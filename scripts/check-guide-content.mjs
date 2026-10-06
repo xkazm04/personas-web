@@ -13,7 +13,9 @@
  * indexes the orphan. See src/app/guide/[category]/[topic]/page.tsx.
  *
  * Also lints every topic body (English and all locales) for unknown or
- * malformed `:::` directives, which the renderer would otherwise drop.
+ * malformed `:::` directives, which the renderer would otherwise drop, and for
+ * `#` lines that are not headings the renderer takes (`#####`, `#tag`, an
+ * indented `# x`), which render as plain text.
  *
  * Exits non-zero on any mismatch. Designed to run zero-dep in CI.
  */
@@ -160,5 +162,5 @@ if (errors.length > 0) {
 
 console.log(
   `Guide content invariant OK — ${categories.length} categories, ${topics.length} topics, all linked; ` +
-    `${directiveTopics} topic bodies across ${contentFiles.length} content modules have well-formed, known directives.`,
+    `${directiveTopics} topic bodies across ${contentFiles.length} content modules have well-formed, known directives and headings.`,
 );

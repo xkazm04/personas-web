@@ -37,7 +37,11 @@ fallback is SSR-safe and renders without JS.
   (English and all locale content modules, loaded with Node's built-in type stripping,
   Node >= 22.18) and fails on any. `KNOWN_DIRECTIVES` is pinned to the
   `parseCustomBlock` dispatch by `directiveLint.test.ts`. A malformed `:::` line is
-  skipped in production; it used to stall the parse loop (render hang).
+  skipped in production; it used to stall the parse loop (render hang). The same scan
+  flags a top-level `#` line that is not a heading the renderer takes (`#####`, `#tag`,
+  an indented `# x`; only `#`-`####` at column 0 plus a space count). Those also hung
+  the loop; they now render as plain paragraph text, because the paragraph collector
+  always takes the line no block branch claimed.
 - **Inline.** `parseInline` (`parseInline.tsx:12`) is a single global regex over
   images, links, `***bi***`, `**b**`, `*i*`, `` `code` ``, and `==highlight==`,
   recursing into the captured text. Bare text runs through `typography()`
@@ -110,7 +114,8 @@ fallback is SSR-safe and renders without JS.
 - **Parser is line-based and unforgiving.** Blocks are recognized only at a line's
   start (after `trimStart`); there is no lookahead/AST. A custom block whose body fails
   its mini-DSL returns `null` and **vanishes from the page** (a dev-only console warning, no
-  build check — `check:guide-content` only catches unknown/malformed directives) — e.g.
+  build check — `check:guide-content` only catches unknown/malformed directives and
+  malformed headings) — e.g.
   `:::steps` items must match `1. **Title** — body` exactly, `:::keys` lines need a
   dash separator, `:::cards` rows need a `[status]` prefix and a title. Authoring typos
   silently drop content.

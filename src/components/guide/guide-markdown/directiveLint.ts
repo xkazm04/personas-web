@@ -10,6 +10,10 @@
  *   and all locales) and fails on any issue;
  * - `parseBlocks` runs it in development and logs each issue.
  *
+ * It also flags a top-level line that starts with `#` but is not a heading the
+ * renderer takes (`#####`, `#tag`, an indented `# x`): those render as plain
+ * text (they used to hang the parse loop).
+ *
  * It mirrors the renderer exactly, including its limits: a top-level code
  * fence hides `:::` lines, but inside a directive the first line starting with
  * `:::` closes it (nesting is not supported).
@@ -38,7 +42,13 @@ export const KNOWN_DIRECTIVES: ReadonlySet<string> = new Set([
   "success",
 ]);
 
-export type DirectiveIssueKind = "unknown" | "malformed" | "stray-close" | "unclosed" | "nested";
+export type DirectiveIssueKind =
+  | "unknown"
+  | "malformed"
+  | "stray-close"
+  | "unclosed"
+  | "nested"
+  | "malformed-heading";
 
 export interface DirectiveIssue {
   /** 1-based line number within the content string. */
@@ -50,6 +60,9 @@ export interface DirectiveIssue {
 
 /** The opener form the renderer accepts: `:::name`, nothing else on the line. */
 export const DIRECTIVE_OPENER = /^:::([\w-]+)$/;
+
+/** The heading form the renderer accepts: `#` to `####` at column 0, a space, text. */
+export const HEADING = /^(#{1,4})\s+(.+)$/;
 
 export function lintDirectives(lines: readonly string[]): DirectiveIssue[] {
   const issues: DirectiveIssue[] = [];
@@ -68,6 +81,9 @@ export function lintDirectives(lines: readonly string[]): DirectiveIssue[] {
     }
 
     if (!trimmed.startsWith(":::")) {
+      if (trimmed.startsWith("#") && !HEADING.test(lines[index])) {
+        add(index, "malformed-heading", "heading must be '#' to '####' at the line start, then a space and text; renders as plain text");
+      }
       index++;
       continue;
     }

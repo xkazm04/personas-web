@@ -66,3 +66,50 @@ describe("parseBlocks on malformed directives", () => {
     expect(texts.some((t) => t.includes("after two"))).toBe(true);
   });
 });
+
+// A sync infinite loop cannot be interrupted by a vitest timeout, so the lines
+// are handed over behind a read budget: a parse that stops advancing exhausts
+// it and throws instead of stalling the worker.
+function budgeted(lines: string[], budget = 10_000): string[] {
+  let reads = 0;
+  return new Proxy(lines, {
+    get(target, prop, receiver) {
+      if (typeof prop === "string" && /^\d+$/.test(prop) && ++reads > budget) {
+        throw new Error("parseBlocks stopped advancing (read budget exhausted)");
+      }
+      return Reflect.get(target, prop, receiver);
+    },
+  });
+}
+
+const MALFORMED_HEADINGS = ["##### Five deep", "#tag", "  # indented", "#", "######"];
+
+describe("parseBlocks on malformed headings", () => {
+  it.each(MALFORMED_HEADINGS)("terminates on %j and keeps it as text, with the content around it", (bad) => {
+    const nodes = parseBlocks(budgeted(["before", "", bad, "after"])) as ReactElement[];
+    const texts = nodes.map((n) => JSON.stringify((n.props as { children?: unknown }).children ?? ""));
+    expect(texts.some((t) => t.includes("before"))).toBe(true);
+    expect(texts.some((t) => t.includes("after"))).toBe(true);
+    expect(texts.some((t) => t.includes(JSON.stringify(bad.trim()).slice(1, -1)))).toBe(true);
+  });
+
+  it("still renders a well-formed heading as a heading", () => {
+    const nodes = parseBlocks(budgeted(["## Fine"])) as ReactElement[];
+    expect(nodes).toHaveLength(1);
+    expect((nodes[0].props as { rawText?: string }).rawText).toBe("Fine");
+  });
+});
+
+describe("lintDirectives on malformed headings", () => {
+  it("flags each heading the renderer cannot take as a heading", () => {
+    for (const bad of MALFORMED_HEADINGS) {
+      expect(kinds(["intro", bad].join("\n"))).toEqual([[2, "malformed-heading"]]);
+    }
+  });
+
+  it("accepts h1-h4 and ignores # inside code fences and directive bodies", () => {
+    expect(kinds(["# A", "## B", "### C", "#### D"].join("\n"))).toEqual([]);
+    expect(kinds(["```bash", "#comment", "```"].join("\n"))).toEqual([]);
+    expect(kinds([":::tabs", "### Tab", "#####", ":::"].join("\n"))).toEqual([]);
+  });
+});

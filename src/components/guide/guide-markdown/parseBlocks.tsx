@@ -3,7 +3,7 @@ import React, { type ReactNode } from "react";
 import { CodeFence, MarkdownTable } from "../GuideBlocks";
 import { expandLineRanges } from "./expandLineRanges";
 import { HeadingAnchor } from "./HeadingAnchor";
-import { DIRECTIVE_OPENER, KNOWN_DIRECTIVES, lintDirectives } from "./directiveLint";
+import { DIRECTIVE_OPENER, HEADING, KNOWN_DIRECTIVES, lintDirectives } from "./directiveLint";
 import { createHeadingIdAssigner } from "./headingId";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
@@ -64,7 +64,7 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       continue;
     }
 
-    const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
+    const headingMatch = line.match(HEADING);
     if (headingMatch) {
       // Shift in-content markdown headings down one level: the topic title is
       // the page's single <h1> (rendered in TopicView), so a content "#"
@@ -168,13 +168,15 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       continue;
     }
 
-    const paragraphLines: string[] = [];
+    // Every branch above `continue`s, so the current line is one none of them
+    // could take. It opens the paragraph unconditionally: a line that looks
+    // like a block start but is not one (`#####`, `#tag`, an indented `# x`)
+    // renders as text instead of stalling the loop (lintDirectives flags it).
+    const paragraphLines: string[] = [lines[index++]];
     while (index < lines.length && lines[index].trim() !== "" && !isBlockStart(lines[index])) {
       paragraphLines.push(lines[index++]);
     }
-    if (paragraphLines.length > 0) {
-      emit(<p className="text-base text-muted-dark leading-relaxed mb-4">{parseInline(paragraphLines.join(" "), `p${key}`)}</p>);
-    }
+    emit(<p className="text-base text-muted-dark leading-relaxed mb-4">{parseInline(paragraphLines.join(" "), `p${key}`)}</p>);
   }
 
   return elements;
