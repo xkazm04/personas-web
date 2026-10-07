@@ -135,6 +135,23 @@ describe("orchestrator proxy", () => {
     expect(upstream[0].init?.headers).toMatchObject({ Authorization: "Bearer team-secret", "X-User-Token": "live-user-1" });
   });
 
+  it("never lets a path leave the orchestrator's origin", async () => {
+    for (const path of [["", "evil.test", "steal"], ["..", "admin"], ["personas", "."]]) {
+      const res = await call(GET, path, { "X-User-Token": "live-user-4" });
+      expect(res.status).toBe(400);
+      expect(await res.json()).toEqual({ error: "bad_path" });
+    }
+    expect(upstream).toHaveLength(0);
+  });
+
+  it("encodes each segment and keeps the query string", async () => {
+    const req = new NextRequest("https://personas.so/api/orchestrator/a%2Fb/%2F%2Fevil.test?limit=5", {
+      headers: { "X-User-Token": "live-user-5" },
+    });
+    await GET(req, { params: Promise.resolve({ path: ["a/b", "//evil.test"] }) });
+    expect(upstream.map((u) => u.url)).toEqual(["https://orch.test/a%2Fb/%2F%2Fevil.test?limit=5"]);
+  });
+
   it("serves a non-JSON upstream body as inert text, never as markup on this origin", async () => {
     for (const type of ["text/html; charset=utf-8", "image/svg+xml", "application/xhtml+xml", "application/json-seq, text/html"]) {
       upstreamReply = () => new Response("<script>alert(document.domain)</script>", { headers: { "Content-Type": type } });

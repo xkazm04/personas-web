@@ -20,6 +20,21 @@ function orchestratorKey(): string | undefined {
   return process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
 }
 
+/**
+ * The orchestrator URL for a proxied path, or null when the path could leave
+ * the orchestrator. Every segment is percent-encoded, so only the joining
+ * slashes are structure, but an empty first segment still makes `//host`, a
+ * protocol-relative URL that swaps the host (and sends the team key there).
+ * Next redirects `//` paths today; this check does not depend on it.
+ */
+function upstreamUrl(base: string, path: string[], search: string): URL | null {
+  if (path.length === 0 || path.some((s) => s === "" || s === "." || s === "..")) return null;
+  const url = new URL("/" + path.map(encodeURIComponent).join("/"), base);
+  if (url.origin !== new URL(base).origin) return null;
+  url.search = search;
+  return url;
+}
+
 const JSON_TYPE = /^application\/(?:[\w.+-]+\+)?json\s*(?:;|$)/i;
 
 /**
@@ -59,9 +74,10 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
     return Response.json({ error: "unauthenticated" }, { status: 401 });
   }
 
-  const targetPath = "/" + path.map(encodeURIComponent).join("/");
-  const url = new URL(targetPath, base);
-  url.search = req.nextUrl.search;
+  const url = upstreamUrl(base, path, req.nextUrl.search);
+  if (!url) {
+    return Response.json({ error: "bad_path" }, { status: 400 });
+  }
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
