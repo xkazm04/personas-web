@@ -55,6 +55,8 @@ export interface SyncReachability extends Reachability {
    * verdicts follow the online gate only on a command plane (M20).
    */
   commandPlane: boolean;
+  /** The live plane is the desktop's local API: some actions are unsupported there (`desktopUnsupported`). */
+  desktopPlane: boolean;
 }
 
 /**
@@ -152,5 +154,5 @@ export function useSyncReachability(): SyncReachability {
   const ready = probing
     ? probeSettled
     : !live || (devicesLoaded && phase !== "unknown" && phase !== "loading");
-  return { ...overall, ready, now, fallbackDeviceId: overall.device?.deviceId ?? null, tierFor, commandPlane: isDemo || IS_SUPABASE };
+  return { ...overall, ready, now, fallbackDeviceId: overall.device?.deviceId ?? null, tierFor, commandPlane: isDemo || IS_SUPABASE, desktopPlane: IS_DESKTOP && !isDemo };
 }

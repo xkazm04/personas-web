@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import { SendHorizontal } from "lucide-react";
 import { chatSendParams, isMessageTooLong } from "@/lib/chat/chatModel";
 import { actionsEnabled, type ReachabilityTier } from "@/lib/sync/reachability";
+import { desktopUnsupported } from "@/lib/sync/desktopUnsupported";
 import { mobileCopy, type MobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
@@ -22,8 +23,13 @@ type ChatCopy = MobileCopy["chat"];
  * paused persona still chats (PLAN M21): pause stops its triggers, schedules
  * and subscriptions, not an explicit ask.
  */
-export function composerDisabledReason(copy: ChatCopy, tier: ReachabilityTier | null): string | null {
+export function composerDisabledReason(
+  copy: ChatCopy,
+  tier: ReachabilityTier | null,
+  desktopPlane = false,
+): string | null {
   if (tier === null) return "";
+  if (desktopUnsupported("chatSend", tier, desktopPlane)) return "";
   if (actionsEnabled(tier)) return null;
   if (tier === "offline") return copy.disabled.offline;
   return tier === "online-unpaired" ? copy.disabled.unpaired : copy.disabled.never;

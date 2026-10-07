@@ -11,6 +11,8 @@
  * testable and nothing here reads a clock in a render path.
  */
 
+import { desktopUnsupported } from "./desktopUnsupported";
+
 /**
  * How fresh a heartbeat must be to count as online: 120 s is 2.7 missed 45 s
  * passes, so one slow pass does not flap the gate. Shared with
@@ -138,9 +140,15 @@ export function actionsEnabled(tier: ReachabilityTier): boolean {
  * Can a review verdict be given here (PLAN M20)? On a command plane (the live
  * mirror, the demo) a verdict is a `review_decide` command, so it follows the
  * online gate like the persona actions (null = not judged yet: no). The
- * orchestrator plane writes the verdict itself and has no gate.
+ * orchestrator plane writes the verdict itself and has no gate. The desktop
+ * plane cannot take a verdict at all (`desktopUnsupported`), so it is off there.
  */
-export function verdictsEnabled(tier: ReachabilityTier | null, commandPlane: boolean): boolean {
+export function verdictsEnabled(
+  tier: ReachabilityTier | null,
+  commandPlane: boolean,
+  desktopPlane = false,
+): boolean {
+  if (desktopUnsupported("reviewVerdict", tier, desktopPlane)) return false;
   if (!commandPlane) return true;
   return tier !== null && actionsEnabled(tier);
 }

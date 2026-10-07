@@ -111,7 +111,7 @@ export default function ChatPanel({ threadKind, personaId, name, ownerDeviceId, 
 
   // The gate is the tier of the desktop that holds the thread.
   const gateDevice = threadDevice ?? ownerDeviceId;
-  const disabledReason = composerDisabledReason(copy, reach.ready ? reach.tierFor(gateDevice).tier : null);
+  const disabledReason = composerDisabledReason(copy, reach.ready ? reach.tierFor(gateDevice).tier : null, reach.desktopPlane);
 
   const onSend = (message: string) => {
     void useChatStore.getState().send({

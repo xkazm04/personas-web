@@ -20,23 +20,24 @@ export interface ReviewGate {
  * On a command plane a verdict is a `review_decide` to the desktop that raised
  * the review (else the persona's), so it is enabled only where that desktop
  * is online and this browser is paired (or in the demo). The orchestrator
- * plane writes verdicts directly and is never gated.
+ * plane writes verdicts directly and is never gated. The desktop plane cannot
+ * take a verdict (`desktopUnsupported`), so it is off there while online.
  */
 export function useReviewGate(): ReviewGate {
   const reach = useSyncReachability();
   const personasById = usePersonaStore((s) => s.personasById);
-  const { commandPlane, ready, tierFor } = reach;
+  const { commandPlane, desktopPlane, ready, tierFor } = reach;
 
   const canDecide = useCallback<ReviewGate["canDecide"]>(
     (review) => {
-      if (!commandPlane) return true;
-      if (!ready) return false;
+      if (!commandPlane && !desktopPlane) return true;
+      if (!ready) return !commandPlane;
       const device = review ? reviewTargetDevice(review.deviceId, personasById[review.personaId]?.deviceId) : null;
-      return verdictsEnabled(tierFor(device).tier, true);
+      return verdictsEnabled(tierFor(device).tier, commandPlane, desktopPlane);
     },
-    [commandPlane, ready, tierFor, personasById],
+    [commandPlane, desktopPlane, ready, tierFor, personasById],
   );
 
-  const blocked = commandPlane && ready && !verdictsEnabled(reach.tier, true);
+  const blocked = ready && !verdictsEnabled(reach.tier, commandPlane, desktopPlane);
   return { reach, canDecide, blocked };
 }

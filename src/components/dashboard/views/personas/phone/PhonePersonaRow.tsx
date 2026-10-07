@@ -8,6 +8,7 @@ import { useExecutionStore } from "@/stores/executionStore";
 import { displayEnabled, isTerminal, latestForPersona } from "@/lib/commands/commandReducer";
 import { derivePersonaRow, personaRuns, reportedCancelledId, type PersonaRowState } from "@/lib/commands/personaRow";
 import { actionsEnabled } from "@/lib/sync/reachability";
+import { desktopUnsupported } from "@/lib/sync/desktopUnsupported";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
 import CommandChip from "./CommandChip";
 import { sendPersonaAction } from "./personaActions";
@@ -52,6 +53,7 @@ export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions
   // never-synced / no-account: the desktop is not there to ask, so offer no action at all.
   const showAction = tier !== "never-synced" && tier !== "no-account";
   const canAct = actionsEnabled(tier) && !busy;
+  const toggleUnsupported = desktopUnsupported(enabled ? "pause" : "resume", tier, reach.desktopPlane);
   const label = (enabled ? copy.pauseLabel : copy.resumeLabel).replace("{name}", persona.name);
   // Before the runs first load, only Paused is known: claim no Idle / Running yet.
   const stateKnown = runsKnown || row.state === "paused";
@@ -99,7 +101,7 @@ export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions
               type="button"
               data-persona-action="toggle"
               onClick={onToggle}
-              disabled={!canAct}
+              disabled={!canAct || toggleUnsupported}
               aria-label={label}
               className={`${action} px-3`}
             >
