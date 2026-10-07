@@ -73,7 +73,7 @@ Float output is rounded with `r2` so server and browser agree on hydration.
   implementation (`MultiProviderAI.tsx` and `multi-provider/` `RouterArt` with the
   wide/tall router layouts) is in git history.
 - **i18n - English-only for now.** `aiModelsSection` and `featuresSections` are in
-  `PENDING_TRANSLATION`; the other 13 locales fall back to English. Unread leftovers:
+  `src/i18n/pending/` (PLAN M22); the other 13 locales fall back to English. Unread leftovers:
   `aiModelsSection.lede|artLabel|local`, `featuresSections.models.v2|v3` and
   `agents.support`.
 - **Orphaned namespace still contradicts the section.** `featurePages["multi-provider"]`

@@ -130,7 +130,7 @@ the "build a flow" button is not rendered and `composerOpen` is forced false, de
   `SwarmView`, `VariantTabs`, `EventBusLegend`, `data.ts`, `figures.ts` + `figures.test.ts`) is
   deleted and lives in git history. The lazy export and the preview slug keep the old name
   (`LazyEventBusShowcase` -> `event-bus-showcase`).
-- **i18n - English only, pending translation.** Copy is in `howSections` (`PENDING_TRANSLATION`);
+- **i18n - English only, pending translation.** Copy is in `howSections` (`src/i18n/pending/`, PLAN M22);
   the 13 other locales fall back to English. Tool names come from the catalogue and stay as-is.
 - **Phones (under 48rem) get their own views, no composer.** `PhoneHub` fits the width (eight
   route tools; the five `swarmFeatured`-only tools are not on the phone orbit) and `LanesPhone`

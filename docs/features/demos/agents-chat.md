@@ -99,8 +99,8 @@ still ends exactly at the slot edges. The windows sit in a `md:grid-cols-[1fr_5.
   screen, one clock"). The previous merged "Race Log" transcript
   (`src/components/sections/agents-chat/`: `useChatSequence`, `ChatTimelineVariant`,
   `TimelineRaceSummary`, `timeline-utils.ts`) is deleted and lives in git history.
-- **i18n - English only, pending translation.** Copy is in `howSections` (listed in
-  `PENDING_TRANSLATION`); the 13 other locales fall back to English. Line timings stay in
+- **i18n - English only, pending translation.** Copy is in `howSectionsCopy`
+  (`src/i18n/pending/howSections.ts`, PLAN M22); the 13 other locales fall back to English. Line timings stay in
   `SCENARIOS`, so when translating, keep each `scripted[]`/`agent[]` array the same length as its
   timing array.
 - **Reduced motion is the finished story.** Under `useStillMotion`, `t` rests at the scenario's

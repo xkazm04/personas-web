@@ -98,7 +98,7 @@ decisions.
   and its `public/imgs/features/matrix/*.png` Leonardo backgrounds, now deleted) is
   in git history.
 - **i18n - English-only for now.** `designMatrix` and `featuresSections` are both in
-  `PENDING_TRANSLATION` (`src/i18n/en.ts:3077`); the 13 other locales fall back to
+  `src/i18n/pending/` (PLAN M22); the 13 other locales fall back to
   English. `featuresSections.design` still carries review-era keys nothing reads
   (`v3.*`, `reading`, `decided`); only the keys listed above are used.
 - **Motion gating.** Under `useStillMotion()` the clock reports the final step, so

@@ -114,7 +114,7 @@ designed node) and a pilled "healed" tag, the "Same laptop" line, `PhoneScrubber
   dial"). The previous scroll-spread layer stack (`src/components/sections/platform-layers/`:
   `Layer`, `LayerConnection`, `ConnectionPillar`, `StackLabels`, `visuals.tsx`) is deleted and
   lives in git history. The doc keeps its old filename and anchor.
-- **i18n - English only, pending translation.** Copy is in `howSections` (`PENDING_TRANSLATION`);
+- **i18n - English only, pending translation.** Copy is in `howSections` (`src/i18n/pending/`, PLAN M22);
   the 13 other locales fall back to English.
 - **Phones get a phone-sized dial.** Below 64rem `PhoneDial` replaces the wide art (the old
   `CompactList` card stack is gone): same clock, same scene code over the `NARROW` drawing, all

@@ -78,7 +78,7 @@ example line; selection is `useState<CategoryKey | null>` in `index.tsx`.
   implementation (`MemoryLayers.tsx` and `memory-layers/` "run twice" art with
   `RunTwiceArt`) is in git history.
 - **i18n - English-only for now.** `memorySection` and `featuresSections` are both in
-  `PENDING_TRANSLATION`; the other 13 locales fall back to English. Unread leftovers:
+  `src/i18n/pending/` (PLAN M22); the other 13 locales fall back to English. Unread leftovers:
   `memorySection.artLabel|run1|run12|memory` and `featuresSections.memory.v1|v2`.
 - **Motion gating.** `useStillMotion` -> `p` pinned to `RUNS` (finished rings), replay
   disabled. Markup never depends on the preference, so SSR and hydration agree. The

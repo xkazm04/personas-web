@@ -81,7 +81,7 @@ line).
   that folder, and `ActivityRow`/`OverviewModule` in it are dead; `AgentId` is the one live
   export. Moving it next to `log.ts` would let the folder go.
 - **i18n - English-only for now.** `observeSection` and `featuresSections` are in
-  `PENDING_TRANSLATION`; the other 13 locales fall back to English. Unread leftovers:
+  `src/i18n/pending/` (PLAN M22); the other 13 locales fall back to English. Unread leftovers:
   `observeSection.description|modules.*`, `featuresSections.observe.v1|v2`.
 - **Motion gating.** The printer clock is an ambient loop gated by `useLoopGate` (off-screen,
   hidden tab, reduced motion all stop it). Reduced motion rests on `REST_S`, a full tape with

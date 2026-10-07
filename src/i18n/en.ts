@@ -1917,32 +1917,17 @@
       brain: string;
     };
   };
-  // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
-  // END pending-translation namespaces
 }
 
 /**
- * Namespaces migrated from hardcoded English on 2026-09-25 by owner decision
- * ("Migrate hardcoded English, no need to translate for now"). They are
- * English-only until translated: the 13 non-en locales may omit them (see
- * `LocaleTranslations`), the runtime falls back to English via
- * `mergeWithEnglishFallback`, and `scripts/check-i18n-coverage.mjs` skips them
- * while printing the pending count. To translate one, add it to every locale
- * file and remove it from this list - tsc then requires it everywhere.
- *
- * Being emptied (PLAN M22): every route bundles this file, so pending
- * namespaces move out to `src/i18n/pending/<namespace>.ts` (a typed
- * `<namespace>Copy` const imported only by its consumers). New English-only
- * copy goes there, not here. See docs/features/platform/internationalization.md.
+ * The shape a non-en locale file must satisfy: all of `Translations`. Every
+ * namespace here is translated in all 14 locales. English-only copy that is
+ * waiting for translation does not go in this file (every route bundles it):
+ * it lives in `src/i18n/pending/<namespace>.ts` (PLAN M4, M22) and moves back
+ * here, translated into the 13 locales, when its translation pass lands. See
+ * docs/features/platform/internationalization.md.
  */
-export const PENDING_TRANSLATION = [
-] as const;
-
-export type PendingNamespace = (typeof PENDING_TRANSLATION)[number];
-
-/** The shape a non-en locale file must satisfy: pending namespaces optional. */
-export type LocaleTranslations = Omit<Translations, PendingNamespace> &
-  Partial<Pick<Translations, PendingNamespace>>;
+export type LocaleTranslations = Translations;
 
 export const en: Translations = {
   notFound: {
@@ -4154,6 +4139,4 @@ export const en: Translations = {
       brain: 'Your vault, agent-ready',
     },
   },
-  // BEGIN pending-translation namespaces (English only; listed in PENDING_TRANSLATION)
-  // END pending-translation namespaces
 };

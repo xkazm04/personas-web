@@ -108,7 +108,7 @@ result card. Same `p`, same windows, same reduced-motion end frame.
   rails"). The previous race (`src/components/sections/agents-timeline/`: two tracks of step
   pills, rAF race timers, `ComparisonSummary`, `data.test.ts`) is deleted and lives in git history.
 - **i18n - English only, pending translation.** All copy is in `howSections`, which is listed in
-  `PENDING_TRANSLATION` (`src/i18n/en.ts`); the 13 other locales fall back to English until the
+  `src/i18n/pending/` (PLAN M22); the 13 other locales fall back to English until the
   namespace is translated into every locale and removed from the list.
 - **Under 64rem the map is redrawn, not scrolled.** `useWide` swaps the wide `ArtBox` for
   `Phone.tsx` (portrait `PHONE` track, max 26rem wide); nothing scrolls sideways at 360-1023px.

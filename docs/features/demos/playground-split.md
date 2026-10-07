@@ -62,7 +62,7 @@ The first prompt plays once on its own when the panel is half on screen (never u
 ## Conventions & gotchas
 - **Replaced on 2026-10-05** by the winner of the landing review ("Camera"). The previous two-panel terminal (`PromptEditorPanel`, `AgentMindPanel` flowchart, `FlowNodeCard`, `ConnectionLine`, `ResultCapabilitiesList`, `use-playground-simulation.ts`) is in git history. `data.ts` still exports `RESULT_DIMENSIONS`, `buildFlowNodes` and `getStatusColor`, now unused.
 - **Outcome cards show labels only.** Do not reintroduce the concrete result sentence as visible, truncated text; it stays in the `sr-only` span.
-- **i18n, English-only for now:** `playgroundSection` and `landingSections` are in `PENDING_TRANSLATION`; the 13 other locales fall back to English. `SYNTAX_KEYWORDS` are English tokens, so a translated prompt will not highlight until they are localized.
+- **i18n, English-only for now:** `playgroundSection` and `landingSections` are in `src/i18n/pending/` (PLAN M22); the 13 other locales fall back to English. `SYNTAX_KEYWORDS` are English tokens, so a translated prompt will not highlight until they are localized.
 - **Animation gating:** `useStillMotion` (via `useMindRun`'s `reduced`) zeroes the camera move, edge draws, panel and card entrances and disables autoplay; the camera's travelling dot and `WorldNode` loops run only while `live` (`useIsVisible(ref) && !reduced`).
 - **Tab-background abort, not pause.** Timers are scheduled up front, so a hidden tab aborts to idle and the visitor re-triggers; `start` also refuses while `document.hidden`.
 - **Timers and re-entry.** Every `setTimeout` goes into `timers` and is cleared on unmount, reset and abort; prompts are disabled while running, Reset shows only at `done`.

@@ -120,25 +120,21 @@ const { translations: fullBaseline, moduleExports: baselineExports } =
   loadLocaleModule(baselineLocale);
 const targetLocales = locales.filter((locale) => locale !== baselineLocale);
 
-// Namespaces the owner decided to ship English-only for now (PLAN M4). Two
-// homes, both skipped here and reported, never failed on:
-//   - en.ts PENDING_TRANSLATION: pending namespaces still inside en.ts;
-//   - src/i18n/pending/<namespace>.ts: pending namespaces moved out of the
-//     shared bundle (PLAN M22), one module per namespace exporting
-//     `<namespace>Copy` (the Copy suffix is what lets copy:check read it as a
-//     dictionary).
-// What IS failed on: a listed namespace missing from en.ts, a pending module
-// whose export does not match its filename, and a namespace that is both
-// pending and in en.ts/a locale (a translated namespace moves back into en.ts
-// and its pending module is deleted - never both).
-const pendingInEn = Array.isArray(baselineExports.PENDING_TRANSLATION)
-  ? [...baselineExports.PENDING_TRANSLATION]
-  : [];
-for (const ns of pendingInEn) {
-  if (!(ns in fullBaseline)) {
-    console.error(`PENDING_TRANSLATION names "${ns}", which is not a namespace in en.ts.`);
-    process.exit(1);
-  }
+// Namespaces the owner decided to ship English-only for now (PLAN M4) live in
+// src/i18n/pending/<namespace>.ts, off the shared en.ts bundle (PLAN M22): one
+// module per namespace exporting `<namespace>Copy` (the Copy suffix is what
+// lets copy:check read it as a dictionary). They are not compared here, only
+// counted and reported. What IS failed on: a pending module whose export does
+// not match its filename, and a namespace that is both pending and in en.ts or
+// a locale (a translated namespace moves back into en.ts and its pending module
+// is deleted - never both). en.ts itself carries no pending namespaces any
+// more: every namespace in it is held to 100% in all 13 locales.
+if ("PENDING_TRANSLATION" in baselineExports) {
+  console.error(
+    "en.ts exports PENDING_TRANSLATION again. English-only namespaces live in src/i18n/pending/ " +
+      "(PLAN M22) so that only their routes bundle them; en.ts holds translated namespaces only.",
+  );
+  process.exit(1);
 }
 
 const pendingDir = path.join(i18nDir, "pending");
@@ -189,11 +185,8 @@ for (const locale of targetLocales) {
   }
 }
 
-const pendingNamespaces = [...pendingInEn, ...Object.keys(pendingModuleCopy)];
-const pendingCopy = { ...fullBaseline, ...pendingModuleCopy };
-const baseline = Object.fromEntries(
-  Object.entries(fullBaseline).filter(([ns]) => !pendingInEn.includes(ns)),
-);
+const pendingNamespaces = Object.keys(pendingModuleCopy);
+const baseline = fullBaseline;
 
 let failed = false;
 
@@ -213,12 +206,11 @@ for (const locale of targetLocales) {
 }
 
 if (pendingNamespaces.length > 0) {
-  const pendingKeys = pendingNamespaces.reduce((sum, ns) => sum + countLeaves(pendingCopy[ns]), 0);
+  const pendingKeys = pendingNamespaces.reduce((sum, ns) => sum + countLeaves(pendingModuleCopy[ns]), 0);
   console.log(
     `
-pending translation (English only, by owner decision): ${pendingKeys} keys in ${pendingNamespaces.length} namespaces` +
-      (pendingInEn.length ? `\n  in en.ts: ${pendingInEn.join(", ")}` : "") +
-      (pendingModules.length ? `\n  in src/i18n/pending/: ${Object.keys(pendingModuleCopy).join(", ")}` : ""),
+pending translation (English only, by owner decision; src/i18n/pending/): ${pendingKeys} keys in ` +
+      `${pendingNamespaces.length} namespaces: ${pendingNamespaces.join(", ")}`,
   );
 }
 

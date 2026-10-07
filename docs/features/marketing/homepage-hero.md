@@ -36,7 +36,7 @@ Below the hero, the rest of the page is a sequence of marketing sections (use-ca
 | `src/components/sections/LazySection.tsx`, `lazy.tsx` | `createLazySection()` factory, `Lazy*` exports, custom skeletons |
 
 ## Data & state
-- **Copy:** `landingSectionsCopy.hero.*` (headline, subhead, aria, event/done chips) plus `t.hero.downloadCta` / `viewOnGithub` / `trustLine`. `landingSections` is in `PENDING_TRANSLATION` (`src/i18n/en.ts`): English only, the 13 other locales fall back at runtime.
+- **Copy:** `landingSectionsCopy.hero.*` (headline, subhead, aria, event/done chips) plus `t.hero.downloadCta` / `viewOnGithub` / `trustLine`. `landingSections` is in `src/i18n/pending/` (PLAN M22): English only, the 13 other locales fall back at runtime.
 - **No data fetch, no stores.** The hero shows no live numbers. (The unused `/api/stats` route and `useLiveStats` hook were deleted on 2026-10-05; the waitlist count comes from `/api/waitlist` via `waitlistCounts.ts`.)
 - **State:** `SectionObserverContext` tracks the section in view for the scroll map; the only hero state is the `--tilt` CSS variable.
 - **Download CTA:** `ctaHref(DOWNLOAD_PLAN)` from `src/lib/release.ts`; tracked as `download_click` with `{ platform, placement: "hero", outcome }`.
@@ -54,7 +54,7 @@ Below the hero, the rest of the page is a sequence of marketing sections (use-ca
 - **`FloatingParticles.tsx` is now unreferenced** (nothing imports it); treat it as dead until reused.
 - **Gate props, never markup.** The floor's DOM is constant; reduced motion is handled in CSS only. Keep `HeroShell`'s `suppressHydrationWarning` (the pause registry toggles a class after hydration). `e2e/reduced-motion-hydration.spec.ts` asserts `/` hydrates cleanly.
 - **Loops are CSS**, so the pause registry (`.animations-paused`) and the hidden-tab class are what stop them; there is no JS rAF here.
-- **English-only copy:** the hero strings are in `landingSections.hero`, untranslated until that namespace leaves `PENDING_TRANSLATION`.
+- **English-only copy:** the hero strings are in `landingSections.hero`, untranslated until that namespace leaves `src/i18n/pending/`.
 - **JSON-LD is hand-maintained.** `homeJsonLd.ts` hardcodes URLs and FAQ copy independently of the on-page FAQ; keep in sync and re-validate after edits.
 
 ## Related docs

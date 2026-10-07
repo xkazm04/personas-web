@@ -17,13 +17,13 @@ History: the section used to be an offer band plus six feature-group cards ("Eve
 | `src/components/sections/pricing/billGeometry.ts` | WIDE / TALL layouts, beat timing (`BEAT_START`), path helpers |
 | `src/components/sections/pricing/BillParts.tsx` | Diagram primitives (Node, Legend, Coin, RunDot, WorkPulse, BeatCaption) |
 | `src/components/sections/pricing/usePlayOnce.ts` | Play-once progress value with replay, reduced-motion aware |
-| `src/i18n/en.ts` | `pricingSection` (pending translation: heading, lede, art labels, beats); CTA label still from `compareSection.ctaLabel` |
+| `src/i18n/pending/pricingSection.ts` | `pricingSectionCopy` (pending translation: heading, lede, art labels, beats); CTA label still from `compareSection.ctaLabel` |
 | `src/components/sections/lazy.tsx` | `LazyPricing` + `PricingSkeleton` (heading, lede, one wide box, CTA) |
 | `src/app/page.tsx` | Mounts `LazyPricing` in the homepage section list (`wrapperId: "pricing"`) |
 
 ## Data & state
 - **Source:** fully static. **Stores:** none. CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`; the click reports `download_click` with `placement: "pricing"` via `trackDownloadClick` (`src/lib/analytics.ts`). Both are asserted against `index.tsx` by source-scan tests (`analytics.download-click.test.ts`, `release.test.ts`).
-- **Copy:** `pricingSectionCopy` is listed in `PENDING_TRANSLATION` (English only by owner decision, 2026-09-25; the other locales fall back to English at runtime). Most of `t.compareSection` (offer badges, groups) is now unused - left for a dead-key pass.
+- **Copy:** `pricingSectionCopy` is a pending module in `src/i18n/pending/` (English only by owner decision, 2026-09-25; the other locales fall back to English at runtime). Most of `t.compareSection` (offer badges, groups) is now unused - left for a dead-key pass.
 
 ## Integration points
 - **Stage system** (`src/styles/stage.css`): `fit="fill"`, `data-stage-slot`, `data-stage-art`; one stage high at every desktop size (`e2e/stage-fit.spec.ts`).

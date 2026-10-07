@@ -50,7 +50,7 @@ The tools are a curated slice of the real connector catalog; which one is "chose
 
 ## Data & state
 - **Source:** static; the script is `CASES` + `TOOLS`. No fetch, no stores, no API routes. State lives in `useCaseCycle` (a `useReducer`) plus an `inView` flag.
-- **Copy:** `landingSectionsCopy.useCases.*` and `useCasesPersonaCopy.*` (persona name/description, `pause`/`play`/`replay`) plus the live `t.useCasesSection.heading` / `headingGradient`. `landingSections` and `useCasesPersona` are in `PENDING_TRANSLATION` (`src/i18n/en.ts`): English only, the 13 other locales fall back at runtime, pending a namespace translation.
+- **Copy:** `landingSectionsCopy.useCases.*` and `useCasesPersonaCopy.*` (persona name/description, `pause`/`play`/`replay`) plus the live `t.useCasesSection.heading` / `headingGradient`. `landingSections` and `useCasesPersona` are in `src/i18n/pending/` (PLAN M22): English only, the 13 other locales fall back at runtime, pending a namespace translation.
 
 ## Integration points
 - `SectionWrapper` (`fit="fill"`, `id="use-cases"`) and `SectionIntro`; `src/app/page.tsx` wraps it in `#tools` with `data-scroll-anchor="personas"` (`lib/landing-address.ts` maps `tools` and `use-cases` to `personas`).

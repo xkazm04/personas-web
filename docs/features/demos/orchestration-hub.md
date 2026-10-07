@@ -54,7 +54,7 @@ One trigger is **active** at a time: its tile is lit from inside in its own colo
 | `src/app/page.tsx` | Gated `LazyMount` section inside `<div id="pipelines">` |
 
 ## Data & state
-- **Source:** static. `TRIGGERS` in `data.ts` plus `orchestrationSectionCopy` (`src/i18n/en.ts`); no API, mocks or Supabase.
+- **Source:** static. `TRIGGERS` in `data.ts` plus `orchestrationSectionCopy` (`src/i18n/pending/orchestrationSection.ts`); no API, mocks or Supabase.
 - **Stores:** none. State is the `useReducer` playback machine in `useHubPlayback`.
 - **API routes:** none. Outbound links are `<Link>`s to `/guide/triggers/*` from each trigger's `doc.href`.
 - **Copy:** the section reuses the `orchestrationSection` keys (heading, `ringLabel`, `firesWhen`, per-trigger label/description/persona/example/doc label) plus `landingSectionsCopy.hub.wakes` for the "Wakes" label; controls use the translated `t.orchestrationHub` / `t.tour` keys.
@@ -69,7 +69,7 @@ One trigger is **active** at a time: its tile is lit from inside in its own colo
 ## Conventions & gotchas
 - **Replaced on 2026-10-05** by the winner of the landing review ("lit instrument ring", the faithful upgrade of the old radial hub). The previous `HubRing`, `HubNode`, `TriggerDetail` and `PlaybackControls` are in git history; the playback machine and its test are unchanged. `data.ts` still exports the old `CENTER` / `RADIUS` / `NODE_SIZE` / `nodePosition`, now unused; `geometry.ts` is the live geometry.
 - **e2e contract:** the spec drives the controls by `t.tour.pause` / `t.tour.play`, the Previous/Next `aria-label`s and a standalone `n / N` element; keep all three in `HubControls`. (The spec's header comment still names the old `PlaybackControls.tsx`.)
-- **i18n, English-only for now:** `orchestrationSection` and `landingSections` are in `PENDING_TRANSLATION`; the 13 other locales fall back to English. Code-shaped examples stay in `data.ts` as `exampleCode`.
+- **i18n, English-only for now:** `orchestrationSection` and `landingSections` are in `src/i18n/pending/` (PLAN M22); the 13 other locales fall back to English. Code-shaped examples stay in `data.ts` as `exampleCode`.
 - **Animation gating goes through the loop gate:** every loop reads `live` (gate open and not stopped) and switches `animate`/`transition` props, never elements; `loop-gate.test.ts` scans this directory for framer `useReducedMotion`, bare `repeat: Infinity` or a private IntersectionObserver, and guards that `RingArt`/`RingNodes`/`AgentLens` do not branch markup on `still`/`reduced`. The countdown ring is a CSS animation, off when stopped or still.
 - **A selection sticks (owner-approved 2026-09-23):** clicking a tile, stepping or Pause stops the hub until Play (WCAG 2.2.2). Touch pointers take no hover hold and a pointer hold self-expires. The Athena tour therefore leaves the hub stopped on Webhook. Do not re-add a timed resume.
 - **Tiles are real buttons** over the SVG in the same view-box percentages: change `geometry.ts` once and both layers move. Tiles use `aria-pressed`.

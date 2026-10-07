@@ -59,7 +59,7 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 | `src/components/LandingHashArrival.tsx` | Client leaf mounted in `page.tsx` that resolves the hash on load and on `hashchange` |
 
 ## Data & state
-- **Source:** Static. Get Started heading is `getStartedSectionCopy` (`src/i18n/en.ts`); the art copy is `landingSectionsCopy.getStarted` (`replay`, `stylised`, `v3.*`); times and runs are in `dialGeometry.ts`. Download CTA config comes from `NEXT_PUBLIC_*` build-time env vars, read only by `src/lib/release.ts`.
+- **Source:** Static. Get Started heading is `getStartedSectionCopy` (`src/i18n/pending/getStartedSection.ts`); the art copy is `landingSectionsCopy.getStarted` (`replay`, `stylised`, `v3.*`); times and runs are in `dialGeometry.ts`. Download CTA config comes from `NEXT_PUBLIC_*` build-time env vars, read only by `src/lib/release.ts`.
 - **Stores:** None (no Zustand). Local component state only: the setup `p` motion value and the `day` / `passed` state in Get Started; `waitlistPlatform` and `useFreshRelease`'s `fresh` in Download CTA.
 - **API routes:** `GET /api/download` — validated 302 redirect to the artifact, or `/#download` fallback.
 - **Types:** `Platform` / `PlatformKey` (`download-cta/downloadCtaTypes.ts`), `BrandKey` (`src/lib/brand-theme.ts`).
@@ -70,7 +70,7 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 - **Waitlist:** unavailable platform pills and the no-URL download button open `WaitlistModal` (see [Waitlist & app download](../community/waitlist-download.md)).
 - **Analytics:** `trackDownloadClick(DOWNLOAD_PLAN, "download-cta", detectPlatformKey())` from `src/lib/analytics.ts` on the real download button.
 - **Sentry:** `/api/download` reports invalid `NEXT_PUBLIC_DOWNLOAD_URL` via a once-per-process `captureMessage`.
-- **i18n:** Get Started pulls from `getStartedSectionCopy` and `landingSectionsCopy.getStarted` (both English only, listed in `PENDING_TRANSLATION`); the Download CTA pulls from `t.downloadSection.*` and `t.common.{step,notifyMe}` (`src/i18n/en.ts`).
+- **i18n:** Get Started pulls from `getStartedSectionCopy` and `landingSectionsCopy.getStarted` (both English only, pending modules in `src/i18n/pending/`); the Download CTA pulls from `t.downloadSection.*` and `t.common.{step,notifyMe}` (`src/i18n/en.ts`).
 
 ## Conventions & gotchas
 - **Replaced on 2026-10-05** by the winner of the landing review ("Your day, its day"). The previous lifecycle illustration (`LifecycleArt`, `LifecyclePhone`, three lanes over Mon-Fri) is in git history. The `landingSections.getStarted` interface still declares unused `steps`, `v1`, `v2`, `gmail` and `slack` keys; only `replay`, `stylised` and `v3` are read.

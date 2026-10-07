@@ -136,7 +136,7 @@ fixed-pixel bay zooms as a whole by viewport-height tier (`src/styles/stage.css`
   data files (`roster.ts`, `athenaFleetData.ts`, `secondBrainData.ts`) stayed in `plugins/` and
   are still imported by the bay; `plugins/` holds no components except `AthenaOrb`.
 - **i18n - partly English-only.** `pluginShowcase` is translated in all 14 locales;
-  `pluginsExtra` and `featuresSections` are in `PENDING_TRANSLATION`, so the 13 other locales fall
+  `pluginsExtra` and `featuresSections` are in `src/i18n/pending/` (PLAN M22), so the 13 other locales fall
   back to English for scene bodies, Drive/Twin taglines and the reach plate. The
   `pluginShowcase.introTail` English text was cut on this branch; the other 13 locales keep the
   longer tail. Left in code on purpose: product/plugin labels, session names, file names, version
