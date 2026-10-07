@@ -29,6 +29,9 @@ The survey this plan rests on, with anchors, is [SURVEY.md](SURVEY.md).
 | M17 | **Paired phones auto-run every v1 verb**, including the spending ones (`run_persona`, `chat_send`). | No desktop prompt and no daily cap. The trust boundary is the device key plus desktop-side revocation (spec §3.5). |
 | M18 | **Chat: both kinds, Athena first.** | Athena's companion threads (the send path is already in Rust) land first. Persona chat follows after the chat turn moves into the Rust core. |
 | M19 | **Notes and chat sync are separate opt-ins, off by default.** | Each is a separate desktop toggle. The privacy policy and the storage register are updated when each lands. |
+| M20 | **Reviews are approved from the phone (2026-10-07).** | New auto-run verb `review_decide` (PHASE2-SPEC §1.6, §2.2). In live mode every web Approve/Reject (phone or desk layout) commits through the signed command plane; the undo window stays in front of the send. |
+| M21 | **A paused persona still chats and still runs on demand (2026-10-07).** | Pause stops the persona's own role: triggers, schedules, event subscriptions. `chat_send` and `run_persona` are explicit asks and run anyway; the old `persona_paused` refusal is removed on both sides. |
+| M22 | **English-only pending copy leaves the shared bundle (2026-10-07).** | Pending namespaces move out of `en.ts` into per-namespace modules that only their routes import. They go back into `en.ts` + 13 locales when they are translated. |
 | — | Route paths. | `/m` stays the mobile root. The old `/m/overview`, `/m/alerts`, `/m/messages` and `/m/reviews` pages are deleted (owner-approved), and their URLs are kept alive as redirects. |
 
 ## Phase 0: clear the ground (in progress)

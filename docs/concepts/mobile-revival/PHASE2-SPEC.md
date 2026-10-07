@@ -109,6 +109,14 @@ So the new state is visible on the web about 2-5 s after the desktop applies it.
 
 **Reaches the cloud today: no.** `chat_messages` isn't in `SYNC_TABLES`, and `table_to_event` doesn't map it (`cdc.rs:211-270`). `synced_messages` (`sql:159-177`) is a different thing: persona *notifications* (`persona_reports`), not chat.
 
+
+### 1.6 Decide a manual review (M20, added 2026-10-07)
+
+**Ground truth.** The desk's Approve / Reject call the Tauri command `update_manual_review_status(id, status, reviewer_notes)` (`desk:src-tauri/src/commands/design/reviews.rs`). Its body is more than a status write: `manual_repo::update_status` (which also writes the one `learned` memory), then the `MANUAL_REVIEW_RESOLVED` event, `publish_review_decision`, the team-channel bridge, the goal signal, App master probation and ask reactions, and the held-team-step resume loop. **The phone verb must run that whole body**, so it is hoisted into one shared function that the Tauri command and `review_decide` both call; a verb that only wrote the status would leave a held team step blocked and teach the fleet nothing.
+
+**Reaches the cloud today: yes.** `synced_manual_reviews` already mirrors every review with `device_id`, `persona_id`, `status`, `reviewer_notes`, `resolved_at`. The web already reads it (`supabaseApi.ts`, `reviewToEvent`). What was missing is the write: `supabaseApi.updateEvent` is read-only (501), so in live mode a web verdict failed. It now travels as `review_decide` (§2.2).
+
+**Out of v1:** choosing one of the review's `suggested_actions` (the desk's `dispatch_review_action`, which also starts a follow-up run). The phone sends a plain approve or reject.
 ---
 
 ## 2. Command contract v1 (`pending_commands`)
@@ -162,7 +170,10 @@ create trigger trg_pending_commands_insert_guard before insert on public.pending
 | `resume_persona` | required | `{}` | persona exists; its project is not switched off: `persona_project_disabled` (`desk:src-tauri/db/src/repos/dev/projects.rs:293`) → `project_off: <name>`, same rule as `PersonaTile.tsx:112` | `repo::set_enabled(&db, id, true)`, then on `Some(true)` call `engine::subscription::request_wake` (exactly `personas.rs:142-144`) | `{"enabled":true,"changed":bool}` |
 | `cancel_execution` | required | `{"executionId":"<id>"}` | the execution exists and `execution.persona_id == persona_id` (`verify_execution_owner`, `executions.rs:27-37`). If it is already terminal → `completed` with `changed:false` | `state.engine.cancel_execution(&exec_id, &state.db, Some(&persona_id))` (`engine/execution.rs:1214`). This is the same path as the Tauri command at `executions.rs:745-749`. | `{"executionId":"…","changed":bool,"wasQueued":bool}` |
 | `run_persona` | required | `{"prompt":"…"}`. The legacy `prompt` column is still filled for older desktops | as today, plus the project gate inside `execute_persona_inner` | `execute_persona_inner(…, input_data=prompt, idempotency_key=Some(id))` | `execution_id` column, as today (`rc.rs:485-487`), and `{"executionId":"…"}` |
-| `chat_send` (M9) | required | `{"sessionId":"chat-…"\|null,"message":"…"}` | persona exists; the message is not empty and ≤ 8 KB | see §5.3 | `{"sessionId":"…","userMessageId":"…","executionId":"…"}`. **It completes when the turn starts**; the reply arrives as data (§5.3) |
+| `chat_send` (M9) | required | `{"sessionId":"chat-…"\|null,"message":"…"}` | persona exists; the message is not empty and ≤ 8 KB. **A paused persona is accepted (M21)** | see §5.3 | `{"sessionId":"…","userMessageId":"…","executionId":"…"}`. **It completes when the turn starts**; the reply arrives as data (§5.3) |
+| `review_decide` (M20) | required: the review's `persona_id` | `{"reviewId":"…","decision":"approved"\|"rejected","notes":"…"\|null}`; `notes` ≤ 2000 chars | the review exists locally AND its `persona_id` equals the envelope's (else `not_found`, never a hint that the id exists elsewhere); `decision` is one of the two (else `invalid_decision`). Already decided → `completed` with `changed:false` and the current status, the same rule as an already-terminal cancel | the shared chokepoint behind the desk's `update_manual_review_status` (§1.6): status write + every side effect, then a reviews sync nudge | `{"reviewId":"…","status":"approved"\|"rejected"\|"resolved","changed":bool}` |
+
+**`review_decide` targeting.** `target_device_id` = `synced_manual_reviews.device_id` of the review (the desktop that raised it), falling back to the persona's `device_id` when the review row has none.
 
 **Not touched:** the queue verbs keep their JSON-in-`prompt` payloads (`rc.rs:121-153`) and **keep the per-command approval** in v1. There is no web UI for them yet, and D1 can be extended to them once one exists.
 
@@ -309,7 +320,7 @@ Holding the secret proves the phone saw the QR, so a thief with a stolen JWT can
 6. **Timing fails:** `exp` has passed, or `iat` is more than 5 min old. Result: expired. The desktop clock gets ±30 s skew tolerance.
 7. **Otherwise** it returns `Paired(ctrl)`, and the desktop stamps `last_command_at`.
 
-**`auto_verb`.** It covers `run_persona`, `pause_persona`, `resume_persona`, `cancel_execution` and `chat_send`. Queue verbs stay prompt-gated (§2.2).
+**`auto_verb`.** It covers `run_persona`, `pause_persona`, `resume_persona`, `cancel_execution`, `chat_send` and (M20) `review_decide`. Queue verbs stay prompt-gated (§2.2).
 
 ### 3.4 Revocation
 
@@ -486,6 +497,8 @@ Yes, sending from the phone is a command, `chat_send`. The desktop executes it, 
 5. Register a completion hook. Only on a `completed` terminal state (the rule at `chatSlice.ts:310-322`), it assembles the assistant text from the execution's output, inserts the `assistant` row, and stores `claude_session_id`.
 
 `chatSlice.sendChatMessage` then calls the same Rust command, so there is **one** turn path. A bridge that has the Rust side emit an event for the webview to run the TS path would also work, but it loses the reply if the webview reloads mid-turn and leaves two paths. **Not recommended.**
+
+**Paused personas (M21).** A paused persona still takes a `chat_send`: pause stops its own role (triggers, schedules, event subscriptions), not an explicit ask. `run_persona` already behaved this way; the two are now symmetric.
 
 **Phone UX.** The phone gets no token streaming in v1.
 - The user message appears optimistically.
