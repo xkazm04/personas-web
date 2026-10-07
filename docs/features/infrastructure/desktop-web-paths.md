@@ -46,6 +46,19 @@ Env (all optional; see `.env.example`): `PROBE_DESKTOP_URL` (default `http://127
 - Supabase reads also filter `user_id=eq.<the session's user>`; RLS is the real boundary.
 - The `deep-links.*` route rows are a static claim checked against the desktop source, not exercised: the probe never opens a `personas://` URL. A click from the web into the running desktop is still unproven.
 
+## Live proofs parked (2026-10-07)
+The operator parked the live proof session on 2026-10-07 (answer to ask 8548a233) and the desktop app stays down. The seven plan goals below are blocked on a live desktop until the operator says it is up. A builder cannot start the desktop or sign in to `pvfw`, so until then only code-only work proceeds. "Blocked" here is the plan's state for the goal, not a probe verdict, and no path is retired.
+
+| Goal | Probe rows that would prove it | What the proof needs |
+| --- | --- | --- |
+| M2 goal 1 "Proxy reaches the running desktop" | `desktop-api.direct`, `desktop-api.proxy` | the desktop on :9420, `TEAM_API_KEY`, the web dev server with `NEXT_PUBLIC_ORCHESTRATOR_URL` and `ORCHESTRATOR_TARGET=desktop`, and a `pvfw` session |
+| M3 goal 2 "Web reads the mirror instead of mocks" | `mirror.devices`, `mirror.personas` | desktop cloud sync on `pvfw`, `NEXT_PUBLIC_DATA_SOURCE=supabase`, and a session |
+| M4 goal 1 "Web pairs with and is revoked by the desktop" | `pairing` | a pairing from `/dashboard/settings#pair=` and a Revoke at the desk |
+| M4 goal 2 "Remote commands round-trip" | the `command-plane.*` rows | pause, resume, run, cancel and chat_send issued from the web while the desktop runs |
+| M4 goal 3 "`personas://` deep links emitted and handled" | `deep-links.persona`, `deep-links.execution` | the static rows read working; the click from the web into the running desktop is unproven |
+| M5 goal 1 "One probe for every path" | every row | a probe run against the running desktop |
+| M5 goal 2 "Matrix recorded with its evidence" | every row | a probe run against the running desktop, with the commit of both repos |
+
 ## Last run
 2026-10-07 09:46 UTC · personas-web `c6d52c30` (branch base; the probe itself was uncommitted on top) · personas master `654263d997` · env: the operator's `.env` (no `TEAM_API_KEY`, no probe session), desktop and web dev server not running. Exit 1. (The two `persona`/`execution` rows and the summary below were updated by hand for the 1520e629 handler; the probe was not re-run.)
 
