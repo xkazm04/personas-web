@@ -14,7 +14,8 @@ import GlowCard from "@/components/GlowCard";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
-import { type TriageItem, type TriageKind, useTriageQueue } from "./useTriageQueue";
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
+import { type TriageItem, type TriageKind, useTriageEmptyKind, useTriageQueue } from "./useTriageQueue";
 
 const KIND_META: Record<TriageKind, { Icon: React.ElementType; labelKey: "triageKindBreach" | "triageKindIncident" | "triageKindReview" }> = {
   breach: { Icon: Shield, labelKey: "triageKindBreach" },
@@ -85,6 +86,7 @@ export function TriagePane() {
   const { t } = useTranslation();
   const labels = t.dashboard.home.cockpit;
   const items = useTriageQueue();
+  const emptyKind = useTriageEmptyKind(items.length);
 
   return (
     <GlowCard accent="amber" className="flex h-full flex-col p-5">
@@ -95,12 +97,14 @@ export function TriagePane() {
           <span className="ml-auto rounded-full border border-amber-500/20 bg-amber-500/8 px-2 py-0.5 text-sm font-medium tabular-nums text-amber-300">
             {items.length}
           </span>
-        ) : (
+        ) : emptyKind === "clear" ? (
           <span className="ml-auto text-sm text-muted-dark">{labels.triageSubtitle}</span>
-        )}
+        ) : null}
       </div>
 
-      {items.length === 0 ? (
+      {emptyKind === "unserved" ? (
+        <DesktopUnsupportedNote />
+      ) : emptyKind === "clear" ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-2 py-8 text-center">
           <CheckCircle2 className="h-8 w-8 text-emerald-400/80" />
           <p className="max-w-[16rem] text-sm text-muted-dark">{labels.triageEmpty}</p>

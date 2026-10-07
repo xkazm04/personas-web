@@ -21,6 +21,8 @@ Clicking a cell, or pressing **1–8**, opens layer 2: a rail of all eight on th
 
 Layer-2 evidence reuses the dashboard's cards: Outcomes → Traffic & Errors + execution heatmap; Agents → health digest + top performers; Waiting on you → triage pane + memory actions + approved work; Self-healing → fleet recommendation + healing issues; Spend → cost by day (spike days in warning colour); Autonomy → upcoming routines + fleet sessions; Vault → vault changes + rotation overview; Instruments → status ticker + per-source status.
 
+On the desktop plane the review list is not served (`reviewStore.listNotServed`), so the Mission queue reads "not measured" (`queueReading` in `readings.ts`) and Triage shows the desktop note (`triageEmptyKind` in `useTriageQueue.ts`) instead of an all-clear. Demo sessions are unchanged.
+
 ## How it works
 - **View** `src/components/dashboard/views/home/index.tsx`: header (title, greeting, the fixed 14-day window note, tour launcher), wall or detail by `useSearchParams().get("dim")`, `useWallKeys` (document keydown; ignored in inputs, dialogs and with modifiers) and `useWallFocus`. Opening from the wall is a `pushState`; moving along the rail is a `replaceState`, so Back closes the detail instead of replaying the rail.
 - **Readings** `mission/readings.ts`: the pure model: `DIMENSION_IDS` (desktop order), `Reading<T>` (`pending | failed | unmeasured | ready`), per-dimension value shapes, `judge(id, reading)` with the desktop's verdict rules, `successPercent`, `gradeOf`. Unit-tested in `readings.test.ts`.

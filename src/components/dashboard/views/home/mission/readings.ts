@@ -135,6 +135,25 @@ export function judge<K extends DimensionId>(id: K, reading: MissionReadings[K])
   return (JUDGES[id] as (value: ReadyValue<K>) => Verdict)(reading.value as ReadyValue<K>);
 }
 
+/**
+ * The queue reading from the review source. A list the desktop plane does not
+ * serve is "not measured", never a ready 0 that judges to an all-clear.
+ */
+export function queueReading(input: {
+  settled: boolean;
+  listNotServed: boolean;
+  pendingReviews: number;
+  extras: { alerts: number; memory: number; reports: number };
+}): Reading<Queue> {
+  if (!input.settled) return { status: "pending" };
+  if (input.listNotServed) return { status: "unmeasured" };
+  const { pendingReviews: reviews, extras } = input;
+  return {
+    status: "ready",
+    value: { reviews, ...extras, total: reviews + extras.alerts + extras.memory + extras.reports },
+  };
+}
+
 /** Share of finished runs that completed, as a whole percent. */
 export function successPercent(completed: number, failed: number): number | null {
   const finished = completed + failed;

@@ -69,6 +69,24 @@ const PERSONA_COLOR: Record<string, string> = Object.fromEntries(
 
 const MAX_ITEMS = 6;
 
+export type TriageEmptyKind = "items" | "unserved" | "clear";
+
+/**
+ * What the pane shows for a queue of `count` items. An empty queue is an
+ * all-clear only when the review list was actually served.
+ */
+export function triageEmptyKind(count: number, listNotServed: boolean): TriageEmptyKind {
+  if (count > 0) return "items";
+  return listNotServed ? "unserved" : "clear";
+}
+
+/** Same choice for the pane, with the demo session (which never hits the desktop plane) kept as-is. */
+export function useTriageEmptyKind(count: number): TriageEmptyKind {
+  const isDemo = useAuthStore((s) => s.isDemo);
+  const listNotServed = useReviewStore((s) => s.listNotServed);
+  return triageEmptyKind(count, listNotServed && !isDemo);
+}
+
 /**
  * The Mission-Control Triage Pane's data: a single ranked queue of the most
  * urgent things needing attention, merged across active SLA breaches, open

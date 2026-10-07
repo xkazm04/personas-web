@@ -18,7 +18,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { effectiveNextRunMs } from "../home-page/relativeLabels";
 import { useUpcomingRoutines } from "../home-page/useUpcomingRoutines";
-import { gradeOf, successPercent, type MissionReadings, type Reading } from "./readings";
+import { gradeOf, queueReading, successPercent, type MissionReadings, type Reading } from "./readings";
 
 /** z-score above which a day's cost counts as a spike (matches Observability). */
 const COST_SPIKE_Z = 2;
@@ -96,6 +96,7 @@ export function useMissionReadings(now: number): {
 } {
   const isDemo = useAuthStore((s) => s.isDemo);
   const pendingReviews = useReviewStore((s) => s.pendingReviewCount);
+  const listNotServed = useReviewStore((s) => s.listNotServed);
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
   const fetchReviews = useReviewStore((s) => s.fetchReviews);
   // `reviewsLoading` flips only once the fetch starts; latch the first paint.
@@ -154,16 +155,12 @@ export function useMissionReadings(now: number): {
           })(),
         }
       : { status: "unmeasured" },
-    queue: reviewsReady
-      ? {
-          status: "ready",
-          value: {
-            reviews: pendingReviews,
-            ...demoQueueExtras,
-            total: pendingReviews + demoQueueExtras.alerts + demoQueueExtras.memory + demoQueueExtras.reports,
-          },
-        }
-      : { status: "pending" },
+    queue: queueReading({
+      settled: reviewsReady,
+      listNotServed: listNotServed && !isDemo,
+      pendingReviews,
+      extras: demoQueueExtras,
+    }),
     recovery: fromSwr(issuesQuery.data, issuesQuery.error, recoveryOf),
     spend: fromSwr(dailyQuery.data, dailyQuery.error, spendOf),
     autonomy: routinesReading,

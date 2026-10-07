@@ -1,5 +1,37 @@
 import { describe, expect, it } from "vitest";
-import { gradeOf, judge, successPercent } from "./readings";
+import { gradeOf, judge, queueReading, successPercent } from "./readings";
+
+describe("queueReading", () => {
+  const extras = { alerts: 0, memory: 0, reports: 0 };
+  const base = { settled: true, listNotServed: false, pendingReviews: 0, extras };
+
+  it("is pending until the review fetch settles", () => {
+    expect(queueReading({ ...base, settled: false })).toEqual({ status: "pending" });
+    expect(queueReading({ ...base, settled: false, listNotServed: true })).toEqual({ status: "pending" });
+  });
+
+  it("is unmeasured when the list is not served, never a ready 0", () => {
+    const reading = queueReading({ ...base, listNotServed: true });
+    expect(reading).toEqual({ status: "unmeasured" });
+    expect(judge("queue", reading)).toBe("unmeasured");
+  });
+
+  it("reads a served empty list as ready 0 and judges ok", () => {
+    const reading = queueReading(base);
+    expect(reading).toEqual({ status: "ready", value: { reviews: 0, alerts: 0, memory: 0, reports: 0, total: 0 } });
+    expect(judge("queue", reading)).toBe("ok");
+  });
+
+  it("carries the pending count and demo extras into the total", () => {
+    expect(queueReading({ ...base, pendingReviews: 3 })).toEqual({
+      status: "ready",
+      value: { reviews: 3, alerts: 0, memory: 0, reports: 0, total: 3 },
+    });
+    const demo = queueReading({ ...base, pendingReviews: 2, extras: { alerts: 1, memory: 2, reports: 3 } });
+    expect(demo).toEqual({ status: "ready", value: { reviews: 2, alerts: 1, memory: 2, reports: 3, total: 8 } });
+    expect(judge("queue", demo)).toBe("yours");
+  });
+});
 
 describe("mission readings", () => {
   it("passes source states through untouched", () => {
