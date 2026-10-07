@@ -3,6 +3,7 @@ import {
   OrchestratorConfigError,
   validateOrchestratorUrl,
 } from "@/lib/orchestrator-config";
+import { verifySession } from "../userSession";
 
 /**
  * Same-origin proxy for every orchestrator REST call.
@@ -10,8 +11,10 @@ import {
  * The team API key MUST NOT reach the browser bundle, so the client calls
  * `/api/orchestrator/<path>` and this handler attaches the key server-side
  * (preferring the server-only `TEAM_API_KEY`, falling back to the legacy
- * `NEXT_PUBLIC_TEAM_API_KEY` during migration). The user's own Supabase
- * session token is forwarded from the `X-User-Token` header when present.
+ * `NEXT_PUBLIC_TEAM_API_KEY` during migration). The key carries the
+ * orchestrator's full authority, so it is attached only for a caller whose
+ * `X-User-Token` Supabase verifies as a live session (`userSession.ts`); that
+ * token is forwarded too.
  */
 function orchestratorKey(): string | undefined {
   return process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
@@ -28,15 +31,25 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
     throw err;
   }
 
+  const userToken = req.headers.get("x-user-token");
+  const session = await verifySession(userToken);
+  if (session === "unavailable") {
+    return Response.json({ error: "auth_unavailable" }, { status: 503 });
+  }
+  if (session !== "verified" || !userToken) {
+    return Response.json({ error: "unauthenticated" }, { status: 401 });
+  }
+
   const targetPath = "/" + path.map(encodeURIComponent).join("/");
   const url = new URL(targetPath, base);
   url.search = req.nextUrl.search;
 
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "X-User-Token": userToken,
+  };
   const key = orchestratorKey();
   if (key) headers["Authorization"] = `Bearer ${key}`;
-  const userToken = req.headers.get("x-user-token");
-  if (userToken) headers["X-User-Token"] = userToken;
 
   const hasBody = req.method !== "GET" && req.method !== "HEAD";
   const body = hasBody ? await req.text() : undefined;
