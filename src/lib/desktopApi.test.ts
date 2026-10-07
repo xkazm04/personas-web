@@ -68,6 +68,31 @@ describe("createDesktopApi", () => {
     expect(matchDesktopShape("GET", ["api", "events"])).toMatchObject({ served: "not_on_desktop" });
   });
 
+  it("refuses the subscription reads with the 501 body and never calls the fetcher", async () => {
+    const { api, calls } = setup({});
+    const all = await api.listAllSubscriptions().catch((e: unknown) => e);
+    expect(all).toBeInstanceOf(ApiError);
+    expect((all as ApiError).status).toBe(501);
+    expect(JSON.parse((all as ApiError).body)).toEqual({
+      error: "not_on_desktop",
+      method: "GET",
+      path: "/api/personas/:id/subscriptions",
+    });
+    const one = await api.listSubscriptions("p1").catch((e: unknown) => e);
+    expect(one).toBeInstanceOf(ApiError);
+    expect((one as ApiError).status).toBe(501);
+    expect(JSON.parse((one as ApiError).body)).toEqual({
+      error: "not_on_desktop",
+      method: "GET",
+      path: "/api/personas/p1/subscriptions",
+    });
+    expect(calls).toEqual([]);
+  });
+
+  it("keeps the subscription overrides and the shape table in step", () => {
+    expect(matchDesktopShape("GET", ["api", "personas", "p1", "subscriptions"])).toMatchObject({ served: "not_on_desktop" });
+  });
+
   it("lists personas, blanking what the desktop does not send", async () => {
     const { api, calls } = setup({
       "/api/personas": ok([{ id: "p1", name: "N", description: "d", enabled: true, icon: "x", color: "#111" }]),

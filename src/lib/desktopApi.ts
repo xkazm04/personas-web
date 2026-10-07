@@ -125,6 +125,25 @@ export function createDesktopApi(fetcher: DesktopFetcher, base: ApiClient): ApiC
         new ApiError(501, JSON.stringify({ error: "not_on_desktop", method: "GET", path: "/api/events" })),
       ),
 
+    // The desktop serves no subscription read (desktopShapes: GET /api/personas/:id/subscriptions is
+    // not_on_desktop). Same local 501 as listEvents; without it the base listAllSubscriptions would
+    // choke on the persona envelope or send one request per persona. Create, update and delete stay on base.
+    listAllSubscriptions: () =>
+      Promise.reject(
+        new ApiError(
+          501,
+          JSON.stringify({ error: "not_on_desktop", method: "GET", path: "/api/personas/:id/subscriptions" }),
+        ),
+      ),
+
+    listSubscriptions: (personaId: string) =>
+      Promise.reject(
+        new ApiError(
+          501,
+          JSON.stringify({ error: "not_on_desktop", method: "GET", path: `/api/personas/${personaId}/subscriptions` }),
+        ),
+      ),
+
     getStatus: () => call<StatusResponse>("/api/status"),
 
     getHealth: async (): Promise<HealthResponse> => {

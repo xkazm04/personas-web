@@ -103,6 +103,8 @@ interface EventState {
 
   subscriptions: PersonaEventSubscription[];
   subscriptionsLoading: boolean;
+  /** The plane answered 501 not_on_desktop to the subscription read: an empty list means "not served", not "no subscriptions". */
+  subscriptionsNotServed: boolean;
   fetchSubscriptions: () => Promise<void>;
   createSubscription: (input: { personaId: string; eventType: string; sourceFilter?: string }) => Promise<void>;
   updateSubscription: (personaId: string, subId: string, body: { enabled?: boolean; eventType?: string; sourceFilter?: string | null }) => Promise<void>;
@@ -345,13 +347,15 @@ export const useEventStore = create<EventState>((set, get) => ({
 
   subscriptions: [],
   subscriptionsLoading: false,
+  subscriptionsNotServed: false,
   fetchSubscriptions: async () => {
     set({ subscriptionsLoading: true });
     try {
       const subscriptions = await api.listAllSubscriptions();
-      set({ subscriptions });
-    } catch {
-      // leave stale
+      set({ subscriptions, subscriptionsNotServed: false });
+    } catch (err) {
+      // 501 means this plane does not serve the read; any other failure leaves stale.
+      if (err instanceof ApiError && err.status === 501) set({ subscriptionsNotServed: true });
     } finally {
       set({ subscriptionsLoading: false });
     }
@@ -390,6 +394,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       retryCounts: {},
       subscriptions: [],
       subscriptionsLoading: false,
+      subscriptionsNotServed: false,
     });
   },
 }));

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import type { PersonaEvent } from "@/lib/types";
+import type { PersonaEvent, PersonaEventSubscription } from "@/lib/types";
 
 const publishEvent = vi.fn();
 const updateEvent = vi.fn();
@@ -262,5 +262,31 @@ describe("behaviours the FSM must not regress", () => {
     list.mockRejectedValueOnce(new Error("network"));
     await useEventStore.getState().fetchEvents();
     expect(useEventStore.getState().listNotServed).toBe(false);
+  });
+
+  it("a 501 from the subscription read sets subscriptionsNotServed and keeps the rows; a success clears it; another error leaves it; reset clears it", async () => {
+    const { api } = await import("@/lib/api");
+    const { ApiError } = await import("@/lib/api-error");
+    const list = api.listAllSubscriptions as unknown as ReturnType<typeof vi.fn>;
+    const kept = { id: "s1", personaId: "p1", eventType: "x", enabled: true } as unknown as PersonaEventSubscription;
+    useEventStore.setState({ subscriptions: [kept], subscriptionsNotServed: false });
+    list.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsNotServed).toBe(true);
+    expect(useEventStore.getState().subscriptions.map((s) => s.id)).toEqual(["s1"]);
+    list.mockRejectedValueOnce(new ApiError(500, "boom"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsNotServed).toBe(true);
+    list.mockResolvedValueOnce([]);
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsNotServed).toBe(false);
+    list.mockRejectedValueOnce(new Error("network"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsNotServed).toBe(false);
+    list.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsNotServed).toBe(true);
+    useEventStore.getState().reset();
+    expect(useEventStore.getState().subscriptionsNotServed).toBe(false);
   });
 });
