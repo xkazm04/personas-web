@@ -12,6 +12,14 @@ export type ReviewDecision = "approved" | "rejected";
 /** The contract's cap on a verdict's notes (spec 2.2). */
 export const REVIEW_NOTES_MAX = 2000;
 
+/**
+ * What the desktop keeps of a phone note, in characters: it redacts credential-
+ * looking tokens, then cuts to `PHONE_NOTES_CAP_CHARS` (500, marker included),
+ * `review_decide.rs` at personas 66888d389d. The note fields stop here so
+ * nothing typed is silently cut; `REVIEW_NOTES_MAX` stays the envelope bound.
+ */
+export const REVIEW_NOTES_KEPT = 500;
+
 export interface ReviewDecideParams {
   reviewId: string;
   decision: ReviewDecision;

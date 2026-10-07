@@ -6,7 +6,7 @@ import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import CommandChip from "@/components/dashboard/views/personas/phone/CommandChip";
 import { useTranslation } from "@/i18n/useTranslation";
 import { mobileCopy } from "@/i18n/pending/mobile";
-import { REVIEW_NOTES_MAX } from "@/lib/commands/reviewDecide";
+import { REVIEW_NOTES_KEPT } from "@/lib/commands/reviewDecide";
 import type { InflightCommand } from "@/lib/commands/commandReducer";
 import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -107,11 +107,12 @@ export default function PhoneReviewCard({ review, now, canDecide, command, onDec
               data-review-note
               value={draft ?? ""}
               onChange={(e) => setDraft(review.id, e.target.value)}
-              maxLength={REVIEW_NOTES_MAX}
+              maxLength={REVIEW_NOTES_KEPT}
               rows={2}
               placeholder={t.dashboardUi.notesPlaceholder}
               className="mt-1 min-h-[44px] w-full resize-none rounded-xl border border-glass-hover bg-white/[0.03] px-3 py-2.5 text-base text-foreground placeholder:text-muted-dark focus-visible:outline-2 focus-visible:outline-brand-cyan"
             />
+            <p className="mt-1 text-sm text-muted-dark">{copy.notesKept.replace("{max}", String(REVIEW_NOTES_KEPT))}</p>
           </div>
         ) : (
           <button

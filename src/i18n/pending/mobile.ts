@@ -143,6 +143,7 @@ export interface MobileCopy {
     approveLabel: string;
     rejectLabel: string;
     escalationFailed: string;
+    notesKept: string;
   };
   /** `/dashboard/notes`: the desktop Notepad's goals, read-only (PHASE2-SPEC.md 5.1). */
   notes: {
@@ -322,6 +323,7 @@ export const mobileCopy: MobileCopy = {
     approveLabel: 'Approve: {title}',
     rejectLabel: 'Reject: {title}',
     escalationFailed: 'An overdue review couldn\'t be approved automatically ({reason}). It\'s still waiting for you.',
+    notesKept: 'The desktop keeps up to {max} characters and removes anything that looks like a credential.',
   },
   notes: {
     nav: 'Notes',

@@ -5,7 +5,7 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import { mobileCopy } from "@/i18n/pending/mobile";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatAge, resolverLabel, reviewerNotesText } from "@/lib/review-display";
-import { REVIEW_NOTES_MAX } from "@/lib/commands/reviewDecide";
+import { REVIEW_NOTES_KEPT } from "@/lib/commands/reviewDecide";
 import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import { DueChip } from "../review-due";
@@ -155,7 +155,8 @@ function ReviewNotesEditor({ notes, setNotes, notesRef }: { notes: string; setNo
         <Bookmark className="h-3 w-3 text-muted-dark" />
         <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">{t.dashboardUi.reviewerNotes}</span>
       </div>
-      <textarea ref={notesRef} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={REVIEW_NOTES_MAX} placeholder={t.dashboardUi.notesPlaceholder} rows={3} className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none resize-none" />
+      <textarea ref={notesRef} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={REVIEW_NOTES_KEPT} placeholder={t.dashboardUi.notesPlaceholder} rows={3} className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none resize-none" />
+      <p className="mt-1 text-sm text-muted-dark">{mobileCopy.reviews.notesKept.replace("{max}", String(REVIEW_NOTES_KEPT))}</p>
     </div>
   );
 }
