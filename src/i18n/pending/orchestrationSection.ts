@@ -89,14 +89,14 @@ export interface OrchestrationSectionCopy {
 export const orchestrationSectionCopy: OrchestrationSectionCopy = {
   heading: 'Orchestration',
   headingGradient: 'hub',
-  description: 'Ten trigger types, one persona hub. Any signal can wake any agent \u2014 or launch one yourself. Pick a trigger to see it fire.',
+  description: 'Ten trigger types, one persona hub. Any signal can wake any agent, or launch one yourself. Pick a trigger to see it fire.',
   ringLabel: 'Trigger types',
   trigger: 'Trigger',
   firesWhen: 'Fires when',
   triggers: {
     schedule: {
       label: 'Schedule',
-      description: 'Runs on a time-based schedule \u2014 a cron expression, a fixed interval, or a specific calendar time.',
+      description: 'Runs on a time-based schedule: a cron expression, a fixed interval, or a specific calendar time.',
       example: 'Every morning at 08:00',
       persona: 'Morning Brief',
     },
@@ -118,7 +118,7 @@ export const orchestrationSectionCopy: OrchestrationSectionCopy = {
     },
     clipboard: {
       label: 'Clipboard',
-      description: 'Fires when the OS clipboard receives content matching a pattern \u2014 URLs, tokens, or snippets.',
+      description: 'Fires when the OS clipboard receives content matching a pattern: URLs, tokens, or snippets.',
       example: 'On copy of URL',
       persona: 'Link Archiver',
     },
@@ -135,7 +135,7 @@ export const orchestrationSectionCopy: OrchestrationSectionCopy = {
     },
     chain: {
       label: 'Chain',
-      description: 'Fires when an upstream persona finishes \u2014 one agent\'s output becomes the next agent\'s input.',
+      description: 'Fires when an upstream persona finishes: one agent\'s output becomes the next agent\'s input.',
       example: 'After Researcher runs',
       persona: 'Report Writer',
     },
@@ -147,7 +147,7 @@ export const orchestrationSectionCopy: OrchestrationSectionCopy = {
     },
     manual: {
       label: 'Manual',
-      description: 'Run an agent on demand \u2014 straight from the dashboard, the CLI, or a hotkey. No automation required.',
+      description: 'Run an agent on demand, straight from the dashboard, the CLI, or a hotkey. No automation required.',
       example: 'Click Run',
       persona: 'Ad-hoc Task',
     },

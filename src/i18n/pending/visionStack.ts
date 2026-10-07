@@ -109,7 +109,7 @@ export const visionStackCopy: VisionStackCopy = {
   layers: {
     orchestration: {
       title: 'Orchestration',
-      description: 'Eight trigger types wake personas in parallel \u2014 schedule, webhook, file watcher, clipboard, event, and more.',
+      description: 'Eight trigger types wake personas in parallel: schedule, webhook, file watcher, clipboard, event, and more.',
       details: [
         'Schedule, polling, webhook, event, composite',
         'File watcher and clipboard triggers',
@@ -122,7 +122,7 @@ export const visionStackCopy: VisionStackCopy = {
     },
     byom: {
       title: 'BYOM',
-      description: 'Bring your own model. Run personas against Claude or local Ollama \u2014 your machine, your choice.',
+      description: 'Bring your own model. Run personas against Claude or local Ollama: your machine, your choice.',
       details: [
         'Claude (via the official CLI)',
         'Ollama for fully local inference',
@@ -147,7 +147,7 @@ export const visionStackCopy: VisionStackCopy = {
     },
     monitoring: {
       title: 'Monitoring',
-      description: 'Self-healing execution, human review queues, and persistent agent memory \u2014 watch every run in real time.',
+      description: 'Self-healing execution, human review queues, and persistent agent memory. Watch every run in real time.',
       details: [
         'Self-healing engine with automatic recovery',
         'Human-in-the-loop review queues',

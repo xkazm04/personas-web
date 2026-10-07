@@ -85,7 +85,7 @@ export interface ObserveSectionCopy {
 export const observeSectionCopy: ObserveSectionCopy = {
   heading: 'See everything,',
   headingGradient: 'miss nothing',
-  description: 'Every run, message and event \u2014 live, in one dashboard.',
+  description: 'Every run, message and event, live in one dashboard.',
   modules: {
     executions: {
       title: 'Executions',

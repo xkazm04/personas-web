@@ -425,7 +425,7 @@ export const featuresSectionsCopy: FeaturesSectionsCopy = {
       },
       steps: {
         read: 'Read Gmail',
-        summarise: 'Summarise',
+        summarise: 'Summarize',
         save: 'Save to Notion',
         post: 'Post to Slack',
       },
@@ -580,7 +580,7 @@ export const featuresSectionsCopy: FeaturesSectionsCopy = {
         spike: 'Error spike found',
         rollback: 'Rolled back v2.14',
         indexed: 'Indexed 22 pages',
-        standup: 'Summarised stand-up',
+        standup: 'Summarized stand-up',
         drafted: 'Drafted 3 replies',
         post: 'Posted PR summary',
         repost: 'Posted PR summary',

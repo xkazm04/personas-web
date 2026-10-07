@@ -72,8 +72,8 @@ export interface PluginsExtraCopy {
 
 export const pluginsExtraCopy: PluginsExtraCopy = {
   variantBlurbs: {
-    athenaFleet: 'A grid of CLIs under Athena\'s watch \u2014 her orb glides to whatever blocks them and answers on-policy',
-    brain: 'Knowledge graph view \u2014 your notes, connected and alive',
+    athenaFleet: 'A grid of CLIs under Athena\'s watch: her orb glides to whatever blocks them and answers on-policy',
+    brain: 'Knowledge graph view: your notes, connected and alive',
   },
   fleet: {
     title: 'Agent fleet',
@@ -83,7 +83,7 @@ export const pluginsExtraCopy: PluginsExtraCopy = {
     done: 'Done',
     autonomous: 'autonomous',
     statusSpawning: 'spawning {spawned}/16\u2026',
-    statusBlocked: '{needs} blocked \u2014 Athena dispatching',
+    statusBlocked: '{needs} blocked: Athena dispatching',
     statusWorking: 'fleet working',
     statusTriaging: 'Athena triaging \u00b7 {resolved}/4 resolved',
     statusAllGreen: '16/16 green \u00b7 0 human interruptions',
@@ -102,10 +102,10 @@ export const pluginsExtraCopy: PluginsExtraCopy = {
       lcpBudget: 'Raise the LCP budget?',
     },
     captions: {
-      quarantine: '\u2713 approved \u2014 quarantine 3',
-      focusRing: '\u2713 approved \u2014 focus-ring fix',
-      release: '\u26a1 nudged \u2014 release resumed',
-      budget: '\u2713 answered \u2014 keep 2.5s budget',
+      quarantine: '\u2713 approved: quarantine 3',
+      focusRing: '\u2713 approved: focus-ring fix',
+      release: '\u26a1 nudged: release resumed',
+      budget: '\u2713 answered: keep 2.5s budget',
     },
   },
   brain: {

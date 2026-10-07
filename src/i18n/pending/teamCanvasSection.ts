@@ -26,7 +26,7 @@ export interface TeamCanvasSectionCopy {
 export const teamCanvasSectionCopy: TeamCanvasSectionCopy = {
   heading: 'From goal to',
   headingGradient: 'shipped',
-  lede: 'Triggers wake a single agent — the team canvas wires many. A goal fans out to personas that move real KPIs toward target along the line, then converges into a reviewed, shippable release.',
+  lede: 'Triggers wake a single agent. The team canvas wires many. A goal fans out to personas that move real KPIs toward target along the line, then converges into a reviewed, shippable release.',
   goalLabel: 'Goal',
   goal: 'Ship the v0.5 release',
   shipped: 'Shipped',

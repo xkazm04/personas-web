@@ -33,8 +33,8 @@ export interface UseCasesPersonaCopy {
 }
 
 export const useCasesPersonaCopy: UseCasesPersonaCopy = {
-  groupLabel: 'One persona, {persona}, shown as its card. Connecting each of {tools} tools adds that tool\'s jobs, {jobs} in all, while the persona\'s name, icon and colour stay the same.',
-  identityNote: 'Same name, same icon, same colour through every tool. Connecting a tool only adds jobs to this one persona.',
+  groupLabel: 'One persona, {persona}, shown as its card. Connecting each of {tools} tools adds that tool\'s jobs, {jobs} in all, while the persona\'s name, icon and color stay the same.',
+  identityNote: 'Same name, same icon, same color through every tool. Connecting a tool only adds jobs to this one persona.',
   personaName: 'Chief of staff',
   personaDescription: 'Keeps your inbox, channels, repos and calendar moving.',
   active: 'Active',

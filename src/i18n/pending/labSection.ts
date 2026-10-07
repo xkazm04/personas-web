@@ -90,7 +90,7 @@ export interface LabSectionCopy {
 export const labSectionCopy: LabSectionCopy = {
   heading: 'The',
   headingGradient: 'Lab',
-  lede: 'Four ways to make your personas better — chat with them, fight them against each other, evolve them across generations, or score them on the dimensions that matter. Every improvement you keep is versioned and reversible.',
+  lede: 'Four ways to make your personas better: chat with them, fight them against each other, evolve them across generations, or score them on the dimensions that matter. Every improvement you keep is versioned and reversible.',
   tabs: {
     chat: { label: 'Chat', blurb: 'Refine your persona by talking to it' },
     arena: { label: 'Arena', blurb: 'Two prompts enter, one wins' },
@@ -106,7 +106,7 @@ export const labSectionCopy: LabSectionCopy = {
     replay: 'replay',
     messages: {
       tooManyUrgent: 'The triage agent is labeling too many emails as urgent. Dial it back.',
-      tighten: "Got it. Looking at your last 200 runs — 31% were flagged urgent. Industry benchmark for this pattern is 8–12%. I'll tighten the urgency criteria.",
+      tighten: "Got it. Looking at your last 200 runs, 31% were flagged urgent. Industry benchmark for this pattern is 8–12%. I'll tighten the urgency criteria.",
       newsletters: "Also stop flagging newsletters even if they say 'urgent' in the subject.",
       preFilter: 'Added a newsletter pre-filter. Anything with List-Unsubscribe headers or sender in marketing-domains list is now excluded from urgency scoring.',
       replayResult: 'Replaying the last 48h against the new config… 9.2% flagged urgent. Want me to promote this?',
@@ -125,7 +125,7 @@ export const labSectionCopy: LabSectionCopy = {
     fighting: 'fighting…',
     roundComplete: 'round complete',
     inputs: {
-      prodBug: 'Urgent bug in prod — draft status update',
+      prodBug: 'Urgent bug in prod: draft status update',
       declineMeeting: 'Politely decline a meeting',
       slackSummary: 'Summarize 40 unread Slack msgs',
       explainPr: 'Explain the PR in plain English',

@@ -42,28 +42,28 @@ export const companionSectionCopy: CompanionSectionCopy = {
   heading: 'Meet',
   headingGradient: 'Athena',
   headingTrailing: ', always on',
-  description: 'A persistent orb that lives on your desktop \u2014 hold it to talk, it remembers how you work, and it reaches out before you have to ask.',
+  description: 'A persistent orb that lives on your desktop: hold it to talk, it remembers how you work, and it reaches out before you have to ask.',
   avatarAlt: 'Athena, the Personas companion',
   capabilities: {
     always: {
       label: 'Always on, never in the way',
-      blurb: 'A floating orb lives on your desktop \u2014 her animated face is the interface. Drag it anywhere; it survives restarts and quietly pauses when you look away.',
+      blurb: 'A floating orb lives on your desktop, and her animated face is the interface. Drag it anywhere; it survives restarts and quietly pauses when you look away.',
       line: 'I\'m right here whenever you need me.',
     },
     voice: {
       label: 'Hold to talk',
-      blurb: 'Press and hold the orb to speak \u2014 voice in, voice out. Runs on-device with local Whisper, or in your browser. No chat window required.',
-      line: 'Hold to talk \u2014 I\'m listening.',
+      blurb: 'Press and hold the orb to speak: voice in, voice out. Runs on-device with local Whisper, or in your browser. No chat window required.',
+      line: 'Hold to talk. I\'m listening.',
     },
     memory: {
       label: 'Remembers what matters',
-      blurb: 'Athena keeps a long-term memory of your identity, goals, and how you work \u2014 and you\'re the editor. She never overwrites; every change is yours to approve.',
+      blurb: 'Athena keeps a long-term memory of your identity, goals, and how you work, and you\'re the editor. She never overwrites; every change is yours to approve.',
       line: 'I remember your goals and how you work.',
     },
     proactive: {
       label: 'Reaches out first',
-      blurb: 'She surfaces what needs you \u2014 a goal due soon, an aging backlog, runs that failed overnight \u2014 and can even schedule her own check-ins.',
-      line: 'Heads up \u2014 3 runs failed overnight.',
+      blurb: 'She surfaces what needs you (a goal due soon, an aging backlog, runs that failed overnight) and can even schedule her own check-ins.',
+      line: 'Heads up: 3 runs failed overnight.',
     },
   },
 };
