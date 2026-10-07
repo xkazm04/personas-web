@@ -8,7 +8,7 @@ import type { BrandKey } from "@/lib/brand-theme";
  * an agent team moves toward target — each KPI a baseline→current→target with
  * warn/crit threshold bands, a traffic-light status, and a deterministic trend.
  *
- * Words live in en.ts (t.teamCanvasSection: kpis by KPI_KEY, status, goal);
+ * Words live in src/i18n/pending/teamCanvasSection.ts (teamCanvasSectionCopy: kpis by KPI_KEY, status, goal);
  * this file keeps ids, numbers and colours. Colors are resolved by consumers via
  * STATUS_BRAND → BRAND_VAR (no raw hex), so they stay theme-correct.
  */

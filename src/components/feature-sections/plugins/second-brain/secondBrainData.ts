@@ -1,7 +1,7 @@
 import { FileText, Hash, Sparkles } from "lucide-react";
-import type { Translations } from "@/i18n/en";
+import type { PluginsExtraCopy } from "@/i18n/pending/pluginsExtra";
 
-type BrainCopy = Translations["pluginsExtra"]["brain"];
+type BrainCopy = PluginsExtraCopy["brain"];
 
 export type NodeType = "note" | "tag" | "idea";
 
@@ -49,7 +49,7 @@ export const NODE_ICON: Record<NodeType, typeof FileText> = {
   idea: Sparkles,
 };
 
-/** Sample vault files; each note line is `t.pluginsExtra.brain.backlinkNotes[noteKey]`. */
+/** Sample vault files; each note line is `pluginsExtraCopy.brain.backlinkNotes[noteKey]`. */
 export const BACKLINKS: { label: string; noteKey: keyof BrainCopy["backlinkNotes"] }[] = [
   { label: "leonardo.md", noteKey: "leonardo" },
   { label: "matrix-redesign.md", noteKey: "matrix" },
@@ -57,7 +57,7 @@ export const BACKLINKS: { label: string; noteKey: keyof BrainCopy["backlinkNotes
   { label: "roadmap.md", noteKey: "roadmap" },
 ];
 
-/** Recent captures; each line is `t.pluginsExtra.brain.captures[textKey]`. */
+/** Recent captures; each line is `pluginsExtraCopy.brain.captures[textKey]`. */
 export const CAPTURES: { time: string; textKey: keyof BrainCopy["captures"] }[] = [
   { time: "12m", textKey: "wire" },
   { time: "1h", textKey: "masks" },

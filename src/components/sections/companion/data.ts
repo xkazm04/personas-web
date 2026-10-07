@@ -1,16 +1,16 @@
 import { Sparkles, Mic, Brain, BellRing } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { BrandKey } from "@/lib/brand-theme";
-import type { Translations } from "@/i18n/en";
+import type { CompanionSectionCopy } from "@/i18n/pending/companionSection";
 
 /**
  * Athena (the Companion) capabilities — copy verified against the desktop
  * `docs/features/companion/` feature so every claim maps to a real behavior.
  * Each capability's label, blurb and line is translated copy in
- * `t.companionSection.capabilities[id]`.
+ * `companionSectionCopy.capabilities[id]`.
  */
 
-export type CapabilityId = keyof Translations["companionSection"]["capabilities"];
+export type CapabilityId = keyof CompanionSectionCopy["capabilities"];
 
 export interface Capability {
   id: CapabilityId;

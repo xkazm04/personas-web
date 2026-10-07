@@ -10,6 +10,7 @@ import { CHAT_SCRIPT } from "../data";
 import type { ChatMsg } from "../types";
 import { REFINED_VERSION } from "../ledger";
 import TabBackdrop from "./TabBackdrop";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 /** `liveId` + `onActivate` come from the section's version ledger: the
  *  script ends with "Want me to promote this?", and the done-state footer
@@ -22,7 +23,7 @@ export default function ChatTab({
   onActivate: (id: string) => void;
 }) {
   const { t } = useTranslation();
-  const copy = t.labSection.chat;
+  const copy = labSectionCopy.chat;
   const reduced = useStillMotion();
   const [visible, setVisible] = useState<ChatMsg[]>(() =>
     reduced ? CHAT_SCRIPT : [],

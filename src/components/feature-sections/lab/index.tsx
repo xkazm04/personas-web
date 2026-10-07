@@ -13,10 +13,10 @@ import EvolutionTab from "./components/EvolutionTab";
 import EvalTab from "./components/EvalTab";
 import VersionRail from "./components/VersionRail";
 import { arenaContenders, initialLedger, ledgerReducer } from "./ledger";
-import { useTranslation } from "@/i18n/useTranslation";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 export default function Lab() {
-  const copy = useTranslation().t.labSection;
+  const copy = labSectionCopy;
   const [active, setActive] = useState<LabTab>("chat");
   // One version ledger for the whole section: the rail, the chat's promote
   // answer and the arena's contender labels all project from it. Lazy

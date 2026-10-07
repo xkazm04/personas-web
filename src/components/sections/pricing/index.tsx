@@ -12,6 +12,7 @@ import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
 import BillArt from "./BillArt";
 import { TALL, WIDE } from "./billGeometry";
 import { usePlayOnce } from "./usePlayOnce";
+import { pricingSectionCopy } from "@/i18n/pending/pricingSection";
 
 /**
  * Pricing: Personas itself is free (MIT, every feature, no account); the only
@@ -25,7 +26,7 @@ const DURATION = 4.2;
 
 export default function Pricing() {
   const { t } = useTranslation();
-  const w = t.pricingSection;
+  const w = pricingSectionCopy;
   const { ref, p, replay, still } = usePlayOnce(DURATION);
   // The art's natural size: never drawn taller than the stage slot (data-stage-art)
   // and never wider than its content needs.

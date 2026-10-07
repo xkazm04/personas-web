@@ -3,17 +3,19 @@
 import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import { CASES, TOOLS } from "./catalog";
+import { useCasesPersonaCopy } from "@/i18n/pending/useCasesPersona";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /** The words the animations use: heading, persona name, need labels, the art's name and the per-case status line. */
 export function useCaseCopy() {
   const { t } = useTranslation();
-  const copy = t.landingSections.useCases;
-  const persona = t.useCasesPersona.personaName;
+  const copy = landingSectionsCopy.useCases;
+  const persona = useCasesPersonaCopy.personaName;
   return {
     heading: t.useCasesSection.heading,
     gradient: t.useCasesSection.headingGradient,
     persona,
-    personaDescription: t.useCasesPersona.personaDescription,
+    personaDescription: useCasesPersonaCopy.personaDescription,
     capabilities: copy.capabilities,
     artLabel: fillTemplate(copy.artLabel, { persona }),
     need: (i: number) => copy.needs[CASES[i].need],

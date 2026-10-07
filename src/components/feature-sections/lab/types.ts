@@ -1,11 +1,11 @@
 import type { LucideIcon } from "lucide-react";
-import type { Translations } from "@/i18n/en";
+import type { LabSectionCopy } from "@/i18n/pending/labSection";
 
 export type LabTab = "chat" | "arena" | "evolution" | "eval";
 
-type LabCopy = Translations["labSection"];
+type LabCopy = LabSectionCopy;
 
-/** Words live in `labSection` (en.ts); data carries ids and numbers only. */
+/** Words live in `labSectionCopy` (src/i18n/pending/labSection.ts); data carries ids and numbers only. */
 export type ChatMessageKey = keyof LabCopy["chat"]["messages"];
 export type ArenaInputKey = keyof LabCopy["arena"]["inputs"];
 export type EvalDimensionKey = keyof LabCopy["eval"]["dimensions"];

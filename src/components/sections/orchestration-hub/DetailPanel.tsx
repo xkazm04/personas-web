@@ -5,11 +5,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, BookOpen, Bot } from "lucide-react";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { EYEBROW } from "@/lib/typography";
-import { useTranslation } from "@/i18n/useTranslation";
 import { triggerWords } from "@/components/sections/orchestration-hub/data";
 import TriggerScene from "./shared/TriggerScene";
 import { mix } from "./shared/scene-kit";
 import type { HubPlayback } from "./shared/useHubPlayback";
+import { orchestrationSectionCopy } from "@/i18n/pending/orchestrationSection";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
  * The selected trigger, given the room the live panel never had: its own
@@ -18,8 +19,7 @@ import type { HubPlayback } from "./shared/useHubPlayback";
  * wakes - and the guide link. Polite live region only while the visitor drives.
  */
 export default function DetailPanel({ hub }: { hub: HubPlayback }) {
-  const { t } = useTranslation();
-  const copy = t.orchestrationSection;
+  const copy = orchestrationSectionCopy;
   const trigger = hub.trigger;
   const words = triggerWords(copy, trigger);
   const tone = BRAND_VAR[trigger.brand];
@@ -81,7 +81,7 @@ export default function DetailPanel({ hub }: { hub: HubPlayback }) {
               <dd className="mt-1.5 font-mono text-[clamp(0.9375rem,2.5cqh,1.125rem)] text-foreground">{words.example}</dd>
             </div>
             <div className="min-w-0">
-              <dt className={EYEBROW}>{t.landingSections.hub.wakes}</dt>
+              <dt className={EYEBROW}>{landingSectionsCopy.hub.wakes}</dt>
               <dd className="mt-1.5 flex items-center gap-2 text-[clamp(0.9375rem,2.5cqh,1.125rem)] font-semibold text-foreground">
                 <Bot className="h-4 w-4 shrink-0" style={{ color: BRAND_VAR.cyan }} aria-hidden="true" />
                 {words.persona}

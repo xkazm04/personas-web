@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import type { Translations } from "@/i18n/en";
+import type { ObserveSectionCopy } from "@/i18n/pending/observeSection";
 
-type ObserveCopy = Translations["observeSection"];
+type ObserveCopy = ObserveSectionCopy;
 export type AgentId = keyof ObserveCopy["agents"];
 
 export interface ActivityRow {
@@ -14,7 +14,7 @@ export interface ActivityRow {
 }
 
 export interface OverviewModule {
-  /** Title and blurb are `t.observeSection.modules[id]`. */
+  /** Title and blurb are `observeSectionCopy.modules[id]`. */
   id: keyof ObserveCopy["modules"];
   icon: LucideIcon;
   color: string;

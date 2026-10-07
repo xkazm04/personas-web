@@ -5,6 +5,7 @@ import { BRAND_VAR } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 import { frame } from "./shared/Stage";
 import { AGENTS, FLEET, H, LINES, N, PRINT, PRINTER, TAPE, W, cableEnd, fleetY, stepOf } from "./log";
+import { observeSectionCopy } from "@/i18n/pending/observeSection";
 
 /* The left half of V3: the fleet (each agent a button that isolates its lines
  * on the record), a cable from each agent into the printer, a light that runs
@@ -36,7 +37,7 @@ function Cable({ i, clock, dim }: { i: number; clock: MotionValue<number>; dim: 
 }
 
 function AgentButton({ i, clock, active, onPick }: { i: number; clock: MotionValue<number>; active: boolean; onPick: () => void }) {
-  const name = useTranslation().t.observeSection.agents[AGENTS[i].id];
+  const name = observeSectionCopy.agents[AGENTS[i].id];
   const c = BRAND_VAR[AGENTS[i].brand];
   const glow = useTransform(clock, (s) => {
     const { whole, frac } = stepOf(s);

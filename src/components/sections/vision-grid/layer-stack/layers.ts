@@ -1,8 +1,8 @@
 import { Cpu, FlaskConical, KeyRound, LayoutGrid, Activity, Workflow, type LucideIcon } from "lucide-react";
 import type { BrandKey } from "@/lib/brand-theme";
 import type { GuideTopicRef } from "@/lib/guide-link";
-import type { Translations } from "@/i18n/en";
 import { PLATFORM_CARDS, type PlatformCard, type PlatformCardId } from "../data";
+import type { VisionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * Layer-stack variant data. The six layers are the six platform cards from
@@ -10,14 +10,14 @@ import { PLATFORM_CARDS, type PlatformCard, type PlatformCardId } from "../data"
  * the stack needs to tell: where that layer shows up on the sample persona
  * card above the stack. Every word (title, description, details, the question
  * each layer answers about ONE agent, its one-line job, what it does for the
- * sample agent) is translated copy in `t.visionStack`, joined in by
+ * sample agent) is translated copy in `visionStackCopy`, joined in by
  * `localizeStackLayers`.
  *
  * Order is top (nearest the agent) to bottom. Templates and Orchestration
  * share cyan in `data.ts`, so they are kept apart in the stack.
  */
 
-type VisionCopy = Translations["visionStack"];
+type VisionCopy = VisionStackCopy;
 
 /** A part of the sample persona card that a layer is responsible for. */
 export type CardPart = "trigger" | "model" | "origin" | "run" | "prompt" | "keys";
@@ -87,7 +87,7 @@ export function localizeStackLayers(copy: VisionCopy): StackLayer[] {
 
 /**
  * The sample agent on top of the stack. Persona colour is a brand token; its
- * name, origin, trigger and last run are `t.visionStack.persona` copy.
+ * name, origin, trigger and last run are `visionStackCopy.persona` copy.
  */
 export const SAMPLE_PERSONA = {
   brand: "blue" as BrandKey,

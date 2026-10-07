@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { BrandKey } from "@/lib/brand-theme";
-import type { Translations } from "@/i18n/en";
+import type { OrchestrationSectionCopy } from "@/i18n/pending/orchestrationSection";
 
 /**
  * Real trigger catalog — mirrors personas/src/features/triggers/sub_triggers/configs.
@@ -20,11 +20,11 @@ import type { Translations } from "@/i18n/en";
  * Each trigger maps to a brand key (not hex) so it adapts to light themes.
  * Identity, icon and links live here; every label, description, sample
  * persona and natural-language firing condition is translated copy in
- * `t.orchestrationSection` (see `triggerWords`). A firing condition that is
+ * `orchestrationSectionCopy` (see `triggerWords`). A firing condition that is
  * code (a route, a glob, an event name) stays here as `exampleCode`.
  */
 
-type OrchestrationCopy = Translations["orchestrationSection"];
+type OrchestrationCopy = OrchestrationSectionCopy;
 export type TriggerId = keyof OrchestrationCopy["triggers"];
 
 export interface DocRef {

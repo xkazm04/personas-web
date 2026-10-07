@@ -8,8 +8,8 @@ import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { useTranslation } from "@/i18n/useTranslation";
 import NestedVaultArt from "./security-vault/NestedVaultArt";
+import { securitySectionCopy } from "@/i18n/pending/securitySection";
 
 /**
  * /illustrate 1.1.0 variant "nested-vault": three concentric seals (device, OS
@@ -21,7 +21,7 @@ const DURATION = 3.8;
 
 export default function SecurityVaultNestedVault() {
   const still = useStillMotion();
-  const copy = useTranslation().t.securitySection;
+  const copy = securitySectionCopy;
   const artRef = useRef<HTMLDivElement>(null);
   const inView = useInView(artRef, { once: true, amount: 0.35 });
   const progress = useMotionValue(1);

@@ -10,18 +10,13 @@ import type { ArenaSide } from "../ledger";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import TabBackdrop from "./TabBackdrop";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 /** Contender labels project from the version ledger (`arenaContenders`), so
  *  the arena and the version rail name — and rate — the same versions. */
-export default function ArenaTab({
-  contenders,
-  liveId,
-}: {
-  contenders: Record<ArenaSide, string>;
-  liveId: string;
-}) {
+export default function ArenaTab({ contenders, liveId }: { contenders: Record<ArenaSide, string>; liveId: string }) {
   const { t } = useTranslation();
-  const copy = t.labSection.arena;
+  const copy = labSectionCopy.arena;
   const reduced = useStillMotion();
   // Ambient round cycle: stop advancing rounds into a backgrounded tab.
   const tabHidden = usePageVisibility();

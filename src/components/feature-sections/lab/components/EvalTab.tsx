@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { Radar } from "lucide-react";
 import { EVAL_DIMENSIONS, EVAL_SAMPLE_RUNS } from "../data";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import TabBackdrop from "./TabBackdrop";
 import { useStageBox } from "../useStageBox";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 export default function EvalTab() {
-  const copy = useTranslation().t.labSection.eval;
+  const copy = labSectionCopy.eval;
   const reduced = useStillMotion();
   // On the desktop stage the radar is height-bound: crop the viewBox to the
   // chart and its labels, and size the labels to read ~15px at any height.

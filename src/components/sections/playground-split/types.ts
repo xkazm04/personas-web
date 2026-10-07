@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import type { Translations } from "@/i18n/en";
+import type { PlaygroundSectionCopy } from "@/i18n/pending/playgroundSection";
 
-export type PlaygroundCopy = Translations["playgroundSection"];
+export type PlaygroundCopy = PlaygroundSectionCopy;
 
 export interface ToolNode {
   label: string;
@@ -16,7 +16,7 @@ export interface ResultCapabilities {
 }
 
 export interface ExamplePrompt {
-  /** Stable, untranslated identity (the `t.playgroundSection.examples` key). */
+  /** Stable, untranslated identity (the `playgroundSectionCopy.examples` key). */
   id: ExampleBase["id"];
   label: string;
   icon: LucideIcon;

@@ -5,6 +5,7 @@ import { RotateCcw } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import { useTranslation } from "@/i18n/useTranslation";
+import { aiModelsSectionCopy } from "@/i18n/pending/aiModelsSection";
 
 /* Frame pieces shared by the models lab variants: the section intro (the live
  * heading template with its product names as gradient text), an aspect-locked
@@ -14,7 +15,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 const HEADING_NAMES: Record<string, string> = { "{claude}": "Claude", "{ollama}": "Ollama" };
 
 export function Intro({ lede }: { lede: string }) {
-  const heading = useTranslation().t.aiModelsSection.heading;
+  const heading = aiModelsSectionCopy.heading;
   return (
     <div className="text-center" data-section-intro>
       <SectionHeading>
@@ -64,7 +65,7 @@ export function frame(w: number, h: number) {
 }
 
 export function ReplayButton({ onClick, disabled, className = "" }: { onClick: () => void; disabled: boolean; className?: string }) {
-  const label = useTranslation().t.aiModelsSection.replay;
+  const label = aiModelsSectionCopy.replay;
   return (
     <button
       type="button"

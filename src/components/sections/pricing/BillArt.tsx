@@ -3,9 +3,9 @@
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { Bot, Sparkles, SquareTerminal, Wallet } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import type { Translations } from "@/i18n/en";
 import { beat, pathD, type BillLayout } from "./billGeometry";
 import { BeatCaption, Coin, Legend, Node, RunDot, WorkPulse } from "./BillParts";
+import type { PricingSectionCopy } from "@/i18n/pending/pricingSection";
 
 /*
  * Who you pay for one agent run (owner's pick from /illustrate round 3, "bill").
@@ -17,7 +17,7 @@ import { BeatCaption, Coin, Legend, Node, RunDot, WorkPulse } from "./BillParts"
  * call: the only thing paid is the user's Claude plan.
  */
 
-type Words = Translations["pricingSection"];
+type Words = PricingSectionCopy;
 
 export default function BillArt({ l, p, w, className }: { l: BillLayout; p: MotionValue<number>; w: Words; className: string }) {
   const lit = useTransform(p, (v) => 0.25 + 0.75 * beat(v, 0, 0.3));

@@ -55,7 +55,7 @@ radius is `rounded-2xl`.
 - No guided-tour step targets this section.
 
 ## Conventions & gotchas
-- **i18n — migrated, English-only for now.** All copy lives in `t.securitySection`. The inner ring's engraving `AES-256-GCM` is a deliberate literal (`{ literal: ... }` in `RINGS`), the other two rings take `{ key: ... }` into `securitySection.rings`. `securitySection` is listed in `PENDING_TRANSLATION` in `en.ts`, so the 13 other locales fall back to English until it is translated.
+- **i18n — migrated, English-only for now.** All copy lives in `securitySectionCopy`. The inner ring's engraving `AES-256-GCM` is a deliberate literal (`{ literal: ... }` in `RINGS`), the other two rings take `{ key: ... }` into `securitySection.rings`. `securitySection` is listed in `PENDING_TRANSLATION` in `en.ts`, so the 13 other locales fall back to English until it is translated.
 - **Animation gating — followed.** The gate is `useStillMotion` (`SecurityVault.tsx:23`): when still, `progress` is pinned to 1 and the replay button is `disabled`. DOM shape is constant (only the motion value differs). One-shot, not an ambient loop.
 - **Tokens.** SVG colours come from `BRAND_VAR` / `tint()` and `var(--foreground)` / `var(--background)`; the frame uses `border-glass`. `bg-white/[0.02]` on the frame and `bg-white/[0.03]` on the replay button are raw-colour exceptions.
 - **`useId`-scoped SVG ids.** Gradient and label-path ids are suffixed with a sanitised `useId()` so two instances cannot collide; the blur filter id `nv-soft` is not scoped.

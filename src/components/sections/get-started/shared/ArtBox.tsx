@@ -4,7 +4,8 @@ import type { CSSProperties, ReactNode, RefObject } from "react";
 import { RotateCcw } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
-import { useTranslation } from "@/i18n/useTranslation";
+import { getStartedSectionCopy } from "@/i18n/pending/getStartedSection";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /* Frame pieces shared by the get-started lab variants: the section intro (keeps
  * the live heading and its `get-started-heading` id, which the landing's address
@@ -12,7 +13,7 @@ import { useTranslation } from "@/i18n/useTranslation";
  * and HTML text layer share one coordinate system (viewBox units). */
 
 export function Intro({ lede }: { lede: string }) {
-  const copy = useTranslation().t.getStartedSection;
+  const copy = getStartedSectionCopy;
   return (
     <div className="text-center" data-section-intro>
       <SectionHeading id="get-started-heading">
@@ -58,7 +59,7 @@ export function frame(w: number, h: number) {
 }
 
 export function ReplayButton({ onClick, disabled, className = "" }: { onClick: () => void; disabled: boolean; className?: string }) {
-  const label = useTranslation().t.landingSections.getStarted.replay;
+  const label = landingSectionsCopy.getStarted.replay;
   return (
     <button
       type="button"
@@ -75,7 +76,7 @@ export function ReplayButton({ onClick, disabled, className = "" }: { onClick: (
 
 /** The small "stylised" tag that marks designed art as not a screenshot. */
 export function StylisedTag({ style }: { style: CSSProperties }) {
-  const label = useTranslation().t.landingSections.getStarted.stylised;
+  const label = landingSectionsCopy.getStarted.stylised;
   return (
     <span className="pointer-events-none select-none font-mono uppercase tracking-[0.14em] text-muted-dark/80" style={style}>
       {label}

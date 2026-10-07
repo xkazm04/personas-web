@@ -27,7 +27,7 @@ The tools are a curated slice of the real connector catalog; which one is "chose
 
 **Reels (`Reel.tsx`, `reels.ts`).** `reels.ts` builds each strip (candidates repeated 4 times plus a 3-cell tail), the start and end stop indices and the `translateY` that puts an index on the payline (`PAYLINE_ROW`). `Reel` animates the strip over `spinMs` with an overshooting ease; `PersonaHand.tsx` renders the card and deals tools in; `shared/ToolGlyph.tsx` paints a glyph as a CSS mask of the SVG (`bg-current`).
 
-**Copy (`shared/useCaseCopy.ts`).** Heading from `t.useCasesSection.heading` / `headingGradient`, persona name and description from `t.useCasesPersona`, everything else from `t.landingSections.useCases` (`artLabel`, `needs`, `status`, `controls`, `prevCase`, `nextCase`, `capabilities`, `jobsCount`), filled with `fillTemplate`.
+**Copy (`shared/useCaseCopy.ts`).** Heading from `t.useCasesSection.heading` / `headingGradient`, persona name and description from `useCasesPersonaCopy`, everything else from `landingSectionsCopy.useCases` (`artLabel`, `needs`, `status`, `controls`, `prevCase`, `nextCase`, `capabilities`, `jobsCount`), filled with `fillTemplate`.
 
 **Stage fit.** `fit="fill"`: exactly one desktop stage (`src/styles/stage.css`); the art box sizes to the slot by aspect ratio.
 
@@ -50,7 +50,7 @@ The tools are a curated slice of the real connector catalog; which one is "chose
 
 ## Data & state
 - **Source:** static; the script is `CASES` + `TOOLS`. No fetch, no stores, no API routes. State lives in `useCaseCycle` (a `useReducer`) plus an `inView` flag.
-- **Copy:** `t.landingSections.useCases.*` and `t.useCasesPersona.*` (persona name/description, `pause`/`play`/`replay`) plus the live `t.useCasesSection.heading` / `headingGradient`. `landingSections` and `useCasesPersona` are in `PENDING_TRANSLATION` (`src/i18n/en.ts`): English only, the 13 other locales fall back at runtime, pending a namespace translation.
+- **Copy:** `landingSectionsCopy.useCases.*` and `useCasesPersonaCopy.*` (persona name/description, `pause`/`play`/`replay`) plus the live `t.useCasesSection.heading` / `headingGradient`. `landingSections` and `useCasesPersona` are in `PENDING_TRANSLATION` (`src/i18n/en.ts`): English only, the 13 other locales fall back at runtime, pending a namespace translation.
 
 ## Integration points
 - `SectionWrapper` (`fit="fill"`, `id="use-cases"`) and `SectionIntro`; `src/app/page.tsx` wraps it in `#tools` with `data-scroll-anchor="personas"` (`lib/landing-address.ts` maps `tools` and `use-cases` to `personas`).

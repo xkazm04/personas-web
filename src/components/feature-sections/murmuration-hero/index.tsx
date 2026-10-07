@@ -6,6 +6,7 @@ import HoneycombMark from "@/components/HoneycombMark";
 import HeroShell from "./shared/HeroShell";
 import HeroCtas from "./shared/HeroCtas";
 import MurmurationArt from "./MurmurationArt";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
  * The /features hero, "Murmuration" (runner-up of the 2026-10-05 landing contest): the viewport is a living swarm of AI
@@ -19,7 +20,7 @@ import MurmurationArt from "./MurmurationArt";
  */
 export default function MurmurationHero() {
   const { t } = useTranslation();
-  const copy = t.landingSections.featuresHero;
+  const copy = landingSectionsCopy.featuresHero;
   return (
     <HeroShell labelledBy="features-hero-heading" className="-mt-24 stage:-mt-(--nav-h)">
       <MurmurationArt />

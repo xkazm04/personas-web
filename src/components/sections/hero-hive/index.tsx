@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, type PointerEvent } from "react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import GradientText from "@/components/GradientText";
@@ -9,6 +8,7 @@ import HeroShell from "./shared/HeroShell";
 import HeroCtas from "./shared/HeroCtas";
 import HiveFloor from "./HiveFloor";
 import s from "./hive.module.css";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
  * The landing hero, "Hive" (winner of the 2026-10-05 landing contest): the lower half of the viewport is a honeycomb
@@ -19,8 +19,7 @@ import s from "./hive.module.css";
  * whole hive. The headline is a centred poster above the horizon.
  */
 export default function HiveHero() {
-  const { t } = useTranslation();
-  const copy = t.landingSections.hero;
+  const copy = landingSectionsCopy.hero;
   const still = useStillMotion();
   // Loads the hidden-tab class toggle that pauses the floor's CSS loops.
   usePageVisibility();

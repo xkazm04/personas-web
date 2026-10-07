@@ -1,7 +1,6 @@
 "use client";
 
 import { BRAND_VAR, STATE_COLORS } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import {
   STATUS_BRAND,
   kpiStatus,
@@ -9,6 +8,7 @@ import {
   type Kpi,
   type KpiStatus,
 } from "./kpiData";
+import { teamCanvasSectionCopy } from "@/i18n/pending/teamCanvasSection";
 
 /**
  * Shared leaf widgets for the "From goal to shipped" KPI variants — the marketing
@@ -63,7 +63,6 @@ export function StatusDot({ status, size = 8 }: { status: KpiStatus; size?: numb
 
 /** Traffic-light verdict chip. */
 export function StatusPill({ status, className = "" }: { status: KpiStatus; className?: string }) {
-  const { t } = useTranslation();
   const c = statusColor(status);
   return (
     <span
@@ -71,7 +70,7 @@ export function StatusPill({ status, className = "" }: { status: KpiStatus; clas
       style={{ color: c, backgroundColor: `color-mix(in srgb, ${c} 16%, transparent)` }}
     >
       <span className="h-1.5 w-1.5 rounded-full" style={{ background: c }} />
-      {t.teamCanvasSection.status[status]}
+      {teamCanvasSectionCopy.status[status]}
     </span>
   );
 }
@@ -81,8 +80,7 @@ export function StatusPill({ status, className = "" }: { status: KpiStatus; clas
  * current value as a marker, and the target as a flag. The "steer by KPI" affordance.
  */
 export function CalibrationTrack({ kpi, height = 26 }: { kpi: Kpi; height?: number }) {
-  const { t } = useTranslation();
-  const copy = t.teamCanvasSection;
+  const copy = teamCanvasSectionCopy;
   const status = kpiStatus(kpi);
   const lo = Math.min(kpi.baseline, kpi.target, kpi.critAt, kpi.current);
   const hi = Math.max(kpi.baseline, kpi.target, kpi.critAt, kpi.current);

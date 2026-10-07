@@ -4,6 +4,7 @@ import type { CSSProperties, ReactNode, RefObject } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
 import { useTranslation } from "@/i18n/useTranslation";
+import { observeSectionCopy } from "@/i18n/pending/observeSection";
 
 /* Frame pieces shared by the observe lab variants: the live section's heading
  * (its identity), an aspect-locked art box whose SVG layer and HTML layer share
@@ -11,7 +12,7 @@ import { useTranslation } from "@/i18n/useTranslation";
  * needs. The art box carries the guided tour's `data-tour-diagram="observe"`. */
 
 export function Intro({ lede }: { lede: string }) {
-  const copy = useTranslation().t.observeSection;
+  const copy = observeSectionCopy;
   return (
     <div className="text-center" data-section-intro>
       <SectionHeading>

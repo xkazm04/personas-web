@@ -6,6 +6,7 @@ import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
 import { useTranslation } from "@/i18n/useTranslation";
+import { memorySectionCopy } from "@/i18n/pending/memorySection";
 
 /* Frame pieces shared by the memory lab variants: the live section shell (its
  * `memory-layers` id, heading and lede), an aspect-locked art box whose SVG
@@ -13,7 +14,7 @@ import { useTranslation } from "@/i18n/useTranslation";
  * the small replay button and "stylised" tag. */
 
 export function MemoryShell({ children }: { children: ReactNode }) {
-  const copy = useTranslation().t.memorySection;
+  const copy = memorySectionCopy;
   return (
     <SectionWrapper fit="fill" id="memory-layers" className="overflow-hidden">
       <div className="relative z-10 text-center" data-section-intro>
@@ -83,7 +84,7 @@ export function frame(w: number, h: number) {
 }
 
 export function ReplayButton({ onClick, disabled, style }: { onClick: () => void; disabled: boolean; style?: CSSProperties }) {
-  const label = useTranslation().t.memorySection.replay;
+  const label = memorySectionCopy.replay;
   return (
     <button
       type="button"

@@ -4,7 +4,7 @@ import { useEffect, useId, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR, brandShadow, tint, type BrandKey } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
+import { companionSectionCopy } from "@/i18n/pending/companionSection";
 
 /**
  * AthenaOrb — the section's centerpiece "art". The real Athena avatar (the
@@ -25,7 +25,7 @@ const ORB_R = 92;
 const DOT_COUNT = 5;
 
 export default function AthenaOrb({ brand }: { brand: BrandKey }) {
-  const avatarAlt = useTranslation().t.companionSection.avatarAlt;
+  const avatarAlt = companionSectionCopy.avatarAlt;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { run, still: reduced } = useLoopGate(rootRef);

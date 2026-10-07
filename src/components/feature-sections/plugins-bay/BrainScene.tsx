@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { FileText, Link2, Search, Sparkles } from "lucide-react";
 import { useLoopGate } from "@/hooks/useLoopGate";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BACKLINKS, CAPTURES } from "@/components/feature-sections/plugins/second-brain/secondBrainData";
 import BrainGraph from "./BrainGraph";
+import { pluginsExtraCopy } from "@/i18n/pending/pluginsExtra";
 
 const P = "var(--brand-purple)";
 const mix = (c: string, pct: number) => `color-mix(in srgb, ${c} ${pct}%, transparent)`;
@@ -19,7 +19,7 @@ const RECALLS = BACKLINKS.map((b) => b.noteKey);
  * backlink in the panel at the same moment.
  */
 export default function BrainScene() {
-  const copy = useTranslation().t.pluginsExtra.brain;
+  const copy = pluginsExtraCopy.brain;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { run } = useLoopGate(rootRef);
   const [step, setStep] = useState(1);

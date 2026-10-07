@@ -4,9 +4,10 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import { useInView } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
-import { useTranslation } from "@/i18n/useTranslation";
 import { localizeExamples } from "@/components/sections/playground-split/data";
 import type { NodeStatus, PlaygroundPhase } from "@/components/sections/playground-split/types";
+import { playgroundSectionCopy } from "@/i18n/pending/playgroundSection";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
  * The live section's simulation (sections/playground-split/
@@ -27,9 +28,8 @@ const DONE_RATIO = 0.7;
 export function useMindRun(panelRef: RefObject<HTMLElement | null>, pace = 1) {
   const reduced = useStillMotion();
   const isHidden = usePageVisibility();
-  const { t } = useTranslation();
-  const copy = t.playgroundSection;
-  const lab = t.landingSections.agentMind;
+  const copy = playgroundSectionCopy;
+  const lab = landingSectionsCopy.agentMind;
   const examples = useMemo(() => localizeExamples(copy), [copy]);
 
   const [activeExample, setActiveExample] = useState<number | null>(null);

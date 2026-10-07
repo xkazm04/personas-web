@@ -4,14 +4,14 @@ import { ArrowDown, ArrowUp, ArrowUpRight, Check } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { guideHref, openGuideLink } from "@/lib/guide-link";
 import { EYEBROW } from "@/lib/typography";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import type { StackLayer } from "./layers";
+import { visionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * The tabpanel for the selected layer: which question it answers about the
  * agent, what it is doing for the sample agent right now (the lit part of the
- * card), then the layer's own copy (`t.visionStack.layers`). Every layer's one-line job is
+ * card), then the layer's own copy (`visionStackCopy.layers`). Every layer's one-line job is
  * already visible in the stack; this adds the detail.
  */
 export function LayerDetail({
@@ -32,8 +32,7 @@ export function LayerDetail({
   next: StackLayer;
   onNext: () => void;
 }) {
-  const { t } = useTranslation();
-  const copy = t.visionStack;
+  const copy = visionStackCopy;
   const color = BRAND_VAR[layer.brand];
   const Icon = layer.icon;
   return (

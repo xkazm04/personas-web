@@ -2,9 +2,9 @@
 
 import { Fragment, type CSSProperties } from "react";
 import { Check } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { CYCLE_S, LATTICE_PATH, SCENARIOS, STEP_S, TWINKLES, VB_H, VB_W, cellCenter, hexPoints, pct, type Scenario } from "./hive-geometry";
 import s from "./hive.module.css";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
@@ -24,8 +24,7 @@ function chain(sc: Scenario) {
  * Purely CSS-driven (hive.module.css), so markup never depends on motion.
  */
 export default function HiveFloor() {
-  const { t } = useTranslation();
-  const copy = t.landingSections.hero;
+  const copy = landingSectionsCopy.hero;
   return (
     <div className={s.plane}>
       <svg className={`${s.svg} ${s.lattice}`} viewBox={`0 0 ${VB_W} ${VB_H}`} preserveAspectRatio="none" aria-hidden="true">

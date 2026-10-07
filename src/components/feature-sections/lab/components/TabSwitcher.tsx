@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
 import { TABS } from "../data";
 import type { LabTab } from "../types";
-import { useTranslation } from "@/i18n/useTranslation";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 export default function TabSwitcher({
   active,
@@ -13,7 +13,7 @@ export default function TabSwitcher({
   active: LabTab;
   onSelect: (tab: LabTab) => void;
 }) {
-  const tabs = useTranslation().t.labSection.tabs;
+  const tabs = labSectionCopy.tabs;
   return (
     <motion.div
       variants={fadeUp}

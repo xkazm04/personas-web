@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import type { TriggerDef } from "@/components/sections/orchestration-hub/data";
 import { mix, timedLoop } from "./shared/scene-kit";
 import { C, HUB_R, SIGNAL_S, pct } from "./geometry";
+import { orchestrationSectionCopy } from "@/i18n/pending/orchestrationSection";
 
 interface AgentLensProps {
   trigger: TriggerDef;
@@ -20,7 +20,7 @@ interface AgentLensProps {
  * trigger wakes - the end of the story the comet starts.
  */
 export default function AgentLens({ trigger, live, still }: AgentLensProps) {
-  const copy = useTranslation().t.orchestrationSection;
+  const copy = orchestrationSectionCopy;
   const tone = BRAND_VAR[trigger.brand];
   const persona = copy.triggers[trigger.id].persona;
 

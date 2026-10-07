@@ -7,9 +7,9 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { fadeUp } from "@/lib/animations";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { CAPABILITIES, AUTO_CYCLE_MS } from "./data";
 import AthenaOrb from "./AthenaOrb";
+import { companionSectionCopy } from "@/i18n/pending/companionSection";
 
 /**
  * Companion (Athena) — the flagship companion story. An auto-cycling capability
@@ -21,8 +21,7 @@ import AthenaOrb from "./AthenaOrb";
 const TAP_PAUSE_MS = AUTO_CYCLE_MS * 2;
 
 export default function Companion() {
-  const { t } = useTranslation();
-  const copy = t.companionSection;
+  const copy = companionSectionCopy;
   const [hovering, setHovering] = useState(false);
   const gridRef = useRef<HTMLDivElement | null>(null);
   const { active, setActive, pauseFor } = useAutoCycle({

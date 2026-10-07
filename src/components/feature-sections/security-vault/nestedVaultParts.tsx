@@ -2,7 +2,7 @@
 
 import { backOut, easeIn, motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
-import type { Translations } from "@/i18n/en";
+import type { SecuritySectionCopy } from "@/i18n/pending/securitySection";
 
 /* Geometry and moving parts of the nested-vault illustration (see .art.tsx for the beats). */
 export const W = 760;
@@ -17,8 +17,8 @@ interface RingSpec {
   color: BrandKey;
   turn: number;
   beat: [number, number];
-  /** Engraved label: translated copy (`t.securitySection.rings`), or a literal technical name. */
-  label: { key: keyof Translations["securitySection"]["rings"] } | { literal: string };
+  /** Engraved label: translated copy (`securitySectionCopy.rings`), or a literal technical name. */
+  label: { key: keyof SecuritySectionCopy["rings"] } | { literal: string };
   labelR: number;
 }
 

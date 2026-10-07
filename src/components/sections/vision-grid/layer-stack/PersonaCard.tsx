@@ -4,9 +4,9 @@ import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { Clock, Cpu, DollarSign, FlaskConical, Inbox, LayoutGrid, Lock, Zap } from "lucide-react";
 import { BRAND_VAR, STATE_COLORS, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import { SAMPLE_CONNECTORS, SAMPLE_PERSONA, type CardPart, type StackLayer } from "./layers";
+import { visionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * The sample agent at the top of the stack, reduced from the app's persona
@@ -17,7 +17,7 @@ import { SAMPLE_CONNECTORS, SAMPLE_PERSONA, type CardPart, type StackLayer } fro
  */
 export function LayerStackPersonaCard({ active }: { active: StackLayer }) {
   const p = SAMPLE_PERSONA;
-  const words = useTranslation().t.visionStack.persona;
+  const words = visionStackCopy.persona;
   const lit = (part: CardPart): CSSProperties =>
     active.part === part
       ? { boxShadow: `0 0 0 1px ${BRAND_VAR[active.brand]}`, backgroundColor: tint(active.brand, 14) }

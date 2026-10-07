@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { useLoopGate } from "@/hooks/useLoopGate";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { KPIS, kpiStatus, progressPct, health } from "./kpiData";
 import { CalibrationTrack, HealthRing, StatusPill, Sparkline, statusColor } from "./kpiPrimitives";
+import { teamCanvasSectionCopy } from "@/i18n/pending/teamCanvasSection";
 
 /**
  * AssemblyLine — variant 1 of 3 of the "From goal to shipped" redesign.
@@ -31,8 +31,7 @@ const SLOTS = STATIONS.length + 1;
 const SHIPPED_SLOT = STATIONS.length;
 
 export default function AssemblyLine() {
-  const { t } = useTranslation();
-  const copy = t.teamCanvasSection;
+  const copy = teamCanvasSectionCopy;
   // The conveyor dot and the station cascade run only while the line is on
   // screen and the tab is visible; they used to run for the life of the page.
   const rootRef = useRef<HTMLDivElement | null>(null);

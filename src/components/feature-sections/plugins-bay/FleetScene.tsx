@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useLoopGate } from "@/hooks/useLoopGate";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import { AthenaOrb } from "@/components/feature-sections/plugins/dev-tools-grid/AthenaFleetParts";
 import {
@@ -16,6 +15,7 @@ import {
 } from "@/components/feature-sections/plugins/dev-tools-grid/athenaFleetData";
 import FleetCell from "./FleetCell";
 import { TONE, mixC, progressAt } from "./fleetTone";
+import { pluginsExtraCopy } from "@/i18n/pending/pluginsExtra";
 
 const TICK_MS = 1200;
 // Still frame (reduced motion / off screen): mid-triage, the whole story in one image.
@@ -28,7 +28,7 @@ const STILL_TICK = 12;
  * the fleet itself, one segment per session in its state colour.
  */
 export default function FleetScene() {
-  const copy = useTranslation().t.pluginsExtra.fleet;
+  const copy = pluginsExtraCopy.fleet;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { run } = useLoopGate(rootRef);
   const [tick, setTick] = useState(STILL_TICK);

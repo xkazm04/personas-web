@@ -10,8 +10,8 @@ import { bestLineage, genomeSummary, nodeTone, type NodeTone } from "../genome";
 import type { GenomeNode } from "../types";
 import TabBackdrop from "./TabBackdrop";
 import { useStageBox } from "../useStageBox";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 // Module-level: GENOME_NODES is static, so the lineage and the header figures
 // are computed once, from the same data the tree draws.
@@ -28,7 +28,7 @@ const TONE_FILL: Record<NodeTone, string> = {
 };
 
 export default function EvolutionTab() {
-  const copy = useTranslation().t.labSection.evolution;
+  const copy = labSectionCopy.evolution;
   // The best node's halo is an ambient loop: still under reduced motion, and
   // parked while the tab is backgrounded.
   const reduced = useStillMotion();

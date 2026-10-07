@@ -5,7 +5,6 @@ import SectionWrapper from "@/components/SectionWrapper";
 import { SectionIntro } from "@/components/primitives";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { TRIGGERS } from "@/components/sections/orchestration-hub/data";
 import { useHubPlayback } from "./shared/useHubPlayback";
 import { useDialSteps } from "./shared/useDialSteps";
@@ -14,6 +13,7 @@ import RingArt from "./RingArt";
 import RingNodes from "./RingNodes";
 import AgentLens from "./AgentLens";
 import DetailPanel from "./DetailPanel";
+import { orchestrationSectionCopy } from "@/i18n/pending/orchestrationSection";
 
 /**
  * Orchestration hub - V1, the faithful upgrade. Same layout and mechanism as
@@ -27,7 +27,7 @@ import DetailPanel from "./DetailPanel";
  */
 export default function OrchestrationHub() {
   const { diagramRef, hub } = useHubPlayback();
-  const copy = useTranslation().t.orchestrationSection;
+  const copy = orchestrationSectionCopy;
   const tone = BRAND_VAR[hub.trigger.brand];
   const dialSteps = useDialSteps(hub.state.active, TRIGGERS.length);
 

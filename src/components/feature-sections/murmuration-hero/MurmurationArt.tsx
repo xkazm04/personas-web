@@ -2,9 +2,9 @@
 
 import { useMemo, useRef, type PointerEvent } from "react";
 import { Zap, FastForward } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { useSwarm } from "./useSwarm";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
  * The swarm layer: a full-bleed canvas of AI agents in teams. The visitor's
@@ -12,8 +12,7 @@ import { useSwarm } from "./useSwarm";
  * real button sends one from the keyboard. Motion gating lives in useSwarm.
  */
 export default function MurmurationArt() {
-  const { t } = useTranslation();
-  const copy = t.landingSections.featuresHero;
+  const copy = landingSectionsCopy.featuresHero;
   const still = useStillMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);

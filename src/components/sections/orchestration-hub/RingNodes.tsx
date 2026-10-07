@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import type { TriggerId } from "@/components/sections/orchestration-hub/data";
 import { mix, timedLoop } from "./shared/scene-kit";
 import { NODES, SIGNAL_S, TILE, pct } from "./geometry";
+import { orchestrationSectionCopy } from "@/i18n/pending/orchestrationSection";
 
 interface RingNodesProps {
   activeId: TriggerId;
@@ -20,7 +20,7 @@ interface RingNodesProps {
  * `data-trigger-id` is the guided tour's click target.
  */
 export default function RingNodes({ activeId, live, onSelect }: RingNodesProps) {
-  const copy = useTranslation().t.orchestrationSection;
+  const copy = orchestrationSectionCopy;
 
   return (
     <>

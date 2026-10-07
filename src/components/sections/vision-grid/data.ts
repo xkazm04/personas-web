@@ -1,20 +1,20 @@
 import type { BrandKey } from "@/lib/brand-theme";
 import type { GuideTopicRef } from "@/lib/guide-link";
-import type { Translations } from "@/i18n/en";
+import type { VisionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * The six platform cards: identity, colour, art and guide links. Every title,
  * description, detail and guide-link label is translated copy in
- * `t.visionStack.layers[id]`.
+ * `visionStackCopy.layers[id]`.
  */
 
-export type PlatformCardId = keyof Translations["visionStack"]["layers"];
+export type PlatformCardId = keyof VisionStackCopy["layers"];
 
 export interface PlatformCard {
   id: PlatformCardId;
   brand: BrandKey;
   images: { dark: string; light: string };
-  /** Guide deep-links; the link text is `t.visionStack.layers[id].guide`. */
+  /** Guide deep-links; the link text is `visionStackCopy.layers[id].guide`. */
   guideTopics?: Omit<GuideTopicRef, "label">[];
 }
 

@@ -3,10 +3,10 @@
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { Lock } from "lucide-react";
 import type { CSSProperties } from "react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { frame } from "./shared/ArtBox";
 import { beat } from "./shared/motion";
 import { C, DAY, H, R, RUNS, W, clock, degOf, polar } from "./dialGeometry";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /* The words of V3 in the dial's coordinates: the names of your day around the
  * band, the clock and day in the middle, your few minutes on the left, and the
@@ -27,7 +27,7 @@ function SetupStep({ p, i, text }: { p: MotionValue<number>; i: number; text: st
 }
 
 export default function DialWords({ p, hour, day, passed }: { p: MotionValue<number>; hour: MotionValue<number>; day: number; passed: number }) {
-  const g = useTranslation().t.landingSections.getStarted;
+  const g = landingSectionsCopy.getStarted;
   const c = g.v3;
   const time = useTransform(hour, clock);
   const setup = [c.setup.install, c.setup.describe, c.setup.connect];

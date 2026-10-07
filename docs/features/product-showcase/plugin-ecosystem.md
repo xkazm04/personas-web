@@ -111,7 +111,7 @@ fixed-pixel bay zooms as a whole by viewport-height tier (`src/styles/stage.css`
 - **Source:** static. Manifest, roster, scene data files above. No fetch, no mock-API call, no
   API routes.
 - **Copy:** `t.pluginShowcase` (all 14 locales): heading, derived intro, `tabsLabel`, `counter`,
-  Dev Tools/Brain taglines. `t.pluginsExtra` (pending): `fleet` and `brain` scene words.
+  Dev Tools/Brain taglines. `pluginsExtraCopy` (pending): `fleet` and `brain` scene words.
   `t.featuresSections.plugins` (pending): `more`, `stylised`, `taglines`, `v1.artLabel|reach`,
   `drive.*`, `twin.*` (incl. per-channel tone/message/reply).
 - **State:** `active` in `index.tsx`; per-scene `useState` tick/step. No Zustand.

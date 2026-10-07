@@ -13,7 +13,7 @@ History: the section used to be an offer band plus six feature-group cards ("Eve
 | File | Role |
 | --- | --- |
 | `src/components/sections/pricing/index.tsx` | Section: SectionIntro, stage slot with the diagram + replay, download CTA |
-| `src/components/sections/pricing/BillArt.tsx` | The "bill" diagram (SVG), words from `t.pricingSection` |
+| `src/components/sections/pricing/BillArt.tsx` | The "bill" diagram (SVG), words from `pricingSectionCopy` |
 | `src/components/sections/pricing/billGeometry.ts` | WIDE / TALL layouts, beat timing (`BEAT_START`), path helpers |
 | `src/components/sections/pricing/BillParts.tsx` | Diagram primitives (Node, Legend, Coin, RunDot, WorkPulse, BeatCaption) |
 | `src/components/sections/pricing/usePlayOnce.ts` | Play-once progress value with replay, reduced-motion aware |
@@ -23,7 +23,7 @@ History: the section used to be an offer band plus six feature-group cards ("Eve
 
 ## Data & state
 - **Source:** fully static. **Stores:** none. CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`; the click reports `download_click` with `placement: "pricing"` via `trackDownloadClick` (`src/lib/analytics.ts`). Both are asserted against `index.tsx` by source-scan tests (`analytics.download-click.test.ts`, `release.test.ts`).
-- **Copy:** `t.pricingSection` is listed in `PENDING_TRANSLATION` (English only by owner decision, 2026-09-25; the other locales fall back to English at runtime). Most of `t.compareSection` (offer badges, groups) is now unused - left for a dead-key pass.
+- **Copy:** `pricingSectionCopy` is listed in `PENDING_TRANSLATION` (English only by owner decision, 2026-09-25; the other locales fall back to English at runtime). Most of `t.compareSection` (offer badges, groups) is now unused - left for a dead-key pass.
 
 ## Integration points
 - **Stage system** (`src/styles/stage.css`): `fit="fill"`, `data-stage-slot`, `data-stage-art`; one stage high at every desktop size (`e2e/stage-fit.spec.ts`).

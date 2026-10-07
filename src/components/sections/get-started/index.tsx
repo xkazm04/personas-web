@@ -2,12 +2,12 @@
 
 import { useRef } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ArtBox, Intro, ReplayButton, StylisedTag, frame } from "./shared/ArtBox";
 import Dial from "./Dial";
 import DialWords from "./DialWords";
 import { H, W } from "./dialGeometry";
 import { useDial } from "./useDial";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
  * From download to running agents, "Your day, its day" (winner of the 2026-10-05 landing review).
@@ -18,7 +18,7 @@ import { useDial } from "./useDial";
  * reduced motion, which rests on 08:15 the next morning with every run done).
  */
 export default function GetStarted() {
-  const c = useTranslation().t.landingSections.getStarted;
+  const c = landingSectionsCopy.getStarted;
   const ref = useRef<HTMLDivElement>(null);
   const { p, hour, day, passed, play, still } = useDial(ref);
   const { place, fs } = frame(W, H);

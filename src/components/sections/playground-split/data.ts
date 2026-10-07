@@ -18,7 +18,7 @@ import type {
 /**
  * The four sample prompts: identity, icons and the code-shaped text (intent
  * ids, emitted events). Every natural-language string is translated copy in
- * `t.playgroundSection`, joined in by `localizeExamples`.
+ * `playgroundSectionCopy`, joined in by `localizeExamples`.
  */
 const EXAMPLE_BASES: ExampleBase[] = [
   {

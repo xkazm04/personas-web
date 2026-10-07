@@ -1,6 +1,6 @@
-import type { Translations } from "@/i18n/en";
+import type { PluginsExtraCopy } from "@/i18n/pending/pluginsExtra";
 
-type FleetCopy = Translations["pluginsExtra"]["fleet"];
+type FleetCopy = PluginsExtraCopy["fleet"];
 
 /**
  * Data + clock for the "fleet under Athena's watch" visual, mirroring the
@@ -18,7 +18,7 @@ type FleetCopy = Translations["pluginsExtra"]["fleet"];
  *                interruptions. Loop.
  *
  * Session names are code (branch-style ids) and stay here; every sentence
- * (questions, captions, status phrases) is `t.pluginsExtra.fleet` copy.
+ * (questions, captions, status phrases) is `pluginsExtraCopy.fleet` copy.
  */
 
 export const GRID = 4;
@@ -42,7 +42,7 @@ export interface FleetCellDef {
   /** Tick the session blocks (a question, or it goes quiet). */
   needsAt?: number;
   needKind?: "ask" | "stale";
-  /** The question the session is blocked on (`t.pluginsExtra.fleet.asks`). */
+  /** The question the session is blocked on (`pluginsExtraCopy.fleet.asks`). */
   askKey?: keyof FleetCopy["asks"];
 }
 
@@ -69,7 +69,7 @@ export interface OrbStop {
   cell: number;
   arrive: number;
   depart: number;
-  /** Caption narrated beside the orb while she resolves the cell (`t.pluginsExtra.fleet.captions`). */
+  /** Caption narrated beside the orb while she resolves the cell (`pluginsExtraCopy.fleet.captions`). */
   caption: keyof FleetCopy["captions"];
 }
 

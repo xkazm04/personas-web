@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp } from "@/lib/animations";
 import AssemblyLine from "./variants/AssemblyLine";
+import { teamCanvasSectionCopy } from "@/i18n/pending/teamCanvasSection";
 
 /**
  * Team Canvas — the multi-agent pipeline story, reframed around the desktop
@@ -14,8 +14,7 @@ import AssemblyLine from "./variants/AssemblyLine";
  * Deliberately distinct from the OrchestrationHub (which shows triggers).
  */
 export default function TeamCanvas() {
-  const { t } = useTranslation();
-  const copy = t.teamCanvasSection;
+  const copy = teamCanvasSectionCopy;
   return (
     <SectionWrapper fit="min" id="team-canvas" aria-labelledby="team-canvas-heading">
       <SectionIntro

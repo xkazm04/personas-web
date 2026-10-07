@@ -5,13 +5,13 @@ import { useAnimationControls, useInView } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import { localizeStackLayers } from "./layer-stack/layers";
 import { LayerStackPersonaCard } from "./layer-stack/PersonaCard";
 import { LayerSlabs } from "./layer-stack/LayerPlates";
 import { LayerLabels } from "./layer-stack/LayerLabels";
 import { LayerDetail } from "./layer-stack/LayerDetail";
+import { visionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * Vision grid, "Layer stack" direction: one agent on top, the six platform
@@ -30,8 +30,7 @@ export default function VisionGridLayerStack() {
   const panelId = `${uid}-panel`;
   const [active, setActive] = useState(0);
   const still = useStillMotion();
-  const { t } = useTranslation();
-  const copy = t.visionStack;
+  const copy = visionStackCopy;
   const STACK_LAYERS = useMemo(() => localizeStackLayers(copy), [copy]);
 
   const boxRef = useRef<HTMLDivElement>(null);

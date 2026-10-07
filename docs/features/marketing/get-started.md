@@ -10,11 +10,11 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 
 ## How it works
 
-**Get Started** (`get-started/index.tsx`). `SectionWrapper fit="fill"` (exactly one desktop stage, `src/styles/stage.css`) with `aria-labelledby="get-started-heading"`; `Intro` (`shared/ArtBox.tsx:14`) renders the live heading (`SectionHeading id="get-started-heading"`) from `t.getStartedSection` plus the lede `t.landingSections.getStarted.v3.lede`. `ArtBox` (`shared/ArtBox.tsx:32`) is the `data-stage-slot` / `data-stage-art` box, aspect-locked from `dialGeometry` `W` x `H` (1200 x 640), so the SVG layer and the HTML text layer share one coordinate system; `frame(W, H)` gives `place`/`fs` helpers that position text in viewBox units. Children: `Dial` (SVG), `DialWords` (HTML), `ReplayButton` (disabled under still motion) and `StylisedTag`.
+**Get Started** (`get-started/index.tsx`). `SectionWrapper fit="fill"` (exactly one desktop stage, `src/styles/stage.css`) with `aria-labelledby="get-started-heading"`; `Intro` (`shared/ArtBox.tsx:14`) renders the live heading (`SectionHeading id="get-started-heading"`) from `getStartedSectionCopy` plus the lede `landingSectionsCopy.getStarted.v3.lede`. `ArtBox` (`shared/ArtBox.tsx:32`) is the `data-stage-slot` / `data-stage-art` box, aspect-locked from `dialGeometry` `W` x `H` (1200 x 640), so the SVG layer and the HTML text layer share one coordinate system; `frame(W, H)` gives `place`/`fs` helpers that position text in viewBox units. Children: `Dial` (SVG), `DialWords` (HTML), `ReplayButton` (disabled under still motion) and `StylisedTag`.
 
 **Dial (`Dial.tsx`, geometry in `dialGeometry.ts`).** One SVG (`role="img"`, label `v3.artLabel`). `dialGeometry.ts` holds the `C`/`R` radii, `degOf`/`polar` (rounded, because server and browser `Math.cos` can differ in the last digit and break hydration), `band()` annular sectors, `DAY` parts, `SETUP` (09:00 to 09:20), `RUNS` (client, invoice, overnight, digest with `h`, `time`, `trigger`) and the clock maths (`hourAt`, `lapAt`, `MIDNIGHT`, `REST`, `clock`). `Dial` draws the day band, setup sliver, 24 ticks, the agent ring with `RunMark`s (each flares by the hand's distance) and the hand, all from framer `MotionValue`s.
 
-**DialWords (`DialWords.tsx`).** The words in the dial's coordinates: day-part names around the band, the clock and day in the middle, the three setup steps (`SetupStep`, brightening with `beat(p, ...)`) on the left, the agent's runs on the right (lit once `passed` counts them) and the lock note `v3.onYourPc`. Copy is `t.landingSections.getStarted.v3`.
+**DialWords (`DialWords.tsx`).** The words in the dial's coordinates: day-part names around the band, the clock and day in the middle, the three setup steps (`SetupStep`, brightening with `beat(p, ...)`) on the left, the agent's runs on the right (lit once `passed` counts them) and the lock note `v3.onYourPc`. Copy is `landingSectionsCopy.getStarted.v3`.
 
 **Clock (`useDial.ts`, `shared/motion.ts`).** `usePlay(ref, 3.2)` plays a 0 to 1 setup value `p` once when 35% in view (`useInView`); `useLoop(ref, 22, REST, introDone)` turns the lap only once the intro is done, while on screen (`useIsVisible`), the tab is foregrounded and motion is allowed. `hour = hourAt(p, loop)`; `day` and `passed` are React state set from `useMotionValueEvent`, never from an effect body. All start at the resting frame (08:15, day 2, all 4 runs done), which is what the server renders and what reduced motion keeps.
 
@@ -59,7 +59,7 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 | `src/components/LandingHashArrival.tsx` | Client leaf mounted in `page.tsx` that resolves the hash on load and on `hashchange` |
 
 ## Data & state
-- **Source:** Static. Get Started heading is `t.getStartedSection` (`src/i18n/en.ts`); the art copy is `t.landingSections.getStarted` (`replay`, `stylised`, `v3.*`); times and runs are in `dialGeometry.ts`. Download CTA config comes from `NEXT_PUBLIC_*` build-time env vars, read only by `src/lib/release.ts`.
+- **Source:** Static. Get Started heading is `getStartedSectionCopy` (`src/i18n/en.ts`); the art copy is `landingSectionsCopy.getStarted` (`replay`, `stylised`, `v3.*`); times and runs are in `dialGeometry.ts`. Download CTA config comes from `NEXT_PUBLIC_*` build-time env vars, read only by `src/lib/release.ts`.
 - **Stores:** None (no Zustand). Local component state only: the setup `p` motion value and the `day` / `passed` state in Get Started; `waitlistPlatform` and `useFreshRelease`'s `fresh` in Download CTA.
 - **API routes:** `GET /api/download` — validated 302 redirect to the artifact, or `/#download` fallback.
 - **Types:** `Platform` / `PlatformKey` (`download-cta/downloadCtaTypes.ts`), `BrandKey` (`src/lib/brand-theme.ts`).
@@ -70,7 +70,7 @@ Two stacked homepage conversion sections that turn an interested visitor into a 
 - **Waitlist:** unavailable platform pills and the no-URL download button open `WaitlistModal` (see [Waitlist & app download](../community/waitlist-download.md)).
 - **Analytics:** `trackDownloadClick(DOWNLOAD_PLAN, "download-cta", detectPlatformKey())` from `src/lib/analytics.ts` on the real download button.
 - **Sentry:** `/api/download` reports invalid `NEXT_PUBLIC_DOWNLOAD_URL` via a once-per-process `captureMessage`.
-- **i18n:** Get Started pulls from `t.getStartedSection` and `t.landingSections.getStarted` (both English only, listed in `PENDING_TRANSLATION`); the Download CTA pulls from `t.downloadSection.*` and `t.common.{step,notifyMe}` (`src/i18n/en.ts`).
+- **i18n:** Get Started pulls from `getStartedSectionCopy` and `landingSectionsCopy.getStarted` (both English only, listed in `PENDING_TRANSLATION`); the Download CTA pulls from `t.downloadSection.*` and `t.common.{step,notifyMe}` (`src/i18n/en.ts`).
 
 ## Conventions & gotchas
 - **Replaced on 2026-10-05** by the winner of the landing review ("Your day, its day"). The previous lifecycle illustration (`LifecycleArt`, `LifecyclePhone`, three lanes over Mon-Fri) is in git history. The `landingSections.getStarted` interface still declares unused `steps`, `v1`, `v2`, `gmail` and `slack` keys; only `replay`, `stylised` and `v3` are read.

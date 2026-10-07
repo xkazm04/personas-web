@@ -5,6 +5,7 @@ import { BRAND_VAR } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 import { StylisedTag, frame } from "./shared/Stage";
 import { AGENTS, H, STATEMENT, W, printed, sumLines } from "./log";
+import { observeSectionCopy } from "@/i18n/pending/observeSection";
 
 /* The right of V3: the day's statement, kept by the record as it prints -
  * total spend, runs, failures caught, sign-offs, and spend per agent. */
@@ -24,7 +25,7 @@ function Stat({ label, value, color }: { label: string; value: MotionValue<strin
 }
 
 function AgentBar({ i, clock, dim }: { i: number; clock: MotionValue<number>; dim: boolean }) {
-  const name = useTranslation().t.observeSection.agents[AGENTS[i].id];
+  const name = observeSectionCopy.agents[AGENTS[i].id];
   const width = useTransform(clock, (s) => `${(spendOf(i, s) / maxSpend(s)) * 100}%`);
   const value = useTransform(clock, (s) => `$${spendOf(i, s).toFixed(2)}`);
   const c = BRAND_VAR[AGENTS[i].brand];

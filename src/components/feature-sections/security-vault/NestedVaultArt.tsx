@@ -4,8 +4,8 @@ import { useId } from "react";
 import { easeOut, motion, useTransform, type MotionValue } from "framer-motion";
 import { KeyRound } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { Bolts, H, RINGS, Ring, W, rotateStyle } from "./nestedVaultParts";
+import { securitySectionCopy } from "@/i18n/pending/securitySection";
 
 /*
  * Geometry (viewBox 760 x 480, drawn around the vault centre at 0,0).
@@ -22,7 +22,7 @@ import { Bolts, H, RINGS, Ring, W, rotateStyle } from "./nestedVaultParts";
 
 export default function NestedVaultArt({ progress }: { progress: MotionValue<number> }) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const copy = useTranslation().t.securitySection;
+  const copy = securitySectionCopy;
   const keyY = useTransform(progress, [0, 0.2], [-290, 0], { ease: easeOut });
   const keyOpacity = useTransform(progress, [0, 0.05], [0, 1]);
   const keyScale = useTransform(progress, [0.9, 0.95, 1], [1, 1.14, 1]);
