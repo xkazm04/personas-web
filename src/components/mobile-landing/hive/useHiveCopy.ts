@@ -1,15 +1,15 @@
 "use client";
 
 import { useTranslation } from "@/i18n/useTranslation";
-import type { Translations } from "@/i18n/en";
+import { mobileLandingCopy, type MobileLandingCopy } from "@/i18n/pending/mobileLanding";
 
 /** The /m landing's own words (the English-only pending namespace `mobileLanding`). */
-export type MobileLandingCopy = Translations["mobileLanding"];
+export type { MobileLandingCopy };
 
 /** The page's words: `m` is the page's own namespace, `t` the translated site copy it reuses. */
 export function useHiveCopy() {
   const { t } = useTranslation();
-  return { t, m: t.mobileLanding };
+  return { t, m: mobileLandingCopy };
 }
 
 /** Fill `{name}` slots in a copy string. */

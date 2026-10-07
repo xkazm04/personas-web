@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { en } from "@/i18n/en";
 import ClockLanding from "@/components/mobile-landing/clock/ClockLanding";
+import { mobileLanding2Copy } from "@/i18n/pending/mobileLanding2";
 
 export const dynamic = "force-static";
 
@@ -10,8 +10,8 @@ export const dynamic = "force-static";
  * with /m. No redirect sends phones here (M1), and it stays out of the index until launch.
  */
 export const metadata: Metadata = {
-  title: en.mobileLanding2.meta.title,
-  description: en.mobileLanding2.meta.description,
+  title: mobileLanding2Copy.meta.title,
+  description: mobileLanding2Copy.meta.description,
   robots: { index: false },
 };
 

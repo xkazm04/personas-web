@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { en } from "@/i18n/en";
 import HiveLanding from "@/components/mobile-landing/hive/HiveLanding";
+import { mobileLandingCopy } from "@/i18n/pending/mobileLanding";
 
 /*
  * /m - the phone landing ("Hive Reels", docs/concepts/mobile-revival/PLAN.md phase 1).
@@ -10,8 +10,8 @@ import HiveLanding from "@/components/mobile-landing/hive/HiveLanding";
  * catalogue, like every route in src/app (no layout resolves a server-side locale today).
  */
 export const metadata: Metadata = {
-  title: en.mobileLanding.metaTitle,
-  description: en.mobileLanding.metaDescription,
+  title: mobileLandingCopy.metaTitle,
+  description: mobileLandingCopy.metaDescription,
   robots: { index: false },
   alternates: { canonical: "/" },
 };

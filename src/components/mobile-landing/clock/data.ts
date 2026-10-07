@@ -1,6 +1,6 @@
 /**
  * The stylized day the /m2 dial tells: which hour each tool shift, Athena moment, agent run and
- * pricing beat sits at. Times only; every word lives in `t.mobileLanding2` (src/i18n/en.ts).
+ * pricing beat sits at. Times only; every word lives in `mobileLanding2Copy` (src/i18n/pending/mobileLanding2.ts).
  */
 import { hhmm } from "./geometry";
 

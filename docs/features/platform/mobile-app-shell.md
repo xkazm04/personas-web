@@ -29,7 +29,7 @@ still redirect to their desktop pages.
 
 ## How it works
 - **Route.** `src/app/m/page.tsx` is a server component holding the metadata (`robots: { index: false }`,
-  `alternates.canonical: "/"`, title and description from `en.mobileLanding`). It renders `HiveLanding`, a client
+  `alternates.canonical: "/"`, title and description from `mobileLandingCopy`). It renders `HiveLanding`, a client
   component, which still server-renders: the headline is in the initial HTML.
 - **Film.** `.hm` (page root) > `.phone` (fixed column, `100dvh`, a framed 430px phone from 500px up) > `main.film`
   (`scroll-snap-type: y mandatory`) > six `section.poster[data-poster]`. `useChapters` watches the posters with an
@@ -74,8 +74,8 @@ still redirect to their desktop pages.
 | `src/components/primitives/BottomSheet.tsx` | Kept bottom-sheet primitive from the old `/m` (unused; `/m` ports the winner's own sheet) |
 
 ## Data & state
-- **Copy.** `mobileLanding` in `src/i18n/en.ts`, an English-only pending namespace (listed in `PENDING_TRANSLATION`,
-  decision M4). Tool names and jobs come from the translated `useCasesSection`, the answers from `faqSection.questions`,
+- **Copy.** `mobileLandingCopy` in `src/i18n/pending/mobileLanding.ts`, an English-only pending namespace (decision M4;
+  kept off the shared en.ts bundle, M22). Tool names and jobs come from the translated `useCasesSection`, the answers from `faqSection.questions`,
   platform names from `downloadSection`, waitlist errors from `waitlist`.
 - **State** is local React state: active poster, open sheet, reel / Athena / bill state, the hand-off (platform, mode,
   beam). Nothing persists; visitors are anonymous.
@@ -171,7 +171,7 @@ hub at 390px); the header chip steps out of the way in the FAQ and CTA; the stag
 | `e2e/mobile/m2-landing.spec.ts` | Phone spec: SSR headline, no sideways scroll at 390/360, CTA at every stop, every CTA action, the story's taps, light theme, reduced motion |
 
 **Gotchas.**
-- Copy lives in the English-only pending namespace `mobileLanding2` (M4); translate it before launch.
+- Copy lives in the English-only pending namespace `mobileLanding2` (M4), `src/i18n/pending/mobileLanding2.ts` (M22); translate it before launch.
 - The engine finds its parts by `data-k`; renaming one silently disconnects it. The e2e spec waits on `[data-ready]`.
 - The day, its times and its runs are a stylized illustration (tagged "Stylized day"); Athena's portrait and loop are
   the only real product images.

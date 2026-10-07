@@ -1,13 +1,12 @@
 "use client";
 
-import { useTranslation } from "@/i18n/useTranslation";
-import type { Translations } from "@/i18n/en";
+import { mobileLanding2Copy, type MobileLanding2Copy } from "@/i18n/pending/mobileLanding2";
 
-export type ClockCopy = Translations["mobileLanding2"];
+export type ClockCopy = MobileLanding2Copy;
 
 /** The page's words: the English-only pending namespace `mobileLanding2` (decision M4). */
 export function useClockCopy(): ClockCopy {
-  return useTranslation().t.mobileLanding2;
+  return mobileLanding2Copy;
 }
 
 /** Fill `{name}` placeholders. */

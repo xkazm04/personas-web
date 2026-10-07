@@ -3,7 +3,7 @@
  * .contest/arena/mobile-landing/entries/claude-claude-sonnet-5-5_max/variant-1/app.js).
  *
  * Everything here is pure and computed once at module load, so the server and the client render
- * the same SVG. Words live in src/i18n/en.ts (`mobileLanding`, plus the translated
+ * the same SVG. Words live in src/i18n/pending/mobileLanding.ts (plus the translated
  * `useCasesSection` / `faqSection`); this module holds only shape, order and colour keys.
  */
 import type { ToolKey } from "./toolIcons";
