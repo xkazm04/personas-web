@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { useIsVisible } from "@/hooks/useIsVisible";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
@@ -10,6 +9,7 @@ import { EASE_CURVE } from "@/lib/animations";
 import Stop from "./Stop";
 import { roleDef, type ViewerRole } from "./roles";
 import { useBoxSize } from "./useBoxSize";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* The route on the stage is a snake through a 2x2 of stations: stop 1 and 2
  * along the top, a U-turn at the right edge, stop 3 and 4 back along the
@@ -32,7 +32,7 @@ function snake(w: number, h: number) {
  *  colour. Switching role redraws the line and re-tells each stop. A flow runs
  *  along the line while it is on screen, in a visible tab, with motion on. */
 export default function Route({ role, touched }: { role: ViewerRole; touched: boolean }) {
-  const c = useTranslation().t.howSections.rolePath;
+  const c = howSectionsCopy.rolePath;
   const def = roleDef(role);
   const still = useStillMotion();
   const ref = useRef<HTMLDivElement>(null);

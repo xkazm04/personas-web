@@ -10,7 +10,6 @@ import { fadeUp } from "@/lib/animations";
 import { useLoopGate } from "@/hooks/useLoopGate";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { createSnapshot } from "@/lib/event-bus-demo";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useStepper } from "./shared/useStepper";
 import { ROUTE_SEEDS, hubTelemetry } from "./telemetry";
 import Tabs, { type HubVariant } from "./Tabs";
@@ -18,6 +17,7 @@ import HubView from "./HubView";
 import LanesView from "./LanesView";
 import PhoneHub from "./PhoneHub";
 import LanesPhone from "./LanesPhone";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 const FlowComposer = dynamic(() => import("@/components/FlowComposer"), { ssr: false });
 const RELAY_MS = ROUTE_SEEDS.map(() => 3600);
@@ -40,7 +40,7 @@ const noHashOnServer = () => false;
  * stacked lane cards, and no composer: it is a drag-and-wire canvas.
  */
 export default function EventsV1() {
-  const t = useTranslation().t.howSections.events;
+  const t = howSectionsCopy.events;
   const uid = useId();
   const stageRef = useRef<HTMLDivElement>(null);
   const { run, tick } = useLoopGate(stageRef, { rootMargin: "200px" });

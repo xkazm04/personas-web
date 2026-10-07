@@ -2,9 +2,9 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ToolMark, frame } from "./shared/Stage";
 import { AGENTS, H, LH, LINES, N, PRINT, STEP_S, TAPE, W, lineTime, paperPos, type Stamp } from "./log";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* The record of V3: a paper tape rising out of the printer, one line per run
  * (time, tool, what it did, what it cost). Failures, recoveries and sign-offs
@@ -15,7 +15,7 @@ const STAMP: Record<Stamp, string> = { failed: BRAND_VAR.rose, retried: BRAND_VA
 const pct = (v: number) => `${(v / TAPE.h) * 100}%`;
 
 function TapeLine({ j, copy, clock, dim }: { j: number; copy: number; clock: MotionValue<number>; dim: boolean }) {
-  const c = useTranslation().t.featuresSections.observe.v3;
+  const c = featuresSectionsCopy.observe.v3;
   const line = LINES[j];
   const abs = (s: number) => (Math.floor(Math.floor(s / STEP_S) / N) + copy) * N + j;
   const time = useTransform(clock, (s) => lineTime(abs(s)));

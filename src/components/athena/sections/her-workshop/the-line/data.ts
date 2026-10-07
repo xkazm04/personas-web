@@ -20,7 +20,7 @@
  * state the visitor can change.
  */
 
-import type { Translations } from "@/i18n/en";
+import type { AthenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 export const TICK_MS = 900;
 /** 26 x 900ms = 23.4s per loop. */
@@ -120,7 +120,7 @@ export function tally(phase: number, line: number) {
   return { done, yours, named: named.reverse() };
 }
 
-type Copy = Translations["athenaSections"]["workshop"]["v3"];
+type Copy = AthenaSectionsCopy["workshop"]["v3"];
 
 export function statusAt(beat: number, c: Copy): [string, string] {
   return [c.status.full[beat], c.status.short[beat]];

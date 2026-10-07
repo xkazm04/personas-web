@@ -1,7 +1,7 @@
 import { Clapperboard, FileSpreadsheet, FileText, Film, Image as ImageIcon, NotebookPen, Palette, PenLine, ScrollText, Target, type LucideIcon } from "lucide-react";
-import type { Translations } from "@/i18n/en";
+import type { FeaturesSectionsCopy } from "@/i18n/pending/featuresSections";
 
-type AgentKey = keyof Translations["featuresSections"]["plugins"]["drive"]["agents"];
+type AgentKey = keyof FeaturesSectionsCopy["plugins"]["drive"]["agents"];
 
 /**
  * What the Drive scene's agents export, in landing order. File names are the

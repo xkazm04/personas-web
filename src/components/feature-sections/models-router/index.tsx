@@ -2,13 +2,13 @@
 
 import { useRef } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ArtBox, Intro, ReplayButton, StylisedTag } from "./shared/Frame";
 import { FG, mix, useLoop, usePlay } from "./shared/motion";
 import { Backdrop, Defs } from "./Backdrop";
 import Stations from "./Stations";
 import Agents from "./Agents";
 import { DURATION, H, HUB, W } from "./geometry";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /**
  * Powered by Claude, private via Ollama - "Router, lit" (winner of the 2026-10-06 /features review). Four agents live in
@@ -20,7 +20,7 @@ import { DURATION, H, HUB, W } from "./geometry";
  * and under reduced motion, which shows the docked end state).
  */
 export default function MultiProviderAI() {
-  const c = useTranslation().t.featuresSections.models;
+  const c = featuresSectionsCopy.models;
   const ref = useRef<HTMLDivElement>(null);
   const { p, play, still } = usePlay(ref, DURATION);
   const flow = useLoop(ref, 3.2, 0.3);

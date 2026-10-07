@@ -2,7 +2,6 @@
 
 import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { EASE_CURVE } from "@/lib/animations";
 import { tint } from "@/lib/brand-theme";
 import Shell from "./Shell";
@@ -11,6 +10,7 @@ import { CYCLE, INITIAL_TICK, TICK_MS, eventsAt, momentAt } from "./data";
 import Stream from "./Stream";
 import Voice from "./Voice";
 import River from "./River";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /** Where the line sits in the slot, and how tall her voice may rise. */
 const ART_VARS = { "--line-y": "60%", "--wave-h": "clamp(5rem, 40cqh, 28rem)" } as CSSProperties;
@@ -38,7 +38,7 @@ const ART_VARS = { "--line-y": "60%", "--wave-h": "clamp(5rem, 40cqh, 28rem)" } 
  * the passing events caught on the line, no drift.
  */
 export default function AthenaQuietLine() {
-  const q = useTranslation().t.athenaSections.quiet;
+  const q = athenaSectionsCopy.quiet;
   const { ref, phase, live, reduced } = useQuietClock({ cycle: CYCLE, tickMs: TICK_MS, initial: INITIAL_TICK });
   const mo = momentAt(phase);
   const fill = (s: string) => s.replace("{events}", eventsAt(phase).toLocaleString()).replace("{spoken}", String(mo.spoken));

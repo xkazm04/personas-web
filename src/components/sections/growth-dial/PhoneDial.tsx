@@ -3,13 +3,13 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { LayersShell, StylisedTag, frame } from "./shared/Shell";
 import { LAYERS } from "./shared/layers";
 import { COUNTS, NARROW } from "./geometry";
 import { useGrowth } from "./useGrowth";
 import Scene from "./Scene";
 import PhoneScrubber from "./PhoneScrubber";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 const f = frame(NARROW.w, NARROW.h);
 const designed = NARROW.nodes[NARROW.designed];
@@ -22,7 +22,7 @@ const healed = NARROW.nodes[NARROW.healed];
  * Same clock as the wide dial (useGrowth); reduced motion rests on year 1.
  */
 export default function PhoneDial() {
-  const v = useTranslation().t.howSections.layers.v2;
+  const v = howSectionsCopy.layers.v2;
   const { boxRef, stage, run, still, playing, choose, toggle } = useGrowth();
   const stop = v.stops[stage];
   const count = COUNTS[stage];

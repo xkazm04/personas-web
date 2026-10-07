@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowUp, UserRound } from "lucide-react";
 import { DrawCheck } from "./DrawCheck";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import type { Frame } from "./shared/art";
 import { ITEMS, itemState } from "./data";
 import type { V3Layout } from "./layout";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The words in the field: the axis's two ends, and the eight pieces of work
@@ -16,7 +16,7 @@ import type { V3Layout } from "./layout";
  * Drag the line past one and it changes hands on the spot.
  */
 export default function Chips({ phase, line, g, f, reduced }: { phase: number; line: number; g: V3Layout; f: Frame; reduced: boolean }) {
-  const c = useTranslation().t.athenaSections.workshop.v3;
+  const c = athenaSectionsCopy.workshop.v3;
   const { x, y, w, h } = g.field;
   const axis = "absolute flex items-center whitespace-nowrap rounded-full bg-background/85 font-mono uppercase tracking-[0.16em] text-muted-dark backdrop-blur-sm";
 

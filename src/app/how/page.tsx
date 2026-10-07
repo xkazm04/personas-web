@@ -11,8 +11,8 @@ import StageSection from "@/components/StageSection";
 import HowRolePath, { type ViewerRole } from "@/components/sections/how-role-path";
 import HowManifesto from "@/components/sections/how-manifesto";
 import InfoPageLayout from "@/components/InfoPageLayout";
-import { useTranslation } from "@/i18n/useTranslation";
 import type { StageColor } from "@/lib/colors";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* ── Glow colors per persona ── */
 
@@ -36,8 +36,7 @@ const stageColors: Record<ViewerRole, { evFrom: StageColor; evTo: StageColor }> 
 };
 
 export default function HowItWorks() {
-  const { t } = useTranslation();
-  const nav = t.howSections.scrollMap;
+  const nav = howSectionsCopy.scrollMap;
   const [role, setRole] = useState<ViewerRole>("developer");
   const glow = stageGlow[role];
   const colors = stageColors[role];

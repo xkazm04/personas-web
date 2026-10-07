@@ -1,11 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import ToolMark from "./shared/ToolMark";
 import HubArt from "./HubArt";
 import { ART_AR, HUB, VB_H, VB_W, WIDE, orbitNodes, pct } from "./geometry";
 import { ORBIT_TOOLS, ROUTE_SEEDS, ink } from "./telemetry";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 const NODES = orbitNodes(ORBIT_TOOLS.length);
 const COLORS = ORBIT_TOOLS.map((t) => t.color);
@@ -18,7 +18,7 @@ const indexOf = (id: string) => ORBIT_TOOLS.findIndex((t) => t.id === id);
  * trickle of traffic flowing in.
  */
 export default function HubView({ uid, step, run }: { uid: string; step: number; run: boolean }) {
-  const copy = useTranslation().t.howSections.events.v1;
+  const copy = howSectionsCopy.events.v1;
   const route = ROUTE_SEEDS[step % ROUTE_SEEDS.length];
   const from = indexOf(route.producerId);
   const to = indexOf(route.consumerId);

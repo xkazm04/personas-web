@@ -1,10 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ANNOTATION_DIM, SPRING_POP } from "@/components/athena/stage/athena-tokens";
 import { BARS, momentAt } from "./data";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Athena on the line: the bright point at its centre, the voice the line
@@ -14,7 +14,7 @@ import { BARS, momentAt } from "./data";
  * she is drawn, not pressed.)
  */
 export default function Voice({ phase, live, reduced }: { phase: number; live: boolean; reduced: boolean }) {
-  const q = useTranslation().t.athenaSections.quiet;
+  const q = athenaSectionsCopy.quiet;
   const mo = momentAt(phase);
   const speaking = mo.speaking;
   const said = speaking ? { key: `m${mo.m}`, line: q.moments[mo.m].line } : null;

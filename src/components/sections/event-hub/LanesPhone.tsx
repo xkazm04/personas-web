@@ -5,9 +5,9 @@ import { ArrowRight } from "lucide-react";
 import type { QueueRouteMetric } from "@/lib/event-bus-demo";
 import { TOOL_MAP } from "@/lib/tool-catalogue";
 import { loopTransition } from "@/lib/motion/loop-gate";
-import { useTranslation } from "@/i18n/useTranslation";
 import ToolMark from "./shared/ToolMark";
 import { ink, laneFigures } from "./telemetry";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 function End({ id }: { id: string }) {
   const tool = TOOL_MAP.get(id)!;
@@ -33,7 +33,7 @@ function End({ id }: { id: string }) {
  * three live figures in a row underneath.
  */
 export default function LanesPhone({ routes, run }: { routes: QueueRouteMetric[]; run: boolean }) {
-  const copy = useTranslation().t.howSections.events.v1;
+  const copy = howSectionsCopy.events.v1;
   return (
     <div className="mx-auto flex w-full max-w-[26rem] flex-col gap-3">
       {routes.map((r, i) => {

@@ -1,9 +1,9 @@
 "use client";
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { CLAUDE, FG, LOCAL, mix } from "./shared/motion";
 import { AGENTS, STATIONS, docked, swell, type Engine } from "./geometry";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* The four engines of V1. Size reads as weight (Opus largest); each station's
  * halo swells as its agent docks, and Ollama gains a closed shield ring. */
@@ -11,7 +11,7 @@ import { AGENTS, STATIONS, docked, swell, type Engine } from "./geometry";
 const NAMES: Record<Engine, string> = { opus: "Opus", sonnet: "Sonnet", haiku: "Haiku", ollama: "Ollama" };
 
 function Station({ e, p }: { e: Engine; p: MotionValue<number> }) {
-  const traits = useTranslation().t.featuresSections.models.traits;
+  const traits = featuresSectionsCopy.models.traits;
   const { c, r } = STATIONS[e];
   const agent = AGENTS.find((a) => a.engine === e)!;
   const local = e === "ollama";

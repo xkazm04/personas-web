@@ -4,8 +4,8 @@ import type { CSSProperties, ReactNode, RefObject } from "react";
 import { RotateCcw } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
-import { useTranslation } from "@/i18n/useTranslation";
 import { aiModelsSectionCopy } from "@/i18n/pending/aiModelsSection";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* Frame pieces shared by the models lab variants: the section intro (the live
  * heading template with its product names as gradient text), an aspect-locked
@@ -82,7 +82,7 @@ export function ReplayButton({ onClick, disabled, className = "" }: { onClick: (
 
 /** Marks designed art as not a screenshot. */
 export function StylisedTag({ className = "" }: { className?: string }) {
-  const label = useTranslation().t.featuresSections.models.stylised;
+  const label = featuresSectionsCopy.models.stylised;
   return (
     <span className={`pointer-events-none absolute select-none font-mono text-xs uppercase tracking-[0.14em] text-muted-dark/80 ${className}`}>
       {label}

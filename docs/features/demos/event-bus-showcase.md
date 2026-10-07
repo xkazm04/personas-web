@@ -98,7 +98,7 @@ the "build a flow" button is not rendered and `composerOpen` is forced false, de
   calendar->stripe; same ids and seed figures as the previous section). Orbit membership is
   every route endpoint plus every `swarmFeatured` catalogue tool (`telemetry.ts:32-37`). No
   orchestrator call, no API routes.
-- **Copy:** `t.howSections.events` (`src/i18n/en.ts`): `heading`, `headingGradient`,
+- **Copy:** `howSectionsCopy.events` (`src/i18n/en.ts`): `heading`, `headingGradient`,
   `description`, and `v1` (illustration label, tab labels/hints, `hub`, figure labels,
   `buildFlow`, and `routes` keyed by route id).
 - **State:** `variant`, `snapshot`, `composerToggle` (`useState`), `step` (`useStepper`), the loop

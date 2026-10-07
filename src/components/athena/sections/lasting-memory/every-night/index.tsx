@@ -9,6 +9,7 @@ import { CYCLE, INITIAL_TICK, PARK_TICK, TICK_MS, sceneAt } from "./data";
 import Field from "./Field";
 import { COMPACT_AR, WIDE_AR, layoutFor } from "./layout";
 import { statusAt, statusShortAt } from "./status";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Memory lab, v1 - "Every night, a little more", EVOLVED.
@@ -52,7 +53,7 @@ export default function MemoryLabEveryNight() {
   return (
     <LabShell
       sectionRef={sectionRef}
-      artLabel={t.athenaSections.memory.v1.artLabel}
+      artLabel={athenaSectionsCopy.memory.v1.artLabel}
       ar={WIDE_AR}
       compactAr={COMPACT_AR}
       arMin={1.75}

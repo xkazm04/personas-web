@@ -9,6 +9,7 @@ import Earth from "./Earth";
 import Garden from "./Garden";
 import Lantern from "./Lantern";
 import Overlay, { PhoneCard } from "./Overlay";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Athena lab - Nothing quietly rots, v2: "Roots".
@@ -49,7 +50,7 @@ export default function AthenaLabPortfolioRoots() {
   return (
     <Shell
       sectionRef={ref}
-      label={t.athenaSections.portfolio.aria.roots}
+      label={athenaSectionsCopy.portfolio.aria.roots}
       status={statusAt(phase, BEATS, copy.status)}
       live={live}
       // Phones: the garden sits low with a band of sky over it tall enough for

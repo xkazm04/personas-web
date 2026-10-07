@@ -1,12 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { TOOL_MAP } from "@/lib/tool-catalogue";
 import ToolMark from "./shared/ToolMark";
 import HubArt from "./HubArt";
 import { NARROW } from "./geometry";
 import { ROUTE_SEEDS, ink } from "./telemetry";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* Phones: the hub with only the four routes' eight tools, each route's ends
  * facing each other across it, so every relay crosses the hub. The caption
@@ -17,7 +17,7 @@ const COLORS = TOOLS.map((t) => t.color);
 const { hub: HUB, pct } = NARROW;
 
 export default function PhoneHub({ uid, step, run }: { uid: string; step: number; run: boolean }) {
-  const copy = useTranslation().t.howSections.events.v1;
+  const copy = howSectionsCopy.events.v1;
   const k = step % ROUTE_SEEDS.length;
   const route = ROUTE_SEEDS[k];
   const from = k;

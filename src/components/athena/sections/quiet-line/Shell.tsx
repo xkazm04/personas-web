@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import AthenaStage from "@/components/athena/stage/AthenaStage";
 import { ANNOTATION_DIM } from "@/components/athena/stage/athena-tokens";
 import { SectionIntro } from "@/components/primitives";
-import { useTranslation } from "@/i18n/useTranslation";
 import { staggerContainer } from "@/lib/animations";
 import { BRAND_VAR } from "@/lib/brand-theme";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The section frame: the page's AthenaStage, one `data-stage="fill"` section
@@ -33,7 +33,7 @@ export default function Shell({
   live: boolean;
   children: ReactNode;
 }) {
-  const q = useTranslation().t.athenaSections.quiet;
+  const q = athenaSectionsCopy.quiet;
 
   return (
     <AthenaStage>

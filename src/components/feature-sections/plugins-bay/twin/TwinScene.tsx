@@ -10,6 +10,7 @@ import ChannelCard from "./ChannelCard";
 import TwinSource from "./TwinSource";
 import TwinWires from "./TwinWires";
 import { CHANNELS, TWIN_STILL, twinAt } from "./twinData";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 const A = "var(--brand-amber)";
 const BEAT_MS = 1100;
@@ -23,8 +24,8 @@ const MORE = TWIN_MORE_CHANNELS.map((key) => TOOLS[key]);
  * the answers come home to the twin. Stylised (the window says so).
  */
 export default function TwinScene() {
-  const { t, language } = useTranslation();
-  const copy = t.featuresSections.plugins.twin;
+  const { language } = useTranslation();
+  const copy = featuresSectionsCopy.plugins.twin;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { step, run } = useBeat(rootRef, BEAT_MS, TWIN_STILL);
   const frame = twinAt(step);

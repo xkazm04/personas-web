@@ -12,6 +12,7 @@ import {
   LazyLastingMemory,
   LazyOneMind,
 } from "@/components/sections/athena-lazy";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /*
  * /athena — the page Athena earned once she outgrew a single homepage
@@ -47,7 +48,7 @@ export default function AthenaPage() {
   // scroll-map rail and the mobile TOC both render them as visible text.
   const scrollMapItems = [
     { label: nav.meet, href: "#meet" },
-    { label: t.athenaSections.quiet.nav, href: "#quiet" },
+    { label: athenaSectionsCopy.quiet.nav, href: "#quiet" },
     { label: nav.onboarding, href: "#onboarding" },
     { label: nav.fleet, href: "#fleet" },
     { label: nav.workshop, href: "#workshop" },

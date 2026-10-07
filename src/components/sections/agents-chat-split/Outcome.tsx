@@ -2,13 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Check, Star, UserRound } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { AGENT, SCRIPT, fill, mix } from "./shared/scenarios";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /** A window's footer: what the customer ended up with, and how they rated it.
  *  Reserved height, so the reveal never moves the transcript above it. */
 export default function Outcome({ kind, done, text, seconds, stars, still }: { kind: "scripted" | "agent"; done: boolean; text: string; seconds: number; stars: number; still: boolean }) {
-  const c = useTranslation().t.howSections.chat;
+  const c = howSectionsCopy.chat;
   const isAgent = kind === "agent";
   const color = isAgent ? AGENT : SCRIPT;
   const Icon = isAgent ? Check : UserRound;

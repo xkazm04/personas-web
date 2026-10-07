@@ -1,8 +1,8 @@
 "use client";
 
-import { useTranslation } from "@/i18n/useTranslation";
 import { CLAUDE, FG, LOCAL } from "./shared/motion";
 import { CLOUD, MACHINE, PORT } from "./geometry";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* The two places of V1: your machine (emerald, a lit device with a dotted floor)
  * and Claude (warm haze) beyond the machine's single port. */
@@ -38,7 +38,7 @@ export function Defs() {
 }
 
 export function Backdrop() {
-  const c = useTranslation().t.featuresSections.models;
+  const c = featuresSectionsCopy.models;
   const m = MACHINE;
   const k = CLOUD;
   return (

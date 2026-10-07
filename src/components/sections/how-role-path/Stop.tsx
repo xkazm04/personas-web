@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, brandShadow } from "@/lib/brand-theme";
 import { EASE_CURVE } from "@/lib/animations";
 import { STOP_HREFS, type RoleDef } from "./roles";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* Stage placement on the snake: 1 and 2 along the top row, then 3 under 2 and
  * 4 under 1 (full class strings so Tailwind can see them). */
@@ -28,7 +28,7 @@ export default function Stop({
   /** Fade the role line in: only after the visitor switches role. */
   animateIn: boolean;
 }) {
-  const c = useTranslation().t.howSections.rolePath;
+  const c = howSectionsCopy.rolePath;
   const stop = c.stops[index];
   const color = BRAND_VAR[role.brand];
   const cut = stop.title.lastIndexOf(" ") + 1;

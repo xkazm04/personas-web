@@ -81,7 +81,7 @@ result card. Same `p`, same windows, same reduced-motion end frame.
 
 ## Data & state
 - **Source:** static. Geometry and timing in `data.ts`; every word in
-  `t.howSections.timeline` (`src/i18n/en.ts`): `heading`, `scenarios[]` (`name`, `trigger` are
+  `howSectionsCopy.timeline` (`src/i18n/en.ts`): `heading`, `scenarios[]` (`name`, `trigger` are
   read here) and `v3` (`lede`, `artLabel`, legend/stage labels, `announce`, and `cases[]` with
   `snag`, `wait`, `waypoints[4]`, `result`). Scenarios and cases are matched by index. No fetch,
   no mock API, no API routes.

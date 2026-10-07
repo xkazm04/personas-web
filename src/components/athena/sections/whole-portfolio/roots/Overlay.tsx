@@ -7,6 +7,7 @@ import FindingCard, { Check } from "./shared/FindingCard";
 import type { GardenState } from "./data";
 import { CARD, CAUSE, GROUND, pct, PLANTS, WORST_PLANT } from "./geometry";
 import { TONE_KEY } from "./Plant";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The type layer of "Roots" - HTML in percent of the garden's box, which
@@ -96,7 +97,7 @@ export default function Overlay({ g, live, reduced }: { g: GardenState; live: bo
           color: g.healed ? BRAND_VAR.emerald : BRAND_VAR.rose,
         }}
       >
-        {t.athenaSections.portfolio.cause}
+        {athenaSectionsCopy.portfolio.cause}
       </span>
 
       {/* The wire from the cause into the finding (stage sizes only) */}

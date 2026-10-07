@@ -10,6 +10,7 @@ import BrainScene from "./BrainScene";
 import FleetScene from "./FleetScene";
 import DriveScene from "./drive/DriveScene";
 import TwinScene from "./twin/TwinScene";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /** One scene per plugin: a plugin added to the desktop manifest is a tsc error here until it has one. */
 const SCENES: Record<LabPlugin["key"], React.ComponentType> = {
@@ -87,7 +88,7 @@ export default function PluginWindow({
             <div className="font-mono text-[14px] text-foreground/65">{tagline}</div>
           </div>
           <div className="ml-auto flex items-center gap-3 font-mono text-[13px] uppercase tracking-[0.16em] text-foreground/65">
-            <span className="rounded-md border border-foreground/[0.12] px-2 py-0.5 tracking-[0.12em]">{t.featuresSections.plugins.stylised}</span>
+            <span className="rounded-md border border-foreground/[0.12] px-2 py-0.5 tracking-[0.12em]">{featuresSectionsCopy.plugins.stylised}</span>
             <span className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full" style={{ background: c, boxShadow: `0 0 8px ${c}` }} aria-hidden="true" />
               {fillTemplate(copy.counter, { current: index + 1, total: plugins.length })}

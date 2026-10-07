@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { fadeUp } from "@/lib/animations";
 import Ambience from "./Ambience";
 import TypewriterLine from "./Typewriter";
 import Proofs from "./Proofs";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* Statement and proofs share three equal rows on the stage, so each proof sits
  * level with the line it proves. The statement is sized from the slot (a size
@@ -21,7 +21,7 @@ const ROWS = "stage:grid stage:h-full stage:grid-rows-3";
  * far agents may go, and keys that stay on your own computer.
  */
 export default function HowManifesto() {
-  const m = useTranslation().t.howSections.manifesto;
+  const m = howSectionsCopy.manifesto;
 
   return (
     <SectionWrapper fit="fill" id="manifesto" aria-label={m.aria} className="overflow-clip">

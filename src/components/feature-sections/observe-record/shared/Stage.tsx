@@ -3,8 +3,8 @@
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
-import { useTranslation } from "@/i18n/useTranslation";
 import { observeSectionCopy } from "@/i18n/pending/observeSection";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* Frame pieces shared by the observe lab variants: the live section's heading
  * (its identity), an aspect-locked art box whose SVG layer and HTML layer share
@@ -73,7 +73,7 @@ export function frame(w: number, h: number) {
 
 /** The small tag that marks designed data as stylised, not a screenshot. */
 export function StylisedTag({ style, className = "" }: { style: CSSProperties; className?: string }) {
-  const label = useTranslation().t.featuresSections.observe.stylised;
+  const label = featuresSectionsCopy.observe.stylised;
   return (
     <span className={`pointer-events-none select-none font-mono uppercase tracking-[0.14em] text-muted-dark ${className}`} style={style}>
       {label}

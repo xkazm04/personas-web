@@ -2,11 +2,11 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { UserRound } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import type { Frame } from "./shared/art";
 import Her, { type Mood } from "./shared/Her";
 import type { V3Layout } from "./layout";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The two numbers the field adds up to. Hers climbs into the hundreds as the
@@ -31,7 +31,7 @@ export default function Tallies({
   f: Frame;
   reduced: boolean;
 }) {
-  const c = useTranslation().t.athenaSections.workshop.v3;
+  const c = athenaSectionsCopy.workshop.v3;
   const { her, you } = g;
   const label = "absolute whitespace-nowrap font-mono uppercase tracking-[0.16em]";
   const count = "absolute font-semibold leading-none tabular-nums";

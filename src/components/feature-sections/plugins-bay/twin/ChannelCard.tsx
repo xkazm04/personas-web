@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { CornerDownLeft } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import ToolLogo from "../shared/ToolLogo";
 import { brandInk, type LogoTool } from "../shared/catalog";
 import type { ChannelKey } from "./twinData";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 const A = "var(--brand-amber)";
 const mix = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
@@ -44,7 +44,7 @@ export default function ChannelCard({
   index: number;
   run: boolean;
 }) {
-  const copy = useTranslation().t.featuresSections.plugins.twin;
+  const copy = featuresSectionsCopy.plugins.twin;
   const words = copy.channels[channel];
   const ink = brandInk(tool);
   // Fades in over 0.4s after `delay`, and out in 0.2s with no delay, so the

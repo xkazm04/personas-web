@@ -2,10 +2,10 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { frame } from "./shared/Stage";
 import { AGENTS, FLEET, H, LINES, N, PRINT, PRINTER, TAPE, W, cableEnd, fleetY, stepOf } from "./log";
 import { observeSectionCopy } from "@/i18n/pending/observeSection";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* The left half of V3: the fleet (each agent a button that isolates its lines
  * on the record), a cable from each agent into the printer, a light that runs
@@ -64,7 +64,7 @@ function AgentButton({ i, clock, active, onPick }: { i: number; clock: MotionVal
 }
 
 export default function FleetCables({ clock, agent, onPick, label }: { clock: MotionValue<number>; agent: number | null; onPick: (i: number | null) => void; label: string }) {
-  const c = useTranslation().t.featuresSections.observe.v3;
+  const c = featuresSectionsCopy.observe.v3;
   // The slot flares and the LED lights while a line is coming out.
   const printing = useTransform(clock, (s) => {
     const { frac } = stepOf(s);

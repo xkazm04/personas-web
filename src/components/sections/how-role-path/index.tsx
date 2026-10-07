@@ -3,11 +3,11 @@
 import { useState } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { useTranslation } from "@/i18n/useTranslation";
 import RoleLenses from "./RoleLenses";
 import Route from "./Route";
 import { roleDef, type ViewerRole } from "./roles";
 import { ZOOM_FILL, ZOOM_TIERS, zoomStyle } from "./zoom";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 export type { ViewerRole } from "./roles";
 
@@ -25,7 +25,7 @@ export default function HowRolePath({
   role: ViewerRole;
   onRoleChange: (role: ViewerRole) => void;
 }) {
-  const c = useTranslation().t.howSections.rolePath;
+  const c = howSectionsCopy.rolePath;
   // Stop lines fade in only after a switch: the first paint shows them as-is.
   const [touched, setTouched] = useState(false);
   const pick = (next: ViewerRole) => {

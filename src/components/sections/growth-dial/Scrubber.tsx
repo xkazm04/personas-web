@@ -3,10 +3,10 @@
 import { motion } from "framer-motion";
 import { Pause, Play } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { frame } from "./shared/Shell";
 import { LAYERS } from "./shared/layers";
 import { H, SCRUB, W } from "./geometry";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 const f = frame(W, H);
 const TRACK_X = 76;
@@ -29,7 +29,7 @@ export default function Scrubber({
   onStage: (s: number) => void;
   onToggle: () => void;
 }) {
-  const v = useTranslation().t.howSections.layers.v2;
+  const v = howSectionsCopy.layers.v2;
   const at = (s: number) => `${(s / 3) * 100}%`;
   const ease = still ? { duration: 0 } : { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const };
 

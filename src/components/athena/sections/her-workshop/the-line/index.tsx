@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ArtBox, frame } from "./shared/art";
 import Shell from "./shared/Shell";
 import { useSceneClock } from "./shared/useSceneClock";
@@ -13,6 +12,7 @@ import Field from "./Field";
 import Handle from "./Handle";
 import { WIDE_H, WIDE_W, layoutFor } from "./layout";
 import Tallies from "./Tallies";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Workshop lab v3 - "The Line You Set".
@@ -34,8 +34,7 @@ import Tallies from "./Tallies";
  */
 export default function WorkshopLineYouSet() {
   const compact = useIsMobile();
-  const { t } = useTranslation();
-  const c = t.athenaSections.workshop.v3;
+  const c = athenaSectionsCopy.workshop.v3;
   const { ref, phase, reduced } = useSceneClock({ cycle: CYCLE, still: STILL_TICK, tickMs: TICK_MS });
   const [line, setLine] = useState(DEFAULT_LINE);
   const scene = sceneAt(phase);

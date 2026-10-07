@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { frame } from "./shared/Shell";
 import { LAYERS } from "./shared/layers";
 import { COL_W, COUNTS, H, W } from "./geometry";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 const f = frame(W, H);
 
@@ -14,7 +14,7 @@ const f = frame(W, H);
  * is the headline), and which layer each stop leans on - lit as you reach it.
  */
 export default function Ledger({ stage, still }: { stage: number; still: boolean }) {
-  const v = useTranslation().t.howSections.layers.v2;
+  const v = howSectionsCopy.layers.v2;
   const stop = v.stops[stage];
   const count = COUNTS[stage];
   const enter = still ? false : { opacity: 0, y: 14 };

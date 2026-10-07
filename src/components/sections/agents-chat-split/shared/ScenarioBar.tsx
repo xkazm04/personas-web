@@ -1,16 +1,16 @@
 "use client";
 
 import { Pause, Play } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import type { StoryClock } from "./useStoryClock";
 import { CUSTOMER, mix } from "./scenarios";
 import { zoomStyle } from "./zoom";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /** The scenario picker: one pill per customer message, the playing one filling
  *  with the story's progress, and the auto-play toggle. Real buttons, so the
  *  whole row is keyboard reachable. */
 export default function ScenarioBar({ clock, className = "" }: { clock: StoryClock; className?: string }) {
-  const c = useTranslation().t.howSections.chat;
+  const c = howSectionsCopy.chat;
   const autoLabel = clock.held ? c.resume : c.pause;
 
   return (

@@ -5,8 +5,9 @@
 
 import type { Translations } from "@/i18n/en";
 import { BEATS, OPENS } from "./data";
+import type { AthenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
-type Lab = Translations["athenaSections"]["oneMind"]["v3"]["status"];
+type Lab = AthenaSectionsCopy["oneMind"]["v3"]["status"];
 type Live = Translations["athenaPage"]["oneMind"]["status"];
 
 export function statusAt(phase: number, c: Lab, live: Live, short: boolean): string {

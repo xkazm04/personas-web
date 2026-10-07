@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Brain, Fingerprint, MessageSquareReply, SlidersHorizontal, UserRound } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { CHANNELS, type TwinFrame } from "./twinData";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 const A = "var(--brand-amber)";
 const mix = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
@@ -14,7 +14,7 @@ const mix = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, transparen
  * lighting as it works, and the memory it recalls and the replies it tracks.
  */
 export default function TwinSource({ frame, run }: { frame: TwinFrame; run: boolean }) {
-  const copy = useTranslation().t.featuresSections.plugins.twin;
+  const copy = featuresSectionsCopy.plugins.twin;
   const traits = [
     { key: "identity", label: copy.traits.identity, icon: UserRound, on: frame.recalled },
     { key: "tone", label: copy.traits.tone, icon: SlidersHorizontal, on: frame.toned },

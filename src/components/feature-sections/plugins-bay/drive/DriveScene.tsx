@@ -9,6 +9,7 @@ import { useBeat } from "../shared/useBeat";
 import DriveBrowser from "./DriveBrowser";
 import DriveDrawer from "./DriveDrawer";
 import { DRIVE_STILL, FILES, VERSIONS, driveAt } from "./driveData";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 const E = "var(--brand-emerald)";
 const mix = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
@@ -22,8 +23,8 @@ const BEAT_MS = 1000;
  * file stays.
  */
 export default function DriveScene() {
-  const { t, language } = useTranslation();
-  const copy = t.featuresSections.plugins.drive;
+  const { language } = useTranslation();
+  const copy = featuresSectionsCopy.plugins.drive;
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { step, run } = useBeat(rootRef, BEAT_MS, DRIVE_STILL);
   const { landed, updating, updated } = driveAt(step);

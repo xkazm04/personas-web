@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { motion, useTransform } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { ArtBox, MemoryShell, ReplayButton, StylisedTag, frame } from "./shared/Frame";
 import { usePlay } from "./shared/motion";
@@ -10,6 +9,7 @@ import type { CategoryKey } from "./shared/categories";
 import Disc, { CALLOUTS } from "./Disc";
 import Panel, { PANEL_X } from "./Panel";
 import { C, H, RUNS, W } from "./rings";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /**
  * Remembers what works - "Growth rings" (winner of the 2026-10-06 /features review). The concept, not
@@ -26,7 +26,7 @@ const DURATION = 9;
 const { place, fs } = frame(W, H);
 
 export default function MemoryLayers() {
-  const copy = useTranslation().t.featuresSections.memory;
+  const copy = featuresSectionsCopy.memory;
   const ref = useRef<HTMLDivElement>(null);
   const { p, play, still } = usePlay(ref, DURATION, RUNS);
   const [sel, setSel] = useState<CategoryKey | null>(null);

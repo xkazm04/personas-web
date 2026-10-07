@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fillTemplate } from "@/lib/fillTemplate";
 import { DIMS, type Dim, type DimKey } from "./dims";
 import { designMatrixCopy } from "@/i18n/pending/designMatrix";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 export interface DimCopy extends Dim {
   label: string;
@@ -24,9 +24,8 @@ const PICKED: Partial<Record<DimKey, number>> = { triggers: 0, review: 1 };
  * the lab's own `featuresSections.design` labels.
  */
 export function useDesignCopy() {
-  const { t } = useTranslation();
   const m = designMatrixCopy;
-  const l = t.featuresSections.design;
+  const l = featuresSectionsCopy.design;
   return useMemo(() => {
     const keywords = l.keywords as Partial<Record<DimKey, string>>;
     const dims: DimCopy[] = DIMS.map((d) => {

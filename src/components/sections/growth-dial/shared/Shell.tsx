@@ -3,7 +3,7 @@
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { useTranslation } from "@/i18n/useTranslation";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* Frame pieces shared by the "Built to grow" lab variants: the section shell
  * (the live `platform-layers` id, eyebrow and heading), an aspect-locked art
@@ -11,7 +11,7 @@ import { useTranslation } from "@/i18n/useTranslation";
  * tag that marks designed art as stylised. */
 
 export function LayersShell({ lede, children }: { lede: string; children: ReactNode }) {
-  const c = useTranslation().t.howSections.layers;
+  const c = howSectionsCopy.layers;
   return (
     <SectionWrapper fit="fill" id="platform-layers" className="overflow-clip">
       <SectionIntro
@@ -84,7 +84,7 @@ export function frame(w: number, h: number) {
 
 /** The small tag that marks designed art as not a screenshot. */
 export function StylisedTag({ style }: { style?: CSSProperties }) {
-  const label = useTranslation().t.howSections.layers.stylised;
+  const label = howSectionsCopy.layers.stylised;
   return (
     <span
       aria-hidden

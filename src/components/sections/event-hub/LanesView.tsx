@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import type { QueueRouteMetric } from "@/lib/event-bus-demo";
 import { TOOL_MAP } from "@/lib/tool-catalogue";
 import { loopTransition } from "@/lib/motion/loop-gate";
-import { useTranslation } from "@/i18n/useTranslation";
 import ToolMark from "./shared/ToolMark";
 import { ink, laneFigures } from "./telemetry";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 function Endpoint({ id, align }: { id: string; align: "start" | "end" }) {
   const tool = TOOL_MAP.get(id)!;
@@ -32,7 +32,7 @@ function Endpoint({ id, align }: { id: string; align: "start" | "end" }) {
  * the live figures sit at the end of each lane.
  */
 export default function LanesView({ routes, run }: { routes: QueueRouteMetric[]; run: boolean }) {
-  const copy = useTranslation().t.howSections.events.v1;
+  const copy = howSectionsCopy.events.v1;
   return (
     <div className="mx-auto flex h-full w-full max-w-[min(100%,calc(100cqh*2.6))] flex-col justify-center gap-[2.4cqh] [container-type:inline-size]">
       {routes.map((r, i) => {

@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { EVENTS, TRAVEL, travelAt } from "./data";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /** Seamless ruler drift: one tick spacing per loop, so the strip never jumps. */
 const RULER_DRIFT = { x: [0, -48] };
@@ -19,7 +19,7 @@ const TICK_STEP = 1 / TRAVEL;
  * (`hushed`) the passing chips fall back so nothing talks over her.
  */
 export default function Stream({ phase, live, reduced, hushed }: { phase: number; live: boolean; reduced: boolean; hushed: boolean }) {
-  const q = useTranslation().t.athenaSections.quiet;
+  const q = athenaSectionsCopy.quiet;
 
   return (
     <div className="pointer-events-none absolute inset-x-0 top-[var(--line-y)] h-0">

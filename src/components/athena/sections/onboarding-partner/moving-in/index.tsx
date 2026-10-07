@@ -15,6 +15,7 @@ import { Dialogue } from "./Dialogue";
 import { Floor } from "./Floor";
 import { ART_AR, isoPct } from "./iso";
 import { DeskTags, EmptySign, RunCounter, SocketGlyphs } from "./Labels";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Athena lab, onboarding v2 — "Moving In".
@@ -40,7 +41,7 @@ import { DeskTags, EmptySign, RunCounter, SocketGlyphs } from "./Labels";
 export default function OnboardingMovingIn() {
   const { t } = useTranslation();
   const intro = t.athenaPage.onboarding.intro;
-  const v = t.athenaSections.onboarding.v2;
+  const v = athenaSectionsCopy.onboarding.v2;
   const { sectionRef, phase, reduced, live } = useSceneClock({ cycle: CYCLE, tickMs: TICK_MS, still: STILL_TICK });
   const s = stateAt(phase);
   const orb = isoPct(s.orb);

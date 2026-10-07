@@ -4,13 +4,13 @@ import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import { fadeUp } from "@/lib/animations";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ArtBox, Intro } from "./shared/Stage";
 import { useClock } from "./shared/motion";
 import FleetCables from "./FleetCables";
 import Statement from "./Statement";
 import Tape from "./Tape";
 import { H, REST_S, W } from "./log";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /**
  * See everything, miss nothing - "On the record" (winner of the 2026-10-06 /features review): observability
@@ -22,7 +22,7 @@ import { H, REST_S, W } from "./log";
  * motion (which rests on a full tape with every stamp in view).
  */
 export default function ObservabilityDeck() {
-  const c = useTranslation().t.featuresSections.observe.v3;
+  const c = featuresSectionsCopy.observe.v3;
   const ref = useRef<HTMLDivElement>(null);
   const clock = useClock(ref, REST_S);
   const [agent, setAgent] = useState<number | null>(null);

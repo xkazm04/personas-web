@@ -9,6 +9,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { ToolGlyph, type ToolId } from "./shared/ToolGlyph";
 import { PICKED, type V2State } from "./data";
 import { LABEL } from "./Labels";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The two-line conversation that drives the floor: her question, your reply.
@@ -24,7 +25,7 @@ const TOOLS: ToolId[] = ["slack", "gmail", "github", "notion"];
 
 export function Dialogue({ s, reduced }: { s: V2State; reduced: boolean }) {
   const { t } = useTranslation();
-  const v = t.athenaSections.onboarding.v2;
+  const v = athenaSectionsCopy.onboarding.v2;
   const c = t.athenaPage.onboarding.canvas;
   if (!s.question) return null;
   const ask = s.question === "tools" ? v.askTools : s.question === "jobs" ? v.askJobs : v.askStart;

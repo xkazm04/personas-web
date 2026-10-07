@@ -3,13 +3,13 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ArtBox, LayersShell, StylisedTag, frame } from "./shared/Shell";
 import Scene from "./Scene";
 import Ledger from "./Ledger";
 import Scrubber from "./Scrubber";
 import { DESIGNED, H, HEALED, NODES, ROOT, W, WIDE } from "./geometry";
 import { useGrowth } from "./useGrowth";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 const f = frame(W, H);
 
@@ -21,7 +21,7 @@ const f = frame(W, H);
  * year-one frame, still, every control live.
  */
 export default function LayersGrowthDial() {
-  const v = useTranslation().t.howSections.layers.v2;
+  const v = howSectionsCopy.layers.v2;
   const { boxRef, stage, run, still, playing, choose, toggle } = useGrowth();
   const designed = NODES[DESIGNED];
   const healed = NODES[HEALED];

@@ -7,6 +7,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { ToolGlyph, type ToolId } from "./shared/ToolGlyph";
 import { DESKS, PLOT, SOCKETS, pct } from "./iso";
 import type { V2State } from "./data";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The HTML layer over the floor: the brand marks on the sockets, a name tag
@@ -47,7 +48,7 @@ export function SocketGlyphs({ plugged, reduced }: { plugged: boolean[]; reduced
 export function DeskTags({ s, reduced }: { s: V2State; reduced: boolean }) {
   const { t } = useTranslation();
   const c = t.athenaPage.onboarding.canvas;
-  const v = t.athenaSections.onboarding.v2;
+  const v = athenaSectionsCopy.onboarding.v2;
   const names = [c.template.title, c.templateAlt.title, c.runsRows[1].name];
   return (
     <>
@@ -76,7 +77,6 @@ export function DeskTags({ s, reduced }: { s: V2State; reduced: boolean }) {
 
 /** The empty plot's sign — the product before anyone set it up. */
 export function EmptySign({ gone, reduced }: { gone: boolean; reduced: boolean }) {
-  const { t } = useTranslation();
   return (
     <motion.span
       className={`absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg border border-dashed px-3 py-1 font-mono uppercase tracking-[0.18em] text-muted-dark ${LABEL}`}
@@ -85,7 +85,7 @@ export function EmptySign({ gone, reduced }: { gone: boolean; reduced: boolean }
       animate={{ opacity: gone ? 0 : 1, scale: gone ? 0.94 : 1 }}
       transition={reduced ? { duration: 0 } : { duration: 0.5 }}
     >
-      {t.athenaSections.onboarding.v2.empty}
+      {athenaSectionsCopy.onboarding.v2.empty}
     </motion.span>
   );
 }
@@ -115,7 +115,7 @@ export function RunCounter({ s, reduced }: { s: V2State; reduced: boolean }) {
             style={{ backgroundColor: s.running && i < live ? BRAND_VAR.emerald : tint("cyan", 20) }}
           />
         ))}
-        {s.running ? live : 0} {t.athenaSections.onboarding.v2.agentsLive}
+        {s.running ? live : 0} {athenaSectionsCopy.onboarding.v2.agentsLive}
       </span>
     </span>
   );

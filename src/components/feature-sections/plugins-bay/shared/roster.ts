@@ -2,6 +2,7 @@ import { Brain, Fingerprint, HardDrive, Wrench, type LucideIcon } from "lucide-r
 import { SHIPPED_DESKTOP_PLUGINS, type ShippedPluginId } from "@/data/desktop-plugins";
 import type { BrandKey } from "@/lib/brand-theme";
 import type { Translations } from "@/i18n/en";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /**
  * Every plugin a release build of the desktop app ships, in the order the bay
@@ -47,5 +48,5 @@ export const DEFAULT_LAB_PLUGIN: LabPluginKey = "dev-tools";
 /** One-line tagline: the translated showcase copy for Dev Tools and Brain, the pending namespace for Drive and Twin. */
 export function pluginTagline(t: Translations, key: LabCopyKey): string {
   if (key === "devTools" || key === "brain") return t.pluginShowcase.taglines[key];
-  return t.featuresSections.plugins.taglines[key];
+  return featuresSectionsCopy.plugins.taglines[key];
 }

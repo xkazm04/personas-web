@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionHeading from "@/components/SectionHeading";
 import GradientText from "@/components/GradientText";
-import { useTranslation } from "@/i18n/useTranslation";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /**
  * The healing section's frame, shared by the lab variants: the live heading
@@ -13,7 +13,7 @@ import { useTranslation } from "@/i18n/useTranslation";
  * with `cqh` and always fits one viewport.
  */
 export default function HealingSection({ lede, children }: { lede: string; children: ReactNode }) {
-  const t = useTranslation().t.featuresSections.healing;
+  const t = featuresSectionsCopy.healing;
   return (
     <SectionWrapper fit="fill" id="healing-circuit" className="relative overflow-hidden">
       <div className="relative z-10 text-center" data-section-intro>

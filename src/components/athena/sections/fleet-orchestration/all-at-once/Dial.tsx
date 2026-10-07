@@ -10,6 +10,7 @@ import { HUES, TASK_COUNT } from "./shared/cast";
 import type { SceneState } from "./data";
 import { DIAL, box, type Rect } from "./layout";
 import Rings from "./Rings";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The dial - the dominant object of V2. She sits at its centre; her team's
@@ -23,7 +24,7 @@ const AVATAR = 92;
 
 export default function Dial({ rect, scene, reduced }: { rect: Rect; scene: SceneState; reduced: boolean }) {
   const { t } = useTranslation();
-  const lab = t.athenaSections.fleet.v2;
+  const lab = athenaSectionsCopy.fleet.v2;
   const tasks = t.athenaPage.fleet.tasks;
   const awake = atStage(scene.sentence, "chosen");
   const step = lab.serialStep.replace("{n}", String(scene.serialTask + 1)).replace("{total}", String(TASK_COUNT));

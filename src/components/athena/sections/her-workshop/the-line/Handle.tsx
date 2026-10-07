@@ -3,11 +3,11 @@
 import { useRef, useState, type PointerEvent, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import { ChevronsUpDown } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import type { Frame } from "./shared/art";
 import { LINE_MAX, LINE_MIN } from "./data";
 import type { V3Layout } from "./layout";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * The visitor's hand on the line.
@@ -38,7 +38,7 @@ export default function Handle({
   f: Frame;
   reduced: boolean;
 }) {
-  const c = useTranslation().t.athenaSections.workshop.v3;
+  const c = athenaSectionsCopy.workshop.v3;
   const field = useRef<HTMLDivElement | null>(null);
   const [dragging, setDragging] = useState(false);
   const { x, y, w, h } = g.field;

@@ -73,7 +73,7 @@ still ends exactly at the slot edges. The windows sit in a `md:grid-cols-[1fr_5.
 ## Data & state
 - **Source:** static. Structure in `SCENARIOS` (`shared/scenarios.ts:36`): per scenario, the
   `at` second and `tone` of each scripted and agent line, and the two star ratings (scripted
-  1-2, agent 5). Words in `t.howSections.chat` (`src/i18n/en.ts`): `heading`, `gradient`, `lede`,
+  1-2, agent 5). Words in `howSectionsCopy.chat` (`src/i18n/en.ts`): `heading`, `gradient`, `lede`,
   `aria`, labels, and `scenarios[]` (`name`, `message`, `scripted[]`, `agent[]`,
   `scriptedOutcome`, `agentOutcome`), indexed the same way as `SCENARIOS`; `v1` holds the art
   label, window modes, clock label, outcome labels and the rating template. No fetch, no API

@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { useTranslation } from "@/i18n/useTranslation";
 import ScenarioBar from "./shared/ScenarioBar";
 import { ZOOM_FILL, ZOOM_TIERS, zoomStyle } from "./shared/zoom";
 import { useStoryClock } from "./shared/useStoryClock";
@@ -11,6 +10,7 @@ import { SCENARIOS, storyEnd } from "./shared/scenarios";
 import CustomerFork from "./CustomerFork";
 import ChatWindow from "./ChatWindow";
 import ClockSpine from "./ClockSpine";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /**
  * How lab chat V1 - "Split screen, one clock". The live concept kept and
@@ -23,7 +23,7 @@ import ClockSpine from "./ClockSpine";
 const OUTRO = 1.6;
 
 export default function HowLabChatV1() {
-  const c = useTranslation().t.howSections.chat;
+  const c = howSectionsCopy.chat;
   const artRef = useRef<HTMLDivElement>(null);
   const clock = useStoryClock(artRef, {
     count: SCENARIOS.length,

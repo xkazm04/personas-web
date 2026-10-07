@@ -1,9 +1,9 @@
 "use client";
 
-import { useTranslation } from "@/i18n/useTranslation";
 import { frame } from "./shared/Frame";
 import { CATEGORY_KEYS, CategoryGlyph, catColor, catTint, type CategoryKey } from "./shared/categories";
 import { H, W } from "./rings";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* V3's right column: the five kinds of memory as buttons. Picking one marks
  * its seeds on the rings and shows a real example of that kind. */
@@ -12,7 +12,7 @@ const { place, fs } = frame(W, H);
 export const PANEL_X = 830;
 
 export default function Panel({ sel, onSel }: { sel: CategoryKey | null; onSel: (k: CategoryKey | null) => void }) {
-  const copy = useTranslation().t.featuresSections.memory;
+  const copy = featuresSectionsCopy.memory;
   return (
     <div className="absolute flex flex-col" style={{ ...place(PANEL_X, 104, 330), gap: "max(6px, calc(10 * 100cqw / 1200))" }}>
       <span className="font-mono font-semibold uppercase tracking-[0.16em] text-foreground/75" style={fs(15, 12)}>

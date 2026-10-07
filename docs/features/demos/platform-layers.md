@@ -89,7 +89,7 @@ designed node) and a pilled "healed" tag, the "Same laptop" line, `PhoneScrubber
 | `src/app/how/page.tsx` (`:65-67`) | Mounts it in `StageSection id="platform-layers"` |
 
 ## Data & state
-- **Source:** static geometry (`geometry.ts`) and `LAYERS`; copy in `t.howSections.layers`
+- **Source:** static geometry (`geometry.ts`) and `LAYERS`; copy in `howSectionsCopy.layers`
   (`src/i18n/en.ts`): `eyebrow`, `heading`/`headingGradient`/`headingTrailing`, `stylised`, and
   `v2` (`lede`, `artLabel`, `scrubLabel`, `play`/`pause`, `agent`/`agents`, `sameLaptop`,
   `ledgerLabel`, `prompt`, `healed`, `stops[4]` `{when, what}`, `layerLines` keyed by layer id).

@@ -2,7 +2,6 @@
 
 import { useRef, type CSSProperties } from "react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import HealingSection from "./shared/HealingSection";
 import { CASE_COLOR, fill } from "./shared/cases";
 import { useLoopGate, useStepLoop } from "./shared/useStepLoop";
@@ -10,6 +9,7 @@ import { BRAND_LABEL, FINAL_STEP, LOOP, PHASES, V1_CASES, stepMs } from "./geome
 import Board, { phaseColor } from "./Board";
 import RunLog, { type LogLine } from "./RunLog";
 import Stepper from "./Stepper";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /*
  * Fixes itself when things break - "Run circuit" (winner of the 2026-10-06 /features review), successor of the earlier
@@ -21,7 +21,7 @@ import Stepper from "./Stepper";
  * The art is sized in em from the stage slot's height (cqh), so it always fits.
  */
 export default function HealingCircuit() {
-  const t = useTranslation().t.featuresSections.healing;
+  const t = featuresSectionsCopy.healing;
   const ref = useRef<HTMLDivElement>(null);
   const { still, running } = useLoopGate(ref);
   const [step, setStep] = useStepLoop(LOOP, stepMs, running, FINAL_STEP);

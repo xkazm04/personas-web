@@ -12,6 +12,7 @@ import { DEFAULT_LAB_PLUGIN, LAB_PLUGINS, pluginTagline, type LabPluginKey } fro
 import Cartridge, { CARTRIDGE_GAP } from "./Cartridge";
 import PluginWindow from "./PluginWindow";
 import ReachPlate from "./ReachPlate";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /**
  * Everything to plug in - the plug-in bay (winner of the 2026-10-06 /features
@@ -41,7 +42,7 @@ export default function Plugins() {
         data-stage-body
         data-stage-fixed
         role="group"
-        aria-label={t.featuresSections.plugins.v1.artLabel}
+        aria-label={featuresSectionsCopy.plugins.v1.artLabel}
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

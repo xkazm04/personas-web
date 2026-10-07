@@ -2,10 +2,10 @@
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { useTranslation } from "@/i18n/useTranslation";
 import { StylisedTag, frame } from "./shared/Stage";
 import { AGENTS, H, STATEMENT, W, printed, sumLines } from "./log";
 import { observeSectionCopy } from "@/i18n/pending/observeSection";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* The right of V3: the day's statement, kept by the record as it prints -
  * total spend, runs, failures caught, sign-offs, and spend per agent. */
@@ -43,7 +43,7 @@ function AgentBar({ i, clock, dim }: { i: number; clock: MotionValue<number>; di
 }
 
 export default function Statement({ clock, agent }: { clock: MotionValue<number>; agent: number | null }) {
-  const c = useTranslation().t.featuresSections.observe.v3;
+  const c = featuresSectionsCopy.observe.v3;
   const spend = useTransform(clock, (s) => `$${AGENTS.reduce((sum, _, i) => sum + spendOf(i, s), 0).toFixed(2)}`);
   const runs = useTransform(clock, (s) => String(BASE.runs + printed(s)));
   const failures = useTransform(clock, (s) => String(BASE.failures + sumLines(printed(s), (l) => (l.stamp === "failed" ? 1 : 0))));

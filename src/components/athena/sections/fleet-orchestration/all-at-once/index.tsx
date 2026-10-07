@@ -13,6 +13,7 @@ import { COMPACT, WIDE, layoutFor } from "./layout";
 import Roster from "./Roster";
 import Sentence from "./Sentence";
 import StartControl from "./StartControl";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Athena lab - Fleet orchestration, V2: "All At Once".
@@ -48,7 +49,7 @@ export default function AthenaLabFleetV2() {
       statusShort={key === "planning" ? s.piecesShort : s[`${key}Short`]}
       reduced={reduced}
     >
-      <FitBox wide={WIDE} compact={COMPACT} label={t.athenaSections.fleet.v2.art}>
+      <FitBox wide={WIDE} compact={COMPACT} label={athenaSectionsCopy.fleet.v2.art}>
         {(narrow) => {
           const L = layoutFor(narrow);
           return (

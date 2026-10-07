@@ -4,14 +4,14 @@ import { useSyncExternalStore, type CSSProperties, type ReactNode, type RefObjec
 import { motion, type MotionValue } from "framer-motion";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import SectionIntro from "@/components/primitives/SectionIntro";
-import { useTranslation } from "@/i18n/useTranslation";
 import { fill } from "./motion";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /* Frame pieces shared by the timeline lab variants: the live heading through
  * SectionIntro, an aspect-locked art box whose SVG and HTML layers share one
  * coordinate system, the scenario picker and the small replay/pause chrome. */
 
-export const useTimelineCopy = () => useTranslation().t.howSections.timeline;
+export const useTimelineCopy = () => howSectionsCopy.timeline;
 
 /* The wide map needs 64rem; below it the section draws its portrait map. The
  * section is client-only (ssr: false), so the branch never meets a server render. */

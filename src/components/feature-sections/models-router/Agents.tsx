@@ -1,9 +1,9 @@
 "use client";
 
 import { motion, useTransform, type MotionValue } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
 import { CLAUDE, FG, LOCAL, mix } from "./shared/motion";
 import { AGENTS, ROUTES, ROW, at, docked, orbU, type Agent } from "./geometry";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* The agents of V1: each lives in a row on your machine. Its orb (its thinking)
  * leaves the row's socket, lights its route as it goes and docks at its engine;
@@ -30,7 +30,7 @@ function Lock({ x, y, s }: { x: MotionValue<number>; y: MotionValue<number>; s: 
 }
 
 function AgentRow({ a, i, p, flow }: { a: Agent; i: number; p: MotionValue<number>; flow: MotionValue<number> }) {
-  const c = useTranslation().t.featuresSections.models;
+  const c = featuresSectionsCopy.models;
   const col = a.lock ? LOCAL : CLAUDE;
   const u = useTransform(p, (v) => orbU(v, a));
   const x = useTransform(u, (v) => at(i, v)[0]);

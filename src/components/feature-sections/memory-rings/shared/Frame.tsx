@@ -5,8 +5,8 @@ import { RotateCcw } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import SectionHeading from "@/components/SectionHeading";
 import SectionWrapper from "@/components/SectionWrapper";
-import { useTranslation } from "@/i18n/useTranslation";
 import { memorySectionCopy } from "@/i18n/pending/memorySection";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 /* Frame pieces shared by the memory lab variants: the live section shell (its
  * `memory-layers` id, heading and lede), an aspect-locked art box whose SVG
@@ -102,7 +102,7 @@ export function ReplayButton({ onClick, disabled, style }: { onClick: () => void
 
 /** The small tag that marks designed art as not a screenshot. */
 export function StylisedTag({ style }: { style: CSSProperties }) {
-  const label = useTranslation().t.featuresSections.memory.stylised;
+  const label = featuresSectionsCopy.memory.stylised;
   return (
     <span aria-hidden className="pointer-events-none select-none font-mono uppercase tracking-[0.14em] text-muted-dark/80" style={style}>
       {label}

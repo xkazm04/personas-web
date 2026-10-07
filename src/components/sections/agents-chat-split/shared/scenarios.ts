@@ -1,7 +1,7 @@
 import { BRAND_VAR } from "@/lib/brand-theme";
 
 /* Structure behind the How lab chat variants. The words live in
- * `t.howSections.chat` (en.ts), indexed the same way as `SCENARIOS`; this module
+ * `howSectionsCopy.chat` (src/i18n/pending/howSections.ts), indexed the same way as `SCENARIOS`; this module
  * holds what is not copy: when each line lands on the shared clock (seconds
  * after the customer hits send, carried over from the live section's
  * transcripts), its tone, the customer rating, how the scripted bot and the

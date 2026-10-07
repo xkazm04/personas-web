@@ -3,9 +3,9 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Bot, CloudOff, KeyRound, Laptop, Lock, Sparkles } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, tint, type BrandKey } from "@/lib/brand-theme";
 import { fadeUp } from "@/lib/animations";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /** A proof panel beside its statement line, with a connector reaching back
  *  across the column gap to the line it proves. */
@@ -34,7 +34,7 @@ function Proof({ brand, kicker, children }: { brand: BrandKey; kicker: string; c
 const chip = "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-sm";
 
 function AgentsProof() {
-  const a = useTranslation().t.howSections.manifesto.agents;
+  const a = howSectionsCopy.manifesto.agents;
   return (
     <Proof brand="cyan" kicker={a.kicker}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -61,7 +61,7 @@ function AgentsProof() {
 const CHOSEN = 1;
 
 function RulesProof() {
-  const r = useTranslation().t.howSections.manifesto.rules;
+  const r = howSectionsCopy.manifesto.rules;
   const at = (i: number) => `${(i / (r.levels.length - 1)) * 100}%`;
   return (
     <Proof brand="purple" kicker={r.kicker}>
@@ -101,7 +101,7 @@ function RulesProof() {
 }
 
 function InfraProof() {
-  const f = useTranslation().t.howSections.manifesto.infra;
+  const f = howSectionsCopy.manifesto.infra;
   return (
     <Proof brand="emerald" kicker={f.kicker}>
       <div className="flex flex-wrap items-center gap-3 sm:flex-nowrap">

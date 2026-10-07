@@ -1,15 +1,15 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { BRAND_VAR, brandShadow, tint } from "@/lib/brand-theme";
 import { ROLES, type ViewerRole } from "./roles";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /** The three role "lenses": real toggle buttons (aria-pressed), so the choice
  *  is keyboard reachable. The chosen lens lights in its role colour - the same
  *  colour the route beside it is drawn in. */
 export default function RoleLenses({ role, onChange }: { role: ViewerRole; onChange: (role: ViewerRole) => void }) {
-  const c = useTranslation().t.howSections.rolePath;
+  const c = howSectionsCopy.rolePath;
 
   return (
     <div

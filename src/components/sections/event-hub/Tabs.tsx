@@ -2,14 +2,14 @@
 
 import { useRef, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
-import { useTranslation } from "@/i18n/useTranslation";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 export type HubVariant = "swarm" | "lanes";
 const ORDER: HubVariant[] = ["swarm", "lanes"];
 
 /** The live section's view switch: a real tablist with arrow-key roving focus. */
 export default function Tabs({ uid, value, onChange }: { uid: string; value: HubVariant; onChange: (v: HubVariant) => void }) {
-  const copy = useTranslation().t.howSections.events.v1;
+  const copy = howSectionsCopy.events.v1;
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const labels = { swarm: [copy.tabLive, copy.tabLiveHint], lanes: [copy.tabLanes, copy.tabLanesHint] } as const;
 

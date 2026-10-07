@@ -1,8 +1,8 @@
 "use client";
 
 import { Check, ChevronRight, Folder } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { FILES } from "./driveData";
+import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
 const E = "var(--brand-emerald)";
 const mix = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, transparent)`;
@@ -13,7 +13,7 @@ const mix = (c: string, p: number) => `color-mix(in srgb, ${c} ${p}%, transparen
  * markup) and fade in as their file drops into the drawer.
  */
 export default function DriveBrowser({ landed, updated }: { landed: number; updated: boolean }) {
-  const copy = useTranslation().t.featuresSections.plugins.drive;
+  const copy = featuresSectionsCopy.plugins.drive;
   return (
     <div className="flex min-h-0 flex-col rounded-2xl border px-3 py-3" style={{ borderColor: mix(E, 24), background: mix(E, 4) }}>
       <div className="mb-2 flex items-center gap-1.5 px-1 font-mono text-[14px] text-foreground/70">

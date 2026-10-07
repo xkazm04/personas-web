@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, Workflow } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { AGENT, SCRIPT, endOf, mix, type Line } from "./shared/scenarios";
 import Bubble, { Typing } from "./Bubble";
 import Outcome from "./Outcome";
+import { howSectionsCopy } from "@/i18n/pending/howSections";
 
 /** One side of the split screen: a lit chat window that fills with its
  *  system's replies on the shared clock. Newest line pins to the bottom
@@ -36,7 +36,7 @@ export default function ChatWindow({
   running: boolean;
   runKey: number;
 }) {
-  const c = useTranslation().t.howSections.chat;
+  const c = howSectionsCopy.chat;
   const isAgent = kind === "agent";
   const color = isAgent ? SCRIPT_OR_AGENT.agent : SCRIPT_OR_AGENT.scripted;
   const shown = lines.filter((l) => l.at <= t).length;

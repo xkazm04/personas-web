@@ -10,6 +10,7 @@ import Forward from "./Forward";
 import { layoutFor } from "./layout";
 import { statusAt } from "./status";
 import Tile from "./Tile";
+import { athenaSectionsCopy } from "@/i18n/pending/athenaSections";
 
 /**
  * Lab v3 - "One Face". The same claim, told as IDENTITY.
@@ -33,7 +34,7 @@ import Tile from "./Tile";
 export default function OneMindOneFace() {
   const compact = useIsMobile();
   const { t } = useTranslation();
-  const lab = t.athenaSections.oneMind.v3;
+  const lab = athenaSectionsCopy.oneMind.v3;
   const live = t.athenaPage.oneMind;
   const names = [...live.conversations.map((c) => c.name), ...lab.extras];
   const { ref, phase, reduced, running } = useLoop({

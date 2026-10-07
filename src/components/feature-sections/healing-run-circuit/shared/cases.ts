@@ -9,7 +9,7 @@ import type { BrandKey } from "@/lib/brand-theme";
  *   broken setup -> AiHealing: the session is resumed on Claude Opus with the error
  *   credential   -> CreateIssue, never retried: a person must renew the login
  * Every retryable category escalates to an issue after 3 retries (MAX_RETRY_COUNT).
- * Words live in en.ts `featuresSections.healing.cases`.
+ * Words live in `featuresSectionsCopy.healing.cases` (src/i18n/pending/featuresSections.ts).
  */
 
 export type CaseId = "rateLimit" | "timeout" | "overload" | "setup" | "login";
