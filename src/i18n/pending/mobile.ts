@@ -63,6 +63,7 @@ export interface MobileCopy {
     completed: string;
     failed: string;
     rejected: string;
+    replayed: string;
     expired: string;
   };
   pairing: {
@@ -123,6 +124,7 @@ export interface MobileCopy {
       not_paired: string;
       unsupported: string;
       expired: string;
+      replayed: string;
       no_device: string;
       other: string;
       unknown: string;
@@ -235,6 +237,7 @@ export const mobileCopy: MobileCopy = {
     completed: 'Done',
     failed: 'Failed: {reason}',
     rejected: 'Refused: {reason}',
+    replayed: 'Already handled. Your computer will not run the same command twice.',
     expired: 'Your computer didn\'t answer',
   },
   pairing: {
@@ -298,6 +301,7 @@ export const mobileCopy: MobileCopy = {
       not_paired: 'This phone isn\'t paired anymore. Pair it again in Settings.',
       unsupported: 'Update Personas on your computer to chat from your phone.',
       expired: 'Your computer didn\'t answer. Is Personas still open?',
+      replayed: 'Already handled. Your computer will not run the same command twice.',
       no_device: 'No synced computer found to send this to.',
       other: 'Couldn\'t send: {reason}',
       unknown: 'Couldn\'t send. Try again.',

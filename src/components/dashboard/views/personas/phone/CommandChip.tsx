@@ -2,6 +2,7 @@
 
 import { Check, Loader2, Send, TriangleAlert } from "lucide-react";
 import type { CommandStatus, InflightCommand } from "@/lib/commands/commandReducer";
+import { chatErrorKind } from "@/lib/chat/chatModel";
 import { mobileCopy } from "@/i18n/pending/mobile";
 
 const TONE: Record<CommandStatus, string> = {
@@ -32,7 +33,9 @@ export default function CommandChip({ command }: { command: InflightCommand }) {
     status === "failed"
       ? copy.failed.replace("{reason}", reasonText(command.error))
       : status === "rejected"
-        ? copy.rejected.replace("{reason}", reasonText(command.error))
+        ? chatErrorKind(status, command.error) === "replayed"
+          ? copy.replayed
+          : copy.rejected.replace("{reason}", reasonText(command.error))
         : copy[status];
   const Icon =
     status === "pending" ? Send : status === "executing" ? Loader2 : status === "completed" ? Check : TriangleAlert;

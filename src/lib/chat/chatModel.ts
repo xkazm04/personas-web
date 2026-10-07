@@ -403,6 +403,7 @@ export type ChatErrorKind =
   | "not_paired"
   | "unsupported"
   | "expired"
+  | "replayed"
   | "no_device"
   | "other";
 
@@ -418,6 +419,8 @@ const TOKEN_KIND: Readonly<Record<string, ChatErrorKind>> = {
   // A desktop without this verb (persona chat before its update) refuses the type.
   unsupported_command_type: "unsupported",
   expired: "expired",
+  // The desktop refuses a second claim of a command it already ran.
+  replayed: "replayed",
   no_device: "no_device",
 };
 
