@@ -6,8 +6,6 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import { useI18nStore } from "@/stores/i18nStore";
 import { usePersona } from "@/stores/personaStore";
 import { useExecutionStore } from "@/stores/executionStore";
-import { useCommandStore } from "@/stores/commandStore";
-import { displayEnabled, latestForPersona } from "@/lib/commands/commandReducer";
 import { personaRuns } from "@/lib/commands/personaRow";
 import { formatCost, formatDuration } from "@/lib/format";
 import { formatDue } from "@/lib/review-sla";
@@ -46,7 +44,6 @@ export default function PersonaDetailSheet({ open, personaId, reach, onClose }: 
   const copy = mobileCopy.personas;
   const baseId = useId();
   const persona = usePersona(personaId);
-  const latest = useCommandStore((s) => (personaId ? latestForPersona(s.inflight, personaId) : null));
   const [tab, setTab] = useState<DetailTab>("activity");
   const [prevOpen, setPrevOpen] = useState(open);
   if (open !== prevOpen) {
@@ -83,7 +80,6 @@ export default function PersonaDetailSheet({ open, personaId, reach, onClose }: 
             name={persona.name}
             ownerDeviceId={persona.deviceId ?? null}
             reach={reach}
-            paused={!displayEnabled(persona, latest)}
             chromePx={SHEET_CHROME_PX}
           />
         )}

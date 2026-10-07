@@ -256,7 +256,8 @@ describe("chatModel: the desktop's error tokens", () => {
     expect(chatErrorKind("failed", "message_too_long")).toBe("message_too_long");
     expect(chatErrorKind("failed", "bad_params: sessionId")).toBe("bad_params");
     expect(chatErrorKind("failed", "not_found: session")).toBe("not_found");
-    expect(chatErrorKind("failed", "persona_paused")).toBe("persona_paused");
+    // M21: the refusal is gone on both sides; an older desktop's token reads as a plain failure.
+    expect(chatErrorKind("failed", "persona_paused")).toBe("other");
     expect(chatErrorKind("rejected", "controller_not_paired")).toBe("not_paired");
     expect(chatErrorKind("rejected", "controller_revoked")).toBe("not_paired");
     expect(chatErrorKind("rejected", "unsupported_command_type: chat_send for personas")).toBe("unsupported");

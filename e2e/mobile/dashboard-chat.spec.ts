@@ -114,7 +114,7 @@ test.describe("phone chat (demo)", () => {
     await expect(sheet.locator("li[data-activity-run]").first()).toHaveAttribute("data-run-status", "completed");
   });
 
-  test("a paused persona's composer is off, with the reason", async ({ page }) => {
+  test("a paused persona still chats (M21): the message sends and the demo reply arrives", async ({ page }) => {
     await openDemo(page);
     // The demo has one paused persona; its row offers Resume.
     const resume = page.getByRole("button", { name: /^Resume / }).first();
@@ -123,8 +123,12 @@ test.describe("phone chat (demo)", () => {
     const sheet = page.getByRole("dialog", { name });
     await sheet.getByRole("tab", { name: "Chat" }).click();
     await sheet.getByRole("button", { name: "New chat" }).click();
-    await expect(sheet.locator("textarea[data-chat-composer]")).toBeDisabled();
-    await expect(sheet.locator("[data-chat-composer-hint]")).toHaveText(`${name} is paused. Resume it to chat.`);
+    await expect(sheet.locator("[data-chat-composer-hint]")).toHaveCount(0);
+    await send(sheet, "Are you still watching the queue?");
+    await expect(sheet.locator('[data-chat-message="assistant"]').last()).toContainText("Are you still watching the queue?", { timeout: 6_000 });
+    // Chatting did not resume it: the row still offers Resume.
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("button", { name: `Resume ${name}` })).toBeVisible();
   });
 
   test("?desktop=offline: threads still read, the composer is disabled with the reason", async ({ page }) => {

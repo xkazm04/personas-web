@@ -32,8 +32,6 @@ interface Props {
   /** The desktop that holds this chat (the persona's owner); null = the newest device. */
   ownerDeviceId: string | null;
   reach: SyncReachability;
-  /** Persona chat: the persona is paused, and the desktop refuses a chat to it. */
-  paused?: boolean;
   /** The sheet's own height around the panel (handle, title, tabs, padding), for the keyboard-open height. */
   chromePx: number;
 }
@@ -54,7 +52,7 @@ const IDLE = { loading: false, loaded: false, error: null };
  * once; the reply arrives as synced data (Realtime refetches the open thread;
  * the demo's simulated desktop writes its fixtures).
  */
-export default function ChatPanel({ threadKind, personaId, name, ownerDeviceId, reach, paused = false, chromePx }: Props) {
+export default function ChatPanel({ threadKind, personaId, name, ownerDeviceId, reach, chromePx }: Props) {
   const copy = mobileCopy.chat;
   const keyboard = useKeyboardInset();
 
@@ -113,7 +111,7 @@ export default function ChatPanel({ threadKind, personaId, name, ownerDeviceId, 
 
   // The gate is the tier of the desktop that holds the thread.
   const gateDevice = threadDevice ?? ownerDeviceId;
-  const disabledReason = composerDisabledReason(copy, reach.ready ? reach.tierFor(gateDevice).tier : null, paused, name);
+  const disabledReason = composerDisabledReason(copy, reach.ready ? reach.tierFor(gateDevice).tier : null);
 
   const onSend = (message: string) => {
     void useChatStore.getState().send({

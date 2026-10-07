@@ -142,8 +142,9 @@ function threadTitle(message: string): string {
  * `chat_send` (contract: params `{ sessionId | null, message }`; result
  * `{ sessionId, userMessageId, executionId? }`): the user's message is written
  * at once, the turn starts, and a canned reply follows. Refuses like the
- * desktop: an empty or over-8 KB message, an unknown persona or thread, a
- * paused persona.
+ * desktop: an empty or over-8 KB message, an unknown persona or thread. A
+ * paused persona still chats (PLAN M21): pause stops its own role, not an
+ * explicit ask.
  */
 function executeChat(cmd: MockCommand, schedule: Schedule, changed: () => void): CommandRowUpdate {
   const message = typeof cmd.params.message === "string" ? cmd.params.message.trim() : "";
@@ -154,7 +155,6 @@ function executeChat(cmd: MockCommand, schedule: Schedule, changed: () => void):
   const kind: ChatThreadKind = athena ? "athena" : "persona";
   const persona = athena ? null : MOCK_PERSONAS.find((p) => p.id === cmd.personaId);
   if (!athena && !persona) return { id: cmd.id, status: "failed", error_message: "not_found: persona" };
-  if (persona && !persona.enabled) return { id: cmd.id, status: "failed", error_message: "persona_paused" };
 
   const ids = mockChatIds(cmd.id);
   const nowIso = new Date().toISOString();

@@ -9,7 +9,7 @@ import { mobileCopy, type MobileCopy } from "@/i18n/pending/mobile";
 interface Props {
   /** Who the message goes to, for the field's label. */
   name: string;
-  /** Why sending is off in this tier (offline, unpaired, paused...), or null when it is on. */
+  /** Why sending is off in this tier (offline, unpaired...), or null when it is on. */
   disabledReason: string | null;
   onSend: (message: string) => void;
 }
@@ -17,17 +17,16 @@ interface Props {
 type ChatCopy = MobileCopy["chat"];
 
 /**
- * Why the composer is off, or null when it is on: the tier of the desktop
- * that holds the thread (null = not judged yet: off, no reason shown), then a
- * paused persona, which the desktop would refuse (`persona_paused`).
+ * Why the composer is off, or null when it is on: only the tier of the desktop
+ * that holds the thread (null = not judged yet: off, no reason shown). A
+ * paused persona still chats (PLAN M21): pause stops its triggers, schedules
+ * and subscriptions, not an explicit ask.
  */
-export function composerDisabledReason(copy: ChatCopy, tier: ReachabilityTier | null, paused: boolean, name: string): string | null {
+export function composerDisabledReason(copy: ChatCopy, tier: ReachabilityTier | null): string | null {
   if (tier === null) return "";
-  if (!actionsEnabled(tier)) {
-    if (tier === "offline") return copy.disabled.offline;
-    return tier === "online-unpaired" ? copy.disabled.unpaired : copy.disabled.never;
-  }
-  return paused ? copy.disabled.paused.replace("{name}", name) : null;
+  if (actionsEnabled(tier)) return null;
+  if (tier === "offline") return copy.disabled.offline;
+  return tier === "online-unpaired" ? copy.disabled.unpaired : copy.disabled.never;
 }
 
 /**

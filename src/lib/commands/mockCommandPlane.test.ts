@@ -211,23 +211,33 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
       expect(MOCK_CHAT_MESSAGES.find((m) => m.id === ids.replyId)).toMatchObject({ role: "assistant", executionId: ids.executionId, personaId: persona.id });
     });
 
-    it("refuses like the desktop: empty, over 8 KB, an unknown thread, a paused persona, an unknown persona", () => {
-      const paused = MOCK_PERSONAS.find((p) => !p.enabled)!;
+    it("refuses like the desktop: empty, over 8 KB, an unknown thread, an unknown persona", () => {
       const rows: CommandRowUpdate[] = [];
       const send = (id: string, personaId: string, params: Record<string, unknown>) =>
         runMockCommand({ id, verb: "chat_send", personaId, params }, (r) => rows.push(r), visible);
       send("e1", "athena", { sessionId: null, message: "   " });
       send("e2", "athena", { sessionId: null, message: "a".repeat(8193) });
       send("e3", "athena", { sessionId: "no-such-thread", message: "hi" });
-      send("e4", paused.id, { sessionId: null, message: "hi" });
       send("e5", "nope", { sessionId: null, message: "hi" });
       vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
       expect(outcome(rows, "e1")?.error_message).toBe("empty_message");
       expect(outcome(rows, "e2")?.error_message).toBe("message_too_long");
       expect(outcome(rows, "e3")?.error_message).toMatch(/^not_found/);
-      expect(outcome(rows, "e4")?.error_message).toBe("persona_paused");
       expect(outcome(rows, "e5")?.error_message).toMatch(/^not_found/);
-      expect(rows.filter((r) => r.status === "failed")).toHaveLength(5);
+      expect(rows.filter((r) => r.status === "failed")).toHaveLength(4);
+    });
+
+    it("a paused persona still chats (PLAN M21): the turn starts, and the reply arrives", () => {
+      const paused = MOCK_PERSONAS.find((p) => !p.enabled)!;
+      const rows: CommandRowUpdate[] = [];
+      runMockCommand({ id: "pz1", verb: "chat_send", personaId: paused.id, params: { sessionId: null, message: "Still there?" } }, (r) => rows.push(r), visible);
+      vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+      const ids = mockChatIds("pz1");
+      expect(outcome(rows, "pz1")).toMatchObject({ status: "completed", result: { executionId: ids.executionId } });
+      vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.replyMs);
+      expect(MOCK_CHAT_MESSAGES.find((m) => m.id === ids.replyId)).toMatchObject({ role: "assistant", personaId: paused.id });
+      // Pause is untouched: the persona stays paused.
+      expect(MOCK_PERSONAS.find((p) => p.id === paused.id)?.enabled).toBe(false);
     });
 
     it("cancelling the command before the reply stops the reply", () => {

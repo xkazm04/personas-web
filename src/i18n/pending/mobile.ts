@@ -105,7 +105,7 @@ export interface MobileCopy {
     composerLabel: string;
     send: string;
     tooLong: string;
-    disabled: { offline: string; unpaired: string; never: string; paused: string };
+    disabled: { offline: string; unpaired: string; never: string };
     sending: string;
     thinking: string;
     waiting: string;
@@ -120,7 +120,6 @@ export interface MobileCopy {
       message_too_long: string;
       bad_params: string;
       not_found: string;
-      persona_paused: string;
       not_paired: string;
       unsupported: string;
       expired: string;
@@ -269,7 +268,6 @@ export const mobileCopy: MobileCopy = {
       offline: 'Personas isn\'t running on your computer. Open it to chat from here.',
       unpaired: 'Pair this phone in Settings to chat from here.',
       never: 'Connect your computer to chat from here.',
-      paused: '{name} is paused. Resume it to chat.',
     },
     sending: 'Sending...',
     thinking: '{name} is thinking...',
@@ -285,7 +283,6 @@ export const mobileCopy: MobileCopy = {
       message_too_long: 'That message is too long. Keep it under 8 KB.',
       bad_params: 'Your computer couldn\'t read that message. Try again.',
       not_found: 'This chat is gone from your computer. Start a new one.',
-      persona_paused: '{name} is paused. Resume it, then try again.',
       not_paired: 'This phone isn\'t paired anymore. Pair it again in Settings.',
       unsupported: 'Update Personas on your computer to chat from your phone.',
       expired: 'Your computer didn\'t answer. Is Personas still open?',

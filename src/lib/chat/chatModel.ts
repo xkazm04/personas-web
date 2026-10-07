@@ -400,7 +400,6 @@ export type ChatErrorKind =
   | "message_too_long"
   | "bad_params"
   | "not_found"
-  | "persona_paused"
   | "not_paired"
   | "unsupported"
   | "expired"
@@ -414,7 +413,6 @@ const TOKEN_KIND: Readonly<Record<string, ChatErrorKind>> = {
   message_too_long: "message_too_long",
   bad_params: "bad_params",
   not_found: "not_found",
-  persona_paused: "persona_paused",
   controller_not_paired: "not_paired",
   controller_revoked: "not_paired",
   // A desktop without this verb (persona chat before its update) refuses the type.
