@@ -6,6 +6,8 @@
  * proxy does no path rewriting, so a shape is `desktop` only when the desktop
  * serves that exact method and path today. Routes are read from the personas
  * repo: `management_router` in `management_api.rs` and `/health` in `webhook.rs`.
+ * `POST /api/execute` (body {personaId,prompt}), `POST /api/executions/{id}/cancel`
+ * and `GET /api/status` are served since personas f64d96ca43.
  */
 export type DesktopShape =
   | { served: "desktop"; desktopRoute: string }
@@ -19,14 +21,8 @@ export const DESKTOP_SHAPES: Record<string, DesktopShape> = {
   "DELETE /api/personas/:id": { served: "not_on_desktop", reason: `${NO_ROUTE} (persona delete)` },
   "GET /api/executions": { served: "desktop", desktopRoute: "GET /api/executions" },
   "GET /api/executions/:id": { served: "desktop", desktopRoute: "GET /api/executions/{id}" },
-  "POST /api/executions/:id/cancel": {
-    served: "not_on_desktop",
-    reason: `${NO_ROUTE}; the desktop only cancels lab runs (POST /api/lab/cancel/{run_id})`,
-  },
-  "POST /api/execute": {
-    served: "not_on_desktop",
-    reason: "desktop serves POST /api/execute/{persona_id}, with the persona id in the path rather than the body",
-  },
+  "POST /api/executions/:id/cancel": { served: "desktop", desktopRoute: "POST /api/executions/{id}/cancel" },
+  "POST /api/execute": { served: "desktop", desktopRoute: "POST /api/execute" },
   "GET /api/events": { served: "not_on_desktop", reason: `${NO_ROUTE} (event list)` },
   "POST /api/events": { served: "not_on_desktop", reason: `${NO_ROUTE} (event create)` },
   "PUT /api/events/:id": { served: "not_on_desktop", reason: `${NO_ROUTE} (event update)` },
@@ -36,7 +32,7 @@ export const DESKTOP_SHAPES: Record<string, DesktopShape> = {
   "DELETE /api/personas/:id/subscriptions/:id": { served: "not_on_desktop", reason: `${NO_ROUTE} (subscriptions)` },
   "GET /api/personas/:id/triggers": { served: "not_on_desktop", reason: `${NO_ROUTE} (triggers)` },
   "GET /health": { served: "desktop", desktopRoute: "GET /health" },
-  "GET /api/status": { served: "not_on_desktop", reason: `${NO_ROUTE} (worker status)` },
+  "GET /api/status": { served: "desktop", desktopRoute: "GET /api/status" },
   "GET /api/observability": { served: "not_on_desktop", reason: `${NO_ROUTE} (observability)` },
   "GET /api/usage": { served: "not_on_desktop", reason: `${NO_ROUTE} (usage analytics)` },
 };
