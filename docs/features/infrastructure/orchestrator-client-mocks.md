@@ -5,7 +5,7 @@
 This is the seam between the demo and a real deployment. Every `/dashboard/*` page reads its data through one object — `api` from `src/lib/api.ts` — which exposes a flat `ApiClient` interface (personas, executions, events, subscriptions, triggers, health/status, observability, usage). At call time `api` decides where each method runs:
 
 - **Demo mode** (`isDemo` in the auth store, set by the "Try Demo" button) → in-memory `mockApi` backed by hand-authored fixtures. This is *what makes the dashboard "demo-only" in this repo*: no network, deterministic data, artificial latency.
-- **Live mode** → the real orchestrator REST API at `NEXT_PUBLIC_ORCHESTRATOR_URL` (`realApi`), or the read-only Supabase mirror (`supabaseApi`) when `NEXT_PUBLIC_DATA_SOURCE=supabase`.
+- **Live mode** → the real orchestrator REST API at `NEXT_PUBLIC_ORCHESTRATOR_URL` (`realApi`), the read-only Supabase mirror (`supabaseApi`) when `NEXT_PUBLIC_DATA_SOURCE=supabase`, or the desktop's management API mapped into the web's types (`createDesktopApi` in `desktopApi.ts`) when `NEXT_PUBLIC_DATA_SOURCE=desktop`.
 
 The dispatch is per-method-access and invisible to callers — the same page code works in all three environments. Demo is always an explicit user choice, never auto-enabled.
 
@@ -22,6 +22,13 @@ Separately, a small standalone `apiFetch` wrapper serves the marketing-side Next
 
 **Dashboard query layer.** `dashboard-queries.ts` is a thin SWR helper sitting on top of `api`. `loadAgentDetail` (`dashboard-queries.ts:15`) `Promise.all`s three `api` calls (executions/subscriptions/triggers) for an agent-detail panel; `useAgentDetail` wraps it in `useSWR` with a stable `dashboardKeys.agentDetail` tuple key, 60s deduping, `keepPreviousData`, and no focus revalidation. Most pages call `api` directly through their own stores/SWR; this file is the only shared query module so far.
 
+## Desktop plane
+`NEXT_PUBLIC_DATA_SOURCE=desktop` selects `createDesktopApi(orchestratorFetch, realApi)` (`src/lib/desktopApi.ts`); it needs `ORCHESTRATOR_TARGET=desktop` on the server too, so the proxy relays to the desktop (:9420) and answers unserved shapes with a typed 501. Demo still wins. The mapping lives in this client backend, not the proxy, which stays a verbatim relay (decision 2026-10-07-proxy-typed-501).
+- Every `/api/*` answer is an envelope `{ success, data?, error?, code? }`. `unwrap` returns `data` on success; a 2xx with `success:false` or no data throws `ApiError(502, error (code))`. `GET /health` is unwrapped.
+- Overrides: `listPersonas`, `getPersona`, `listExecutions`, `getExecution`, `executePersona` (`POST /api/execute`, body `{personaId,prompt}`), `cancelExecution`, `getStatus`, `getHealth` (`/health` + `/api/status` composed). Everything else delegates to `realApi` and so gets the proxy's 501 (events, subscriptions, triggers, observability, usage, persona delete).
+- Rows are snake_case and mapped with the mappers shared with `supabaseApi` (`src/lib/desktopRows.ts`: `mapStatus`, `mapPersona`, `mapExecution`, `executionDetailFromRow`). `incomplete` maps to `failed`, `pending` to `queued`.
+- Limits: the desktop's persona list sends only id, name, description, enabled, icon, color; the detail adds `system_prompt` (capped at 500 chars) and no icon/color. Every other `Persona` field takes its empty value (`''`, `0`, `null`), never an invented one. `GET /api/executions` takes only `limit`, `status`, `persona_id` and has no offset: the client asks for `limit+offset` rows and drops the first `offset`; `getExecution` applies its output cursor on the web side and does not forward `offset`.
+
 ## Server-side proxy route
 `src/app/api/orchestrator/[...path]/route.ts` is the same-origin proxy for live orchestrator calls (GET/POST/PUT/DELETE/PATCH). It attaches the team key (`TEAM_API_KEY`, falling back to the legacy `NEXT_PUBLIC_TEAM_API_KEY`) server-side, so the key stays out of the browser bundle. Behavior, in order:
 - **503 `orchestrator_not_configured`** when `NEXT_PUBLIC_ORCHESTRATOR_URL` is missing or invalid.
@@ -34,7 +41,9 @@ Separately, a small standalone `apiFetch` wrapper serves the marketing-side Next
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/lib/api.ts` | `ApiClient` interface, `realApi`, `orchestratorFetch`, `ApiError`, and the dispatching `api` Proxy |
+| `src/lib/api.ts` | `ApiClient` interface, `realApi`, `orchestratorFetch`, and the dispatching `api` Proxy (re-exports `ApiError` from `api-error.ts`) |
+| `src/lib/desktopApi.ts` | `createDesktopApi`: the desktop plane (envelope unwrap + row mapping) over `realApi` |
+| `src/lib/desktopRows.ts` | Pure desktop-row mappers shared by `supabaseApi` and `desktopApi` |
 | `src/app/api/orchestrator/[...path]/route.ts` | Server-side proxy for every live orchestrator REST call; attaches the team key (see *Server-side proxy route*) |
 | `src/app/api/orchestrator/userSession.ts` | `verifySession`: asks Supabase Auth whether an `X-User-Token` is a live session (30 s positive cache keyed by SHA-256) |
 | `src/app/api/orchestrator/proxy.test.ts` | Unit tests for the proxy's auth, path pinning and response relay |

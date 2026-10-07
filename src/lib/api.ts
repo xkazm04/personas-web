@@ -3,6 +3,8 @@ import { useAuthStore } from "@/stores/authStore";
 import { mockApi } from "./mockApi";
 import { supabaseApi } from "./supabaseApi";
 import { OrchestratorConfigError } from "./orchestrator-config";
+import { ApiError } from "./api-error";
+import { createDesktopApi } from "./desktopApi";
 
 export { OrchestratorConfigError };
 import type {
@@ -34,15 +36,7 @@ import { verdictEventBody, type ReviewDecisionInput } from "./commands/reviewDec
 // Error
 // ---------------------------------------------------------------------------
 
-export class ApiError extends Error {
-  constructor(
-    public status: number,
-    public body: string,
-  ) {
-    super(`API ${status}: ${body}`);
-    this.name = "ApiError";
-  }
-}
+export { ApiError };
 
 // ---------------------------------------------------------------------------
 // Core fetch wrapper
@@ -415,10 +409,16 @@ const realApi: ApiClient = {
  * Which production data plane to use:
  *   - `supabaseApi` — the desktop → Supabase sync mirror (read-only), when
  *     `NEXT_PUBLIC_DATA_SOURCE=supabase`.
+ *   - `desktopApi` — the desktop's management API through the proxy, mapped
+ *     into the web's types, when `NEXT_PUBLIC_DATA_SOURCE=desktop`.
  *   - `realApi` — the orchestrator REST API (default; left untouched).
  * Demo/dev always use the mock.
  */
 const USE_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
+const USE_DESKTOP = process.env.NEXT_PUBLIC_DATA_SOURCE === "desktop";
+
+/** The orchestrator proxy pointed at the desktop (`ORCHESTRATOR_TARGET=desktop`): its answers mapped into the web's types. */
+const desktopApi: ApiClient = createDesktopApi(orchestratorFetch, realApi);
 
 /**
  * Dynamic API dispatch: uses mockApi when the user entered via the "Try Demo"
@@ -430,7 +430,7 @@ export const api: ApiClient = new Proxy({} as ApiClient, {
   get(_target, prop: string | symbol) {
     const { isDemo } = useAuthStore.getState();
     if (isDemo) return mockApi[prop as keyof ApiClient];
-    const impl = USE_SUPABASE ? supabaseApi : realApi;
+    const impl = USE_SUPABASE ? supabaseApi : USE_DESKTOP ? desktopApi : realApi;
     return impl[prop as keyof ApiClient];
   },
 });
