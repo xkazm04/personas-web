@@ -3,6 +3,7 @@ import {
   OrchestratorConfigError,
   validateOrchestratorUrl,
 } from "@/lib/orchestrator-config";
+import { matchDesktopShape } from "../desktopShapes";
 import { verifySession } from "../userSession";
 
 /**
@@ -77,6 +78,18 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
   const url = upstreamUrl(base, path, req.nextUrl.search);
   if (!url) {
     return Response.json({ error: "bad_path" }, { status: 400 });
+  }
+
+  // Pointed at the desktop, only the shapes its management API serves go
+  // upstream; everything else is a typed 501 rather than a bare 404.
+  if (process.env.ORCHESTRATOR_TARGET === "desktop") {
+    const shape = matchDesktopShape(req.method, path);
+    if (shape?.served !== "desktop") {
+      return Response.json(
+        { error: "not_on_desktop", method: req.method, path: "/" + path.join("/") },
+        { status: 501 },
+      );
+    }
   }
 
   const headers: Record<string, string> = {

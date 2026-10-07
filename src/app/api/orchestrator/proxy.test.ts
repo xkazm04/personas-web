@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
+import * as proxyRoute from "./[...path]/route";
 import { GET, POST } from "./[...path]/route";
+import { DESKTOP_SHAPES } from "./desktopShapes";
 import { createSessionVerifier, VERIFIED_TTL_MS } from "./userSession";
 
 const AUTH = { url: "https://ref.supabase.co/", anonKey: "anon-key" };
@@ -172,5 +174,103 @@ describe("orchestrator proxy", () => {
     res = await call(GET, ["personas"], { "X-User-Token": "live-user-3" });
     expect(res.headers.get("Content-Type")).toBe("application/json");
     expect(await res.json()).toEqual({ a: 1 });
+  });
+});
+
+describe("orchestrator proxy with ORCHESTRATOR_TARGET=desktop", () => {
+  const ENV = {
+    NEXT_PUBLIC_ORCHESTRATOR_URL: "http://localhost:9420",
+    ORCHESTRATOR_TARGET: "desktop",
+    NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
+  };
+  const saved: Record<string, string | undefined> = {};
+  let upstream: string[];
+
+  beforeEach(() => {
+    for (const [k, v] of Object.entries(ENV)) {
+      saved[k] = process.env[k];
+      process.env[k] = v;
+    }
+    upstream = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = String(input);
+        if (url.startsWith("https://ref.supabase.co/auth/v1/user")) {
+          const auth = (init?.headers as Record<string, string>).Authorization;
+          return new Response("{}", { status: auth.startsWith("Bearer live-") ? 200 : 401 });
+        }
+        upstream.push(url);
+        return Response.json({ ok: true });
+      }),
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    for (const [k, v] of Object.entries(saved)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  });
+
+  const send = (method: string, path: string[]) =>
+    proxyRoute[method as "GET"](
+      new NextRequest(`https://personas.so/api/orchestrator/${path.join("/")}`, {
+        method,
+        headers: { "X-User-Token": "live-desktop" },
+        body: method === "GET" ? undefined : "{}",
+      }),
+      { params: Promise.resolve({ path }) },
+    );
+
+  const concrete = (pattern: string) => {
+    const [method, p] = pattern.split(" ");
+    return { method, path: p.split("/").filter(Boolean).map((s) => (s.startsWith(":") ? "id-1" : s)) };
+  };
+
+  it("answers every not_on_desktop shape with a typed 501 and forwards nothing", async () => {
+    for (const [key, shape] of Object.entries(DESKTOP_SHAPES)) {
+      if (shape.served !== "not_on_desktop") continue;
+      const { method, path } = concrete(key);
+      const res = await send(method, path);
+      expect(res.status, key).toBe(501);
+      expect(await res.json()).toEqual({ error: "not_on_desktop", method, path: "/" + path.join("/") });
+    }
+    expect(upstream).toHaveLength(0);
+  });
+
+  it("forwards every desktop shape to the same path", async () => {
+    let n = 0;
+    for (const [key, shape] of Object.entries(DESKTOP_SHAPES)) {
+      if (shape.served !== "desktop") continue;
+      const { method, path } = concrete(key);
+      const res = await send(method, path);
+      expect(res.status, key).toBe(200);
+      expect(upstream[n++]).toBe(`http://localhost:9420/${path.join("/")}`);
+    }
+    expect(n).toBeGreaterThan(0);
+  });
+
+  it("answers an unknown path with 501 and does not forward it", async () => {
+    const res = await send("GET", ["api", "mystery"]);
+    expect(res.status).toBe(501);
+    expect(await res.json()).toMatchObject({ error: "not_on_desktop" });
+    expect(upstream).toHaveLength(0);
+  });
+
+  it("still answers an unauthenticated call with 401 first", async () => {
+    const res = await GET(new NextRequest("https://personas.so/api/orchestrator/api/mystery"), {
+      params: Promise.resolve({ path: ["api", "mystery"] }),
+    });
+    expect(res.status).toBe(401);
+  });
+
+  it("does not shape-check when the target is unset", async () => {
+    delete process.env.ORCHESTRATOR_TARGET;
+    const res = await send("GET", ["api", "mystery"]);
+    expect(res.status).toBe(200);
+    expect(upstream).toEqual(["http://localhost:9420/api/mystery"]);
   });
 });
