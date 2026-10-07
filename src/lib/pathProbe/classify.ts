@@ -56,7 +56,10 @@ export const PAIRING_REFUSALS: ReadonlySet<string> = new Set(["controller_not_pa
 
 /**
  * Routes `personas://` is handled for today, read from personas
- * `src-tauri/src/boot/deep_link.rs` on master 654263d997 (2026-10-07).
+ * `src-tauri/src/boot/deep_link.rs`: the first five on master 654263d997, and
+ * `persona/<id>` and `execution/<id>` (`parse_nav_link`, id `^[A-Za-z0-9_-]{1,64}$`)
+ * on master 1520e629 (2026-10-07). The web builds those two in
+ * `src/lib/deepLinks/desktopLinks.ts`.
  */
 export const DESKTOP_DEEP_LINKS: readonly { id: string; route: string }[] = [
   { id: "deep-links.auth-callback", route: "auth/callback" },
@@ -64,10 +67,9 @@ export const DESKTOP_DEEP_LINKS: readonly { id: string; route: string }[] = [
   { id: "deep-links.import", route: "import/<slug>" },
   { id: "deep-links.ref", route: "ref/<code>" },
   { id: "deep-links.pair", route: "pair" },
+  { id: "deep-links.persona", route: "persona/<id>" },
+  { id: "deep-links.execution", route: "execution/<id>" },
 ];
-
-/** Links the web would need with no web builder and no desktop handler today (milestone 4 goal 3 is open). */
-export const UNHANDLED_DEEP_LINKS: readonly string[] = ["deep-links.persona", "deep-links.execution"];
 
 const verdict = (id: string, direction: Direction, state: PathState, reason: string): Verdict => ({
   id,
@@ -288,7 +290,7 @@ export function classifyPairing(controllers: Obs, refusals: Obs): Verdict {
 /** Whether `personas://` is registered for the current user (HKCU on Windows). */
 export type SchemeObs = "registered" | "absent" | "not-windows";
 
-/** (7) deep-links: one row for the scheme, one per handled route, one per link with no handler. */
+/** (7) deep-links: one row for the scheme, one per handled route. */
 export function classifyDeepLinks(scheme: SchemeObs): Verdict[] {
   const dir: Direction = "web->desktop";
   const out: Verdict[] = [];
@@ -306,7 +308,6 @@ export function classifyDeepLinks(scheme: SchemeObs): Verdict[] {
         : verdict(link.id, dir, "blocked", blockedReason),
     );
   }
-  for (const id of UNHANDLED_DEEP_LINKS) out.push(verdict(id, dir, "broken", "no handler"));
   return out;
 }
 

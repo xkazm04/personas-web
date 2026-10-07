@@ -237,11 +237,24 @@ describe("classifyPairing", () => {
 });
 
 describe("classifyDeepLinks", () => {
-  it("persona and execution links are broken 'no handler' whatever the registry says", () => {
+  it("persona and execution links are working when the scheme is registered, blocked otherwise", () => {
+    const pick = (scheme: "registered" | "absent" | "not-windows") =>
+      classifyDeepLinks(scheme).filter((v) => v.id === "deep-links.persona" || v.id === "deep-links.execution");
+    const reg = pick("registered");
+    expect(reg).toHaveLength(2);
+    expect(reg.every((v) => v.state === "working")).toBe(true);
+    expect(reg.map((v) => v.reason)).toEqual([
+      "handled: persona/<id> (deep_link.rs, 2026-10-07)",
+      "handled: execution/<id> (deep_link.rs, 2026-10-07)",
+    ]);
+    for (const scheme of ["absent", "not-windows"] as const) {
+      expect(pick(scheme).every((v) => v.state === "blocked")).toBe(true);
+    }
+  });
+
+  it("no deep-link row is broken", () => {
     for (const scheme of ["registered", "absent", "not-windows"] as const) {
-      const rows = classifyDeepLinks(scheme).filter((v) => v.id === "deep-links.persona" || v.id === "deep-links.execution");
-      expect(rows).toHaveLength(2);
-      expect(rows.every((v) => v.state === "broken" && v.reason === "no handler")).toBe(true);
+      expect(classifyDeepLinks(scheme).some((v) => v.state === "broken" || v.reason === "no handler")).toBe(false);
     }
   });
 

@@ -34,7 +34,7 @@ Env (all optional; see `.env.example`): `PROBE_DESKTOP_URL` (default `http://127
 | `pairing` | both | at least one `command_controllers` row is `active` and not revoked, and no signed command (`controller_id` set) newer than the newest activation was rejected `controller_not_paired`/`controller_revoked`. No controller is blocked; controllers but none active is broken | session; a phone paired |
 | `deep-links.scheme` | web->desktop | `reg query HKCU\Software\Classes\personas` succeeds (Windows only; elsewhere blocked) | desktop installed on this machine |
 | `deep-links.auth-callback`, `.share`, `.import`, `.ref`, `.pair` | web->desktop | static table of the routes personas `src-tauri/src/boot/deep_link.rs` handles (master 654263d997, 2026-10-07): `auth/callback`, `share`, `import/<slug>`, `ref/<code>`, `pair`. Working when the scheme is registered, blocked otherwise | as `deep-links.scheme` |
-| `deep-links.persona`, `deep-links.execution` | web->desktop | no web link builder and no desktop handler today: broken `no handler` (milestone 4 goal 3 is open), not retired | none |
+| `deep-links.persona`, `deep-links.execution` | web->desktop | static table, as above: `persona/<id>` and `execution/<id>`, handled by `parse_nav_link` (personas master 1520e629, 2026-10-07; id `^[A-Za-z0-9_-]{1,64}$`, navigation only). The web builds them in `src/lib/deepLinks/desktopLinks.ts` and renders them in the execution detail modal. Working when the scheme is registered, blocked otherwise | as `deep-links.scheme` |
 
 ## Key files
 - `src/lib/pathProbe/classify.ts`: every verdict, the exit-code rule, the config refusals and the report format. Pure, no imports (the runner loads it with Node's type stripping), so `DEVICE_FRESH_MS` is copied as `PROBE_DEVICE_FRESH_MS` and a test pins it to reachability's value.
@@ -42,12 +42,12 @@ Env (all optional; see `.env.example`): `PROBE_DESKTOP_URL` (default `http://127
 - `scripts/probe-paths.mjs`: the I/O: fetches with an 8 s timeout, the session, PostgREST reads, the registry query. It silences Node's `MODULE_TYPELESS_PACKAGE_JSON` warning for the `.ts` import (package.json has no `"type"`).
 
 ## Conventions & gotchas
-- When the desktop gains a deep-link handler or a path is retired by a decision record, update `DESKTOP_DEEP_LINKS` / `UNHANDLED_DEEP_LINKS` (and cite the commit and date) and this doc in the same commit.
+- When the desktop gains a deep-link handler or a path is retired by a decision record, update `DESKTOP_DEEP_LINKS` (and cite the commit and date) and this doc in the same commit.
 - Supabase reads also filter `user_id=eq.<the session's user>`; RLS is the real boundary.
-- The `deep-links.*` route rows are a static claim checked against the desktop source, not exercised: the probe never opens a `personas://` URL.
+- The `deep-links.*` route rows are a static claim checked against the desktop source, not exercised: the probe never opens a `personas://` URL. A click from the web into the running desktop is still unproven.
 
 ## Last run
-2026-10-07 09:46 UTC · personas-web `c6d52c30` (branch base; the probe itself was uncommitted on top) · personas master `654263d997` · env: the operator's `.env` (no `TEAM_API_KEY`, no probe session), desktop and web dev server not running. Exit 1.
+2026-10-07 09:46 UTC · personas-web `c6d52c30` (branch base; the probe itself was uncommitted on top) · personas master `654263d997` · env: the operator's `.env` (no `TEAM_API_KEY`, no probe session), desktop and web dev server not running. Exit 1. (The two `persona`/`execution` rows and the summary below were updated by hand for the 1520e629 handler; the probe was not re-run.)
 
 | Path | State | Reason |
 | --- | --- | --- |
@@ -68,7 +68,7 @@ Env (all optional; see `.env.example`): `PROBE_DESKTOP_URL` (default `http://127
 | deep-links.import | working | handled: import/&lt;slug&gt; (deep_link.rs, 2026-10-07) |
 | deep-links.ref | working | handled: ref/&lt;code&gt; (deep_link.rs, 2026-10-07) |
 | deep-links.pair | working | handled: pair (deep_link.rs, 2026-10-07) |
-| deep-links.persona | broken | no handler |
-| deep-links.execution | broken | no handler |
+| deep-links.persona | working | handled: persona/&lt;id&gt; (deep_link.rs, 2026-10-07) |
+| deep-links.execution | working | handled: execution/&lt;id&gt; (deep_link.rs, 2026-10-07) |
 
-Summary: 19 paths: 6 working, 2 broken, 11 blocked, 0 retired (exit 1).
+Summary: 19 paths: 8 working, 0 broken, 11 blocked, 0 retired (exit 3).
