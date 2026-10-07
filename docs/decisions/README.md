@@ -4,6 +4,8 @@ A decision record captures one technical choice that has already settled: the co
 
 Newest first:
 
+- [2026-10-07 Desktop data plane: pause, resume, chat send and review verdicts are unsupported](2026-10-07-desktop-plane-unsupported-actions.md) — one table pinned to `desktopApi` and `desktopShapes`; the controls are disabled before the click with a reason and send no request.
+- [2026-10-07 M21 governs run and chat: a paired phone may run and chat with a paused persona](2026-10-07-paused-persona-phone-run-and-chat-m21.md) — scan finding 8 accepted; pause is no longer a brake against a paired phone.
 - [2026-10-07 `pending_commands` update guard](2026-10-07-pending-commands-update-guard.md) — a BEFORE UPDATE trigger: a command never returns to pending and a finished one is final.
 - [2026-10-07 Desktop data plane: a client backend that maps the desktop's rows](2026-10-07-desktop-data-plane-client-backend.md) — `NEXT_PUBLIC_DATA_SOURCE=desktop` selects `desktopApi`; the proxy stays a verbatim relay and the plane has its own health-probe online gate.
 - [2026-10-07 `pvfw` is the test Supabase project, not production](2026-10-07-pvfw-is-the-test-supabase-project.md) — the loop's test project for the desktop-to-web mirror and command plane; `db:migrate:sync` adds only the sync objects.
