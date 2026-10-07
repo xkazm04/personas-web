@@ -4,6 +4,7 @@ A decision record captures one technical choice that has already settled: the co
 
 Newest first:
 
+- [2026-10-07 Desktop data plane: a client backend that maps the desktop's rows](2026-10-07-desktop-data-plane-client-backend.md) — `NEXT_PUBLIC_DATA_SOURCE=desktop` selects `desktopApi`; the proxy stays a verbatim relay and the plane has its own health-probe online gate.
 - [2026-10-07 `pvfw` is the test Supabase project, not production](2026-10-07-pvfw-is-the-test-supabase-project.md) — the loop's test project for the desktop-to-web mirror and command plane; `db:migrate:sync` adds only the sync objects.
 - [2026-10-07 ACCEPTED RISK: execution text is mirrored raw to `synced_executions`](2026-10-07-accepted-risk-execution-text-synced-raw.md) — no code change until cloud sync goes beyond a test project; the web Executions view keeps showing raw text.
 - [2026-10-07 Typed 501 `not_on_desktop`, no path rewriting](2026-10-07-proxy-typed-501-not-on-desktop.md) — with `ORCHESTRATOR_TARGET=desktop`, call shapes the desktop does not serve get a typed 501, never a rewrite or a bare 404.
