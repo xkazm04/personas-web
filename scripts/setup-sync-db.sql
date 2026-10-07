@@ -374,11 +374,12 @@ alter table public.pending_commands add column if not exists result_ref text;
 -- block): a second, narrower re-add earlier in this file would fail
 -- validation on a re-run once v1 rows exist.
 -- 'chat_send' ships later (M9) but is allowed now so the desktop's refusal
--- path is exercised.
+-- path is exercised. 'review_decide' (M20, 2026-10-07): a manual review's
+-- verdict from the web, run by the desktop's shared decision chokepoint.
 alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
 alter table public.pending_commands add constraint pending_commands_command_type_check
   check (command_type in ('run_persona','cancel_execution','pause_persona','resume_persona','chat_send',
-                          'queue_reorder','queue_set_lane','queue_cancel'));
+                          'review_decide','queue_reorder','queue_set_lane','queue_cancel'));
 create index if not exists idx_pending_commands_device on public.pending_commands (target_device_id, status);
 
 -- =====================================================================

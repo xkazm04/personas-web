@@ -127,10 +127,11 @@ These are additive. They are appended to `scripts/setup-sync-db.sql` in the same
 
 ```sql
 -- v1 verbs. 'chat_send' ships in M9 but is allowed now so the desktop's refusal path is exercised.
+-- 'review_decide' added 2026-10-07 (M20), widened in place in the same statement.
 alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
 alter table public.pending_commands add constraint pending_commands_command_type_check
   check (command_type in ('run_persona','cancel_execution','pause_persona','resume_persona','chat_send',
-                          'queue_reorder','queue_set_lane','queue_cancel'));
+                          'review_decide','queue_reorder','queue_set_lane','queue_cancel'));
 
 -- Trust envelope (section 3). The row's other columns stay for filters and display; the envelope is authoritative.
 alter table public.pending_commands add column if not exists controller_id uuid;
