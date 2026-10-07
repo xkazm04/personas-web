@@ -1,9 +1,9 @@
-import type { Translations } from "@/i18n/en";
 import { topSeverity, type FleetAgent } from "../fleet-data";
 import { SEVERITY_COLOR, STATE_COLOR } from "./palette";
 import { rankOf } from "./useNightSim";
+import type { PersonasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
-export type CityCopy = Translations["personasMonitor"]["city"];
+export type CityCopy = PersonasMonitorCopy["city"];
 
 /** `fill("{n} runs", { n: 3 })` -> "3 runs". */
 export function fill(tpl: string, vars: Record<string, string | number>): string {

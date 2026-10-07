@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ATTENTION_COLOR, countAttention } from "../attention";
 import { formatClock, type FleetAgent, type FleetProcess } from "../fleet-data";
 import type { Meter } from "./Moon";
@@ -7,12 +6,12 @@ import type { NightEvent } from "./nightStore";
 import { KIND_COLOR, textTone } from "./palette";
 import { fill, fmtAgo, fmtDur, type CityCopy } from "./vocab";
 import s from "./night.module.css";
+import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 /** The top strip's verdict: how many need you (in the needs colour), then the
  *  rest of the fleet as working / resting / off. One line. */
 export function AttentionSummary({ agents }: { agents: FleetAgent[] }) {
-  const { t } = useTranslation();
-  const A = t.personasMonitor.attention;
+  const A = personasMonitorCopy.attention;
   const c = countAttention(agents);
   const dot = (k: "working" | "resting" | "off") => (
     <span className="flex items-center gap-1.5 whitespace-nowrap text-sm text-muted-dark">

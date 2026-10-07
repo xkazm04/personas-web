@@ -4,11 +4,11 @@ import { ArrowLeft } from "lucide-react";
 import type { CSSProperties } from "react";
 import { ATTENTION_COLOR, type AttentionCounts } from "../attention";
 import { FLEET, formatAge, formatClock } from "../fleet-data";
-import { useTranslation } from "@/i18n/useTranslation";
 import { simNow, type BoardCopy } from "./copy";
 import { TEAM_BY_ID, fill, plural, type SimAgent } from "./model";
 import type { BoardNav } from "./useBoardNav";
 import b from "./board.module.css";
+import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 interface TopStripProps {
   counts: AttentionCounts;
@@ -60,8 +60,7 @@ function Crumbs({ scope, copy, nav }: Pick<TopStripProps, "scope" | "copy" | "na
 
 /** L0's top edge, one line: the way back, the verdict, the fleet's mix, usage pace, the clock. */
 export default function TopStrip({ counts: c, scope, simMs, copy, nav }: TopStripProps) {
-  const { t } = useTranslation();
-  const piles = t.personasMonitor.attention;
+  const piles = personasMonitorCopy.attention;
   const verdict = c.needs ? plural(c.needs, copy.top.needsOne, copy.top.needsMany) : copy.top.allClear;
   // Below the fleet level the way back needs the room: the pile legend yields.
   const deep = !!(nav.teamOpen || nav.agentOpen);

@@ -3,11 +3,11 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { Bot } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { DEFAULT_FLEET_SCALE, FLEET_SCALES, type FleetScale } from "@/components/dashboard/fleet-monitor/fleet-data";
 import StageLoading from "@/components/dashboard/fleet-monitor/StageLoading";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import PhonePersonas from "./phone/PhonePersonas";
+import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 /* Each view is a client-only chunk: they carry the 130 KB demo fleet and
    their own artwork, none of which belongs in the dashboard's first load. */
@@ -37,8 +37,7 @@ export default function PersonasView() {
  * of the viewport, edge to edge (the view is full-bleed in `spa/views.ts`).
  */
 function PersonasStage() {
-  const { t } = useTranslation();
-  const copy = t.personasMonitor;
+  const copy = personasMonitorCopy;
   const [view, setView] = useState<View>("board");
   const [scale, setScale] = useState<FleetScale>(DEFAULT_FLEET_SCALE);
 

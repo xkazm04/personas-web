@@ -1,8 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ATTENTION_COLOR, type AttentionTone } from "./attention";
+import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 export interface RailItem {
   id: string;
@@ -33,8 +33,7 @@ interface NeedsYouRailProps {
  * light the agent in the field; the view wires `onHover` to its own attention.
  */
 export default function NeedsYouRail({ items, activeId, onHover, onSelect, footer }: NeedsYouRailProps) {
-  const { t } = useTranslation();
-  const copy = t.personasMonitor.rail;
+  const copy = personasMonitorCopy.rail;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">

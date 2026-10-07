@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import FleetFrame from "../FleetFrame";
 import NeedsYouRail from "../NeedsYouRail";
@@ -16,6 +15,7 @@ import { AttentionSummary, BottomStrip, MeterChips } from "./Strips";
 import { useFieldSize } from "./useFieldSize";
 import { ranked, useNightSim } from "./useNightSim";
 import s from "./night.module.css";
+import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 /**
  * Variant 2, "Night Shift": the fleet as a small city at night, kept as a
@@ -26,8 +26,7 @@ import s from "./night.module.css";
  * sky unpins). Demo fleet, stylised illustration.
  */
 export default function NightCity({ scale }: { scale: FleetScale }) {
-  const { t } = useTranslation();
-  const copy = t.personasMonitor.city;
+  const copy = personasMonitorCopy.city;
   const still = useStillMotion();
   const sim = useNightSim(scale);
   const fieldRef = useRef<HTMLDivElement>(null);

@@ -4,7 +4,6 @@ import { AnimatePresence } from "framer-motion";
 import { useRef, type CSSProperties } from "react";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
-import { useTranslation } from "@/i18n/useTranslation";
 import { FLEET, type FleetScale } from "../fleet-data";
 import FleetFrame from "../FleetFrame";
 import NeedsYouRail from "../NeedsYouRail";
@@ -20,6 +19,7 @@ import { useArrival, useBoardSim, useSize, useToast } from "./useBoardRuntime";
 import { useBoardNav } from "./useBoardNav";
 import b from "./board.module.css";
 import s from "./tiles.module.css";
+import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 /** The shared attention colours, handed to the board's CSS as variables. */
 const ATTENTION_VARS = {
@@ -36,8 +36,7 @@ const ATTENTION_VARS = {
  * Team (L1) and agent (L2) open inside the field, each with a way back.
  */
 export default function BoardPrototype({ scale }: { scale: FleetScale }) {
-  const { t } = useTranslation();
-  const copy = t.personasMonitor.board;
+  const copy = personasMonitorCopy.board;
   const still = useStillMotion();
   const hidden = usePageVisibility();
   const live = !still && !hidden;

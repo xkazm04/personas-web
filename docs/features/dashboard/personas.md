@@ -26,7 +26,7 @@ Both views run a seeded simulation (runs progress and complete, failures self-he
 
 **View and shell.** `src/components/dashboard/views/personas/index.tsx` is the view the dashboard SPA renders for `personas` (the default view: `/dashboard` and the demo entry land here); `spa/views.ts` marks it `fullBleed`. The shell owns the view and the scale; the stage is `calc(100dvh - 4.25rem)` minus the 48px toolbar, with a 700px floor. Each fleet view is a `next/dynamic({ ssr: false })` chunk, so the 130 KB fleet JSON and the art never reach the dashboard's first load. The view is kept alive across view switches (`spa/ViewOutlet.tsx`): leaving pauses the simulation (its effects unmount) and keeps the chosen view and scale.
 
-**Shared L0 pieces.** `FleetFrame.tsx` (the top / main / rail / bottom grid), `attention.ts` (`attentionOf`, `needsTone`, `ATTENTION_COLOR`, `countAttention`: the one state language, colours from site tokens only), `NeedsYouRail.tsx` (the ranked rail). Copy: `t.personasMonitor.rail.*`, `t.personasMonitor.attention.*`.
+**Shared L0 pieces.** `FleetFrame.tsx` (the top / main / rail / bottom grid), `attention.ts` (`attentionOf`, `needsTone`, `ATTENTION_COLOR`, `countAttention`: the one state language, colours from site tokens only), `NeedsYouRail.tsx` (the ranked rail). Copy: `personasMonitorCopy.rail.*`, `personasMonitorCopy.attention.*`.
 
 **Data.** `fleet-data.ts` types `fleet.json` (copied from `.contest/arena/dashboard-fleet/data/`) and exports `FLEET`, `sliceFleet(scale)`, `needsYou`, `urgency`, `topSeverity`, `formatAge`, `formatClock`. "Now" is `FLEET.nowMs`, never `Date.now()`.
 
@@ -53,7 +53,7 @@ Both views run a seeded simulation (runs progress and complete, failures self-he
 | `src/components/dashboard/navRegistry.ts` | "Personas" rail section, first in the menu |
 
 ## Data & state
-- **Copy:** `t.personasMonitor.*` (`rail`, `attention`, `board`, `city`) in `src/i18n/en.ts`, English only, registered in `PENDING_TRANSLATION`. The nav label `t.dashboard.personas` is translated in all 14 locales. Fleet strings (names, tasks, review titles, team names, simulated event texts) are demo data, not UI copy.
+- **Copy:** `personasMonitorCopy.*` (`rail`, `attention`, `board`, `city`) in `src/i18n/pending/personasMonitor.ts`, English only (pending module, PLAN M22). The nav label `t.dashboard.personas` is translated in all 14 locales. Fleet strings (names, tasks, review titles, team names, simulated event texts) are demo data, not UI copy.
 - **State:** shell `useState` for view and scale; Board's reducer state; Night's module store. Nothing persists; a reload returns to the seeded fleet.
 - **No API on desktop.** The desktop-width stage does not read the orchestrator, Supabase or the dashboard mocks. The phone layout does: `personaStore` through the `api` proxy, `deviceStore` (`synced_devices`), `controllerStore` (`command_controllers`) and `commandStore` (`pending_commands`) and `executionStore` (row states and Activity), all live-plane only except the persona and execution lists; demo simulates the device and the desktop. Chat reads `chatStore` (`synced_chat_sessions` / `synced_chat_messages` through the `api` proxy; loaded lazily with the chat sheets, and by Realtime and sign-out only through a dynamic import).
 

@@ -1,11 +1,11 @@
-import type { Translations } from "@/i18n/en";
 import { FLEET, formatAge, topSeverity } from "../fleet-data";
 import { needsTone } from "../attention";
 import type { RailItem } from "../NeedsYouRail";
 import { TEAM_BY_ID, fill, needAgeMs, needs, pct, plural, queueOf, reasonOf, topReview, type BoardEvent, type SimAgent } from "./model";
+import type { PersonasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
-/** The board's copy (`t.personasMonitor.board`). */
-export type BoardCopy = Translations["personasMonitor"]["board"];
+/** The board's copy (`personasMonitorCopy.board`). */
+export type BoardCopy = PersonasMonitorCopy["board"];
 
 export function stateText(a: SimAgent, c: BoardCopy): string {
   if (!a.enabled) return c.states.off;
