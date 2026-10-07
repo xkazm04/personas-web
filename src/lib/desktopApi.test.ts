@@ -18,7 +18,7 @@ function setup(answers: Record<string, unknown>) {
     const key = Object.keys(answers).find((k) => path === k || path.startsWith(k + "/")) ?? path;
     return answers[key];
   }) as DesktopFetcher;
-  const base = { listEvents: () => "base:listEvents" } as unknown as ApiClient;
+  const base = { getSomethingElse: () => "base:getSomethingElse" } as unknown as ApiClient;
   return { calls, api: createDesktopApi(fetcher, base) };
 }
 
@@ -52,7 +52,20 @@ const execRow = (over: Record<string, unknown> = {}) => ({
 describe("createDesktopApi", () => {
   it("delegates methods it does not override to base", () => {
     const { api } = setup({});
-    expect(api.listEvents()).toBe("base:listEvents");
+    expect((api as unknown as { getSomethingElse(): string }).getSomethingElse()).toBe("base:getSomethingElse");
+  });
+
+  it("refuses listEvents with the proxy's 501 body and never calls the fetcher", async () => {
+    const { api, calls } = setup({});
+    const err = await api.listEvents().catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect((err as ApiError).status).toBe(501);
+    expect(JSON.parse((err as ApiError).body)).toEqual({ error: "not_on_desktop", method: "GET", path: "/api/events" });
+    expect(calls).toEqual([]);
+  });
+
+  it("keeps the listEvents override and the shape table in step", () => {
+    expect(matchDesktopShape("GET", ["api", "events"])).toMatchObject({ served: "not_on_desktop" });
   });
 
   it("lists personas, blanking what the desktop does not send", async () => {

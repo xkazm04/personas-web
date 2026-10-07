@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { api } from "@/lib/api";
+import { ApiError } from "@/lib/api-error";
 import type { EventStatus, PersonaEvent, PersonaEventSubscription } from "@/lib/types";
 import {
   assertEventTransition,
@@ -78,6 +79,8 @@ interface EventState {
   events: PersonaEvent[];
   eventIds: Set<string>;
   eventsLoading: boolean;
+  /** The plane answered 501 not_on_desktop to the list read: an empty list means "not served", not "no events". */
+  listNotServed: boolean;
   connectionStatus: ConnectionStatus;
   setConnectionStatus: (status: ConnectionStatus) => void;
   fetchEvents: () => Promise<void>;
@@ -112,6 +115,7 @@ export const useEventStore = create<EventState>((set, get) => ({
   events: [],
   eventIds: new Set(),
   eventsLoading: false,
+  listNotServed: false,
   connectionStatus: "polling" as ConnectionStatus,
   setConnectionStatus: (status) => set({ connectionStatus: status }),
   fetchEvents: async () => {
@@ -139,10 +143,12 @@ export const useEventStore = create<EventState>((set, get) => ({
         return {
           events: merged,
           eventIds: new Set(merged.map((e) => e.id)),
+          listNotServed: false,
         };
       });
-    } catch {
-      // leave stale
+    } catch (err) {
+      // 501 means this plane does not serve the list; any other failure leaves stale.
+      if (err instanceof ApiError && err.status === 501) set({ listNotServed: true });
     } finally {
       set({ eventsLoading: false });
     }
@@ -378,6 +384,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       events: [],
       eventIds: new Set(),
       eventsLoading: false,
+      listNotServed: false,
       replayingIds: new Set(),
       discardingIds: new Set(),
       retryCounts: {},

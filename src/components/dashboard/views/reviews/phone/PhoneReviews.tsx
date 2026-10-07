@@ -40,6 +40,8 @@ export default function PhoneReviews() {
   const { reach, canDecide, blocked } = useReviewGate();
   const reviews = useReviewStore((s) => s.reviews);
   const loading = useReviewStore((s) => s.reviewsLoading);
+  // Desktop plane: the list is not served, so "no reviews" would be false; the note stands in for it.
+  const unserved = useReviewStore((s) => s.listNotServed) && reviews.length === 0;
   const policy = useReviewStore((s) => s.escalationPolicy);
   const reviewCommands = useReviewStore((s) => s.reviewCommands);
   const fetchReviews = useReviewStore((s) => s.fetchReviews);
@@ -91,10 +93,10 @@ export default function PhoneReviews() {
       </h1>
 
       {reach.ready && reach.commandPlane && <ReachabilityNotice reach={reach} />}
-      {blocked && reach.desktopPlane && <DesktopUnsupportedNote />}
+      {((blocked && reach.desktopPlane) || unserved) && <DesktopUnsupportedNote />}
       <EscalationFailureNotice />
 
-      {waiting ? (
+      {unserved ? null : waiting ? (
         <p className="flex items-center gap-2 text-sm text-muted-dark" aria-busy="true">
           <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />
           {copy.loading}

@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import * as Sentry from "@sentry/nextjs";
 import { api } from "@/lib/api";
+import { ApiError } from "@/lib/api-error";
 import { usePersonaStore } from "./personaStore";
 import type {
   Persona,
@@ -284,6 +285,8 @@ interface ReviewState {
   /** Last server truth, before the overlay. */
   baseReviews: ManualReviewItem[];
   reviewsLoading: boolean;
+  /** The plane answered 501 not_on_desktop to the list read: an empty list means "not served", not "no reviews". */
+  listNotServed: boolean;
   pendingReviewCount: number;
   ledger: LedgerState;
   /** Reviewer-note drafts keyed by review id; every verdict path carries them. */
@@ -430,6 +433,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     reviews: [],
     baseReviews: [],
     reviewsLoading: false,
+    listNotServed: false,
     pendingReviewCount: 0,
     ledger: IDLE_LEDGER,
     drafts: {},
@@ -457,11 +461,12 @@ export const useReviewStore = create<ReviewState>((set, get) => {
         if (seq === reviewFetchSeq) {
           set((s) => {
             const fresh = reconcileConfirmed(reviews, s.confirmed, Date.now());
-            return { ...derive(fresh.rows, s.ledger), confirmed: fresh.confirmed };
+            return { ...derive(fresh.rows, s.ledger), confirmed: fresh.confirmed, listNotServed: false };
           });
         }
-      } catch {
-        // leave stale
+      } catch (err) {
+        // 501 means this plane does not serve the list; any other failure leaves stale.
+        if (seq === reviewFetchSeq && err instanceof ApiError && err.status === 501) set({ listNotServed: true });
       } finally {
         if (seq === reviewFetchSeq) {
           set({ reviewsLoading: false });
@@ -521,6 +526,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       set({
         ...derive([], get().ledger),
         reviewsLoading: false,
+        listNotServed: false,
         drafts: {},
         lastResult: null,
         refusal: null,

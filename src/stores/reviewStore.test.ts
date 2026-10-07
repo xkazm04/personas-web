@@ -145,4 +145,21 @@ describe("reviewStore decision ledger", () => {
     expect((store().lastResult as { failedIds: string[] }).failedIds).toEqual(["r2"]);
     expect(store().pendingReviewCount).toBe(1);
   });
+
+  it("a 501 from the list read sets listNotServed and keeps the rows; a success clears it; another error leaves it", async () => {
+    const { ApiError } = await import("@/lib/api-error");
+    await load([ev("r1", "high", 5)]);
+    listEvents.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await store().fetchReviews();
+    expect(store().listNotServed).toBe(true);
+    expect(store().reviews.map((r) => r.id)).toEqual(["r1"]);
+    listEvents.mockRejectedValueOnce(new ApiError(500, "boom"));
+    await store().fetchReviews();
+    expect(store().listNotServed).toBe(true);
+    await load([ev("r1", "high", 5)]);
+    expect(store().listNotServed).toBe(false);
+    listEvents.mockRejectedValueOnce(new Error("network"));
+    await store().fetchReviews();
+    expect(store().listNotServed).toBe(false);
+  });
 });

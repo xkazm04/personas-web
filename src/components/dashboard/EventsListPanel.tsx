@@ -4,6 +4,7 @@ import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "rea
 import { motion } from "framer-motion";
 import { Inbox, Radio } from "lucide-react";
 import EmptyState from "@/components/dashboard/EmptyState";
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import { fadeUp } from "@/lib/animations";
 import type { PersonaEvent } from "@/lib/types";
 import { isEventDiscardable, isEventRetryable } from "@/lib/eventStatusFsm";
@@ -25,6 +26,7 @@ export default function EventsListPanel() {
   const { t } = useTranslation();
   const events = useEventStore((s) => s.events);
   const eventsLoading = useEventStore((s) => s.eventsLoading);
+  const listNotServed = useEventStore((s) => s.listNotServed);
   const fetchEvents = useEventStore((s) => s.fetchEvents);
   const replayEvent = useEventStore((s) => s.replayEvent);
   const replayEvents = useEventStore((s) => s.replayEvents);
@@ -138,7 +140,7 @@ export default function EventsListPanel() {
         labels={t}
       />
       <motion.div variants={fadeUp}>
-        <DataTable<PersonaEvent> columns={columns} data={visibleEvents} keyExtractor={(event) => event.id} expandable={(event) => <EventExpandedContent event={event} />} rowClassName={rowClassName} emptyState={<EventsEmptyState filter={filter} hasActiveFilters={hasActiveFilters} labels={t} />} />
+        <DataTable<PersonaEvent> columns={columns} data={visibleEvents} keyExtractor={(event) => event.id} expandable={(event) => <EventExpandedContent event={event} />} rowClassName={rowClassName} emptyState={listNotServed && events.length === 0 ? <DesktopUnsupportedNote /> : <EventsEmptyState filter={filter} hasActiveFilters={hasActiveFilters} labels={t} />} />
       </motion.div>
       {filtered.length > visibleEvents.length && (
         <motion.div variants={fadeUp} className="mt-3 flex items-center justify-center">

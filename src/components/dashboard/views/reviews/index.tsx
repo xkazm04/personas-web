@@ -40,6 +40,8 @@ function ReviewsPage() {
   const now = useReviewClock();
   const reviews = useReviewStore((s) => s.reviews);
   const policy = useReviewStore((s) => s.escalationPolicy);
+  // Desktop plane: the list is not served, so "no reviews" would be false; the note stands in for it.
+  const unserved = useReviewStore((s) => s.listNotServed) && reviews.length === 0;
   const overdue = useMemo(() => countOverdue(reviews, policy, now), [reviews, policy, now]);
 
   return (
@@ -62,7 +64,7 @@ function ReviewsPage() {
             {t.reviewsPage.sla.overdueCount.replace("{n}", String(overdue))}
           </span>
         )}
-        {mode === "split" && (
+        {mode === "split" && !unserved && (
           <button
             type="button"
             onClick={() => setMode("focus")}
@@ -74,16 +76,17 @@ function ReviewsPage() {
         )}
       </motion.div>
 
-      {gate.blocked && (
+      {(unserved || gate.blocked) && (
         <div className="mb-4">
-          {gate.reach.desktopPlane ? <DesktopUnsupportedNote /> : <ReachabilityNotice reach={gate.reach} />}
+          {unserved || gate.reach.desktopPlane ? <DesktopUnsupportedNote /> : <ReachabilityNotice reach={gate.reach} />}
         </div>
       )}
       <div className="mb-4 empty:hidden">
         <EscalationFailureNotice />
       </div>
 
-      <div data-tour-diagram="dashboard-reviews">
+      {/* Hidden, not unmounted: the split pane owns the poll that notices when the list becomes served. */}
+      <div data-tour-diagram="dashboard-reviews" hidden={unserved}>
         {mode === "split" ? (
           <ReviewsSplitPane now={now} canDecide={gate.canDecide} />
         ) : (

@@ -117,6 +117,14 @@ export function createDesktopApi(fetcher: DesktopFetcher, base: ApiClient): ApiC
     executePersona: (personaId: string, prompt: string) =>
       call<ExecutionAck>("/api/execute", { method: "POST", body: { personaId, prompt } }),
 
+    // The desktop's local API has no event list (desktopShapes: GET /api/events is not_on_desktop).
+    // Rejects with the proxy's own 501 body without a round trip, so the stores can tell "not served"
+    // from "empty".
+    listEvents: () =>
+      Promise.reject(
+        new ApiError(501, JSON.stringify({ error: "not_on_desktop", method: "GET", path: "/api/events" })),
+      ),
+
     getStatus: () => call<StatusResponse>("/api/status"),
 
     getHealth: async (): Promise<HealthResponse> => {

@@ -242,4 +242,25 @@ describe("behaviours the FSM must not regress", () => {
     expect(s.replayingIds.size).toBe(0);
     expect(s.discardingIds.size).toBe(0);
   });
+
+  it("a 501 from the list read sets listNotServed and keeps the rows; a success clears it; another error leaves it", async () => {
+    const { api } = await import("@/lib/api");
+    const { ApiError } = await import("@/lib/api-error");
+    const list = api.listEvents as unknown as ReturnType<typeof vi.fn>;
+    const kept = event({ status: "pending" });
+    seed([kept]);
+    list.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().listNotServed).toBe(true);
+    expect(useEventStore.getState().events.map((e) => e.id)).toEqual([kept.id]);
+    list.mockRejectedValueOnce(new ApiError(500, "boom"));
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().listNotServed).toBe(true);
+    list.mockResolvedValueOnce([]);
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().listNotServed).toBe(false);
+    list.mockRejectedValueOnce(new Error("network"));
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().listNotServed).toBe(false);
+  });
 });

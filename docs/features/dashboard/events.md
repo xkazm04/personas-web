@@ -269,6 +269,8 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   count is correct but the implied graph edges are a star, not a clique. It runs only
   over the currently *visible* slice, so a chain can shrink as you paginate.
 
+- **Desktop plane: the list is not served.** With `NEXT_PUBLIC_DATA_SOURCE=desktop`, `desktopApi.listEvents` rejects with the proxy's typed 501 `not_on_desktop` (`GET /api/events`, no request sent). `eventStore.fetchEvents` sets `listNotServed` on that 501 (cleared by the next successful read; any other error leaves it and the rows stale), and `EventsListPanel` shows `DesktopUnsupportedNote` instead of its empty state while it is set and no events are held. Other readers of `listEvents` (home triage queue, mission readings, event bus stats, `useEventStream`) are unchanged.
+
 ## Related docs
 - [Execution History & Streaming](executions.md)
 - [Dashboard shell & chrome](shell-chrome.md)
