@@ -1176,7 +1176,14 @@
             "src/components/dashboard/views/reviews/review-due.tsx",
             "src/lib/review-display.ts",
             "src/lib/review-queue-i18n.test.ts",
-            "src/stores/reviewStore.resolver.test.ts"
+            "src/stores/reviewStore.resolver.test.ts",
+            "src/lib/commands/reviewDecide.ts",
+            "src/lib/commands/reviewDecide.test.ts",
+            "src/stores/reviewStore.commands.test.ts",
+            "src/components/dashboard/views/reviews/useReviewGate.ts",
+            "src/components/dashboard/views/reviews/EscalationFailureNotice.tsx",
+            "src/components/dashboard/views/reviews/phone/PhoneReviews.tsx",
+            "src/components/dashboard/views/reviews/phone/PhoneReviewCard.tsx"
           ],
           "target": null,
           "apiRoutes": []
@@ -1643,7 +1650,8 @@
             "e2e/mobile/dashboard-personas.spec.ts",
             "src/hooks/useKeyboardInset.ts",
             "src/hooks/useKeyboardInset.test.ts",
-            "e2e/mobile/dashboard-chat.spec.ts"
+            "e2e/mobile/dashboard-chat.spec.ts",
+            "e2e/mobile/dashboard-reviews.spec.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1991,7 +1999,30 @@
             "src/i18n/useTranslation.ts",
             "src/i18n/vi.ts",
             "src/i18n/zh.ts",
-            "src/stores/i18nStore.ts"
+            "src/stores/i18nStore.ts",
+            "src/i18n/pending/aiModelsSection.ts",
+            "src/i18n/pending/athenaSections.ts",
+            "src/i18n/pending/companionSection.ts",
+            "src/i18n/pending/designMatrix.ts",
+            "src/i18n/pending/featuresSections.ts",
+            "src/i18n/pending/getStartedSection.ts",
+            "src/i18n/pending/howSections.ts",
+            "src/i18n/pending/labSection.ts",
+            "src/i18n/pending/landingSections.ts",
+            "src/i18n/pending/memorySection.ts",
+            "src/i18n/pending/mobile.ts",
+            "src/i18n/pending/mobileLanding.ts",
+            "src/i18n/pending/mobileLanding2.ts",
+            "src/i18n/pending/observeSection.ts",
+            "src/i18n/pending/orchestrationSection.ts",
+            "src/i18n/pending/personasMonitor.ts",
+            "src/i18n/pending/playgroundSection.ts",
+            "src/i18n/pending/pluginsExtra.ts",
+            "src/i18n/pending/pricingSection.ts",
+            "src/i18n/pending/securitySection.ts",
+            "src/i18n/pending/teamCanvasSection.ts",
+            "src/i18n/pending/useCasesPersona.ts",
+            "src/i18n/pending/visionStack.ts"
           ],
           "target": null,
           "apiRoutes": []

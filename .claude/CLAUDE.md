@@ -50,6 +50,16 @@ npm run test:e2e    # Playwright (specs under e2e/)
    - On deletion: remove the key from every locale in the same commit.
    - Never introduce hardcoded English in JSX, `aria-label`, `alt`, or
      page `metadata`.
+   - **The one exception: owner-approved English-only pending copy** (designs
+     still settling: the landing sections, `/m`, the phone dashboard). It lives
+     in `src/i18n/pending/<namespace>.ts` as a typed `<namespace>Copy` const that
+     components import directly, so only the routes that use it bundle it (the
+     shared `en.ts` ships on every route). Add a key there only for a namespace
+     that is already pending; a new pending namespace needs the owner's call.
+     When a namespace is translated it moves back into `en.ts` + the 13 locales
+     and its module is deleted. `check:i18n-coverage`, `check:i18n-encoding` and
+     `copy:check` cover these modules. See
+     `docs/features/platform/internationalization.md`.
 
 2. **Semantic Tailwind tokens**: use `text-foreground`, `bg-background`,
    `bg-surface`, `text-muted-dark`, `border-glass`, `border-glass-hover`,
