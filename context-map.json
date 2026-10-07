@@ -1885,6 +1885,8 @@
           "category": "lib",
           "filePaths": [
             "src/app/api/orchestrator/[...path]/route.ts",
+            "src/app/api/orchestrator/userSession.ts",
+            "src/app/api/orchestrator/proxy.test.ts",
             "src/lib/api-fetch.ts",
             "src/lib/api.ts",
             "src/lib/dashboard-queries.ts",

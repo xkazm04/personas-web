@@ -22,10 +22,22 @@ Separately, a small standalone `apiFetch` wrapper serves the marketing-side Next
 
 **Dashboard query layer.** `dashboard-queries.ts` is a thin SWR helper sitting on top of `api`. `loadAgentDetail` (`dashboard-queries.ts:15`) `Promise.all`s three `api` calls (executions/subscriptions/triggers) for an agent-detail panel; `useAgentDetail` wraps it in `useSWR` with a stable `dashboardKeys.agentDetail` tuple key, 60s deduping, `keepPreviousData`, and no focus revalidation. Most pages call `api` directly through their own stores/SWR; this file is the only shared query module so far.
 
+## Server-side proxy route
+`src/app/api/orchestrator/[...path]/route.ts` is the same-origin proxy for live orchestrator calls (GET/POST/PUT/DELETE/PATCH). It attaches the team key (`TEAM_API_KEY`, falling back to the legacy `NEXT_PUBLIC_TEAM_API_KEY`) server-side, so the key stays out of the browser bundle. Behavior, in order:
+- **503 `orchestrator_not_configured`** when `NEXT_PUBLIC_ORCHESTRATOR_URL` is missing or invalid.
+- **401 `unauthenticated`** unless the `X-User-Token` header is an access token Supabase Auth verifies (`GET /auth/v1/user`) as a live session. A missing or rejected token never receives the key.
+- **503 `auth_unavailable`** when `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` are missing server-side, or Supabase Auth cannot answer (network error, 429, 5xx).
+- **400 `bad_path`** for a path that could leave the orchestrator origin: no segments, or an empty, `.` or `..` segment, or a resolved URL on a different origin.
+- Otherwise it forwards the request with `Authorization: Bearer <key>` (when a key is set) and the user's `X-User-Token`. Network failure answers 502 `upstream_unreachable`; a client abort answers 499.
+- **Response relay:** only JSON content types (`application/json`, `application/*+json`, or none) pass through with the upstream type. Anything else is served as `text/plain; charset=utf-8`. Every relayed answer carries `X-Content-Type-Options: nosniff` and `Content-Security-Policy: default-src 'none'; frame-ancestors 'none'; sandbox`.
+
 ## Key files
 | File | Role |
 | --- | --- |
 | `src/lib/api.ts` | `ApiClient` interface, `realApi`, `orchestratorFetch`, `ApiError`, and the dispatching `api` Proxy |
+| `src/app/api/orchestrator/[...path]/route.ts` | Server-side proxy for every live orchestrator REST call; attaches the team key (see *Server-side proxy route*) |
+| `src/app/api/orchestrator/userSession.ts` | `verifySession`: asks Supabase Auth whether an `X-User-Token` is a live session (30 s positive cache keyed by SHA-256) |
+| `src/app/api/orchestrator/proxy.test.ts` | Unit tests for the proxy's auth, path pinning and response relay |
 | `src/lib/orchestrator-config.ts` | `validateOrchestratorUrl` + `OrchestratorConfigError` (env validation) |
 | `src/lib/mockApi.ts` | `mockApi` — demo implementation of `ApiClient` with simulated latency |
 | `src/lib/mock-dashboard-data.ts` | Static + seeded fixtures for dashboard *visualizations* (SLA, leaderboard, memories, messages, heatmaps, providers…) |
