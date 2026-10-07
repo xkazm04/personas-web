@@ -6,6 +6,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useDeviceStore } from "@/stores/deviceStore";
 import { useControllerStore } from "@/stores/controllerStore";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { api } from "@/lib/api";
 import {
   computeReachability,
   parseDemoDesktop,
@@ -15,6 +16,10 @@ import {
 } from "@/lib/sync/reachability";
 
 const IS_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
+const IS_DESKTOP = process.env.NEXT_PUBLIC_DATA_SOURCE === "desktop";
+
+/** The desktop plane has no heartbeat row: its gate is a health probe, repeated on this clock while visible. */
+const DESKTOP_PROBE_MS = 30_000;
 
 /** Staleness is the ABSENCE of heartbeats, so no event announces "offline": re-judge on a clock. */
 const TICK_MS = 10_000;
@@ -64,6 +69,7 @@ export function useSyncReachability(): SyncReachability {
     useShallow((s) => ({ isDemo: s.isDemo, isAuthenticated: s.isAuthenticated })),
   );
   const live = IS_SUPABASE && isAuthenticated && !isDemo;
+  const probing = IS_DESKTOP && isAuthenticated && !isDemo;
   const liveDevices = useDeviceStore((s) => s.devices);
   const devicesLoaded = useDeviceStore((s) => s.loaded);
   const phase = useControllerStore((s) => s.phase);
@@ -73,6 +79,8 @@ export function useSyncReachability(): SyncReachability {
   const [demoDesktop] = useState<DemoDesktop>(() =>
     typeof window === "undefined" ? "online" : parseDemoDesktop(window.location.search),
   );
+  const [desktopSeenAt, setDesktopSeenAt] = useState<number | null>(null);
+  const [probeSettled, setProbeSettled] = useState(false);
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -93,6 +101,31 @@ export function useSyncReachability(): SyncReachability {
     if (useControllerStore.getState().phase === "unknown") void useControllerStore.getState().load();
   }, [live]);
 
+  useEffect(() => {
+    if (!probing || hidden) return;
+    let cancelled = false;
+    const probe = () => {
+      api.getHealth().then(
+        () => {
+          if (cancelled) return;
+          setDesktopSeenAt(Date.now());
+          setProbeSettled(true);
+        },
+        () => {
+          // A closed desktop is the expected cause: keep the old value, which
+          // ages out through DEVICE_FRESH_MS, and say nothing.
+          if (!cancelled) setProbeSettled(true);
+        },
+      );
+    };
+    probe();
+    const id = setInterval(probe, DESKTOP_PROBE_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [probing, hidden]);
+
   const devices = useMemo(
     () => (isDemo ? demoDevices(demoDesktop, now) : liveDevices),
     [isDemo, demoDesktop, now, liveDevices],
@@ -104,16 +137,20 @@ export function useSyncReachability(): SyncReachability {
         isDemo,
         isAuthenticated,
         supabasePlane: IS_SUPABASE,
+        desktopPlane: IS_DESKTOP,
+        desktopSeenAt,
         devices,
         paired: phase === "active",
         ownerDeviceId,
         demoDesktop,
         now,
       }),
-    [isDemo, isAuthenticated, devices, phase, demoDesktop, now],
+    [isDemo, isAuthenticated, devices, phase, demoDesktop, desktopSeenAt, now],
   );
 
   const overall = tierFor(null);
-  const ready = !live || (devicesLoaded && phase !== "unknown" && phase !== "loading");
+  const ready = probing
+    ? probeSettled
+    : !live || (devicesLoaded && phase !== "unknown" && phase !== "loading");
   return { ...overall, ready, now, fallbackDeviceId: overall.device?.deviceId ?? null, tierFor, commandPlane: isDemo || IS_SUPABASE };
 }
