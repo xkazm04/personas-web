@@ -122,6 +122,11 @@ export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions
           </>
         )}
       </div>
+      {showAction && toggleUnsupported && (
+        <p data-persona-unsupported className="mt-2 pl-[3.25rem] text-sm text-muted-dark">
+          {mobileCopy.reach.desktopUnsupported}
+        </p>
+      )}
       {latest && (
         <div className="mt-2 pl-[3.25rem]">
           <CommandChip command={latest} />

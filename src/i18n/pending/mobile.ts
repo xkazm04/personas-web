@@ -56,6 +56,7 @@ export interface MobileCopy {
     unpairedTitle: string;
     unpairedBody: string;
     unpairedCta: string;
+    desktopUnsupported: string;
   };
   command: {
     pending: string;
@@ -106,7 +107,7 @@ export interface MobileCopy {
     composerLabel: string;
     send: string;
     tooLong: string;
-    disabled: { offline: string; unpaired: string; never: string };
+    disabled: { offline: string; unpaired: string; never: string; desktop: string };
     sending: string;
     thinking: string;
     waiting: string;
@@ -230,6 +231,7 @@ export const mobileCopy: MobileCopy = {
     unpairedTitle: 'Pair this phone',
     unpairedBody: 'Your computer is online, but this phone isn\'t paired yet. Pair it once to run, pause and cancel your agents, and to chat, from here.',
     unpairedCta: 'How to pair',
+    desktopUnsupported: 'Not available over your computer\'s local API. Open the Personas app to do this.',
   },
   command: {
     pending: 'Sending...',
@@ -283,6 +285,7 @@ export const mobileCopy: MobileCopy = {
       offline: 'Personas isn\'t running on your computer. Open it to chat from here.',
       unpaired: 'Pair this phone in Settings to chat from here.',
       never: 'Connect your computer to chat from here.',
+      desktop: 'Not available over your computer\'s local API. Open the Personas app to do this.',
     },
     sending: 'Sending...',
     thinking: '{name} is thinking...',

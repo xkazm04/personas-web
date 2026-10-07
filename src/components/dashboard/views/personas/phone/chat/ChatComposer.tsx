@@ -29,7 +29,7 @@ export function composerDisabledReason(
   desktopPlane = false,
 ): string | null {
   if (tier === null) return "";
-  if (desktopUnsupported("chatSend", tier, desktopPlane)) return "";
+  if (desktopUnsupported("chatSend", tier, desktopPlane)) return copy.disabled.desktop;
   if (actionsEnabled(tier)) return null;
   if (tier === "offline") return copy.disabled.offline;
   return tier === "online-unpaired" ? copy.disabled.unpaired : copy.disabled.never;

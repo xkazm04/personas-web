@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ClipboardCheck, Loader2 } from "lucide-react";
 import ReachabilityNotice from "@/components/dashboard/views/personas/phone/ReachabilityNotice";
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import CommandChip from "@/components/dashboard/views/personas/phone/CommandChip";
 import { useTranslation } from "@/i18n/useTranslation";
 import { mobileCopy } from "@/i18n/pending/mobile";
@@ -36,7 +37,7 @@ export default function PhoneReviews() {
   const { t } = useTranslation();
   const copy = mobileCopy.reviews;
   const demo = useAuthStore((s) => s.isDemo);
-  const { reach, canDecide } = useReviewGate();
+  const { reach, canDecide, blocked } = useReviewGate();
   const reviews = useReviewStore((s) => s.reviews);
   const loading = useReviewStore((s) => s.reviewsLoading);
   const policy = useReviewStore((s) => s.escalationPolicy);
@@ -90,6 +91,7 @@ export default function PhoneReviews() {
       </h1>
 
       {reach.ready && reach.commandPlane && <ReachabilityNotice reach={reach} />}
+      {blocked && reach.desktopPlane && <DesktopUnsupportedNote />}
       <EscalationFailureNotice />
 
       {waiting ? (

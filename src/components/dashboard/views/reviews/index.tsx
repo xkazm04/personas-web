@@ -14,6 +14,7 @@ import { useReviewGate } from "./useReviewGate";
 import EscalationFailureNotice from "./EscalationFailureNotice";
 import PhoneReviews from "./phone/PhoneReviews";
 import ReachabilityNotice from "@/components/dashboard/views/personas/phone/ReachabilityNotice";
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useTranslation } from "@/i18n/useTranslation";
 
@@ -75,7 +76,7 @@ function ReviewsPage() {
 
       {gate.blocked && (
         <div className="mb-4">
-          <ReachabilityNotice reach={gate.reach} />
+          {gate.reach.desktopPlane ? <DesktopUnsupportedNote /> : <ReachabilityNotice reach={gate.reach} />}
         </div>
       )}
       <div className="mb-4 empty:hidden">
