@@ -154,6 +154,9 @@ export default function PhoneReviewCard({ review, now, canDecide, command, onDec
             {t.reviewsPage.focus.reject}
           </button>
         </div>
+        {review.deskOnly && (
+          <p data-review-desk-only className="mt-2 text-sm text-muted">{mobileCopy.command.deskOnly}</p>
+        )}
       </article>
     </li>
   );

@@ -196,3 +196,13 @@ describe("machine verdicts (escalation) on a command plane", () => {
     expect(row("r1").status).toBe("pending");
   });
 });
+
+describe("deskOnly on a loaded review", () => {
+  it("reads the payload's deskOnly flag, undefined otherwise", async () => {
+    const a = ev("desk");
+    a.payload = JSON.stringify({ title: "desk", severity: "info", deskOnly: true });
+    await load([a, ev("plain")]);
+    expect(row("desk").deskOnly).toBe(true);
+    expect(row("plain").deskOnly).toBeUndefined();
+  });
+});

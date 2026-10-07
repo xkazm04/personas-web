@@ -73,3 +73,22 @@ describe("supabaseApi.getExecution offset contract (D5)", () => {
     expect(res.outputLines).toBe(2);
   });
 });
+
+describe("supabaseApi.listEvents manual_review desk-only mapping", () => {
+  const base = {
+    id: "r1", device_id: "dev-1", execution_id: "e1", persona_id: "p1", title: "T", description: "D",
+    severity: "info", status: "pending", reviewer_notes: null, resolved_at: null, created_at: "2026-10-07T00:00:00Z",
+  };
+  it("flags a probation review and never forwards context_data", async () => {
+    const ctx = '{"kind":"app_master_probation","secret":"hunter2"}';
+    stagedRows = [{ ...base, context_data: ctx }, { ...base, id: "r2", context_data: null }];
+    const events = await supabaseApi.listEvents({ eventType: "manual_review" });
+    const p0 = JSON.parse(events[0].payload ?? "{}");
+    const p1 = JSON.parse(events[1].payload ?? "{}");
+    expect(p0.deskOnly).toBe(true);
+    expect(p1.deskOnly).toBe(false);
+    expect(events[0].payload).not.toContain("hunter2");
+    expect(p0).not.toHaveProperty("context_data");
+    expect(p0).not.toHaveProperty("contextData");
+  });
+});

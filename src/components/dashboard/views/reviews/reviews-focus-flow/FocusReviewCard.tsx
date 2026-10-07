@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
+import { mobileCopy } from "@/i18n/pending/mobile";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatAge } from "@/lib/review-display";
 import type { ManualReviewItem } from "@/lib/types";
@@ -145,6 +146,9 @@ export function FocusReviewCard({
           </kbd>
         </button>
       </div>
+      {review.deskOnly && (
+        <p data-review-desk-only className="mt-2 text-sm text-muted">{mobileCopy.command.deskOnly}</p>
+      )}
     </motion.div>
   );
 }

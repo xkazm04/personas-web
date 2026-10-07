@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { AlertOctagon, Bookmark, Check, ClipboardCheck, Clock, Terminal, X } from "lucide-react";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import { mobileCopy } from "@/i18n/pending/mobile";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatAge, resolverLabel, reviewerNotesText } from "@/lib/review-display";
 import { REVIEW_NOTES_MAX } from "@/lib/commands/reviewDecide";
@@ -86,6 +87,9 @@ export function ReviewDetailPanel({
         </div>
       </div>
       <ReviewDetailContent review={review} notes={notes} setNotes={setNotes} notesRef={notesRef} />
+      {isPending && review.deskOnly && (
+        <p data-review-desk-only className="flex-shrink-0 border-t border-glass px-4 py-2 text-sm text-muted">{mobileCopy.command.deskOnly}</p>
+      )}
       {isPending && <ReviewResolveActions disabled={!canDecide} onResolve={(status) => onResolve(review.id, status)} />}
     </div>
   );

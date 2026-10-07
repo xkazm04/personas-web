@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useReviewStore } from "@/stores/reviewStore";
+import { decidableIds } from "@/lib/commands/deskOnlyReview";
 import type { ManualReviewItem } from "@/lib/types";
 
 /**
@@ -30,7 +31,7 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
     if (bulkResult) setSelectedIds(new Set(bulkResult.failedIds));
   }
 
-  const pendingInFiltered = filtered.filter((r) => r.status === "pending");
+  const pendingInFiltered = filtered.filter((r) => r.status === "pending" && !r.deskOnly);
 
   // Forget the anchor as soon as the anchor row is no longer present in the
   // current filtered view — otherwise the next shift-click would silently
@@ -66,13 +67,13 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
         setSelectedIds((prev) => {
           const next = new Set(prev);
           for (let i = start; i <= end; i++) {
-            if (filtered[i].status === "pending") {
+            if (filtered[i].status === "pending" && !filtered[i].deskOnly) {
               next.add(filtered[i].id);
             }
           }
           return next;
         });
-      } else {
+      } else if (!filtered[currentIndex]?.deskOnly) {
         setSelectedIds((prev) => {
           const next = new Set(prev);
           if (next.has(id)) next.delete(id);
@@ -94,9 +95,12 @@ export function useReviewBulkActions(filtered: ManualReviewItem[]) {
     (ids: string[], status: "approved" | "rejected") => {
       // The ledger is the guard: it flushes a disjoint open window and refuses
       // an overlapping one (the refusal shows on the open undo toast).
-      if (decide(ids, status)) setSelectedIds(new Set());
+      // A desk-only review never goes out as a review_decide, whatever was selected.
+      const sendable = decidableIds(ids, filtered);
+      if (sendable.length === 0) return;
+      if (decide(sendable, status)) setSelectedIds(new Set());
     },
-    [decide],
+    [decide, filtered],
   );
 
   const handleBulkAction = useCallback(
