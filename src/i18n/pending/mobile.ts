@@ -65,6 +65,7 @@ export interface MobileCopy {
     failed: string;
     rejected: string;
     replayed: string;
+    deskOnly: string;
     expired: string;
   };
   pairing: {
@@ -240,6 +241,7 @@ export const mobileCopy: MobileCopy = {
     failed: 'Failed: {reason}',
     rejected: 'Refused: {reason}',
     replayed: 'Already handled. Your computer will not run the same command twice.',
+    deskOnly: 'Decide this one at your computer. App Master approvals stay on the desk.',
     expired: 'Your computer didn\'t answer',
   },
   pairing: {

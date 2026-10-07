@@ -3,6 +3,7 @@
 import { Check, Loader2, Send, TriangleAlert } from "lucide-react";
 import type { CommandStatus, InflightCommand } from "@/lib/commands/commandReducer";
 import { chatErrorKind } from "@/lib/chat/chatModel";
+import { isDeskOnly } from "@/lib/commands/commandRefusal";
 import { mobileCopy } from "@/i18n/pending/mobile";
 
 const TONE: Record<CommandStatus, string> = {
@@ -29,8 +30,10 @@ function reasonText(error: string | null): string {
 export default function CommandChip({ command }: { command: InflightCommand }) {
   const copy = mobileCopy.command;
   const { status } = command;
-  const label =
-    status === "failed"
+  const deskOnly = (status === "failed" || status === "rejected") && isDeskOnly(command.error);
+  const label = deskOnly
+    ? copy.deskOnly
+    : status === "failed"
       ? copy.failed.replace("{reason}", reasonText(command.error))
       : status === "rejected"
         ? chatErrorKind(status, command.error) === "replayed"
