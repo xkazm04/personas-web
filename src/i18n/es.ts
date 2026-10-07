@@ -1258,6 +1258,8 @@ export const es: LocaleTranslations = {
       noExecutions: "A\u00fan no hay ejecuciones",
       noExecutionsDesc: "Ejecuta un agente para ver resultados aqu\u00ed",
       waitingForWorker: "Esperando worker...",
+      openExecutionInDesktop: "Abrir la ejecuci\u00f3n en la app de escritorio",
+      openPersonaInDesktop: "Abrir el persona en la app de escritorio",
       noOutputYet: "A\u00fan sin resultados",
       noFilteredActive: "No hay ejecuciones activas en esta vista",
       noFilteredCompleted: "No hay ejecuciones completadas en esta vista",

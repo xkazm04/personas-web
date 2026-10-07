@@ -1258,6 +1258,8 @@ export const cs: LocaleTranslations = {
       noExecutions: "Zat\u00edm \u017e\u00e1dn\u00e1 spu\u0161t\u011bn\u00ed",
       noExecutionsDesc: "Spus\u0165te agenta a uvid\u00edte v\u00fdsledky zde",
       waitingForWorker: "\u010cek\u00e1 se na pracovn\u00ed proces...",
+      openExecutionInDesktop: "Otev\u0159\u00edt spu\u0161t\u011bn\u00ed v desktopov\u00e9 aplikaci",
+      openPersonaInDesktop: "Otev\u0159\u00edt personu v desktopov\u00e9 aplikaci",
       noOutputYet: "Zat\u00edm \u017e\u00e1dn\u00fd v\u00fdstup",
       noFilteredActive: "V tomto zobrazen\u00ed nejsou \u017e\u00e1dn\u00e9 aktivn\u00ed b\u011bhy",
       noFilteredCompleted: "V tomto zobrazen\u00ed nejsou \u017e\u00e1dn\u00e9 dokon\u010den\u00e9 b\u011bhy",

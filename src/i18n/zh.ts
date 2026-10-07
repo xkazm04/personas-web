@@ -1258,6 +1258,8 @@ export const zh: LocaleTranslations = {
       noExecutions: "\u6682\u65e0\u6267\u884c\u8bb0\u5f55",
       noExecutionsDesc: "\u6267\u884c\u4e00\u4e2a\u667a\u80fd\u4f53\u4ee5\u67e5\u770b\u7ed3\u679c",
       waitingForWorker: "\u7b49\u5f85\u5de5\u4f5c\u8282\u70b9...",
+      openExecutionInDesktop: "\u5728\u684c\u9762\u5e94\u7528\u4e2d\u6253\u5f00\u6267\u884c",
+      openPersonaInDesktop: "\u5728\u684c\u9762\u5e94\u7528\u4e2d\u6253\u5f00\u89d2\u8272",
       noOutputYet: "\u6682\u65e0\u8f93\u51fa",
       noFilteredActive: "\u6b64\u89c6\u56fe\u4e2d\u6ca1\u6709\u6d3b\u8dc3\u7684\u6267\u884c",
       noFilteredCompleted: "\u6b64\u89c6\u56fe\u4e2d\u6ca1\u6709\u5df2\u5b8c\u6210\u7684\u6267\u884c",

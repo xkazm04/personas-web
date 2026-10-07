@@ -1258,6 +1258,8 @@ export const de: LocaleTranslations = {
       noExecutions: "Noch keine Ausf\u00fchrungen",
       noExecutionsDesc: "F\u00fchren Sie einen Agenten aus, um Ergebnisse hier zu sehen",
       waitingForWorker: "Warte auf Worker...",
+      openExecutionInDesktop: "Ausf\u00fchrung in der Desktop-App \u00f6ffnen",
+      openPersonaInDesktop: "Persona in der Desktop-App \u00f6ffnen",
       noOutputYet: "Noch keine Ausgabe",
       noFilteredActive: "Keine aktiven Ausf\u00fchrungen in dieser Ansicht",
       noFilteredCompleted: "Keine abgeschlossenen Ausf\u00fchrungen in dieser Ansicht",

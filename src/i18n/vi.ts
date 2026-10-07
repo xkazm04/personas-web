@@ -1258,6 +1258,8 @@ export const vi: LocaleTranslations = {
       noExecutions: "Ch\u01b0a c\u00f3 l\u01b0\u1ee3t th\u1ef1c thi n\u00e0o",
       noExecutionsDesc: "Th\u1ef1c thi m\u1ed9t t\u00e1c nh\u00e2n \u0111\u1ec3 xem k\u1ebft qu\u1ea3 t\u1ea1i \u0111\u00e2y",
       waitingForWorker: "\u0110ang ch\u1edd worker...",
+      openExecutionInDesktop: "M\u1edf l\u01b0\u1ee3t ch\u1ea1y trong \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh",
+      openPersonaInDesktop: "M\u1edf persona trong \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh",
       noOutputYet: "Ch\u01b0a c\u00f3 k\u1ebft qu\u1ea3 xu\u1ea5t",
       noFilteredActive: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y \u0111ang ho\u1ea1t \u0111\u1ed9ng trong khung nh\u00ecn n\u00e0y",
       noFilteredCompleted: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y ho\u00e0n t\u1ea5t trong khung nh\u00ecn n\u00e0y",

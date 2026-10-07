@@ -1008,6 +1008,8 @@
     noExecutions: string;
     noExecutionsDesc: string;
     waitingForWorker: string;
+    openExecutionInDesktop: string;
+    openPersonaInDesktop: string;
     noOutputYet: string;
     noFilteredActive: string;
     noFilteredCompleted: string;
@@ -3070,6 +3072,8 @@ export const en: Translations = {
     noExecutions: 'No executions yet',
     noExecutionsDesc: 'Execute an agent to see results here',
     waitingForWorker: 'Waiting for worker...',
+    openExecutionInDesktop: 'Open execution in desktop app',
+    openPersonaInDesktop: 'Open persona in desktop app',
     noOutputYet: 'No output yet',
     noFilteredActive: 'No active runs in this view',
     noFilteredCompleted: 'No completed runs in this view',

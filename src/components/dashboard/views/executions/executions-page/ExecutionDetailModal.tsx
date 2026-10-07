@@ -5,9 +5,12 @@ import { AlertTriangle, Clock, DollarSign, Hash, RotateCw } from "lucide-react";
 import { Modal } from "@/components/dashboard/Modal";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatCost, formatDuration, relativeTime } from "@/lib/format";
+import { executionDeepLink, personaDeepLink } from "@/lib/deepLinks/desktopLinks";
 import type { GlobalExecution } from "@/lib/types";
+import { useAuthStore } from "@/stores/authStore";
 
 import { ExecutionOutput } from "./ExecutionOutput";
 
@@ -25,11 +28,18 @@ export function ExecutionDetailModal({
   onClose: () => void;
 }) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
+  const isDemo = useAuthStore((s) => s.isDemo);
 
   const personaName = execution?.personaName ?? "—";
   const startedAt = execution?.startedAt ?? execution?.createdAt ?? null;
   const totalTokens =
     (execution?.inputTokens ?? 0) + (execution?.outputTokens ?? 0);
+
+  // A phone cannot open the desktop's scheme, and the demo has no desktop.
+  const showDesktopLinks = !isMobile && !isDemo;
+  const executionHref = execution && showDesktopLinks ? executionDeepLink(execution.id) : null;
+  const personaHref = execution && showDesktopLinks ? personaDeepLink(execution.personaId) : null;
 
   return (
     <Modal
@@ -84,6 +94,21 @@ export function ExecutionDetailModal({
               <p className="text-sm leading-relaxed text-rose-200/90">
                 {execution.errorMessage}
               </p>
+            </div>
+          )}
+
+          {(executionHref || personaHref) && (
+            <div className="mb-5 flex flex-wrap gap-4 text-sm">
+              {executionHref && (
+                <a href={executionHref} className="text-brand-cyan hover:underline">
+                  {t.executionsPage.openExecutionInDesktop}
+                </a>
+              )}
+              {personaHref && (
+                <a href={personaHref} className="text-brand-cyan hover:underline">
+                  {t.executionsPage.openPersonaInDesktop}
+                </a>
+              )}
             </div>
           )}
 

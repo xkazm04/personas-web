@@ -1258,6 +1258,8 @@ export const id: LocaleTranslations = {
       noExecutions: "Belum ada eksekusi",
       noExecutionsDesc: "Jalankan agen untuk melihat hasil di sini",
       waitingForWorker: "Menunggu worker...",
+      openExecutionInDesktop: "Buka eksekusi di aplikasi desktop",
+      openPersonaInDesktop: "Buka persona di aplikasi desktop",
       noOutputYet: "Belum ada output",
       noFilteredActive: "Tidak ada eksekusi aktif dalam tampilan ini",
       noFilteredCompleted: "Tidak ada eksekusi selesai dalam tampilan ini",
