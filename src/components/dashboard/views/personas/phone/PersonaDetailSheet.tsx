@@ -3,7 +3,6 @@
 import { useId, useMemo, useState } from "react";
 import BottomSheet from "@/components/primitives/BottomSheet";
 import StatusBadge from "@/components/dashboard/StatusBadge";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import { usePersona } from "@/stores/personaStore";
 import { useExecutionStore } from "@/stores/executionStore";
@@ -15,6 +14,7 @@ import { formatDue } from "@/lib/review-sla";
 import type { PersonaExecution } from "@/lib/types";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
 import ChatPanel from "./chat/ChatPanel";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 /** The detail sheet's tabs: Activity (runs) and Chat (PHASE2-SPEC.md 5.2, 5.3). */
 type DetailTab = "activity" | "chat";
@@ -43,8 +43,7 @@ const ACTIVITY_LIMIT = 10;
  * Chat's composer follows the online gate.
  */
 export default function PersonaDetailSheet({ open, personaId, reach, onClose }: Props) {
-  const { t } = useTranslation();
-  const copy = t.mobile.personas;
+  const copy = mobileCopy.personas;
   const baseId = useId();
   const persona = usePersona(personaId);
   const latest = useCommandStore((s) => (personaId ? latestForPersona(s.inflight, personaId) : null));
@@ -94,8 +93,7 @@ export default function PersonaDetailSheet({ open, personaId, reach, onClose }: 
 }
 
 function ActivityPanel({ personaId, now }: { personaId: string; now: number }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.personas;
+  const copy = mobileCopy.personas;
   const executions = useExecutionStore((s) => s.rawExecutions);
   const loading = useExecutionStore((s) => s.executionsLoading);
   const error = useExecutionStore((s) => s.executionsError);
@@ -118,8 +116,7 @@ function ActivityPanel({ personaId, now }: { personaId: string; now: number }) {
 }
 
 function ActivityItem({ run, now }: { run: PersonaExecution; now: number }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.personas;
+  const copy = mobileCopy.personas;
   const language = useI18nStore((s) => s.language);
   const startedMs = Date.parse(run.startedAt ?? run.createdAt);
   // Clamped into the past: a run that began after the clock's last 10 s tick still reads "ago".

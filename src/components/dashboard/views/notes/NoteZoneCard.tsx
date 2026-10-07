@@ -1,13 +1,12 @@
 import { useId } from "react";
 import { FolderGit2 } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import type { NoteZone } from "@/lib/notes/notesModel";
 import NoteCard from "./NoteCard";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 /** A project's zone, as in the desktop Quest Log: its name, how many goals, then the goals in rail order. */
 export default function NoteZoneCard({ zone, onOpen }: { zone: NoteZone; onOpen: (id: string) => void }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.notes;
+  const copy = mobileCopy.notes;
   const headingId = useId();
   const count = zone.notes.length === 1 ? copy.goalsOne : copy.goals.replace("{count}", String(zone.notes.length));
 

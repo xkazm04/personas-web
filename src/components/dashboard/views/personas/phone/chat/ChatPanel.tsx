@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useKeyboardInset } from "@/hooks/useKeyboardInset";
 import { useChatStore, scopeKey, threadKey } from "@/stores/chatStore";
 import { useCommandStore } from "@/stores/commandStore";
@@ -22,6 +21,7 @@ import type { PersonaExecutionStatus } from "@/lib/types";
 import ChatThreadList from "./ChatThreadList";
 import ChatTranscript from "./ChatTranscript";
 import ChatComposer, { composerDisabledReason } from "./ChatComposer";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
   threadKind: ChatThreadKind;
@@ -55,8 +55,7 @@ const IDLE = { loading: false, loaded: false, error: null };
  * the demo's simulated desktop writes its fixtures).
  */
 export default function ChatPanel({ threadKind, personaId, name, ownerDeviceId, reach, paused = false, chromePx }: Props) {
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   const keyboard = useKeyboardInset();
 
   const [view, setView] = useState<View>({ kind: "list" });

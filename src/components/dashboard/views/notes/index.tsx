@@ -7,7 +7,6 @@ import EmptyState from "@/components/dashboard/EmptyState";
 import { Modal } from "@/components/dashboard/Modal";
 import BottomSheet from "@/components/primitives/BottomSheet";
 import ReachabilityNotice from "@/components/dashboard/views/personas/phone/ReachabilityNotice";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useSyncReachability } from "@/hooks/useSyncReachability";
 import { useAuthStore } from "@/stores/authStore";
@@ -17,6 +16,7 @@ import type { ReachabilityTier } from "@/lib/sync/reachability";
 import NoteDetail from "./NoteDetail";
 import NoteZoneCard from "./NoteZoneCard";
 import { REVIEW_PILL, UNREAD_PILL } from "./NoteCard";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 /** Tiers that get the reachability banner here. Pairing is for commands; reading notes needs none. */
 const NOTICE_TIERS: ReadonlySet<ReachabilityTier> = new Set(["offline", "never-synced", "no-account"]);
@@ -33,8 +33,7 @@ const NO_DATA_TIERS: ReadonlySet<ReachabilityTier> = new Set(["never-synced", "n
  * sheet on a phone and a modal on a desktop.
  */
 export default function NotesView() {
-  const { t } = useTranslation();
-  const copy = t.mobile.notes;
+  const copy = mobileCopy.notes;
   const phone = useIsMobile();
   const { demo, authenticated } = useAuthStore(useShallow((s) => ({ demo: s.isDemo, authenticated: s.isAuthenticated })));
   const reach = useSyncReachability();

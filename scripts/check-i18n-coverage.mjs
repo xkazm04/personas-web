@@ -118,22 +118,82 @@ function compareShape(expected, actual, pathParts, issues) {
 const locales = listLocaleFiles();
 const { translations: fullBaseline, moduleExports: baselineExports } =
   loadLocaleModule(baselineLocale);
+const targetLocales = locales.filter((locale) => locale !== baselineLocale);
 
-// Namespaces the owner decided to ship English-only for now (en.ts
-// PENDING_TRANSLATION). They are skipped here and reported, never failed on.
-const pendingNamespaces = Array.isArray(baselineExports.PENDING_TRANSLATION)
+// Namespaces the owner decided to ship English-only for now (PLAN M4). Two
+// homes, both skipped here and reported, never failed on:
+//   - en.ts PENDING_TRANSLATION: pending namespaces still inside en.ts;
+//   - src/i18n/pending/<namespace>.ts: pending namespaces moved out of the
+//     shared bundle (PLAN M22), one module per namespace exporting
+//     `<namespace>Copy` (the Copy suffix is what lets copy:check read it as a
+//     dictionary).
+// What IS failed on: a listed namespace missing from en.ts, a pending module
+// whose export does not match its filename, and a namespace that is both
+// pending and in en.ts/a locale (a translated namespace moves back into en.ts
+// and its pending module is deleted - never both).
+const pendingInEn = Array.isArray(baselineExports.PENDING_TRANSLATION)
   ? [...baselineExports.PENDING_TRANSLATION]
   : [];
-for (const ns of pendingNamespaces) {
+for (const ns of pendingInEn) {
   if (!(ns in fullBaseline)) {
     console.error(`PENDING_TRANSLATION names "${ns}", which is not a namespace in en.ts.`);
     process.exit(1);
   }
 }
+
+const pendingDir = path.join(i18nDir, "pending");
+const pendingModules = fs.existsSync(pendingDir)
+  ? fs
+      .readdirSync(pendingDir)
+      .filter((filename) => filename.endsWith(".ts") && !filename.endsWith(".test.ts"))
+      .sort((a, b) => a.localeCompare(b))
+  : [];
+const pendingModuleCopy = {};
+for (const filename of pendingModules) {
+  const ns = path.basename(filename, ".ts");
+  const file = path.join(pendingDir, filename);
+  const compiled = ts.transpileModule(fs.readFileSync(file, "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+    fileName: file,
+  }).outputText;
+  const sandbox = { exports: {}, module: { exports: {} } };
+  sandbox.exports = sandbox.module.exports;
+  sandbox.require = (specifier) => {
+    throw new Error(`Unexpected runtime import "${specifier}" in pending module ${filename}`);
+  };
+  vm.runInNewContext(compiled, sandbox, { filename: file });
+  const copy = sandbox.module.exports[`${ns}Copy`];
+  if (!copy || typeof copy !== "object") {
+    console.error(`src/i18n/pending/${filename} must export a const named "${ns}Copy" (its filename + Copy).`);
+    process.exit(1);
+  }
+  if (ns in fullBaseline) {
+    console.error(
+      `"${ns}" is both a pending module (src/i18n/pending/${filename}) and a namespace in en.ts. ` +
+        "A translated namespace moves back into en.ts and its pending module is deleted.",
+    );
+    process.exit(1);
+  }
+  pendingModuleCopy[ns] = copy;
+}
+for (const locale of targetLocales) {
+  const translations = loadLocale(locale);
+  for (const ns of Object.keys(pendingModuleCopy)) {
+    if (ns in translations) {
+      console.error(
+        `${locale}.ts carries "${ns}", which is still a pending module (src/i18n/pending/${ns}.ts). ` +
+          "Move the namespace back into en.ts before translating it.",
+      );
+      process.exit(1);
+    }
+  }
+}
+
+const pendingNamespaces = [...pendingInEn, ...Object.keys(pendingModuleCopy)];
+const pendingCopy = { ...fullBaseline, ...pendingModuleCopy };
 const baseline = Object.fromEntries(
-  Object.entries(fullBaseline).filter(([ns]) => !pendingNamespaces.includes(ns)),
+  Object.entries(fullBaseline).filter(([ns]) => !pendingInEn.includes(ns)),
 );
-const targetLocales = locales.filter((locale) => locale !== baselineLocale);
 
 let failed = false;
 
@@ -153,10 +213,12 @@ for (const locale of targetLocales) {
 }
 
 if (pendingNamespaces.length > 0) {
-  const pendingKeys = pendingNamespaces.reduce((sum, ns) => sum + countLeaves(fullBaseline[ns]), 0);
+  const pendingKeys = pendingNamespaces.reduce((sum, ns) => sum + countLeaves(pendingCopy[ns]), 0);
   console.log(
     `
-pending translation (English only, by owner decision): ${pendingKeys} keys in ${pendingNamespaces.length} namespaces: ${pendingNamespaces.join(", ")}`,
+pending translation (English only, by owner decision): ${pendingKeys} keys in ${pendingNamespaces.length} namespaces` +
+      (pendingInEn.length ? `\n  in en.ts: ${pendingInEn.join(", ")}` : "") +
+      (pendingModules.length ? `\n  in src/i18n/pending/: ${Object.keys(pendingModuleCopy).join(", ")}` : ""),
   );
 }
 

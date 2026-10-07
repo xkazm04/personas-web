@@ -13,6 +13,7 @@ import DesktopSidebar from "./DesktopSidebar";
 import MobileBottomNav from "./MobileBottomNav";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Translations } from "@/i18n/en";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 export interface NavLeaf {
   view: DashboardViewId;
@@ -38,7 +39,7 @@ function sectionViews(section: NavSectionDef): DashboardViewId[] {
 
 /** A nav label: `t.dashboard`, or the pending `mobile` namespace for a view not yet translated. */
 function navLabel(t: Translations, key: NavLabelKey): string {
-  if (key === "notes") return t.mobile.notes.nav;
+  if (key === "notes") return mobileCopy.notes.nav;
   return t.dashboard[key];
 }
 

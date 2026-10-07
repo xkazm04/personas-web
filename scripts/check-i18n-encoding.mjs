@@ -33,6 +33,9 @@
  *     a locale moved to a region-coded name), the gate fails loudly instead of
  *     quietly measuring a smaller corpus.
  *
+ * Pending modules (src/i18n/pending/*.ts, English-only copy kept off the shared
+ * bundle) are scanned too and held to en.ts's zero; they are not in the baseline.
+ *
  * Selection: any *.ts in src/i18n that is not a known non-locale module. This
  * is deliberately broader than a bare two-letter match so that region-coded
  * locales (pt-BR.ts, zh-Hant.ts) are covered the day they are added rather
@@ -75,6 +78,20 @@ if (!fs.existsSync(I18N_DIR) || !fs.statSync(I18N_DIR).isDirectory()) {
 const allTs = fs.readdirSync(I18N_DIR).filter((f) => f.endsWith(".ts"));
 const files = allTs.filter((f) => !NON_LOCALE_FILES.has(f) && LOCALE_FILE.test(f)).sort();
 
+// Pending-translation modules (src/i18n/pending/<namespace>.ts, PLAN M22): English
+// copy moved out of en.ts so only its routes bundle it. It ships like en.ts, so it
+// is held to the same zero, and it stays out of the baseline (a module is deleted
+// when its namespace is translated and moves back into en.ts).
+const PENDING_DIR = path.join(I18N_DIR, "pending");
+const pendingFiles = fs.existsSync(PENDING_DIR)
+  ? fs
+      .readdirSync(PENDING_DIR)
+      .filter((f) => f.endsWith(".ts"))
+      .sort()
+      .map((f) => `pending/${f}`)
+  : [];
+const mustBeClean = (f) => f === "en.ts" || f.startsWith("pending/");
+
 // ── Instrument assertions ───────────────────────────────────────────────────
 // Assert the instrument before trusting the result.
 if (files.length === 0) {
@@ -89,7 +106,7 @@ if (files.length === 0) {
 
 const counts = {};
 const samples = {};
-for (const f of files) {
+for (const f of [...files, ...pendingFiles]) {
   const text = fs.readFileSync(path.join(I18N_DIR, f), "utf8");
   const lines = text.split("\n");
   let n = 0;
@@ -106,7 +123,8 @@ for (const f of files) {
 }
 
 if (updateBaseline) {
-  fs.writeFileSync(BASELINE_PATH, JSON.stringify(counts, null, 2) + "\n");
+  const localeCounts = Object.fromEntries(files.map((f) => [f, counts[f]]));
+  fs.writeFileSync(BASELINE_PATH, JSON.stringify(localeCounts, null, 2) + "\n");
   console.log(`[i18n-encoding] baseline updated: ${BASELINE_PATH}`);
   process.exit(0);
 }
@@ -131,12 +149,12 @@ if (unscanned.length > 0) {
 
 let failed = false;
 let improved = false;
-for (const f of files) {
+for (const f of [...files, ...pendingFiles]) {
   const now = counts[f];
   const base = baseline[f] ?? 0;
-  if (f === "en.ts" && now > 0) {
+  if (mustBeClean(f) && now > 0) {
     failed = true;
-    console.error(`[i18n-encoding] FAIL ${f}: ${now} mojibake sequence(s) — en.ts ships to production and must be clean:`);
+    console.error(`[i18n-encoding] FAIL ${f}: ${now} mojibake sequence(s) — English copy (en.ts, pending/) ships to production and must be clean:`);
     for (const s of samples[f]) console.error(s);
   } else if (now > base) {
     failed = true;
@@ -157,7 +175,7 @@ if (improved) {
 const dirty = files.filter((f) => counts[f] > 0);
 console.log(
   dirty.length === 0
-    ? `[i18n-encoding] OK — all ${files.length} locale files clean`
+    ? `[i18n-encoding] OK — all ${files.length} locale files and ${pendingFiles.length} pending module(s) clean`
     : `[i18n-encoding] OK — scanned ${files.length} locale files, no new corruption ` +
         `(${dirty.length} file(s) still carry known baseline debt: ` +
         `${dirty.map((f) => `${f}=${counts[f]}`).join(", ")})`,

@@ -2,9 +2,9 @@
 
 import { useId, useState } from "react";
 import { SendHorizontal } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { chatSendParams, isMessageTooLong } from "@/lib/chat/chatModel";
 import { actionsEnabled, type ReachabilityTier } from "@/lib/sync/reachability";
+import { mobileCopy, type MobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
   /** Who the message goes to, for the field's label. */
@@ -14,7 +14,7 @@ interface Props {
   onSend: (message: string) => void;
 }
 
-type ChatCopy = ReturnType<typeof useTranslation>["t"]["mobile"]["chat"];
+type ChatCopy = MobileCopy["chat"];
 
 /**
  * Why the composer is off, or null when it is on: the tier of the desktop
@@ -38,8 +38,7 @@ export function composerDisabledReason(copy: ChatCopy, tier: ReachabilityTier | 
  * Ctrl/Cmd+Enter sends; plain Enter is a new line, as in the desktop chat.
  */
 export default function ChatComposer({ name, disabledReason, onSend }: Props) {
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   const fieldId = useId();
   const hintId = useId();
   const [text, setText] = useState("");

@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Bot, Loader2 } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useExecutionStore } from "@/stores/executionStore";
@@ -13,6 +12,7 @@ import ReachabilityNotice from "./ReachabilityNotice";
 import PersonaActionsSheet from "./PersonaActionsSheet";
 import PersonaDetailSheet from "./PersonaDetailSheet";
 import AthenaChatSheet, { AthenaRow } from "./chat/AthenaChatSheet";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 /** One sheet at a time; `open` flips first so the sheet can slide out with its content. */
 interface SheetState {
@@ -33,8 +33,7 @@ interface SheetState {
  * never `fleet.json`, which has no live counterpart.
  */
 export default function PhonePersonas() {
-  const { t } = useTranslation();
-  const copy = t.mobile.personas;
+  const copy = mobileCopy.personas;
   const demo = useAuthStore((s) => s.isDemo);
   const reach = useSyncReachability();
   const { ids, loading, error } = usePersonaStore(

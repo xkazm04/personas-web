@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { MoreHorizontal, Pause, Play } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { usePersona } from "@/stores/personaStore";
 import { useCommandStore } from "@/stores/commandStore";
 import { useExecutionStore } from "@/stores/executionStore";
@@ -12,6 +11,7 @@ import { actionsEnabled } from "@/lib/sync/reachability";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
 import CommandChip from "./CommandChip";
 import { sendPersonaAction } from "./personaActions";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
   id: string;
@@ -37,8 +37,7 @@ const STATE_TONE: Record<PersonaRowState, string> = {
  * result until the synced persona catches up (displayEnabled).
  */
 export default function PhonePersonaRow({ id, reach, onOpenDetail, onOpenActions }: Props) {
-  const { t } = useTranslation();
-  const copy = t.mobile.personas;
+  const copy = mobileCopy.personas;
   const persona = usePersona(id);
   const latest = useCommandStore((s) => latestForPersona(s.inflight, id));
   const executions = useExecutionStore((s) => s.rawExecutions);

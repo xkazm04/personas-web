@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import { Loader2, RotateCcw, TriangleAlert, X } from "lucide-react";
 import { MarkdownReport } from "@/components/dashboard/MarkdownReport";
-import { useTranslation } from "@/i18n/useTranslation";
 import { chatErrorKind, type ChatMessage, type TurnView } from "@/lib/chat/chatModel";
+import { mobileCopy, type MobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
   /** Who answers: "Athena" or the persona's name. */
@@ -42,8 +42,7 @@ const PINNED_PX = 48;
  */
 export default function ChatTranscript(props: Props) {
   const { name, messages, turns, bubbleKeys, emptyText, loading, error, onReload, onRetry, onDismiss } = props;
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   const scroller = useRef<HTMLDivElement>(null);
   const pinned = useRef(true);
   const turnCount = useRef(turns.length);
@@ -127,8 +126,7 @@ export default function ChatTranscript(props: Props) {
 }
 
 function TurnStatus({ turn, name, onRetry, onDismiss }: { turn: TurnView; name: string; onRetry: (id: string) => void; onDismiss: (id: string) => void }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   const { send, phase } = turn;
 
   if (phase === "sending" || phase === "thinking") {
@@ -165,7 +163,7 @@ function TurnStatus({ turn, name, onRetry, onDismiss }: { turn: TurnView; name: 
   );
 }
 
-type ChatCopy = ReturnType<typeof useTranslation>["t"]["mobile"]["chat"];
+type ChatCopy = MobileCopy["chat"];
 
 function errorText(copy: ChatCopy, turn: TurnView, name: string): string {
   const kind = chatErrorKind(turn.commandStatus, turn.error);

@@ -1,11 +1,11 @@
 "use client";
 
 import { ChevronRight, Loader2, MessageSquarePlus, Pin } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import { formatDue } from "@/lib/review-sla";
 import type { ChatSession } from "@/lib/chat/chatModel";
 import type { ListStatus } from "@/stores/chatStore";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
   sessions: readonly ChatSession[];
@@ -27,8 +27,7 @@ const ROW =
  * looking broken.
  */
 export default function ChatThreadList({ sessions, status, now, onOpen, onNew, onReload }: Props) {
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   const language = useI18nStore((s) => s.language);
 
   let body: React.ReactNode;

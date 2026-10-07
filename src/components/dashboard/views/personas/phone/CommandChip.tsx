@@ -1,8 +1,8 @@
 "use client";
 
 import { Check, Loader2, Send, TriangleAlert } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import type { CommandStatus, InflightCommand } from "@/lib/commands/commandReducer";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 const TONE: Record<CommandStatus, string> = {
   pending: "border-brand-cyan/30 bg-brand-cyan/10 text-brand-cyan",
@@ -26,8 +26,7 @@ function reasonText(error: string | null): string {
  * "Your computer didn't answer". Announced politely as it changes.
  */
 export default function CommandChip({ command }: { command: InflightCommand }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.command;
+  const copy = mobileCopy.command;
   const { status } = command;
   const label =
     status === "failed"

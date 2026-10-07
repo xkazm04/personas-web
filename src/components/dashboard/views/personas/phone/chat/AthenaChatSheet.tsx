@@ -2,10 +2,10 @@
 
 import { ChevronRight, Sparkles } from "lucide-react";
 import BottomSheet from "@/components/primitives/BottomSheet";
-import { useTranslation } from "@/i18n/useTranslation";
 import { ATHENA_PERSONA_ID } from "@/lib/chat/chatModel";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
 import ChatPanel from "./ChatPanel";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 /** The sheet around the panel: handle, title row, bottom padding. */
 const SHEET_CHROME_PX = 110;
@@ -16,8 +16,7 @@ const SHEET_CHROME_PX = 110;
  * its chat.
  */
 export function AthenaRow({ onOpen }: { onOpen: () => void }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   return (
     <div data-athena-row className="rounded-2xl border border-glass bg-white/[0.02] p-3">
       <button
@@ -45,8 +44,7 @@ export function AthenaRow({ onOpen }: { onOpen: () => void }) {
 
 /** Athena's chat in a bottom sheet: her threads, a transcript, the composer. */
 export default function AthenaChatSheet({ open, reach, onClose }: { open: boolean; reach: SyncReachability; onClose: () => void }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.chat;
+  const copy = mobileCopy.chat;
   return (
     <BottomSheet open={open} onClose={onClose} title={copy.athenaName} keyboardSafe>
       <ChatPanel

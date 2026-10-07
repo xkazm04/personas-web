@@ -5,12 +5,12 @@ import { useShallow } from "zustand/react/shallow";
 import { Loader2, Smartphone } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import { fadeUp } from "@/lib/animations";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
 import { useControllerStore, type ControllerPhase } from "@/stores/controllerStore";
 import { useDeviceStore } from "@/stores/deviceStore";
 import { parsePairFragment, type PairFragment } from "@/lib/commands/pairing";
 import { newestDevice } from "@/lib/sync/reachability";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 const IS_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
 
@@ -33,8 +33,7 @@ function takePairFragment() {
  * and then shows the phase the desktop answers with. Live plane only.
  */
 export function PhoneControlCard() {
-  const { t } = useTranslation();
-  const copy = t.mobile.pairing;
+  const copy = mobileCopy.pairing;
   const { isDemo, isAuthenticated } = useAuthStore(useShallow((s) => ({ isDemo: s.isDemo, isAuthenticated: s.isAuthenticated })));
   const live = IS_SUPABASE && isAuthenticated && !isDemo;
   const { phase, error } = useControllerStore(useShallow((s) => ({ phase: s.phase, error: s.error })));

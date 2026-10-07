@@ -45,7 +45,7 @@ The desktop Notepad keeps a short list of goals (at most 10 in a working slot) p
 ## Data & state
 - **Table:** `synced_notes` (id, device_id, project_name, title, body_md, status, order_index, dispatch_target, result_summary, open_reviews, unread_comments, published/started/completed/created/updated_at, synced_at). The desktop masks secret-looking tokens and caps the body at 16 KB before upload. Not synced: archived notes, thread bodies, `root_path`, session/dispatch ids, raw `result_json`.
 - **Store:** `notesStore` (`notes`, `loading`, `loaded`, `error`, `fetchedAt`). The sheet's "Updated 3 hours ago" is judged against `fetchedAt` (React 19 purity: no clock read in render).
-- **i18n:** the English-only pending `t.mobile.notes` namespace (PLAN M4), including the nav label (`navLabel` in `DashboardNavigation.tsx` resolves `PendingNavLabelKey` there). It is translated with the rest of `mobile` before launch (spec M10).
+- **i18n:** the English-only pending `mobileCopy.notes` namespace (PLAN M4; `src/i18n/pending/mobile.ts`, off the shared bundle per M22), including the nav label (`navLabel` in `DashboardNavigation.tsx` resolves `PendingNavLabelKey` there). It is translated with the rest of `mobile` before launch (spec M10).
 
 ## Integration points
 - **Nav:** rail section after Personas (desktop); bottom-bar slot 3 (phone). The bar is now a chosen set (`PHONE_BAR_VIEWS`), not "the first five menu entries"; Mission Control moved under More on phones.

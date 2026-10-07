@@ -1,14 +1,13 @@
-import { useTranslation } from "@/i18n/useTranslation";
 import type { SyncedNote } from "@/lib/notes/notesModel";
 import RailGlyph from "./RailGlyph";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 export const REVIEW_PILL = "rounded-full border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-sm font-medium text-amber-300";
 export const UNREAD_PILL = "rounded-full border border-cyan-500/25 bg-cyan-500/10 px-2 py-0.5 text-sm font-medium text-cyan-300";
 
 /** One goal: title, its status on the rail, and what waits for the operator. Tapping opens the body sheet. */
 export default function NoteCard({ note, onOpen }: { note: SyncedNote; onOpen: (id: string) => void }) {
-  const { t } = useTranslation();
-  const copy = t.mobile.notes;
+  const copy = mobileCopy.notes;
   return (
     <li>
       <button

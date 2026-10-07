@@ -2,20 +2,19 @@
 
 import { useState } from "react";
 import { Download, KeyRound, MonitorOff } from "lucide-react";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import { DashLink } from "@/components/dashboard/spa/navigate";
 import { browserShareCapabilities, handoffUrl, shareOrCopy, type ShareOutcome } from "@/components/mobile-landing/shared/handoff";
 import { formatDue } from "@/lib/review-sla";
 import { lastSeenMs, showsDownloadCta } from "@/lib/sync/reachability";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 const CARD = "rounded-2xl border p-4";
 
 /** "Send the download to my computer": the phone cannot install the app, so it hands the link over (PLAN M8). */
 function DownloadHandoff() {
-  const { t } = useTranslation();
-  const copy = t.mobile.reach;
+  const copy = mobileCopy.reach;
   const [outcome, setOutcome] = useState<ShareOutcome | null>(null);
   const [url, setUrl] = useState("");
 
@@ -49,9 +48,8 @@ function DownloadHandoff() {
  * online but unpaired browser is pointed at pairing; online shows nothing.
  */
 export default function ReachabilityNotice({ reach }: { reach: SyncReachability }) {
-  const { t } = useTranslation();
   const language = useI18nStore((s) => s.language);
-  const copy = t.mobile.reach;
+  const copy = mobileCopy.reach;
   const { tier, device, now } = reach;
 
   if (tier === "offline") {

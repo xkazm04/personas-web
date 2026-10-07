@@ -1,9 +1,9 @@
 import { MarkdownReport } from "@/components/dashboard/MarkdownReport";
-import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
 import { formatDue } from "@/lib/review-sla";
 import { railPosition, type SyncedNote } from "@/lib/notes/notesModel";
 import { REVIEW_PILL, UNREAD_PILL } from "./NoteCard";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 const LABEL = "text-sm font-medium uppercase tracking-wider text-muted-dark";
 
@@ -13,9 +13,8 @@ const LABEL = "text-sm font-medium uppercase tracking-wider text-muted-dark";
  * own renderer: React elements only, no HTML injection). Read-only (v1).
  */
 export default function NoteDetail({ note, now }: { note: SyncedNote; now: number }) {
-  const { t } = useTranslation();
   const language = useI18nStore((s) => s.language);
-  const copy = t.mobile.notes;
+  const copy = mobileCopy.notes;
   const { rail, steps, index } = railPosition(note.status);
   const updated = Date.parse(note.updatedAt);
 

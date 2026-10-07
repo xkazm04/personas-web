@@ -3,7 +3,6 @@
 import { useId, useMemo, useState } from "react";
 import { Play, Square } from "lucide-react";
 import BottomSheet from "@/components/primitives/BottomSheet";
-import { useTranslation } from "@/i18n/useTranslation";
 import { usePersona } from "@/stores/personaStore";
 import { useCommandStore } from "@/stores/commandStore";
 import { useExecutionStore } from "@/stores/executionStore";
@@ -19,6 +18,7 @@ import {
 import { actionsEnabled } from "@/lib/sync/reachability";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
 import { sendCancel, sendRun } from "./personaActions";
+import { mobileCopy } from "@/i18n/pending/mobile";
 
 interface Props {
   open: boolean;
@@ -38,8 +38,7 @@ const ITEM =
  * plane like Pause, so the row's chip follows them; the sheet closes on send.
  */
 export default function PersonaActionsSheet({ open, personaId, reach, onClose }: Props) {
-  const { t } = useTranslation();
-  const copy = t.mobile.personas;
+  const copy = mobileCopy.personas;
   const promptId = useId();
   const hintId = useId();
   const persona = usePersona(personaId) ?? null;
