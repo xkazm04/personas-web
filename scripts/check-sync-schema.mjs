@@ -3,7 +3,8 @@
  * Read-only probe for the desktop sync schema (scripts/setup-sync-db.sql).
  *
  * Expected tables are parsed from every `create table if not exists public.<name>`
- * in the SQL, so this cannot drift from it. Runs SELECTs against the catalog
+ * in the SQL, so this cannot drift from it. The triggers on pending_commands
+ * are parsed from `create trigger` the same way. Runs SELECTs against the catalog
  * (and `count(*)` on the other public tables) and prints names and counts only,
  * never row contents.
  *
@@ -37,6 +38,13 @@ const expected = [
   ),
 ];
 
+// Expected triggers, parsed the same way: `create trigger <name> ... on public.<table>`.
+const expectedTriggers = [
+  ...sql.matchAll(/create\s+trigger\s+([a-z_][a-z0-9_]*)[^;]*?\son\s+public\.([a-z_][a-z0-9_]*)/gi),
+]
+  .map((m) => ({ name: m[1].toLowerCase(), table: m[2].toLowerCase() }))
+  .filter((t) => t.table === "pending_commands");
+
 const quoteIdent = (name) => `"${name.replace(/"/g, '""')}"`;
 
 const client = new pg.Client({
@@ -67,6 +75,21 @@ async function main() {
         if (!rls) ok = false;
         console.log(`  ${name}: present, rls ${rls ? "on" : "OFF"}`);
       }
+    }
+
+    const trig = await client.query(
+      `select t.tgname as name, c.relname as tbl
+         from pg_trigger t
+         join pg_class c on c.oid = t.tgrelid
+         join pg_namespace n on n.oid = c.relnamespace
+        where n.nspname = 'public' and not t.tgisinternal`,
+    );
+    const haveTriggers = new Set(trig.rows.map((r) => `${r.tbl}.${r.name}`));
+    console.log("Expected triggers on pending_commands:");
+    for (const t of expectedTriggers) {
+      const present = haveTriggers.has(`${t.table}.${t.name}`);
+      if (!present) ok = false;
+      console.log(`  ${t.name}: ${present ? "present" : "missing"}`);
     }
 
     console.log("Other public base tables (exact row counts):");

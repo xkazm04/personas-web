@@ -415,6 +415,30 @@ drop trigger if exists trg_pending_commands_insert_guard on public.pending_comma
 create trigger trg_pending_commands_insert_guard before insert on public.pending_commands
   for each row execute function public.pending_commands_insert_guard();
 
+-- Replay guard (security scan 5e21d618, finding 1 residual). RLS is one
+-- owner_all rule, so any holder of the user's JWT may UPDATE a row: a finished
+-- signed command could be set back to 'pending' and, inside its envelope
+-- window, run again after a desktop restart (the desktop's replay ledger is
+-- process memory). A command never returns to pending and a finished one is
+-- final. Same-state writes (result, updated_at ...) pass. Legit writers: the
+-- desktop claims pending -> executing and resolves pending|executing ->
+-- completed|failed|rejected|expired; the web expires pending -> expired;
+-- 'approved' stays for the legacy flow. None of them is refused.
+create or replace function public.pending_commands_update_guard() returns trigger language plpgsql as $$
+begin
+  if new.status = old.status then return new; end if;
+  if new.status = 'pending' then
+    raise exception 'pending_commands: a command never returns to pending';
+  end if;
+  if old.status in ('completed','failed','rejected','expired') then
+    raise exception 'pending_commands: a % command is final', old.status;
+  end if;
+  return new;
+end $$;
+drop trigger if exists trg_pending_commands_update_guard on public.pending_commands;
+create trigger trg_pending_commands_update_guard before update on public.pending_commands
+  for each row execute function public.pending_commands_update_guard();
+
 -- ── command_controllers: phones paired to a desktop ──────────────────
 -- Pairing ceremony: the desktop shows a QR of
 -- /dashboard/settings#pair=<pairing_id>.<secret>; the phone generates its key
