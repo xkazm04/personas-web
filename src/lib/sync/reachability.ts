@@ -141,7 +141,8 @@ export function actionsEnabled(tier: ReachabilityTier): boolean {
  * mirror, the demo) a verdict is a `review_decide` command, so it follows the
  * online gate like the persona actions (null = not judged yet: no). The
  * orchestrator plane writes the verdict itself and has no gate. The desktop
- * plane cannot take a verdict at all (`desktopUnsupported`), so it is off there.
+ * plane cannot take a verdict at all (`desktopUnsupported`), so it is off there
+ * in every tier, whatever the health.
  */
 export function verdictsEnabled(
   tier: ReachabilityTier | null,

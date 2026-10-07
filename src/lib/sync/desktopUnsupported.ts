@@ -19,14 +19,18 @@ export const DESKTOP_UNSUPPORTED_ACTIONS = ["pause", "resume", "chatSend", "revi
 export type DesktopUnsupportedAction = (typeof DESKTOP_UNSUPPORTED_ACTIONS)[number];
 
 /**
- * Is this action explicitly unsupported right now? Only the online desktop
- * plane qualifies: offline is already blocked by its own gate, and every other
- * plane serves the action (or gates it) as before.
+ * Is this action explicitly unsupported right now? On the desktop plane,
+ * `pause`, `resume` and `chatSend` qualify only while online (offline is already
+ * blocked by its own gate). `reviewVerdict` qualifies in every tier, null
+ * included: `PUT /api/events/:id` is `not_on_desktop` whatever the health. Every
+ * other plane serves the action (or gates it) as before.
  */
 export function desktopUnsupported(
   action: DesktopUnsupportedAction,
   tier: ReachabilityTier | null,
   desktopPlane: boolean,
 ): boolean {
-  return desktopPlane && tier === "online" && DESKTOP_UNSUPPORTED_ACTIONS.includes(action);
+  if (!desktopPlane) return false;
+  if (action === "reviewVerdict") return true;
+  return tier === "online" && DESKTOP_UNSUPPORTED_ACTIONS.includes(action);
 }

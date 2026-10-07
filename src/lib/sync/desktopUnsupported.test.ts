@@ -78,18 +78,25 @@ describe("DESKTOP_UNSUPPORTED_ACTIONS is pinned to the code", () => {
 describe("desktopUnsupported", () => {
   const tiers: ReachabilityTier[] = ["demo", "no-account", "never-synced", "offline", "online-unpaired", "online"];
 
-  it("is true only for every listed action on the online desktop plane", () => {
-    for (const action of DESKTOP_UNSUPPORTED_ACTIONS) {
+  it("pause, resume and chatSend are unsupported only on the online desktop plane", () => {
+    for (const action of ["pause", "resume", "chatSend"] as const) {
       expect(tiers.filter((t) => desktopUnsupported(action, t, true))).toEqual(["online"]);
       expect(tiers.some((t) => desktopUnsupported(action, t, false))).toBe(false);
       expect(desktopUnsupported(action, null, true)).toBe(false);
     }
   });
 
-  it("turns review verdicts off on the online desktop plane and leaves the rest as before", () => {
+  it("reviewVerdict is unsupported in every tier on the desktop plane, and nowhere else", () => {
+    expect(tiers.every((t) => desktopUnsupported("reviewVerdict", t, true))).toBe(true);
+    expect(desktopUnsupported("reviewVerdict", null, true)).toBe(true);
+    expect(tiers.some((t) => desktopUnsupported("reviewVerdict", t, false))).toBe(false);
+    expect(desktopUnsupported("reviewVerdict", null, false)).toBe(false);
+  });
+
+  it("turns review verdicts off on the desktop plane in every tier and leaves the rest as before", () => {
     expect(verdictsEnabled("online", false, true)).toBe(false);
-    expect(verdictsEnabled("offline", false, true)).toBe(true);
-    expect(verdictsEnabled(null, false, true)).toBe(true);
+    expect(verdictsEnabled("offline", false, true)).toBe(false);
+    expect(verdictsEnabled(null, false, true)).toBe(false);
     expect(verdictsEnabled("online", false)).toBe(true);
     expect(verdictsEnabled("online", true)).toBe(true);
   });
