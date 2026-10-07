@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import useSWR from "swr";
 import CompareToggle from "@/components/dashboard/CompareToggle";
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
+import { isNotServed } from "@/components/dashboard/views/home/mission/readings";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useFocusParam } from "@/hooks/useFocusParam";
 import { fadeUp } from "@/lib/animations";
@@ -83,6 +85,9 @@ export default function PerformanceView() {
       </div>
     );
   }
+
+  // The desktop plane does not serve this read: say so instead of an error over empty charts.
+  if (isNotServed(error) && !metrics) return <DesktopUnsupportedNote />;
 
   return (
     <div className="relative">

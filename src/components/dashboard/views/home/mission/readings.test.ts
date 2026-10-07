@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "@/lib/api-error";
-import { fromSwr, gradeOf, isNotServed, judge, openAlertValue, queueReading, successPercent } from "./readings";
+import {
+  fromSwr,
+  gradeOf,
+  instrumentsReading,
+  isNotServed,
+  judge,
+  openAlertValue,
+  queueReading,
+  sourceOf,
+  successPercent,
+  type SourceState,
+} from "./readings";
 
 describe("queueReading", () => {
   const extras = { alerts: 0, memory: 0, reports: 0 };
@@ -104,5 +115,53 @@ describe("not-served reads", () => {
     expect(openAlertValue(undefined, true)).toBeNull();
     expect(openAlertValue([{ status: "open" }, { status: "resolved" }, { status: "open" }], false)).toBe(2);
     expect(openAlertValue([], false)).toBe(0);
+  });
+});
+
+describe("sourceOf", () => {
+  it("reads a 501 as unserved with no error text", () => {
+    expect(sourceOf("observability", false, new ApiError(501, "not on desktop"))).toEqual({
+      key: "observability",
+      status: "unserved",
+      error: null,
+    });
+  });
+
+  it("reads any other error as failed with its message", () => {
+    expect(sourceOf("healing", false, new ApiError(500, "boom"))).toMatchObject({ status: "failed", error: expect.stringContaining("boom") });
+  });
+
+  it("is ok when settled and pending when not", () => {
+    expect(sourceOf("routines", true, undefined)).toEqual({ key: "routines", status: "ok", error: null });
+    expect(sourceOf("routines", false, undefined)).toEqual({ key: "routines", status: "pending", error: null });
+  });
+});
+
+describe("instrumentsReading", () => {
+  const src = (...statuses: SourceState["status"][]): SourceState[] =>
+    statuses.map((status, i) => ({
+      key: (["observability", "healing", "reviews", "routines"] as const)[i],
+      status,
+      error: null,
+    }));
+
+  it("is pending while any source is pending", () => {
+    expect(instrumentsReading(src("ok", "pending", "ok", "unserved"))).toEqual({ status: "pending" });
+  });
+
+  it("counts every source when all are served", () => {
+    expect(instrumentsReading(src("ok", "ok", "ok", "ok"))).toEqual({ status: "ready", value: { ok: 4, total: 4 } });
+    expect(instrumentsReading(src("ok", "ok", "ok", "failed"))).toEqual({ status: "ready", value: { ok: 3, total: 4 } });
+  });
+
+  it("leaves unserved sources out of ok and total", () => {
+    expect(instrumentsReading(src("ok", "unserved", "ok", "unserved"))).toEqual({
+      status: "ready",
+      value: { ok: 2, total: 2 },
+    });
+  });
+
+  it("is unmeasured when no source is served", () => {
+    expect(instrumentsReading(src("unserved", "unserved", "unserved", "unserved"))).toEqual({ status: "unmeasured" });
   });
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { isNotServed } from "@/components/dashboard/views/home/mission/readings";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
@@ -67,7 +68,8 @@ export function useSparklines(): SparklinesResult {
         setError(null);
       } catch (err) {
         if (cancelled) return;
-        captureExceptionScrubbed(err, { tags: { scope: "useSparklines" } });
+        // A 501 means the plane does not serve this read; it is not an error to report.
+        if (!isNotServed(err)) captureExceptionScrubbed(err, { tags: { scope: "useSparklines" } });
         setError(
           err instanceof Error ? err.message : "Failed to load sparkline data",
         );

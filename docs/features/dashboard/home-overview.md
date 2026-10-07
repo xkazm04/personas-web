@@ -13,7 +13,7 @@ One screen answers *is the fleet fine, and if not, where*. Eight cells in a 4×2
 | 5 | Spend | Is spend behaving? | any cost spike → watch | $ total · spikes, or $ per day |
 | 6 | Autonomy | What runs without you? | nothing scheduled → watch | scheduled · next run in |
 | 7 | Vault | Are credentials sound? | an access anomaly → needs you, overdue rotation → watch | overdue + anomalies · overdue / anomalies / events |
-| 8 | Instruments | Is this page up to date? | a source failed → watch | ok/total sources |
+| 8 | Instruments | Is this page up to date? | a served source failed → watch; not-served sources are left out | ok/total served sources |
 
 Verdicts are `pending` (measuring), `failed` (unavailable), `unmeasured`, `ok` (steady), `watch`, `yours` (waiting on you), `act` (needs you). Only watch / yours / act **light** a cell (a tint and ring in the verdict colour); a steady cell stays quiet. Only `act` pulses, and never under reduced motion.
 
@@ -21,7 +21,7 @@ Clicking a cell, or pressing **1–8**, opens layer 2: a rail of all eight on th
 
 Layer-2 evidence reuses the dashboard's cards: Outcomes → Traffic & Errors + execution heatmap; Agents → health digest + top performers; Waiting on you → triage pane + memory actions + approved work; Self-healing → fleet recommendation + healing issues; Spend → cost by day (spike days in warning colour); Autonomy → upcoming routines + fleet sessions; Vault → vault changes + rotation overview; Instruments → status ticker + per-source status.
 
-On the desktop plane the review list is not served (`reviewStore.listNotServed`), so the Mission queue reads "not measured" (`queueReading` in `readings.ts`) and Triage shows the desktop note (`triageEmptyKind` in `useTriageQueue.ts`) instead of an all-clear. Demo sessions are unchanged. The observability reads (`GET /api/observability`) are not served on the desktop plane either, so the outcomes, recovery and spend dims read "not measured" (`fromSwr` in `readings.ts`) and the Status Ticker shows no alerts item rather than an all-clear (`useOpenAlertCount` returns `null` for unknown).
+On the desktop plane the review list is not served (`reviewStore.listNotServed`), so the Mission queue reads "not measured" (`queueReading` in `readings.ts`) and Triage shows the desktop note (`triageEmptyKind` in `useTriageQueue.ts`) instead of an all-clear. Demo sessions are unchanged. The observability reads (`GET /api/observability`) are not served on the desktop plane either, so the outcomes, recovery and spend dims read "not measured" (`fromSwr` in `readings.ts`) and the Status Ticker shows no alerts item rather than an all-clear (`useOpenAlertCount` returns `null` for unknown). Instruments lists a not-served source (observability, healing or reviews: a 501, or `listNotServed` for reviews) as "Not measured" (`sourceOf` in `readings.ts`, status `unserved`, no error text) and leaves it out of ok/total (`instrumentsReading`); when no source is served, Instruments reads "not measured".
 
 ## How it works
 - **View** `src/components/dashboard/views/home/index.tsx`: header (title, greeting, the fixed 14-day window note, tour launcher), wall or detail by `useSearchParams().get("dim")`, `useWallKeys` (document keydown; ignored in inputs, dialogs and with modifiers) and `useWallFocus`. Opening from the wall is a `pushState`; moving along the rail is a `replaceState`, so Back closes the detail instead of replaying the rail.

@@ -1,10 +1,10 @@
 "use client";
 
-import { CircleAlert, CircleCheck, CircleDashed, PauseCircle } from "lucide-react";
+import { CircleAlert, CircleCheck, CircleDashed, CircleMinus, PauseCircle } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { detectCostAnomalies } from "@/lib/observabilitySeries";
 import type { DailyMetric, HealthIssue } from "@/lib/types";
-import type { SourceState } from "./useMissionReadings";
+import type { SourceState } from "./readings";
 
 const PANEL = "rounded-2xl border border-glass bg-white/[0.02] p-5";
 const TITLE = "text-xs font-semibold uppercase tracking-[0.2em] text-muted-dark";
@@ -101,13 +101,22 @@ export function CostByDay({ daily }: { daily: DailyMetric[] }) {
   );
 }
 
-const SOURCE_ICON = { pending: CircleDashed, ok: CircleCheck, failed: CircleAlert } as const;
-const SOURCE_TONE = { pending: "text-muted-dark", ok: "text-status-success", failed: "text-status-error" } as const;
+const SOURCE_ICON = { pending: CircleDashed, ok: CircleCheck, unserved: CircleMinus, failed: CircleAlert } as const;
+const SOURCE_TONE = {
+  pending: "text-muted-dark",
+  ok: "text-status-success",
+  unserved: "text-muted-dark",
+  failed: "text-status-error",
+} as const;
 
 /** Instruments: each source this page reads, and whether it answered. */
 export function SourcesList({ sources }: { sources: SourceState[] }) {
   const { t } = useTranslation();
   const copy = t.dashboard.home.mission.detail;
+  const statusLabel = {
+    ...copy.sourceStatus,
+    unserved: t.dashboard.home.mission.verdicts.unmeasured,
+  };
   return (
     <section className={PANEL}>
       <h3 className={TITLE}>{copy.sourcesTitle}</h3>
@@ -120,7 +129,7 @@ export function SourcesList({ sources }: { sources: SourceState[] }) {
               <span className="flex-1 text-sm text-foreground">{copy.sources[source.key]}</span>
               {source.error && <span className="truncate text-sm text-muted">{source.error}</span>}
               <span className={`text-xs font-semibold uppercase tracking-wider ${SOURCE_TONE[source.status]}`}>
-                {copy.sourceStatus[source.status]}
+                {statusLabel[source.status]}
               </span>
             </li>
           );

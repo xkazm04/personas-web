@@ -4,6 +4,8 @@ import { useMemo } from "react";
 import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
+import { isNotServed } from "@/components/dashboard/views/home/mission/readings";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
@@ -126,6 +128,9 @@ export default function UsageView() {
       </div>
     );
   }
+
+  // The desktop plane does not serve this read: say so instead of an error over empty charts.
+  if (isNotServed(error) && !data) return <DesktopUnsupportedNote />;
 
   return (
     <div>

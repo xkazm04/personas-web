@@ -18,7 +18,19 @@ import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { effectiveNextRunMs } from "../home-page/relativeLabels";
 import { useUpcomingRoutines } from "../home-page/useUpcomingRoutines";
-import { fromSwr, gradeOf, queueReading, successPercent, type MissionReadings, type Reading } from "./readings";
+import {
+  fromSwr,
+  gradeOf,
+  instrumentsReading,
+  queueReading,
+  sourceOf,
+  successPercent,
+  type MissionReadings,
+  type Reading,
+  type SourceState,
+} from "./readings";
+
+export type { SourceKey, SourceState } from "./readings";
 
 /** z-score above which a day's cost counts as a spike (matches Observability). */
 const COST_SPIKE_Z = 2;
@@ -28,14 +40,6 @@ const SWR_OPTIONS = {
   revalidateOnReconnect: false,
   dedupingInterval: 60_000,
 } as const;
-
-export type SourceKey = "observability" | "healing" | "reviews" | "routines";
-
-export interface SourceState {
-  key: SourceKey;
-  status: "pending" | "ok" | "failed";
-  error: string | null;
-}
 
 function outcomesOf(daily: DailyMetric[]) {
   const runs = daily.reduce((sum, day) => sum + day.executions, 0);
@@ -170,24 +174,14 @@ export function useMissionReadings(now: number): {
   const sources: SourceState[] = [
     sourceOf("observability", dailyQuery.data !== undefined, dailyQuery.error),
     sourceOf("healing", issuesQuery.data !== undefined, issuesQuery.error),
-    { key: "reviews", status: reviewsReady ? "ok" : "pending", error: null },
+    {
+      key: "reviews",
+      status: !reviewsReady ? "pending" : listNotServed && !isDemo ? "unserved" : "ok",
+      error: null,
+    },
     sourceOf("routines", !routines.loading, routines.error),
   ];
-  if (sources.every((source) => source.status !== "pending")) {
-    readings.instruments = {
-      status: "ready",
-      value: { ok: sources.filter((source) => source.status === "ok").length, total: sources.length },
-    };
-  }
+  readings.instruments = instrumentsReading(sources);
 
   return { readings, sources, daily: dailyQuery.data ?? [], issues: issuesQuery.data ?? [] };
-}
-
-function errorText(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
-
-function sourceOf(key: SourceKey, settled: boolean, error: unknown): SourceState {
-  if (error) return { key, status: "failed", error: errorText(error) };
-  return { key, status: settled ? "ok" : "pending", error: null };
 }

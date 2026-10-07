@@ -183,6 +183,33 @@ export function fromSwr<T, V>(data: T | undefined, error: unknown, map: (data: T
   return { status: "ready", value: map(data) };
 }
 
+export type SourceKey = "observability" | "healing" | "reviews" | "routines";
+
+export interface SourceState {
+  key: SourceKey;
+  status: "pending" | "ok" | "unserved" | "failed";
+  error: string | null;
+}
+
+/** One source's state: a not-served read is unserved (no error text), any other error is failed. */
+export function sourceOf(key: SourceKey, settled: boolean, error: unknown): SourceState {
+  if (error) {
+    return isNotServed(error) ? { key, status: "unserved", error: null } : { key, status: "failed", error: errorText(error) };
+  }
+  return { key, status: settled ? "ok" : "pending", error: null };
+}
+
+/**
+ * Instruments from the per-source states. Sources the plane does not serve are
+ * left out of ok/total; with none served the reading is unmeasured.
+ */
+export function instrumentsReading(sources: SourceState[]): Reading<Instruments> {
+  if (sources.some((source) => source.status === "pending")) return { status: "pending" };
+  const served = sources.filter((source) => source.status !== "unserved");
+  if (served.length === 0) return { status: "unmeasured" };
+  return { status: "ready", value: { ok: served.filter((source) => source.status === "ok").length, total: served.length } };
+}
+
 /** Open-alert count from a health-issue read; null (unknown) until it has answered, and after any error. */
 export function openAlertValue(issues: { status: string }[] | undefined, failed: boolean): number | null {
   if (failed || issues === undefined) return null;
