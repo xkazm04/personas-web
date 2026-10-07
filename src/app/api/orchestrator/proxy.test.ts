@@ -134,4 +134,26 @@ describe("orchestrator proxy", () => {
     expect(upstream[0].url).toBe("https://orch.test/personas");
     expect(upstream[0].init?.headers).toMatchObject({ Authorization: "Bearer team-secret", "X-User-Token": "live-user-1" });
   });
+
+  it("serves a non-JSON upstream body as inert text, never as markup on this origin", async () => {
+    for (const type of ["text/html; charset=utf-8", "image/svg+xml", "application/xhtml+xml", "application/json-seq, text/html"]) {
+      upstreamReply = () => new Response("<script>alert(document.domain)</script>", { headers: { "Content-Type": type } });
+      const res = await call(GET, ["personas"], { "X-User-Token": "live-user-2" });
+      expect(res.headers.get("Content-Type")).toBe("text/plain; charset=utf-8");
+      expect(res.headers.get("X-Content-Type-Options")).toBe("nosniff");
+      expect(res.headers.get("Content-Security-Policy")).toContain("sandbox");
+      expect(await res.text()).toBe("<script>alert(document.domain)</script>");
+    }
+  });
+
+  it("passes JSON types through, and labels an untyped body JSON as before", async () => {
+    upstreamReply = () => new Response("{}", { status: 422, headers: { "Content-Type": "application/problem+json" } });
+    let res = await call(GET, ["personas"], { "X-User-Token": "live-user-3" });
+    expect(res.status).toBe(422);
+    expect(res.headers.get("Content-Type")).toBe("application/problem+json");
+    upstreamReply = () => new Response(new TextEncoder().encode('{"a":1}'));
+    res = await call(GET, ["personas"], { "X-User-Token": "live-user-3" });
+    expect(res.headers.get("Content-Type")).toBe("application/json");
+    expect(await res.json()).toEqual({ a: 1 });
+  });
 });

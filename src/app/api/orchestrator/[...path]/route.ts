@@ -20,6 +20,25 @@ function orchestratorKey(): string | undefined {
   return process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
 }
 
+const JSON_TYPE = /^application\/(?:[\w.+-]+\+)?json\s*(?:;|$)/i;
+
+/**
+ * Headers for a relayed answer. The proxy answers on the app's own origin, the
+ * one that holds a paired phone's signing key (PHASE2-SPEC 3.5), under a site
+ * CSP that allows inline script: an HTML or SVG body relayed here would run as
+ * this origin. The orchestrator is a JSON API, so only a JSON type passes
+ * through, anything else is served as inert text, and the answer may not be
+ * sniffed, framed or run.
+ */
+function relayHeaders(upstreamType: string | null): Record<string, string> {
+  const json = upstreamType === null || JSON_TYPE.test(upstreamType.trim());
+  return {
+    "Content-Type": json ? (upstreamType ?? "application/json") : "text/plain; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; sandbox",
+  };
+}
+
 async function proxy(req: NextRequest, path: string[]): Promise<Response> {
   let base: string;
   try {
@@ -76,9 +95,7 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
     upstream.status >= 200 && upstream.status < 600 ? upstream.status : 502;
   return new Response(respBody || null, {
     status: safeStatus,
-    headers: {
-      "Content-Type": upstream.headers.get("Content-Type") ?? "application/json",
-    },
+    headers: relayHeaders(upstream.headers.get("Content-Type")),
   });
 }
 
