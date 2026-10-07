@@ -105,6 +105,8 @@ interface EventState {
   subscriptionsLoading: boolean;
   /** The plane answered 501 not_on_desktop to the subscription read: an empty list means "not served", not "no subscriptions". */
   subscriptionsNotServed: boolean;
+  /** A subscription read has succeeded since the last reset; until then the count is unknown, not zero. */
+  subscriptionsRead: boolean;
   fetchSubscriptions: () => Promise<void>;
   createSubscription: (input: { personaId: string; eventType: string; sourceFilter?: string }) => Promise<void>;
   updateSubscription: (personaId: string, subId: string, body: { enabled?: boolean; eventType?: string; sourceFilter?: string | null }) => Promise<void>;
@@ -348,11 +350,12 @@ export const useEventStore = create<EventState>((set, get) => ({
   subscriptions: [],
   subscriptionsLoading: false,
   subscriptionsNotServed: false,
+  subscriptionsRead: false,
   fetchSubscriptions: async () => {
     set({ subscriptionsLoading: true });
     try {
       const subscriptions = await api.listAllSubscriptions();
-      set({ subscriptions, subscriptionsNotServed: false });
+      set({ subscriptions, subscriptionsNotServed: false, subscriptionsRead: true });
     } catch (err) {
       // 501 means this plane does not serve the read; any other failure leaves stale.
       if (err instanceof ApiError && err.status === 501) set({ subscriptionsNotServed: true });
@@ -395,6 +398,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       subscriptions: [],
       subscriptionsLoading: false,
       subscriptionsNotServed: false,
+      subscriptionsRead: false,
     });
   },
 }));

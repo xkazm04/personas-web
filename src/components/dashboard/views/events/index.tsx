@@ -16,11 +16,14 @@ import { useEventStore } from "@/stores/eventStore";
 
 import { EventsPageTabs, type PageTab } from "./events-page/EventsPageTabs";
 import { EventsVisualizationView } from "./events-page/EventsVisualizationView";
+import { tabCounts } from "./events-page/tabCounts";
 
 export default function EventsPage() {
   const { t } = useTranslation();
   const events = useEventStore((state) => state.events);
+  const listNotServed = useEventStore((state) => state.listNotServed);
   const subscriptions = useEventStore((state) => state.subscriptions);
+  const subscriptionsRead = useEventStore((state) => state.subscriptionsRead);
   const [pageTab, setPageTab] = useState<PageTab>("events");
   const [selectedNode, setSelectedNode] = useState<SwarmNode | null>(null);
   const [burstTrigger, setBurstTrigger] = useState(0);
@@ -49,8 +52,7 @@ export default function EventsPage() {
         </p>
         <EventsPageTabs
           activeTab={pageTab}
-          eventCount={events.length}
-          subscriptionCount={subscriptions.length}
+          {...tabCounts({ events, listNotServed, subscriptions, subscriptionsRead })}
           listLabel={t.eventsPage.title}
           labels={{
             events: t.eventsPage.tabEvents,

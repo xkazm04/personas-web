@@ -21,8 +21,8 @@ export function EventsPageTabs({
   onTabChange,
 }: {
   activeTab: PageTab;
-  eventCount: number;
-  subscriptionCount: number;
+  eventCount?: number;
+  subscriptionCount?: number;
   listLabel: string;
   labels: Record<PageTab, string>;
   onTabChange: (tab: PageTab) => void;

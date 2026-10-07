@@ -289,4 +289,25 @@ describe("behaviours the FSM must not regress", () => {
     useEventStore.getState().reset();
     expect(useEventStore.getState().subscriptionsNotServed).toBe(false);
   });
+
+  it("subscriptionsRead is false until a fetch succeeds, survives a 501 or 500, and reset clears it", async () => {
+    const { api } = await import("@/lib/api");
+    const { ApiError } = await import("@/lib/api-error");
+    const list = api.listAllSubscriptions as unknown as ReturnType<typeof vi.fn>;
+    expect(useEventStore.getState().subscriptionsRead).toBe(false);
+    list.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsRead).toBe(false);
+    list.mockResolvedValueOnce([]);
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsRead).toBe(true);
+    list.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsRead).toBe(true);
+    list.mockRejectedValueOnce(new ApiError(500, "boom"));
+    await useEventStore.getState().fetchSubscriptions();
+    expect(useEventStore.getState().subscriptionsRead).toBe(true);
+    useEventStore.getState().reset();
+    expect(useEventStore.getState().subscriptionsRead).toBe(false);
+  });
 });
