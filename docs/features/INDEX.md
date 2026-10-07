@@ -158,6 +158,7 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Surface |
 | --- | --- |
 | ✅ [orchestrator-client-mocks](infrastructure/orchestrator-client-mocks.md) | API client + demo mocks |
+| ✅ [desktop-web-paths](infrastructure/desktop-web-paths.md) | Read-only probe of every desktop<->web path (working / broken / blocked / retired) |
 | ✅ [authentication-session](infrastructure/authentication-session.md) | Demo auth + guards |
 | ✅ [supabase-client](infrastructure/supabase-client.md) | Optional anon-key client |
 | ✅ [error-monitoring-analytics](infrastructure/error-monitoring-analytics.md) | Sentry + analytics |
