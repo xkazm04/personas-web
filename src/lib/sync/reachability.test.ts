@@ -65,6 +65,28 @@ describe("reachability tiers (PHASE2-SPEC 4.3)", () => {
     expect(computeReachability(live({ supabasePlane: false, devices: [seenAgo("d1", 5)] })).tier).toBe("never-synced");
   });
 
+  it("the desktop plane is online on a fresh probe, with no devices and no pairing", () => {
+    const desk = live({ supabasePlane: false, desktopPlane: true, paired: false, devices: [] });
+    expect(computeReachability({ ...desk, desktopSeenAt: NOW - 5_000 })).toEqual({ tier: "online", device: null });
+    expect(computeReachability({ ...desk, desktopSeenAt: NOW - DEVICE_FRESH_MS })).toEqual({ tier: "online", device: null });
+  });
+
+  it("the desktop plane is offline once the last probe is older than the window, or never answered, and never shows the download CTA", () => {
+    const desk = live({ supabasePlane: false, desktopPlane: true, paired: false, devices: [] });
+    const stale = computeReachability({ ...desk, desktopSeenAt: NOW - DEVICE_FRESH_MS - 1 });
+    expect(stale).toEqual({ tier: "offline", device: null });
+    const never = computeReachability({ ...desk, desktopSeenAt: null });
+    expect(never).toEqual({ tier: "offline", device: null });
+    expect(showsDownloadCta(never.tier)).toBe(false);
+    expect(actionsEnabled(never.tier)).toBe(false);
+  });
+
+  it("the desktop plane still reads no-account when signed out, and demo wins", () => {
+    const desk = live({ supabasePlane: false, desktopPlane: true, desktopSeenAt: NOW });
+    expect(computeReachability({ ...desk, isAuthenticated: false }).tier).toBe("no-account");
+    expect(computeReachability({ ...desk, isDemo: true }).tier).toBe("demo");
+  });
+
   it("demo is demo whatever else is true, and its ?desktop= switch maps to offline / never-synced", () => {
     const demo = live({ isDemo: true, isAuthenticated: false, supabasePlane: false, paired: false, devices: [seenAgo("demo", 7 * 60)] });
     expect(computeReachability(demo).tier).toBe("demo");

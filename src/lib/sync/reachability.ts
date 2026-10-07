@@ -35,7 +35,8 @@ export interface SyncedDevice {
  *   blocked (nothing is queued, PLAN M12); no download CTA.
  * - `online-unpaired`: the desktop is reachable but this browser holds no
  *   active controller key, so it cannot sign a command.
- * - `online`: reachable and paired.
+ * - `online`: reachable and paired. On the desktop plane, reachable is enough:
+ *   there is no pairing and the tiers are only `online` / `offline`.
  */
 export type ReachabilityTier =
   | "demo"
@@ -53,6 +54,10 @@ export interface ReachabilityInput {
   isAuthenticated: boolean;
   /** The live plane is the desktop -> Supabase mirror (NEXT_PUBLIC_DATA_SOURCE=supabase). */
   supabasePlane: boolean;
+  /** The live plane is the desktop's management API (NEXT_PUBLIC_DATA_SOURCE=desktop). */
+  desktopPlane?: boolean;
+  /** Desktop plane: clock (ms) of the last health probe that answered; null = none yet. */
+  desktopSeenAt?: number | null;
   devices: readonly SyncedDevice[];
   /** This browser holds a controller key the desktop has activated. */
   paired: boolean;
@@ -108,6 +113,14 @@ export function computeReachability(input: ReachabilityInput): Reachability {
     return { tier: "demo", device: owner };
   }
   if (!input.isAuthenticated) return { tier: "no-account", device: null };
+  if (input.desktopPlane) {
+    // The desktop is installed by definition (no download CTA) and the proxy
+    // signs with the desktop API key, so the browser pairs nothing: the gate
+    // is the last answered health probe alone.
+    const seen = input.desktopSeenAt ?? null;
+    const fresh = seen !== null && now - seen <= DEVICE_FRESH_MS;
+    return { tier: fresh ? "online" : "offline", device: null };
+  }
   // The orchestrator plane has no heartbeat: from here the desktop cannot be reached.
   if (!input.supabasePlane || devices.length === 0 || owner === null) {
     return { tier: "never-synced", device: null };
