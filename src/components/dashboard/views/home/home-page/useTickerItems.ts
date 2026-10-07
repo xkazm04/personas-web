@@ -84,8 +84,13 @@ export function useTickerItems({
           tone: "cyan" as Tone,
         }]
       : []),
-    openAlerts > 0
-      ? { id: "alerts", icon: AlertTriangle, label: labels.tickerAlerts, value: `${openAlerts}`, tone: "rose" }
-      : { id: "alerts", icon: CheckCircle2, label: labels.tickerAlerts, value: labels.tickerAllClear, tone: "emerald" },
+    // null = unknown (in flight, or the plane does not serve it): no item, not an all-clear.
+    ...(openAlerts === null
+      ? []
+      : [
+          openAlerts > 0
+            ? { id: "alerts", icon: AlertTriangle, label: labels.tickerAlerts, value: `${openAlerts}`, tone: "rose" as Tone }
+            : { id: "alerts", icon: CheckCircle2, label: labels.tickerAlerts, value: labels.tickerAllClear, tone: "emerald" as Tone },
+        ]),
   ];
 }

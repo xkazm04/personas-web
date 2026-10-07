@@ -18,7 +18,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { effectiveNextRunMs } from "../home-page/relativeLabels";
 import { useUpcomingRoutines } from "../home-page/useUpcomingRoutines";
-import { gradeOf, queueReading, successPercent, type MissionReadings, type Reading } from "./readings";
+import { fromSwr, gradeOf, queueReading, successPercent, type MissionReadings, type Reading } from "./readings";
 
 /** z-score above which a day's cost counts as a spike (matches Observability). */
 const COST_SPIKE_Z = 2;
@@ -35,16 +35,6 @@ export interface SourceState {
   key: SourceKey;
   status: "pending" | "ok" | "failed";
   error: string | null;
-}
-
-function errorText(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
-}
-
-function fromSwr<T, V>(data: T | undefined, error: unknown, map: (data: T) => V): Reading<V> {
-  if (error) return { status: "failed", error: errorText(error) };
-  if (data === undefined) return { status: "pending" };
-  return { status: "ready", value: map(data) };
 }
 
 function outcomesOf(daily: DailyMetric[]) {
@@ -191,6 +181,10 @@ export function useMissionReadings(now: number): {
   }
 
   return { readings, sources, daily: dailyQuery.data ?? [], issues: issuesQuery.data ?? [] };
+}
+
+function errorText(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 function sourceOf(key: SourceKey, settled: boolean, error: unknown): SourceState {

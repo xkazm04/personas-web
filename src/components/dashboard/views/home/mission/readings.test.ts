@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { gradeOf, judge, queueReading, successPercent } from "./readings";
+import { ApiError } from "@/lib/api-error";
+import { fromSwr, gradeOf, isNotServed, judge, openAlertValue, queueReading, successPercent } from "./readings";
 
 describe("queueReading", () => {
   const extras = { alerts: 0, memory: 0, reports: 0 };
@@ -76,5 +77,32 @@ describe("mission readings", () => {
     expect(gradeOf(80)).toBe("healthy");
     expect(gradeOf(79)).toBe("degraded");
     expect(gradeOf(59)).toBe("critical");
+  });
+});
+
+describe("not-served reads", () => {
+  const e501 = new ApiError(501, '{"error":"not_on_desktop"}');
+  const e500 = new ApiError(500, "boom");
+
+  it("isNotServed is true only for ApiError 501", () => {
+    expect(isNotServed(e501)).toBe(true);
+    expect(isNotServed(e500)).toBe(false);
+    expect(isNotServed(new Error("x"))).toBe(false);
+    expect(isNotServed(undefined)).toBe(false);
+  });
+
+  it("fromSwr maps each state", () => {
+    const map = (n: number) => n * 2;
+    expect(fromSwr(undefined, e501, map)).toEqual({ status: "unmeasured" });
+    expect(fromSwr(undefined, e500, map)).toEqual({ status: "failed", error: e500.message });
+    expect(fromSwr(undefined, undefined, map)).toEqual({ status: "pending" });
+    expect(fromSwr(2, undefined, map)).toEqual({ status: "ready", value: 4 });
+  });
+
+  it("openAlertValue is null unless a read succeeded", () => {
+    expect(openAlertValue(undefined, false)).toBeNull();
+    expect(openAlertValue(undefined, true)).toBeNull();
+    expect(openAlertValue([{ status: "open" }, { status: "resolved" }, { status: "open" }], false)).toBe(2);
+    expect(openAlertValue([], false)).toBe(0);
   });
 });

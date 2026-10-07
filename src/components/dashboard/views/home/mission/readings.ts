@@ -7,6 +7,8 @@
  * Pure: no React, no clock. The hook that fills these lives beside it.
  */
 
+import { ApiError } from "@/lib/api-error";
+
 export const DIMENSION_IDS = [
   "outcomes",
   "agents",
@@ -163,4 +165,26 @@ export function successPercent(completed: number, failed: number): number | null
 /** Agent grade from a 0-100 score, on the desktop's composite-health cut-offs. */
 export function gradeOf(score: number): "healthy" | "degraded" | "critical" {
   return score >= 80 ? "healthy" : score >= 60 ? "degraded" : "critical";
+}
+
+/** The plane answered 501: it does not serve this read (same rule as reviewStore and eventStore). */
+export function isNotServed(error: unknown): boolean {
+  return error instanceof ApiError && error.status === 501;
+}
+
+function errorText(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+/** One SWR query as a reading: a not-served read is unmeasured, any other error is failed. */
+export function fromSwr<T, V>(data: T | undefined, error: unknown, map: (data: T) => V): Reading<V> {
+  if (error) return isNotServed(error) ? { status: "unmeasured" } : { status: "failed", error: errorText(error) };
+  if (data === undefined) return { status: "pending" };
+  return { status: "ready", value: map(data) };
+}
+
+/** Open-alert count from a health-issue read; null (unknown) until it has answered, and after any error. */
+export function openAlertValue(issues: { status: string }[] | undefined, failed: boolean): number | null {
+  if (failed || issues === undefined) return null;
+  return issues.filter((issue) => issue.status === "open").length;
 }
