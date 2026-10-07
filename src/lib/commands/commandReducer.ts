@@ -94,12 +94,13 @@ export function openIds(map: InflightMap): string[] {
 /**
  * The newest management command for a persona (what its row's chip shows, and
  * what holds its actions while open), or null. `chat_send` is not one: a chat
- * turn shows its state in the transcript, and must not hold Pause.
+ * turn shows its state in the transcript, and must not hold Pause. Nor is
+ * `review_decide`: a verdict shows on its review (M20).
  */
 export function latestForPersona(map: InflightMap, personaId: string): InflightCommand | null {
   let best: InflightCommand | null = null;
   for (const c of Object.values(map)) {
-    if (c.verb === "chat_send") continue;
+    if (c.verb === "chat_send" || c.verb === "review_decide") continue;
     if (c.personaId === personaId && (best === null || c.requestedAt > best.requestedAt)) best = c;
   }
   return best;

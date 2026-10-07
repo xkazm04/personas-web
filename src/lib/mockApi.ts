@@ -38,6 +38,7 @@ import {
   type ValueRollup,
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
+import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import type { SyncedNote } from "./notes/notesModel";
 import type {
   ChatMessage,
@@ -226,6 +227,14 @@ export const mockApi: ApiClient = {
     };
     MOCK_EVENTS[idx] = updated;
     return { ...updated };
+  },
+
+  // A verdict is a `review_decide` to the scripted desktop (M20), which writes
+  // it back through `updateEvent` above, as a desktop's sync would.
+  decideReview: async (input: ReviewDecisionInput): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    const params = reviewDecideParams(input.reviewId, input.decision, input.notes);
+    return sendPersonaCommand("review_decide", input.personaId, { ...params }, DEMO_TARGET);
   },
 
   listSubscriptions: async (personaId: string): Promise<PersonaEventSubscription[]> => {

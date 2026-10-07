@@ -169,6 +169,8 @@ export interface ManualReviewItem extends WithPersonaInfo {
   resolvedAt: string | null;
   resolvedBy: string | null;
   escalatedAt: string | null;
+  /** The desktop that raised it (`synced_manual_reviews.device_id`), where the plane knows it: a verdict command goes there. */
+  deviceId?: string | null;
   /** True when the event payload failed JSON.parse or omitted/used an invalid
    *  severity. Such reviews are fail-loud escalated to "critical" so a
    *  malformed payload can never widen the SLA via the info default. */

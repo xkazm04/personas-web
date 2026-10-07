@@ -8,8 +8,11 @@
  * test against. Pure and isomorphic: no key, no clock, no DOM.
  */
 
-/** The v1 verbs a paired controller may send. The queue verbs stay desktop-approved and are not sent from here. */
-export type CommandVerb = "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send";
+/**
+ * The v1 verbs a paired controller may send (`review_decide`: PLAN M20, spec
+ * 1.6). The queue verbs stay desktop-approved and are not sent from here.
+ */
+export type CommandVerb = "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide";
 
 /** Commands never queue (PLAN M12): an envelope is valid for 60 s from `iat`. */
 export const COMMAND_TTL_MS = 60_000;

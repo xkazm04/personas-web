@@ -44,6 +44,12 @@ export interface SyncReachability extends Reachability {
   fallbackDeviceId: string | null;
   /** The tier for one persona, judged on the device that owns it. */
   tierFor: (ownerDeviceId: string | null | undefined) => Reachability;
+  /**
+   * Actions here are commands to the desktop (the demo's scripted desktop, or
+   * the live sync mirror), not the orchestrator's direct writes. Review
+   * verdicts follow the online gate only on a command plane (M20).
+   */
+  commandPlane: boolean;
 }
 
 /**
@@ -109,5 +115,5 @@ export function useSyncReachability(): SyncReachability {
 
   const overall = tierFor(null);
   const ready = !live || (devicesLoaded && phase !== "unknown" && phase !== "loading");
-  return { ...overall, ready, now, fallbackDeviceId: overall.device?.deviceId ?? null, tierFor };
+  return { ...overall, ready, now, fallbackDeviceId: overall.device?.deviceId ?? null, tierFor, commandPlane: isDemo || IS_SUPABASE };
 }

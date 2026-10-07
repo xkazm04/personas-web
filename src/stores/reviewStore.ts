@@ -15,7 +15,9 @@ import {
   applyConfirmed,
   countPending,
   overlay,
+  reconcileConfirmed,
   transition,
+  type ConfirmedMap,
   type LedgerBatch,
   type LedgerEffect,
   type LedgerEvent,
@@ -25,6 +27,7 @@ import {
 } from "@/lib/review-ledger";
 import { AUTO_APPROVE_NOTE, RESOLVED_BY_REVIEWER, RESOLVED_BY_SYSTEM } from "@/lib/review-display";
 import { DEFAULT_ESCALATION_POLICY, escalationDue, validateEscalationPolicy } from "@/lib/review-sla";
+import { reviewCommandOutcome } from "@/lib/commands/reviewDecide";
 
 export { DEFAULT_ESCALATION_POLICY };
 
@@ -56,6 +59,7 @@ function parseManualReview(
   let severity: ReviewSeverity = "critical";
   let reviewerNotes: string | null = null;
   let recordedResolver: string | null = null;
+  let deviceId: string | null = null;
   let parseError = false;
   try {
     const payload = JSON.parse(event.payload ?? "{}");
@@ -69,6 +73,8 @@ function parseManualReview(
     }
     reviewerNotes = payload.reviewerNotes ?? null;
     if (typeof payload.resolvedBy === "string" && payload.resolvedBy) recordedResolver = payload.resolvedBy;
+    // The sync mirror carries the desktop that raised the review (supabaseApi.reviewToEvent).
+    if (typeof payload.deviceId === "string" && payload.deviceId) deviceId = payload.deviceId;
   } catch {
     content = event.payload ?? "";
     parseError = true;
@@ -89,6 +95,7 @@ function parseManualReview(
     // recorded resolver was not given here, so it reads as the system's.
     resolvedBy: status !== "pending" ? (recordedResolver ?? RESOLVED_BY_SYSTEM) : null,
     escalatedAt: null,
+    deviceId,
     personaName: p?.name,
     personaIcon: p?.icon ?? undefined,
     personaColor: p?.color ?? undefined,
@@ -197,6 +204,10 @@ function saveEscalationEnabled(enabled: boolean): void {
 //      faster than the previous escalation pass won't re-enter overlap.
 const escalationsInFlight = new Set<string>();
 let escalationRunning = false;
+// A machine verdict that did not go through (no paired phone, desktop offline)
+// is not resent on every 30 s pass: each attempt would be another command.
+const ESCALATION_RETRY_MS = 5 * 60_000;
+const escalationRetryAt = new Map<string, number>();
 
 const ESCALATION_LOCK_NAME = "review-escalations";
 
@@ -228,16 +239,23 @@ async function withCrossTabLock<T>(
 const COMMIT_CONCURRENCY = 6;
 let windowTimer: { batchId: number; handle: ReturnType<typeof setTimeout> } | null = null;
 
-/**
- * The one verdict write. `resolvedBy` travels in the metadata with the notes,
- * so the next poll reads back who resolved the review (`parseManualReview`).
- */
-function writeVerdict(id: string, status: Verdict, resolvedBy: string, notes?: string) {
-  return api.updateEvent(id, {
-    status: status === "approved" ? "processed" : "failed",
-    metadata: JSON.stringify(notes ? { reviewerNotes: notes, resolvedBy } : { resolvedBy }),
-  });
+/** A verdict command that ended without applying (spec 2.3): its desktop reason. */
+class VerdictCommandError extends Error {
+  constructor(readonly reason: string) {
+    super(reason);
+    this.name = "VerdictCommandError";
+  }
 }
+
+/** Lazy and loaded once: commandStore loads the command planes on first use. */
+let commandStoreModule: Promise<typeof import("@/stores/commandStore")> | null = null;
+function loadCommandStore() {
+  commandStoreModule ??= import("@/stores/commandStore");
+  return commandStoreModule;
+}
+
+/** The fields of a review a verdict needs on every plane. */
+type VerdictTarget = Pick<ManualReviewItem, "id" | "personaId" | "deviceId">;
 
 /** The only place `reviews` and `pendingReviewCount` are derived. */
 function derive(baseReviews: ManualReviewItem[], ledger: LedgerState) {
@@ -273,6 +291,12 @@ interface ReviewState {
   lastResult: CommitResult | null;
   /** Last refused arm; shown on the open undo toast. */
   refusal: { reason: RefusalReason; batchId: number | null } | null;
+  /** On a command plane (M20): the `review_decide` each review's verdict was sent as, for its chip. */
+  reviewCommands: Record<string, string>;
+  /** Verdicts the plane confirmed in this tab, held over a lagging mirror (`reconcileConfirmed`). */
+  confirmed: ConfirmedMap;
+  /** The last machine verdict (escalation) that did not go through, shown, never swallowed. */
+  escalationFailure: { reviewId: string; reason: string } | null;
   escalationPolicy: EscalationPolicy;
   escalationEnabled: boolean;
   fetchReviews: () => Promise<void>;
@@ -309,8 +333,14 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       set((s) => {
         const drafts = { ...s.drafts };
         for (const id of okIds) delete drafts[id];
+        const at = Date.now();
+        const confirmed = { ...s.confirmed };
+        for (const id of okIds) {
+          confirmed[id] = { verdict: batch.verdict, resolvedBy: RESOLVED_BY_REVIEWER, notes: batch.notes[id] ?? null, at };
+        }
         return {
           drafts,
+          confirmed,
           commitProgress: s.commitProgress?.batchId === batch.batchId ? null : s.commitProgress,
           lastResult: failedIds.length
             ? { batchId: batch.batchId, total: batch.ids.length, successCount: okIds.length, failedIds, status: batch.verdict }
@@ -341,6 +371,33 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     }
   }
 
+  /**
+   * The one verdict write, on whichever plane `api` is: the orchestrator
+   * answers with the updated event (the write is done), a command plane (the
+   * live mirror, the demo's scripted desktop) with a `review_decide` to follow
+   * until it settles (M20). Throws when the verdict did not apply.
+   */
+  async function writeVerdict(review: VerdictTarget, status: Verdict, resolvedBy: string, notes?: string): Promise<void> {
+    const ack = await api.decideReview({
+      reviewId: review.id,
+      personaId: review.personaId,
+      deviceId: review.deviceId ?? null,
+      decision: status,
+      notes: notes?.trim() ? notes : null,
+      resolvedBy,
+    });
+    if (!("commandId" in ack)) return;
+    set((s) => ({ reviewCommands: { ...s.reviewCommands, [review.id]: ack.commandId } }));
+    const { settleCommand } = await loadCommandStore();
+    const outcome = reviewCommandOutcome(await settleCommand(ack.commandId));
+    if (!outcome.ok) throw new VerdictCommandError(outcome.reason);
+  }
+
+  /** The row a verdict is about; a row gone from the list still sends (the desktop answers `not_found`). */
+  function verdictTarget(id: string): VerdictTarget {
+    return get().baseReviews.find((r) => r.id === id) ?? { id, personaId: "", deviceId: null };
+  }
+
   async function commit(batch: LedgerBatch) {
     const { ids, batchId } = batch;
     const failed: string[] = [];
@@ -351,7 +408,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       while (cursor < ids.length) {
         const id = ids[cursor++];
         try {
-          await writeVerdict(id, batch.verdict, RESOLVED_BY_REVIEWER, batch.notes[id]);
+          await writeVerdict(verdictTarget(id), batch.verdict, RESOLVED_BY_REVIEWER, batch.notes[id]);
         } catch {
           failed.push(id);
         } finally {
@@ -376,6 +433,9 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     commitProgress: null,
     lastResult: null,
     refusal: null,
+    reviewCommands: {},
+    confirmed: {},
+    escalationFailure: null,
     escalationPolicy: DEFAULT_ESCALATION_POLICY,
     escalationEnabled: loadEscalationEnabled(),
     fetchReviews: async () => {
@@ -392,7 +452,10 @@ export const useReviewStore = create<ReviewState>((set, get) => {
           .map((e) => parseManualReview(e, personaMap))
           .filter((r): r is ManualReviewItem => r !== null);
         if (seq === reviewFetchSeq) {
-          set((s) => derive(reviews, s.ledger));
+          set((s) => {
+            const fresh = reconcileConfirmed(reviews, s.confirmed, Date.now());
+            return { ...derive(fresh.rows, s.ledger), confirmed: fresh.confirmed };
+          });
         }
       } catch {
         // leave stale
@@ -419,16 +482,18 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     dismissResult: () => set({ lastResult: null }),
     resolveReview: async (id, status, notes) => {
       // Only machine actors call this (escalation); the verdict is the system's.
-      await writeVerdict(id, status, RESOLVED_BY_SYSTEM, notes);
-      const resolvedAt = new Date().toISOString();
-      set((s) =>
-        derive(
+      await writeVerdict(verdictTarget(id), status, RESOLVED_BY_SYSTEM, notes);
+      const at = Date.now();
+      const resolvedAt = new Date(at).toISOString();
+      set((s) => ({
+        ...derive(
           s.baseReviews.map((r) =>
             r.id === id ? { ...r, status, resolvedAt, resolvedBy: RESOLVED_BY_SYSTEM, reviewerNotes: notes ?? r.reviewerNotes } : r,
           ),
           s.ledger,
         ),
-      );
+        confirmed: { ...s.confirmed, [id]: { verdict: status, resolvedBy: RESOLVED_BY_SYSTEM, notes: notes ?? null, at } },
+      }));
     },
     setEscalationPolicy: (next) => {
       // Same validator as the localStorage load: an SLA shorter than its
@@ -449,7 +514,17 @@ export const useReviewStore = create<ReviewState>((set, get) => {
       reviewFetchSeq++;
       // Preserve escalationPolicy/escalationEnabled — those are browser-level prefs,
       // not user data, and are also persisted in localStorage.
-      set({ ...derive([], get().ledger), reviewsLoading: false, drafts: {}, lastResult: null, refusal: null });
+      escalationRetryAt.clear();
+      set({
+        ...derive([], get().ledger),
+        reviewsLoading: false,
+        drafts: {},
+        lastResult: null,
+        refusal: null,
+        reviewCommands: {},
+        confirmed: {},
+        escalationFailure: null,
+      });
     },
   checkEscalations: async () => {
     if (escalationRunning) return;
@@ -468,6 +543,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
           // non-pending in the overlay, so a human verdict beats the machine.
           if (!escalationDue(review, escalationPolicy, now)) continue;
           if (escalationsInFlight.has(review.id)) continue;
+          if ((escalationRetryAt.get(review.id) ?? 0) > now) continue;
           const rule = escalationPolicy[review.severity];
 
           escalationsInFlight.add(review.id);
@@ -475,7 +551,18 @@ export const useReviewStore = create<ReviewState>((set, get) => {
             if (rule.action === "auto_approve") {
               // Awaited so the next iteration can't re-pick a still-pending row,
               // and so escalationsInFlight covers the whole API round-trip.
-              await resolveReview(review.id, "approved", AUTO_APPROVE_NOTE);
+              try {
+                await resolveReview(review.id, "approved", AUTO_APPROVE_NOTE);
+                escalationRetryAt.delete(review.id);
+                if (get().escalationFailure?.reviewId === review.id) set({ escalationFailure: null });
+              } catch (err) {
+                // A machine verdict that did not apply (on a command plane: no
+                // paired phone, the desktop offline or refusing) is shown, and
+                // retried only after a cool-down.
+                escalationRetryAt.set(review.id, Date.now() + ESCALATION_RETRY_MS);
+                const reason = err instanceof VerdictCommandError ? err.reason : err instanceof Error ? err.message : "unknown";
+                set({ escalationFailure: { reviewId: review.id, reason } });
+              }
             } else if (rule.action === "escalate") {
               const escalatedAt = new Date().toISOString();
               set((s) =>

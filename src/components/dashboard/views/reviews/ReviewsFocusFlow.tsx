@@ -12,14 +12,17 @@ import { FocusProgressHeader } from "./reviews-focus-flow/FocusProgressHeader";
 import { FocusReviewCard } from "./reviews-focus-flow/FocusReviewCard";
 import { ReviewUndoToast } from "./reviews-split-pane/ReviewsSplitPaneToasts";
 import { useReviewClock } from "./review-due";
+import type { ReviewGate } from "./useReviewGate";
 
 interface Props {
   onExit: () => void;
+  /** The online gate (M20); always open on the orchestrator plane. */
+  canDecide?: ReviewGate["canDecide"];
   /** The page's clock; /m/reviews passes none and the flow runs its own. */
   now?: number;
 }
 
-export default function ReviewsFocusFlow({ onExit, now: pageNow }: Props) {
+export default function ReviewsFocusFlow({ onExit, now: pageNow, canDecide }: Props) {
   const { t } = useTranslation();
   const reviews = useReviewStore((state) => state.reviews);
   const decide = useReviewStore((state) => state.decide);
@@ -62,8 +65,9 @@ export default function ReviewsFocusFlow({ onExit, now: pageNow }: Props) {
   // The card leaves the queue because the ledger's overlay makes it
   // non-pending, and returns if the verdict is undone or its write fails.
   // A second verdict inside the 5 s window commits the first (flush-then-arm).
+  const allowed = !canDecide || canDecide(current);
   function handleVerdict(verdict: "approved" | "rejected") {
-    if (!current) return;
+    if (!current || !allowed) return;
     const id = current.id;
     if (decide([id], verdict)) setDecided((prev) => new Set(prev).add(id));
   }
@@ -142,6 +146,7 @@ export default function ReviewsFocusFlow({ onExit, now: pageNow }: Props) {
             reject: t.reviewsPage.focus.reject,
             skip: t.reviewsPage.focus.skip,
           }}
+          decideDisabled={!allowed}
           onApprove={handleApprove}
           onReject={handleReject}
           onSkip={handleSkip}

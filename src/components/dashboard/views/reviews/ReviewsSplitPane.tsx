@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import FilterBar from "@/components/dashboard/FilterBar";
@@ -15,8 +15,9 @@ import { ReviewList } from "./reviews-split-pane/ReviewList";
 import { ReviewsBulkToolbar } from "./reviews-split-pane/ReviewsBulkToolbar";
 import { ReviewsSplitPaneToasts } from "./reviews-split-pane/ReviewsSplitPaneToasts";
 import { useReviewKeyboardShortcuts } from "./reviews-split-pane/useReviewKeyboardShortcuts";
+import type { ReviewGate } from "./useReviewGate";
 
-export default function ReviewsSplitPane({ now }: { now: number }) {
+export default function ReviewsSplitPane({ now, canDecide }: { now: number; canDecide: ReviewGate["canDecide"] }) {
   const { t } = useTranslation();
   const reviews = useReviewStore((s) => s.reviews);
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
@@ -63,13 +64,20 @@ export default function ReviewsSplitPane({ now }: { now: number }) {
   }, [selectedIdRaw, filtered]);
   const selectedReview = useMemo(() => filtered.find((r) => r.id === selectedId) ?? null, [filtered, selectedId]);
   const selectedIndex = useMemo(() => filtered.findIndex((r) => r.id === selectedId), [filtered, selectedId]);
+  // In live mode the selected review's desktop must be reachable (M20); bulk is judged on the newest desktop.
+  const selectedAllowed = canDecide(selectedReview);
+  const bulkAllowed = canDecide(null);
+  const gatedDecide = useCallback(
+    (ids: string[], verdict: "approved" | "rejected") => selectedAllowed && decide(ids, verdict),
+    [selectedAllowed, decide],
+  );
 
   useReviewKeyboardShortcuts({
     selectedIndex,
     filtered,
     selectedReview,
     setSelectedId,
-    decide,
+    decide: gatedDecide,
     bulkCount,
     clearSelection: bulk.clearSelection,
   });
@@ -100,7 +108,7 @@ export default function ReviewsSplitPane({ now }: { now: number }) {
           </div>
           <AnimatePresence>
             {bulk.pendingInFiltered.length > 0 && (
-              <ReviewsBulkToolbar bulkCount={bulkCount} pendingInFiltered={bulk.pendingInFiltered} bulkResolving={bulk.bulkResolving} clearSelection={bulk.clearSelection} selectAll={bulk.selectAll} handleBulkAction={bulk.handleBulkAction} />
+              <ReviewsBulkToolbar bulkCount={bulkCount} pendingInFiltered={bulk.pendingInFiltered} bulkResolving={bulk.bulkResolving} decideDisabled={!bulkAllowed} clearSelection={bulk.clearSelection} selectAll={bulk.selectAll} handleBulkAction={bulk.handleBulkAction} />
             )}
           </AnimatePresence>
           <ReviewList listRef={listRef} now={now} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
@@ -114,7 +122,7 @@ export default function ReviewsSplitPane({ now }: { now: number }) {
         <div className="w-[60%] flex flex-col">
           <AnimatePresence mode="wait">
             <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: EASE_CURVE }} className="h-full">
-              <ReviewDetailPanel review={selectedReview} now={now} onResolve={(id, status) => decide([id], status)} />
+              <ReviewDetailPanel review={selectedReview} now={now} canDecide={selectedAllowed} onResolve={(id, status) => gatedDecide([id], status)} />
             </motion.div>
           </AnimatePresence>
         </div>

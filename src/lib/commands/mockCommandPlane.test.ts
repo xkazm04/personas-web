@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
 import { MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS } from "@/lib/mock-dashboard-data";
+import type { PersonaEvent } from "@/lib/types";
 import type { CommandRowUpdate } from "./commandReducer";
 import {
   MOCK_CHAT_TIMINGS,
@@ -246,6 +247,87 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
       stop();
       vi.advanceTimersByTime(MOCK_CHAT_TIMINGS.replyMs);
       expect(MOCK_CHAT_MESSAGES.some((m) => m.id === mockChatIds("ch4").replyId)).toBe(false);
+    });
+  });
+
+  describe("review_decide (M20): the verdict goes through the api, like the desktop's decision", () => {
+    type Ev = PersonaEvent;
+    const outcome = (rows: CommandRowUpdate[], id: string) => rows.find((r) => r.id === id && r.status !== "executing");
+    const review = (id: string, personaId: string, status: Ev["status"] = "pending"): Ev => ({
+      id,
+      projectId: "p",
+      eventType: "manual_review",
+      sourceType: "execution",
+      sourceId: null,
+      targetPersonaId: personaId,
+      payload: "{}",
+      status,
+      errorMessage: null,
+      processedAt: null,
+      useCaseId: null,
+      createdAt: "2026-10-07T08:00:00.000Z",
+    });
+    const plane = (events: Ev[]) => {
+      const update = vi.fn(async (id: string, body: { status: Ev["status"]; metadata?: string }) => ({ ...events.find((e) => e.id === id)!, status: body.status }));
+      return { update, deps: { ...visible, reviews: { list: async () => events, update } } };
+    };
+
+    it("claims at 1.2 s, applies the verdict with its notes at 2 s, and completes with the contract's result", async () => {
+      const { update, deps } = plane([review("r1", "p1")]);
+      const rows: CommandRowUpdate[] = [];
+      runMockCommand(
+        { id: "rd1", verb: "review_decide", personaId: "p1", params: { reviewId: "r1", decision: "rejected", notes: "not yet" } },
+        (r) => rows.push(r),
+        deps,
+      );
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.executingMs);
+      expect(rows).toEqual([{ id: "rd1", status: "executing" }]);
+      expect(update).not.toHaveBeenCalled();
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.completedMs - MOCK_TIMINGS.executingMs);
+      expect(update).toHaveBeenCalledWith("r1", { status: "failed", metadata: JSON.stringify({ reviewerNotes: "not yet" }) });
+      expect(outcome(rows, "rd1")).toEqual({ id: "rd1", status: "completed", result: { reviewId: "r1", status: "rejected", changed: true } });
+    });
+
+    it("an approve with no notes writes only the status", async () => {
+      const { update, deps } = plane([review("r1", "p1")]);
+      runMockCommand({ id: "rd2", verb: "review_decide", personaId: "p1", params: { reviewId: "r1", decision: "approved", notes: null } }, () => {}, deps);
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.completedMs);
+      expect(update).toHaveBeenCalledWith("r1", { status: "processed" });
+    });
+
+    it("refuses like the desktop: an unknown review, another persona's review (never a hint it exists), a bad decision", async () => {
+      const { update, deps } = plane([review("r1", "p1")]);
+      const rows: CommandRowUpdate[] = [];
+      const send = (id: string, personaId: string, params: Record<string, unknown>) =>
+        runMockCommand({ id, verb: "review_decide", personaId, params }, (r) => rows.push(r), deps);
+      send("x1", "p1", { reviewId: "nope", decision: "approved", notes: null });
+      send("x2", "p2", { reviewId: "r1", decision: "approved", notes: null });
+      send("x3", "p1", { reviewId: "r1", decision: "maybe", notes: null });
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.completedMs);
+      expect(outcome(rows, "x1")).toMatchObject({ status: "failed", error_message: "not_found" });
+      expect(outcome(rows, "x2")).toMatchObject({ status: "failed", error_message: "not_found" });
+      expect(outcome(rows, "x3")).toMatchObject({ status: "failed", error_message: "invalid_decision" });
+      expect(update).not.toHaveBeenCalled();
+    });
+
+    it("an already decided review completes unchanged, reporting its current status", async () => {
+      const { update, deps } = plane([review("r1", "p1", "processed")]);
+      const rows: CommandRowUpdate[] = [];
+      runMockCommand({ id: "rd3", verb: "review_decide", personaId: "p1", params: { reviewId: "r1", decision: "rejected", notes: null } }, (r) => rows.push(r), deps);
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.completedMs);
+      expect(outcome(rows, "rd3")).toEqual({ id: "rd3", status: "completed", result: { reviewId: "r1", status: "approved", changed: false } });
+      expect(update).not.toHaveBeenCalled();
+    });
+
+    it("cancelling before the answer writes nothing", async () => {
+      const { update, deps } = plane([review("r1", "p1")]);
+      const rows: CommandRowUpdate[] = [];
+      const stop = runMockCommand({ id: "rd4", verb: "review_decide", personaId: "p1", params: { reviewId: "r1", decision: "approved", notes: null } }, (r) => rows.push(r), deps);
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.executingMs);
+      stop();
+      await vi.advanceTimersByTimeAsync(MOCK_TIMINGS.completedMs);
+      expect(update).not.toHaveBeenCalled();
+      expect(outcome(rows, "rd4")).toBeUndefined();
     });
   });
 });

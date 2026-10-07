@@ -4,6 +4,7 @@ import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatAge, resolverLabel, reviewerNotesText } from "@/lib/review-display";
+import { REVIEW_NOTES_MAX } from "@/lib/commands/reviewDecide";
 import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import { DueChip } from "../review-due";
@@ -12,10 +13,13 @@ import { reviewSeverityConfig } from "./reviewSeverityConfig";
 export function ReviewDetailPanel({
   review,
   now,
+  canDecide = true,
   onResolve,
 }: {
   review: ManualReviewItem | null;
   now: number;
+  /** Live mode with this review's desktop unreachable (M20): the buttons are off. */
+  canDecide?: boolean;
   /** Notes are not passed: the store's `decide` reads the draft for the id. */
   onResolve: (id: string, status: "approved" | "rejected") => void;
 }) {
@@ -82,7 +86,7 @@ export function ReviewDetailPanel({
         </div>
       </div>
       <ReviewDetailContent review={review} notes={notes} setNotes={setNotes} notesRef={notesRef} />
-      {isPending && <ReviewResolveActions onResolve={(status) => onResolve(review.id, status)} />}
+      {isPending && <ReviewResolveActions disabled={!canDecide} onResolve={(status) => onResolve(review.id, status)} />}
     </div>
   );
 }
@@ -147,7 +151,7 @@ function ReviewNotesEditor({ notes, setNotes, notesRef }: { notes: string; setNo
         <Bookmark className="h-3 w-3 text-muted-dark" />
         <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">{t.dashboardUi.reviewerNotes}</span>
       </div>
-      <textarea ref={notesRef} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder={t.dashboardUi.notesPlaceholder} rows={3} className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none resize-none" />
+      <textarea ref={notesRef} value={notes} onChange={(e) => setNotes(e.target.value)} maxLength={REVIEW_NOTES_MAX} placeholder={t.dashboardUi.notesPlaceholder} rows={3} className="w-full rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-2 text-base text-foreground placeholder:text-muted-dark/60 focus:border-brand-cyan/30 focus:outline-none resize-none" />
     </div>
   );
 }
@@ -165,16 +169,16 @@ function ReviewResolvedNotes({ notes }: { notes: string }) {
   );
 }
 
-function ReviewResolveActions({ onResolve }: { onResolve: (status: "approved" | "rejected") => void }) {
+function ReviewResolveActions({ disabled, onResolve }: { disabled: boolean; onResolve: (status: "approved" | "rejected") => void }) {
   const { t } = useTranslation();
   return (
     <div className="flex-shrink-0 border-t border-glass px-4 py-3 flex items-center gap-2">
-      <button onClick={() => onResolve("approved")} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20">
+      <button onClick={() => onResolve("approved")} disabled={disabled} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60">
         <Check className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.approve}
         <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-sm">A</kbd>
       </button>
-      <button onClick={() => onResolve("rejected")} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20">
+      <button onClick={() => onResolve("rejected")} disabled={disabled} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-60">
         <X className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.reject}
         <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-sm">R</kbd>

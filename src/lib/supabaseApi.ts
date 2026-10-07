@@ -13,6 +13,7 @@
  */
 import { getSupabase } from "./supabase";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
+import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
@@ -90,7 +91,7 @@ async function ownerDeviceFromMirror(personaId: string): Promise<string | null> 
  * proxy, so a static import would be a cycle.
  */
 async function sendCommand(
-  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send",
+  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide",
   personaId: string,
   params: Record<string, unknown>,
   /** The desktop the caller already knows (a chat thread's device); else the persona's owner. */
@@ -271,6 +272,7 @@ function mapEvent(r: EventRow): PersonaEvent {
 
 interface ManualReviewRow {
   id: string;
+  device_id: string | null;
   execution_id: string;
   persona_id: string;
   title: string;
@@ -307,6 +309,8 @@ function reviewToEvent(r: ManualReviewRow): PersonaEvent {
       description: r.description ?? "",
       severity: r.severity,
       reviewerNotes: r.reviewer_notes ?? null,
+      // Where a verdict command goes (spec 2.2, review_decide targeting).
+      deviceId: r.device_id ?? null,
     }),
     status,
     errorMessage: null,
@@ -442,7 +446,7 @@ export const supabaseApi: ApiClient = {
         getSupabase()
           .from("synced_manual_reviews")
           .select(
-            "id, execution_id, persona_id, title, description, severity, status, reviewer_notes, resolved_at, created_at",
+            "id, device_id, execution_id, persona_id, title, description, severity, status, reviewer_notes, resolved_at, created_at",
           )
           .order("created_at", { ascending: false })
           .limit(opts?.limit ?? 100),
@@ -463,6 +467,10 @@ export const supabaseApi: ApiClient = {
 
   publishEvent: async (_input: CreateEventInput) => readOnly(),
   updateEvent: async () => readOnly(),
+  // Reviews are not read-only any more (M20): a verdict is a signed
+  // `review_decide` to the desktop that raised the review, else the persona's.
+  decideReview: async (input: ReviewDecisionInput) =>
+    sendCommand("review_decide", input.personaId, { ...reviewDecideParams(input.reviewId, input.decision, input.notes) }, input.deviceId),
 
   // Subscriptions and triggers are not part of the Phase-1 sync set yet.
   listSubscriptions: async (): Promise<PersonaEventSubscription[]> => [],

@@ -19,6 +19,7 @@ export function FocusReviewCard({
   review,
   now,
   labels,
+  decideDisabled = false,
   onApprove,
   onReject,
   onSkip,
@@ -33,6 +34,8 @@ export function FocusReviewCard({
     reject: string;
     skip: string;
   };
+  /** Live mode with this review's desktop unreachable (M20): Approve / Reject are off. */
+  decideDisabled?: boolean;
   onApprove: () => void;
   onReject: () => void;
   onSkip: () => void;
@@ -109,7 +112,8 @@ export function FocusReviewCard({
         <button
           type="button"
           onClick={onApprove}
-          className="flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20"
+          disabled={decideDisabled}
+          className="flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <Check className="h-3.5 w-3.5" />
           {labels.approve}
@@ -120,7 +124,8 @@ export function FocusReviewCard({
         <button
           type="button"
           onClick={onReject}
-          className="flex items-center gap-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm font-medium text-rose-400 transition-all hover:bg-rose-500/20"
+          disabled={decideDisabled}
+          className="flex items-center gap-1.5 rounded-lg border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm font-medium text-rose-400 transition-all hover:bg-rose-500/20 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <X className="h-3.5 w-3.5" />
           {labels.reject}

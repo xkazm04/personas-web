@@ -116,6 +116,13 @@ describe("what a persona row shows", () => {
     expect(latestForPersona(addCommand({}, cmd({ id: "chat", verb: "chat_send" })), "p1")).toBeNull();
   });
 
+  it("latestForPersona skips review verdicts: a review_decide shows on its review, not on the persona row (M20)", () => {
+    let m: InflightMap = addCommand({}, cmd({ id: "pause", requestedAt: T0 }));
+    m = addCommand(m, cmd({ id: "verdict", verb: "review_decide", requestedAt: T0 + 5_000 }));
+    expect(latestForPersona(m, "p1")?.id).toBe("pause");
+    expect(latestForPersona(addCommand({}, cmd({ id: "verdict", verb: "review_decide" })), "p1")).toBeNull();
+  });
+
   it("reportedEnabled: a completed pause reads false, a completed resume true, anything else null", () => {
     expect(reportedEnabled(cmd({ status: "completed", result: { enabled: false, changed: true } }))).toBe(false);
     expect(reportedEnabled(cmd({ verb: "resume_persona", status: "completed", result: { enabled: true, changed: false } }))).toBe(true);

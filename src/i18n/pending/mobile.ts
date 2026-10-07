@@ -128,6 +128,18 @@ export interface MobileCopy {
       unknown: string;
     };
   };
+  /** `/dashboard/reviews` at phone width: decide pending reviews (PLAN M20, PHASE2-SPEC.md 1.6). */
+  reviews: {
+    loading: string;
+    pendingLabel: string;
+    decidedTitle: string;
+    addNote: string;
+    showMore: string;
+    showLess: string;
+    approveLabel: string;
+    rejectLabel: string;
+    escalationFailed: string;
+  };
   /** `/dashboard/notes`: the desktop Notepad's goals, read-only (PHASE2-SPEC.md 5.1). */
   notes: {
     nav: string;
@@ -290,6 +302,17 @@ export const mobileCopy: MobileCopy = {
       other: 'Couldn\'t send: {reason}',
       unknown: 'Couldn\'t send. Try again.',
     },
+  },
+  reviews: {
+    loading: 'Loading reviews...',
+    pendingLabel: 'Reviews waiting for you',
+    decidedTitle: 'Decided here',
+    addNote: 'Add a note',
+    showMore: 'Show more',
+    showLess: 'Show less',
+    approveLabel: 'Approve: {title}',
+    rejectLabel: 'Reject: {title}',
+    escalationFailed: 'An overdue review couldn\'t be approved automatically ({reason}). It\'s still waiting for you.',
   },
   notes: {
     nav: 'Notes',

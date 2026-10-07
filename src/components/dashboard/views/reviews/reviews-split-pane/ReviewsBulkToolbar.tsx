@@ -7,6 +7,7 @@ export function ReviewsBulkToolbar({
   bulkCount,
   pendingInFiltered,
   bulkResolving,
+  decideDisabled = false,
   clearSelection,
   selectAll,
   handleBulkAction,
@@ -14,6 +15,8 @@ export function ReviewsBulkToolbar({
   bulkCount: number;
   pendingInFiltered: ManualReviewItem[];
   bulkResolving: boolean;
+  /** Live mode with the desktop unreachable (M20): verdicts cannot be sent. */
+  decideDisabled?: boolean;
   clearSelection: () => void;
   selectAll: () => void;
   handleBulkAction: (status: "approved" | "rejected") => void;
@@ -54,7 +57,7 @@ export function ReviewsBulkToolbar({
             <div className="ml-auto flex items-center gap-1.5">
               <button
                 onClick={() => handleBulkAction("approved")}
-                disabled={bulkResolving}
+                disabled={bulkResolving || decideDisabled}
                 className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:opacity-50"
               >
                 <Check className="inline h-3 w-3 mr-1" />
@@ -62,7 +65,7 @@ export function ReviewsBulkToolbar({
               </button>
               <button
                 onClick={() => handleBulkAction("rejected")}
-                disabled={bulkResolving}
+                disabled={bulkResolving || decideDisabled}
                 className="rounded-md border border-red-500/30 bg-red-500/10 px-2.5 py-1 text-xs font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:opacity-50"
               >
                 <X className="inline h-3 w-3 mr-1" />

@@ -3,7 +3,13 @@ import type { PersonaEvent } from "@/lib/types";
 
 const listEvents = vi.fn();
 const updateEvent = vi.fn();
-vi.mock("@/lib/api", () => ({ api: { listEvents, updateEvent } }));
+// The orchestrator plane: a verdict is the event PATCH (realApi.decideReview).
+vi.mock("@/lib/api", async () => {
+  const { verdictEventBody } = await import("@/lib/commands/reviewDecide");
+  type Input = { reviewId: string; decision: "approved" | "rejected"; resolvedBy: string; notes: string | null };
+  const decideReview = (i: Input) => updateEvent(i.reviewId, verdictEventBody(i.decision, i.resolvedBy, i.notes));
+  return { api: { listEvents, updateEvent, decideReview } };
+});
 vi.mock("@sentry/nextjs", () => ({ captureMessage: vi.fn() }));
 vi.mock("@/stores/personaStore", () => ({ usePersonaStore: { getState: () => ({ personas: [] }) } }));
 

@@ -122,6 +122,17 @@ export function actionsEnabled(tier: ReachabilityTier): boolean {
 }
 
 /**
+ * Can a review verdict be given here (PLAN M20)? On a command plane (the live
+ * mirror, the demo) a verdict is a `review_decide` command, so it follows the
+ * online gate like the persona actions (null = not judged yet: no). The
+ * orchestrator plane writes the verdict itself and has no gate.
+ */
+export function verdictsEnabled(tier: ReachabilityTier | null, commandPlane: boolean): boolean {
+  if (!commandPlane) return true;
+  return tier !== null && actionsEnabled(tier);
+}
+
+/**
  * The desktop download CTA shows only where a real user cannot sync (PLAN M7):
  * no account, or an account whose desktop has never synced. A synced user whose
  * desktop is merely closed is told to open it, not to download it again, and the

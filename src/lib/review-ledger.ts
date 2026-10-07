@@ -168,6 +168,61 @@ export function applyConfirmed(
   return rows.map((r) => (ok.has(r.id) ? applyBatch(r, batch) : r));
 }
 
+/**
+ * A verdict the plane confirmed in this tab. On a command plane (M20) the
+ * command completes once the desktop applied it, and the synced row follows a
+ * sync pass later; a refetch in between must not repaint the row pending.
+ * It also remembers who decided, which the synced mirror does not carry.
+ */
+export interface ConfirmedVerdict {
+  verdict: Verdict;
+  resolvedBy: string;
+  notes: string | null;
+  /** Epoch ms of the confirmation. */
+  at: number;
+}
+
+export type ConfirmedMap = Readonly<Record<string, ConfirmedVerdict>>;
+
+/** How long a still-pending mirror row is taken for lag rather than the truth. */
+export const MIRROR_LAG_MS = 120_000;
+
+/**
+ * Fetched rows reconciled with this tab's confirmed verdicts: a row still
+ * pending within the lag allowance shows the verdict; a row that agrees keeps
+ * who decided it; a row decided otherwise, or pending past the allowance, is
+ * the truth and its echo is dropped. Returns the same map when nothing dropped.
+ */
+export function reconcileConfirmed(
+  rows: readonly ManualReviewItem[],
+  confirmed: ConfirmedMap,
+  now: number,
+): { rows: ManualReviewItem[]; confirmed: ConfirmedMap } {
+  if (Object.keys(confirmed).length === 0) return { rows: [...rows], confirmed };
+  let kept: Record<string, ConfirmedVerdict> | null = null;
+  const drop = (id: string) => {
+    kept ??= { ...confirmed };
+    delete kept[id];
+  };
+  const out = rows.map((r) => {
+    const echo = confirmed[r.id];
+    if (!echo) return r;
+    if (r.status === echo.verdict) return { ...r, resolvedBy: echo.resolvedBy };
+    if (r.status === "pending" && now - echo.at < MIRROR_LAG_MS) {
+      return {
+        ...r,
+        status: echo.verdict,
+        resolvedAt: new Date(echo.at).toISOString(),
+        resolvedBy: echo.resolvedBy,
+        reviewerNotes: echo.notes ?? r.reviewerNotes,
+      };
+    }
+    drop(r.id);
+    return r;
+  });
+  return { rows: out, confirmed: kept ?? confirmed };
+}
+
 export function countPending(rows: readonly ManualReviewItem[]): number {
   return rows.filter((r) => r.status === "pending").length;
 }

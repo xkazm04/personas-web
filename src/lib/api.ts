@@ -28,6 +28,7 @@ import type {
 } from "./types";
 import type { SyncedNote } from "./notes/notesModel";
 import type { ChatMessage, ChatSendInput, ChatSession, ChatThreadRef, ListChatSessionsInput } from "./chat/chatModel";
+import { verdictEventBody, type ReviewDecisionInput } from "./commands/reviewDecide";
 
 // ---------------------------------------------------------------------------
 // Error
@@ -164,6 +165,13 @@ export interface ApiClient {
   listEvents(opts?: { eventType?: string; status?: string; limit?: number; offset?: number }): Promise<PersonaEvent[]>;
   publishEvent(input: CreateEventInput): Promise<PersonaEvent>;
   updateEvent(id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent>;
+  /**
+   * Record a manual review's verdict. The orchestrator writes it at once (the
+   * updated event); the command planes send a `review_decide` (PLAN M20,
+   * PHASE2-SPEC.md 1.6), so the desktop runs its whole decision, and answer
+   * with the command to follow.
+   */
+  decideReview(input: ReviewDecisionInput): Promise<PersonaEvent | CommandAck>;
   listSubscriptions(personaId: string): Promise<PersonaEventSubscription[]>;
   listAllSubscriptions(): Promise<PersonaEventSubscription[]>;
   createSubscription(input: { personaId: string; eventType: string; sourceFilter?: string }): Promise<PersonaEventSubscription>;
@@ -273,6 +281,13 @@ const realApi: ApiClient = {
         orchestratorFetch<PersonaEvent>(`/api/events/${id}`, {
           method: "PUT",
           body,
+        }),
+
+      // A review is a manual_review event here: the verdict is its status PUT.
+      decideReview: (input: ReviewDecisionInput) =>
+        orchestratorFetch<PersonaEvent>(`/api/events/${input.reviewId}`, {
+          method: "PUT",
+          body: verdictEventBody(input.decision, input.resolvedBy, input.notes),
         }),
 
       // Subscriptions

@@ -10,10 +10,29 @@ import { useReviewStore } from "@/stores/reviewStore";
 import ReviewsSplitPane from "./ReviewsSplitPane";
 import ReviewsFocusFlow from "./ReviewsFocusFlow";
 import { useReviewClock } from "./review-due";
+import { useReviewGate } from "./useReviewGate";
+import EscalationFailureNotice from "./EscalationFailureNotice";
+import PhoneReviews from "./phone/PhoneReviews";
+import ReachabilityNotice from "@/components/dashboard/views/personas/phone/ReachabilityNotice";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { useTranslation } from "@/i18n/useTranslation";
 
-export default function ReviewsPage() {
+/**
+ * `/dashboard/reviews`. At phone width it is the pending reviews as cards with
+ * big Approve / Reject (PLAN M20, a phone layout of this view, not a new
+ * route); from 768 px up it is the split pane / focus flow below. The view is
+ * client-only (next/dynamic ssr:false), so choosing by media query cannot
+ * mismatch a server render.
+ */
+export default function ReviewsView() {
+  const phone = useIsMobile();
+  return phone ? <PhoneReviews /> : <ReviewsPage />;
+}
+
+function ReviewsPage() {
   const { t } = useTranslation();
+  // In live mode a verdict is a command to the desktop: off unless it is online and this browser paired.
+  const gate = useReviewGate();
   const [mode, setMode] = useState<"split" | "focus">("split");
   // One clock for the page: the header count, the split pane's chips and the
   // focus card all read the same `now`.
@@ -54,11 +73,20 @@ export default function ReviewsPage() {
         )}
       </motion.div>
 
+      {gate.blocked && (
+        <div className="mb-4">
+          <ReachabilityNotice reach={gate.reach} />
+        </div>
+      )}
+      <div className="mb-4 empty:hidden">
+        <EscalationFailureNotice />
+      </div>
+
       <div data-tour-diagram="dashboard-reviews">
         {mode === "split" ? (
-          <ReviewsSplitPane now={now} />
+          <ReviewsSplitPane now={now} canDecide={gate.canDecide} />
         ) : (
-          <ReviewsFocusFlow now={now} onExit={() => setMode("split")} />
+          <ReviewsFocusFlow now={now} onExit={() => setMode("split")} canDecide={gate.canDecide} />
         )}
       </div>
     </motion.div>

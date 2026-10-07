@@ -6,6 +6,7 @@ import {
   newestDevice,
   parseDemoDesktop,
   showsDownloadCta,
+  verdictsEnabled,
   type ReachabilityInput,
   type SyncedDevice,
 } from "./reachability";
@@ -97,6 +98,14 @@ describe("what each tier allows (M7, M12)", () => {
   it("the download CTA shows only where a real user cannot sync - never in the demo (owner, 2026-10-06)", () => {
     const cta = (["demo", "no-account", "never-synced", "offline", "online-unpaired", "online"] as const).filter(showsDownloadCta);
     expect(cta).toEqual(["no-account", "never-synced"]);
+  });
+
+  it("review verdicts (M20) follow the online gate on a command plane; the orchestrator writes them directly", () => {
+    const tiers = ["demo", "no-account", "never-synced", "offline", "online-unpaired", "online"] as const;
+    expect(tiers.filter((t) => verdictsEnabled(t, true))).toEqual(["demo", "online"]);
+    expect(verdictsEnabled(null, true)).toBe(false);
+    expect(tiers.every((t) => verdictsEnabled(t, false))).toBe(true);
+    expect(verdictsEnabled(null, false)).toBe(true);
   });
 
   it("parses the demo switch, defaulting to online", () => {

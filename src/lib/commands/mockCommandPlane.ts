@@ -13,7 +13,7 @@
 import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
 import { MOCK_CHAT_DEVICE_ID, MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS, mockChatReply } from "@/lib/mock-dashboard-data";
 import { ATHENA_PERSONA_ID, CHAT_MESSAGE_MAX_BYTES, utf8Bytes, type ChatThreadKind } from "@/lib/chat/chatModel";
-import type { GlobalExecution, Persona } from "@/lib/types";
+import type { EventStatus, GlobalExecution, Persona, PersonaEvent } from "@/lib/types";
 import type { CommandRowUpdate } from "./commandReducer";
 import type { CommandVerb } from "./envelope";
 
@@ -44,11 +44,58 @@ export interface MockCommand {
   params: Record<string, unknown>;
 }
 
+/**
+ * How the scripted desktop reads and decides reviews. A review's verdict goes
+ * through the `api` (in demo, mockApi's write-through), never through the
+ * fixtures directly, so the demo's review queue reads back what a real desktop
+ * would have synced.
+ */
+export interface MockReviewPort {
+  list: () => Promise<PersonaEvent[]>;
+  update: (id: string, body: { status: EventStatus; metadata?: string }) => Promise<PersonaEvent>;
+}
+
 export interface MockPlaneDeps {
   /** Defaults to `document.hidden`. */
   isHidden?: () => boolean;
   /** Called after every write to the fixtures, so the stores can re-read them. */
   onFixtureChange?: () => void;
+  /** Defaults to the `api` proxy (mockApi in demo). */
+  reviews?: MockReviewPort;
+}
+
+/** The `api` proxy, loaded when a review is first decided (it imports the planes that load this module). */
+const apiReviews: MockReviewPort = {
+  list: async () => (await import("@/lib/api")).api.listEvents({ eventType: "manual_review", limit: 500 }),
+  update: async (id, body) => (await import("@/lib/api")).api.updateEvent(id, body),
+};
+
+/** A review event's status as the desktop's `manual_reviews.status`. */
+function reviewStatus(status: EventStatus): "pending" | "approved" | "rejected" {
+  return status === "processed" ? "approved" : status === "failed" ? "rejected" : "pending";
+}
+
+/**
+ * `review_decide` (contract: params `{ reviewId, decision, notes }`; result
+ * `{ reviewId, status, changed }`). Refuses like the desktop: a review that
+ * is not this persona's reads as `not_found` (never a hint that it exists),
+ * a decision other than approved / rejected is `invalid_decision`; an already
+ * decided review completes unchanged with its current status. The verdict is
+ * the event's status plus the reviewer notes; like the desktop's synced row,
+ * it records no resolver.
+ */
+async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort): Promise<CommandRowUpdate> {
+  const reviewId = typeof cmd.params.reviewId === "string" ? cmd.params.reviewId : "";
+  const decision = cmd.params.decision;
+  const notes = typeof cmd.params.notes === "string" && cmd.params.notes ? cmd.params.notes : null;
+  const review = (await reviews.list()).find((e) => e.id === reviewId);
+  if (!review || review.targetPersonaId !== cmd.personaId) return { id: cmd.id, status: "failed", error_message: "not_found" };
+  if (decision !== "approved" && decision !== "rejected") return { id: cmd.id, status: "failed", error_message: "invalid_decision" };
+  const current = reviewStatus(review.status);
+  if (current !== "pending") return { id: cmd.id, status: "completed", result: { reviewId, status: current, changed: false } };
+  const status: EventStatus = decision === "approved" ? "processed" : "failed";
+  await reviews.update(reviewId, notes ? { status, metadata: JSON.stringify({ reviewerNotes: notes }) } : { status });
+  return { id: cmd.id, status: "completed", result: { reviewId, status: decision, changed: true } };
 }
 
 /** The id of the execution a mock run creates: derived from the command, so a resend cannot run twice. */
@@ -298,12 +345,25 @@ export function runMockCommand(cmd: MockCommand, onUpdate: (row: CommandRowUpdat
   if (hidden()) throw new Error("hidden: the demo desktop does not start in a background tab");
   const changed = deps.onFixtureChange ?? (() => {});
   const timers: ReturnType<typeof setTimeout>[] = [];
+  let stopped = false;
   const schedule: Schedule = (fn, ms) => {
     timers.push(setTimeout(fn, ms));
   };
   schedule(() => onUpdate({ id: cmd.id, status: "executing" }), MOCK_TIMINGS.executingMs);
-  schedule(() => onUpdate(execute(cmd, schedule, changed)), MOCK_TIMINGS.completedMs);
+  schedule(() => {
+    if (cmd.verb !== "review_decide") {
+      onUpdate(execute(cmd, schedule, changed));
+      return;
+    }
+    // The verdict goes through the api, which answers asynchronously.
+    executeReviewDecide(cmd, deps.reviews ?? apiReviews)
+      .catch((err: unknown): CommandRowUpdate => ({ id: cmd.id, status: "failed", error_message: err instanceof Error ? err.message : "failed" }))
+      .then((row) => {
+        if (!stopped) onUpdate(row);
+      });
+  }, MOCK_TIMINGS.completedMs);
   return () => {
+    stopped = true;
     for (const t of timers) clearTimeout(t);
   };
 }
