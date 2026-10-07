@@ -4,6 +4,7 @@ A decision record captures one technical choice that has already settled: the co
 
 Newest first:
 
+- [2026-10-07 `pvfw` is the test Supabase project, not production](2026-10-07-pvfw-is-the-test-supabase-project.md) — the loop's test project for the desktop-to-web mirror and command plane; `db:migrate:sync` adds only the sync objects.
 - [2026-10-07 ACCEPTED RISK: execution text is mirrored raw to `synced_executions`](2026-10-07-accepted-risk-execution-text-synced-raw.md) — no code change until cloud sync goes beyond a test project; the web Executions view keeps showing raw text.
 - [2026-10-07 Typed 501 `not_on_desktop`, no path rewriting](2026-10-07-proxy-typed-501-not-on-desktop.md) — with `ORCHESTRATOR_TARGET=desktop`, call shapes the desktop does not serve get a typed 501, never a rewrite or a bare 404.
 - [2026-10-07 Proxy key only for a verified Supabase session](2026-10-07-proxy-key-session-gated.md) — the team key is attached only after Supabase verifies the caller; upstream is pinned to the orchestrator origin and only JSON is relayed.
