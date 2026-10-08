@@ -22,6 +22,8 @@ interface FieldProps {
   arriving: boolean;
   cmds: readonly Command[];
   hostName: string;
+  /** Agents in focus while a search or pile filter is on; null shows everyone. */
+  matchIds: ReadonlySet<string> | null;
 }
 
 const EDGE = 10;
@@ -62,7 +64,7 @@ export function computeLayout(teams: FleetTeam[], scope: SimAgent[], w: number, 
 }
 
 /** L0: the whole fleet, nine team bays filling the field. */
-export default function Field({ width, height, teams, scope, nav, copy, live, arriving, cmds, hostName }: FieldProps) {
+export default function Field({ width, height, teams, scope, nav, copy, live, arriving, cmds, hostName, matchIds }: FieldProps) {
   if (width <= 0 || height <= 0) return null;
   const layout = computeLayout(teams, scope, width, height);
   const hovered = nav.att?.type === "agent" ? scope.find((a) => a.id === nav.att!.id) : undefined;
@@ -76,10 +78,11 @@ export default function Field({ width, height, teams, scope, nav, copy, live, ar
         const isAtt = nav.att?.type === "team" && nav.att.id === t.id;
         const agentsText = fill(plural(list.length, copy.bay.agentsCountOne, copy.bay.agentsCount), { n: list.length });
         const needText = fill(plural(c.needs, copy.bay.needCountOne, copy.bay.needCount), { n: c.needs });
+        const inBay = matchIds ? list.filter((a) => matchIds.has(a.id)).length : null;
         return (
           <Fragment key={t.id}>
             <div
-              className={`${s.bay} ${isAtt ? s.bayAtt : ""} ${arriving ? s.rise : ""}`}
+              className={`${s.bay} ${isAtt ? s.bayAtt : ""} ${arriving ? s.rise : ""} ${inBay === 0 ? s.bayDim : ""}`}
               style={{ left: B.x, top: B.y, width: B.w, height: B.h, "--h": t.hue, "--ad": `${ti * 0.05}s` } as CSSProperties}
             >
               <button
@@ -95,6 +98,7 @@ export default function Field({ width, height, teams, scope, nav, copy, live, ar
                 <i className={s.hueTick} aria-hidden="true" />
                 <span className="min-w-0 flex-1 truncate text-sm font-semibold text-foreground">{t.name}</span>
                 <span className="flex shrink-0 items-center gap-2 text-xs tabular-nums text-muted-dark" aria-hidden="true">
+                  {inBay != null && <span className="font-semibold text-foreground">{fill(copy.find.bayMatches, { m: inBay, n: list.length })}</span>}
                   {c.working > 0 && (
                     <span className="inline-flex items-center gap-1">
                       <i className="h-1.5 w-1.5 rounded-full bg-[var(--at-working)]" />
@@ -120,6 +124,7 @@ export default function Field({ width, height, teams, scope, nav, copy, live, ar
                   att={nav.att?.type === "agent" && nav.att.id === a.id}
                   live={live}
                   pending={!!inFlightFor(cmds, a.id)}
+                  dim={!!matchIds && !matchIds.has(a.id)}
                   riseDelay={arriving ? 0.1 + ti * 0.05 + L.j * 0.015 : null}
                   onAttend={() => nav.attend({ type: "agent", id: a.id })}
                   onUnattend={nav.unattend}

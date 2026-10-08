@@ -18,6 +18,8 @@ interface TileProps {
   live: boolean;
   /** A command to this agent is on its way to the machine. */
   pending: boolean;
+  /** Out of focus (a search or pile filter is on and it does not match). */
+  dim: boolean;
   /** Arrival delay (s) for the first-paint rise; null after arrival. */
   riseDelay: number | null;
   onAttend: () => void;
@@ -44,14 +46,14 @@ export function needGlyph(a: SimAgent): string {
  * needs you, a ghost while it rests, hatched when off. The callsign is always
  * there; bigger tiles (30 and 10 agents, large screens) add name and task.
  */
-export default function Tile({ agent: a, rect, copy, att, live, pending, riseDelay, onAttend, onUnattend, onOpen }: TileProps) {
+export default function Tile({ agent: a, rect, copy, att, live, pending, dim, riseDelay, onAttend, onUnattend, onOpen }: TileProps) {
   const tier = tierOf(rect);
   const pile = attentionOf(a);
   const needs = pile === "needs";
   const running = a.state === "running";
   const cls = [
     s.tile, s[pile], needs && needsTone(a) === "critical" && s.critical, needs && live && s.pulse,
-    pile === "resting" && a.state === "queued" && s.queued, att && s.att, riseDelay != null && s.rise,
+    pile === "resting" && a.state === "queued" && s.queued, att && s.att, riseDelay != null && s.rise, dim && s.dim,
   ].filter(Boolean).join(" ");
   const style = {
     left: rect.x, top: rect.y, width: rect.w, height: rect.h,

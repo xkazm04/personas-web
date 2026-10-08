@@ -27,6 +27,8 @@ export interface PersonasMonitorCopy {
     title: string;
     empty: string;
     listLabel: string;
+    of: string;
+    emptyFiltered: string;
   };
   attention: {
     needs: string;
@@ -363,6 +365,19 @@ export interface PersonasMonitorCopy {
       trigger: string;
       pausedPlan: string;
     };
+    find: {
+      placeholder: string;
+      label: string;
+      matchesOne: string;
+      matches: string;
+      none: string;
+      clear: string;
+      pilesLabel: string;
+      pileHint: string;
+      enterHint: string;
+      shortcuts: string;
+      bayMatches: string;
+    };
   };
   city: {
     label: string;
@@ -455,6 +470,8 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
     title: 'Needs you',
     empty: 'Nobody is waiting on you.',
     listLabel: 'Agents that need you, most urgent first',
+    of: '{n} of {total}',
+    emptyFiltered: 'None of the agents you found needs you.',
   },
   attention: {
     needs: 'need you',
@@ -789,6 +806,19 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       nextAt: 'next at {time} UTC',
       trigger: 'On {trigger}',
       pausedPlan: 'Paused: no schedule or trigger fires until you resume',
+    },
+    find: {
+      placeholder: 'Find an agent',
+      label: 'Find agents by callsign, name, team, task or state',
+      matchesOne: '{n} match',
+      matches: '{n} matches',
+      none: 'No agent matches',
+      clear: 'Clear the search and filters',
+      pilesLabel: 'Show only these piles',
+      pileHint: 'Show only agents that are {pile}',
+      enterHint: 'Enter opens {callsign}',
+      shortcuts: 'Keyboard shortcuts',
+      bayMatches: '{m} of {n}',
     },
   },
   city: {

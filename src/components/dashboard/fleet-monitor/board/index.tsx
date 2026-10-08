@@ -13,7 +13,8 @@ import TeamScene from "./TeamScene";
 import AgentScene from "./AgentScene";
 import TopStrip from "./TopStrip";
 import BottomStrip from "./BottomStrip";
-import { TEAM_BY_ID, fill } from "./model";
+import { TEAM_BY_ID, fill, orderInBay } from "./model";
+import { NO_FOCUS, inFocus, isFocusing, matchesQuery, type FocusFilter } from "./focus";
 import { railItems } from "./copy";
 import HostCard, { OfflineBanner } from "./HostCard";
 import Toast from "./Toast";
@@ -56,6 +57,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
   const [toast, showToast] = useToast();
   const commands = useCommands(dispatch);
   const [confirmPause, setConfirmPause] = useState(false);
+  const [focus, setFocus] = useState<FocusFilter>(NO_FOCUS);
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
@@ -68,13 +70,19 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
   const deep = !!(openAgent || nav.teamOpen);
   const host = readHost(scope, scale, sim.simMs, sim.beatAt, hostStatus);
   const op = makeOperator({ commands, toast: showToast, copy, hostName: host.name, offline });
+  // Find and focus: what matches, in the field's reading order (Enter opens the first).
+  const focusing = isFocusing(focus);
+  const reading = teams.flatMap((t) => orderInBay(scope.filter((a) => a.team === t.id)));
+  const matches = focusing ? reading.filter((a) => inFocus(a, focus, copy)) : reading;
+  const matchIds = focusing ? new Set(matches.map((a) => a.id)) : null;
+  const railScope = focus.query.trim() ? scope.filter((a) => matchesQuery(a, focus.query, copy)) : scope;
 
   const main = (
     <div className="absolute inset-0 flex flex-col">
       {offline && <OfflineBanner host={host} copy={copy} />}
       <div ref={mainRef} className="relative min-h-0 flex-1">
         <div inert={deep} className={`absolute inset-0 transition-[opacity,transform,filter] duration-500 ${deep ? "pointer-events-none scale-[1.02] opacity-0" : ""} ${offline ? "saturate-[.4]" : ""}`}>
-          <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} />
+          <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={matchIds} />
         </div>
         <AnimatePresence>
           {nav.teamOpen && bayRect && (
@@ -117,7 +125,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
     >
       <FleetFrame
         label={copy.label}
-        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} />}
+        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} />}
         main={main}
         rail={
           <>
@@ -131,7 +139,9 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
               onResumeAll={() => op.resumeAll((sim.fleetPaused ?? []).length)}
             />
             <NeedsYouRail
-              items={railItems(scope, sim.simMs, sim.events, copy)}
+              items={railItems(railScope, sim.simMs, sim.events, copy)}
+              total={railScope === scope ? undefined : countAttention(scope).needs}
+              emptyText={railScope === scope ? undefined : personasMonitorCopy.rail.emptyFiltered}
               activeId={nav.att?.type === "agent" ? nav.att.id : null}
               onHover={(id) => (id ? nav.attend({ type: "agent", id }) : nav.unattend())}
               onSelect={(id) => nav.openAgent(id, document.activeElement as HTMLElement | null)}
