@@ -3,12 +3,17 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 // A minimal stand-in for the supabase query builder: every chain method returns
 // the builder, and awaiting it resolves to the row set the test staged.
 let stagedRows: unknown[] = [];
+const selects: string[] = [];
 
 function builder() {
   const b: Record<string, unknown> = {};
-  for (const m of ["select", "eq", "order", "limit", "in", "gte"]) {
+  for (const m of ["eq", "order", "limit", "in", "gte"]) {
     b[m] = () => b;
   }
+  b.select = (cols: string) => {
+    selects.push(cols);
+    return b;
+  };
   b.then = (resolve: (v: { data: unknown[]; error: null }) => unknown) =>
     resolve({ data: stagedRows, error: null });
   return b;
@@ -18,7 +23,7 @@ vi.mock("./supabase", () => ({
   getSupabase: () => ({ from: () => builder() }),
 }));
 
-const { supabaseApi } = await import("./supabaseApi");
+const { supabaseApi, getSyncedReport } = await import("./supabaseApi");
 
 function runningRow(lines: string[]) {
   return {
@@ -99,5 +104,30 @@ describe("supabaseApi.listEvents manual_review desk-only mapping", () => {
     const p = JSON.parse(ev.payload ?? "{}");
     expect(p).toMatchObject({ title: "T", deviceId: "dev-1", deskOnly: true });
     expect(ev.targetPersonaId).toBe("p1");
+  });
+});
+
+describe("council Approval report", () => {
+  const base = {
+    id: "r1", device_id: "dev-1", execution_id: null, persona_id: "p1", title: "T", description: "D",
+    severity: "info", status: "pending", reviewer_notes: null, resolved_at: null, created_at: "2026-10-07T00:00:00Z",
+  };
+  it("maps context_data's reportId into the payload without forwarding context_data", async () => {
+    stagedRows = [{ ...base, context_data: '{"reportId":"r1","x":"hunter2"}' }];
+    const [ev] = await supabaseApi.listEvents({ eventType: "manual_review" });
+    const p = JSON.parse(ev.payload ?? "{}");
+    expect(p.reportId).toBe("r1");
+    expect(p.deskOnly).toBe(false);
+    expect(ev.payload).not.toContain("hunter2");
+    expect(p).not.toHaveProperty("context_data");
+  });
+  it("getSyncedReport selects no metadata and returns null for a missing row", async () => {
+    selects.length = 0;
+    stagedRows = [];
+    expect(await getSyncedReport("r1")).toBeNull();
+    expect(selects).toEqual(["id, persona_id, title, content, content_type, created_at"]);
+    expect(selects[0]).not.toContain("metadata");
+    stagedRows = [{ id: "r1", title: "R", content: "body" }];
+    expect((await getSyncedReport("r1"))?.content).toBe("body");
   });
 });

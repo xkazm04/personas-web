@@ -12,6 +12,7 @@ import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import { DueChip } from "../review-due";
 import { reviewSeverityConfig } from "../reviews-split-pane/reviewSeverityConfig";
+import PhoneReviewReport from "./PhoneReviewReport";
 
 /** A body longer than this is clamped behind "Show more". */
 const CLAMP_CHARS = 180;
@@ -96,6 +97,8 @@ export default function PhoneReviewCard({ review, now, canDecide, command, onDec
             )}
           </div>
         )}
+
+        {review.reportId && <PhoneReviewReport reportId={review.reportId} />}
 
         {noteOpen ? (
           <div className="mt-3">

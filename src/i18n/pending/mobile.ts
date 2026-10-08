@@ -144,6 +144,11 @@ export interface MobileCopy {
     rejectLabel: string;
     escalationFailed: string;
     notesKept: string;
+    report: string;
+    reportLoading: string;
+    reportError: string;
+    reportRetry: string;
+    reportNotSynced: string;
   };
   /** `/dashboard/notes`: the desktop Notepad's goals, read-only (PHASE2-SPEC.md 5.1). */
   notes: {
@@ -324,6 +329,11 @@ export const mobileCopy: MobileCopy = {
     rejectLabel: 'Reject: {title}',
     escalationFailed: 'An overdue review couldn\'t be approved automatically ({reason}). It\'s still waiting for you.',
     notesKept: 'The desktop keeps up to {max} characters and removes anything that looks like a credential.',
+    report: 'Report',
+    reportLoading: 'Loading the report...',
+    reportError: 'Couldn\'t load the report.',
+    reportRetry: 'Try again',
+    reportNotSynced: 'The report hasn\'t synced yet.',
   },
   notes: {
     nav: 'Notes',

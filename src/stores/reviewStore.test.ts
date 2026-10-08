@@ -163,3 +163,13 @@ describe("reviewStore decision ledger", () => {
     expect(store().listNotServed).toBe(false);
   });
 });
+
+describe("council Approval reportId", () => {
+  it("carries a string payload reportId onto the review and ignores a non-string one", async () => {
+    const withReport = { ...ev("a1", "info", 1), payload: JSON.stringify({ title: "a1", severity: "info", reportId: "r1" }) };
+    const bad = { ...ev("a2", "info", 2), payload: JSON.stringify({ title: "a2", severity: "info", reportId: 7 }) };
+    await load([withReport, bad]);
+    expect(store().reviews.find((r) => r.id === "a1")?.reportId).toBe("r1");
+    expect(store().reviews.find((r) => r.id === "a2")?.reportId).toBeUndefined();
+  });
+});

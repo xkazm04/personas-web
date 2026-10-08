@@ -13,7 +13,7 @@
  */
 import { getSupabase } from "./supabase";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
-import { isDeskOnlyReview } from "./commands/deskOnlyReview";
+import { isDeskOnlyReview, reviewReportId } from "./commands/deskOnlyReview";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
@@ -173,7 +173,7 @@ interface ManualReviewRow {
   reviewer_notes: string | null;
   resolved_at: string | null;
   created_at: string;
-  /** JSON text; read only to derive `deskOnly`, never forwarded. */
+  /** JSON text; read only to derive `deskOnly` and `reportId`, never forwarded. */
   context_data: string | null;
 }
 
@@ -206,6 +206,8 @@ function reviewToEvent(r: ManualReviewRow): PersonaEvent {
       deviceId: r.device_id ?? null,
       // The desktop refuses an App Master review as desk_only: only the verdict on that rides along.
       deskOnly: isDeskOnlyReview(r.context_data),
+      // A council Approval's report: the synced_messages row with this id.
+      reportId: reviewReportId(r.context_data),
     }),
     status,
     errorMessage: null,
@@ -646,6 +648,28 @@ export interface SyncedKnowledgePattern {
   createdAt: string;
   updatedAt: string;
 }
+
+/** A council report as the phone shows it: no `metadata` (it carries desktop file paths). */
+export interface SyncedReport {
+  id: string;
+  persona_id: string | null;
+  title: string | null;
+  content: string | null;
+  content_type: string | null;
+  created_at: string;
+}
+
+/** The synced report a council Approval is about, or null when it has not synced yet. */
+export const getSyncedReport = async (id: string): Promise<SyncedReport | null> => {
+  const r = await rows<SyncedReport>(
+    getSupabase()
+      .from("synced_messages")
+      .select("id, persona_id, title, content, content_type, created_at")
+      .eq("id", id)
+      .limit(1),
+  );
+  return r[0] ?? null;
+};
 
 export const getSyncedMemories = async (): Promise<SyncedMemory[]> => {
   const r = await rows<{

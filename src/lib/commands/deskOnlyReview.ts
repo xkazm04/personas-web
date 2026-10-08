@@ -25,6 +25,25 @@ export function isDeskOnlyReview(contextData: string | null | undefined): boolea
 }
 
 /**
+ * The report a council Approval is about: the desktop writes `context_data`
+ * as `{"reportId":"<id>"}` and the report syncs as the `synced_messages` row
+ * with that id. Null for anything else (absent, non-JSON, array, non-string
+ * or empty id). Pure.
+ */
+export function reviewReportId(contextData: string | null | undefined): string | null {
+  if (!contextData) return null;
+  let ctx: unknown;
+  try {
+    ctx = JSON.parse(contextData);
+  } catch {
+    return null;
+  }
+  if (typeof ctx !== "object" || ctx === null || Array.isArray(ctx)) return null;
+  const { reportId } = ctx as Record<string, unknown>;
+  return typeof reportId === "string" && reportId ? reportId : null;
+}
+
+/**
  * The ids a bulk verdict may send: a desk-only review never gets a
  * `review_decide`, whatever the selection holds.
  */

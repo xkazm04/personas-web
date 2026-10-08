@@ -62,6 +62,7 @@ function parseManualReview(
   let recordedResolver: string | null = null;
   let deviceId: string | null = null;
   let deskOnly = false;
+  let reportId: string | null = null;
   let parseError = false;
   try {
     const payload = JSON.parse(event.payload ?? "{}");
@@ -78,6 +79,7 @@ function parseManualReview(
     // The sync mirror carries the desktop that raised the review (supabaseApi.reviewToEvent).
     if (typeof payload.deviceId === "string" && payload.deviceId) deviceId = payload.deviceId;
     if (payload.deskOnly === true) deskOnly = true;
+    if (typeof payload.reportId === "string" && payload.reportId) reportId = payload.reportId;
   } catch {
     content = event.payload ?? "";
     parseError = true;
@@ -100,6 +102,7 @@ function parseManualReview(
     escalatedAt: null,
     deviceId,
     deskOnly: deskOnly || undefined,
+    reportId: reportId ?? undefined,
     personaName: p?.name,
     personaIcon: p?.icon ?? undefined,
     personaColor: p?.color ?? undefined,

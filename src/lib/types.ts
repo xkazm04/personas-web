@@ -173,6 +173,8 @@ export interface ManualReviewItem extends WithPersonaInfo {
   deviceId?: string | null;
   /** The desktop refuses a phone verdict on this review (App Master packet or ask): decide it at the desk. Absent means false. */
   deskOnly?: boolean;
+  /** The synced report (`synced_messages.id`) a council Approval is about, where the plane carries it. */
+  reportId?: string | null;
   /** True when the event payload failed JSON.parse or omitted/used an invalid
    *  severity. Such reviews are fail-loud escalated to "critical" so a
    *  malformed payload can never widen the SLA via the info default. */
