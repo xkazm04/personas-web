@@ -55,3 +55,18 @@ From the security read (`bb48836922`, `docs/features/settings/README.md`, the `c
 The Director ran `npm run db:migrate:sync` against pvfw at about 18:10 local on 2026-10-08. `check-sync-schema` reported `RESULT ok`, including `pending_commands_command_type_check names channel_say: yes` (source: the Director).
 
 Not yet exercised end to end (phone to pvfw to desktop to the master's channel); the first exercise waits on Tailscale.
+
+
+## Status, 2026-10-08 night
+
+The sections above are not edited. Known limits (a), (b) and (d) are closed on personas master. Limits (c) and (e) are still open; (c) is being worked as F3.
+
+- (a) closed by `2c65f9f0ea` (F1). Each paired phone may make at most 10 says in any 10 minutes, counted from the database. Past that the say is refused `rate_limited`. A phone's row carries `author_id` = its controller id and `author_label` `'phone: <name>'`.
+- (b) closed by `693fc11e77` (F2). Every terminal write of a `channel_say` row sets the cloud row's params to `{}` and its envelope to null.
+- (d) closed by `78c5fcd8e6` (F4). A say is accepted only for the App Master the headless loop reads. `channel_say::is_loop_read_master` applies the rule of `dbread.mjs` `masterPersona`. Any other persona is refused `not_app_master`.
+
+The refusals now include `rate_limited`. Docs landed in `2eb2b110b2`, and test helpers in `4e0f1010a7`. The calls made on the way are in [the hardening-calls record](2026-10-08-phone-say-hardening-calls.md).
+
+Run `eb59af72` step 0 re-proved all of this on master: `channel_say` 19 passed, `remote_commands` 49 passed.
+
+It has not yet been exercised end to end. The operator's installed build `57d305c7` does not carry it.

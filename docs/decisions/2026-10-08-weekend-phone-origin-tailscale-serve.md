@@ -34,3 +34,14 @@ personas-web: `src/lib/commands/signer.ts:37,43,96`; `src/lib/commands/pairing.t
 The sections above are not edited. Run `afe2afb6` (item B) merged on personas master as `0706c0d811`, `3e3ed19246` and `53d746b537` (verify with `git -C C:/Users/kazda/kiro/personas log --oneline 0706c0d811~1..53d746b537`). The setting is the Pairing address field in the desktop's Paired phones panel.
 
 Open and undecided: when the address is unset, the QR still falls back to `https://personas.so`, which does not resolve, so a user who never sets the address would send pairing secrets to whoever registers that domain. The served `*.ts.net` name is still not recorded.
+
+
+## Status, 2026-10-08 night
+
+The sections above are not edited. The evening's open item is closed. Personas `6edb84e889`, `11895b575e` and `8c7d3587f7` (H2) removed the `personas.so` default.
+
+With no Pairing address set, pairing is off. Pair a phone is disabled, and `begin_pairing` refuses with a validation error before it mints a secret. The `CloudPairingOrigin` shape is unchanged; `custom: false` now means not set.
+
+Still open, and with the operator: `src-tauri/src/commands/live_roadmap.rs` fetches `https://personas.so/roadmap/v1.json` for Home > Releases. Whoever registers the domain could put any text into that roadmap. The text renders as plain text, with no links and no script. The fetch also tells the registrant each install's IP and app version. Run `eb59af72` rated it medium. The operator's choice, not yet made, is to register the domain or move the URL.
+
+The served `*.ts.net` name is still not recorded.
