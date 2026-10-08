@@ -225,6 +225,30 @@ export interface PersonasMonitorCopy {
       live: string;
       liveNote: string;
     };
+    host: {
+      label: string;
+      online: string;
+      offline: string;
+      synced: string;
+      justNow: string;
+      secondsAgo: string;
+      latency: string;
+      latencyTitle: string;
+      lastSeen: string;
+      offlineNote: string;
+      offlineBanner: string;
+      asOf: string;
+      slots: string;
+      slotsValue: string;
+      slotsAria: string;
+      queued: string;
+      queuedNone: string;
+      paused: string;
+      cpu: string;
+      memory: string;
+      memValue: string;
+      notReported: string;
+    };
   };
   city: {
     label: string;
@@ -513,6 +537,30 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       procQueued: 'queued',
       live: 'Live',
       liveNote: 'Newest events',
+    },
+    host: {
+      label: 'The computer your agents run on',
+      online: 'Online',
+      offline: 'Offline',
+      synced: 'synced {ago}',
+      justNow: 'just now',
+      secondsAgo: '{n}s ago',
+      latency: '{ms} ms',
+      latencyTitle: 'Round trip of its last report',
+      lastSeen: 'Last seen {ago}',
+      offlineNote: 'Showing the last state it reported. Nothing you send will reach it until it is back.',
+      offlineBanner: '{name} is offline, last seen {ago}. You are looking at the last state it reported.',
+      asOf: 'as of {time} UTC',
+      slots: 'Run slots',
+      slotsValue: '{used} of {total}',
+      slotsAria: '{used} of {total} run slots in use, {queued} queued, {paused} paused',
+      queued: '{n} queued',
+      queuedNone: 'Nothing queued',
+      paused: '{n} paused',
+      cpu: 'CPU',
+      memory: 'Memory',
+      memValue: '{used}/{total} GB',
+      notReported: 'not reported',
     },
   },
   city: {

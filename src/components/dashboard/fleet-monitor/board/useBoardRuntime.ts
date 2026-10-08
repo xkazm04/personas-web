@@ -1,18 +1,31 @@
 "use client";
 
 import { useEffect, useReducer, useState, type RefObject } from "react";
+import { parseDemoDesktop } from "@/lib/sync/reachability";
 import { initSim, simReducer } from "./sim";
+import type { HostStatus } from "./host";
 
 /** Drives the seeded simulation once per second while the tab is visible.
- *  Reduced motion keeps the data ticking (slower), only the motion goes still. */
-export function useBoardSim(scale: number, still: boolean, hidden: boolean) {
-  const [sim, dispatch] = useReducer(simReducer, undefined, initSim);
+ *  Reduced motion keeps the data ticking (slower), only the motion goes still.
+ *  An offline machine reports nothing, so its last state stands still. */
+export function useBoardSim(scale: number, still: boolean, hidden: boolean, offline: boolean) {
+  const [sim, dispatch] = useReducer(simReducer, scale, initSim);
   useEffect(() => {
-    if (hidden) return;
+    if (hidden || offline) return;
     const id = window.setInterval(() => dispatch({ type: "advance", dt: 1000, scale, still }), 1000);
     return () => window.clearInterval(id);
-  }, [scale, still, hidden]);
+  }, [scale, still, hidden, offline]);
   return [sim, dispatch] as const;
+}
+
+/** Whether the demo machine answers: `?desktop=offline` (or `never`) switches it
+ *  off for review and e2e, the same switch the phone layout reads. The board is
+ *  client-only (next/dynamic ssr:false), so reading the URL once is safe. */
+export function useHostStatus(): HostStatus {
+  const [status] = useState<HostStatus>(() =>
+    typeof window !== "undefined" && parseDemoDesktop(window.location.search) !== "online" ? "offline" : "online",
+  );
+  return status;
 }
 
 /** The element's content box, kept current by a ResizeObserver. */

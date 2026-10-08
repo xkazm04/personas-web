@@ -1,4 +1,5 @@
 import { FLEET } from "../fleet-data";
+import { slotCapacity } from "./host";
 import {
   MESSAGE_TEXTS,
   TEAM_TASKS,
@@ -24,6 +25,10 @@ export interface SimState {
   simMs: number;
   seed: number;
   nextTickAt: number;
+  /** Sim time of the machine's last report: every tick is a sync pass. */
+  beatAt: number;
+  /** The fleet size the last advance ran at; caps concurrent runs (host slots). */
+  scale: number;
 }
 
 export type SimAction =
@@ -33,7 +38,7 @@ export type SimAction =
 
 const MAX_EVENTS = 400;
 
-export function initSim(): SimState {
+export function initSim(scale = 99): SimState {
   return {
     agents: FLEET.agents.map((a, idx) => ({
       ...a,
@@ -49,6 +54,8 @@ export function initSim(): SimState {
     simMs: 0,
     seed: 20261001,
     nextTickAt: 3000,
+    beatAt: 0,
+    scale,
   };
 }
 
@@ -98,6 +105,19 @@ function startRun(a: SimAgent, simMs: number, task: string | null, taskKey: Task
   a.task = task;
   a.taskKey = taskKey;
   a.liveToolCalls = 0;
+}
+
+/** Start a run when the machine has a free slot; otherwise queue it. */
+function startOrQueue(d: Draft, a: SimAgent, scale: number, simMs: number, task: string | null, taskKey: TaskKey | null) {
+  const running = d.agents.slice(0, scale).filter((x) => x.state === "running").length;
+  if (running < slotCapacity(scale)) startRun(a, simMs, task, taskKey);
+  else {
+    a.state = "queued";
+    a.task = task;
+    a.taskKey = taskKey;
+    a.progress = null;
+    a.startSim = null;
+  }
 }
 
 function teamTask(d: Draft, a: SimAgent): [string | null, TaskKey | null] {
@@ -160,7 +180,7 @@ function simTick(d: Draft, scale: number, simMs: number) {
   const failed = d.agents.slice(0, scale).filter((a) => a.state === "failed" && a.enabled);
   if (r < 0.1 && failed.length) {
     const a = d.edit(d.pick(failed).idx);
-    startRun(a, simMs, ...teamTask(d, a));
+    startOrQueue(d, a, scale, simMs, ...teamTask(d, a));
     a.health = "degraded";
     d.push({ agentId: a.id, toAgentId: null, kind: "self_heal", text: null }, simMs);
   } else if (r < 0.17) {
@@ -181,15 +201,17 @@ function simTick(d: Draft, scale: number, simMs: number) {
 
 export function simReducer(state: SimState, action: SimAction): SimState {
   const d = new Draft(state);
-  let { simMs, nextTickAt } = state;
+  let { simMs, nextTickAt, beatAt } = state;
   if (action.type === "advance") {
     simMs += action.dt;
     if (simMs >= nextTickAt) {
       simTick(d, action.scale, simMs);
       nextTickAt = simMs + (action.still ? 6000 : 2500 + d.r() * 1500);
+      beatAt = simMs;
     }
-    return { agents: d.agents, events: d.events, seed: d.seed, simMs, nextTickAt };
+    return { agents: d.agents, events: d.events, seed: d.seed, simMs, nextTickAt, beatAt, scale: action.scale };
   }
+  const scale = state.scale;
   const idx = state.agents.findIndex((a) => a.id === action.id);
   if (idx < 0) return state;
   const a = d.edit(idx);
@@ -203,15 +225,15 @@ export function simReducer(state: SimState, action: SimAction): SimState {
       a.task = null;
       a.taskKey = null;
     }
-    if (a.state === "draft_ready" && !action.approve && !a.reviews.length) startRun(a, simMs, null, "revising");
+    if (a.state === "draft_ready" && !action.approve && !a.reviews.length) startOrQueue(d, a, scale, simMs, null, "revising");
     d.push({ ...base, decision: { act: action.approve ? "approve" : "sendback", title: rv.title } }, simMs);
   } else if (action.type === "retry") {
     const pool = TEAM_TASKS[a.team];
-    startRun(a, simMs, pool?.[0] ?? null, pool?.length ? null : "retrying");
+    startOrQueue(d, a, scale, simMs, pool?.[0] ?? null, pool?.length ? null : "retrying");
     a.health = "degraded";
     d.push({ ...base, decision: { act: "retry" } }, simMs);
   } else if (action.type === "answer") {
-    startRun(a, simMs, null, "resuming");
+    startOrQueue(d, a, scale, simMs, null, "resuming");
     d.push({ ...base, decision: { act: "answer" } }, simMs);
   } else {
     const n = a.unreadMessages.length;

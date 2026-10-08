@@ -7,6 +7,7 @@ import { FLEET, formatAge, formatClock } from "../fleet-data";
 import { simNow, type BoardCopy } from "./copy";
 import { TEAM_BY_ID, fill, plural, type SimAgent } from "./model";
 import type { BoardNav } from "./useBoardNav";
+import type { HostReading } from "./host";
 import b from "./board.module.css";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
@@ -16,6 +17,7 @@ interface TopStripProps {
   simMs: number;
   copy: BoardCopy;
   nav: BoardNav;
+  host: HostReading;
 }
 
 const PILES = ["needs", "working", "resting", "off"] as const;
@@ -59,7 +61,7 @@ function Crumbs({ scope, copy, nav }: Pick<TopStripProps, "scope" | "copy" | "na
 }
 
 /** L0's top edge, one line: the way back, the verdict, the fleet's mix, usage pace, the clock. */
-export default function TopStrip({ counts: c, scope, simMs, copy, nav }: TopStripProps) {
+export default function TopStrip({ counts: c, scope, simMs, copy, nav, host }: TopStripProps) {
   const piles = personasMonitorCopy.attention;
   const verdict = c.needs ? plural(c.needs, copy.top.needsOne, copy.top.needsMany) : copy.top.allClear;
   // Below the fleet level the way back needs the room: the pile legend yields.
@@ -100,7 +102,11 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav }: TopStri
             </div>
           );
         })}
-        <span className="font-mono text-sm font-semibold tabular-nums text-foreground" aria-hidden="true">{formatClock(simNow(simMs))} UTC</span>
+        {host.status === "online" ? (
+          <span className="font-mono text-sm font-semibold tabular-nums text-foreground" aria-hidden="true">{formatClock(simNow(simMs))} UTC</span>
+        ) : (
+          <span className="text-sm text-muted-dark">{fill(copy.host.asOf, { time: formatClock(simNow(simMs) - host.beatAgeMs).slice(0, 5) })}</span>
+        )}
         <span className="hidden items-center gap-1.5 whitespace-nowrap text-xs text-muted-dark xl:flex">
           <kbd className={kbd} title={copy.nav.nextHint}>N</kbd> <span className="hidden 2xl:inline">{copy.nav.nextHint}</span>
           <kbd className={`${kbd} ml-1`} title={copy.nav.escHint}>Esc</kbd> <span className="hidden 2xl:inline">{copy.nav.escHint}</span>

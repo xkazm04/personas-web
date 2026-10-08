@@ -13,6 +13,7 @@ interface BottomStripProps {
   copy: BoardCopy;
   nav: BoardNav;
   live: boolean;
+  offline: boolean;
 }
 
 const KIND_COLOR: Record<BoardEvent["kind"], string> = {
@@ -21,15 +22,15 @@ const KIND_COLOR: Record<BoardEvent["kind"], string> = {
 };
 
 /** L0's bottom edge, one line: the newest events, then app-level work. */
-export default function BottomStrip({ scope, simMs, events, copy, nav, live }: BottomStripProps) {
+export default function BottomStrip({ scope, simMs, events, copy, nav, live, offline }: BottomStripProps) {
   const byId = new Map(scope.map((a) => [a.id, a]));
   const latest = events.filter((e) => byId.has(e.agentId)).slice(0, 3);
 
   return (
     <>
       <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-dark">
-        <i className={`h-1.5 w-1.5 rounded-full bg-[var(--status-success)] ${live ? "animate-pulse" : ""}`} aria-hidden="true" />
-        {copy.band.live}
+        <i className={`h-1.5 w-1.5 rounded-full ${offline ? "shadow-[inset_0_0_0_1.5px_var(--muted-foreground)]" : "bg-[var(--status-success)]"} ${live ? "animate-pulse" : ""}`} aria-hidden="true" />
+        {offline ? copy.host.offline : copy.band.live}
       </span>
       <ul className="flex min-w-0 flex-1 items-center gap-5 overflow-hidden" aria-label={copy.band.liveNote}>
         {latest.map((e) => {
