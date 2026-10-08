@@ -113,6 +113,10 @@ async function main() {
     if (!namesReviewDecide) ok = false;
     console.log(`pending_commands_command_type_check names review_decide: ${namesReviewDecide ? "yes" : "NO"}`);
 
+    const namesChannelSay = (cons.rows[0]?.def ?? "").includes("channel_say");
+    if (!namesChannelSay) ok = false;
+    console.log(`pending_commands_command_type_check names channel_say: ${namesChannelSay ? "yes" : "NO"}`);
+
     console.log("Other public base tables (exact row counts):");
     const others = rows.map((r) => r.name).filter((n) => !expected.includes(n));
     if (others.length === 0) console.log("  (none)");

@@ -29,6 +29,7 @@ import type {
   EventStatus,
 } from "./types";
 import type { SyncedNote } from "./notes/notesModel";
+import type { ChannelSayInput } from "./commands/channelSay";
 import type { ChatMessage, ChatSendInput, ChatSession, ChatThreadRef, ListChatSessionsInput } from "./chat/chatModel";
 import { verdictEventBody, type ReviewDecisionInput } from "./commands/reviewDecide";
 
@@ -188,6 +189,12 @@ export interface ApiClient {
   listChatMessages(thread: ChatThreadRef): Promise<ChatMessage[]>;
   /** Send a chat message: a `chat_send` command (spec 5.3); the reply arrives as synced data. */
   sendChatMessage(input: ChatSendInput): Promise<CommandAck>;
+  /**
+   * Direct an App Master: a `channel_say` command (weekend item E). The desk
+   * writes it into the master's channel and starts no run; the headless master
+   * reads it at its next wake. Answers with the command to follow.
+   */
+  sayToMaster(input: ChannelSayInput): Promise<CommandAck>;
 }
 
 // ---------------------------------------------------------------------------
@@ -402,6 +409,9 @@ const realApi: ApiClient = {
       listChatMessages: async () => [],
       sendChatMessage: async () => {
         throw new ApiError(501, "Chat is not available on the orchestrator plane.");
+      },
+      sayToMaster: async () => {
+        throw new ApiError(501, "Directing an App Master is not available on the orchestrator plane.");
       },
     };
 

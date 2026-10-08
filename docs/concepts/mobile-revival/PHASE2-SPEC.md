@@ -128,10 +128,11 @@ These are additive. They are appended to `scripts/setup-sync-db.sql` in the same
 ```sql
 -- v1 verbs. 'chat_send' ships in M9 but is allowed now so the desktop's refusal path is exercised.
 -- 'review_decide' added 2026-10-07 (M20), widened in place in the same statement.
+-- 'channel_say' added 2026-10-08 (weekend E): a direction to an App Master persona.
 alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
 alter table public.pending_commands add constraint pending_commands_command_type_check
   check (command_type in ('run_persona','cancel_execution','pause_persona','resume_persona','chat_send',
-                          'review_decide','queue_reorder','queue_set_lane','queue_cancel'));
+                          'review_decide','channel_say','queue_reorder','queue_set_lane','queue_cancel'));
 
 -- Trust envelope (section 3). The row's other columns stay for filters and display; the envelope is authoritative.
 alter table public.pending_commands add column if not exists controller_id uuid;
@@ -173,6 +174,9 @@ create trigger trg_pending_commands_insert_guard before insert on public.pending
 | `run_persona` | required | `{"prompt":"…"}`. The legacy `prompt` column is still filled for older desktops | as today, plus the project gate inside `execute_persona_inner` | `execute_persona_inner(…, input_data=prompt, idempotency_key=Some(id))` | `execution_id` column, as today (`rc.rs:485-487`), and `{"executionId":"…"}` |
 | `chat_send` (M9) | required | `{"sessionId":"chat-…"\|null,"message":"…"}` | persona exists; the message is not empty and ≤ 8 KB. **A paused persona is accepted (M21)** | see §5.3 | `{"sessionId":"…","userMessageId":"…","executionId":"…"}`. **It completes when the turn starts**; the reply arrives as data (§5.3) |
 | `review_decide` (M20) | required: the review's `persona_id` | `{"reviewId":"…","decision":"approved"\|"rejected","notes":"…"\|null}`; `notes` ≤ 2000 chars | the review exists locally AND its `persona_id` equals the envelope's (else `not_found`, never a hint that the id exists elsewhere); `decision` is one of the two (else `invalid_decision`); `reviewId` not a string → `bad_params`, `notes` over 2000 chars → `invalid_notes`. Already decided → `completed` with `changed:false` and the current status, the same rule as an already-terminal cancel | the shared chokepoint behind the desk's `update_manual_review_status` (§1.6): status write + every side effect, then a reviews sync nudge | `{"reviewId":"…","status":"approved"\|"rejected"\|"resolved","changed":bool}` |
+| `channel_say` (weekend E, 2026-10-08; personas `7653b0be85`, `channel_say.rs`) | required: the App Master persona, the same id as the envelope's `persona` | `{"message":"…"}`, exactly that one key; the web sends it trimmed. 1 to 2000 characters after the trim, counted by Unicode code point (`chars().count()` on the desk, `Array.from(s).length` on the web) | in order: `message` missing or not a string → `bad_params`; empty after the trim → `empty_message`; over 2000 → `message_too_long` (refused, never cut); the persona exists locally → `not_found`; it is an App Master (at least one non-retired charter, draft / suspended / active, bound to a project or a workspace) → else `not_app_master`. Idempotency: the command id is the message row id; a re-delivery of the same id completes with `changed:false` and writes nothing, and an id that already names a different row fails `internal_error` | credential-looking tokens are masked, then ONE `team_channel_messages` row (`author_kind 'user'`, `id` = the command id) is written. It starts no run and gets no reply through this surface: the headless App Master reads it at its next wake | `{"messageId":"…","changed":bool}`; `result_ref` = the message id, no `execution_id` |
+
+**`channel_say` targeting.** `target_device_id` = the persona's own device (`synced_personas.device_id`), chosen as the other persona verbs choose it. The refusal tokens a phone can see: `bad_params`, `empty_message`, `message_too_long`, `not_found`, `not_app_master`, `internal_error`, plus the plane's own `controller_not_paired`, `controller_revoked` and `expired`.
 
 **`review_decide` targeting.** `target_device_id` = `synced_manual_reviews.device_id` of the review (the desktop that raised it), falling back to the persona's `device_id` when the review row has none.
 

@@ -48,6 +48,7 @@ export const COMMAND_VERBS = [
   "cancel_execution",
   "chat_send",
   "review_decide",
+  "channel_say",
 ] as const;
 export type CommandVerb = (typeof COMMAND_VERBS)[number];
 

@@ -90,7 +90,7 @@ async function ownerDeviceFromMirror(personaId: string): Promise<string | null> 
  * proxy, so a static import would be a cycle.
  */
 async function sendCommand(
-  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide",
+  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide" | "channel_say",
   personaId: string,
   params: Record<string, unknown>,
   /** The desktop the caller already knows (a chat thread's device); else the persona's owner. */
@@ -610,6 +610,13 @@ export const supabaseApi: ApiClient = {
     if (!params) throw new ApiError(400, input.message.trim() ? "message_too_long" : "empty_message");
     const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;
     return sendCommand("chat_send", personaId, params, input.deviceId);
+  },
+
+  // A channel_say command to the App Master's own desktop: persona_id and
+  // envelope.persona are the master persona; params is exactly { message }.
+  sayToMaster: async (input) => {
+    const { channelSayParams } = await import("./commands/channelSay");
+    return sendCommand("channel_say", input.personaId, { ...channelSayParams(input.message) }, input.deviceId ?? null);
   },
 };
 

@@ -10,9 +10,9 @@
 
 /**
  * The v1 verbs a paired controller may send (`review_decide`: PLAN M20, spec
- * 1.6). The queue verbs stay desktop-approved and are not sent from here.
+ * 1.6; `channel_say`: weekend E, a direction to an App Master). The queue verbs stay desktop-approved and are not sent from here.
  */
-export type CommandVerb = "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide";
+export type CommandVerb = "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide" | "channel_say";
 
 /** Commands never queue (PLAN M12): an envelope is valid for 60 s from `iat`. */
 export const COMMAND_TTL_MS = 60_000;

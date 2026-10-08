@@ -331,3 +331,34 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
     });
   });
 });
+
+describe("channel_say (mock plane)", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const run = (id: string, personaId: string, params: Record<string, unknown>) => {
+    const rows: CommandRowUpdate[] = [];
+    runMockCommand({ id, verb: "channel_say", personaId, params }, (r) => rows.push(r), { isHidden: () => false });
+    vi.advanceTimersByTime(MOCK_TIMINGS.completedMs);
+    return rows.find((r) => r.status !== "executing");
+  };
+
+  it("completes with messageId = the command id and changed true, then changed false for the same id", () => {
+    const personaId = MOCK_PERSONAS[0].id;
+    expect(run("say-1", personaId, { message: " hi " })).toEqual({ id: "say-1", status: "completed", result: { messageId: "say-1", changed: true } });
+    expect(run("say-1", personaId, { message: " hi " })).toEqual({ id: "say-1", status: "completed", result: { messageId: "say-1", changed: false } });
+  });
+
+  it("refuses like the desk: bad params, empty, too long (by code point), unknown persona", () => {
+    const personaId = MOCK_PERSONAS[0].id;
+    expect(run("say-2", personaId, {})?.error_message).toBe("bad_params");
+    expect(run("say-3", personaId, { message: "  " })?.error_message).toBe("empty_message");
+    expect(run("say-4", personaId, { message: "😀".repeat(2001) })?.error_message).toBe("message_too_long");
+    expect(run("say-5", personaId, { message: "😀".repeat(2000) })?.status).toBe("completed");
+    expect(run("say-6", "nobody", { message: "hi" })?.error_message).toBe("not_found");
+  });
+});

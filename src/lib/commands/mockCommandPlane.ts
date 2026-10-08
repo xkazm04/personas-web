@@ -14,6 +14,7 @@ import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
 import { MOCK_CHAT_DEVICE_ID, MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS, mockChatReply } from "@/lib/mock-dashboard-data";
 import { ATHENA_PERSONA_ID, CHAT_MESSAGE_MAX_BYTES, utf8Bytes, type ChatThreadKind } from "@/lib/chat/chatModel";
 import type { EventStatus, GlobalExecution, Persona, PersonaEvent } from "@/lib/types";
+import { SAY_MAX_CHARS } from "./channelSay";
 import type { CommandRowUpdate } from "./commandReducer";
 import type { CommandVerb } from "./envelope";
 
@@ -276,10 +277,33 @@ function executeChat(cmd: MockCommand, schedule: Schedule, changed: () => void):
   return { id: cmd.id, status: "completed", result };
 }
 
+/** Command ids a mock `channel_say` has delivered: the same id again writes nothing. */
+const saidCommandIds = new Set<string>();
+
+/**
+ * `channel_say` (contract: params `{ message }`; result `{ messageId, changed }`).
+ * The message id is the command id; the same id again completes with
+ * `changed: false`. Refuses like the desktop: a bad / empty / over-2000-code-
+ * point message, an unknown persona. It starts no run and gets no reply. The
+ * demo has no App Master marker, so every known persona takes a direction.
+ */
+function executeSay(cmd: MockCommand): CommandRowUpdate {
+  const raw = cmd.params.message;
+  if (typeof raw !== "string") return { id: cmd.id, status: "failed", error_message: "bad_params" };
+  const message = raw.trim();
+  if (message.length === 0) return { id: cmd.id, status: "failed", error_message: "empty_message" };
+  if (Array.from(message).length > SAY_MAX_CHARS) return { id: cmd.id, status: "failed", error_message: "message_too_long" };
+  if (!MOCK_PERSONAS.some((p) => p.id === cmd.personaId)) return { id: cmd.id, status: "failed", error_message: "not_found" };
+  const changed = !saidCommandIds.has(cmd.id);
+  saidCommandIds.add(cmd.id);
+  return { id: cmd.id, status: "completed", result: { messageId: cmd.id, changed } };
+}
+
 /** Run the verb against the fixtures; returns the row the desktop would write. */
 function execute(cmd: MockCommand, schedule: Schedule, changed: () => void): CommandRowUpdate {
   // Athena is not a persona: a chat is answered before the persona lookup.
   if (cmd.verb === "chat_send") return executeChat(cmd, schedule, changed);
+  if (cmd.verb === "channel_say") return executeSay(cmd);
 
   const idx = MOCK_PERSONAS.findIndex((p) => p.id === cmd.personaId);
   if (idx === -1) return { id: cmd.id, status: "failed", error_message: "not_found" };

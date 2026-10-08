@@ -378,10 +378,12 @@ alter table public.pending_commands add column if not exists result_ref text;
 -- 'chat_send' ships later (M9) but is allowed now so the desktop's refusal
 -- path is exercised. 'review_decide' (M20, 2026-10-07): a manual review's
 -- verdict from the web, run by the desktop's shared decision chokepoint.
+-- 'channel_say' (weekend E, 2026-10-08): a direction from the phone to an App
+-- Master persona, read at its next wake (personas 7653b0be85, channel_say.rs).
 alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
 alter table public.pending_commands add constraint pending_commands_command_type_check
   check (command_type in ('run_persona','cancel_execution','pause_persona','resume_persona','chat_send',
-                          'review_decide','queue_reorder','queue_set_lane','queue_cancel'));
+                          'review_decide','channel_say','queue_reorder','queue_set_lane','queue_cancel'));
 create index if not exists idx_pending_commands_device on public.pending_commands (target_device_id, status);
 
 -- =====================================================================

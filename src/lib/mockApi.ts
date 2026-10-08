@@ -47,6 +47,7 @@ import type {
   ChatThreadRef,
   ListChatSessionsInput,
 } from "./chat/chatModel";
+import type { ChannelSayInput } from "./commands/channelSay";
 import type {
   Persona,
   PersonaExecution,
@@ -390,6 +391,12 @@ export const mockApi: ApiClient = {
     const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;
     const { sendPersonaCommand } = await import("./commands/personaCommands");
     return sendPersonaCommand("chat_send", personaId, params, DEMO_TARGET);
+  },
+
+  sayToMaster: async (input: ChannelSayInput): Promise<CommandAck> => {
+    const { channelSayParams } = await import("./commands/channelSay");
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("channel_say", input.personaId, { ...channelSayParams(input.message) }, DEMO_TARGET);
   },
 };
 
