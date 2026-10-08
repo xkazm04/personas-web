@@ -1783,7 +1783,14 @@
             "src/components/dashboard/spa/navigate.tsx",
             "src/components/dashboard/spa/viewRegistry.tsx",
             "src/components/dashboard/spa/views.ts",
-            "src/app/dashboard/[view]/page.tsx"
+            "src/app/dashboard/[view]/page.tsx",
+            "src/components/dashboard/arrival/ArrivalProvider.tsx",
+            "src/components/dashboard/arrival/Deferred.tsx",
+            "src/components/dashboard/arrival/ViewGap.tsx",
+            "src/components/dashboard/arrival/arrive.ts",
+            "src/components/dashboard/arrival/scheduler.ts",
+            "src/components/dashboard/arrival/scheduler.test.ts",
+            "src/styles/dashboard.css"
           ],
           "target": null,
           "apiRoutes": []

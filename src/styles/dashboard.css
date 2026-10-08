@@ -1,13 +1,21 @@
 /**
  * Dashboard canvas + arrival choreography.
  *
- * Dashboard-only styles.
+ * Two concerns live here because both only apply under `/dashboard/*`:
  *
- * `.dash-canvas` — the dashboard's backdrop. Every theme gets a faint
+ * 1. `.dash-canvas` — the dashboard's backdrop. Every theme gets a faint
  *    glow + a pattern of its own so the working surface is never one flat
- *    colour. The layers sit on a fixed, composited `::before` (no repaint on
+ *    colour. The layers sit on fixed, composited `::before`/`::after` (no repaint on
  *    scroll, no layout), fade out toward the edges through a mask, and are
  *    dropped entirely under forced colours and print.
+ *
+ * 2. The arrival tiers (docs/features/dashboard/loading-orchestration.md):
+ *    `.dash-arrive` (T1 structure / T2 content cascade), `.dash-settle`
+ *    (T3 deep content reveal) and `.dash-ghost` (the delayed placeholder).
+ *    All of them animate opacity/transform only. `[data-arrived]` is written
+ *    by ViewOutlet when an entrance finishes, so a kept-alive view that is
+ *    shown again (Activity toggles `display`, which restarts CSS animations)
+ *    does not replay its cascade.
  */
 
 /* ── Canvas: per-theme tokens ───────────────────────────────────────────
@@ -164,5 +172,63 @@
   .dash-canvas::before,
   .dash-canvas::after {
     display: none;
+  }
+}
+
+/* ── Arrival tiers ──────────────────────────────────────────────────── */
+
+:root {
+  /* T1/T2 cascade: per-index offset and each item's own motion. */
+  --arrive-step: 45ms;
+  --arrive-duration: 240ms;
+  /* T3 deep reveal. */
+  --settle-duration: 280ms;
+  /* Placeholder invisibility window (warm loads never see a ghost). */
+  --ghost-delay: 160ms;
+  --arrive-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes dash-arrive {
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes dash-settle {
+  from { opacity: 0; transform: translate3d(0, 3px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes dash-ghost {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.dash-arrive:not([data-arrived]) {
+  animation: dash-arrive var(--arrive-duration) var(--arrive-ease) both;
+  animation-delay: calc(var(--arrive-i, 0) * var(--arrive-step));
+}
+
+.dash-settle:not([data-arrived]) {
+  animation: dash-settle var(--settle-duration) var(--arrive-ease) both;
+}
+
+/* The ghost is invisible for --ghost-delay, then fades in over 400ms. */
+.dash-ghost {
+  animation: dash-ghost 400ms ease-out var(--ghost-delay) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Content appears settled on its first frame — the same end state as a
+     finished cascade, never a delayed one. */
+  .dash-arrive:not([data-arrived]),
+  .dash-settle:not([data-arrived]) {
+    animation: none !important;
+  }
+
+  /* The ghost keeps its invisibility window (it is not motion, it is the
+     thing that stops warm loads flashing): appear in one step after the
+     delay. The global reset shortens duration but leaves the delay intact. */
+  .dash-ghost {
+    animation: dash-ghost 1ms steps(1, end) var(--ghost-delay) both !important;
   }
 }

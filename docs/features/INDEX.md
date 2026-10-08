@@ -61,6 +61,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [knowledge](dashboard/knowledge.md) | `/dashboard/knowledge` | Knowledge |
 | ✅ [settings](dashboard/settings.md) | `/dashboard/settings` | Settings |
 | ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (SPA shell, two-level menu, realtime) |
+| ✅ [loading-orchestration](dashboard/loading-orchestration.md) | `/dashboard/*` | (loading tier standard, theme canvas) |
 
 ### marketing/ — Marketing & Landing
 

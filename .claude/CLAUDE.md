@@ -153,6 +153,18 @@ npm run test:e2e    # Playwright (specs under e2e/)
    silently undoes the split). See the chart cards under
    `src/components/dashboard/` for the established shape.
 
+10. **Dashboard loading tiers**: every `/dashboard/*` view follows
+    `docs/features/dashboard/loading-orchestration.md`. T0 frame and T1 section
+    chrome paint with the view (T1 enters via the `.dash-arrive` cascade from
+    `arrival/arrive.ts`); T2 data renders the moment it exists; T3 deep content
+    (charts, graphs, heavy/nested/below-fold panels) mounts through
+    `<Deferred minHeight order preload>` from `src/components/dashboard/arrival/`,
+    which reserves the space, starts the chunk download at once, and releases
+    the mount through the view's idle-scheduled queue. Never ghost chrome, never
+    show an undelayed placeholder, never re-key a subtree to replay an entrance.
+    The dashboard backdrop is `.dash-canvas` (`src/styles/dashboard.css`): a new
+    theme adds its `--dash-*` block there.
+
 ## Out of scope
 
 Unless the user explicitly asks:
