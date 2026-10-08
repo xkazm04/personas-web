@@ -72,7 +72,7 @@ export function ReasonChip({ cls, label, className = "" }: { cls: ReasonClass; l
 }
 
 export function StatePill({ agent, text }: { agent: SimAgent; text: string }) {
-  const key = agent.enabled ? agent.state : "off";
+  const key = agent.enabled || agent.state === "running" ? agent.state : "off";
   return (
     <span className={`${b.chip} ${b[`ink-${key}`]} rounded-full border-transparent px-3 py-1 text-sm font-semibold`}>{text}</span>
   );

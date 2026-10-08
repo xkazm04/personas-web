@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useEffectEvent, useRef, useState, type RefObject } from "react";
-import { queueOf, type SimAgent } from "./model";
+import { FLEET } from "../fleet-data";
+import { orderInBay, queueOf, type SimAgent } from "./model";
 
 export type Attention = { type: "agent" | "team"; id: string } | null;
 
@@ -13,6 +14,14 @@ interface NavInput {
   toast: (text: string) => void;
   nextToast: (i: number, n: number, a: SimAgent) => string;
   nobodyToast: string;
+  /** `T` at the fleet or team level starts triage. */
+  onTriage?: () => void;
+  /** `L` at the fleet level switches between the field and the list. */
+  onLayout?: () => void;
+  /** `E` opens or closes the activity log. */
+  onActivity?: () => void;
+  /** `?` shows every shortcut. */
+  onShortcuts?: () => void;
 }
 
 /**
@@ -20,7 +29,7 @@ interface NavInput {
  * Escape closes the top layer only and hands focus back to whatever opened it;
  * `N` walks the ranked needs-you queue from anywhere on the page.
  */
-export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, nobodyToast }: NavInput) {
+export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, nobodyToast, onTriage, onLayout, onActivity, onShortcuts }: NavInput) {
   const [teamOpen, setTeamOpen] = useState<string | null>(null);
   const [agentOpen, setAgentOpen] = useState<string | null>(null);
   const [att, setAtt] = useState<Attention>(null);
@@ -92,6 +101,18 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     else if (teamOpen) closeTeam(true);
   };
 
+  /** Step the open agent through its neighbours: its team's bay order when a
+   *  team is open, the whole field's reading order otherwise. */
+  const stepAgent = (delta: number) => {
+    if (!agentOpen) return;
+    const list = teamOpen
+      ? orderInBay(scope.filter((a) => a.team === teamOpen))
+      : FLEET.teams.flatMap((t) => orderInBay(scope.filter((a) => a.team === t.id)));
+    const i = list.findIndex((a) => a.id === agentOpen);
+    if (i < 0 || list.length < 2) return;
+    setAgentOpen(list[(i + delta + list.length) % list.length].id);
+  };
+
   const nextNeeds = () => {
     const q = queueOf(scope);
     if (!q.length) {
@@ -115,12 +136,29 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     if (e.altKey || e.ctrlKey || e.metaKey || e.defaultPrevented) return;
     const tag = (e.target as HTMLElement | null)?.tagName?.toLowerCase();
     if (tag === "input" || tag === "textarea" || tag === "select") return;
+    // A dialog owns the keyboard (its own Escape closes it, not the scene behind).
+    if (document.querySelector('[aria-modal="true"]')) return;
     if (e.key === "Escape" && (agentOpen || teamOpen)) {
       e.preventDefault();
       back();
     } else if (e.key === "n" || e.key === "N") {
       e.preventDefault();
       nextNeeds();
+    } else if ((e.key === "t" || e.key === "T") && onTriage && !agentOpen) {
+      e.preventDefault();
+      onTriage();
+    } else if ((e.key === "l" || e.key === "L") && onLayout && !agentOpen && !teamOpen) {
+      e.preventDefault();
+      onLayout();
+    } else if (e.key === "?" && onShortcuts) {
+      e.preventDefault();
+      onShortcuts();
+    } else if ((e.key === "e" || e.key === "E") && onActivity && !agentOpen) {
+      e.preventDefault();
+      onActivity();
+    } else if (agentOpen && (e.key === "j" || e.key === "k")) {
+      e.preventDefault();
+      stepAgent(e.key === "j" ? 1 : -1);
     }
   });
   useEffect(() => {
@@ -131,7 +169,7 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
 
   return {
     teamOpen, agentOpen, att,
-    attend, unattend, openTeam, closeTeam, openAgent, closeAgent, back, nextNeeds,
+    attend, unattend, openTeam, closeTeam, openAgent, closeAgent, back, nextNeeds, stepAgent,
   };
 }
 
