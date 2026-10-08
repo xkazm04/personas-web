@@ -163,7 +163,8 @@ function mapEvent(r: EventRow): PersonaEvent {
 interface ManualReviewRow {
   id: string;
   device_id: string | null;
-  execution_id: string;
+  /** NULL for a council Approval (raised with no execution). */
+  execution_id: string | null;
   persona_id: string;
   title: string;
   description: string | null;

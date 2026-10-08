@@ -92,6 +92,27 @@ async function main() {
       console.log(`  ${t.name}: ${present ? "present" : "missing"}`);
     }
 
+    // Catalog checks the review sync depends on (read-only SELECTs).
+    const nullable = await client.query(
+      `select is_nullable from information_schema.columns
+        where table_schema = 'public' and table_name = 'synced_manual_reviews' and column_name = 'execution_id'`,
+    );
+    const execNullable = nullable.rows[0]?.is_nullable === "YES";
+    if (!execNullable) ok = false;
+    console.log(`synced_manual_reviews.execution_id nullable: ${execNullable ? "yes" : "NO"}`);
+
+    const cons = await client.query(
+      `select pg_get_constraintdef(con.oid) as def
+         from pg_constraint con
+         join pg_class c on c.oid = con.conrelid
+         join pg_namespace n on n.oid = c.relnamespace
+        where n.nspname = 'public' and c.relname = 'pending_commands'
+          and con.conname = 'pending_commands_command_type_check'`,
+    );
+    const namesReviewDecide = (cons.rows[0]?.def ?? "").includes("review_decide");
+    if (!namesReviewDecide) ok = false;
+    console.log(`pending_commands_command_type_check names review_decide: ${namesReviewDecide ? "yes" : "NO"}`);
+
     console.log("Other public base tables (exact row counts):");
     const others = rows.map((r) => r.name).filter((n) => !expected.includes(n));
     if (others.length === 0) console.log("  (none)");

@@ -91,4 +91,13 @@ describe("supabaseApi.listEvents manual_review desk-only mapping", () => {
     expect(p0).not.toHaveProperty("context_data");
     expect(p0).not.toHaveProperty("contextData");
   });
+
+  it("maps a council Approval with a null execution_id, keeping its other fields", async () => {
+    stagedRows = [{ ...base, id: "r3", execution_id: null, context_data: '{"kind":"app_master_probation"}' }];
+    const [ev] = await supabaseApi.listEvents({ eventType: "manual_review" });
+    expect(ev.sourceId).toBeNull();
+    const p = JSON.parse(ev.payload ?? "{}");
+    expect(p).toMatchObject({ title: "T", deviceId: "dev-1", deskOnly: true });
+    expect(ev.targetPersonaId).toBe("p1");
+  });
 });

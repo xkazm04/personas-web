@@ -138,7 +138,7 @@ create table if not exists public.synced_manual_reviews (
   id                 text primary key,
   user_id            uuid not null default auth.uid() references auth.users(id) on delete cascade,
   device_id          text,
-  execution_id       text not null,
+  execution_id       text,
   persona_id         text not null,
   title              text not null,
   description        text,
@@ -152,6 +152,8 @@ create table if not exists public.synced_manual_reviews (
   updated_at         timestamptz not null default now(),
   synced_at          timestamptz not null default now()
 );
+-- A council Approval has no execution; the table already deployed with NOT NULL, so relax it in place.
+alter table public.synced_manual_reviews alter column execution_id drop not null;
 create index if not exists idx_synced_reviews_user_status on public.synced_manual_reviews (user_id, status);
 create index if not exists idx_synced_reviews_user_created on public.synced_manual_reviews (user_id, created_at desc);
 

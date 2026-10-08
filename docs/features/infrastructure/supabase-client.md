@@ -50,3 +50,4 @@ Provides a single shared `@supabase/supabase-js` client (`getSupabase()`) plus t
 - [Public Roadmap](../community/public-roadmap.md)
 - [Feature Voting & Comments](../community/feature-voting.md)
 - [Feature index](../INDEX.md)
+- `synced_manual_reviews.execution_id` is nullable (`ManualReviewRow.execution_id: string | null`): a council Approval is raised with no execution, and a NOT NULL there failed the whole review batch upsert; `reviewStore` maps null to an empty `executionId`, so the detail panel hides the execution line.
