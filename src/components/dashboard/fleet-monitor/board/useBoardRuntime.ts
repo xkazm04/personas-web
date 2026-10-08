@@ -4,6 +4,7 @@ import { useEffect, useReducer, useState, type RefObject } from "react";
 import { parseDemoDesktop } from "@/lib/sync/reachability";
 import { initSim, simReducer } from "./sim";
 import type { HostStatus } from "./host";
+import { HOLD_MS } from "./useCommands";
 
 /** Drives the seeded simulation once per second while the tab is visible.
  *  Reduced motion keeps the data ticking (slower), only the motion goes still.
@@ -44,15 +45,21 @@ export function useSize(ref: RefObject<HTMLElement | null>) {
   return size;
 }
 
-/** A transient status line (decisions, the `N` walk). */
+export interface ToastAction {
+  label: string;
+  run: () => void;
+}
+
+/** A transient status line (decisions, the `N` walk). One with an action
+ *  (Undo) stays for the command's hold window, so the action is still real. */
 export function useToast() {
-  const [toast, setToast] = useState<{ seq: number; text: string } | null>(null);
+  const [toast, setToast] = useState<{ seq: number; text: string; action?: ToastAction } | null>(null);
   useEffect(() => {
     if (!toast) return;
-    const id = window.setTimeout(() => setToast(null), 2600);
+    const id = window.setTimeout(() => setToast(null), toast.action ? HOLD_MS : 2600);
     return () => window.clearTimeout(id);
   }, [toast]);
-  const show = (text: string) => setToast((t) => ({ seq: (t?.seq ?? 0) + 1, text }));
+  const show = (text: string, action?: ToastAction) => setToast((t) => ({ seq: (t?.seq ?? 0) + 1, text, action }));
   return [toast, show] as const;
 }
 

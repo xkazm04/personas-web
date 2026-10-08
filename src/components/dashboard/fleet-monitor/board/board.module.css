@@ -66,6 +66,13 @@
 .orbitLive { animation: orbit 40s linear infinite; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
+/* A held verdict's Undo window running out. */
+.holdDrain {
+  transform-origin: 0 50%;
+  animation: holdDrain var(--hold, 4s) linear forwards;
+}
+@keyframes holdDrain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
 /* ── Spotlight art (agent scene): drifts against the pointer ── */
 .spotArt {
   transform: translate(calc(var(--px) * -18px), calc(var(--py) * -14px));

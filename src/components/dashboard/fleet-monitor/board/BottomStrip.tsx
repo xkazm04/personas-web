@@ -5,6 +5,7 @@ import { ATTENTION_COLOR } from "../attention";
 import { ago, eventText, type BoardCopy } from "./copy";
 import { fill, type BoardEvent, type SimAgent } from "./model";
 import type { BoardNav } from "./useBoardNav";
+import { FLEET_EVENT_ID } from "./sim";
 
 interface BottomStripProps {
   scope: SimAgent[];
@@ -24,7 +25,7 @@ const KIND_COLOR: Record<BoardEvent["kind"], string> = {
 /** L0's bottom edge, one line: the newest events, then app-level work. */
 export default function BottomStrip({ scope, simMs, events, copy, nav, live, offline }: BottomStripProps) {
   const byId = new Map(scope.map((a) => [a.id, a]));
-  const latest = events.filter((e) => byId.has(e.agentId)).slice(0, 3);
+  const latest = events.filter((e) => byId.has(e.agentId) || e.agentId === FLEET_EVENT_ID).slice(0, 3);
 
   return (
     <>
@@ -34,17 +35,19 @@ export default function BottomStrip({ scope, simMs, events, copy, nav, live, off
       </span>
       <ul className="flex min-w-0 flex-1 items-center gap-5 overflow-hidden" aria-label={copy.band.liveNote}>
         {latest.map((e) => {
-          const a = byId.get(e.agentId)!;
+          const a = byId.get(e.agentId);
+          const callsign = a?.callsign ?? copy.cmd.fleetCallsign;
           return (
             <li key={`${e.tsMs}-${e.agentId}-${e.kind}`} className="min-w-0 shrink last:hidden xl:last:block">
               <button
                 type="button"
                 className="flex max-w-full items-center gap-2 rounded text-left text-sm text-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground"
-                aria-label={`${copy.kinds[e.kind]}, ${a.callsign}: ${eventText(e, copy)}`}
-                onClick={(ev) => nav.openAgent(a.id, ev.currentTarget)}
+                aria-label={`${copy.kinds[e.kind]}, ${callsign}: ${eventText(e, copy)}`}
+                disabled={!a}
+                onClick={(ev) => a && nav.openAgent(a.id, ev.currentTarget)}
               >
                 <i className="h-2 w-2 shrink-0 rounded-full" style={{ background: KIND_COLOR[e.kind] }} aria-hidden="true" />
-                <b className="shrink-0 font-mono text-xs text-foreground">{a.callsign}</b>
+                <b className="shrink-0 font-mono text-xs text-foreground">{callsign}</b>
                 <span className="truncate">{eventText(e, copy)}</span>
                 <span className="shrink-0 text-xs text-muted-dark">{ago(FLEET.nowMs + simMs - e.tsMs, copy)}</span>
               </button>

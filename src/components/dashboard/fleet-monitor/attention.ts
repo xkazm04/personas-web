@@ -19,8 +19,10 @@ export type AttentionTone = "critical" | "warning";
 
 export function attentionOf(agent: Pick<FleetAgent, "state" | "enabled" | "reviews">): Attention {
   if (needsYou(agent as FleetAgent)) return "needs";
-  if (!agent.enabled) return "off";
+  // A paused agent finishes the run it is on (pause stops new runs), so it is
+  // still working until that run ends; then it is off.
   if (agent.state === "running") return "working";
+  if (!agent.enabled) return "off";
   return "resting";
 }
 

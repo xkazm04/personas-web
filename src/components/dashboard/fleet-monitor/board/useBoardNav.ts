@@ -115,6 +115,8 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     if (e.altKey || e.ctrlKey || e.metaKey || e.defaultPrevented) return;
     const tag = (e.target as HTMLElement | null)?.tagName?.toLowerCase();
     if (tag === "input" || tag === "textarea" || tag === "select") return;
+    // A dialog owns the keyboard (its own Escape closes it, not the scene behind).
+    if (document.querySelector('[aria-modal="true"]')) return;
     if (e.key === "Escape" && (agentOpen || teamOpen)) {
       e.preventDefault();
       back();

@@ -105,6 +105,13 @@ export interface PersonasMonitorCopy {
       answer: string;
       read: string;
       readOne: string;
+      pause: string;
+      resume: string;
+      run: string;
+      cancel: string;
+      pauseAll: string;
+      pauseAllStop: string;
+      resumeAll: string;
     };
     toasts: {
       approve: string;
@@ -248,6 +255,78 @@ export interface PersonasMonitorCopy {
       memory: string;
       memValue: string;
       notReported: string;
+    };
+    cmd: {
+      pause: string;
+      resume: string;
+      run: string;
+      cancel: string;
+      pauseAll: string;
+      resumeAll: string;
+      controls: string;
+      fleetControls: string;
+      fleetCallsign: string;
+      hints: {
+        pause: string;
+        resume: string;
+        run: string;
+        cancel: string;
+        pauseAll: string;
+        resumeAll: string;
+      };
+      status: {
+        held: string;
+        sending: string;
+        acked: string;
+        done: string;
+      };
+      pending: string;
+      doing: {
+        pause: string;
+        resume: string;
+        run: string;
+        cancel: string;
+        retry: string;
+        answer: string;
+        read: string;
+        approve: string;
+        sendback: string;
+        pauseAll: string;
+        resumeAll: string;
+      };
+      pausingShort: string;
+      offline: string;
+      pausedRunning: string;
+      fleetPaused: string;
+      fleetPausedNote: string;
+      undo: string;
+      undone: string;
+      toasts: {
+        pause: string;
+        resume: string;
+        run: string;
+        cancel: string;
+        pauseAll: string;
+        pauseAllStop: string;
+        resumeAll: string;
+      };
+      decided: {
+        approve: string;
+        sendback: string;
+      };
+      confirm: {
+        title: string;
+        lede: string;
+        running: string;
+        queued: string;
+        triggers: string;
+        alreadyOff: string;
+        stopNow: string;
+        stopping: string;
+        confirm: string;
+        confirmStop: string;
+        keep: string;
+      };
     };
   };
   city: {
@@ -418,6 +497,13 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       answer: 'You answered; the run resumed',
       read: 'You read {n} messages',
       readOne: 'You read {n} message',
+      pause: 'You paused it',
+      resume: 'You resumed it',
+      run: 'You started a run',
+      cancel: 'You cancelled the run',
+      pauseAll: 'You paused {n} agents',
+      pauseAllStop: 'You paused {n} agents and stopped {m} runs',
+      resumeAll: 'You resumed {n} agents',
     },
     toasts: {
       approve: '{callsign}: approved “{title}”',
@@ -561,6 +647,78 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       memory: 'Memory',
       memValue: '{used}/{total} GB',
       notReported: 'not reported',
+    },
+    cmd: {
+      pause: 'Pause',
+      resume: 'Resume',
+      run: 'Run now',
+      cancel: 'Cancel run',
+      pauseAll: 'Pause all',
+      resumeAll: 'Resume {n}',
+      controls: 'Controls for {callsign}',
+      fleetControls: 'Fleet controls',
+      fleetCallsign: 'Fleet',
+      hints: {
+        pause: 'Stops new runs, schedules and triggers. A run in progress finishes.',
+        resume: 'Lets it run again on its schedule and triggers',
+        run: 'Start a run now. It queues if every slot is busy.',
+        cancel: 'Stop the run in progress',
+        pauseAll: 'Pause every agent on {host}',
+        resumeAll: 'Resume the {n} agents Pause all switched off',
+      },
+      status: {
+        held: 'Sends in a moment',
+        sending: 'Sending to {host}',
+        acked: '{host} is on it',
+        done: 'Done',
+      },
+      pending: '{doing} · {status}',
+      doing: {
+        pause: 'Pausing',
+        resume: 'Resuming',
+        run: 'Starting a run',
+        cancel: 'Cancelling the run',
+        retry: 'Retrying',
+        answer: 'Sending your answer',
+        read: 'Marking read',
+        approve: 'Approving',
+        sendback: 'Sending back',
+        pauseAll: 'Pausing all',
+        resumeAll: 'Resuming all',
+      },
+      pausingShort: 'Pausing',
+      offline: '{host} is offline. Commands cannot reach it.',
+      pausedRunning: 'Paused, finishing its current run',
+      fleetPaused: 'Fleet paused',
+      fleetPausedNote: '{n} switched off',
+      undo: 'Undo',
+      undone: 'Undone. Nothing was sent to {host}.',
+      toasts: {
+        pause: '{callsign}: pausing',
+        resume: '{callsign}: resuming',
+        run: '{callsign}: run requested',
+        cancel: '{callsign}: cancelling the run',
+        pauseAll: 'Pausing {n} agents on {host}',
+        pauseAllStop: 'Pausing {n} agents and stopping {m} runs on {host}',
+        resumeAll: 'Resuming {n} agents on {host}',
+      },
+      decided: {
+        approve: 'Approved',
+        sendback: 'Sent back',
+      },
+      confirm: {
+        title: 'Pause every agent on {host}?',
+        lede: 'Nothing new starts until you resume. You can resume them all in one click.',
+        running: '{n} runs in progress finish first',
+        queued: '{n} queued runs will not start',
+        triggers: 'No schedule or trigger fires while paused',
+        alreadyOff: '{n} agents are already off and stay off',
+        stopNow: 'Also stop the {n} runs in progress now',
+        stopping: '{n} runs in progress stop now',
+        confirm: 'Pause {n} agents',
+        confirmStop: 'Pause {n} and stop {m} runs',
+        keep: 'Keep running',
+      },
     },
   },
   city: {

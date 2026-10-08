@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import { useRef, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { FLEET, type FleetScale } from "../fleet-data";
@@ -16,8 +16,12 @@ import BottomStrip from "./BottomStrip";
 import { TEAM_BY_ID, fill } from "./model";
 import { railItems } from "./copy";
 import HostCard, { OfflineBanner } from "./HostCard";
+import Toast from "./Toast";
 import { readHost } from "./host";
 import { useArrival, useBoardSim, useHostStatus, useSize, useToast } from "./useBoardRuntime";
+import { isOpen, useCommands } from "./useCommands";
+import FleetPauseDialog from "./FleetPauseDialog";
+import { makeOperator } from "./operator";
 import { useBoardNav } from "./useBoardNav";
 import b from "./board.module.css";
 import s from "./tiles.module.css";
@@ -50,6 +54,8 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
   const { width, height } = useSize(mainRef);
   const [sim, dispatch] = useBoardSim(scale, still, hidden, offline);
   const [toast, showToast] = useToast();
+  const commands = useCommands(dispatch);
+  const [confirmPause, setConfirmPause] = useState(false);
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
@@ -61,13 +67,14 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
   const bayRect = nav.teamOpen ? computeLayout(teams, scope, width, height).bays[nav.teamOpen] : undefined;
   const deep = !!(openAgent || nav.teamOpen);
   const host = readHost(scope, scale, sim.simMs, sim.beatAt, hostStatus);
+  const op = makeOperator({ commands, toast: showToast, copy, hostName: host.name, offline });
 
   const main = (
     <div className="absolute inset-0 flex flex-col">
       {offline && <OfflineBanner host={host} copy={copy} />}
       <div ref={mainRef} className="relative min-h-0 flex-1">
         <div inert={deep} className={`absolute inset-0 transition-[opacity,transform,filter] duration-500 ${deep ? "pointer-events-none scale-[1.02] opacity-0" : ""} ${offline ? "saturate-[.4]" : ""}`}>
-          <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} />
+          <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} />
         </div>
         <AnimatePresence>
           {nav.teamOpen && bayRect && (
@@ -88,15 +95,10 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
         </AnimatePresence>
         <AnimatePresence>
           {openAgent && (
-            <AgentScene key="agent" agent={openAgent} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live} dispatch={dispatch} toast={showToast} />
+            <AgentScene key="agent" agent={openAgent} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live} op={op} cmds={commands.cmds} hostName={host.name} />
           )}
         </AnimatePresence>
-        <div
-          role="status"
-          className={`pointer-events-none absolute left-1/2 top-3 z-30 -translate-x-1/2 rounded-xl bg-surface px-4 py-2 text-base text-foreground shadow-[inset_0_0_0_1px_var(--border-glass-strong),0_12px_40px_rgb(0_0_0/0.3)] transition-opacity duration-300 ${toast ? "opacity-100" : "opacity-0"}`}
-        >
-          {toast?.text}
-        </div>
+        <Toast toast={toast} />
       </div>
     </div>
   );
@@ -119,7 +121,15 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
         main={main}
         rail={
           <>
-            <HostCard host={host} copy={copy} live={live} />
+            <HostCard
+              host={host}
+              copy={copy}
+              live={live}
+              fleetPaused={(sim.fleetPaused ?? []).filter((id) => scope.some((a) => a.id === id && !a.enabled)).length}
+              pending={commands.cmds.find((c) => c.agentId === null && isOpen(c))}
+              onPauseAll={() => setConfirmPause(true)}
+              onResumeAll={() => op.resumeAll((sim.fleetPaused ?? []).length)}
+            />
             <NeedsYouRail
               items={railItems(scope, sim.simMs, sim.events, copy)}
               activeId={nav.att?.type === "agent" ? nav.att.id : null}
@@ -130,6 +140,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
         }
         bottom={<BottomStrip scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} nav={nav} live={live} offline={offline} />}
       />
+      <FleetPauseDialog open={confirmPause} onClose={() => setConfirmPause(false)} scope={scope} hostName={host.name} copy={copy} onConfirm={op.pauseAll} />
     </div>
   );
 }

@@ -1,14 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import Emblem from "./Emblem";
 import RunCard from "./RunCard";
 import AgentSide from "./AgentSide";
+import Controls from "./Controls";
 import { StatePill } from "./parts";
 import { stateText, type BoardCopy } from "./copy";
-import { TEAM_BY_ID, fill, plural, type BoardEvent, type SimAgent } from "./model";
-import type { SimAction } from "./sim";
+import { TEAM_BY_ID, type BoardEvent, type SimAgent } from "./model";
+import { openControl, type Command } from "./useCommands";
+import type { Operator } from "./operator";
 import b from "./board.module.css";
 
 interface AgentSceneProps {
@@ -18,41 +20,22 @@ interface AgentSceneProps {
   copy: BoardCopy;
   still: boolean;
   live: boolean;
-  dispatch: (a: SimAction) => void;
-  toast: (text: string) => void;
+  op: Operator;
+  cmds: readonly Command[];
+  hostName: string;
 }
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 
 /** One agent as a composed scene: who it is, its run, and what waits on you. */
-export default function AgentScene({ agent: a, simMs, events, copy, still, live, dispatch, toast }: AgentSceneProps) {
-  const [leaving, setLeaving] = useState<string | null>(null);
+export default function AgentScene({ agent: a, simMs, events, copy, still, live, op, cmds, hostName }: AgentSceneProps) {
   const team = TEAM_BY_ID[a.team];
+  const pending = openControl(cmds, a.id);
   const col = (dx: number, dy: number, delay: number) => ({
     initial: { opacity: 0, x: still ? 0 : dx, y: still ? 0 : dy },
     animate: { opacity: 1, x: 0, y: 0 },
     transition: { duration: still ? 0.2 : 0.6, delay: still ? 0 : delay, ease: EASE },
   });
-
-  const review = (rid: string, approve: boolean) => {
-    const r = a.reviews.find((x) => x.id === rid);
-    if (!r) return;
-    setLeaving(rid);
-    window.setTimeout(() => {
-      dispatch({ type: "review", id: a.id, rid, approve });
-      setLeaving(null);
-      toast(fill(copy.toasts[approve ? "approve" : "sendback"], { callsign: a.callsign, title: r.title }));
-    }, still ? 0 : 320);
-  };
-  const act = (kind: "retry" | "answer") => {
-    dispatch({ type: kind, id: a.id });
-    toast(fill(copy.toasts[kind], { callsign: a.callsign }));
-  };
-  const read = () => {
-    const n = a.unreadMessages.length;
-    dispatch({ type: "read", id: a.id });
-    toast(fill(plural(n, copy.toasts.readOne, copy.toasts.read), { callsign: a.callsign, n }));
-  };
 
   return (
     <motion.section
@@ -84,13 +67,16 @@ export default function AgentScene({ agent: a, simMs, events, copy, still, live,
             </span>
             <StatePill agent={a} text={stateText(a, copy)} />
           </div>
+          <div className="mt-4">
+            <Controls agent={a} copy={copy} op={op} pending={pending} hostName={hostName} />
+          </div>
         </div>
       </motion.div>
       <motion.div className="min-w-0 py-4 [container-type:size]" {...col(0, 24, 0.1)}>
-        <RunCard agent={a} simMs={simMs} events={events} copy={copy} live={live} onAct={act} />
+        <RunCard agent={a} simMs={simMs} events={events} copy={copy} live={live} busy={op.offline || !!pending} onAct={(k) => op[k](a)} />
       </motion.div>
       <motion.div className="min-w-0 border-l border-glass py-5 pl-5 pr-6" {...col(30, 0, 0.15)}>
-        <AgentSide agent={a} simMs={simMs} copy={copy} leaving={leaving} still={still} onReview={review} onRead={read} />
+        <AgentSide agent={a} simMs={simMs} copy={copy} cmds={cmds} still={still} offline={op.offline} hostName={hostName} onReview={(rid, approve) => op.verdict(a, rid, approve)} onUndo={op.undo} onRead={() => op.read(a)} />
       </motion.div>
     </motion.section>
   );

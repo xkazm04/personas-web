@@ -55,11 +55,13 @@ interface RunCardProps {
   events: BoardEvent[];
   copy: BoardCopy;
   live: boolean;
+  /** A command is in flight or the machine is offline: the actions wait. */
+  busy: boolean;
   onAct: (act: "retry" | "answer") => void;
 }
 
 /** The middle column of the agent scene: the current run, or how it rests. */
-export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: RunCardProps) {
+export default function RunCard({ agent: a, simMs, events, copy, live, busy, onAct }: RunCardProps) {
   const run = a.state === "running";
   const traced = run || a.state === "failed" || a.state === "input_required";
   const frac = run ? a.progress ?? 0 : a.successRate;
@@ -70,7 +72,7 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
     : [[copy.agent.state, stateText(a, copy)], [copy.agent.health, copy.health[a.health]],
       [copy.agent.runsToday, a.runsToday], [copy.agent.lastResult, copy.agent.results[a.recentStatuses[0]]]];
   const recent = events.filter((e) => e.agentId === a.id || e.toAgentId === a.id).slice(0, 2);
-  const btn = "inline-flex items-center rounded-xl px-4 py-2 text-base font-semibold transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
+  const btn = "inline-flex items-center rounded-xl px-4 py-2 text-base font-semibold transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
   const warnBtn = { background: "var(--st-input_required)", color: "color-mix(in oklab, var(--st-input_required) 18%, black)" } as CSSProperties;
 
   return (
@@ -104,8 +106,8 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
         </div>
       )}
       <div className="mt-2 flex min-h-11 flex-wrap items-center gap-3">
-        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} onClick={() => onAct("retry")}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
-        {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} onClick={() => onAct("answer")}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
+        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => onAct("retry")}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
+        {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => onAct("answer")}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
         {a.state === "queued" && <span className={`text-base ${b["ink-queued"]}`}>{copy.agent.queuedNote}</span>}
         {a.state === "draft_ready" && <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span>}
       </div>

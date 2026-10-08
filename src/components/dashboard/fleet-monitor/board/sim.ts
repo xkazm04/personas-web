@@ -29,12 +29,22 @@ export interface SimState {
   beatAt: number;
   /** The fleet size the last advance ran at; caps concurrent runs (host slots). */
   scale: number;
+  /** Agents the last "Pause all" switched off, so "Resume all" brings back exactly
+   *  those (and not the ones that were off before it); null when not fleet-paused. */
+  fleetPaused: string[] | null;
 }
+
+/** The agent id of a fleet-wide event (pause all, resume all). */
+export const FLEET_EVENT_ID = "*";
+
+export type AgentVerb = "retry" | "answer" | "read" | "pause" | "resume" | "run" | "cancel";
 
 export type SimAction =
   | { type: "advance"; dt: number; scale: number; still: boolean }
   | { type: "review"; id: string; rid: string; approve: boolean }
-  | { type: "retry" | "answer" | "read"; id: string };
+  | { type: AgentVerb; id: string }
+  | { type: "pauseAll"; stop: boolean }
+  | { type: "resumeAll" };
 
 const MAX_EVENTS = 400;
 
@@ -56,6 +66,7 @@ export function initSim(scale = 99): SimState {
     nextTickAt: 3000,
     beatAt: 0,
     scale,
+    fleetPaused: null,
   };
 }
 
@@ -137,11 +148,17 @@ function complete(d: Draft, a: SimAgent, scale: number, simMs: number) {
   a.spark24h[23]++;
   a.costTodayUsd = Math.round((a.costTodayUsd + 0.03 + d.r() * 0.12) * 100) / 100;
   a.liveToolCalls = 0;
+  fillSlot(d, scale, simMs, a, true);
+}
+
+/** A slot just freed: the next queued agent (same team first) takes it, or,
+ *  when `busy` keeps the machine busy, a resting one starts its next batch. */
+function fillSlot(d: Draft, scale: number, simMs: number, a: SimAgent, busy: boolean) {
   const scope = d.agents.slice(0, scale);
   let next =
     scope.find((x) => x.state === "queued" && x.enabled && x.team === a.team) ??
     scope.find((x) => x.state === "queued" && x.enabled);
-  if (!next) {
+  if (!next && busy) {
     const idle = scope.filter((x) => x.state === "idle" && x.enabled && !x.reviews.length && x.id !== a.id);
     if (idle.length) next = d.pick(idle);
   }
@@ -149,6 +166,16 @@ function complete(d: Draft, a: SimAgent, scale: number, simMs: number) {
     const q = d.edit(next.idx);
     startRun(q, simMs, ...teamTask(d, q));
   }
+}
+
+/** Stop a run where it stands (cancel, or "Pause all" with stop). */
+function stopRun(a: SimAgent) {
+  a.state = a.reviews.length ? "attention" : "idle";
+  a.task = null;
+  a.taskKey = null;
+  a.progress = null;
+  a.startSim = null;
+  a.liveToolCalls = 0;
 }
 
 function replayEdge(d: Draft, scale: number, simMs: number) {
@@ -209,9 +236,10 @@ export function simReducer(state: SimState, action: SimAction): SimState {
       nextTickAt = simMs + (action.still ? 6000 : 2500 + d.r() * 1500);
       beatAt = simMs;
     }
-    return { agents: d.agents, events: d.events, seed: d.seed, simMs, nextTickAt, beatAt, scale: action.scale };
+    return { ...state, agents: d.agents, events: d.events, seed: d.seed, simMs, nextTickAt, beatAt, scale: action.scale };
   }
   const scale = state.scale;
+  if (action.type === "pauseAll" || action.type === "resumeAll") return fleetDecision(d, state, action);
   const idx = state.agents.findIndex((a) => a.id === action.id);
   if (idx < 0) return state;
   const a = d.edit(idx);
@@ -235,10 +263,61 @@ export function simReducer(state: SimState, action: SimAction): SimState {
   } else if (action.type === "answer") {
     startOrQueue(d, a, scale, simMs, null, "resuming");
     d.push({ ...base, decision: { act: "answer" } }, simMs);
+  } else if (action.type === "pause") {
+    if (!a.enabled) return state;
+    a.enabled = false;
+    // A queued run never starts; a run in progress finishes (pause stops new runs).
+    if (a.state === "queued") stopRun(a);
+    d.push({ ...base, decision: { act: "pause" } }, simMs);
+  } else if (action.type === "resume") {
+    if (a.enabled) return state;
+    a.enabled = true;
+    d.push({ ...base, decision: { act: "resume" } }, simMs);
+  } else if (action.type === "run") {
+    if (!a.enabled || a.state === "running" || a.state === "input_required" || a.state === "draft_ready") return state;
+    startOrQueue(d, a, scale, simMs, ...teamTask(d, a));
+    d.push({ ...base, decision: { act: "run" } }, simMs);
+  } else if (action.type === "cancel") {
+    if (a.state !== "running") return state;
+    stopRun(a);
+    fillSlot(d, scale, simMs, a, false);
+    d.push({ ...base, decision: { act: "cancel" } }, simMs);
   } else {
     const n = a.unreadMessages.length;
     a.unreadMessages = [];
     d.push({ ...base, decision: { act: "read", n } }, simMs);
   }
   return { ...state, agents: d.agents, events: d.events, seed: d.seed };
+}
+
+/** "Pause all" switches every agent in scope off (stopping runs too when asked)
+ *  and remembers whom; "Resume all" brings back exactly those. */
+function fleetDecision(d: Draft, state: SimState, action: { type: "pauseAll"; stop: boolean } | { type: "resumeAll" }): SimState {
+  const base = { agentId: FLEET_EVENT_ID, toAgentId: null, kind: "decision" as const, text: null };
+  const scope = state.agents.slice(0, state.scale);
+  if (action.type === "pauseAll") {
+    const paused: string[] = [];
+    let stopped = 0;
+    for (const x of scope) {
+      if (!x.enabled && !(action.stop && x.state === "running")) continue;
+      const a = d.edit(x.idx);
+      if (a.enabled) paused.push(a.id);
+      a.enabled = false;
+      if (a.state === "queued" || (action.stop && a.state === "running")) {
+        if (a.state === "running") stopped++;
+        stopRun(a);
+      }
+    }
+    d.push({ ...base, decision: { act: "pauseAll", n: paused.length, stopped } }, state.simMs);
+    return { ...state, agents: d.agents, events: d.events, seed: d.seed, fleetPaused: [...(state.fleetPaused ?? []), ...paused] };
+  }
+  const ids = new Set(state.fleetPaused ?? []);
+  let n = 0;
+  for (const x of scope) {
+    if (x.enabled || !ids.has(x.id)) continue;
+    d.edit(x.idx).enabled = true;
+    n++;
+  }
+  d.push({ ...base, decision: { act: "resumeAll", n } }, state.simMs);
+  return { ...state, agents: d.agents, events: d.events, seed: d.seed, fleetPaused: null };
 }

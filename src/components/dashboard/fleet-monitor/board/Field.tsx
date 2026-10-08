@@ -8,6 +8,7 @@ import HoverCard from "./HoverCard";
 import { fill, gridFit, orderInBay, plural, type SimAgent } from "./model";
 import type { BoardCopy } from "./copy";
 import type { BoardNav } from "./useBoardNav";
+import { inFlightFor, type Command } from "./useCommands";
 import s from "./tiles.module.css";
 
 interface FieldProps {
@@ -19,6 +20,8 @@ interface FieldProps {
   copy: BoardCopy;
   live: boolean;
   arriving: boolean;
+  cmds: readonly Command[];
+  hostName: string;
 }
 
 const EDGE = 10;
@@ -59,7 +62,7 @@ export function computeLayout(teams: FleetTeam[], scope: SimAgent[], w: number, 
 }
 
 /** L0: the whole fleet, nine team bays filling the field. */
-export default function Field({ width, height, teams, scope, nav, copy, live, arriving }: FieldProps) {
+export default function Field({ width, height, teams, scope, nav, copy, live, arriving, cmds, hostName }: FieldProps) {
   if (width <= 0 || height <= 0) return null;
   const layout = computeLayout(teams, scope, width, height);
   const hovered = nav.att?.type === "agent" ? scope.find((a) => a.id === nav.att!.id) : undefined;
@@ -116,6 +119,7 @@ export default function Field({ width, height, teams, scope, nav, copy, live, ar
                   copy={copy}
                   att={nav.att?.type === "agent" && nav.att.id === a.id}
                   live={live}
+                  pending={!!inFlightFor(cmds, a.id)}
                   riseDelay={arriving ? 0.1 + ti * 0.05 + L.j * 0.015 : null}
                   onAttend={() => nav.attend({ type: "agent", id: a.id })}
                   onUnattend={nav.unattend}
@@ -127,7 +131,7 @@ export default function Field({ width, height, teams, scope, nav, copy, live, ar
         );
       })}
       {hovered && layout.tiles[hovered.id] && (
-        <HoverCard agent={hovered} anchor={layout.tiles[hovered.id]} width={width} height={height} copy={copy} live={live} tone={needsTone(hovered)} />
+        <HoverCard agent={hovered} anchor={layout.tiles[hovered.id]} width={width} height={height} copy={copy} live={live} tone={needsTone(hovered)} pending={inFlightFor(cmds, hovered.id)} hostName={hostName} />
       )}
     </>
   );

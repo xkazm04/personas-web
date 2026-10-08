@@ -22,8 +22,10 @@ export interface SimAgent extends FleetAgent {
 
 export type Decision =
   | { act: "approve" | "sendback"; title: string }
-  | { act: "retry" | "answer" }
-  | { act: "read"; n: number };
+  | { act: "retry" | "answer" | "pause" | "resume" | "run" | "cancel" }
+  | { act: "read"; n: number }
+  | { act: "pauseAll"; n: number; stopped: number }
+  | { act: "resumeAll"; n: number };
 
 export type BoardEventKind = FleetEvent["kind"] | "decision";
 

@@ -107,6 +107,29 @@
 }
 .glyph { font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
 
+/* A command on its way to the machine: a small spinning ring by the callsign
+   (still under reduced motion: one lit quadrant). */
+.pendingRing {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, currentColor 28%, transparent);
+  border-top-color: currentColor;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+/* Paused while its last run finishes: two bars. */
+.pauseMark {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 9px;
+  border-left: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+}
+
 .mailDot {
   width: 7px;
   height: 7px;

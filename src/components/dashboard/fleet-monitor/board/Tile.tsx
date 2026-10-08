@@ -16,6 +16,8 @@ interface TileProps {
   copy: BoardCopy;
   att: boolean;
   live: boolean;
+  /** A command to this agent is on its way to the machine. */
+  pending: boolean;
   /** Arrival delay (s) for the first-paint rise; null after arrival. */
   riseDelay: number | null;
   onAttend: () => void;
@@ -42,7 +44,7 @@ export function needGlyph(a: SimAgent): string {
  * needs you, a ghost while it rests, hatched when off. The callsign is always
  * there; bigger tiles (30 and 10 agents, large screens) add name and task.
  */
-export default function Tile({ agent: a, rect, copy, att, live, riseDelay, onAttend, onUnattend, onOpen }: TileProps) {
+export default function Tile({ agent: a, rect, copy, att, live, pending, riseDelay, onAttend, onUnattend, onOpen }: TileProps) {
   const tier = tierOf(rect);
   const pile = attentionOf(a);
   const needs = pile === "needs";
@@ -95,7 +97,11 @@ export default function Tile({ agent: a, rect, copy, att, live, riseDelay, onAtt
         <span className="flex items-start gap-2">
           {tier === "lg" && <span className="h-8 w-8 shrink-0"><Emblem agent={a} /></span>}
           <span className="min-w-0 flex-1">
-            <span className={`block whitespace-nowrap font-mono font-semibold leading-tight ${tier === "xs" ? "text-xs" : "text-sm"}`}>{a.callsign}</span>
+            <span className={`flex items-center gap-1 whitespace-nowrap font-mono font-semibold leading-tight ${tier === "xs" ? "text-xs" : "text-sm"}`}>
+              {a.callsign}
+              {!a.enabled && pile !== "off" && <i className={s.pauseMark} />}
+              {pending && <i className={s.pendingRing} />}
+            </span>
             {tier !== "xs" && rect.h >= 84 && <span className="block truncate text-xs font-medium">{shortState(a, copy)}</span>}
           </span>
           {tier !== "xs" && glyph}

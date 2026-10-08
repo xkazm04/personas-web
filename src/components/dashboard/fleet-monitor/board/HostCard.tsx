@@ -1,15 +1,23 @@
 "use client";
 
-import { Monitor } from "lucide-react";
+import { Loader2, Monitor, Pause, Play } from "lucide-react";
 import { ATTENTION_COLOR } from "../attention";
 import { ago, type BoardCopy } from "./copy";
 import { fill } from "./model";
 import type { HostReading } from "./host";
+import { ctlBtn, pendingText } from "./Controls";
+import type { Command } from "./useCommands";
 
 interface HostCardProps {
   host: HostReading;
   copy: BoardCopy;
   live: boolean;
+  /** Agents the last "Pause all" switched off (0 when the fleet is not paused). */
+  fleetPaused: number;
+  /** An open fleet-wide command. */
+  pending?: Command;
+  onPauseAll: () => void;
+  onResumeAll: () => void;
 }
 
 /** "synced 3s ago": the heartbeat at second resolution, which is what it moves at. */
@@ -37,7 +45,7 @@ function Meter({ label, value, frac, tone }: { label: string; value: string; fra
  * answering, how fresh is what you see, and how much room it has left. Run
  * slots are drawn one cell per slot, so "full" reads before the numbers do.
  */
-export default function HostCard({ host: h, copy: c, live }: HostCardProps) {
+export default function HostCard({ host: h, copy: c, live, fleetPaused, pending, onPauseAll, onResumeAll }: HostCardProps) {
   const online = h.status === "online";
   const statusCol = online ? "var(--status-success)" : "var(--muted-foreground)";
   const cpuTone = h.cpuPct != null && h.cpuPct > 85 ? ATTENTION_COLOR.warning : ATTENTION_COLOR.working;
@@ -101,7 +109,44 @@ export default function HostCard({ host: h, copy: c, live }: HostCardProps) {
           tone="var(--status-info)"
         />
       </div>
+
+      <FleetRow c={c} host={h} fleetPaused={fleetPaused} pending={pending} onPauseAll={onPauseAll} onResumeAll={onResumeAll} />
     </section>
+  );
+}
+
+/** The fleet's brake: Pause all (with its impact dialog), or, once pulled,
+ *  the paused state and Resume. Waits while a fleet command is in flight. */
+function FleetRow({ c, host: h, fleetPaused, pending, onPauseAll, onResumeAll }: Pick<HostCardProps, "fleetPaused" | "pending" | "onPauseAll" | "onResumeAll"> & { c: BoardCopy; host: HostReading }) {
+  const offline = h.status === "offline";
+  const off = offline || !!pending;
+  const why = offline ? fill(c.cmd.offline, { host: h.name }) : undefined;
+  return (
+    <div role="group" aria-label={c.cmd.fleetControls} className="mt-3">
+      {fleetPaused > 0 ? (
+        <div className="flex items-center gap-2 rounded-lg bg-[color-mix(in_oklab,var(--status-warning)_12%,transparent)] py-1.5 pl-2.5 pr-1.5">
+          <div className="min-w-0 flex-1 text-xs leading-tight">
+            <div className="font-semibold text-foreground">{c.cmd.fleetPaused}</div>
+            <div className="truncate text-muted-dark">{fill(c.cmd.fleetPausedNote, { n: fleetPaused })}</div>
+          </div>
+          <button type="button" className={`${ctlBtn} h-8 bg-brand-cyan text-background`} disabled={off} title={why ?? fill(c.cmd.hints.resumeAll, { n: fleetPaused })} onClick={onResumeAll} data-ctl="resume-all">
+            <Play aria-hidden className="h-3.5 w-3.5" />
+            {fill(c.cmd.resumeAll, { n: fleetPaused })}
+          </button>
+        </div>
+      ) : (
+        <button type="button" className={`${ctlBtn} h-8 w-full justify-center text-foreground shadow-[inset_0_0_0_1px_var(--border-glass-hover)] hover:bg-[color-mix(in_oklab,var(--status-warning)_10%,transparent)]`} disabled={off} title={why ?? fill(c.cmd.hints.pauseAll, { host: h.name })} onClick={onPauseAll} data-ctl="pause-all">
+          <Pause aria-hidden className="h-3.5 w-3.5" />
+          {c.cmd.pauseAll}
+        </button>
+      )}
+      {pending && (
+        <p role="status" className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-dark">
+          <Loader2 aria-hidden className="h-3 w-3 animate-spin text-brand-cyan" />
+          {pendingText(pending, c, h.name)}
+        </p>
+      )}
+    </div>
   );
 }
 
