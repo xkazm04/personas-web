@@ -1110,6 +1110,7 @@
             "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterLegends.tsx",
             "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx",
             "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx",
+            "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterCanvas.tsx",
             "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx",
             "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts",
             "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts",

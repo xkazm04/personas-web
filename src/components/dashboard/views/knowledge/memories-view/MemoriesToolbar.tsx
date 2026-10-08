@@ -1,8 +1,7 @@
-import { motion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
-import { fadeUp } from "@/lib/animations";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 
 import type { FilterKey } from "./memoryViewConfig";
 
@@ -16,7 +15,7 @@ export function MemoriesToolbar({
   onResolveConflicts,
 }: {
   filter: FilterKey;
-  filterOptions: { key: string; label: string; count: number }[];
+  filterOptions: { key: string; label: string; count?: number }[];
   activeConflictCount: number;
   conflictCountLabel: string;
   resolveButtonLabel: string;
@@ -24,12 +23,8 @@ export function MemoriesToolbar({
   onResolveConflicts: () => void;
 }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      animate="visible"
-      className="mb-3 flex flex-wrap items-center gap-2"
-    >
+    // T1 toolbar: the first step of the tab's CSS cascade (was a framer fadeUp).
+    <div className={`${ARRIVE} mb-3 flex flex-wrap items-center gap-2`} style={arriveAt(0)}>
       <FilterBar
         options={filterOptions}
         active={filter}
@@ -47,6 +42,6 @@ export function MemoriesToolbar({
           {resolveButtonLabel}
         </button>
       )}
-    </motion.div>
+    </div>
   );
 }

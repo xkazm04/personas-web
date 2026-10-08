@@ -110,3 +110,35 @@ export function IncidentList({
     </div>
   );
 }
+
+/** First-screenful row count for the cold-load ghost. */
+const GHOST_ROWS = 6;
+
+/**
+ * Cold-load placeholder for the list body (T2). Flat mode draws the real
+ * card chrome with ghost rows of IncidentRow's exact geometry (62px: py-2.5
+ * around the 42px title + meta block, rail at h-9), delayed by `dash-ghost`
+ * so a warm load never sees it. Grouped mode has no knowable geometry (group
+ * count and sizes come from the data), so it holds an empty reservation of
+ * the same height instead of drawing a wrong shape.
+ */
+export function IncidentListGhost({ grouped }: { grouped: boolean }) {
+  const height = GHOST_ROWS * 62 + (GHOST_ROWS - 1) * 2 + 16;
+  if (grouped) return <div aria-hidden style={{ minHeight: height }} />;
+  return (
+    <GlowCard accent="cyan" className="p-2">
+      <div aria-hidden className="dash-ghost space-y-0.5">
+        {Array.from({ length: GHOST_ROWS }, (_, i) => (
+          <div key={i} className="flex h-[62px] items-center gap-3 px-2.5">
+            <span className="h-9 w-1 flex-shrink-0 rounded-full bg-glass" />
+            <span className="h-4 w-4 flex-shrink-0 rounded bg-glass" />
+            <div className="min-w-0 flex-1 space-y-2">
+              <div className="h-3.5 w-1/2 rounded bg-glass" />
+              <div className="h-3 w-1/3 rounded bg-glass" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </GlowCard>
+  );
+}

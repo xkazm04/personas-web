@@ -1,19 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { CloudOff, SearchX, ShieldCheck, Siren } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
-import SkeletonCard from "@/components/dashboard/SkeletonCard";
+import { ARRIVE, arrive, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 import type { AuditIncident } from "@/lib/mock-dashboard-data";
 import { applyIncidentFilters } from "@/lib/incidentFormat";
 import { IncidentDetailModal } from "./incidents-page/IncidentDetailModal";
-import { IncidentList } from "./incidents-page/IncidentList";
+import { IncidentList, IncidentListGhost } from "./incidents-page/IncidentList";
 import { IncidentsFilters } from "./incidents-page/IncidentsFilters";
 import { IncidentsGroupByTabs } from "./incidents-page/IncidentsGroupByTabs";
 import { IncidentsKpiHeader } from "./incidents-page/IncidentsKpiHeader";
@@ -45,13 +43,18 @@ export default function IncidentsPage() {
     [incidents, status, severity, source, persona],
   );
 
+  // T2 placeholders appear only on a first load with nothing held (SWR keeps
+  // the last data on revalidate). `coldStart` lets content that lands after
+  // such a load take the T2 entrance; data present on the first frame (a warm
+  // SWR cache) does not double up with the section cascade.
+  const [coldStart] = useState(isLoading);
+  const pending = isLoading && incidents.length === 0;
+  const settle = coldStart && !pending ? ARRIVE : "";
+
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div
-        variants={fadeUp}
-        data-tour-diagram="dashboard-incidents"
-        className="mb-6 flex items-center gap-3"
-      >
+    <div>
+      {/* T0 frame: header paints with the view and never animates. */}
+      <div data-tour-diagram="dashboard-incidents" className="mb-6 flex items-center gap-3">
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-rose-500/10 text-rose-400">
           <Siren className="h-5 w-5" />
         </div>
@@ -61,58 +64,57 @@ export default function IncidentsPage() {
           </h1>
           <p className="text-sm text-muted-dark">{labels.subtitle}</p>
         </div>
-      </motion.div>
+      </div>
 
-      {error && (
-        <motion.div variants={fadeUp}>
-          <DashboardErrorBanner message={error} onRetry={retry} />
-        </motion.div>
-      )}
+      {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {liveUnavailable ? (
-        <motion.div variants={fadeUp}>
+        <div {...arrive(0)}>
           <EmptyState
             icon={CloudOff}
             title={t.dashboardUi.liveUnavailableTitle}
             description={t.dashboardUi.liveUnavailableDescription}
           />
-        </motion.div>
-      ) : isLoading ? (
-        <div className="space-y-6">
-          <SkeletonCard lines={2} />
-          <SkeletonCard lines={6} />
         </div>
-      ) : error && incidents.length === 0 ? null : (
+      ) : error && incidents.length === 0 && !isLoading ? null : (
         <>
-          <motion.div variants={fadeUp} className="mb-6">
-            <IncidentsKpiHeader incidents={incidents} />
-          </motion.div>
+          {/* T1 chrome (cascade 0-3) paints with the view, loading or not;
+              each section holds its own T2 placeholder while pending. */}
+          <div className={`${ARRIVE} mb-6`} style={arriveAt(0)}>
+            <IncidentsKpiHeader incidents={incidents} pending={pending} settle={settle} />
+          </div>
 
-          <motion.div variants={fadeUp} className="mb-5">
-            <IncidentsFilters incidents={incidents} />
-          </motion.div>
+          <div className={`${ARRIVE} mb-5`} style={arriveAt(1)}>
+            <IncidentsFilters incidents={incidents} pending={pending} />
+          </div>
 
-          <motion.div variants={fadeUp} className="mb-4">
+          <div className={`${ARRIVE} mb-4`} style={arriveAt(2)}>
             <IncidentsGroupByTabs />
-          </motion.div>
+          </div>
 
-          <motion.div variants={fadeUp}>
-            {filtered.length === 0 ? (
-              <EmptyState
-                icon={incidents.length === 0 ? ShieldCheck : SearchX}
-                title={incidents.length === 0 ? labels.empty.title : labels.empty.filteredTitle}
-                description={
-                  incidents.length === 0 ? labels.empty.description : labels.empty.filteredDescription
-                }
-              />
-            ) : (
-              <IncidentList incidents={filtered} groupBy={groupBy} onSelect={setSelected} />
-            )}
-          </motion.div>
+          <div className={ARRIVE} style={arriveAt(3)} aria-busy={pending || undefined}>
+            {/* Persistent T2 body: takes the entrance on the cold
+                loading -> settled edge, keeps `data-arrived` afterwards. */}
+            <div className={settle || undefined}>
+              {pending ? (
+                <IncidentListGhost grouped={groupBy !== "none"} />
+              ) : filtered.length === 0 ? (
+                <EmptyState
+                  icon={incidents.length === 0 ? ShieldCheck : SearchX}
+                  title={incidents.length === 0 ? labels.empty.title : labels.empty.filteredTitle}
+                  description={
+                    incidents.length === 0 ? labels.empty.description : labels.empty.filteredDescription
+                  }
+                />
+              ) : (
+                <IncidentList incidents={filtered} groupBy={groupBy} onSelect={setSelected} />
+              )}
+            </div>
+          </div>
         </>
       )}
 
       <IncidentDetailModal incident={selected} onClose={() => setSelected(null)} />
-    </motion.div>
+    </div>
   );
 }

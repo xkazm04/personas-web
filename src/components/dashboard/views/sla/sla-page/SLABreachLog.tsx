@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Clock } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useFocusParam } from "@/hooks/useFocusParam";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { fadeUp } from "@/lib/animations";
 import { initialBreachLogState } from "@/lib/incidentThreads";
 import type { SLABreach, SLAMetricType, SLASeverity } from "@/lib/mock-dashboard-data";
 
@@ -16,9 +16,15 @@ const SEVERITY_ORDER: SLASeverity[] = ["critical", "major", "minor"];
 
 export function SLABreachLog({
   breaches,
+  pending,
+  settle,
   labels,
 }: {
   breaches: SLABreach[];
+  /** Cold load with nothing held: hold the body's space instead of "empty". */
+  pending: boolean;
+  /** Rows that land after a cold load play the T2 entrance once. */
+  settle: boolean;
   labels: {
     title: string;
     empty: string;
@@ -82,9 +88,10 @@ export function SLABreachLog({
   ];
 
   return (
-    <motion.div
-      variants={fadeUp}
-      className="rounded-2xl border border-glass bg-white/[0.02] p-4"
+    <div
+      className={`${ARRIVE} rounded-2xl border border-glass bg-white/[0.02] p-4`}
+      style={arriveAt(2)}
+      aria-busy={pending || undefined}
     >
       <div className="mb-3 flex flex-wrap items-center gap-2">
         <Clock className="h-4 w-4 text-muted-dark" />
@@ -102,36 +109,44 @@ export function SLABreachLog({
           </div>
         )}
       </div>
-      {filtered.length === 0 ? (
-        <p className="py-6 text-center text-sm text-muted-dark">
-          {labels.empty}
-        </p>
-      ) : (
-        <div className="space-y-1">
-          <AnimatePresence initial={false}>
-            {filtered.map((breach) => (
-              <SLABreachRow
-                key={breach.id}
-                breach={breach}
-                labels={labels}
-                reduce={reduce}
-                maxDuration={maxDuration}
-                samePersonaCount={
-                  filtered.filter(
-                    (other) =>
-                      other.persona === breach.persona &&
-                      other.id !== breach.id,
-                  ).length
-                }
-                isOpen={openId === breach.id}
-                onToggle={() =>
-                  setOpenId(openId === breach.id ? null : breach.id)
-                }
-              />
-            ))}
-          </AnimatePresence>
-        </div>
-      )}
-    </motion.div>
+      {/* One persistent body node: it takes the T2 entrance on the cold
+          loading -> settled edge and keeps `data-arrived` across filters. */}
+      <div className={settle && !pending ? ARRIVE : undefined}>
+        {pending ? (
+          // Held empty reservation, the height of the empty-state line; the
+          // "no breaches" copy must not flash before the data is known.
+          <div aria-hidden className="h-[68px]" />
+        ) : filtered.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-dark">
+            {labels.empty}
+          </p>
+        ) : (
+          <div className="space-y-1">
+            <AnimatePresence initial={false}>
+              {filtered.map((breach) => (
+                <SLABreachRow
+                  key={breach.id}
+                  breach={breach}
+                  labels={labels}
+                  reduce={reduce}
+                  maxDuration={maxDuration}
+                  samePersonaCount={
+                    filtered.filter(
+                      (other) =>
+                        other.persona === breach.persona &&
+                        other.id !== breach.id,
+                    ).length
+                  }
+                  isOpen={openId === breach.id}
+                  onToggle={() =>
+                    setOpenId(openId === breach.id ? null : breach.id)
+                  }
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

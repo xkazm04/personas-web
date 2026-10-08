@@ -12,13 +12,22 @@ Incidents is the fleet's audit-log inbox: every notable event the orchestrator r
 It mirrors the desktop overview's Incidents Inbox (`sub_incidents`). Like the rest of `/dashboard/*`, all data is **mock** — incidents have no synced source in this repo.
 
 ## How it works
-The page (`src/components/dashboard/views/incidents/index.tsx`) is a `"use client"` component in a `staggerContainer`/`fadeUp` tree. It loads incidents via `useAuditIncidents` (SWR over a standalone mock fetcher) and reads filter/group state from the persisted `useIncidentsFilterStore`. A `useMemo` runs `applyIncidentFilters` (status/severity/source/persona → severity-then-recency sort); the result feeds `IncidentList`, which calls `groupIncidents` for the chosen dimension. A `selected` state drives the detail modal.
+The page (`src/components/dashboard/views/incidents/index.tsx`) is a `"use client"` component that loads per the dashboard tier standard (see **Loading tiers** below). It loads incidents via `useAuditIncidents` (SWR over a standalone mock fetcher) and reads filter/group state from the persisted `useIncidentsFilterStore`. A `useMemo` runs `applyIncidentFilters` (status/severity/source/persona → severity-then-recency sort); the result feeds `IncidentList`, which calls `groupIncidents` for the chosen dimension. A `selected` state drives the detail modal.
 
 Key behaviors:
 - **Persisted filters** — `useIncidentsFilterStore` mirrors `dashboardFilterStore`: a manual `hydrate()`/`persist()` pair keyed `incidents-filter-state`, type-guarding every field on load and writing after each mutation. Hydration runs once after store creation (SSR-safe).
 - **Demo-only fetch** — `getAuditIncidents` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface, so no real/supabase client changes); the hook calls it through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`, for a brief loading state. In a real (non-demo) session nothing is fetched and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) instead of the KPI header, filters and list.
 - **Grouping** — `groupIncidents` buckets by agent (busiest first) / severity (worst first) / source (canonical order) / none (single group); each group keeps the severity-then-recency order. Sections collapse via a local `Set<string>` of collapsed keys.
 - **Nav badge** — `MOCK_OPEN_INCIDENTS` (open + escalated) drives the sidebar badge, matching the KPI headline.
+
+### Loading tiers
+
+Follows [loading-orchestration](loading-orchestration.md).
+
+- **T0** - the header (`data-tour-diagram="dashboard-incidents"`), plain and never animated (`src/components/dashboard/views/incidents/index.tsx:57`).
+- **T1** - CSS cascade by visual order, painted while loading too: KPI card `arriveAt(0)`, filters toolbar `arriveAt(1)`, group-by tabs `arriveAt(2)`, list slot `arriveAt(3)` (`src/components/dashboard/views/incidents/index.tsx:83`-`:95`). The live-unavailable `EmptyState` takes `arrive(0)`.
+- **T2** - KPI numbers, pill counts, rows. Placeholders only on a cold load with nothing held (`pending`, `src/components/dashboard/views/incidents/index.tsx:51`; the SWR mock takes 300 ms): KPI counts are delayed digit-sized ghosts inside the real labels and chips (`incidents-page/IncidentsKpiHeader.tsx:22`); filter pills omit their counts rather than show false zeros (`incidents-page/IncidentsFilters.tsx:77`); the list draws `IncidentListGhost` - the real card with six 62px ghost rows matching `IncidentRow` (flat mode), or an equal-height empty reservation when grouped, since group geometry comes from data (`incidents-page/IncidentList.tsx:125`). On the loading -> settled edge a persistent body node takes `.dash-arrive` once (`coldStart`, `src/components/dashboard/views/incidents/index.tsx:50`); a warm SWR cache paints settled. Rows are keyed by incident id.
+- **T3** - none: no heavy or nested body. The detail modal is a click response.
 
 ## Key files
 | File | Role |
@@ -42,7 +51,7 @@ Key behaviors:
 
 ## Integration points
 - **Dashboard shell** — new nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `Siren` icon) with a `MOCK_OPEN_INCIDENTS` badge in `getBadge`. Route is **not** in `SCOPED_ROUTE_PREFIXES` (it owns a persona filter, so the global scope bar is intentionally hidden).
-- **Shared primitives** — `GlowCard`, `GradientText`, `FilterBar` (pills with count/pulse), `Modal`, `PersonaAvatar`, `EmptyState`, `SkeletonCard`; severity palette mirrors the observability health-issue rows (red/orange/amber/blue).
+- **Shared primitives** — `GlowCard`, `GradientText`, `FilterBar` (pills with count/pulse), `Modal`, `PersonaAvatar`, `EmptyState`; severity palette mirrors the observability health-issue rows (red/orange/amber/blue).
 - **i18n** — nav label `t.dashboard.incidents` + the `t.incidentsPage` namespace (`src/i18n/en.ts`), hand-translated into all 13 non-en locales.
 - **Format/util** — `relativeTime` from `src/lib/format.ts`.
 

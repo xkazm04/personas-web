@@ -17,7 +17,22 @@ import { severityStyle, sourceIcon } from "@/lib/incidentFormat";
  * stay stable as filters change. The web counterpart to the desktop Incidents
  * Inbox KPI header.
  */
-export function IncidentsKpiHeader({ incidents }: { incidents: AuditIncident[] }) {
+/** A digit-sized, delayed ghost that sits in a count's own line box. */
+function GhostDigits({ className = "h-3.5 w-4" }: { className?: string }) {
+  return <span aria-hidden className={`dash-ghost inline-block rounded-sm bg-glass align-middle ${className}`} />;
+}
+
+export function IncidentsKpiHeader({
+  incidents,
+  pending = false,
+  settle = "",
+}: {
+  incidents: AuditIncident[];
+  /** Cold load with nothing held: labels (T1) paint, counts (T2) are ghosted. */
+  pending?: boolean;
+  /** The T2 entrance class for values landing after a cold load, or "". */
+  settle?: string;
+}) {
   const { t } = useTranslation();
   const labels = t.incidentsPage;
 
@@ -39,24 +54,24 @@ export function IncidentsKpiHeader({ incidents }: { incidents: AuditIncident[] }
         {/* Open headline */}
         <div className="flex items-center gap-4 lg:flex-col lg:items-start lg:gap-1">
           <p className="text-sm font-medium uppercase tracking-wider text-muted-dark">{labels.open}</p>
-          <div className="flex items-baseline gap-2">
+          <div className={`flex items-baseline gap-2 ${settle}`}>
             <span className={`text-4xl font-bold tabular-nums ${open > 0 ? "text-rose-400" : "text-emerald-400"}`}>
-              {open}
+              {pending ? <GhostDigits className="h-8 w-10" /> : open}
             </span>
-            <span className="text-sm text-muted-dark">/ {total}</span>
+            <span className="text-sm text-muted-dark">/ {pending ? <GhostDigits /> : total}</span>
           </div>
         </div>
 
         {/* By severity */}
         <div className="min-w-0">
           <p className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{labels.bySeverity}</p>
-          <div className="flex flex-wrap gap-2">
+          <div className={`flex flex-wrap gap-2 ${settle}`}>
             {INCIDENT_SEVERITIES.map((sev) => (
               <span
                 key={sev}
                 className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-sm font-medium ${severityStyle[sev].chip}`}
               >
-                <span className="tabular-nums">{bySeverity[sev]}</span>
+                <span className="tabular-nums">{pending ? <GhostDigits className="h-3.5 w-2" /> : bySeverity[sev]}</span>
                 <span className="opacity-80">{labels.severity[sev]}</span>
               </span>
             ))}
@@ -66,13 +81,15 @@ export function IncidentsKpiHeader({ incidents }: { incidents: AuditIncident[] }
         {/* By source */}
         <div className="min-w-0">
           <p className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-dark">{labels.bySource}</p>
-          <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+          <div className={`flex flex-wrap gap-x-4 gap-y-1.5 ${settle}`}>
             {INCIDENT_SOURCES.map((src) => {
               const Icon = sourceIcon[src];
               return (
                 <span key={src} className="inline-flex items-center gap-1.5 text-sm text-muted-dark" title={labels.source[src]}>
                   <Icon className="h-3.5 w-3.5 text-muted-dark" />
-                  <span className="font-semibold tabular-nums text-foreground">{bySource[src]}</span>
+                  <span className="font-semibold tabular-nums text-foreground">
+                    {pending ? <GhostDigits className="h-3.5 w-2" /> : bySource[src]}
+                  </span>
                   <span className="hidden sm:inline">{labels.source[src]}</span>
                 </span>
               );

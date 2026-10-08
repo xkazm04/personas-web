@@ -21,7 +21,7 @@ It renders three stacked sections:
 - **Demo mode** (this repo's default): `useState` initializers seed the static fixtures `MOCK_SLA_TARGETS` / `MOCK_SLA_BREACHES`, `loading` starts `false`, and the effect early-returns (`if (useMock) return;`) — no fetch runs (`useSlaData.ts:44`).
 - **Real/Supabase mode**: the effect calls `getSyncedSla()` (`src/lib/supabaseApi.ts:831`), which derives default objectives from the `synced_leaderboard` per-persona aggregates (no desktop-side SLA config exists). Errors are captured to Sentry with `tags: { scope: "useSlaData" }` and surfaced via `error`.
 
-**Page composition — `page.tsx`.** `SLAPage` calls `useSlaData()`, then derives the two summary numbers in a `useMemo` (`page.tsx:24`): `overallCompliance` = mean of `target.timeInSLA`, `activeBreachCount` = count of `target.activeBreach`. `fetchedAt` is captured once in a lazy `useState(() => Date.now())` initializer (React 19 purity rule) and fed to `StalenessIndicator`. While `loading`, it renders `SkeletonCard`s; `error` renders a `DashboardErrorBanner` above content. The whole page is a `staggerContainer` with `fadeUp` children (framer-motion).
+**Page composition — `page.tsx`.** `SLAPage` calls `useSlaData()`, then derives the two summary numbers in a `useMemo` (`page.tsx:24`): `overallCompliance` = mean of `target.timeInSLA`, `activeBreachCount` = count of `target.activeBreach`. `fetchedAt` is captured once in a lazy `useState(() => Date.now())` initializer (React 19 purity rule) and fed to `StalenessIndicator`. `error` renders a `DashboardErrorBanner` above content. Loading follows the dashboard tier standard (see **Loading tiers** below) - no framer page stagger, no `SkeletonCard`s.
 
 **Summary grid — `SLASummaryGrid.tsx`.** Three glass tiles. The compliance number's color comes from `complianceBand()`; active-breach count is rose when > 0, else emerald.
 
@@ -41,6 +41,15 @@ It renders three stacked sections:
 - `formatAbsolute(iso)` → deterministic `toLocaleString("en-US", …)`; returns `"-"` for invalid dates. Deliberately render-safe because it depends only on a fixed ISO string (no `Date.now()` call), so it's pure inside render.
 
 **Link to system health.** This page does *not* read `systemStore` directly — overall live system health (connected/disconnected, the global health check) is a separate concern surfaced by the dashboard shell. The SLA surface is about per-persona objective compliance, not the orchestrator connection state.
+
+### Loading tiers
+
+Follows [loading-orchestration](loading-orchestration.md).
+
+- **T0** - the header (icon, title, subtitle, `StalenessIndicator`), plain and never animated (`src/components/dashboard/views/sla/index.tsx:38`).
+- **T1** - the three section frames, CSS cascade by visual order: summary grid `arriveAt(0)` (`src/components/dashboard/views/sla/sla-page/SLASummaryGrid.tsx:38`), target grid `arriveAt(1)` (`src/components/dashboard/views/sla/sla-page/SLATargetGrid.tsx:49`), breach-log card + title `arriveAt(2)` (`src/components/dashboard/views/sla/sla-page/SLABreachLog.tsx:93`). They paint while loading too.
+- **T2** - the tile values, target cards and breach rows. A placeholder shows only on a cold load with nothing held (`pending`, `src/components/dashboard/views/sla/index.tsx:25`): the tile values are delayed `dash-ghost` bars in their own 2rem line box (`SLASummaryGrid.tsx:30`); the target grid holds an empty reservation (the 34px FilterBar row + a 168px card row, `SLATargetGrid.tsx:51`, `:73`); the breach log holds the empty-state line's 68px instead of flashing "no breaches" (`SLABreachLog.tsx:118`). Content that lands after a cold load takes the `.dash-arrive` entrance once on a persistent node (`coldStart`, `src/components/dashboard/views/sla/index.tsx:24`); demo data present on the first frame paints settled. Cards and rows are keyed by id.
+- **T3** - none. Nothing here is heavy, and the breach log stays T2 on purpose: it answers the view's second question, and a `?focus=<breach id>` deep link must find its row mounted to open and scroll it (a below-the-fold `Deferred` would not release without a scroll). The expandable breach detail is a click response, not deferred.
 
 ## Key files
 
@@ -68,7 +77,7 @@ It renders three stacked sections:
 
 ## Integration points
 - **Dashboard shell & nav.** Registered in `navItemDefs` (`src/components/dashboard/DashboardNavigation.tsx:34`) with `labelKey: "sla"`, `Shield` icon, `href: "/dashboard/sla"`. Renders inside the shared dashboard layout (sidebar / mobile bottom nav).
-- **Shared dashboard primitives.** Uses `FilterBar` (status + severity pills, with the animated sliding pill), `SkeletonCard`, `DashboardErrorBanner`, `StalenessIndicator`, and `GradientText`. Note: it does **not** use `StatusBadge` or `MetricCard` — SLA has its own bespoke tiles (`SLASummaryGrid`) and badges (`severityPill`, ongoing/resolved badge) because its status vocabulary (severity, breach, time-in-SLA) differs from the execution-status vocabulary those primitives encode.
+- **Shared dashboard primitives.** Uses `FilterBar` (status + severity pills, with the animated sliding pill), `DashboardErrorBanner`, `StalenessIndicator`, and `GradientText`. Note: it does **not** use `StatusBadge` or `MetricCard` — SLA has its own bespoke tiles (`SLASummaryGrid`) and badges (`severityPill`, ongoing/resolved badge) because its status vocabulary (severity, breach, time-in-SLA) differs from the execution-status vocabulary those primitives encode.
 - **Formatting utilities.** `relativeTime` from `src/lib/format.ts` (Sentry-breadcrumbed clock-skew fallback) for the collapsed row; `formatAbsolute` (local helper) for the detail panel.
 - **i18n.** Nav label at `t.dashboard.sla`. All page copy under `t.slaPage.*` — including `t.slaPage.timeInSla`, `t.slaPage.targetFilter.{all,atRisk,healthy}`, `t.slaPage.metricType.{availability,latency,successRate}`, `t.slaPage.severity.{minor,major,critical}`, and `t.slaPage.breachLog.*` (title, empty, all, ongoing, duration with `{n}`, started, resolved, otherBreaches with `{persona}`/`{n}`, timeToResolve, elapsed). The interface is at `src/i18n/en.ts:525`, the en values at `:1687`.
 - **Observability relationship.** In `context-map.json` this lives under the **"Observability Charts & SLA"** context, but the latency/cost/usage charts are documented separately — see [Observability charts](observability.md). SLA owns only objective tracking + the breach log.
