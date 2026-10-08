@@ -1,6 +1,7 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
+import { Flag } from "lucide-react";
 import { attentionOf, needsTone } from "../attention";
 import Emblem from "./Emblem";
 import { agentAria, shortState, taskText, type BoardCopy } from "./copy";
@@ -40,6 +41,19 @@ export function needGlyph(a: SimAgent): string {
   return String(a.reviews.length);
 }
 
+/** The glyph drawn: a mark for a state, or a flag with the count for reviews,
+ *  so a bare number never reads as another kind of mark. */
+export function NeedGlyph({ agent: a, size }: { agent: SimAgent; size: number }) {
+  const g = needGlyph(a);
+  const reviews = !"!?✎".includes(g);
+  return (
+    <span className={`${s.glyph} inline-flex shrink-0 items-center`} style={{ fontSize: size }}>
+      {reviews && <Flag aria-hidden strokeWidth={3} style={{ width: size * 0.62, height: size * 0.62, marginRight: size * 0.06 }} />}
+      {g}
+    </span>
+  );
+}
+
 /**
  * One agent, drawn to be sorted by the eye before it is read: lit and
  * filling while it works, a solid amber or red block with a glyph when it
@@ -65,9 +79,14 @@ export default function Tile({ agent: a, rect, copy, att, live, pending, dim, ri
   // The glyph already counts reviews unless the state itself is the reason.
   const extraReviews = a.reviews.length > 0 && (a.state === "failed" || a.state === "input_required" || a.state === "draft_ready");
   const marks = a.unreadMessages.length > 0 || extraReviews;
-  const glyph = needs ? (
-    <span className={`${s.glyph} shrink-0`} style={{ fontSize: glyphSize }}>{needGlyph(a)}</span>
-  ) : null;
+  const glyph = needs ? <NeedGlyph agent={a} size={glyphSize} /> : null;
+  // A change of pile flashes once, so the eye catches it (still under reduced motion).
+  const [prevPile, setPrevPile] = useState(pile);
+  const [flash, setFlash] = useState(0);
+  if (pile !== prevPile) {
+    setPrevPile(pile);
+    setFlash(flash + 1);
+  }
 
   return (
     <div
@@ -93,6 +112,7 @@ export default function Tile({ agent: a, rect, copy, att, live, pending, dim, ri
       {running && !needs && <span className={s.fill} aria-hidden="true" />}
       {running && !needs && live && <span className={s.sweep} aria-hidden="true" />}
       {running && <span className={s.bar} aria-hidden="true" />}
+      {flash > 0 && <span key={flash} className={s.flash} aria-hidden="true" />}
 
       <span className="relative flex h-full flex-col p-2" aria-hidden="true">
         {/* Top row: the callsign keeps its own lane; at medium+ the glyph sits at its end. */}
@@ -108,6 +128,11 @@ export default function Tile({ agent: a, rect, copy, att, live, pending, dim, ri
           </span>
           {tier !== "xs" && glyph}
         </span>
+        {/* A tall medium tile has room for what it is doing (large tiles show it under the
+            name); resting and off tiles stay quiet rather than repeat their state. */}
+        {tier === "md" && rect.h >= 124 && (pile === "working" || needs || a.state === "queued") && (
+          <span className={`mt-2 line-clamp-3 text-xs leading-snug ${pile === "working" || needs ? "" : "text-muted-dark"}`}>{taskText(a, copy, copy.tasks.resting)}</span>
+        )}
 
         {tier !== "xs" && (
           <span className="mt-auto min-w-0">

@@ -36,6 +36,42 @@
   transition: left 0.7s var(--ease), top 0.7s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease),
     background-color 0.4s, border-color 0.4s, box-shadow 0.4s, color 0.4s, opacity 0.3s, filter 0.3s;
 }
+/* A change of pile, once: a ring and a wash in the tile's own colour that fade. */
+.flash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: color-mix(in oklab, currentColor 20%, transparent);
+  box-shadow: inset 0 0 0 2px currentColor;
+  animation: flash 1.2s var(--ease) forwards;
+}
+@keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+.still .flash { display: none; }
+
+/* Light themes: tiles become paper. Resting is a plain card, working a card
+   tinted by the brand with a clean fill (the dark-theme mix turned muddy grey
+   on a light ground), off stays hatched. */
+:global([data-theme^="light"]) .resting {
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+:global([data-theme^="light"]) .working {
+  background: color-mix(in oklab, var(--at-working) 6%, var(--surface));
+  border-color: color-mix(in oklab, var(--at-working) 50%, transparent);
+  color: color-mix(in oklab, var(--at-working) 82%, var(--foreground));
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--at-working) 14%, transparent);
+}
+:global([data-theme^="light"]) .fill {
+  background: linear-gradient(0deg, color-mix(in oklab, var(--at-working) 16%, transparent), color-mix(in oklab, var(--at-working) 3%, transparent));
+}
+:global([data-theme^="light"]) .sweep {
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--at-working) 9%, transparent), transparent);
+}
+:global([data-theme^="light"]) .bay {
+  background: linear-gradient(180deg, hsl(var(--h) 60% 50% / 0.08), hsl(var(--h) 60% 50% / 0.02) 70%);
+}
+
 /* Out of focus: present (it keeps its place) but receded. */
 .dim {
   opacity: 0.16;
@@ -104,7 +140,7 @@
 /* needs: solid tone, thick halo; the glyph says why */
 .needs {
   z-index: 2;
-  background: var(--tone);
+  background: linear-gradient(155deg, color-mix(in oklab, var(--tone), white 10%), var(--tone) 55%, color-mix(in oklab, var(--tone), black 6%));
   border-color: var(--tone);
   color: color-mix(in oklab, var(--tone) 14%, black);
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--tone) 35%, transparent), 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent);
