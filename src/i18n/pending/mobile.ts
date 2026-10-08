@@ -149,6 +149,7 @@ export interface MobileCopy {
       message_too_long: string;
       not_found: string;
       not_app_master: string;
+      rate_limited: string;
       internal_error: string;
       controller_not_paired: string;
       controller_revoked: string;
@@ -351,7 +352,7 @@ export const mobileCopy: MobileCopy = {
   },
   say: {
     title: 'Direct this App Master',
-    intro: 'Send a direction to an agent that holds a project charter. It reads the direction the next time it wakes up. This isn\'t a chat, so no reply comes back here.',
+    intro: 'Only a project\'s App Master takes directions, so send this to that project\'s App Master. It reads the direction the next time it wakes up. This isn\'t a chat, so no reply comes back here.',
     label: 'Direction for {name}',
     count: '{count} of {max}',
     tooLong: 'Too long to send. Keep it under {max} characters.',
@@ -370,7 +371,8 @@ export const mobileCopy: MobileCopy = {
       empty_message: 'Write a direction first. That one was empty.',
       message_too_long: 'That direction is too long. Keep it under {max} characters.',
       not_found: 'This agent is gone from your computer.',
-      not_app_master: 'Only an agent that holds a project charter takes directions. Give this one a charter on your computer, or direct another agent.',
+      not_app_master: 'Only a project\'s App Master takes directions. Send this to that project\'s App Master instead.',
+      rate_limited: 'This phone sent 10 directions in the last 10 minutes. Wait a few minutes, then send again.',
       internal_error: 'Your computer hit an error saving the direction. Try again.',
       controller_not_paired: 'This phone isn\'t paired with your computer. Pair it again in Settings.',
       controller_revoked: 'This phone is no longer paired. Pair it again in Settings.',

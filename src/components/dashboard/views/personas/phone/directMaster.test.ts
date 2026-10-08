@@ -5,7 +5,7 @@ import { sayDisabledReason, sayRefusalText } from "./DirectMasterPanel";
 const copy = mobileCopy.say;
 
 describe("sayRefusalText: every desk and plane token has its own words", () => {
-  const tokens = ["bad_params", "empty_message", "message_too_long", "not_found", "not_app_master", "internal_error", "controller_not_paired", "controller_revoked"] as const;
+  const tokens = ["bad_params", "empty_message", "message_too_long", "not_found", "not_app_master", "rate_limited", "internal_error", "controller_not_paired", "controller_revoked"] as const;
 
   it("maps each token to its copy, ignoring a detail after a colon", () => {
     for (const t of tokens) {
@@ -15,8 +15,16 @@ describe("sayRefusalText: every desk and plane token has its own words", () => {
     expect(sayRefusalText(copy, null, true)).toBe(copy.errors.expired);
   });
 
-  it("not_app_master explains that only a project charter holder takes directions", () => {
-    expect(sayRefusalText(copy, "not_app_master", false)).toContain("project charter");
+  it("not_app_master explains that only a project's App Master takes directions", () => {
+    const text = sayRefusalText(copy, "not_app_master", false);
+    expect(text).toContain("App Master");
+    expect(text).not.toContain("project charter");
+  });
+
+  it("rate_limited names the 10 in 10 minutes limit", () => {
+    const text = sayRefusalText(copy, "rate_limited", false);
+    expect(text).toContain("10 directions");
+    expect(text).toContain("10 minutes");
   });
 
   it("an unknown token shows as sent; none at all is the generic line", () => {
