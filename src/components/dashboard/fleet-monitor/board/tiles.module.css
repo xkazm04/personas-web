@@ -148,6 +148,10 @@
   color: var(--tone);
 }
 
+/* A console log line arriving. */
+.logIn { animation: logIn 0.45s var(--ease) both; }
+@keyframes logIn { from { opacity: 0; translate: 0 6px; } }
+
 .rise { animation: rise 0.7s var(--ease) both; animation-delay: var(--ad, 0s); }
 @keyframes rise { from { opacity: 0; translate: 0 12px; } }
 

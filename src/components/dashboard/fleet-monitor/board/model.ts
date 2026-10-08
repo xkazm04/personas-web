@@ -18,6 +18,17 @@ export interface SimAgent extends FleetAgent {
   /** Sim time the current run started at (negative: it started before the page opened). */
   startSim: number | null;
   taskKey: TaskKey | null;
+  /** When the current run's tool calls landed: one entry per sim tick that
+   *  added calls (the newest 24), so a console line keeps its time. */
+  callTicks: CallTick[];
+}
+
+export interface CallTick {
+  /** Sim time of the tick. */
+  at: number;
+  /** Calls before and after it. */
+  from: number;
+  to: number;
 }
 
 export type Decision =

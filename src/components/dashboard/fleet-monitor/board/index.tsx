@@ -95,7 +95,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
         </AnimatePresence>
         <AnimatePresence>
           {openAgent && (
-            <AgentScene key="agent" agent={openAgent} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live} op={op} cmds={commands.cmds} hostName={host.name} />
+            <AgentScene key="agent" agent={openAgent} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live} op={op} cmds={commands.cmds} hostName={host.name} onStep={nav.stepAgent} />
           )}
         </AnimatePresence>
         <Toast toast={toast} />

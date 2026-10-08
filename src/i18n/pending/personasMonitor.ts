@@ -328,6 +328,41 @@ export interface PersonasMonitorCopy {
         keep: string;
       };
     };
+    console: {
+      tabs: {
+        log: string;
+        runs: string;
+        events: string;
+      };
+      tabsLabel: string;
+      logCaption: string;
+      logEmpty: string;
+      logFailed: string;
+      logPaused: string;
+      logLabel: string;
+      runsCaption: string;
+      cols: {
+        result: string;
+        ended: string;
+        duration: string;
+        cost: string;
+      };
+      lastRun: string;
+      lastRunLine: string;
+      eventsEmpty: string;
+      prev: string;
+      next: string;
+      stepHint: string;
+      kpis: string;
+      schedule: string;
+      everyMin: string;
+      everyHour: string;
+      everyHours: string;
+      triggerOnly: string;
+      nextAt: string;
+      trigger: string;
+      pausedPlan: string;
+    };
   };
   city: {
     label: string;
@@ -719,6 +754,41 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         confirmStop: 'Pause {n} and stop {m} runs',
         keep: 'Keep running',
       },
+    },
+    console: {
+      tabs: {
+        log: 'Live log',
+        runs: 'Runs',
+        events: 'Events',
+      },
+      tabsLabel: 'Agent activity',
+      logCaption: 'Tool calls: stylised illustration',
+      logEmpty: 'No run in progress. The log fills when the next run starts.',
+      logFailed: 'timed out after 30 s, run failed',
+      logPaused: 'paused, waiting for your answer',
+      logLabel: 'Tool calls of the current run, oldest first',
+      runsCaption: 'Last 12 runs, newest first',
+      cols: {
+        result: 'Result',
+        ended: 'Ended',
+        duration: 'Took',
+        cost: 'Cost',
+      },
+      lastRun: 'Last run',
+      lastRunLine: '{result} · took {duration} · {cost} · {ago}',
+      eventsEmpty: 'Nothing logged for this agent yet.',
+      prev: 'Previous agent',
+      next: 'Next agent',
+      stepHint: 'J and K step through agents',
+      kpis: 'Today',
+      schedule: 'What starts it',
+      everyMin: 'Every {n} min',
+      everyHour: 'Every hour',
+      everyHours: 'Every {n} h',
+      triggerOnly: 'No schedule, only its trigger',
+      nextAt: 'next at {time} UTC',
+      trigger: 'On {trigger}',
+      pausedPlan: 'Paused: no schedule or trigger fires until you resume',
     },
   },
   city: {

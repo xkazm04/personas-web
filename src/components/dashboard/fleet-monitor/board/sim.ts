@@ -59,6 +59,7 @@ export function initSim(scale = 99): SimState {
       spark24h: [...a.spark24h],
       startSim: a.state === "running" ? -(a.runningSinceMs ?? 0) : null,
       taskKey: null,
+      callTicks: [],
     })),
     events: FLEET.timeline.map((e) => ({ ...e })),
     simMs: 0,
@@ -116,6 +117,7 @@ function startRun(a: SimAgent, simMs: number, task: string | null, taskKey: Task
   a.task = task;
   a.taskKey = taskKey;
   a.liveToolCalls = 0;
+  a.callTicks = [];
 }
 
 /** Start a run when the machine has a free slot; otherwise queue it. */
@@ -198,7 +200,9 @@ function simTick(d: Draft, scale: number, simMs: number) {
   const running = d.agents.slice(0, scale).filter((a) => a.state === "running").map((a) => d.edit(a.idx));
   for (const a of running) {
     a.progress = Math.min(1, (a.progress ?? 0) + 0.015 + d.r() * 0.05);
+    const from = a.liveToolCalls;
     a.liveToolCalls += 1 + Math.floor(d.r() * 4);
+    a.callTicks = [...a.callTicks.slice(-23), { at: simMs, from, to: a.liveToolCalls }];
   }
   running.filter((a) => (a.progress ?? 0) >= 1).slice(0, 2).forEach((a) => complete(d, a, scale, simMs));
   for (const a of running) if (a.state === "running" && (a.progress ?? 0) >= 1) a.progress = 0.99;

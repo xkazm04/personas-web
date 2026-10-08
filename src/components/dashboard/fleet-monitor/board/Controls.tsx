@@ -22,6 +22,8 @@ interface ControlsProps {
   op: Operator;
   pending?: Command;
   hostName: string;
+  /** Keep the reason line's room even when empty, so nothing shifts when a command starts. */
+  reserve?: boolean;
 }
 
 /**
@@ -30,7 +32,7 @@ interface ControlsProps {
  * open the buttons wait and say what is in flight, and offline they say why
  * they are off.
  */
-export default function Controls({ agent: a, copy: c, op, pending, hostName }: ControlsProps) {
+export default function Controls({ agent: a, copy: c, op, pending, hostName, reserve = false }: ControlsProps) {
   const running = a.state === "running";
   const canRun = a.enabled && !running && a.state !== "input_required" && a.state !== "draft_ready";
   const off = op.offline || !!pending;
@@ -64,8 +66,8 @@ export default function Controls({ agent: a, copy: c, op, pending, hostName }: C
           </button>
         )}
       </div>
-      {why && (
-        <p id={reasonId} role="status" className="mt-2 flex items-center gap-1.5 text-sm text-muted-dark">
+      {(why || reserve) && (
+        <p id={reasonId} role="status" className={`mt-1.5 flex min-h-5 max-w-[22rem] items-center gap-1.5 text-sm leading-tight text-muted-dark ${reserve ? "truncate" : ""}`}>
           {pending && !op.offline && <Loader2 aria-hidden className="h-3.5 w-3.5 shrink-0 animate-spin text-brand-cyan" />}
           {why}
         </p>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useEffectEvent, useRef, useState, type RefObject } from "react";
-import { queueOf, type SimAgent } from "./model";
+import { FLEET } from "../fleet-data";
+import { orderInBay, queueOf, type SimAgent } from "./model";
 
 export type Attention = { type: "agent" | "team"; id: string } | null;
 
@@ -92,6 +93,18 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     else if (teamOpen) closeTeam(true);
   };
 
+  /** Step the open agent through its neighbours: its team's bay order when a
+   *  team is open, the whole field's reading order otherwise. */
+  const stepAgent = (delta: number) => {
+    if (!agentOpen) return;
+    const list = teamOpen
+      ? orderInBay(scope.filter((a) => a.team === teamOpen))
+      : FLEET.teams.flatMap((t) => orderInBay(scope.filter((a) => a.team === t.id)));
+    const i = list.findIndex((a) => a.id === agentOpen);
+    if (i < 0 || list.length < 2) return;
+    setAgentOpen(list[(i + delta + list.length) % list.length].id);
+  };
+
   const nextNeeds = () => {
     const q = queueOf(scope);
     if (!q.length) {
@@ -123,6 +136,9 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     } else if (e.key === "n" || e.key === "N") {
       e.preventDefault();
       nextNeeds();
+    } else if (agentOpen && (e.key === "j" || e.key === "k")) {
+      e.preventDefault();
+      stepAgent(e.key === "j" ? 1 : -1);
     }
   });
   useEffect(() => {
@@ -133,7 +149,7 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
 
   return {
     teamOpen, agentOpen, att,
-    attend, unattend, openTeam, closeTeam, openAgent, closeAgent, back, nextNeeds,
+    attend, unattend, openTeam, closeTeam, openAgent, closeAgent, back, nextNeeds, stepAgent,
   };
 }
 

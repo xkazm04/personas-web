@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { formatAge } from "../fleet-data";
 import { Overline, ReasonChip } from "./parts";
 import { ago, type BoardCopy } from "./copy";
-import { fill, pct, type SimAgent } from "./model";
+import { fill, type SimAgent } from "./model";
 import { HOLD_MS, isOpen, type Command } from "./useCommands";
 import type { CSSProperties } from "react";
 import b from "./board.module.css";
@@ -53,19 +53,8 @@ export default function AgentSide({ agent: a, simMs, copy, cmds, still, offline,
   const verdictOn = (rid: string) => cmds.find((c) => c.agentId === a.id && c.rid === rid && isOpen(c));
   const reading = cmds.some((c) => c.agentId === a.id && c.verb === "read" && isOpen(c));
   const reviews = [...a.reviews].sort((x, y) => SEV_ORDER[x.severity] - SEV_ORDER[y.severity] || y.ageMin - x.ageMin);
-  const kv: [string, string | number][] = [
-    [copy.stats.runsToday, a.runsToday], [copy.stats.success, pct(a.successRate)], [copy.stats.costToday, `$${a.costTodayUsd.toFixed(2)}`],
-  ];
   return (
     <div className="h-full overflow-y-auto pb-8 [mask-image:linear-gradient(180deg,#000_90%,transparent)]">
-      <dl className="mb-4 grid grid-cols-3 gap-2.5">
-        {kv.map(([k, v]) => (
-          <div key={k} className="rounded-xl bg-[color-mix(in_oklab,var(--foreground)_4%,transparent)] px-3 py-2 shadow-[inset_0_0_0_1px_var(--border-glass)]">
-            <dt className="text-xs text-muted-dark">{k}</dt>
-            <dd className="text-2xl font-semibold tabular-nums text-foreground">{v}</dd>
-          </div>
-        ))}
-      </dl>
       <Overline className="mb-2.5 justify-between">
         <span>{fill(copy.agent.reviewsCount, { n: a.reviews.length })}</span>
         {a.reviews.length > 0 && <span className="normal-case tracking-normal">{copy.agent.oldestDecides}</span>}

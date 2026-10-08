@@ -66,6 +66,12 @@
 .orbitLive { animation: orbit 40s linear infinite; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
+/* The run column's schedule block yields first when the column is short
+   (laptop screens): the run itself and its actions come before what starts it. */
+@container (max-height: 560px) {
+  .planBlock { display: none; }
+}
+
 /* A held verdict's Undo window running out. */
 .holdDrain {
   transform-origin: 0 50%;
