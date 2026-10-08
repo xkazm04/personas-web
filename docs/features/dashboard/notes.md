@@ -53,6 +53,15 @@ The desktop Notepad keeps a short list of goals (at most 10 in a working slot) p
 - **Reachability:** `useSyncReachability()`; the tiers come from `lib/sync/reachability.ts`.
 - **Smoke:** `/dashboard/notes` is in `e2e/smoke-routes.ts`, so the desktop sidebar walk visits it.
 
+### Loading tiers
+
+Per [loading-orchestration](loading-orchestration.md). No T3 slot: the view has no chart or heavy body.
+
+- **T0** — the header (icon, title, lede). **T1** — the reachability banner / offline note.
+- **T2** — the review totals (`arriveAt(0)`, `views/notes/index.tsx:131`) and the zone cards, keyed by `zone.key`, cascading `arriveAt(i + 1)` (`index.tsx:107`; `NoteZoneCard` takes `className` / `style` for it).
+- **First load** — three zone-shaped ghosts (header + two `NoteCard`-height blocks; 1 / 2 / 3 visible by breakpoint like the board) in `.dash-ghost` with an sr-only status (`index.tsx:80-100`), replacing the spinner.
+- The note body (`NoteDetail` + `MarkdownReport`) is opened on demand in a sheet / modal, so it is not deferred.
+
 ## Conventions & gotchas
 - **Read-only by contract.** Do not add write affordances without a command verb (`note_create`, `notepad_set_review_verdict`) on the desktop side first.
 - **The `?desktop=` switch is read when a view mounts**, from the URL, and a nav link carries no query. The phone spec moves with `history.pushState` to keep it.

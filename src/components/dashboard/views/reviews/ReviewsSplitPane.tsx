@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import FilterBar from "@/components/dashboard/FilterBar";
-import { EASE_CURVE, fadeUp, staggerContainer } from "@/lib/animations";
+import { EASE_CURVE } from "@/lib/animations";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { useReviewBulkActions } from "@/hooks/useReviewBulkActions";
 import { usePolling } from "@/hooks/usePolling";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -28,6 +29,15 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
   const policy = useReviewStore((s) => s.escalationPolicy);
   const [filter, setFilter] = useState("all");
   const [selectedIdRaw, setSelectedId] = useState<string | null>(null);
+  // "Waiting" only until the first fetch settles, so a later poll never shows
+  // the first-load ghost and the empty filter never claims "no reviews" early.
+  const [firstLoadDone, setFirstLoadDone] = useState(false);
+  const [prevLoading, setPrevLoading] = useState(reviewsLoading);
+  if (reviewsLoading !== prevLoading) {
+    setPrevLoading(reviewsLoading);
+    if (!reviewsLoading) setFirstLoadDone(true);
+  }
+  const waiting = !firstLoadDone && reviews.length === 0;
 
   useEffect(() => {
     void fetchReviews();
@@ -90,8 +100,10 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
   }, [selectedIndex]);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col h-[calc(100vh-10rem)]">
-      <motion.div variants={fadeUp} className="flex-1 min-h-0 flex rounded-xl border border-glass bg-white/[0.01] overflow-hidden">
+    // The pane chrome (border, filter bar, list frame) is T1: its entrance is
+    // the view's CSS cascade (reviews/index.tsx), so no framer entrance here.
+    <div className="flex flex-col h-[calc(100vh-10rem)]">
+      <div className="flex-1 min-h-0 flex rounded-xl border border-glass bg-white/[0.01] overflow-hidden">
         <div className="w-[40%] flex flex-col border-r border-glass">
           <div className="flex-shrink-0 px-2 pt-2 pb-1 border-b border-glass">
             <FilterBar
@@ -111,8 +123,8 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
               <ReviewsBulkToolbar bulkCount={bulkCount} pendingInFiltered={bulk.pendingInFiltered} bulkResolving={bulk.bulkResolving} decideDisabled={!bulkAllowed} clearSelection={bulk.clearSelection} selectAll={bulk.selectAll} handleBulkAction={bulk.handleBulkAction} />
             )}
           </AnimatePresence>
-          <ReviewList listRef={listRef} now={now} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
-          {reviewsLoading && (
+          <ReviewList listRef={listRef} now={now} waiting={waiting} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
+          {reviewsLoading && !waiting && (
             <div className="flex-shrink-0 flex items-center justify-center gap-1.5 py-1.5 border-t border-glass bg-white/[0.02]">
               <Loader2 className="h-3 w-3 animate-spin text-muted-dark" />
               <span className="text-sm text-muted-dark">{t.dashboardUi.refreshing}</span>
@@ -120,13 +132,18 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
           )}
         </div>
         <div className="w-[60%] flex flex-col">
-          <AnimatePresence mode="wait">
-            <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: EASE_CURVE }} className="h-full">
-              <ReviewDetailPanel review={selectedReview} now={now} canDecide={selectedAllowed} onResolve={(id, status) => gatedDecide([id], status)} />
-            </motion.div>
-          </AnimatePresence>
+          {/* T3: the rich detail body mounts on the view's first deep turn and
+              fills the pane it reserves. The keyed framer swap below is the
+              row-to-row transition, not a load entrance. */}
+          <Deferred className="h-full" minHeight="100%" order={0}>
+            <AnimatePresence mode="wait">
+              <motion.div key={selectedReview?.id ?? "empty"} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.15, ease: EASE_CURVE }} className="h-full">
+                <ReviewDetailPanel review={selectedReview} now={now} canDecide={selectedAllowed} onResolve={(id, status) => gatedDecide([id], status)} />
+              </motion.div>
+            </AnimatePresence>
+          </Deferred>
         </div>
-      </motion.div>
+      </div>
       <ReviewsSplitPaneToasts
         bulkProgress={bulk.bulkProgress}
         bulkResult={bulk.bulkResult}
@@ -139,6 +156,6 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
         rejectTitle={t.dashboardUi.rejectSelectedTitle}
         rejectBody={t.dashboardUi.rejectSelectedBody}
       />
-    </motion.div>
+    </div>
   );
 }

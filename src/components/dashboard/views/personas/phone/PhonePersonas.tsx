@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { Bot, Loader2 } from "lucide-react";
+import { Bot } from "lucide-react";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useAuthStore } from "@/stores/authStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { useExecutionStore } from "@/stores/executionStore";
@@ -13,6 +14,9 @@ import PersonaActionsSheet from "./PersonaActionsSheet";
 import PersonaDetailSheet from "./PersonaDetailSheet";
 import AthenaChatSheet, { AthenaRow } from "./chat/AthenaChatSheet";
 import { mobileCopy } from "@/i18n/pending/mobile";
+
+/** Placeholder rows for the first load (stable keys; never real data). */
+const GHOST_ROWS = ["a", "b", "c"] as const;
 
 /** One sheet at a time; `open` flips first so the sheet can slide out with its content. */
 interface SheetState {
@@ -61,7 +65,9 @@ export default function PhonePersonas() {
 
       {reach.ready && <ReachabilityNotice reach={reach} />}
 
-      <AthenaRow onOpen={openAthena} />
+      <div className={ARRIVE} style={arriveAt(0)}>
+        <AthenaRow onOpen={openAthena} />
+      </div>
 
       {error && ids.length === 0 ? (
         <div role="alert" className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
@@ -75,14 +81,20 @@ export default function PhonePersonas() {
           </button>
         </div>
       ) : loading && ids.length === 0 ? (
-        <p className="flex items-center gap-2 text-sm text-muted-dark" aria-busy="true">
-          <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />
-          {copy.loading}
-        </p>
+        // First load: rows shaped like PhonePersonaRow (44 px target + p-3 + border),
+        // drawn only after the ghost delay so a warm store never flashes them.
+        <div role="status" aria-busy="true">
+          <span className="sr-only">{copy.loading}</span>
+          <ul aria-hidden className="dash-ghost flex flex-col gap-2">
+            {GHOST_ROWS.map((key) => (
+              <li key={key} className="h-[70px] rounded-2xl border border-glass bg-white/[0.02]" />
+            ))}
+          </ul>
+        </div>
       ) : ids.length === 0 ? (
         <p className="text-sm text-muted-dark">{copy.empty}</p>
       ) : (
-        <ul aria-label={copy.title} className="flex flex-col gap-2">
+        <ul aria-label={copy.title} className={`${ARRIVE} flex flex-col gap-2`} style={arriveAt(1)}>
           {ids.map((id) => (
             <PhonePersonaRow key={id} id={id} reach={reach} onOpenDetail={openDetail} onOpenActions={openActions} />
           ))}

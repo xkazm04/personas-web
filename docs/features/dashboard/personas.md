@@ -87,6 +87,14 @@ Both views run a seeded simulation (runs progress and complete, failures self-he
 - Rendered by the dashboard SPA (auth guard, demo session via `/demo`); first in the rail and in the mobile bar. Replaced the Agents grid (`/dashboard/agents`, removed 2026-10-05 with its portraits, tour step and narration) and the Playground label.
 - `e2e/smoke-routes.ts` covers the route. `e2e/fleet-board.spec.ts` covers the Board as a remote control: the host card and tab badge, offline, `/` find into the console, a palette command reaching Done in the commands audit, triage skip and Esc, the list's sort and shift-range selection.
 
+### Loading tiers
+
+Per [loading-orchestration](loading-orchestration.md).
+
+- **T0** — the toolbar row: title, badges, view tabs, scale switch (`views/personas/index.tsx:68-125`). Paints with the view, never animated.
+- **T3** — the stage body (Board / Night City). `<Deferred className="h-full" minHeight="100%" order={0} preload={loadBoard}>` (`index.tsx:136`): the `#fleet-stage` section already fills the remaining height, so the slot reserves all of it; `loadBoard` / `loadNightCity` (`index.tsx:17-18`) are shared by `dynamic()` and the preload, and only the default view (Board) is preloaded. The dynamic `loading` is `StageGap` (`index.tsx:21`): `StageLoading` wrapped in `.dash-ghost`, so a warm chunk shows nothing.
+- **Phone** (`phone/PhonePersonas.tsx`): heading T0; Athena row T1 `arriveAt(0)` (`:68`); first load shows three `PhonePersonaRow`-shaped ghost rows (70 px) inside `.dash-ghost` with an sr-only status (`:86-94`), replacing the spinner; the persona list (rows keyed by id) is T2 and arrives with `arriveAt(1)` (`:97`). Spinners inside the chat sheets are on-demand UI, not view load, and are unchanged.
+
 ## Conventions & gotchas
 - Demo data, not a live fleet: the simulation, the decisions and the fleet are synthetic by design and labelled so (Demo fleet badge). Wiring it to `usePersonaStore` / synced executions is the next step for a real tenant.
 - All colour is from site tokens; state and severity text is mixed toward `--foreground` in light themes to hold contrast. "Working" uses `--brand-cyan`, so it takes each theme's brand colour (purple in dark-purple, green in dark-matrix).

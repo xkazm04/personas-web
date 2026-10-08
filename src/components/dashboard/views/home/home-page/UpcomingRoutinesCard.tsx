@@ -40,9 +40,8 @@ export function UpcomingRoutinesCard() {
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-10">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
-        </div>
+        // First load: hold the body's height; no spinner as a placeholder.
+        <div aria-busy="true" className="h-24" />
       ) : error ? (
         <DashboardErrorBanner message={error} onRetry={retry} />
       ) : routines.length === 0 ? (

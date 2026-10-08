@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ClipboardCheck, Loader2 } from "lucide-react";
+import { ClipboardCheck } from "lucide-react";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ReachabilityNotice from "@/components/dashboard/views/personas/phone/ReachabilityNotice";
 import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import CommandChip from "@/components/dashboard/views/personas/phone/CommandChip";
@@ -21,6 +22,8 @@ import PhoneReviewCard, { splitReviewContent } from "./PhoneReviewCard";
 
 /** How many of this visit's verdicts stay listed under "Decided here". */
 const DECIDED_SHOWN = 8;
+/** First-load ghost cards (stable keys; never real data). */
+const GHOST_CARDS = ["a", "b"] as const;
 
 /**
  * `/dashboard/reviews` at phone width (PLAN M20, PHASE2-SPEC.md 1.6 + 6.2):
@@ -97,16 +100,22 @@ export default function PhoneReviews() {
       <EscalationFailureNotice />
 
       {unserved ? null : waiting ? (
-        <p className="flex items-center gap-2 text-sm text-muted-dark" aria-busy="true">
-          <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />
-          {copy.loading}
-        </p>
+        // First load: cards the height of a PhoneReviewCard (header, title, due
+        // chip, body, note link, the 48 px verdict row), after the ghost delay.
+        <div role="status" aria-busy="true">
+          <span className="sr-only">{copy.loading}</span>
+          <ul aria-hidden className="dash-ghost flex flex-col gap-3">
+            {GHOST_CARDS.map((key) => (
+              <li key={key} className="h-[17rem] rounded-2xl border border-glass bg-white/[0.02]" />
+            ))}
+          </ul>
+        </div>
       ) : pending.length === 0 ? (
         <p data-reviews-empty className="rounded-2xl border border-glass bg-white/[0.02] p-4 text-sm text-muted">
           {t.reviewsPage.focus.empty}
         </p>
       ) : (
-        <ul aria-label={copy.pendingLabel} data-reviews-pending className="flex flex-col gap-3">
+        <ul aria-label={copy.pendingLabel} data-reviews-pending className={`${ARRIVE} flex flex-col gap-3`} style={arriveAt(0)}>
           {pending.map((review) => {
             const command = commandFor(review.id);
             return (

@@ -6,20 +6,17 @@ import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 
-const TrafficChart = dynamic(
-  () => import("@/components/dashboard/TrafficChart"),
-  {
-    ssr: false,
-    loading: () => <TrafficChartSpinner />,
-  },
-);
+/** Shared by dynamic() and the home view's <Deferred preload>: one chunk, fetched once. */
+export const loadTrafficChart = () => import("@/components/dashboard/TrafficChart");
 
-function TrafficChartSpinner() {
-  return (
-    <div className="flex items-center justify-center h-[200px] sm:h-[280px] lg:h-[320px]">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
-    </div>
-  );
+const TrafficChart = dynamic(loadTrafficChart, {
+  ssr: false,
+  loading: () => <TrafficChartReservation />,
+});
+
+/** The chart's own height, held empty while its chunk or data is in flight (no spinner placeholder). */
+function TrafficChartReservation() {
+  return <div aria-busy="true" className="h-[200px] sm:h-[280px] lg:h-[320px]" />;
 }
 
 export function TrafficErrorsCard({
@@ -56,11 +53,12 @@ export function TrafficErrorsCard({
         </div>
       </div>
 
-      {/* Spinner covers both the pre-trigger window and the in-flight fetch —
-          previously the empty state flashed (and, on failure, stuck) while data
-          was still loading. The empty state now means "resolved, truly empty". */}
+      {/* The reservation covers both the pre-trigger window and the in-flight
+          fetch — previously the empty state flashed (and, on failure, stuck)
+          while data was still loading. The empty state now means "resolved,
+          truly empty". */}
       {!loadObservability || loading ? (
-        <TrafficChartSpinner />
+        <TrafficChartReservation />
       ) : error ? (
         <DashboardErrorBanner message={error} onRetry={onRetry} />
       ) : hasTraffic ? (

@@ -106,6 +106,16 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 - **i18n** — namespaces `t.reviewsPage.*` (focus, parseError, undo, sla, resolved/resolvedBy, resolver, autoApprovedNote, bulkProcessing, severity), `t.dashboardUi.*` (most labels, `status.*` for the filter pills and the progress bar's failed count), `t.executionsPage.all` (the "All" pill), `t.eventsPage.unknownAgent`, `t.dashboard.reviews` (nav label), `t.guide…dashboardReviews` (product description), `t.memoriesPage.conflicts.*` (BatchReviewModal).
 - **Telemetry** — Sentry warnings on escalation-policy validation failures and voice errors.
 
+### Loading tiers
+
+Per [loading-orchestration](loading-orchestration.md).
+
+- **T0** — the header (title, subtitle, overdue count, **Focus** button; `views/reviews/index.tsx:50-78`): no entrance. The old framer `staggerContainer` / `fadeUp` page entrance (which also animated the header) and the split pane's own framer stagger were replaced by the CSS cascade.
+- **T1** — the notices `arriveAt(0)` (`index.tsx:81`, `:85`) and the pane chrome wrapper `arriveAt(1)` (`index.tsx:90`): border, filter bar, list frame.
+- **T2** — the review list. Until the first fetch settles with nothing held, `ReviewList` shows six `ReviewRow`-shaped ghost rows in `.dash-ghost` (`reviews-split-pane/ReviewList.tsx:33-45`) instead of the false "no reviews in this filter"; the "Refreshing" footer is hidden for that first load and stays the ambient refetch indicator after it (`ReviewsSplitPane.tsx`, `firstLoadDone` prev-state pattern).
+- **T3** — the detail panel: `<Deferred className="h-full" minHeight="100%" order={0}>` (`ReviewsSplitPane.tsx:138`) around the keyed `AnimatePresence` swap, which remains the row-to-row transition.
+- **Phone** (`phone/PhoneReviews.tsx`): first load shows two `PhoneReviewCard`-height ghosts (17rem) in `.dash-ghost` (`:105-113`), replacing the spinner; the pending list arrives with `arriveAt(0)` (`:118`), cards keyed by review id.
+
 ## Conventions & gotchas
 - **i18n (14-locale lockstep):** all user-facing copy comes from `t.*` or `Intl`; any new key must be added to `en.ts` and hand-translated into all 13 other locales in the same commit. `src/lib/review-queue-i18n.test.ts` scans the queue's rendering files (this folder, `BulkProgressBar`, `BulkResultToast`, `ConfirmDialog`, `UndoToast`, `BatchReviewModal` + `batch-review-modal/*`) and fails on prose literals, JSX text, a raw `.severity`/`.status`/`.resolvedBy` rendered as text, or a `relativeTime(` call; its allowlist is only key names (`Escape`, `Enter`) and the `<kbd>` glyphs `A R S J K`. Count-bearing copy is count-neutral ("Processing reviews: {count}"), never an English plural suffix.
 - **Semantic Tailwind tokens** throughout (`text-foreground`, `border-glass`, `text-brand-cyan`, severity `*-500/10` tints). No raw hex except persona color fallbacks.

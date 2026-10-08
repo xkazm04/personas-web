@@ -4,11 +4,14 @@ import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 
 import GradientText from "@/components/GradientText";
+import Deferred from "@/components/dashboard/arrival/Deferred";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { navigateDashboard } from "@/components/dashboard/spa/navigate";
 import TourLauncher from "@/components/tour/TourLauncher";
 import { useGreeting } from "@/hooks/useGreeting";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
+import { loadTrafficChart } from "./home-page/TrafficErrorsCard";
 import { useLiveClock } from "./home-page/useLiveClock";
 import { DimDetail } from "./mission/DimDetail";
 import { describeDimension, type DimensionView } from "./mission/dimensions";
@@ -18,6 +21,8 @@ import { WallCell } from "./mission/WallCell";
 import { WallDetail } from "./mission/WallDetail";
 
 const HOME = "/dashboard/home";
+/** The shortest evidence body (one card); Deferred keeps it as a floor, so never larger. */
+const DETAIL_MIN_HEIGHT = 288;
 const hrefFor = (id: DimensionId) => `${HOME}?dim=${id}`;
 
 /** The guided tour's spotlight targets, carried over from the old cockpit regions. */
@@ -75,13 +80,25 @@ export default function MissionControlView() {
           onSelect={(dim: DimensionView) => navigateDashboard(hrefFor(dim.id), { replace: true })}
           onBack={() => navigateDashboard(HOME)}
         >
-          <DimDetail id={open.id} readings={readings} sources={sources} daily={daily} issues={issues} />
+          {/* T3: the evidence cards (charts, heatmap, panels) mount on the
+              view's first deep turn; the rail and the detail header are T1 and
+              paint at once. `space-y-6` carries WallDetail's card spacing into the
+              slot. Not keyed by dimension: once released, switching
+              dimensions renders straight away. */}
+          <Deferred className="space-y-6" minHeight={DETAIL_MIN_HEIGHT} order={0} preload={open.id === "outcomes" ? loadTrafficChart : undefined}>
+            <DimDetail id={open.id} readings={readings} sources={sources} daily={daily} issues={issues} />
+          </Deferred>
         </WallDetail>
       ) : (
         <>
           <ul aria-label={copy.wallLabel} data-tour-diagram="dashboard-vitals" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {dims.map((dim) => (
-              <li key={dim.id} data-tour-diagram={TOUR_ANCHORS[dim.id]?.tourTarget} className="flex">
+            {dims.map((dim, index) => (
+              <li
+                key={dim.id}
+                data-tour-diagram={TOUR_ANCHORS[dim.id]?.tourTarget}
+                className={`${ARRIVE} flex`}
+                style={arriveAt(index)}
+              >
                 <WallCell dim={dim} onOpen={() => navigateDashboard(hrefFor(dim.id))} />
               </li>
             ))}
