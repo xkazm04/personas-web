@@ -21,20 +21,22 @@ function setup() {
     pausePersona: dispatchApi.pausePersona,
     resumePersona: dispatchApi.resumePersona,
     sendChatMessage: dispatchApi.sendChatMessage,
+    sayToMaster: dispatchApi.sayToMaster,
     decideReview: dispatchApi.decideReview,
   } as unknown as ApiClient;
   return { fetcher, api: createDesktopApi(fetcher, base), realApi: dispatchApi };
 }
 
 describe("DESKTOP_UNSUPPORTED_ACTIONS is pinned to the code", () => {
-  it("pause, resume and chatSend reject with a 501 and send no request", async () => {
+  it("pause, resume, chatSend and channelSay reject with a 501 and send no request", async () => {
     const { api, fetcher } = setup();
     const calls = {
       pause: () => api.pausePersona("p1"),
       resume: () => api.resumePersona("p1"),
       chatSend: () => api.sendChatMessage({} as Parameters<ApiClient["sendChatMessage"]>[0]),
+      channelSay: () => api.sayToMaster({} as Parameters<ApiClient["sayToMaster"]>[0]),
     } as const;
-    for (const action of ["pause", "resume", "chatSend"] as const) {
+    for (const action of ["pause", "resume", "chatSend", "channelSay"] as const) {
       expect(DESKTOP_UNSUPPORTED_ACTIONS).toContain(action);
       const err = await calls[action]().then(
         () => null,

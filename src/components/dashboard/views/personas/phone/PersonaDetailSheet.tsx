@@ -12,11 +12,12 @@ import { formatDue } from "@/lib/review-sla";
 import type { PersonaExecution } from "@/lib/types";
 import type { SyncReachability } from "@/hooks/useSyncReachability";
 import ChatPanel from "./chat/ChatPanel";
+import DirectMasterPanel from "./DirectMasterPanel";
 import { mobileCopy } from "@/i18n/pending/mobile";
 
-/** The detail sheet's tabs: Activity (runs) and Chat (PHASE2-SPEC.md 5.2, 5.3). */
-type DetailTab = "activity" | "chat";
-const TABS: readonly DetailTab[] = ["activity", "chat"];
+/** The detail sheet's tabs: Activity (runs), Chat (PHASE2-SPEC.md 5.2, 5.3) and Direct (an App Master's channel). */
+type DetailTab = "activity" | "chat" | "direct";
+const TABS: readonly DetailTab[] = ["activity", "chat", "direct"];
 
 /** The sheet around the chat panel: handle, title row, tab strip, bottom padding. */
 const SHEET_CHROME_PX = 175;
@@ -37,8 +38,9 @@ const ACTIVITY_LIMIT = 10;
  * the persona's last runs (status, started, duration, cost when there is one)
  * from `executionStore`, so a run started from the phone appears and moves
  * here live. **Chat** is the persona's chat (`ChatPanel`: threads ->
- * transcript -> composer). Both read in every tier, offline included; only
- * Chat's composer follows the online gate.
+ * transcript -> composer). **Direct** sends an App Master a direction
+ * (`DirectMasterPanel`). Activity and Chat's transcript read in every tier,
+ * offline included; the two composers follow the online gate.
  */
 export default function PersonaDetailSheet({ open, personaId, reach, onClose }: Props) {
   const copy = mobileCopy.personas;
@@ -82,6 +84,9 @@ export default function PersonaDetailSheet({ open, personaId, reach, onClose }: 
             reach={reach}
             chromePx={SHEET_CHROME_PX}
           />
+        )}
+        {tab === "direct" && persona && (
+          <DirectMasterPanel key={persona.id} personaId={persona.id} name={persona.name} deviceId={persona.deviceId ?? null} reach={reach} />
         )}
       </div>
     </BottomSheet>

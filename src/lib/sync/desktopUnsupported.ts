@@ -12,15 +12,16 @@ import type { ReachabilityTier } from "./reachability";
 /**
  * - `pause`, `resume`: `desktopApi` does not override them; `realApi` throws a 501.
  * - `chatSend`: same, for `sendChatMessage`.
+ * - `channelSay`: same, for `sayToMaster`.
  * - `reviewVerdict`: `decideReview` sends `PUT /api/events/:id`, a `not_on_desktop` shape.
  */
-export const DESKTOP_UNSUPPORTED_ACTIONS = ["pause", "resume", "chatSend", "reviewVerdict"] as const;
+export const DESKTOP_UNSUPPORTED_ACTIONS = ["pause", "resume", "chatSend", "channelSay", "reviewVerdict"] as const;
 
 export type DesktopUnsupportedAction = (typeof DESKTOP_UNSUPPORTED_ACTIONS)[number];
 
 /**
  * Is this action explicitly unsupported right now? On the desktop plane,
- * `pause`, `resume` and `chatSend` qualify only while online (offline is already
+ * `pause`, `resume`, `chatSend` and `channelSay` qualify only while online (offline is already
  * blocked by its own gate). `reviewVerdict` qualifies in every tier, null
  * included: `PUT /api/events/:id` is `not_on_desktop` whatever the health. Every
  * other plane serves the action (or gates it) as before.

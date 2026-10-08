@@ -33,7 +33,7 @@ export interface MobileCopy {
     cancelRun: string;
     cancelOldRun: string;
     detailTabsLabel: string;
-    tabs: { activity: string; chat: string };
+    tabs: { activity: string; chat: string; direct: string };
     activityLoading: string;
     activityEmpty: string;
     activityError: string;
@@ -132,6 +132,31 @@ export interface MobileCopy {
       unknown: string;
     };
   };
+  /** Directing an App Master from the persona sheet: a `channel_say` (weekend item E). Not a chat: no reply comes back here. */
+  say: {
+    title: string;
+    intro: string;
+    label: string;
+    count: string;
+    tooLong: string;
+    send: string;
+    delivered: string;
+    deliveredAgain: string;
+    disabled: { offline: string; unpaired: string; never: string; desktop: string; noDevice: string };
+    errors: {
+      bad_params: string;
+      empty_message: string;
+      message_too_long: string;
+      not_found: string;
+      not_app_master: string;
+      internal_error: string;
+      controller_not_paired: string;
+      controller_revoked: string;
+      expired: string;
+      other: string;
+      unknown: string;
+    };
+  };
   /** `/dashboard/reviews` at phone width: decide pending reviews (PLAN M20, PHASE2-SPEC.md 1.6). */
   reviews: {
     loading: string;
@@ -221,7 +246,7 @@ export const mobileCopy: MobileCopy = {
     cancelRun: 'Cancel run',
     cancelOldRun: 'This run started over a day ago, so this phone may not see it stop.',
     detailTabsLabel: 'Agent details',
-    tabs: { activity: 'Activity', chat: 'Chat' },
+    tabs: { activity: 'Activity', chat: 'Chat', direct: 'Direct' },
     activityLoading: 'Loading runs...',
     activityEmpty: 'No runs yet.',
     activityError: 'Couldn\'t load the runs.',
@@ -320,6 +345,36 @@ export const mobileCopy: MobileCopy = {
       expired: 'Your computer didn\'t answer. Is Personas still open?',
       replayed: 'Already handled. Your computer will not run the same command twice.',
       no_device: 'No synced computer found to send this to.',
+      other: 'Couldn\'t send: {reason}',
+      unknown: 'Couldn\'t send. Try again.',
+    },
+  },
+  say: {
+    title: 'Direct this App Master',
+    intro: 'Send a direction to an agent that holds a project charter. It reads the direction the next time it wakes up. This isn\'t a chat, so no reply comes back here.',
+    label: 'Direction for {name}',
+    count: '{count} of {max}',
+    tooLong: 'Too long to send. Keep it under {max} characters.',
+    send: 'Send direction',
+    delivered: 'Delivered. {name} reads it the next time it wakes up.',
+    deliveredAgain: 'Already delivered earlier. {name} reads it the next time it wakes up.',
+    disabled: {
+      offline: 'Personas isn\'t running on your computer. Open it to send a direction from here.',
+      unpaired: 'Pair this phone in Settings to send a direction from here.',
+      never: 'Connect your computer to send a direction from here.',
+      desktop: 'Not available over your computer\'s local API. Open the Personas app to do this.',
+      noDevice: 'This agent has no synced computer to send a direction to.',
+    },
+    errors: {
+      bad_params: 'Your computer couldn\'t read that direction. Try again.',
+      empty_message: 'Write a direction first. That one was empty.',
+      message_too_long: 'That direction is too long. Keep it under {max} characters.',
+      not_found: 'This agent is gone from your computer.',
+      not_app_master: 'Only an agent that holds a project charter takes directions. Give this one a charter on your computer, or direct another agent.',
+      internal_error: 'Your computer hit an error saving the direction. Try again.',
+      controller_not_paired: 'This phone isn\'t paired with your computer. Pair it again in Settings.',
+      controller_revoked: 'This phone is no longer paired. Pair it again in Settings.',
+      expired: 'Your computer didn\'t answer. Is Personas still open?',
       other: 'Couldn\'t send: {reason}',
       unknown: 'Couldn\'t send. Try again.',
     },
