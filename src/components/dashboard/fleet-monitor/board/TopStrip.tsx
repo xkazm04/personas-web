@@ -25,6 +25,7 @@ interface TopStripProps {
   onFocus: (f: FocusFilter) => void;
   /** Agents in focus, in reading order. */
   matches: readonly SimAgent[];
+  onPalette: () => void;
 }
 
 const PILES = ["needs", "working", "resting", "off"] as const;
@@ -68,7 +69,7 @@ function Crumbs({ scope, copy, nav }: Pick<TopStripProps, "scope" | "copy" | "na
 }
 
 /** L0's top edge, one line: the way back, the verdict, the fleet's mix, usage pace, the clock. */
-export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, focus, onFocus, matches }: TopStripProps) {
+export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, focus, onFocus, matches, onPalette }: TopStripProps) {
   const piles = personasMonitorCopy.attention;
   const verdict = c.needs ? plural(c.needs, copy.top.needsOne, copy.top.needsMany) : copy.top.allClear;
   // Below the fleet level the way back needs the room: the pile legend yields.
@@ -107,6 +108,10 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, foc
         )}
       </div>
       {!deep && <FindBox query={focus.query} onQuery={(q) => onFocus({ ...focus, query: q })} matches={matches} focusing={isFocusing(focus)} onOpen={nav.openAgent} onClear={() => onFocus(NO_FOCUS)} copy={copy} />}
+      <button type="button" onClick={onPalette} title={copy.palette.label} className="hidden shrink-0 items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-dark shadow-[inset_0_0_0_1px_var(--border-glass)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground md:inline-flex" data-palette-open>
+        {copy.palette.open}
+        <kbd className={kbd}>{"⌘K"}</kbd>
+      </button>
       <div className="ml-auto flex shrink-0 items-center gap-4">
         <span className="hidden items-center gap-4 xl:flex"><UsageMeters simMs={simMs} copy={copy} /></span>
         {host.status === "online" ? (

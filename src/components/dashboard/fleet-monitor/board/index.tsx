@@ -22,6 +22,7 @@ import { readHost } from "./host";
 import { useArrival, useBoardSim, useHostStatus, useSize, useToast } from "./useBoardRuntime";
 import { isOpen, useCommands } from "./useCommands";
 import FleetPauseDialog from "./FleetPauseDialog";
+import CommandPalette from "./CommandPalette";
 import { makeOperator } from "./operator";
 import { useBoardNav } from "./useBoardNav";
 import b from "./board.module.css";
@@ -42,7 +43,14 @@ const ATTENTION_VARS = {
  * off hatched); all text lives on the frame's edges and in a floating card.
  * Team (L1) and agent (L2) open inside the field, each with a way back.
  */
-export default function BoardPrototype({ scale }: { scale: FleetScale }) {
+interface BoardProps {
+  scale: FleetScale;
+  /** The shell's view and scale, for the command palette. */
+  onView?: (v: "board" | "city") => void;
+  onScale?: (n: FleetScale) => void;
+}
+
+export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const copy = personasMonitorCopy.board;
   const still = useStillMotion();
   const hidden = usePageVisibility();
@@ -58,6 +66,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
   const commands = useCommands(dispatch);
   const [confirmPause, setConfirmPause] = useState(false);
   const [focus, setFocus] = useState<FocusFilter>(NO_FOCUS);
+  const [palette, setPalette] = useState(false);
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
@@ -76,6 +85,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
   const matches = focusing ? reading.filter((a) => inFocus(a, focus, copy)) : reading;
   const matchIds = focusing ? new Set(matches.map((a) => a.id)) : null;
   const railScope = focus.query.trim() ? scope.filter((a) => matchesQuery(a, focus.query, copy)) : scope;
+  const fleetPaused = (sim.fleetPaused ?? []).filter((id) => scope.some((a) => a.id === id && !a.enabled)).length;
 
   const main = (
     <div className="absolute inset-0 flex flex-col">
@@ -125,7 +135,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
     >
       <FleetFrame
         label={copy.label}
-        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} />}
+        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} onPalette={() => setPalette(true)} />}
         main={main}
         rail={
           <>
@@ -133,7 +143,7 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
               host={host}
               copy={copy}
               live={live}
-              fleetPaused={(sim.fleetPaused ?? []).filter((id) => scope.some((a) => a.id === id && !a.enabled)).length}
+              fleetPaused={fleetPaused}
               pending={commands.cmds.find((c) => c.agentId === null && isOpen(c))}
               onPauseAll={() => setConfirmPause(true)}
               onResumeAll={() => op.resumeAll((sim.fleetPaused ?? []).length)}
@@ -149,6 +159,16 @@ export default function BoardPrototype({ scale }: { scale: FleetScale }) {
           </>
         }
         bottom={<BottomStrip scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} nav={nav} live={live} offline={offline} />}
+      />
+      <CommandPalette
+        open={palette}
+        onOpenChange={setPalette}
+        deps={{
+          scope, teams, copy, hostName: host.name, offline, fleetPaused, scale, onView, onScale,
+          openAgent: (id) => nav.openAgent(id, null), openTeam: (id) => nav.openTeam(id, null), agentVerb: (v, a) => op[v](a),
+          nextNeeds: nav.nextNeeds, pauseAll: () => setConfirmPause(true), resumeAll: () => op.resumeAll(fleetPaused),
+          showPile: (p) => setFocus({ query: "", piles: [p] }), clearFocus: () => setFocus(NO_FOCUS),
+        }}
       />
       <FleetPauseDialog open={confirmPause} onClose={() => setConfirmPause(false)} scope={scope} hostName={host.name} copy={copy} onConfirm={op.pauseAll} />
     </div>

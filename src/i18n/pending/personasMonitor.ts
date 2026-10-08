@@ -378,6 +378,32 @@ export interface PersonasMonitorCopy {
       shortcuts: string;
       bayMatches: string;
     };
+    palette: {
+      label: string;
+      open: string;
+      placeholder: string;
+      groups: {
+        actions: string;
+        agents: string;
+        teams: string;
+        views: string;
+      };
+      empty: string;
+      footer: string;
+      agentVerb: string;
+      teamMeta: string;
+      actions: {
+        next: string;
+        pauseAll: string;
+        resumeAll: string;
+        showNeeds: string;
+        showWorking: string;
+        showOff: string;
+        clear: string;
+        city: string;
+        scale: string;
+      };
+    };
   };
   city: {
     label: string;
@@ -819,6 +845,32 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       enterHint: 'Enter opens {callsign}',
       shortcuts: 'Keyboard shortcuts',
       bayMatches: '{m} of {n}',
+    },
+    palette: {
+      label: 'Command palette',
+      open: 'Commands',
+      placeholder: 'Type a command, or find an agent or team',
+      groups: {
+        actions: 'Actions',
+        agents: 'Agents',
+        teams: 'Teams',
+        views: 'View',
+      },
+      empty: 'Nothing matches “{q}”',
+      footer: 'Enter runs · ↑ ↓ move · Esc closes · start with pause, resume, run or cancel to act on an agent',
+      agentVerb: '{verb} {callsign} {name}',
+      teamMeta: '{n} agents · {need} need you',
+      actions: {
+        next: 'Go to the next agent that needs you',
+        pauseAll: 'Pause every agent on {host}',
+        resumeAll: 'Resume the {n} agents Pause all switched off',
+        showNeeds: 'Show only agents that need you',
+        showWorking: 'Show only working agents',
+        showOff: 'Show only agents that are off',
+        clear: 'Clear search and filters',
+        city: 'Switch to Night shift',
+        scale: 'Show {n} agents',
+      },
     },
   },
   city: {

@@ -42,7 +42,7 @@ export default function AgentHeader({ agent: a, copy: c, live, op, pending, host
         <Emblem agent={a} rich live={live} />
       </div>
       <div className="min-w-0">
-        <h2 tabIndex={-1} data-agent-title className="flex min-w-0 items-baseline gap-3 outline-none focus-visible:outline-none">
+        <h2 tabIndex={-1} data-agent-title className="flex min-w-0 items-baseline gap-3 outline-none focus-visible:outline-none!">
           <span className={`${b.teamInk} font-mono text-3xl font-bold leading-none tracking-tight`}>{a.callsign}</span>
           <span className="truncate text-xl font-semibold leading-tight text-foreground">{a.name}</span>
         </h2>

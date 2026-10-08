@@ -158,6 +158,10 @@
   color: var(--tone);
 }
 
+/* An overlay panel arriving (palette, triage). */
+.pop { animation: pop 0.18s var(--ease, ease-out) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(-6px) scale(0.985); } }
+
 /* A console log line arriving. */
 .logIn { animation: logIn 0.45s var(--ease) both; }
 @keyframes logIn { from { opacity: 0; translate: 0 6px; } }
