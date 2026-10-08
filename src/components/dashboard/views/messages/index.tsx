@@ -14,7 +14,6 @@ import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   type FeedbackMessage,
   type MessageThread,
-  type MessageStatus,
 } from "@/lib/mock-dashboard-data";
 
 import { MessagesPagination } from "./messages-page/MessagesPagination";
@@ -22,47 +21,35 @@ import { MessageRow } from "./messages-page/MessageRow";
 import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
 import { ThreadRow } from "@/components/dashboard/ThreadRow";
 import { useMessagesData } from "./useMessagesData";
+import { useThreadReadState } from "./useThreadReadState";
+import PhoneMessages from "./phone/PhoneMessages";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type MessageView = "threads" | "list";
 
 const PAGE_SIZE = 10;
 
-export default function MessagesPage() {
+/**
+ * `/dashboard/messages`. At phone width it is a thread list with an in-place
+ * report reader (a phone layout of this view, not a new route); from 768 px up
+ * it is the paginated desk list with the detail modal below. The view is
+ * client-only (next/dynamic ssr:false), so choosing by media query cannot
+ * mismatch a server render.
+ */
+export default function MessagesView() {
+  const phone = useIsMobile();
+  return phone ? <PhoneMessages /> : <MessagesPage />;
+}
+
+function MessagesPage() {
   const { t } = useTranslation();
   const [page, setPage] = useState(0);
-  // Per-message read state (keyed by message id) layered over the mock fixture
-  // so "mark all read" / opening a thread can flip threads to read locally.
-  const [overrides, setOverrides] = useState<Map<string, MessageStatus>>(
-    () => new Map(),
-  );
   const [openThreadId, setOpenThreadId] = useState<string | null>(null);
   const [view, setView] = useState<MessageView>("threads");
   const [fetchedAt] = useState(() => Date.now());
 
   const { threads: baseThreads, loading, error, retry } = useMessagesData();
-
-  const threads = useMemo<MessageThread[]>(() => {
-    return baseThreads.map((thread) => {
-      const applyStatus = (status: MessageStatus, id: string): MessageStatus =>
-        overrides.get(id) ?? status;
-      const parent = {
-        ...thread.parent,
-        status: applyStatus(thread.parent.status, thread.parent.id),
-      };
-      const replies = thread.replies.map((r) => ({
-        ...r,
-        status: applyStatus(r.status, r.id),
-      }));
-      const unreadCount = [parent, ...replies].filter(
-        (m) => m.status === "unread",
-      ).length;
-      return { ...thread, parent, replies, unreadCount };
-    }).sort(
-      (a, b) =>
-        new Date(b.latestTimestamp).getTime() -
-        new Date(a.latestTimestamp).getTime(),
-    );
-  }, [baseThreads, overrides]);
+  const { threads, unreadCount, markThreadRead, markAllRead } = useThreadReadState(baseThreads);
 
   // Flat (list) view: every message, parent and reply, newest first. Statuses
   // are already resolved on `threads`, so overrides carry through.
@@ -82,31 +69,6 @@ export default function MessagesPage() {
   const threadPageItems = threads.slice(start, start + PAGE_SIZE);
   const messagePageItems = flatMessages.slice(start, start + PAGE_SIZE);
   const isEmpty = (isList ? messagePageItems : threadPageItems).length === 0;
-
-  const unreadCount = useMemo(
-    () => threads.reduce((sum, t) => sum + t.unreadCount, 0),
-    [threads],
-  );
-
-  function markThreadRead(thread: MessageThread) {
-    setOverrides((prev) => {
-      const next = new Map(prev);
-      next.set(thread.parent.id, "read");
-      for (const r of thread.replies) next.set(r.id, "read");
-      return next;
-    });
-  }
-
-  function markAllRead() {
-    setOverrides((prev) => {
-      const next = new Map(prev);
-      for (const thread of threads) {
-        next.set(thread.parent.id, "read");
-        for (const r of thread.replies) next.set(r.id, "read");
-      }
-      return next;
-    });
-  }
 
   function openThread(thread: MessageThread) {
     setOpenThreadId(thread.id);

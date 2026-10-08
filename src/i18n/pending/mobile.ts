@@ -150,6 +150,12 @@ export interface MobileCopy {
     reportRetry: string;
     reportNotSynced: string;
   };
+  /** `/dashboard/messages` at phone width: thread list + in-place reader. */
+  messages: {
+    showMore: string;
+    backLabel: string;
+    replies: string;
+  };
   /** `/dashboard/notes`: the desktop Notepad's goals, read-only (PHASE2-SPEC.md 5.1). */
   notes: {
     nav: string;
@@ -334,6 +340,11 @@ export const mobileCopy: MobileCopy = {
     reportError: 'Couldn\'t load the report.',
     reportRetry: 'Try again',
     reportNotSynced: 'The report hasn\'t synced yet.',
+  },
+  messages: {
+    showMore: 'Show more',
+    backLabel: 'Back to the message list',
+    replies: '{n} replies',
   },
   notes: {
     nav: 'Notes',

@@ -1,5 +1,5 @@
 # Messages
-> The dashboard inbox where each persona's async run reports arrive as conversation threads you can scan, open, and mark read. **Route:** `/dashboard/messages` · **Nav label:** "Messages" · **Status:** Demo-only (mocks)
+> The dashboard inbox where each persona's async run reports arrive as conversation threads you can scan, open, and mark read. **Route:** `/dashboard/messages` · **Nav label:** "Messages" · **Status:** Mocks in demo mode, `synced_messages` otherwise; desk and phone layouts
 
 ## What it does
 Messages is an inbox-style surface listing **threads** — one per persona conversation. A thread is a parent message (a persona's run report, escalation, learned-pattern note, cost-spike alert, etc.) plus any chronological replies. The list shows each thread's persona, subject, reply count, last-activity time, and an unread badge.
@@ -12,9 +12,11 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 - In the nav, the Messages item shows a badge of `MOCK_UNREAD_MESSAGES` (currently `7`) — a fixed demo constant, independent of the per-session read overrides on this page.
 
 ## How it works
-**Data load** — `useMessagesData()` (`src/components/dashboard/views/messages/useMessagesData.ts`) returns `{ threads, loading, error }`. In demo mode (`useAuthStore.isDemo`) it returns `MOCK_MESSAGE_THREADS` synchronously with `loading: false`. In real/Supabase mode it calls `getSyncedMessageThreads()` from `src/lib/supabaseApi.ts` inside an effect, with a `cancelled` guard, Sentry capture on failure, and an error string fallback. Since `/dashboard/*` is demo-only here, the mock path is what runs.
+**Data load** — `useMessagesData()` (`src/components/dashboard/views/messages/useMessagesData.ts`) returns `{ threads, loading, error }`. In demo mode (`useAuthStore.isDemo`) it returns `MOCK_MESSAGE_THREADS` synchronously with `loading: false`. In real/Supabase mode it calls `getSyncedMessageThreads()` from `src/lib/supabaseApi.ts` inside an effect, with a `cancelled` guard, Sentry capture on failure, and an error string fallback. Outside demo mode the synced path runs; `FeedbackMessage.payload` carries `synced_messages.metadata` (absolute desktop file paths), which no layout renders on the phone.
 
-**Read-state overrides** — the page (`page.tsx:30`) keeps a local `Map<messageId, MessageStatus>` of overrides layered over the immutable mock fixture. A `useMemo` (`page.tsx:38`) maps each base thread, applies overrides per message, recomputes `unreadCount`, and **re-sorts threads by `latestTimestamp` descending**. `markThreadRead`, `markAllRead`, and `openThread` all just add entries to this map — the fixture is never mutated.
+**Phone layout** — `index.tsx` is a switch: `useIsMobile()` (below 768px) renders `phone/PhoneMessages.tsx`, else the desk `MessagesPage`. The phone list shows threads only, newest first, 10 at a time with a **Show more** button (no pagination bar), each row a 44px `PhoneThreadRow`. Tapping a row marks the thread read through the hook and shows `phone/PhoneThreadReader.tsx` in place (no Modal): a Back button, the subject as `h2` (focused on open), and the parent and replies as `MarkdownReport` articles. The list stays mounted but `hidden`, so Back restores scroll position, the Show more depth and focus on the opened row. `message.payload` is never rendered. Phone-only strings live in `src/i18n/pending/mobile.ts` under `messages`.
+
+**Read-state overrides** — `useThreadReadState` (`views/messages/useThreadReadState.ts`, shared by the desk and phone layouts) keeps a local `Map<messageId, MessageStatus>` of overrides layered over the immutable base threads. The pure `applyReadOverrides(threads, overrides)` (unit tested in `useThreadReadState.test.ts`) maps each base thread, applies overrides per message, recomputes `unreadCount`, and **re-sorts threads by `latestTimestamp` descending**. `markThreadRead` and `markAllRead` (via `withThreadsRead`) just add entries to this map — the fixture is never mutated.
 
 **View toggle + list render** — a `view` state (`"threads" | "list"`) drives a compact `FilterBar` with live counts; switching it resets `page` to 0. Thread view paginates the sorted `threads` and renders a `ThreadRow` each (`PersonaAvatar` + subject + reply-count chip + unread pill). List view paginates `flatMessages` — a `useMemo` flattening `[parent, ...replies]` across all threads, sorted by `timestamp` desc (statuses already resolved on `threads`, so overrides carry through) — and renders a `MessageRow` each (`messages-page/MessageRow.tsx`: avatar + subject + a reply chevron for non-parent messages + unread pill). Both row types are `<button>`s; a `MessageRow` click resolves its parent thread via `threads.find(t => t.id === message.threadId)` and calls `openThread`, so the same `ThreadDetailModal` and read-marking apply.
 
@@ -27,7 +29,9 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/dashboard/views/messages/index.tsx` | Page entry — paginates, holds read-state overrides, sorts threads, wires header/list/modal |
+| `src/components/dashboard/views/messages/index.tsx` | Entry — phone/desk switch; desk page paginates and wires header/list/modal |
+| `src/components/dashboard/views/messages/useThreadReadState.ts` | Read-state hook + pure `applyReadOverrides` / `withThreadsRead` |
+| `src/components/dashboard/views/messages/phone/` | Phone layout: `PhoneMessages` (list), `PhoneThreadRow`, `PhoneThreadReader` |
 | `src/components/dashboard/views/messages/useMessagesData.ts` | Data hook — mock threads in demo mode, `getSyncedMessageThreads()` otherwise |
 | `src/components/dashboard/views/messages/messages-page/ThreadRow.tsx` | One thread row (persona, subject, reply chip, unread pill) — opens the modal |
 | `src/components/dashboard/views/messages/messages-page/MessageRow.tsx` | One flat-list row (single message; reply chevron for non-parents) — opens the parent thread |
@@ -40,7 +44,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 ## Data & state
 - **Source:** `MOCK_MESSAGE_THREADS` in `src/lib/mock-dashboard-data.ts` — a seeded (`seededRandom(711)`) fixture of 14 threads (~42 messages) built from `THREAD_REPLY_COUNTS`. Parent unread for the first 3 threads; one extra unread reply on thread index 1. Bodies are interpolated markdown run reports (5 templates round-robined). `MOCK_UNREAD_MESSAGES = 7` is a separate fixed constant used only for the nav badge.
 - **Stores:** `useAuthStore` (read-only `isDemo` flag, picks mock vs. synced source). No dedicated messages Zustand store — all read-state is **local component state** (`overrides` map, `page`, `openThreadId`, `fetchedAt`), so it resets on navigation/reload.
-- **API routes:** None in this repo. Real mode would call `getSyncedMessageThreads()` (Supabase `synced_messages`), but that path is inactive in the demo dashboard.
+- **API routes:** None in this repo. Outside demo mode `getSyncedMessageThreads()` reads Supabase `synced_messages`.
 - **Types:** `MessageThread` (`id`, `persona`, `personaColor`, `subject`, `parent`, `replies`, `latestTimestamp`, `unreadCount`), `FeedbackMessage` (`id`, `threadId`, `isThreadParent`, `persona`, `personaColor`, `timestamp`, `subject`, `status`, `payload`, `body`), `MessageStatus = "unread" | "read"`.
 
 ## Integration points
@@ -54,7 +58,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 - **Semantic Tailwind tokens:** uses `text-foreground`, `text-muted`, `text-muted-dark`, `border-glass`, `border-glass-hover`, `bg-surface`, `text-brand-cyan`. Cyan unread accents use `cyan-*` utilities directly (acceptable accent usage); avoid raw hex / `text-white`.
 - **React 19 rules:** `fetchedAt` is captured via `useState(() => Date.now())` (no impure `Date.now()` in render). `useMessagesData`'s effect never calls synchronous `setState` in its body for the demo path (it early-returns). Keep these patterns if you extend the page.
 - **Read-state is local + non-persistent:** the `overrides` map lives only in component state. There's no persistence and no sync to the nav badge constant — by design for the demo. The mock fixture is treated as immutable (overrides are layered, never mutated).
-- **Demo-only caveat:** this surface runs entirely on mocks. The Supabase/`getSyncedMessageThreads` branch is wired but dormant in this repo; don't assume live data here.
+- **Data source:** `useMessagesData` reads mocks in demo mode and `getSyncedMessageThreads()` (`synced_messages`) whenever the session is not demo. Don't assume mock data.
 - **Where to extend:** add per-message status filters or search in `page.tsx`'s `useMemo` before slicing; thread-level UI lives in `ThreadRow`; conversation rendering in `ThreadDetailModal`/`ConversationMessage`. `PAGE_SIZE` is a `page.tsx` const. To make the nav badge reflect live unread, replace the `MOCK_UNREAD_MESSAGES` reference in `getBadge` with shared state.
 
 ## Related docs
