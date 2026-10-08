@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Medal } from "lucide-react";
 
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
-import { fadeUp } from "@/lib/animations";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 import { compositeBand, medalStyle, TrendIcon } from "./leaderboardStyles";
 import { dimensionScore, type RankDimension } from "./leaderboardRank";
@@ -71,7 +70,7 @@ export function LeaderboardPodium({
   onSelect: (id: string) => void;
 }) {
   return (
-    <motion.div variants={fadeUp} className="grid gap-3 sm:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-3">
       {top.map((persona, index) => {
         const rank = (index + 1) as 1 | 2 | 3;
         const medal = medalStyle[rank];
@@ -106,6 +105,6 @@ export function LeaderboardPodium({
           </button>
         );
       })}
-    </motion.div>
+    </div>
   );
 }

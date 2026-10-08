@@ -1,16 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
-import SkeletonCard, { SkeletonChart } from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
+import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 import { type LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
 import { LeaderboardPodium } from "./leaderboard-page/LeaderboardPodium";
@@ -69,8 +68,9 @@ export default function LeaderboardPage() {
   );
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6 flex items-start gap-3">
+    <div>
+      {/* T0: the view header (with its staleness pill) never animates. */}
+      <div className="mb-6 flex items-start gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-amber-500/25 bg-amber-500/10">
           <Trophy className="h-5 w-5 text-amber-300" />
         </div>
@@ -85,15 +85,15 @@ export default function LeaderboardPage() {
           </p>
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
-      </motion.div>
+      </div>
 
       {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
-        <div className="grid gap-6 lg:grid-cols-5" aria-busy="true">
-          <SkeletonCard className="lg:col-span-3" lines={6} />
-          <SkeletonChart className="lg:col-span-2" />
-        </div>
+        // First load (real mode only; demo is synchronous): a held, shapeless
+        // reservation - the generic skeleton grid matched neither the podium
+        // nor the table, and showed with no delay.
+        <ViewGap />
       ) : personas.length === 0 ? (
         <EmptyState
           icon={Trophy}
@@ -117,13 +117,17 @@ export default function LeaderboardPage() {
         />
       ) : (
         <>
-          <motion.div variants={fadeUp} className="mb-4 flex justify-end">
+          {/* T1: the rank-dimension toolbar. */}
+          <div className={`${ARRIVE} mb-4 flex justify-end`} style={arriveAt(0)}>
             <RankDimensionTabs value={rankDim} onChange={setRankDim} />
-          </motion.div>
-          <motion.div variants={fadeUp} className="mb-6">
+          </div>
+          {/* T2: the podium answers the view's question (cards keyed by persona id). */}
+          <div className={`${ARRIVE} mb-6`} style={arriveAt(1)}>
             <LeaderboardPodium top={top} dim={rankDim} selectedId={selectedId} onSelect={setPickedId} />
-          </motion.div>
-          <div className="grid gap-6 lg:grid-cols-5">
+          </div>
+          {/* T2 table rows (keyed by persona id) + T1 radar chrome; the radar
+              body is the view's one T3 slot. */}
+          <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(2)}>
           <LeaderboardTable
             personas={personas}
             selectedId={selectedId}
@@ -145,6 +149,6 @@ export default function LeaderboardPage() {
           </div>
         </>
       )}
-    </motion.div>
+    </div>
   );
 }

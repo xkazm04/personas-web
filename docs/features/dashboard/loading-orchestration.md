@@ -97,7 +97,8 @@ in document order.
 - **`arrival/arrive.ts`** — `ARRIVE`, `arriveAt(i)`, `arrive(i)` for the T1/T2 cascade.
 - **`arrival/ViewGap.tsx`** — the view-chunk gap: held height, sr-only status, a
   faint line after the ghost delay. Deliberately shapeless (views share no body
-  geometry).
+  geometry). Also used for a tab whose first data is not here yet and whose
+  body shape depends on that data (observability tabs, real-mode leaderboard).
 - **`spa/ViewOutlet.tsx`** — provider per view, the delegated `markArrived`
   replay guard, and `warmLikelyViews` (idle warm-up of `IDLE_WARM` chunks after
   1.5 s, skipped on save-data / 2g).

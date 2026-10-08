@@ -3,6 +3,7 @@ import { Play } from "lucide-react";
 
 import EventBusStats from "@/components/dashboard/EventBusStats";
 import EventDetailDrawer from "@/components/dashboard/EventDetailDrawer";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { EVENT_TYPES, SWARM_PERSONAS, type SwarmNode } from "@/lib/mock-dashboard-data";
 
 // The event-bus swarm is an animated SVG with a requestAnimationFrame particle
@@ -12,13 +13,18 @@ import { EVENT_TYPES, SWARM_PERSONAS, type SwarmNode } from "@/lib/mock-dashboar
 // (sections/event-hub) is code-split the same way; this carries the same
 // discipline into the dashboard. ssr:false also suits it: it branches its markup on
 // prefers-reduced-motion, which is only safe off the server-rendered path.
-const EventBusVisualization = dynamic(
-  () => import("@/components/dashboard/EventBusVisualization"),
-  {
-    ssr: false,
-    loading: () => <div className="relative z-10 h-[420px] animate-pulse rounded-xl bg-white/[0.03]" />,
-  },
-);
+//
+// T3: the named loader is shared by dynamic() and the <Deferred> slot's
+// `preload`, so the chunk downloads the moment the tab opens while the mount
+// waits for the view's arrival queue. The slot owns the wait, so the chunk's
+// own `loading` is a held, empty square of the swarm's real geometry (the SVG
+// is a 500x500 viewBox at w-full, max 560px) - no pulse, no shape.
+const loadEventBusVisualization = () => import("@/components/dashboard/EventBusVisualization");
+const SWARM_BOX = "relative z-10 mx-auto aspect-square w-full max-w-[560px]";
+const EventBusVisualization = dynamic(loadEventBusVisualization, {
+  ssr: false,
+  loading: () => <div aria-hidden className={SWARM_BOX} />,
+});
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
   "pull_request.opened": "#06b6d4",
@@ -86,11 +92,21 @@ export function EventsVisualizationView({
               "radial-gradient(ellipse at center, rgba(6,182,212,0.03) 0%, transparent 70%)",
           }}
         />
-        <EventBusVisualization
-          className="relative z-10"
-          onNodeClick={onSelectNode}
-          triggerBurst={burstTrigger}
-        />
+        {/* The square reservation (an invisible ghost) holds the swarm's
+            responsive height until the slot releases; minHeight is only a
+            floor, so it stays at 0 rather than over-claim on narrow screens. */}
+        <Deferred
+          minHeight={0}
+          order={0}
+          preload={loadEventBusVisualization}
+          ghost={<div className={SWARM_BOX} />}
+        >
+          <EventBusVisualization
+            className="relative z-10"
+            onNodeClick={onSelectNode}
+            triggerBurst={burstTrigger}
+          />
+        </Deferred>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">

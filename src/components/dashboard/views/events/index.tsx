@@ -1,16 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 import GradientText from "@/components/GradientText";
 import ConnectionStatusIndicator from "@/components/dashboard/ConnectionStatusIndicator";
 import EventsListPanel from "@/components/dashboard/EventsListPanel";
 import EventSwimlane from "@/components/dashboard/EventSwimlane";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import SubscriptionsPanel from "@/components/dashboard/SubscriptionsPanel";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 import type { SwarmNode } from "@/lib/mock-dashboard-data";
 import { useEventStore } from "@/stores/eventStore";
 
@@ -29,7 +28,7 @@ export default function EventsPage() {
   const [burstTrigger, setBurstTrigger] = useState(0);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="relative">
+    <div className="relative">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-80 overflow-hidden">
         <Image
           src="/gen/backgrounds/bg-events.avif"
@@ -42,7 +41,8 @@ export default function EventsPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--background)]" />
       </div>
 
-      <motion.div variants={fadeUp} className="mb-6">
+      <div className="mb-6">
+        {/* T0: title, live-connection pill and subtitle paint with the frame. */}
         <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight">
           <GradientText variant="silver">{t.eventsPage.title}</GradientText>
           <ConnectionStatusIndicator />
@@ -50,30 +50,32 @@ export default function EventsPage() {
         <p className="mt-1 text-base text-muted-dark">
           {t.eventsPage.subtitle}
         </p>
-        <EventsPageTabs
-          activeTab={pageTab}
-          {...tabCounts({ events, listNotServed, subscriptions, subscriptionsRead })}
-          listLabel={t.eventsPage.title}
-          labels={{
-            events: t.eventsPage.tabEvents,
-            subscriptions: t.eventsPage.tabSubscriptions,
-            visualization: t.eventsPage.tabVisualization,
-            swimlane: t.eventsPage.tabSwimlane,
-          }}
-          onTabChange={setPageTab}
-        />
-      </motion.div>
+        {/* T1: the tab strip. */}
+        <div className={ARRIVE} style={arriveAt(0)}>
+          <EventsPageTabs
+            activeTab={pageTab}
+            {...tabCounts({ events, listNotServed, subscriptions, subscriptionsRead })}
+            listLabel={t.eventsPage.title}
+            labels={{
+              events: t.eventsPage.tabEvents,
+              subscriptions: t.eventsPage.tabSubscriptions,
+              visualization: t.eventsPage.tabVisualization,
+              swimlane: t.eventsPage.tabSwimlane,
+            }}
+            onTabChange={setPageTab}
+          />
+        </div>
+      </div>
 
-      {pageTab === "subscriptions" ? (
-        <motion.div variants={fadeUp}>
+      {/* T2: the active tab's panel. One wrapper for every tab, so the
+          entrance plays once with the view and a tab switch swaps content in
+          place (no replay, no re-key). */}
+      <div className={ARRIVE} style={arriveAt(1)}>
+        {pageTab === "subscriptions" ? (
           <SubscriptionsPanel />
-        </motion.div>
-      ) : pageTab === "swimlane" ? (
-        <motion.div variants={fadeUp}>
+        ) : pageTab === "swimlane" ? (
           <EventSwimlane />
-        </motion.div>
-      ) : pageTab === "visualization" ? (
-        <motion.div variants={fadeUp}>
+        ) : pageTab === "visualization" ? (
           <EventsVisualizationView
             selectedNode={selectedNode}
             burstTrigger={burstTrigger}
@@ -84,12 +86,12 @@ export default function EventsPage() {
             onBurst={() => setBurstTrigger((value) => value + 1)}
             onSelectNode={setSelectedNode}
           />
-        </motion.div>
-      ) : (
-        <div data-tour-diagram="dashboard-events">
-          <EventsListPanel />
-        </div>
-      )}
-    </motion.div>
+        ) : (
+          <div data-tour-diagram="dashboard-events">
+            <EventsListPanel />
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

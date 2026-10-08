@@ -16,7 +16,7 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 
 1. **List load + poll.** `ExecutionsPage` (`page.tsx:39`) calls `fetchExecutions()` on mount, then `usePolling(fetchExecutions, 3_000, hasRunning)` (`page.tsx:47`) re-fetches every 3s — but only while at least one run is running/queued, and only while the tab is visible (`usePolling` gates on `document.visibilityState`, `usePolling.ts:41`).
 2. **Enrichment.** The store keeps `rawExecutions` normalized (no persona metadata); `useEnrichedExecutions()` (`executionStore.ts:166`) joins them against the persona store via a memoized selector, so personas loading after executions still resolve names/icons/colors without a race.
-3. **Filtering + paging.** A local `filter` state ("all" / running / completed / failed / cancelled) drives a `useMemo` (`page.tsx:49`); "running" intentionally matches **running OR queued**. `visibleCount` starts at 200 and grows by 200 via the "Load more" button (`page.tsx:161`). Changing the filter resets the page size (`page.tsx:64`).
+3. **Filtering + paging.** A local `filter` state ("all" / running / completed / failed / cancelled) drives a `useMemo` (`page.tsx:49`); "running" intentionally matches **running OR queued**. `visibleCount` starts at 200 and grows by 200 via the "Load more" button (`LoadMoreExecutions.tsx`, rendered at `index.tsx:182`). Changing the filter resets the page size (`page.tsx:64`).
 4. **Table render.** `DataTable` (generic, reused) renders columns built by `buildExecutionColumns` and a colored left-border per status via `executionRowClassName`. Row click sets `selected` and opens the modal; `DataTable`'s `expandable` path is unused here (executions use `onRowClick` instead).
 5. **Detail modal.** `ExecutionDetailModal` shows KPIs + error, then mounts `ExecutionOutput` keyed by `execution.id`. It also renders two plain `personas://execution/<id>` and `personas://persona/<id>` anchors (built by `src/lib/deepLinks/desktopLinks.ts`) that open the run or its persona in the desktop app; they are hidden at phone width and when `authStore.isDemo`.
 6. **Output streaming (via polling).** `ExecutionOutput` calls `useExecutionPolling(executionId)` (`useExecutionPolling.ts:20`), which polls `api.getExecution(id, offset)` every 1s, appending only new lines (offset-based), capping at 500 lines, and auto-stopping once status is terminal. The viewer auto-follows the bottom unless the user scrolls up, exposing a "Jump to latest" pill.
@@ -30,6 +30,7 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 | `src/components/dashboard/views/executions/index.tsx` | Page: list load, poll gating, filter/paging state, modal selection |
 | `src/components/dashboard/views/executions/executions-page/ExecutionsFilters.tsx` | Status filter pills (wraps shared `FilterBar`) + loading spinner |
 | `src/components/dashboard/views/executions/executions-page/buildExecutionColumns.tsx` | Column defs + per-status row border class + cancel button |
+| `src/components/dashboard/views/executions/executions-page/LoadMoreExecutions.tsx` | "Load more" pager under the table |
 | `src/components/dashboard/views/executions/executions-page/ExecutionsEmptyState.tsx` | Empty vs. filtered-empty states (distinct copy + "show all" action) |
 | `src/components/dashboard/views/executions/executions-page/ExecutionDetailModal.tsx` | Detail modal: persona header, KPI strip, error, output viewer |
 | `src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx` | Terminal-style output viewer; sticky-bottom auto-follow + jump pill |
@@ -53,6 +54,17 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 - **Shared dashboard chrome.** `DataTable`, `FilterBar`, `Modal`, `StatusBadge`, `PersonaAvatar`, `EmptyState`, `DashboardErrorBanner`, `GradientText` are all reused here; nothing in those is executions-specific.
 - **Orchestrator.** Real list/detail/cancel go through `orchestratorFetch`; the SSE proxy is the only piece that streams rather than request-responds. On the supabase plane, cancel is a signed `cancel_execution` command (it was a 501 before phase 2).
 - **i18n.** Strings live under `t.executionsPage.*`, `t.dashboardUi.*` (`stdout`, `jumpToLatest`, `loadMoreExecutions`, `cancelling`, `cancelQueuedRun`), `t.common.*`, and the subtitle borrows `t.observabilityPage.subtitle` (`page.tsx:122`).
+
+## Loading tiers
+
+Per the [loading standard](loading-orchestration.md):
+
+- **T0** — title + subtitle (`index.tsx:127`), no entrance.
+- **T1** — the status filter toolbar, `ARRIVE` index 0 (`index.tsx:140`). Its `Loader2` (`ExecutionsFilters.tsx:37`) is an ambient refetch indicator beside the pills, not a placeholder, so it stays.
+- **T2** — the table. Until this mount's first `fetchExecutions()` settles, an empty store holds a `min-h-[28rem]` empty reservation (`index.tsx:157`–`160`) instead of flashing "No executions"; a warm store (rows already held) skips it. The table then mounts with `ARRIVE` index 1 (`index.tsx:164`), rows keyed by execution id.
+- **T3** — none on load. The detail modal (`index.tsx:194`) opens on intent, so its output viewer is not queued behind the arrival scheduler (that would only add latency to a click).
+
+The framer `staggerContainer`/`fadeUp` entrance was replaced by the CSS cascade.
 
 ## Conventions & gotchas
 

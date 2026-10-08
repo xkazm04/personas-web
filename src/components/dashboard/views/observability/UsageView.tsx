@@ -1,18 +1,17 @@
 "use client";
 
 import { useMemo } from "react";
-import { Loader2 } from "lucide-react";
 import useSWR from "swr";
 
 import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import { isNotServed } from "@/components/dashboard/views/home/mission/readings";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { api } from "@/lib/api";
 import { CHART_COLORS } from "@/lib/constants";
 
 import { formatToolName } from "./usage-view/usageViewData";
-import { useDeferredMount } from "./usage-view/useDeferredMount";
 import {
   UsageByPersonaCard,
   UsageOverTimeCard,
@@ -118,16 +117,10 @@ export default function UsageView() {
       .replace("{second}", formatToolName(second.toolName));
   }, [toolUsage, t.observabilityPage.usageInsight]);
 
-  const [overTimeRef, overTimeMounted] = useDeferredMount("260px");
-  const [byPersonaRef, byPersonaMounted] = useDeferredMount("260px");
-
-  if (loading && !data) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-dark" />
-      </div>
-    );
-  }
+  // First load with nothing held: a held, shapeless reservation, never a
+  // spinner. The lower charts need no scroll observer of their own: each is a
+  // <Deferred> slot, which queues only once it nears the viewport.
+  if (loading && !data) return <ViewGap />;
 
   // The desktop plane does not serve this read: say so instead of an error over empty charts.
   if (isNotServed(error) && !data) return <DesktopUnsupportedNote />;
@@ -149,26 +142,20 @@ export default function UsageView() {
         insight={insight}
       />
 
-      <div ref={overTimeRef}>
-        <UsageOverTimeCard
-          mounted={overTimeMounted}
-          areaData={areaData}
-          topTools={topTools}
-          labels={{
-            usageOverTime: t.observabilityPage.usageOverTime,
-            last14Days: t.observabilityPage.last14Days,
-          }}
-        />
-      </div>
+      <UsageOverTimeCard
+        areaData={areaData}
+        topTools={topTools}
+        labels={{
+          usageOverTime: t.observabilityPage.usageOverTime,
+          last14Days: t.observabilityPage.last14Days,
+        }}
+      />
 
-      <div ref={byPersonaRef}>
-        <UsageByPersonaCard
-          mounted={byPersonaMounted}
-          personaBarData={personaBarData}
-          allToolNames={allToolNames}
-          title={t.observabilityPage.toolUsageByAgent}
-        />
-      </div>
+      <UsageByPersonaCard
+        personaBarData={personaBarData}
+        allToolNames={allToolNames}
+        title={t.observabilityPage.toolUsageByAgent}
+      />
     </div>
   );
 }

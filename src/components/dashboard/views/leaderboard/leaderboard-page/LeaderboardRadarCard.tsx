@@ -1,20 +1,22 @@
-import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 
-import { fadeUp } from "@/lib/animations";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import type { RadarDatum } from "@/components/dashboard/LeaderboardRadarChart";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
 // recharts (+ d3) is a 344 KB chunk; importing it here put it in this route's
 // first load. Deferred, it is fetched when the card mounts.
-const LeaderboardRadarChart = dynamic(
-  () => import("@/components/dashboard/LeaderboardRadarChart"),
-  {
-    ssr: false,
-    loading: () => <div className="h-full w-full animate-pulse rounded-lg bg-white/[0.03]" />,
-  },
-);
+// T3 body: one named loader for dynamic() and the <Deferred> slot's `preload`,
+// so the chunk downloads with the frame and the mount waits for the view's
+// arrival queue. The slot owns the wait, so the chunk's `loading` is empty -
+// the fixed 300px box below is the reservation.
+const CHART_HEIGHT = 300;
+const loadRadarChart = () => import("@/components/dashboard/LeaderboardRadarChart");
+const LeaderboardRadarChart = dynamic(loadRadarChart, {
+  ssr: false,
+  loading: () => <div aria-hidden className="h-full w-full" />,
+});
 
 export type { RadarDatum };
 
@@ -33,10 +35,7 @@ export function LeaderboardRadarCard({
   const selectedColor = selected?.color ?? BRAND_VAR.cyan;
 
   return (
-    <motion.div
-      variants={fadeUp}
-      className="rounded-2xl border border-glass bg-white/[0.02] p-5 lg:col-span-2"
-    >
+    <div className="rounded-2xl border border-glass bg-white/[0.02] p-5 lg:col-span-2">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <h2 className="text-base font-semibold text-foreground">{title}</h2>
         {selected && (
@@ -46,15 +45,17 @@ export function LeaderboardRadarCard({
           </span>
         )}
       </div>
-      <div className="h-[300px] w-full">
-        <LeaderboardRadarChart
-          data={data}
-          selectedName={selected?.name ?? ""}
-          selectedColor={selectedColor}
-          benchmarkName={benchmark?.name}
-          benchmarkColor={benchmark?.color}
-        />
+      <div className="w-full" style={{ height: CHART_HEIGHT }}>
+        <Deferred className="h-full" minHeight={CHART_HEIGHT} order={0} preload={loadRadarChart}>
+          <LeaderboardRadarChart
+            data={data}
+            selectedName={selected?.name ?? ""}
+            selectedColor={selectedColor}
+            benchmarkName={benchmark?.name}
+            benchmarkColor={benchmark?.color}
+          />
+        </Deferred>
       </div>
-    </motion.div>
+    </div>
   );
 }

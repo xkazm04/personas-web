@@ -3,7 +3,6 @@ import { motion, useReducedMotion } from "framer-motion";
 
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { trendColor } from "@/components/dashboard/trendColor";
-import { fadeUp } from "@/lib/animations";
 import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
 
 import { LeaderboardSortHeader } from "./LeaderboardSortHeader";
@@ -57,10 +56,7 @@ export function LeaderboardTable({
   const sortProps = { sortField, sortDir, sortByLabel: labels.sortBy, onSort: handleSort };
 
   return (
-    <motion.div
-      variants={fadeUp}
-      className="rounded-2xl border border-glass bg-white/[0.02] p-3 lg:col-span-3"
-    >
+    <div className="rounded-2xl border border-glass bg-white/[0.02] p-3 lg:col-span-3">
       <div className="grid grid-cols-[auto_auto_1fr_auto_auto] items-center gap-2 px-2 py-1.5 text-sm font-medium uppercase tracking-wider text-muted-dark">
         <span>{labels.rank}</span>
         <span />
@@ -121,6 +117,6 @@ export function LeaderboardTable({
           );
         })}
       </div>
-    </motion.div>
+    </div>
   );
 }

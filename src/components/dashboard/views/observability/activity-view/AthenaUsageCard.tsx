@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Sparkles } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { AthenaAction } from "@/components/dashboard/AthenaUsageChart";
 import { SERIES } from "@/lib/chart-theme";
@@ -13,9 +14,14 @@ import type { AthenaUsagePoint } from "@/lib/mock-dashboard-data";
 // recharts (+ d3) is a 344 KB chunk. Imported directly by this card it landed
 // in the first load of every route rendering it; deferred, it is fetched when
 // the card mounts. Matches PerformanceLatencyCard / PerformanceSpendCard.
-const AthenaUsageChart = dynamic(() => import("@/components/dashboard/AthenaUsageChart"), {
+// T3 body: one named loader for dynamic() and the <Deferred> slot's `preload`.
+// The slot owns the wait, so the chunk's `loading` is a held block of the
+// chart's real height (its 260px ResponsiveContainer) - no pulse.
+const CHART_HEIGHT = 260;
+const loadAthenaUsageChart = () => import("@/components/dashboard/AthenaUsageChart");
+const AthenaUsageChart = dynamic(loadAthenaUsageChart, {
   ssr: false,
-  loading: () => <div className="h-[260px] animate-pulse rounded-lg bg-white/[0.03]" />,
+  loading: () => <div aria-hidden style={{ height: CHART_HEIGHT }} />,
 });
 
 const ATHENA_ACTIONS: readonly AthenaAction[] = [
@@ -59,17 +65,19 @@ export const AthenaUsageCard = memo(function AthenaUsageCard({
         </div>
       </div>
 
-      <AthenaUsageChart
-        data={data}
-        compare={compare}
-        labels={{
-          invoke: lp.athenaActions.invoke,
-          recall: lp.athenaActions.recall,
-          fallback: lp.athenaActions.fallback,
-          previous: lp.previousPeriod,
-        }}
-        actions={ATHENA_ACTIONS}
-      />
+      <Deferred minHeight={CHART_HEIGHT} order={0} preload={loadAthenaUsageChart}>
+        <AthenaUsageChart
+          data={data}
+          compare={compare}
+          labels={{
+            invoke: lp.athenaActions.invoke,
+            recall: lp.athenaActions.recall,
+            fallback: lp.athenaActions.fallback,
+            previous: lp.previousPeriod,
+          }}
+          actions={ATHENA_ACTIONS}
+        />
+      </Deferred>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-dark">
         {ATHENA_ACTIONS.map((a) => (

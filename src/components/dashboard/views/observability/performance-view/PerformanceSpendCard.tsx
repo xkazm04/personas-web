@@ -1,10 +1,20 @@
 import dynamic from "next/dynamic";
 import { Users } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { fadeUp } from "@/lib/animations";
 import { BUDGET_THRESHOLD, type ObservabilityLabels } from "./performanceViewTypes";
 
-const SpendPieChart = dynamic(() => import("@/components/dashboard/ObservabilitySpendPieChart"), { ssr: false });
+/** ObservabilitySpendPieChart renders a 200px ResponsiveContainer. */
+const CHART_HEIGHT = 200;
+
+// T3 body (the donut): one named loader for dynamic() and the slot's
+// `preload`; the per-persona rows below are T2 and paint with the card.
+const loadSpendPieChart = () => import("@/components/dashboard/ObservabilitySpendPieChart");
+const SpendPieChart = dynamic(loadSpendPieChart, {
+  ssr: false,
+  loading: () => <div aria-hidden style={{ height: CHART_HEIGHT }} />,
+});
 
 export function PerformanceSpendCard({
   personaSpend,
@@ -23,9 +33,11 @@ export function PerformanceSpendCard({
       </h3>
       {spendPieData.length > 0 ? (
         <>
-          <div className="flex items-center justify-center">
-            <SpendPieChart data={spendPieData} />
-          </div>
+          <Deferred className="w-full" minHeight={CHART_HEIGHT} order={3} preload={loadSpendPieChart}>
+            <div className="flex items-center justify-center">
+              <SpendPieChart data={spendPieData} />
+            </div>
+          </Deferred>
           <div className="mt-2 space-y-2">
             {personaSpend.map((persona) => <PersonaSpendRow key={persona.personaId} persona={persona} />)}
           </div>

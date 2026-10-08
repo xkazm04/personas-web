@@ -1,8 +1,6 @@
-import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
-import { fadeUp } from "@/lib/animations";
 
 export function ExecutionsFilters({
   filter,
@@ -24,7 +22,7 @@ export function ExecutionsFilters({
   onChange: (filter: string) => void;
 }) {
   return (
-    <motion.div variants={fadeUp} className="mb-4 flex flex-wrap items-center justify-between gap-3">
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
       <FilterBar
         options={[
           { key: "all", label: labels.all, count: counts.all },
@@ -37,6 +35,6 @@ export function ExecutionsFilters({
         onChange={onChange}
       />
       {loading && <Loader2 className="h-4 w-4 animate-spin text-muted-dark" />}
-    </motion.div>
+    </div>
   );
 }

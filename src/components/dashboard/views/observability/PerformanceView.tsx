@@ -2,15 +2,15 @@
 
 import { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { AlertTriangle, Loader2 } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import useSWR from "swr";
 import CompareToggle from "@/components/dashboard/CompareToggle";
 import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import { isNotServed } from "@/components/dashboard/views/home/mission/readings";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
+import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useFocusParam } from "@/hooks/useFocusParam";
-import { fadeUp } from "@/lib/animations";
 import { api } from "@/lib/api";
 import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -78,13 +78,10 @@ export default function PerformanceView() {
     void mutate();
   }, [mutate]);
 
-  if (loading && !metrics) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-dark" />
-      </div>
-    );
-  }
+  // First load with nothing held: a held, shapeless reservation (sr-only
+  // status, a faint line only after the ghost delay) - never a spinner. A
+  // refetch keeps the held data on screen (keepPreviousData).
+  if (loading && !metrics) return <ViewGap />;
 
   // The desktop plane does not serve this read: say so instead of an error over empty charts.
   if (isNotServed(error) && !metrics) return <DesktopUnsupportedNote />;
@@ -102,7 +99,7 @@ export default function PerformanceView() {
           provide — real mode has no synced prior period, so hide the toggle
           rather than show an empty/fabricated comparison. */}
       {isDemo && (
-        <div className="mb-6 flex justify-end">
+        <div className={`${ARRIVE} mb-6 flex justify-end`} style={arriveAt(1)}>
           <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
         </div>
       )}
@@ -115,14 +112,17 @@ export default function PerformanceView() {
         />
       )}
       {overBudgetPersonas.length > 0 && (
-        <motion.div variants={fadeUp} className="mb-6 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3">
+        <div className={`${ARRIVE} mb-6 flex items-center gap-3 rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3`} style={arriveAt(1)}>
           <AlertTriangle className="h-4 w-4 text-amber-400 flex-shrink-0" />
           <p className="text-base text-amber-300">
             {t.observabilityPage.budgetThresholdExceeded} {overBudgetPersonas.map((persona) => persona.personaName).join(", ")}
           </p>
-        </motion.div>
+        </div>
       )}
-      <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} />
+      {/* T2: the KPI tiles answer the tab's question first. */}
+      <div className={ARRIVE} style={arriveAt(2)}>
+        <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} />
+      </div>
       <PerformanceChartGrid
         costChartData={costChartData}
         execChartData={execChartData}
@@ -133,7 +133,7 @@ export default function PerformanceView() {
         labels={t.observabilityPage}
       />
       <PerformanceLatencyCard labels={t.observabilityPage} />
-      <div className="grid gap-6 lg:grid-cols-5">
+      <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(5)}>
         <PerformanceSpendCard personaSpend={personaSpend} spendPieData={spendPieData} labels={t.observabilityPage} />
         <PerformanceHealthPanel
           openIssues={openIssues}

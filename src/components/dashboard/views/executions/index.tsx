@@ -1,14 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import DataTable from "@/components/dashboard/DataTable";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { usePolling } from "@/hooks/usePolling";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 
 import type { GlobalExecution } from "@/lib/types";
@@ -16,6 +14,7 @@ import type { GlobalExecution } from "@/lib/types";
 import { ExecutionDetailModal } from "./executions-page/ExecutionDetailModal";
 import { ExecutionsEmptyState } from "./executions-page/ExecutionsEmptyState";
 import { ExecutionsFilters } from "./executions-page/ExecutionsFilters";
+import { LoadMoreExecutions } from "./executions-page/LoadMoreExecutions";
 import {
   buildExecutionColumns,
   executionRowClassName,
@@ -35,9 +34,18 @@ export default function ExecutionsPage() {
   const [filter, setFilter] = useState("all");
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EXECUTIONS);
   const [selected, setSelected] = useState<GlobalExecution | null>(null);
+  // Until this mount's first fetch settles, an empty list means "not here
+  // yet", not "no runs" (set from the promise, never synchronously).
+  const [firstFetchSettled, setFirstFetchSettled] = useState(false);
 
   useEffect(() => {
-    void fetchExecutions();
+    let live = true;
+    void fetchExecutions().finally(() => {
+      if (live) setFirstFetchSettled(true);
+    });
+    return () => {
+      live = false;
+    };
   }, [fetchExecutions]);
 
   const hasRunning = useMemo(
@@ -111,71 +119,80 @@ export default function ExecutionsPage() {
   // matches — distinguish "filtered out" from a genuinely idle system.
   const isFilteredEmpty =
     filter !== "all" && executions.length > 0 && filtered.length === 0;
+  // First load with nothing held (a warm store skips it); errors fall through.
+  const awaitingFirstData = !firstFetchSettled && executions.length === 0 && !executionsError;
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6">
+    <div>
+      {/* T0: the view header paints with the frame and never animates. */}
+      <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">{t.executionsPage.title}</GradientText>
         </h1>
         <p className="mt-1 text-base text-muted-dark">
           {t.observabilityPage.subtitle}
         </p>
-      </motion.div>
+      </div>
 
       {executionsError && <DashboardErrorBanner message={executionsError} />}
 
-      <ExecutionsFilters
-        filter={filter}
-        counts={counts}
-        loading={executionsLoading}
-        labels={{
-          all: t.executionsPage.all,
-          active: t.executionsPage.active,
-          completed: t.executionsPage.completed,
-          failed: t.executionsPage.failed,
-          cancelled: t.executionsPage.cancelled,
-        }}
-        onChange={handleFilterChange}
-      />
-
-      <motion.div variants={fadeUp} data-tour-diagram="dashboard-executions">
-        <DataTable
-          columns={columns}
-          data={visibleExecutions}
-          keyExtractor={(row) => row.id}
-          onRowClick={(row) => setSelected(row)}
-          rowClassName={executionRowClassName}
-          emptyState={
-            <ExecutionsEmptyState
-              isFilteredEmpty={isFilteredEmpty}
-              filter={filter}
-              labels={t.executionsPage}
-              onShowAll={() => handleFilterChange("all")}
-            />
-          }
+      {/* T1: the status filter toolbar. */}
+      <div className={ARRIVE} style={arriveAt(0)}>
+        <ExecutionsFilters
+          filter={filter}
+          counts={counts}
+          loading={executionsLoading}
+          labels={{
+            all: t.executionsPage.all,
+            active: t.executionsPage.active,
+            completed: t.executionsPage.completed,
+            failed: t.executionsPage.failed,
+            cancelled: t.executionsPage.cancelled,
+          }}
+          onChange={handleFilterChange}
         />
+      </div>
 
-        <ExecutionDetailModal execution={selected} onClose={() => setSelected(null)} />
+      <div data-tour-diagram="dashboard-executions">
+        {awaitingFirstData ? (
+          // T2 reservation: the table's first screenful, held empty (no ghost,
+          // no spinner) until the first fetch settles.
+          <div aria-busy="true" className="min-h-[28rem]" />
+        ) : (
+          // T2: rows keyed by execution id; mounted on the loading -> settled
+          // edge, so the entrance plays once there.
+          <div className={ARRIVE} style={arriveAt(1)}>
+            <DataTable
+              columns={columns}
+              data={visibleExecutions}
+              keyExtractor={(row) => row.id}
+              onRowClick={(row) => setSelected(row)}
+              rowClassName={executionRowClassName}
+              emptyState={
+                <ExecutionsEmptyState
+                  isFilteredEmpty={isFilteredEmpty}
+                  filter={filter}
+                  labels={t.executionsPage}
+                  onShowAll={() => handleFilterChange("all")}
+                />
+              }
+            />
 
-        {filtered.length > visibleExecutions.length && (
-          <div className="mt-3 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={() => {
-                setVisibleCount((prev) =>
-                  Math.min(filtered.length, prev + EXECUTIONS_LOAD_STEP),
-                );
-              }}
-              className="rounded-lg border border-glass-hover bg-white/[0.03] px-3 py-1.5 text-sm text-muted transition-colors hover:border-glass-strong hover:text-foreground"
-            >
-              {t.dashboardUi.loadMoreExecutions
-                .replace("{visible}", String(visibleExecutions.length))
-                .replace("{total}", String(filtered.length))}
-            </button>
+            {filtered.length > visibleExecutions.length && (
+              <LoadMoreExecutions
+                label={t.dashboardUi.loadMoreExecutions}
+                visible={visibleExecutions.length}
+                total={filtered.length}
+                onLoadMore={() =>
+                  setVisibleCount((prev) => Math.min(filtered.length, prev + EXECUTIONS_LOAD_STEP))
+                }
+              />
+            )}
           </div>
         )}
-      </motion.div>
-    </motion.div>
+
+        <ExecutionDetailModal execution={selected} onClose={() => setSelected(null)} />
+      </div>
+    </div>
   );
 }
