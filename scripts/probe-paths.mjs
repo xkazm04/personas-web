@@ -36,14 +36,20 @@ const {
   classifyDevices,
   classifyDirect,
   classifyMirrorPersonas,
+  classifyMirrorReviews,
   classifyPairing,
   classifyProxy,
+  classifyReviewReports,
+  pendingCouncilReportIds,
   desktopUrlRefusal,
   exitCodeFor,
   formatReport,
   supabaseUrlRefusal,
   webUrlRefusal,
 } = await import("../src/lib/pathProbe/classify.ts");
+
+// Pure, no imports: the phone's own parser of a review's context_data.
+const { reviewReportId } = await import("../src/lib/commands/deskOnlyReview.ts");
 
 const TIMEOUT_MS = 8000;
 const json = process.argv.includes("--json");
@@ -158,6 +164,16 @@ async function main() {
         headers: { "x-user-token": session.token },
       });
 
+  // Council reviews, then the reports of the pending ones (ids only: never content or metadata).
+  const reviews = await rest(session, "synced_manual_reviews", { select: "execution_id,context_data,status,synced_at" });
+  const wanted = pendingCouncilReportIds(reviews, reviewReportId);
+  const reports = wanted.length
+    ? await rest(session, "synced_messages", {
+        select: "id",
+        id: `in.(${wanted.map((x) => `"${x.replace(/["\\]/g, "\\$&")}"`).join(",")})`,
+      })
+    : null;
+
   const since = new Date(now - COMMAND_WINDOW_MS).toISOString();
   const [devices, mirrored, controllers, refusals, ...commands] = await Promise.all([
     rest(session, "synced_devices", { select: "last_seen_at" }),
@@ -186,6 +202,8 @@ async function main() {
     classifyProxy(proxyObs, direct.ids),
     classifyDevices(devices, now),
     classifyMirrorPersonas(mirrored, direct.ids),
+    classifyMirrorReviews(reviews, now, reviewReportId),
+    classifyReviewReports(reviews, reports, reviewReportId),
     ...COMMAND_VERBS.map((verb, i) => classifyCommand(verb, commands[i])),
     classifyPairing(controllers, refusals),
     ...classifyDeepLinks(schemeRegistration()),

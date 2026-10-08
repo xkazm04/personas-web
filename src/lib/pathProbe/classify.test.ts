@@ -7,8 +7,10 @@ import {
   classifyDevices,
   classifyDirect,
   classifyMirrorPersonas,
+  classifyMirrorReviews,
   classifyPairing,
   classifyProxy,
+  classifyReviewReports,
   desktopUrlRefusal,
   errorToken,
   exitCodeFor,
@@ -157,6 +159,103 @@ describe("classifyMirrorPersonas", () => {
   it("broken when a desktop id is missing", () => {
     const v = classifyMirrorPersonas(ok([{ id: "a" }]), ["a", "b"]);
     expect(v).toMatchObject({ state: "broken", reason: "1 of 2 desktop ids missing from the mirror" });
+  });
+});
+
+const reportIdOf = (c: string | null | undefined) => {
+  try {
+    const r = (JSON.parse(c ?? "") as { reportId?: unknown }).reportId;
+    return typeof r === "string" && r ? r : null;
+  } catch {
+    return null;
+  }
+};
+const council = (reportId: string, status = "pending") => ({
+  execution_id: null,
+  context_data: JSON.stringify({ reportId }),
+  status,
+  synced_at: ago(60_000),
+});
+
+describe("classifyMirrorReviews", () => {
+  it("working with counts and the freshest age, never ids", () => {
+    const v = classifyMirrorReviews(
+      ok([council("r1"), { execution_id: "e", context_data: null, status: "approved", synced_at: ago(3_600_000) }]),
+      NOW,
+      reportIdOf,
+    );
+    expect(v).toMatchObject({ state: "working", reason: "2 reviews, 1 council, freshest synced 60s ago" });
+  });
+
+  it("no rows is blocked 'no review synced yet'", () => {
+    expect(classifyMirrorReviews(ok([]), NOW, reportIdOf)).toMatchObject({
+      state: "blocked",
+      reason: "no review synced yet",
+    });
+  });
+
+  it("no session is blocked 'no session'", () => {
+    expect(classifyMirrorReviews({ kind: "no-session" }, NOW, reportIdOf)).toMatchObject({
+      state: "blocked",
+      reason: "no session",
+    });
+  });
+
+  it("a select error is broken with its code only", () => {
+    const v = classifyMirrorReviews(
+      { kind: "status", status: 400, body: { code: "42703", message: "column secret does not exist" } },
+      NOW,
+      reportIdOf,
+    );
+    expect(v).toMatchObject({ state: "broken", reason: "select error 42703" });
+  });
+
+  it("an unrecognized body is broken", () => {
+    expect(classifyMirrorReviews(ok({}), NOW, reportIdOf).state).toBe("broken");
+  });
+});
+
+describe("classifyReviewReports", () => {
+  const reviews = ok([council("r1"), council("r2"), council("r3", "approved"), council("r1")]);
+
+  it("working 'N of N resolve' counts distinct pending reports", () => {
+    expect(classifyReviewReports(reviews, ok([{ id: "r1" }, { id: "r2" }]), reportIdOf)).toMatchObject({
+      state: "working",
+      reason: "2 of 2 resolve",
+    });
+  });
+
+  it("broken 'k of N reports missing on the mirror'", () => {
+    expect(classifyReviewReports(reviews, ok([{ id: "r1" }]), reportIdOf)).toMatchObject({
+      state: "broken",
+      reason: "1 of 2 reports missing on the mirror",
+    });
+  });
+
+  it("blocked 'no pending council review' when none is pending or none is council", () => {
+    const none = { state: "blocked", reason: "no pending council review" };
+    expect(classifyReviewReports(ok([council("r3", "approved")]), null, reportIdOf)).toMatchObject(none);
+    expect(classifyReviewReports(ok([{ context_data: null, status: "pending" }]), null, reportIdOf)).toMatchObject(none);
+    expect(classifyReviewReports(ok([]), null, reportIdOf)).toMatchObject(none);
+  });
+
+  it("blocked 'no session' and a reviews select error follows mirror.reviews", () => {
+    expect(classifyReviewReports({ kind: "no-session" }, null, reportIdOf)).toMatchObject({
+      state: "blocked",
+      reason: "no session",
+    });
+    expect(
+      classifyReviewReports({ kind: "status", status: 500, body: { code: "XX000" } }, null, reportIdOf).state,
+    ).toBe("broken");
+  });
+
+  it("a reports select error is broken with its code", () => {
+    const v = classifyReviewReports(reviews, { kind: "status", status: 400, body: { code: "22P02" } }, reportIdOf);
+    expect(v).toMatchObject({ state: "broken", reason: "select error 22P02" });
+  });
+
+  it("an unrecognized reports body is broken", () => {
+    expect(classifyReviewReports(reviews, ok({}), reportIdOf).state).toBe("broken");
   });
 });
 

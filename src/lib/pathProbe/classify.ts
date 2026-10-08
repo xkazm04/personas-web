@@ -232,6 +232,74 @@ export function classifyMirrorPersonas(obs: Obs, directIds: readonly string[] | 
   return verdict(id, "desktop->web", "working", `all ${directIds.length} desktop ids mirrored (${mirrored.size} rows)`);
 }
 
+/** Parses a review's `context_data` to its report id; the script passes `reviewReportId` (src/lib/commands/deskOnlyReview.ts) so probe and phone agree. */
+export type ReportIdOf = (contextData: string | null | undefined) => string | null;
+
+type ReviewRow = { context_data?: unknown; status?: unknown; synced_at?: unknown };
+
+/** A select that PostgREST answered with an error: broken, naming only its code (else the message's token). */
+function selectError(obs: Obs): string | null {
+  if (obs.kind !== "status" || obs.status < 400 || obs.status === 401 || obs.status === 403) return null;
+  const b = obs.body as { code?: unknown; message?: unknown } | null | undefined;
+  return typeof b?.code === "string" && b.code ? b.code : errorToken(b?.message);
+}
+
+/** (8) mirror.reviews: the user's synced_manual_reviews. Counts and the freshest synced_at's age only. */
+export function classifyMirrorReviews(obs: Obs, now: number, reportIdOf: ReportIdOf): Verdict {
+  const id = "mirror.reviews";
+  const err = selectError(obs);
+  if (err) return verdict(id, "desktop->web", "broken", `select error ${err}`);
+  const g = gate(obs, "supabase");
+  if (g) return verdict(id, "desktop->web", g.state, g.reason);
+  const body = (obs as { body?: unknown }).body;
+  if (!Array.isArray(body)) return verdict(id, "desktop->web", "broken", "unrecognized body");
+  if (body.length === 0) return verdict(id, "desktop->web", "blocked", "no review synced yet");
+  const rows = body as ReviewRow[];
+  const council = rows.filter((r) => reportIdOf(typeof r?.context_data === "string" ? r.context_data : null) !== null).length;
+  const stamps = rows.map((r) => Date.parse(r?.synced_at as string)).filter((t) => Number.isFinite(t));
+  const fresh = stamps.length > 0 ? `, freshest synced ${formatAge(now - Math.max(...stamps))} ago` : ", no synced_at";
+  return verdict(id, "desktop->web", "working", `${rows.length} reviews, ${council} council${fresh}`);
+}
+
+/** The distinct report ids of the pending council reviews in a working mirror.reviews observation. */
+export function pendingCouncilReportIds(obs: Obs, reportIdOf: ReportIdOf): string[] {
+  const body = obs.kind === "status" && obs.status >= 200 && obs.status < 300 ? obs.body : undefined;
+  if (!Array.isArray(body)) return [];
+  const ids = new Set<string>();
+  for (const r of body as ReviewRow[]) {
+    if (r?.status !== "pending") continue;
+    const rid = reportIdOf(typeof r.context_data === "string" ? r.context_data : null);
+    if (rid) ids.add(rid);
+  }
+  return [...ids];
+}
+
+/**
+ * (9) mirror.review-reports: every pending council review's reportId has a
+ * synced_messages row. `reviews` is the (8) observation; `reports` the id-only
+ * select of synced_messages, null when there was nothing to look up.
+ */
+export function classifyReviewReports(reviews: Obs, reports: Obs | null, reportIdOf: ReportIdOf): Verdict {
+  const id = "mirror.review-reports";
+  const rerr = selectError(reviews);
+  if (rerr) return verdict(id, "desktop->web", "broken", `reviews select error ${rerr}`);
+  const rg = gate(reviews, "supabase");
+  if (rg) return verdict(id, "desktop->web", rg.state, rg.reason);
+  const wanted = pendingCouncilReportIds(reviews, reportIdOf);
+  if (wanted.length === 0) return verdict(id, "desktop->web", "blocked", "no pending council review");
+  if (!reports) return verdict(id, "desktop->web", "blocked", "reports not looked up");
+  const err = selectError(reports);
+  if (err) return verdict(id, "desktop->web", "broken", `select error ${err}`);
+  const g = gate(reports, "supabase");
+  if (g) return verdict(id, "desktop->web", g.state, g.reason);
+  const body = (reports as { body?: unknown }).body;
+  if (!Array.isArray(body)) return verdict(id, "desktop->web", "broken", "unrecognized body");
+  const have = new Set(body.map((r) => (r as { id?: unknown })?.id).filter((x) => typeof x === "string"));
+  const missing = wanted.filter((x) => !have.has(x)).length;
+  if (missing > 0) return verdict(id, "desktop->web", "broken", `${missing} of ${wanted.length} reports missing on the mirror`);
+  return verdict(id, "desktop->web", "working", `${wanted.length} of ${wanted.length} resolve`);
+}
+
 /** (5) command-plane.<verb>: the newest pending_commands row of that verb in the last 7 days (newest first). */
 export function classifyCommand(verb: string, obs: Obs): Verdict {
   const id = `command-plane.${verb}`;
