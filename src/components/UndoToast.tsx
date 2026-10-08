@@ -64,7 +64,7 @@ export default function UndoToast({
           </span>
           <button
             onClick={onUndo}
-            className="flex items-center gap-1 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20"
+            className="flex min-h-[44px] items-center gap-1 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-1.5 text-sm font-medium text-brand-cyan transition-all hover:bg-brand-cyan/20 md:min-h-0"
           >
             <Undo2 className="h-3 w-3" />
             {t.dashboardUi.undo}

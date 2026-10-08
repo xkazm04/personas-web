@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { api } from "@/lib/api";
+import { ApiError } from "@/lib/api-error";
 import type { EventStatus, PersonaEvent, PersonaEventSubscription } from "@/lib/types";
 import {
   assertEventTransition,
@@ -78,6 +79,8 @@ interface EventState {
   events: PersonaEvent[];
   eventIds: Set<string>;
   eventsLoading: boolean;
+  /** The plane answered 501 not_on_desktop to the list read: an empty list means "not served", not "no events". */
+  listNotServed: boolean;
   connectionStatus: ConnectionStatus;
   setConnectionStatus: (status: ConnectionStatus) => void;
   fetchEvents: () => Promise<void>;
@@ -100,6 +103,10 @@ interface EventState {
 
   subscriptions: PersonaEventSubscription[];
   subscriptionsLoading: boolean;
+  /** The plane answered 501 not_on_desktop to the subscription read: an empty list means "not served", not "no subscriptions". */
+  subscriptionsNotServed: boolean;
+  /** A subscription read has succeeded since the last reset; until then the count is unknown, not zero. */
+  subscriptionsRead: boolean;
   fetchSubscriptions: () => Promise<void>;
   createSubscription: (input: { personaId: string; eventType: string; sourceFilter?: string }) => Promise<void>;
   updateSubscription: (personaId: string, subId: string, body: { enabled?: boolean; eventType?: string; sourceFilter?: string | null }) => Promise<void>;
@@ -112,6 +119,7 @@ export const useEventStore = create<EventState>((set, get) => ({
   events: [],
   eventIds: new Set(),
   eventsLoading: false,
+  listNotServed: false,
   connectionStatus: "polling" as ConnectionStatus,
   setConnectionStatus: (status) => set({ connectionStatus: status }),
   fetchEvents: async () => {
@@ -139,10 +147,12 @@ export const useEventStore = create<EventState>((set, get) => ({
         return {
           events: merged,
           eventIds: new Set(merged.map((e) => e.id)),
+          listNotServed: false,
         };
       });
-    } catch {
-      // leave stale
+    } catch (err) {
+      // 501 means this plane does not serve the list; any other failure leaves stale.
+      if (err instanceof ApiError && err.status === 501) set({ listNotServed: true });
     } finally {
       set({ eventsLoading: false });
     }
@@ -339,13 +349,16 @@ export const useEventStore = create<EventState>((set, get) => ({
 
   subscriptions: [],
   subscriptionsLoading: false,
+  subscriptionsNotServed: false,
+  subscriptionsRead: false,
   fetchSubscriptions: async () => {
     set({ subscriptionsLoading: true });
     try {
       const subscriptions = await api.listAllSubscriptions();
-      set({ subscriptions });
-    } catch {
-      // leave stale
+      set({ subscriptions, subscriptionsNotServed: false, subscriptionsRead: true });
+    } catch (err) {
+      // 501 means this plane does not serve the read; any other failure leaves stale.
+      if (err instanceof ApiError && err.status === 501) set({ subscriptionsNotServed: true });
     } finally {
       set({ subscriptionsLoading: false });
     }
@@ -378,11 +391,14 @@ export const useEventStore = create<EventState>((set, get) => ({
       events: [],
       eventIds: new Set(),
       eventsLoading: false,
+      listNotServed: false,
       replayingIds: new Set(),
       discardingIds: new Set(),
       retryCounts: {},
       subscriptions: [],
       subscriptionsLoading: false,
+      subscriptionsNotServed: false,
+      subscriptionsRead: false,
     });
   },
 }));

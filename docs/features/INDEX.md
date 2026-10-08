@@ -45,8 +45,9 @@ Status legend: ✅ written · ⬜ planned
 
 | Doc | Route | Nav label |
 | --- | --- | --- |
-| ✅ [home-overview](dashboard/home-overview.md) | `/dashboard/home` | Overview |
-| ✅ [agents](dashboard/agents.md) | `/dashboard/agents` | Agents |
+| ✅ [personas](dashboard/personas.md) | `/dashboard/personas` | Personas (main view; fleet monitor) |
+| ✅ [notes](dashboard/notes.md) | `/dashboard/notes` | Notes (desktop Notepad goals, read-only) |
+| ✅ [home-overview](dashboard/home-overview.md) | `/dashboard/home` | Overview › Mission Control |
 | ✅ [executions](dashboard/executions.md) | `/dashboard/executions` | Executions |
 | ✅ [events](dashboard/events.md) | `/dashboard/events` | Events |
 | ✅ [reviews](dashboard/reviews.md) | `/dashboard/reviews` | Reviews (Human Review) |
@@ -59,18 +60,18 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [health](dashboard/health.md) | `/dashboard/health` | Health |
 | ✅ [knowledge](dashboard/knowledge.md) | `/dashboard/knowledge` | Knowledge |
 | ✅ [settings](dashboard/settings.md) | `/dashboard/settings` | Settings |
-| ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (layout, sidebar, realtime) |
+| ✅ [shell-chrome](dashboard/shell-chrome.md) | `/dashboard/*` | (SPA shell, two-level menu, realtime) |
 
 ### marketing/ — Marketing & Landing
 
 | Doc | Surface |
 | --- | --- |
-| ✅ [homepage-hero](marketing/homepage-hero.md) | Hero, command-center, stat row, social proof |
-| ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels |
-| ✅ [use-cases](marketing/use-cases.md) | Agent-army grid + tool selection |
-| ✅ [features-overview](marketing/features-overview.md) | `/features` page + vision grid |
+| ✅ [homepage-hero](marketing/homepage-hero.md) | "Hive" hero (honeycomb floor, events hand off cell to cell), lazy section orchestration, JSON-LD |
+| ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels (retired section; kept as history) |
+| ✅ [use-cases](marketing/use-cases.md) | "Slot reels": six needs spin through real connectors onto the persona card |
+| ✅ [features-overview](marketing/features-overview.md) | `/features` "Murmuration" swarm hero + features cluster + vision layer stack |
 | ✅ [pricing](marketing/pricing.md) | Pricing tier cards |
-| ✅ [get-started](marketing/get-started.md) | Get-started steps + download CTA |
+| ✅ [get-started](marketing/get-started.md) | "Your day, its day" 24-hour dial + download CTA |
 | ✅ [faq](marketing/faq.md) | FAQ accordion |
 | ✅ [footer](marketing/footer.md) | Footer + primary CTA |
 | ✅ [guided-tour](marketing/guided-tour.md) | Athena guided product tour |
@@ -79,29 +80,29 @@ Status legend: ✅ written · ⬜ planned
 
 | Doc | Surface |
 | --- | --- |
-| ✅ [observability-deck](product-showcase/observability-deck.md) | Live pulse-grid deck |
-| ✅ [security-vault](product-showcase/security-vault.md) | Security vault pillars |
+| ✅ [observability-deck](product-showcase/observability-deck.md) | "On the record" printer tape + day's statement |
+| ✅ [security-vault](product-showcase/security-vault.md) | Nested-vault security illustration |
 | ✅ [agent-lab](product-showcase/agent-lab.md) | Arena / chat / eval / evolution tabs |
-| ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plugin grid + second brain |
-| ✅ [memory-layers](product-showcase/memory-layers.md) | Geological memory stack |
-| ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Multi-provider routing |
-| ✅ [design-engine](product-showcase/design-engine.md) | Design-engine intent matrix |
-| ✅ [healing-circuit](product-showcase/healing-circuit.md) | Self-healing circuit |
-| ✅ [trigger-system](product-showcase/trigger-system.md) | Trigger automation wheel |
+| ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plug-in bay: Dev Tools, Brain, Drive, Twin cartridges |
+| ✅ [memory-layers](product-showcase/memory-layers.md) | "Growth rings" memory illustration |
+| ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Lit model router (Claude vs Ollama) |
+| ✅ [design-engine](product-showcase/design-engine.md) | Design-engine blueprint sheet |
+| ✅ [healing-circuit](product-showcase/healing-circuit.md) | Self-healing run circuit |
+| ✅ [trigger-system](product-showcase/trigger-system.md) | Trigger automation wheel (removed; kept as history) |
 
 ### demos/ — Interactive Demos & Playground
 
 | Doc | Surface |
 | --- | --- |
-| ✅ [flow-composer](demos/flow-composer.md) | Visual flow composer + `/playground` |
-| ✅ [orchestration-hub](demos/orchestration-hub.md) | Orchestration hub graph |
-| ✅ [event-bus-showcase](demos/event-bus-showcase.md) | Animated event-bus showcase |
-| ✅ [platform-layers](demos/platform-layers.md) | Platform layer stack |
+| ✅ [flow-composer](demos/flow-composer.md) | Visual flow composer (opens from the `/how` event hub) + `/playground` |
+| ✅ [orchestration-hub](demos/orchestration-hub.md) | Orchestration hub: lit instrument ring of ten triggers, comet, per-trigger vignettes |
+| ✅ [event-bus-showcase](demos/event-bus-showcase.md) | Event hub: tool logos on a tilted orbit, relays through a glass hub, Live/Performance tabs, build-a-flow |
+| ✅ [platform-layers](demos/platform-layers.md) | Growth dial: one laptop, 1 to 40 agents from Day 1 to Year 1, four layers lighting |
 | ✅ [platform-command](demos/platform-command.md) | Terminal/CLI command sequence |
-| ✅ [agents-timeline](demos/agents-timeline.md) | Agent execution timeline race |
+| ✅ [agents-timeline](demos/agents-timeline.md) | Off the rails: fixed-rules train stalls on a snag, the agent's route goes around it |
 | ✅ [agent-playground](demos/agent-playground.md) | Playground terminal demo |
-| ✅ [agents-chat](demos/agents-chat.md) | Multi-agent chat race |
-| ✅ [playground-split](demos/playground-split.md) | Split-view playground |
+| ✅ [agents-chat](demos/agents-chat.md) | Split screen, one clock: scripted bot vs agent answering one customer message |
+| ✅ [playground-split](demos/playground-split.md) | Agent Mind "Camera": script of sample prompts, camera dolly through the beats, outcome cards |
 | ✅ [playground-timeline](demos/playground-timeline.md) | Pipeline timeline sim |
 | ✅ [preview-harness](demos/preview-harness.md) | Section preview/demo harness |
 
@@ -147,7 +148,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [layout-navigation](platform/layout-navigation.md) | Root layout, navbar, page shell |
 | ✅ [shared-ui-primitives](platform/shared-ui-primitives.md) | Brand cards, terminal, icons, illustrations |
 | ✅ [animation-motion](platform/animation-motion.md) | Motion system + gating hooks |
-| ✅ [mobile-app-shell](platform/mobile-app-shell.md) | `/m` mobile experience |
+| ✅ [mobile-app-shell](platform/mobile-app-shell.md) | `/m` phone landing ("Hive Reels": six one-screen posters, share / waitlist / reminder hand-off to a computer); old `/m/*` views redirect |
 | ✅ [theme-system](platform/theme-system.md) | Multi-variant theme system |
 | ✅ [internationalization](platform/internationalization.md) | 14-locale UI bundle |
 | ✅ [shared-utilities](platform/shared-utilities.md) | Types, hooks, formatting, validation |
@@ -157,6 +158,7 @@ Status legend: ✅ written · ⬜ planned
 | Doc | Surface |
 | --- | --- |
 | ✅ [orchestrator-client-mocks](infrastructure/orchestrator-client-mocks.md) | API client + demo mocks |
+| ✅ [desktop-web-paths](infrastructure/desktop-web-paths.md) | Read-only probe of every desktop<->web path (working / broken / blocked / retired) |
 | ✅ [authentication-session](infrastructure/authentication-session.md) | Demo auth + guards |
 | ✅ [supabase-client](infrastructure/supabase-client.md) | Optional anon-key client |
 | ✅ [error-monitoring-analytics](infrastructure/error-monitoring-analytics.md) | Sentry + analytics |

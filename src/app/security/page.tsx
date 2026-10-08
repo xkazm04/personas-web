@@ -40,14 +40,19 @@ export default function SecurityPage() {
               Security & Privacy
             </p>
             <SectionHeading>
-              Your data{" "}
-              <GradientText className="drop-shadow-lg">never leaves</GradientText>
-              {" "}your machine
+              Your agents run and your keys{" "}
+              <GradientText className="drop-shadow-lg">stay</GradientText>
+              {" "}on your machine
             </SectionHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light">
-              Unlike cloud AI platforms, Personas runs entirely on your desktop.
-              AES-256 encryption, OS-native keyring, zero telemetry, air-gap
-              capable. Privacy by architecture, not by policy.
+              Unlike cloud AI platforms, Personas runs on your desktop. Your
+              agents and run history are stored on your machine, your
+              credentials in an encrypted vault that never leaves it, and your
+              prompts go only to the AI provider you choose, or nowhere at all
+              with a local Ollama model. Cloud sync is optional and off until
+              you turn it on. AES-256 encryption,
+              OS-native keyring, anonymous telemetry with personal data
+              stripped, air-gap capable. Privacy by architecture, not by policy.
             </p>
           </motion.div>
           <SecurityPillarsGrid />
@@ -73,8 +78,9 @@ export default function SecurityPage() {
               <GradientText className="drop-shadow-lg">simplified</GradientText>
             </SectionHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-muted leading-relaxed font-light">
-              When your data doesn&apos;t leave your machine, most compliance
-              requirements become dramatically simpler - or disappear entirely.
+              When no platform sits between you and your AI provider, most
+              compliance requirements become dramatically simpler - or
+              disappear entirely.
             </p>
           </motion.div>
 
@@ -131,8 +137,8 @@ export default function SecurityPage() {
               <GradientText className="drop-shadow-lg">default</GradientText>
             </SectionHeading>
             <p className="mt-6 text-base text-muted leading-relaxed font-light">
-              No signup. No cloud account. No data processing agreement.
-              Download and run - your agents are private from the first second.
+              No signup. No cloud account required. Download and run - your
+              agents are private from the first second.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link

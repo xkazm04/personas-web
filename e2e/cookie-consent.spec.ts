@@ -1,4 +1,10 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+// The banner is present exactly while its Accept All button is. Anchor on the button
+// (a role + accessible name), not on a phrase of the message: the message wording
+// changes, and a phrase that no longer exists makes every not.toBeVisible() pass
+// vacuously - which is how this spec went blind after the 2026-10-06 copy fix.
+const banner = (page: Page) => page.getByRole("button", { name: "Accept All", exact: true });
 
 test.describe("Cookie Consent", () => {
   test.beforeEach(async ({ page }) => {
@@ -9,7 +15,7 @@ test.describe("Cookie Consent", () => {
 
   test("cookie banner appears on first visit", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("text=essential cookies")).toBeVisible({ timeout: 5000 });
+    await expect(banner(page)).toBeVisible({ timeout: 5000 });
   });
 
   test("Accept All hides banner and saves preference", async ({ page }) => {
@@ -18,7 +24,7 @@ test.describe("Cookie Consent", () => {
     await expect(acceptBtn).toBeVisible({ timeout: 5000 });
     await acceptBtn.click();
     // Banner should disappear
-    await expect(page.locator("text=essential cookies")).not.toBeVisible();
+    await expect(banner(page)).not.toBeVisible();
     // localStorage should be set
     const value = await page.evaluate(() => localStorage.getItem("personas-cookie-consent"));
     expect(value).toBe("all");
@@ -29,7 +35,7 @@ test.describe("Cookie Consent", () => {
     const essentialBtn = page.locator("button", { hasText: "Essential Only" });
     await expect(essentialBtn).toBeVisible({ timeout: 5000 });
     await essentialBtn.click();
-    await expect(page.locator("text=essential cookies")).not.toBeVisible();
+    await expect(banner(page)).not.toBeVisible();
     const value = await page.evaluate(() => localStorage.getItem("personas-cookie-consent"));
     expect(value).toBe("essential");
   });
@@ -40,7 +46,7 @@ test.describe("Cookie Consent", () => {
     // Wait for hydration to settle (the banner mounts client-side) instead
     // of a raw timeout, then assert it never appeared.
     await page.waitForLoadState("networkidle");
-    await expect(page.locator("text=essential cookies")).not.toBeVisible();
+    await expect(banner(page)).not.toBeVisible();
   });
 
   test("banner links to legal cookies page", async ({ page }) => {

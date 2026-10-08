@@ -9,13 +9,13 @@ import { SectionSkeleton, createLazySection } from "@/components/sections/LazySe
  * imports. DesignEngine stays a static import (above the fold) for LCP + SEO.
  */
 export const LazyMemoryLayers = createLazySection(
-  () => import("@/components/feature-sections/MemoryLayers"),
+  () => import("@/components/feature-sections/memory-rings"),
   SectionSkeleton,
   { ssr: false },
 );
 
 export const LazyHealingCircuit = createLazySection(
-  () => import("@/components/feature-sections/HealingCircuit"),
+  () => import("@/components/feature-sections/healing-run-circuit"),
   SectionSkeleton,
   { ssr: false },
 );
@@ -27,13 +27,13 @@ export const LazySecurityVault = createLazySection(
 );
 
 export const LazyMultiProviderAI = createLazySection(
-  () => import("@/components/feature-sections/MultiProviderAI"),
+  () => import("@/components/feature-sections/models-router"),
   SectionSkeleton,
   { ssr: false },
 );
 
 export const LazyObservabilityDeck = createLazySection(
-  () => import("@/components/feature-sections/ObservabilityDeck"),
+  () => import("@/components/feature-sections/observe-record"),
   SectionSkeleton,
   { ssr: false },
 );
@@ -45,7 +45,7 @@ export const LazyLab = createLazySection(
 );
 
 export const LazyPlugins = createLazySection(
-  () => import("@/components/feature-sections/Plugins"),
+  () => import("@/components/feature-sections/plugins-bay"),
   SectionSkeleton,
   { ssr: false },
 );

@@ -18,21 +18,21 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 2. **Enrichment.** The store keeps `rawExecutions` normalized (no persona metadata); `useEnrichedExecutions()` (`executionStore.ts:166`) joins them against the persona store via a memoized selector, so personas loading after executions still resolve names/icons/colors without a race.
 3. **Filtering + paging.** A local `filter` state ("all" / running / completed / failed / cancelled) drives a `useMemo` (`page.tsx:49`); "running" intentionally matches **running OR queued**. `visibleCount` starts at 200 and grows by 200 via the "Load more" button (`page.tsx:161`). Changing the filter resets the page size (`page.tsx:64`).
 4. **Table render.** `DataTable` (generic, reused) renders columns built by `buildExecutionColumns` and a colored left-border per status via `executionRowClassName`. Row click sets `selected` and opens the modal; `DataTable`'s `expandable` path is unused here (executions use `onRowClick` instead).
-5. **Detail modal.** `ExecutionDetailModal` shows KPIs + error, then mounts `ExecutionOutput` keyed by `execution.id`.
+5. **Detail modal.** `ExecutionDetailModal` shows KPIs + error, then mounts `ExecutionOutput` keyed by `execution.id`. It also renders two plain `personas://execution/<id>` and `personas://persona/<id>` anchors (built by `src/lib/deepLinks/desktopLinks.ts`) that open the run or its persona in the desktop app; they are hidden at phone width and when `authStore.isDemo`.
 6. **Output streaming (via polling).** `ExecutionOutput` calls `useExecutionPolling(executionId)` (`useExecutionPolling.ts:20`), which polls `api.getExecution(id, offset)` every 1s, appending only new lines (offset-based), capping at 500 lines, and auto-stopping once status is terminal. The viewer auto-follows the bottom unless the user scrolls up, exposing a "Jump to latest" pill.
-7. **Cancel.** Per-row cancel calls `executionStore.cancelExecution` (`executionStore.ts:110`), which is client-idempotent (skips if already in-flight or terminal), optimistically flips status to "cancelled", and recomputes `activeCount`.
+7. **Cancel.** Per-row cancel calls `executionStore.cancelExecution` (`executionStore.ts:110`), which is client-idempotent (skips if already in-flight or terminal) and passes the run's persona to `api.cancelExecution(id, personaId)`. On the orchestrator plane the answer is the effect (`ExecutionAck`) and the row flips to "cancelled" at once. On a command plane (demo, live sync) the answer is a `CommandAck` (PHASE2-SPEC.md 6.2): the row keeps its "cancelling" state until `settleCommand` reports the `cancel_execution` command terminal, flips only on `completed`, and surfaces the desktop's reason in the error banner otherwise. In demo the scripted desktop (`mockCommandPlane`) completes it in 2 s and writes the cancelled run through to `MOCK_EXECUTIONS`, so the 3 s poll no longer reverts it.
 8. **SSE proxy (real, separate path).** `GET /api/executions/[id]/stream` (`route.ts:9`) builds the orchestrator URL, injects the team API key server-side (EventSource can't send headers), forwards an optional `x-user-token`, and pipes `upstream.body` back with `text/event-stream` headers. It maps client aborts to 499, upstream failures to a JSON 502, and clamps out-of-range upstream statuses to avoid a 500-driven reconnect storm.
 
 ## Key files
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/executions/page.tsx` | Page: list load, poll gating, filter/paging state, modal selection |
-| `src/app/dashboard/executions/executions-page/ExecutionsFilters.tsx` | Status filter pills (wraps shared `FilterBar`) + loading spinner |
-| `src/app/dashboard/executions/executions-page/buildExecutionColumns.tsx` | Column defs + per-status row border class + cancel button |
-| `src/app/dashboard/executions/executions-page/ExecutionsEmptyState.tsx` | Empty vs. filtered-empty states (distinct copy + "show all" action) |
-| `src/app/dashboard/executions/executions-page/ExecutionDetailModal.tsx` | Detail modal: persona header, KPI strip, error, output viewer |
-| `src/app/dashboard/executions/executions-page/ExecutionOutput.tsx` | Terminal-style output viewer; sticky-bottom auto-follow + jump pill |
+| `src/components/dashboard/views/executions/index.tsx` | Page: list load, poll gating, filter/paging state, modal selection |
+| `src/components/dashboard/views/executions/executions-page/ExecutionsFilters.tsx` | Status filter pills (wraps shared `FilterBar`) + loading spinner |
+| `src/components/dashboard/views/executions/executions-page/buildExecutionColumns.tsx` | Column defs + per-status row border class + cancel button |
+| `src/components/dashboard/views/executions/executions-page/ExecutionsEmptyState.tsx` | Empty vs. filtered-empty states (distinct copy + "show all" action) |
+| `src/components/dashboard/views/executions/executions-page/ExecutionDetailModal.tsx` | Detail modal: persona header, KPI strip, error, output viewer |
+| `src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx` | Terminal-style output viewer; sticky-bottom auto-follow + jump pill |
 | `src/hooks/useExecutionPolling.ts` | Offset-based output polling; stops on terminal status; 500-line cap |
 | `src/hooks/usePolling.ts` | Generic interval poller; visibility-gated; clamps sub-16ms intervals |
 | `src/stores/executionStore.ts` | `rawExecutions`, `activeCount`, fetch/cancel; enrichment selector |
@@ -51,7 +51,7 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 - **Nav badge.** `DashboardNavigation.tsx:72` reads `useExecutionStore(s => s.activeCount)`; the badge equals the active count when `> 0`. `activeCount` is pre-aggregated in the store (`countActive`, `executionStore.ts:53`) precisely so the nav subscribes to a primitive and avoids re-rendering on unrelated list edits.
 - **Persona store.** `useEnrichedExecutions` joins live against `usePersonaStore`, so persona metadata (name/icon/color) self-heals if personas arrive after executions.
 - **Shared dashboard chrome.** `DataTable`, `FilterBar`, `Modal`, `StatusBadge`, `PersonaAvatar`, `EmptyState`, `DashboardErrorBanner`, `GradientText` are all reused here; nothing in those is executions-specific.
-- **Orchestrator.** Real list/detail/cancel go through `orchestratorFetch`; the SSE proxy is the only piece that streams rather than request-responds.
+- **Orchestrator.** Real list/detail/cancel go through `orchestratorFetch`; the SSE proxy is the only piece that streams rather than request-responds. On the supabase plane, cancel is a signed `cancel_execution` command (it was a 501 before phase 2).
 - **i18n.** Strings live under `t.executionsPage.*`, `t.dashboardUi.*` (`stdout`, `jumpToLatest`, `loadMoreExecutions`, `cancelling`, `cancelQueuedRun`), `t.common.*`, and the subtitle borrows `t.observabilityPage.subtitle` (`page.tsx:122`).
 
 ## Conventions & gotchas
@@ -64,7 +64,7 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 - **`dashboardFilterStore` "custom" coercion.** On hydrate, a persisted `dateRange: "custom"` is coerced back to `"7d"` because the custom start/end bounds aren't persisted (`dashboardFilterStore.ts:45`) — otherwise the range would silently widen to all-time. Also, `setDateRange("custom")` **throws** by design (`dashboardFilterStore.ts:88`); callers must use `setCustomRange(start, end)`. (This store is not used by the executions table, but is in scope for this surface.)
 - **SSE route status normalization is load-bearing.** The `Response` constructor throws `RangeError` outside 200–599, so a 1xx or `0` upstream status previously produced a bodyless 500 that EventSource read as "connection died, reconnect now" → infinite reconnect storm. The clamp at `route.ts:64` to `502` is the fix; don't remove it. Likewise, client aborts return **499 with no body** specifically so Sentry isn't polluted with expected `AbortError`s during reconnect churn.
 - **SSE route never surfaces the orchestrator hostname.** Errors return a generic `{ error: "upstream_unreachable" }` and the host is never echoed — preserve that when editing (consistent with the repo's Sentry-PII posture).
-- **Output cap + offset.** `useExecutionPolling` appends only `data.output` (server returns lines past `offset`) and slices to the last 500 (`useExecutionPolling.ts:48`). If the orchestrator ever returns a non-incremental full buffer, lines would duplicate — the contract assumes offset-delta responses.
+- **Output cap + offset.** `useExecutionPolling` appends only `data.output` (server returns lines past `offset`) and slices to the last 500 (`useExecutionPolling.ts:48`). If a backend ever returns a non-incremental full buffer, lines would duplicate — the contract assumes offset-delta responses (`output` = lines past `offset`, `outputLines` = total). The Supabase mirror stores the whole buffer per row, so `supabaseApi.getExecution` slices it at `offset` itself (locked by `src/lib/supabaseApi.test.ts`).
 - **React 19 reset pattern.** `useExecutionPolling` resets its state inside a `queueMicrotask` in an effect (`useExecutionPolling.ts:32`) and `ExecutionOutput` mutates the scroll DOM directly in effects rather than calling `setState`, to stay clear of the React 19 no-setState-in-effect rule. Follow that pattern if extending the viewer.
 - **`usePolling` clamps and warns.** Intervals below 16ms are clamped and a dev warning fires (seconds-vs-ms guard); non-finite intervals disable polling entirely (`usePolling.ts:42`).
 

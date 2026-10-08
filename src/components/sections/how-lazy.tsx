@@ -1,65 +1,46 @@
 "use client";
 
-import { TerminalPanel } from "@/components/primitives";
-import { createLazySection, SectionSkeleton, Ps, Pm } from "./LazySection";
+import { createLazySection, Ps, Pm, P } from "./LazySection";
 
-function EventBusShowcaseSkeleton() {
+/*
+ * The /how sections are desktop stages (styles/stage.css) and the page snaps
+ * one per scroll, so while a chunk loads its skeleton reserves exactly one
+ * stage and carries the stage attribute - a snap point from first paint, and
+ * nothing below shifts when the section mounts. (The shared section skeleton
+ * has a fixed height, which made the page jump as chunks landed.)
+ */
+function StageSkeleton() {
   return (
-    <section className="relative overflow-hidden px-4 sm:px-6 py-24 md:py-32">
-      <div className="relative z-10 mx-auto max-w-6xl">
-        <div className="flex flex-col items-center gap-4">
-          <div className={`h-12 w-3/4 max-w-lg ${Ps} sm:h-14 md:h-16`} />
-          <div className={`h-5 w-2/3 max-w-xl ${Pm}`} />
-          <div className={`h-5 w-1/2 max-w-md ${Pm}`} />
-        </div>
-
-        <div className="relative mx-auto mt-16 max-w-3xl">
-          <TerminalPanel shadow="hero" bodyClassName="p-4 md:p-6">
-            <div className="flex items-center gap-2 mb-4 pb-3 border-b border-glass">
-              <div className="flex gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-white/6" />
-                <div className="h-2 w-2 rounded-full bg-white/6" />
-                <div className="h-2 w-2 rounded-full bg-white/6" />
-              </div>
-              <div className="h-2.5 w-24 rounded bg-white/4 ml-2" />
-            </div>
-
-            <div className={`min-h-65 w-full sm:min-h-90 ${Pm}`} />
-          </TerminalPanel>
-
-          <div className="pointer-events-none absolute -inset-6 -z-10 rounded-3xl bg-linear-to-br from-brand-cyan/4 via-transparent to-brand-purple/4 blur-2xl" />
-        </div>
-
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6">
-          <div className={`h-4 w-24 ${Pm}`} />
-          <div className={`h-4 w-28 ${Pm}`} />
-          <div className={`h-4 w-32 ${Pm}`} />
-        </div>
+    <section data-stage="fill" data-lazy-placeholder className="relative px-6 py-24 md:py-32">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-4 stage:flex-1">
+        <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
+        <div className={`h-4 w-1/2 max-w-sm ${Pm}`} />
+        <div className={`mt-8 h-40 w-full max-w-4xl stage:h-auto stage:flex-1 ${P}`} />
       </div>
     </section>
   );
 }
 
 export const LazyEventBusShowcase = createLazySection(
-  () => import("@/components/sections/event-bus-showcase"),
-  EventBusShowcaseSkeleton,
+  () => import("@/components/sections/event-hub"),
+  StageSkeleton,
   { ssr: false },
 );
 
 export const LazyAgentsTimeline = createLazySection(
-  () => import("@/components/sections/agents-timeline"),
-  SectionSkeleton,
+  () => import("@/components/sections/agents-race"),
+  StageSkeleton,
   { ssr: false },
 );
 
 export const LazyAgentsChat = createLazySection(
-  () => import("@/components/sections/agents-chat"),
-  SectionSkeleton,
+  () => import("@/components/sections/agents-chat-split"),
+  StageSkeleton,
   { ssr: false },
 );
 
 export const LazyPlatformLayers = createLazySection(
-  () => import("@/components/sections/platform-layers"),
-  SectionSkeleton,
+  () => import("@/components/sections/growth-dial"),
+  StageSkeleton,
   { ssr: false },
 );

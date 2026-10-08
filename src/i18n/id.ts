@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const id: Translations = {
+export const id: LocaleTranslations = {
     notFound: {
       title: "Halaman tidak ditemukan",
       description: "Halaman yang Anda cari tidak ada atau telah dipindahkan. Coba salah satu dari ini:",
@@ -89,7 +89,7 @@ export const id: Translations = {
             "Keyring asli OS",
             "OAuth dengan bantuan AI",
             "Penyegaran token otomatis",
-            "Tanpa telemetri, mengutamakan lokal"
+            "Mengutamakan lokal, hanya telemetri anonim"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const id: Translations = {
     },
     hero: {
       downloadCta: "Unduh",
-      trustLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
+      trustLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda.",
       badge: "Platform Agen AI",
       headingLine1: "Agen cerdas",
       headingLine2: "yang bekerja untuk Anda",
@@ -186,8 +186,7 @@ export const id: Translations = {
       checking: "Memeriksa\u2026",
       connected: "Terhubung",
       disconnected: "Terputus",
-      demo: "Demo",
-      viewFullSite: "Lihat situs lengkap"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "Satu persona,",
@@ -365,8 +364,8 @@ export const id: Translations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Apakah Personas mengumpulkan telemetri atau data penggunaan?",
+          a: "Hanya diagnostik anonim. Build rilis aplikasi desktop mengirim laporan kesalahan dan sinyal penggunaan anonim (sesi aplikasi, bagian yang Anda buka, tindakan utama) ke Sentry. Alamat IP, email, dan nama pengguna dihapus terlebih dahulu, dan prompt, konfigurasi agen, kredensial, serta log eksekusi Anda tidak pernah disertakan. Anda dapat mematikan sinyal penggunaan di Pengaturan > Akun."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +389,7 @@ export const id: Translations = {
       exploreFirst: "Jelajahi kemampuan dulu",
       requiresCli: "Memerlukan Claude Code",
       installerSize: "Installer 12 MB",
-      noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda. Nol telemetri.",
+      noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"
@@ -406,6 +405,15 @@ export const id: Translations = {
       knowledge: "Pengetahuan",
       settings: "Pengaturan",
       leaderboard: "Papan Peringkat",
+      personas: "Persona",
+      missionControl: "Pusat Kendali",
+      navSectionsLabel: "Bagian dasbor",
+      navGroups: {
+        mission: "Misi",
+        monitoring: "Pemantauan",
+        reliability: "Keandalan",
+        memory: "Memori"
+      },
       director: "Sutradara",
       sla: "SLA",
       incidents: "Insiden",
@@ -476,6 +484,99 @@ export const id: Translations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Data mencakup 14 hari terakhir",
+          hint: "Tekan 1 sampai 8 untuk membuka dimensi, Esc untuk kembali",
+          wallLabel: "Dimensi armada",
+          openDimension: "Buka {label}",
+          backToWall: "Kembali ke ikhtisar",
+          railLabel: "Semua dimensi",
+          verdicts: {
+            pending: "Mengukur",
+            failed: "Tidak tersedia",
+            unmeasured: "Belum diukur",
+            ok: "Stabil",
+            watch: "Pantau",
+            yours: "Menunggu Anda",
+            act: "Perlu tindakan Anda"
+          },
+          dims: {
+            outcomes: {
+              label: "Hasil",
+              question: "Apakah eksekusi berhasil?"
+            },
+            agents: {
+              label: "Agen",
+              question: "Adakah agen yang bermasalah?"
+            },
+            queue: {
+              label: "Menunggu Anda",
+              question: "Apa yang perlu Anda tangani?"
+            },
+            recovery: {
+              label: "Pemulihan mandiri",
+              question: "Apakah armada memulihkan dirinya sendiri?"
+            },
+            spend: {
+              label: "Pengeluaran",
+              question: "Apakah pengeluaran wajar?"
+            },
+            autonomy: {
+              label: "Otonomi",
+              question: "Apa yang berjalan tanpa Anda?"
+            },
+            vault: {
+              label: "Brankas",
+              question: "Apakah kredensial aman?"
+            },
+            instruments: {
+              label: "Instrumen",
+              question: "Apakah halaman ini mutakhir?"
+            }
+          },
+          evidence: {
+            outcomes: "Eksekusi {runs} · gagal {failed}",
+            noRuns: "Tidak ada eksekusi dalam periode ini",
+            agents: "Gangguan {critical} · menurun {degraded} · normal {healthy}",
+            queue: "Peringatan {alerts} · tinjauan {reviews} · memori {memory} · belum dibaca {reports}",
+            queueEmpty: "Tidak ada yang menunggu Anda",
+            recovery: "Terbuka {open} · dijeda {paused} · diperbaiki otomatis {fixed}",
+            spendSpikes: "Lonjakan biaya: {n}",
+            spendPerDay: "{value} per hari",
+            autonomy: "Terjadwal {n} · berikutnya dalam {time}",
+            autonomyEmpty: "Tidak ada yang terjadwal",
+            vault: "Terlambat {overdue} · anomali {anomalies} · event {events}",
+            instruments: "Sumber gagal: {failed}",
+            instrumentsOk: "Semua sumber merespons",
+            pending: "Menunggu pembacaan pertama",
+            unmeasured: "Belum ada sumber tersinkron untuk ini"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Masalah pemulihan",
+            issuesEmpty: "Tidak ada masalah pemulihan dalam periode ini.",
+            issueStatus: {
+              open: "Terbuka",
+              auto_fixed: "Diperbaiki otomatis",
+              resolved: "Selesai"
+            },
+            pausedBadge: "Dijeda",
+            costTitle: "Biaya per hari",
+            costSpike: "Lonjakan biaya",
+            sourcesTitle: "Sumber",
+            sourceStatus: {
+              pending: "Menunggu",
+              ok: "Merespons",
+              failed: "Gagal"
+            },
+            sources: {
+              observability: "Observabilitas",
+              healing: "Masalah pemulihan",
+              reviews: "Tinjauan",
+              routines: "Rutinitas"
+            }
+          }
+        },
         vitals: {
           runs: "Eksekusi",
           alerts: "Peringatan"
@@ -667,7 +768,9 @@ export const id: Translations = {
       noDataAvailable: "Belum ada data tersedia",
       errors: "Kesalahan",
       totalLower: "total",
-      copyPayload: "Salin payload"
+      copyPayload: "Salin payload",
+      liveUnavailableTitle: "Belum tersedia untuk workspace live",
+      liveUnavailableDescription: "Tampilan ini hanya berjalan dengan data demo. Workspace Anda belum menyinkronkan data ini, jadi tampilan ini tetap kosong alih-alih menampilkan data contoh."
     },
     memoriesPage: {
       title: "Memori",
@@ -1155,6 +1258,8 @@ export const id: Translations = {
       noExecutions: "Belum ada eksekusi",
       noExecutionsDesc: "Jalankan agen untuk melihat hasil di sini",
       waitingForWorker: "Menunggu worker...",
+      openExecutionInDesktop: "Buka eksekusi di aplikasi desktop",
+      openPersonaInDesktop: "Buka persona di aplikasi desktop",
       noOutputYet: "Belum ada output",
       noFilteredActive: "Tidak ada eksekusi aktif dalam tampilan ini",
       noFilteredCompleted: "Tidak ada eksekusi selesai dalam tampilan ini",
@@ -1267,6 +1372,10 @@ export const id: Translations = {
         title: "Notifikasi",
         subtitle: "Peringatan penyembuhan otomatis dan ringkasan",
         weeklyDigest: "Ringkasan kesehatan mingguan",
+        escalation: {
+          label: "Eskalasikan tinjauan yang lewat tenggat",
+          description: "Tinjauan tertunda yang melewati SLA-nya akan dieskalasi. Jika kebijakan menetapkannya, tinjauan justru disetujui otomatis (secara default, tinjauan Info setelah 8 jam)."
+        },
         voice: {
           label: "Umumkan ulasan baru dengan suara",
           preview: "Pratinjau",
@@ -1338,7 +1447,7 @@ export const id: Translations = {
       title: "Templat Agen",
       subtitle: "Jelajahi {count} templat agen siap pakai yang dikelompokkan berdasarkan jenis pekerjaan. Pilih kategori untuk melihat templat di dalamnya.",
       gridHeading: "Jelajahi templat berdasarkan kategori",
-      gridDescription: "Template adalah Personas yang telah dikonfigurasi sebelumnya dan dapat Anda gunakan dengan satu klik. Setiap template sudah memiliki prompt, tools, dan trigger yang siap untuk tugas tertentu \u2014 tanpa perlu pengaturan.",
+      gridDescription: "Template adalah konfigurasi referensi untuk tugas tertentu. Setiap template menunjukkan prompt, tools, dan trigger yang dibutuhkan agen. Untuk menggunakannya, instal aplikasi desktop Personas dan atur template di sana dengan akun Anda sendiri.",
       changeCategory: "Ganti kategori",
       complexityAll: "Semua",
       complexityBasic: "Dasar",
@@ -1361,16 +1470,22 @@ export const id: Translations = {
       copyFailed: "Gagal menyalin",
       copyConfiguration: "Salin konfigurasi",
       getStartedTitle: "Mulai dengan template ini",
-      getStartedDescription: "Impor template ini langsung ke Personas, atau salin konfigurasinya untuk Anda sesuaikan sendiri.",
-      openInPersonas: "Buka di Personas",
+      getStartedDescription: "Unduh aplikasi desktop Personas untuk membuat agen seperti ini, atau salin konfigurasinya sebagai titik awal.",
+      useTemplate: "Gunakan template ini",
       moreTemplates: "Template {category} lainnya",
-      appNotFoundTitle: "Aplikasi Personas tidak ditemukan",
-      appNotFoundDescription: "Sepertinya Personas belum terpasang di perangkat Anda. Unduh untuk mengimpor template langsung, atau salin konfigurasi untuk menyiapkannya secara manual.",
+      installTitle: "Dapatkan Personas untuk memakai template ini",
+      installDescription: "Template disiapkan di aplikasi desktop Personas, bukan di browser. Unduh aplikasinya untuk membuat agen seperti ini, atau salin konfigurasinya sebagai titik awal.",
       templateNotFound: "Template tidak ditemukan",
       templateNotFoundDescription: "Template ini tidak ada atau telah dihentikan. Jelajahi galeri untuk koleksi terbaru.",
       browseTemplates: "Jelajahi template",
       backToHome: "Kembali ke beranda",
       customTrigger: "Pemicu kustom"
+    },
+    connectorModal: {
+      simulatedLabel: "Contoh simulasi \u00b7 tidak ada yang dijalankan",
+      connecting: "Menghubungkan ke {label}\u2026",
+      working: "Mengerjakan: {task}",
+      done: "Selesai: {task}"
     },
     roadmapSection: {
       inProgress: "Sedang Berjalan",
@@ -1462,10 +1577,6 @@ export const id: Translations = {
         macos: {
           title: "Dukungan macOS",
           description: "Build macOS native sepenuhnya dengan optimasi Apple Silicon, integrasi Spotlight, dan kontrol agen dari menu bar."
-        },
-        i18n: {
-          title: "Internasionalisasi",
-          description: "Instruksi agen multibahasa, antarmuka terlokalisasi, dan penjadwalan yang sadar wilayah untuk tim di seluruh dunia."
         },
         dashboard: {
           title: "Dasbor Web",
@@ -1697,7 +1808,6 @@ export const id: Translations = {
       features5: "Agen hebat jarang benar pada percobaan pertama, jadi Lab adalah tempat Anda menyempurnakannya. Mengobrollah dengan persona untuk melatihnya, adu dua versi di arena, kembangkan lintas generasi, atau beri skor pada dimensi yang penting. Setiap peningkatan yang Anda simpan terversi dan dapat dikembalikan.",
       features6: "Personas hadir dengan enam plugin yang dibuat khusus, masing-masing ruang kerja mandiri yang dapat dijalankan agen Anda. Ambil Dev Tools: ia mengubah persona menjadi rekan koding yang menjalankan tugas, membaca keluaran, dan berulang. Ganti tab dan Anda bertemu spesialis lain \u2014 semuanya berbagi kredensial dan memori yang sama.",
       dashboardHome: "Selamat datang di pusat kendali \u2014 seluruh armada Anda dalam satu layar. Di atas, tanda-tanda vital: tingkat keberhasilan, proses yang berjalan, agen aktif, peringatan terbuka, dan tinjauan yang menanti Anda. Di bawahnya, pengoptimal menampilkan satu perbaikan berdampak besar pada satu waktu \u2014 saat ini, perubahan perutean yang memangkas biaya tanpa menyentuh kualitas. Dua panel di bawahnya melacak kesehatan tiap agen dan memori baru yang telah mereka pelajari dan ingin dipromosikan. Lalu gambaran langsung: setiap eksekusi saat tiba di kiri, empat belas hari lalu lintas dan kesalahan di kanan. Peta panas menampilkan proses per agen, hari demi hari, dan baris bawah melengkapinya \u2014 agen terbaik Anda, rutinitas terjadwal berikutnya, dan setiap rotasi kredensial. Satu halaman, seluruh operasi.",
-      dashboardAgents: "Ini daftar tim Anda. Setiap kartu adalah persona \u2014 satu agen dengan satu identitas dan seperangkat keterampilan yang bisa dipadukan. Potretnya dibuat agar sesuai dengan karakternya; di bawahnya, statistik langsung: tingkat keberhasilan, proses, dan pengeluaran. Tekan Jalankan untuk menjalankan satu sesuai permintaan, atau buka Detail untuk memeriksa konfigurasi dan riwayat terbarunya. Lima agen di sini, masing-masing diam-diam menjalankan satu tugasnya dengan baik.",
       dashboardExecutions: "Setiap proses yang pernah dijalankan armada ada di sini, terbaru lebih dulu. Tabel menampilkan persona, status, durasi, biaya, dan waktu mulai \u2014 saring hanya yang gagal, atau yang masih berjalan. Klik baris mana pun dan eksekusi lengkap terbuka: strip metrik, penjelasan kesalahan apa pun, dan keluaran langsung yang mengalir baris demi baris, persis seperti yang dihasilkan agen.",
       dashboardEvents: "Agen tidak bekerja sendirian \u2014 mereka bereaksi terhadap peristiwa. Ini bus peristiwa: setiap sinyal yang mengalir melalui sistem, dari jadwal dan webhook hingga pesan antar-agen. Setiap baris menampilkan jenis peristiwa, sumbernya, status, dan berapa lama sejak terpicu. Peristiwa yang gagal dapat dicoba lagi di tempat, dan peristiwa terkait saling terangkai sehingga Anda dapat mengikuti satu kaskade dari ujung ke ujung.",
       dashboardReviews: "Beberapa keputusan membutuhkan manusia. Ketika agen menemui sesuatu yang tidak boleh diputuskannya sendiri, ia berhenti dan mengalihkan keputusan itu ke sini. Setiap item memuat persona, konteks, dan tindakan yang diusulkannya \u2014 setujui, tolak, atau lewati untuk nanti, dengan klik atau keyboard. Tidak ada yang berisiko diluncurkan tanpa persetujuan Anda, dan antrean menjaga sisa armada tetap berjalan selagi Anda memutuskan.",
@@ -2307,5 +2417,123 @@ export const id: Translations = {
         devTools: "Armada agen paralel, proyek, triase",
         brain: "Vault Anda, siap untuk agen"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Situs ini tidak memasang cookie miliknya sendiri. Situs ini menyimpan beberapa pengaturan di penyimpanan lokal browser Anda dan, jika Anda menautkan ponsel, sebuah kunci tanda tangan di database browser ponsel tersebut. Setiap item tercantum di bawah.",
+        "Tanpa iklan, pelacakan lintas situs, atau sidik jari digital dalam bentuk apa pun.",
+        "Anda dapat menghapus semuanya kapan saja di pengaturan browser."
+      ],
+      lastUpdated: "Terakhir diperbarui: {date}",
+      approachHeading: "Pendekatan kami terhadap cookie dan penyimpanan",
+      approachBody: "Kami hanya menyimpan apa yang dibutuhkan situs. Menurut aturan UE, penyimpanan browser seperti penyimpanan lokal diperlakukan sama dengan cookie, jadi daftar di bawah mencakup keduanya. Kami tidak menggunakan cookie iklan, piksel pelacak, atau sidik jari digital.",
+      registerHeading: "Apa yang kami simpan di perangkat Anda",
+      registerIntro: "Semua cookie dan kunci penyimpanan yang ditulis situs ini, dikelompokkan menurut tujuannya. Nama yang diakhiri * mewakili sekelompok kunci, misalnya satu untuk setiap kebijakan atau daftar periksa.",
+      categories: {
+        necessary: {
+          title: "Sangat diperlukan",
+          description: "Dibutuhkan agar situs dapat melakukan apa yang Anda minta. Selalu aktif."
+        },
+        preferences: {
+          title: "Preferensi",
+          description: "Mengingat pilihan Anda, agar situs tampil dan berperilaku sesuai pengaturan Anda."
+        },
+        functional: {
+          title: "Fungsional",
+          description: "Menjaga fitur tetap berjalan antarkunjungan: kemajuan Anda, apa yang sudah Anda lihat, dan suara Anda."
+        },
+        analytics: {
+          title: "Analitik",
+          description: "Tidak ada yang disimpan untuk analitik. Jika Anda memilih \"Terima Semua\" di banner cookie, situs menghitung tampilan halaman dan beberapa tindakan utama secara anonim, tanpa menulis apa pun ke perangkat Anda. Jika Anda memilih \"Hanya yang Penting\", tidak ada yang dihitung."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "Penyimpanan lokal",
+        indexedDB: "Database browser (IndexedDB)"
+      },
+      lifetimes: {
+        oneYear: "1 tahun",
+        untilCleared: "Sampai Anda menghapusnya",
+        untilSignOut: "Sampai Anda keluar",
+        untilUnpaired: "Sampai Anda melepas tautan ponsel atau menghapus data situs"
+      },
+      purposes: {
+        consent: "Mengingat pilihan Anda di banner cookie.",
+        authSession: "Menjaga Anda tetap masuk ke dasbor. Ditulis oleh Supabase, penyedia login kami, dan hanya jika Anda masuk.",
+        theme: "Mengingat tema warna yang Anda pilih.",
+        language: "Mengingat bahasa yang Anda pilih.",
+        tourVolume: "Mengingat volume narasi tur terpandu.",
+        dashboardPrefs: "Mengingat tampilan, filter, dan pengaturan dasbor Anda, seperti eskalasi tinjauan dan baca dengan suara.",
+        tourSeen: "Mengingat bahwa Anda sudah melihat tur terpandu, agar tidak ditawarkan lagi.",
+        policySeen: "Mengingat kapan terakhir kali Anda membaca setiap kebijakan di halaman ini, agar pembaruan dapat ditandai.",
+        dashboardActivity: "Mengingat kapan terakhir kali Anda membuka dasbor dan berapa kali sebuah peristiwa demo dicoba ulang.",
+        checklist: "Mengingat item daftar periksa panduan mana yang sudah Anda centang.",
+        voting: "ID acak yang memungkinkan Anda memberi suara sekali per fitur, dan nama panggilan acak (seperti SwiftFox) yang ditampilkan pada komentar Anda. Keduanya dikirim bersama suara dan komentar Anda, dan tidak satu pun berisi informasi pribadi.",
+        pairedPhoneKey: "Hanya di ponsel yang Anda tautkan dengan aplikasi desktop: kunci tanda tangan yang dibuat oleh browser dan tidak dapat diekspor, ID untuk ponsel ini, ID komputer yang ditautkan dengannya, dan waktu penautannya. Kunci ini menandatangani perintah yang dikirim ponsel ini, sehingga komputer Anda dapat memeriksa bahwa perintah itu memang berasal darinya."
+      },
+      notUsedHeading: "Yang tidak kami gunakan",
+      notUsed: [
+        "Tidak ada cookie iklan atau pemasaran ulang",
+        "Tidak ada pelacakan lintas situs",
+        "Tidak ada piksel pelacak media sosial",
+        "Tidak ada cookie analitik atau penyimpanan analitik"
+      ],
+      thirdPartyHeading: "Cookie pihak ketiga",
+      thirdPartyBody: "Jika Anda masuk, Anda melewati Supabase, penyedia login kami, dan penyedia akun pilihan Anda, seperti Google. Mereka dapat memasang cookie di domain mereka sendiri selama proses masuk, sesuai kebijakan mereka sendiri. Kami tidak menggunakan cookie tersebut untuk pelacakan.",
+      managingHeading: "Mengelola cookie dan penyimpanan",
+      managingBody: "Anda dapat menghapus atau memblokir cookie dan data situs di pengaturan browser kapan saja. Menghapusnya akan membuat Anda keluar dan mengatur ulang preferensi Anda. Untuk pertanyaan, hubungi {email}.",
+      manageButton: "Kelola preferensi cookie"
+    },
+    privacyPolicy: {
+      tldr: [
+        "Personas menjalankan agen Anda di komputer Anda dan menyimpannya di sana, bersama riwayat eksekusi, catatan, dan obrolan Anda. Prompt Anda hanya dikirim ke penyedia AI yang Anda pilih.",
+        "Sinkronisasi cloud bersifat opsional dan mati sampai Anda menyalakannya. Fitur ini menyalin agen dan eksekusinya ke akun Anda agar Anda dapat melihatnya di web. Catatan dan obrolan hanya disinkronkan jika Anda juga menyalakan tombol masing-masing.",
+        "Ponsel yang Anda tautkan dapat menjalankan, menjeda, melanjutkan, dan menghentikan agen Anda, menyetujui atau menolak tinjauan mereka, serta mengobrol dengan agen Anda dan Athena tanpa satu klik pun di komputer. Anda dapat mencabutnya kapan saja.",
+        "Kunci API dienkripsi dengan AES-256 dan tidak pernah meninggalkan mesin Anda, bahkan saat sinkronisasi cloud menyala.",
+        "Selain yang Anda pilih untuk disinkronkan, aplikasi desktop hanya mengirimkan laporan kesalahan dan sinyal penggunaan anonim kepada kami, dan sebagian besar dapat Anda matikan.",
+        "Kami hanya mengumpulkan email Anda jika Anda masuk untuk menggunakan fitur cloud.",
+        "Anda dapat mengekspor atau menghapus semuanya kapan saja. Cukup minta."
+      ],
+      lastUpdated: "Terakhir diperbarui: {date}",
+      commitmentHeading: "Komitmen kami terhadap privasi",
+      commitmentBody: "Personas dibangun di atas prinsip sederhana: data Anda milik Anda. Aplikasi desktop kami mengutamakan lokal. Kecuali Anda menyalakan sinkronisasi cloud, agen, prompt, output, dan kredensial Anda tidak pernah dikirim kepada kami, dan satu-satunya data yang dikirim aplikasi kepada kami adalah diagnostik anonim yang dijelaskan di bawah. Kredensial Anda tidak pernah dikirim kepada kami, bahkan saat sinkronisasi cloud menyala.",
+      desktopHeading: "Apa yang disimpan aplikasi desktop",
+      desktopBody: "Semua yang dibuat aplikasi desktop Personas (agen, pipeline, riwayat eksekusi, catatan, percakapan, dan konfigurasi Anda) berada di komputer Anda. Tidak ada yang dikirim ke server kami kecuali Anda menyalakan sinkronisasi cloud yang dijelaskan di bawah. Saat agen berjalan, prompt-nya langsung dikirim dari komputer Anda ke penyedia AI yang Anda pilih: Claude dari Anthropic, atau model Ollama lokal yang tidak pernah meninggalkan komputer Anda.",
+      telemetryHeading: "Laporan kesalahan dan sinyal penggunaan aplikasi desktop",
+      telemetryBody: "Build rilis aplikasi desktop mengirimkan laporan kesalahan (pesan kesalahan, stack trace, sistem operasi, arsitektur, dan versi aplikasi) serta sinyal penggunaan anonim (sesi aplikasi, bagian dan tab yang Anda buka, tindakan penting seperti membuat agen, dan pencapaian satu kali) ke Sentry. Sesi dan pencapaian hanya dikaitkan dengan ID perangkat atau ID instalasi acak. Alamat IP, alamat email, nama pengguna, serta isi dan header permintaan dihapus sebelum apa pun dikirim. Tidak ada jejak performa, tidak ada rekaman sesi, dan tidak ada identitas pengguna, dan prompt, konten persona, serta kredensial Anda tidak pernah disertakan.",
+      telemetryControls: "Anda dapat mematikan sinyal penggunaan dan laporan kesalahan antarmuka aplikasi saat pertama kali dibuka atau kapan saja di Pengaturan > Akun. Laporan crash dari inti native aplikasi belum dicakup oleh tombol itu. Build pengembangan dan build yang Anda kompilasi sendiri dari kode sumber tidak mengirim apa pun.",
+      credentialsHeading: "Cara kredensial dilindungi",
+      credentialsBody: "Kunci API dan rahasia yang Anda tambahkan ke Personas dienkripsi saat disimpan menggunakan AES-256-GCM dan disimpan di keyring sistem operasi Anda. Semuanya tidak pernah meninggalkan perangkat Anda, bahkan saat Anda menggunakan sinkronisasi cloud atau ponsel yang tertaut.",
+      syncHeading: "Sinkronisasi cloud opsional",
+      syncIntro: "Sinkronisasi cloud mati sampai Anda masuk dan menyalakannya di Pengaturan aplikasi desktop. Fitur ini memungkinkan Anda memantau agen di situs web Personas, termasuk dari ponsel. Selama menyala, aplikasi menyalin hal berikut ke akun Anda: agen Anda (termasuk nama, deskripsi, dan instruksinya), eksekusinya (termasuk input, output, biaya, dan kesalahan), event, item yang menunggu tinjauan Anda, pesan yang dikirim agen kepada Anda, memori, pola yang dipelajari, masalah kesehatan, waktu jadwal, antrean eksekusi, dan total harian. Nilai yang tampak seperti rahasia dihapus dari data event sebelum dikirim.",
+      syncNever: "Tidak pernah disinkronkan: kunci API, kata sandi, dan kredensial lain, maupun pengaturan pemicu seperti konfigurasi webhook.",
+      syncOptIns: "Dua jenis data lain hanya disinkronkan jika Anda juga menyalakan tombol masing-masing di Pengaturan yang sama: \"Sinkronkan catatan\" dan \"Sinkronkan obrolan\". Keduanya mati di awal, bahkan jika sinkronisasi cloud sudah menyala.",
+      syncNotes: "\"Sinkronkan catatan\" menyalin tujuan Anda dari Notepad: judul, teks, status, dan nama proyek setiap catatan (tidak pernah folder proyek di komputer Anda), serta ringkasan singkat hasilnya. Catatan yang diarsipkan tidak disinkronkan.",
+      syncChats: "\"Sinkronkan obrolan\" menyalin percakapan Anda dengan Athena dan dengan agen Anda, agar Anda dapat membacanya dan melanjutkannya dari ponsel: judul setiap percakapan aktif, serta pesan Anda dan balasan mulai dari 90 hari sebelum Anda menyalakannya. Balasan dapat mengutip apa yang dibaca agen Anda melalui aplikasi yang Anda hubungkan. Pesan sistem, pesan alat, ringkasan percakapan, memori kerja agen, dan percakapan yang diarsipkan tidak pernah disinkronkan.",
+      syncMasking: "Sebelum teks catatan atau obrolan meninggalkan komputer Anda, apa pun yang tampak seperti kunci, token, atau kata sandi akan disamarkan, dan teks panjang dipotong: judul pada 1 KB, teks catatan pada 16 KB, dan setiap pesan obrolan pada 32 KB.",
+      syncDeletion: "Mematikan \"Sinkronkan catatan\" atau \"Sinkronkan obrolan\" akan menghapus catatan atau obrolan yang disinkronkan komputer ini, pada sinkronisasi berikutnya. Menghapus obrolan dengan agen di komputer Anda juga menghapus salinan yang tersinkron, dan menghapus agen menghapus salinannya yang tersinkron, termasuk obrolannya. Mematikan sinkronisasi cloud itu sendiri menghentikan salinan baru tetapi tidak menghapus apa yang sudah disinkronkan. Kirimi kami email dan kami akan menghapusnya.",
+      syncWhere: "Data yang disinkronkan disimpan di Supabase, penyedia cloud kami, dalam baris yang terkait dengan akun Anda. Aturan akses database hanya mengizinkan akun Anda yang sedang masuk untuk membaca atau mengubah baris tersebut, dari aplikasi desktop atau situs web. Data tidak dienkripsi end-to-end.",
+      phonesHeading: "Ponsel tertaut",
+      phonesIntro: "Selama sinkronisasi cloud menyala, Anda dapat menautkan ponsel dengan memindai kode yang ditampilkan di Pengaturan aplikasi desktop. Dari situs web Personas, ponsel yang tertaut dapat menjalankan, menjeda, dan melanjutkan agen Anda, menghentikan eksekusi, menyetujui atau menolak tinjauan yang menunggu Anda, dan mengobrol dengan Athena atau dengan agen mana pun milik Anda, termasuk yang sedang dijeda (hanya saat \"Sinkronkan obrolan\" menyala). Komputer Anda menjalankannya tanpa bertanya lebih dulu, dan eksekusi, balasan, serta pekerjaan yang disetujui dari ponsel menggunakan paket Claude Anda. Perintah hanya sampai ke komputer saat komputer menyala dan online. Perintah yang tidak sampai dalam satu menit akan kedaluwarsa, bukan menunggu.",
+      phonesLimits: "Ponsel yang tertaut tidak dapat mengedit agen Anda, melihat atau mengubah kredensial Anda, atau mengubah antrean eksekusi tanpa persetujuan Anda di komputer. Tanpa penautan, permintaan dari situs web untuk menjalankan agen akan menunggu sampai Anda menyetujuinya di komputer.",
+      phonesKey: "Saat ditautkan, browser ponsel membuat kunci tanda tangan yang tidak dapat diekspor dan menyimpannya di penyimpanan browser tersebut. Setiap perintah ditandatangani dengannya, dan komputer Anda memeriksa tanda tangan itu terhadap daftar ponsel tertautnya sendiri. Nama ponsel (dari browsernya, misalnya \"iPhone \u00b7 Safari\"), kunci publiknya, serta perintah yang dikirimnya beserta hasilnya disimpan bersama data tersinkron Anda.",
+      phonesRevoke: "Anda dapat mencabut satu ponsel, atau semua ponsel, di Pengaturan aplikasi desktop kapan saja. Pencabutan berlaku dalam hitungan detik, dan eksekusi yang sudah dimulai akan selesai. Anda juga dapat melepas tautan dari ponsel itu sendiri, yang akan menghapus kuncinya di sana.",
+      accountHeading: "Apa yang kami kumpulkan untuk fitur cloud",
+      accountBody: "Jika Anda masuk dengan Google untuk menggunakan fitur cloud, kami menyimpan alamat email dan informasi profil dasar Anda melalui Supabase, penyedia login kami. Jika Anda menyalakan sinkronisasi cloud atau menautkan ponsel, kami juga menyimpan data yang dijelaskan di atas.",
+      analyticsHeading: "Analitik situs web",
+      analyticsBody: "Jika Anda memilih \"{acceptAll}\" di banner cookie, situs web ini menghitung secara anonim tampilan halaman dan beberapa tindakan penting (klik unduhan, pendaftaran daftar tunggu, voting fitur, dan komentar) untuk membantu kami memahami halaman mana yang berguna. Jika Anda memilih \"{essentialOnly}\", tidak ada yang dihitung. Kami tidak melacak pengguna individual, tidak membuat profil iklan, dan tidak menjual data kepada pihak ketiga.",
+      thirdPartyHeading: "Layanan pihak ketiga",
+      thirdPartySupabase: "login, dan penyimpanan cloud untuk data yang Anda pilih untuk disinkronkan",
+      thirdPartySentry: "pelacakan kesalahan dan hitungan anonim di atas pada situs web ini, serta laporan kesalahan dan sinyal penggunaan aplikasi desktop",
+      rightsHeading: "Hak Anda",
+      rightsBody: "Anda dapat meminta akses, koreksi, atau penghapusan data pribadi apa pun yang kami simpan kapan saja, termasuk data tersinkron Anda. Anda juga dapat mengekspor semua data lokal langsung dari aplikasi desktop. Untuk menggunakan hak ini, hubungi kami di {email}."
+    },
+    cookieConsent: {
+      message: "Kami menyimpan beberapa pengaturan di browser Anda agar situs berfungsi. Dengan \"Terima Semua\", kami juga menghitung tampilan halaman dan beberapa tindakan utama secara anonim, tanpa menyimpan apa pun untuk itu. Tanpa iklan, tanpa pelacakan lintas situs.",
+      details: "Detail",
+      essentialOnly: "Hanya yang Penting",
+      acceptAll: "Terima Semua",
+      close: "Tutup dan gunakan yang penting saja"
     }
   };

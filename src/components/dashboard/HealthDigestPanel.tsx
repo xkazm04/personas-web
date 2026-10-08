@@ -114,7 +114,7 @@ export default function HealthDigestPanel() {
           return (
             <motion.div key={agent.name} variants={fadeUp}>
               <Link
-                href="/dashboard/agents"
+                href="/dashboard/personas"
                 className="group flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-white/[0.03] focus-ring focus-visible:ring-offset-0"
               >
               {/* Color dot */}

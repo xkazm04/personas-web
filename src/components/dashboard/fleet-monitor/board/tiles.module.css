@@ -1,0 +1,165 @@
+/* Team bays and agent tiles in the shared four-pile language (attention.ts):
+   working = lit cyan and moving, needs = the loudest thing on screen (solid
+   amber, red when failed or critical), resting = a dim ghost, off = hatched.
+   --at-* are set on the board root from ATTENTION_COLOR, so the colours are
+   the same tokens every prototype uses. */
+
+.bay {
+  position: absolute;
+  border-radius: 14px;
+  background: linear-gradient(180deg, hsl(var(--h) 70% 55% / 0.07), hsl(var(--h) 70% 50% / 0.01) 70%);
+  box-shadow: inset 0 0 0 1px var(--border-glass);
+  transition: left 0.6s var(--ease), top 0.6s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease), box-shadow 0.3s;
+}
+.bayAtt { box-shadow: inset 0 0 0 1px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.5); }
+.hueTick {
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: hsl(var(--h) var(--hue-s) var(--hue-l));
+  box-shadow: 0 0 10px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.6);
+}
+.needCount {
+  background: var(--at-warning);
+  color: color-mix(in oklab, var(--at-warning) 15%, black);
+}
+.needCountCritical { background: var(--at-critical); color: color-mix(in oklab, var(--at-critical) 15%, black); }
+
+.tile {
+  --tone: var(--at-warning);
+  position: absolute;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  border: 1px solid transparent;
+  transition: left 0.7s var(--ease), top 0.7s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease),
+    background-color 0.4s, border-color 0.4s, box-shadow 0.4s, color 0.4s;
+}
+.tile:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 6; }
+.att { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 5; }
+
+/* resting: a ghost that still names itself */
+.resting {
+  background: color-mix(in oklab, var(--foreground) 3%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 11%, transparent);
+  color: var(--muted-dark);
+}
+.queued { border-style: dashed; border-color: color-mix(in oklab, var(--foreground) 22%, transparent); }
+
+/* off: hatched and quieter still */
+.off {
+  background: repeating-linear-gradient(135deg, color-mix(in oklab, var(--foreground) 7%, transparent) 0 2px, transparent 2px 7px);
+  border-color: color-mix(in oklab, var(--foreground) 7%, transparent);
+  color: var(--muted-foreground);
+}
+
+/* working: lit, with its progress rising inside it */
+.working {
+  background: color-mix(in oklab, var(--at-working) 9%, var(--background));
+  border-color: color-mix(in oklab, var(--at-working) 55%, transparent);
+  color: color-mix(in oklab, var(--at-working) 62%, var(--foreground));
+  box-shadow: 0 0 16px color-mix(in oklab, var(--at-working) 16%, transparent);
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 100%;
+  transform: scaleY(var(--p, 0));
+  transition: transform 1.2s var(--ease);
+  background: linear-gradient(0deg, color-mix(in oklab, var(--at-working) 26%, transparent), color-mix(in oklab, var(--at-working) 6%, transparent));
+  pointer-events: none;
+}
+.sweep {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 55%;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--at-working) 18%, transparent), transparent);
+  animation: sweep 3.2s linear infinite;
+  animation-delay: var(--sd, 0s);
+}
+@keyframes sweep { from { transform: translateY(-110%); } to { transform: translateY(200%); } }
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--at-working);
+  box-shadow: 0 0 8px var(--at-working);
+  transition: width 1.2s var(--ease);
+}
+
+/* needs: solid tone, thick halo; the glyph says why */
+.needs {
+  z-index: 2;
+  background: var(--tone);
+  border-color: var(--tone);
+  color: color-mix(in oklab, var(--tone) 14%, black);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--tone) 35%, transparent), 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent);
+}
+.critical { --tone: var(--at-critical); }
+.pulse { animation: halo 2.2s ease-out infinite; }
+@keyframes halo {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--tone) 70%, transparent), 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 9px transparent, 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent); }
+}
+.glyph { font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+
+.mailDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--status-info);
+  box-shadow: 0 0 0 1.5px var(--background);
+}
+.reviewBadge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  font: 700 12px/18px var(--font-sans);
+  text-align: center;
+  background: color-mix(in oklab, black 70%, var(--tone));
+  color: var(--tone);
+}
+
+.rise { animation: rise 0.7s var(--ease) both; animation-delay: var(--ad, 0s); }
+@keyframes rise { from { opacity: 0; translate: 0 12px; } }
+
+/* Team scene cards (L1). */
+.card {
+  --tone: var(--at-warning);
+  position: absolute;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  border: 1px solid var(--border-glass-strong);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--surface) 95%, transparent), color-mix(in oklab, var(--background) 80%, transparent));
+  transition: border-color 0.3s, box-shadow 0.3s, translate 0.35s var(--ease);
+}
+.card:hover,
+.card:focus-visible,
+.cardAtt { border-color: color-mix(in oklab, var(--foreground) 60%, transparent); translate: 0 -3px; }
+.card:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; }
+.cardWorking { border-color: color-mix(in oklab, var(--at-working) 45%, transparent); }
+.cardNeeds { border-color: var(--tone); box-shadow: 0 0 0 1px var(--tone), 0 0 28px color-mix(in oklab, var(--tone) 22%, transparent); }
+.cardOff { background-image: repeating-linear-gradient(135deg, color-mix(in oklab, var(--foreground) 6%, transparent) 0 2px, transparent 2px 8px); }
+.cardGlow {
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.45;
+  background: radial-gradient(circle, color-mix(in oklab, var(--glow) 40%, transparent), transparent 68%);
+}
+.spark i { flex: 1; min-height: 2px; border-radius: 1px; background: hsl(var(--h) var(--hue-s) var(--hue-l) / 0.6); }
+
+.still,
+.still * { animation: none !important; transition-property: opacity, background-color, border-color, box-shadow, color !important; }

@@ -16,11 +16,11 @@ Top to bottom:
 
 **Cross-filtering:** one facet is active at a time (momentum chip, score band, or attention flag); activating another replaces it, re-clicking clears it, and an ✕ clear-chip naming the facet appears in the table header.
 
-The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is flat and stale, NotifyBot is declining into low scores, and ReportGen has never been reviewed.
+The demo story runs on the shared demo fleet (`FLEET`, the same five agents every dashboard page shows), with momentum matching the leaderboard trends: Incident Responder and PR Review Agent are improving, Security Scanner (disabled) is flat and stale, Daily Standup Digest is declining into low scores, and Customer Feedback Analyzer has never been reviewed. `src/lib/mockFleetConsistency.test.ts` holds the roster and verdicts to `FLEET`.
 
 ## How it works
 
-**Data hook — `useDirectorData()`** (`src/app/dashboard/director/useDirectorData.ts`). SWR over the standalone mock fetcher `getDirectorSnapshot()` (`src/lib/mockApi.ts`) — the same demo-only pattern as `useActivityMetrics`: `revalidateOnFocus: false`, 60s dedupe, `retry` = `mutate`. There is no real-mode branch; the Director has no synced source in this repo.
+**Data hook — `useDirectorData()`** (`src/components/dashboard/views/director/useDirectorData.ts`). SWR over the standalone mock fetcher `getDirectorSnapshot()` (`src/lib/mockApi.ts`) — the same demo-only pattern as `useActivityMetrics`: `revalidateOnFocus: false`, 60s dedupe, `retry` = `mutate`. The fetch goes through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`: the Director has no synced source in this repo, so a real (non-demo) session fetches nothing and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) with no staleness pill.
 
 **Mock fixtures** (`src/lib/mock-dashboard-data.ts`, "Director" section): `MOCK_DIRECTOR_PORTFOLIO` (period, total cost, assessed-run breakdown, six score bands, five-agent roster, scope counters, avg score) and `MOCK_DIRECTOR_VERDICTS` (six coaching notes across severities/categories). Roster timestamps are `Date.now()` offsets at module load. Verdict titles and persona names are fixture data shown verbatim (same convention as `MOCK_HEALTH_CHECKS` details).
 
@@ -47,18 +47,18 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/director/page.tsx` | Page shell, facet state, `now` snapshot, skeleton/error handling |
-| `src/app/dashboard/director/useDirectorData.ts` | SWR hook over the mock fetcher |
-| `src/app/dashboard/director/director-page/directorMeta.ts` | Pure score/momentum/attention/facet/sparkline derivations |
-| `src/app/dashboard/director/director-page/DirectorKpiGrid.tsx` | Portfolio scorecard (4 KPI tiles) |
-| `src/app/dashboard/director/director-page/MomentumStrip.tsx` | Improving/flat/declining filter chips |
-| `src/app/dashboard/director/director-page/ValueBreakdownCard.tsx` | Stacked value-outcome bar + legend |
-| `src/app/dashboard/director/director-page/ScoreDistributionCard.tsx` | 0–5 verdict histogram card; defers `ScoreDistributionChart` |
+| `src/components/dashboard/views/director/index.tsx` | Page shell, facet state, `now` snapshot, skeleton/error handling |
+| `src/components/dashboard/views/director/useDirectorData.ts` | Demo-gated SWR hook (`useDemoOnlySWR`) over the mock fetcher |
+| `src/components/dashboard/views/director/director-page/directorMeta.ts` | Pure score/momentum/attention/facet/sparkline derivations |
+| `src/components/dashboard/views/director/director-page/DirectorKpiGrid.tsx` | Portfolio scorecard (4 KPI tiles) |
+| `src/components/dashboard/views/director/director-page/MomentumStrip.tsx` | Improving/flat/declining filter chips |
+| `src/components/dashboard/views/director/director-page/ValueBreakdownCard.tsx` | Stacked value-outcome bar + legend |
+| `src/components/dashboard/views/director/director-page/ScoreDistributionCard.tsx` | 0–5 verdict histogram card; defers `ScoreDistributionChart` |
 | `src/components/dashboard/ScoreDistributionChart.tsx` | The Recharts histogram itself (click-to-filter), lazy-loaded |
-| `src/app/dashboard/director/director-page/CoachingTable.tsx` | Per-agent verdict-history table |
-| `src/app/dashboard/director/director-page/AttentionTriageBar.tsx` | Attention flag chips + clear-chip |
-| `src/app/dashboard/director/director-page/scoreVisuals.tsx` | Score sparkline + delta arrow |
-| `src/app/dashboard/director/director-page/VerdictFeedCard.tsx` | Recent coaching-verdict feed |
+| `src/components/dashboard/views/director/director-page/CoachingTable.tsx` | Per-agent verdict-history table |
+| `src/components/dashboard/views/director/director-page/AttentionTriageBar.tsx` | Attention flag chips + clear-chip |
+| `src/components/dashboard/views/director/director-page/scoreVisuals.tsx` | Score sparkline + delta arrow |
+| `src/components/dashboard/views/director/director-page/VerdictFeedCard.tsx` | Recent coaching-verdict feed |
 | `src/lib/mockApi.ts` | `getDirectorSnapshot()` standalone demo fetcher |
 | `src/lib/mock-dashboard-data.ts` | Director types + `MOCK_DIRECTOR_PORTFOLIO` / `MOCK_DIRECTOR_VERDICTS` |
 
@@ -79,7 +79,7 @@ The demo story: ResearchAgent and CodeReviewer are improving, DataProcessor is f
 
 - **Desktop parity, trimmed:** the desktop Director tab also has period pills (7d/30d/90d), model-efficiency and issues-by-category panels, review actions ("Review all in scope", stale sweep), an add-to-scope modal, per-agent detail modals with full coaching history, Obsidian long-term memory, and the Director's Lab / campaign report. The web demo deliberately renders the read-only scorecard story only; the period label is static ("Last 30 days" from the fixture).
 - **Verdict titles are English fixtures** — data, not UI strings; the same convention as other mock detail text. All labels/hints are i18n.
-- The roster's `lastReviewedAt` offsets are computed at module load, so DataProcessor's 16-day-old review always trips the 14-day stale rule regardless of when the demo runs.
+- The roster's `lastReviewedAt` offsets are computed at module load, so Security Scanner's 16-day-old review always trips the 14-day stale rule regardless of when the demo runs.
 - `attentionFlags` returns `needsReview` *exclusively* — a never-scored agent can't also be stale/low (desktop parity).
 - One facet at a time; there is intentionally no multi-select filtering.
 

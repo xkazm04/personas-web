@@ -1,7 +1,7 @@
 /** Shared SEO constants used across metadata, sitemap, and structured data. */
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://personas.ai";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://personas.so";
 
 export const SITE_NAME = "Personas";
 

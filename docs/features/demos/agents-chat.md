@@ -1,72 +1,128 @@
-# Multi-Agent Chat
-> An auto-cycling marketing demo that races a workflow-bot against an agent-bot through one merged, timestamped transcript — ending in star-rated satisfaction and a "time to outcome" race summary. · **Route:** `/how` section (`#agents-chat`), mounted via `LazyAgentsChat` · **Status:** Live (demo section)
+# Split Screen, One Clock (Agents Chat)
+> One customer message forks into a scripted-bot window and an agent window that answer on one shared clock ruler, ending in outcomes and star ratings · **Route:** `/how` section (`#agents-chat`), mounted via `LazyAgentsChat` · **Status:** Live (demo section)
 
 ## What it does
+On `/how`, this section shows what intelligence buys over rules by sending the **same customer
+message** to two systems and playing both replies on **one clock**:
 
-On the `/how` ("How It Works") page, this section answers "what does *intelligence* buy you over *rules*?" by replaying the **same customer message** through two competing systems on **one shared clock**:
+- The message sits on top in a cyan bubble; two branches (rose and emerald) fork from it to the
+  tops of two chat windows.
+- **Scripted bot** (left, rose, "follows a script") answers in template monospace on square cards
+  with a status rail, hits warnings and errors, and ends "Not resolved" (handed to a person,
+  sent to finance, half done, all undone).
+- **Agent** (right, emerald, "understands the ask") answers in plain speech on soft bubbles,
+  resolves the request sooner, and its window lights with one sweep of light when it does.
+- Between them a **clock spine** ("one clock") shows the running time, a ruler with 5-second
+  marks, a rose tick per scripted reply on the left and an emerald tick per agent reply on the
+  right; the agent's ticks end early with a check.
+- Each window's footer reveals the outcome, the agent's time ("in 4 s") and a 1-5 star
+  customer rating.
 
-- **workflow-bot** (rose) — a deterministic pipeline that misreads ambiguity, hits a `WARNING` / `ERROR`, and hands off to humans (47-minute wait, 3 business days, partial deploy).
-- **agent-bot** (emerald) — a reasoning system that recognizes the intent, resolves it inline, and finishes far sooner.
-
-Four scenarios ship: *Ambiguous Request*, *Split Refund*, *Staging Setup*, *Batch Recovery*. Each plays back like a live terminal: per-lane **typing indicators** bounce, messages stream in chronologically, then both lanes reveal a **resolved / handed-to-humans** badge plus a 1–5 **star rating**. A footer **race summary** draws two proportional time bars and the speed multiple ("agent reached its outcome 3× sooner").
-
-Scenarios **auto-cycle**. A visitor can jump to any scenario via the top chip row or the bottom progress segments, and pause/resume auto-play. Hovering the transcript pauses it; clicking a chip or segment latches it paused.
+Four scenarios (Changed mind, Split refund, Staging setup, Batch recovery) auto-play in turn.
+Pills above the art pick one (the playing pill fills with the story's progress); a round
+pause/play button turns auto-play off and on.
 
 ## How it works
+**Story clock.** `useStoryClock` (`shared/useStoryClock.ts:43`) is a reducer of `{ index, t }`
+where `t` is story seconds since the customer hit send. While `ticking` (`:50`: not still, the
+art visible in a foreground tab via `useIsVisible`, and not finished-while-held) a
+`setInterval` every `TICK_MS` (80 ms, `:14`) dispatches a tick of `0.08 * rate` story seconds
+(`:52-58`). The section passes `rate: 2.4`, `dwell: 7` and a per-scenario `length` of
+`storyEnd(scenario) + OUTRO` (1.6) (`index.tsx:23-33`). The reducer (`:24`) advances to the next
+scenario after `length + dwell` unless `held`; when held it stops at `length`. `select(i)`
+(`:60`) jumps to a scenario and sets `held` (auto-play off); `toggleHeld` flips it back.
+`progress` (`:79`) drives the pill fill.
 
-**Composition.** `AgentsChat` (`index.tsx`) is the only entry. It calls the `useChatSequence()` hook once, bundles the playback snapshot into a `view` object, and renders three things: a `ThemedChip` scenario row, the `ChatTimelineVariant` (the merged "Race Log"), and a `ChatProgressBar` (segments + pause toggle). There is only **one** presentation variant in this section despite the `…Variant` name and the hook's variant-agnostic snapshot type.
+**What is shown is a pure function of `t`.** No child holds a timer:
+- `ChatWindow` (`ChatWindow.tsx:14`) shows the lines whose `at <= t`, a typing indicator when
+  the next line is under 1.1 s away, `done` half a second after its last line, and `lit` when the
+  agent is done (`:38-42`). The transcript is a `flex-col-reverse` box with a faded top edge
+  (`:71`), so once it overflows the newest line pins to the bottom and the window never grows.
+- `Bubble` (`Bubble.tsx:12`) styles a line by side (monospace card vs speech bubble) and tone
+  (`TONE_COLOR`: neutral, thinking, warning, error, success; `shared/scenarios.ts:113`), with
+  its `m:ss` stamp. `Typing` (`:43`) is three dots.
+- `ClockSpine` (`ClockSpine.tsx:12`) maps seconds onto a 20 s ruler (`SPAN`, `:6`); the readout
+  and playhead stop at the scripted bot's last line (`:15`).
+- `Outcome` (`Outcome.tsx:10`) is a reserved-height footer (`:17`) that reveals once `done`.
+- `CustomerFork` (`CustomerFork.tsx:11`) is keyed by scenario index (`index.tsx:43`), so the
+  bubble rise and the branch fade replay on every scenario.
 
-**The playback hook (`use-chat-sequence.ts`).** `useChatSequence()` owns all timing state: `activeIndex`, `wfVisibleCount` / `agVisibleCount` (how many messages of each lane are revealed), `wfTyping` / `agTyping`, `showSatisfaction`, plus `paused` and `hovered`. On every `activeIndex` change, `playScenario()` (deferred via `queueMicrotask`, `use-chat-sequence.ts:81`) clears all timers, resets counts to 0, then schedules — **per message** — a "start typing" timer at `i * interval` and a "show message, stop typing" timer at `i * interval + interval * 0.6`. After the longer lane finishes it schedules the satisfaction reveal at `maxMsgs * interval + SATISFACTION_REVEAL_MS`. `interval` is `MSG_INTERVAL_MS` (800 ms), collapsed to **200 ms** under reduced motion (`:45`). All `setTimeout` handles are tracked in `timerRefs` and cleared on scenario change and unmount.
-
-**Auto-cycle.** A separate effect (`:87-95`) sets one `setTimeout(cycleMs)` to advance `activeIndex` modulo `scenarios.length`. It self-cancels when `paused`, `hovered`, **or** `prefersReduced` is true — so reduced-motion users never auto-advance. `cycleMs` comes from `getScenarioCycleMs()` (`data.ts:7`) = `maxMsgs * interval + SATISFACTION_REVEAL_MS + SATISFACTION_DWELL_MS` (1600 ms dwell), and is also handed to the progress bar so its fill duration matches the cycle exactly.
-
-**Merged transcript (`timeline-utils.ts`).** `buildRaceRows(scenario)` flattens both lanes into one array, parses each `"m:ss"` timestamp to seconds (`parseClock`), and sorts chronologically; ties resolve workflow-first so the slower system reads above the agent at identical clocks. `lastRowIndexOf` / `laneStateAt` compute each row's lane rendering: `"through"` (vertical line continues), `"end"` (terminal node here), or `"none"`. This drives the commit-graph "fork into two lanes" visual in `TimelineRow`.
-
-**Rendering (`ChatTimelineVariant.tsx`).** Inside `TerminalChrome` (title `merged-transcript.log`, status `live`→`complete`), the rows live in a **fixed-height `flex-col-reverse` scroll window** (`:110`) so the newest line pins to the bottom and the card never grows taller as the conversation streams — older lines slide up under a top fade mask. A row is `visible` when its `channelIndex < {wf|ag}VisibleCount`; `TimelineRow` animates `height: 0 → auto` with linear easing. The reserved-height typing strip shows a `TypingIndicator` chip per lane while that lane is typing and not yet done. `TimelineRaceSummary` renders the footer time bars when `showSatisfaction` flips true.
-
-**Star ratings & badges.** `TimelineRow` renders, on each lane's last row once `showSatisfaction` is true, a `resolved`/`handed to humans` pill plus `StarRating` (`satisfaction`/5, emerald if resolved else rose). `StarRating` pops each star with a spring stagger.
+**Layout.** `SectionWrapper fit="fill"` with `ZOOM_TIERS` (`shared/zoom.ts:11`) setting `--cz`
+(1.2 / 1.35 / 1.6, the same height tiers as `data-stage-zoom`); the `figure` is the direct child
+of `data-stage-slot` and fills it with `ZOOM_FILL` (`:15`, slot size divided by `--cz`) while
+`zoom: var(--cz)` scales it back up, so the DOM-built art renders larger on tall monitors and
+still ends exactly at the slot edges. The windows sit in a `md:grid-cols-[1fr_5.5rem_1fr]` grid
+(`index.tsx:44`).
 
 ## Key files
-
 | File | Role |
 | --- | --- |
-| `src/components/sections/agents-chat/index.tsx` | Section entry; calls `useChatSequence()` once, renders chips + variant + progress bar, wires hover/click-pause |
-| `src/components/sections/agents-chat/use-chat-sequence.ts` | Playback hook: per-message typing/reveal timers, satisfaction reveal, auto-cycle, reduced-motion collapse |
-| `src/components/sections/agents-chat/data.ts` | `scenarios[]` (4), timing constants (`MSG_INTERVAL_MS=800`, `SATISFACTION_REVEAL_MS=400`, `SATISFACTION_DWELL_MS=1600`), `getScenarioCycleMs()` |
-| `src/components/sections/agents-chat/types.ts` | `ChatMessage`, `ChatScenario`, `ChatSequenceView` (the playback snapshot) |
-| `src/components/sections/agents-chat/timeline-utils.ts` | `buildRaceRows` (chronological merge), `parseClock`, `lastSeconds`, `lastRowIndexOf`, `laneStateAt` |
-| `src/components/sections/agents-chat/components/ChatTimelineVariant.tsx` | "Race Log" view: terminal chrome, fork origin row, fixed-height reversed scroll log, typing strip |
-| `src/components/sections/agents-chat/components/TimelineRow.tsx` | One merged row: commit-graph lane cells, tone icon/color, end-of-lane badge + `StarRating` |
-| `src/components/sections/agents-chat/components/TimelineRaceSummary.tsx` | Footer "time to outcome" bars (proportional to elapsed seconds) + speed-multiple line |
-| `src/components/sections/agents-chat/components/TypingIndicator.tsx` | Three bouncing dots; static under reduced motion |
-| `src/components/sections/agents-chat/components/StarRating.tsx` | 1–`maxScore` stars + `score/max` label; spring stagger pop-in |
-| `src/components/sections/agents-chat/components/ChatProgressBar.tsx` | Bottom segments (active fills over `cycleMs`), `Chat N of M`, pause/resume toggle |
-| `src/components/sections/how-lazy.tsx:55` | `LazyAgentsChat = createLazySection(() => import("…/agents-chat"), SectionSkeleton, { ssr: false })` |
-| `src/app/how/page.tsx:56` | Mounts `<LazyAgentsChat />` inside a `StageSection` |
+| `src/components/sections/agents-chat-split/index.tsx` | Section entry: clock, intro, `ScenarioBar`, fork, two windows and the spine |
+| `src/components/sections/agents-chat-split/shared/useStoryClock.ts` | Story clock: index + story seconds, visibility/reduced-motion gating, held auto-play |
+| `src/components/sections/agents-chat-split/shared/scenarios.ts` | `SCENARIOS` (line timings, tones, star ratings), `storyEnd`, `clockText`, palette, `TONE_COLOR` |
+| `src/components/sections/agents-chat-split/shared/ScenarioBar.tsx` | Scenario pills with progress fill + auto-play toggle |
+| `src/components/sections/agents-chat-split/shared/zoom.ts` | `ZOOM_TIERS`, `ZOOM_FILL`, `zoomStyle` (height-tier zoom for filling DOM art) |
+| `src/components/sections/agents-chat-split/CustomerFork.tsx` | Customer bubble + forked branches |
+| `src/components/sections/agents-chat-split/ChatWindow.tsx` | One window: header, reversed transcript, typing, outcome footer, resolve sweep |
+| `src/components/sections/agents-chat-split/Bubble.tsx` | One reply (scripted card or agent bubble) + `Typing` dots |
+| `src/components/sections/agents-chat-split/ClockSpine.tsx` | Shared clock: readout, ruler, per-side ticks, agent-done check, playhead |
+| `src/components/sections/agents-chat-split/Outcome.tsx` | Footer: resolved/not resolved, outcome, agent seconds, star rating |
+| `src/components/sections/how-lazy.tsx` (`:55-59`) | `LazyAgentsChat` imports `agents-chat-split` (`ssr: false`, `SectionSkeleton`) |
+| `src/app/how/page.tsx` (`:60-62`) | Mounts it in `StageSection id="agents-chat"` |
 
 ## Data & state
-- **Source:** Static module data only — `scenarios` is a literal array in `data.ts`. No fetch, no Supabase, no orchestrator, no mock-API call. All copy is hardcoded English.
-- **Stores:** None (no Zustand). All state is local to `useChatSequence()` (counts, typing flags, `showSatisfaction`, `activeIndex`, `paused`, `hovered`) held via `useState`/`useRef` and hoisted in `index.tsx` so the variant and progress bar read one source of truth.
-- **API routes:** None.
-- **Types:** `ChatMessage = { sender: "bot" | "system"; text; tone: "neutral"|"warning"|"error"|"success"|"thinking"; timestamp }`. `ChatScenario = { id; name; userMessage; workflow: { messages: ChatMessage[]; satisfaction: number }; agent: { … } }`. `ChatSequenceView` = the playback snapshot passed to the variant (`scenario`, both visible counts, both typing flags, `showSatisfaction`). `RaceRow` / `RaceChannel` / `LaneState` live in `timeline-utils.ts`.
+- **Source:** static. Structure in `SCENARIOS` (`shared/scenarios.ts:36`): per scenario, the
+  `at` second and `tone` of each scripted and agent line, and the two star ratings (scripted
+  1-2, agent 5). Words in `howSectionsCopy.chat` (`src/i18n/en.ts`): `heading`, `gradient`, `lede`,
+  `aria`, labels, and `scenarios[]` (`name`, `message`, `scripted[]`, `agent[]`,
+  `scriptedOutcome`, `agentOutcome`), indexed the same way as `SCENARIOS`; `v1` holds the art
+  label, window modes, clock label, outcome labels and the rating template. No fetch, no API
+  routes.
+- **State:** `useReducer` (`index`, `t`) + `held` in `useStoryClock`. No Zustand.
+- **Leftover fields:** `Scenario.segments`, `Segment`/`Role` and `track` (`scenarios.ts:17-31`)
+  served the prototype round's other two variants; nothing here reads them. `chat.stylised` and
+  `chat.replay` copy is unused too (`clock.replay` exists but has no button).
 
 ## Integration points
-- **`/how` mount.** Registered as `LazyAgentsChat` in `how-lazy.tsx:55` (`ssr: false`, `SectionSkeleton` fallback) and placed in `how/page.tsx:56` inside `<StageSection glow="emerald" fromColor="cyan" toColor="emerald">`. Section anchor `id="agents-chat"`; the page scroll-map exposes it as "AGENTS: CHAT" (`how/page.tsx:19`). This is the **only** place the component renders.
-- **`SectionWrapper`.** The section body sits in `SectionWrapper` (`id="agents-chat"`, English `aria-label`), a `whileInView` `staggerContainer` that reveals children **once** (`viewport={{ once: true }}`). The chip row, transcript wrapper, and `ChatProgressBar` use `variants={fadeUp}` and inherit that one-shot reveal. `ChatTimelineVariant` is mounted on demand and self-drives its own entrance (no inherited variant) — see its header comment (`ChatTimelineVariant.tsx:19-20`).
-- **Shared primitives & libs.** `SectionIntro`, `ThemedChip` (`@/components/primitives`), `TerminalChrome`, `fadeUp` from `src/lib/animations.ts`, and `lucide-react` icons (`User`, `Bot`, `Brain`, `Check`, `X`, `Zap`, `AlertTriangle`, `Timer`, `Star`, `Play`, `Pause`).
-- **Context-map bundling.** In `context-map.json` this is grouped with **Agent Playground**; they are independent components and documented separately. See [Agent Playground](agent-playground.md).
+- **`/how`** - `StageSection id="agents-chat" glow="emerald" fromColor="cyan" toColor="emerald"`
+  (`how/page.tsx:60`); scroll-map item `AGENTS: CHAT` (`:19`). The component's own
+  `SectionWrapper id="agents-chat"` (`index.tsx:38`) carries `aria-label={c.aria}`.
+- **Stage fit** - `fit="fill"`: exactly one viewport under the navbar with the intro at the
+  shared heading height (`src/styles/stage.css`); the art fills `data-stage-slot`.
+- **Shared** - `SectionWrapper`, `SectionIntro`, `useStillMotion`, `useIsVisible`, `BRAND_VAR`
+  (all tints via `color-mix`, so every theme keeps its own values), `lucide-react`.
+- **Sibling** - the outcomes (47 minutes, 3 business days, 6 services broken, all 200 undone)
+  tell the same stories as the race on the section above; see [Off the Rails](agents-timeline.md).
 
 ## Conventions & gotchas
-- **i18n — NOT wired (real gap).** Despite the repo's 14-locale lockstep rule, this entire section is **hardcoded English** with no `useTranslation()` / `t.*` access anywhere under `agents-chat/`. Affected: every scenario string in `data.ts` (`name`, `userMessage`, all message `text`), the `SectionIntro` heading/gradient/description in `index.tsx:46-49`, the section `aria-label` (`:43`), the lane legend / "one clock · two systems" / `customer` / `T+…` labels in `ChatTimelineVariant` + `TimelineRow`, the `resolved` / `handed to humans` / `RESOLVED` / `WARNING` / `ERROR` text, the `TimelineRaceSummary` "Time to outcome" / "agent reached its outcome N× sooner" lines, and the `ChatProgressBar` "Chat N of M" / "Auto-cycling" / "Resume auto-play" strings. Localizing means lifting all of it into `src/i18n/en.ts` and hand-translating into the 13 other locales. Treat any new string here as the same debt.
-- **Reduced-motion gating — solid coverage.** `useChatSequence` reads `useReducedMotion()` and (a) collapses `interval` 800→200 ms so playback isn't a long crawl, and (b) **disables auto-cycle entirely** (`:88`). `TypingIndicator`, `StarRating`, `TimelineRow`, `TimelineRaceSummary`, and `ChatProgressBar` each call `useReducedMotion()` and swap to instant/static variants (no bouncing dots, no spring stars, no width tweens, static progress fill). No `requestAnimationFrame` is used, so the `custom-animation` lint rule isn't in play, but the gating is honored regardless.
-- **Click-latch vs. hover-resume interaction.** Selecting a chip or progress segment calls `setActiveIndex(i)` **and** `setPaused(true)` — picking a scenario latches paused. But the transcript wrapper's `onMouseLeave` sets `hovered=false`, and `hovered` (not `paused`) is what the cycle effect also checks. Because the cycle is suppressed if **`paused` OR `hovered` OR reduced**, a click leaves it paused until the user hits "Resume auto-play" — moving the mouse out does **not** restart it (unlike the sibling Why-Agents section, where leaving resumes). Worth knowing when debugging cycle state.
-- **Fixed-height reversed scroll log is load-bearing.** The `flex-col-reverse` window (`ChatTimelineVariant.tsx:110`) reverses DOM order (first child = visual bottom), which is why `rows.map(...).reverse()` and a trailing `OriginRow` are required, and why the card height never ratchets as messages stream. The typing strip has a reserved `min-h-9` so toggling chips doesn't shift rows. Don't "simplify" the reverse — it's how scroll pins to the newest line natively. The only intentional height change during playback is the `TimelineRaceSummary` expand.
-- **Chronological merge ties.** `buildRaceRows` sorts by parsed seconds, then `channelIndex`, then workflow-before-agent. Several scenarios share identical timestamps across lanes (e.g. both end at `0:04`/`0:06`/`0:12`/`0:16`); the workflow-first tiebreak is deliberate so the failing system reads above the resolving one. Timestamps are strings parsed at runtime — keep them `"m:ss"`.
-- **React 19 purity.** Clean: no `Math.random` / `Date.now` / `new Date()` in render or memo factories. `playScenario` writes state only inside `setTimeout` callbacks (never synchronously in an effect body), and the initial play is deferred with `queueMicrotask`. `buildRaceRows` / lane indices are wrapped in `useMemo` keyed on `scenario`/`rows`. Follow these patterns if you add timing or derived state.
-- **`satisfaction` is per-lane, not validated.** Each lane carries its own `satisfaction: number` rendered as stars; the data hardcodes workflow 1–2, agent 5. `StarRating` clamps nothing beyond `maxScore` stars — keep `satisfaction` within `0..maxScore` (default 5).
-- **Semantic tokens.** Uses `border-glass` / `border-glass-hover`, `bg-white/[0.0x]` decorative surfaces, `text-muted` / `text-muted-dark`, and `text-brand-{rose,emerald,cyan,purple,amber}` with opacity modifiers. Note `ChatProgressBar.tsx:53` uses `text-muted-dark/60` (the `/60` floor) — stay at or above `/60` per the `custom-a11y/no-low-text-opacity` rule when editing.
+- **Replaced 2026-10-06** by the owner-picked winner of the /how prototype review ("Split
+  screen, one clock"). The previous merged "Race Log" transcript
+  (`src/components/sections/agents-chat/`: `useChatSequence`, `ChatTimelineVariant`,
+  `TimelineRaceSummary`, `timeline-utils.ts`) is deleted and lives in git history.
+- **i18n - English only, pending translation.** Copy is in `howSectionsCopy`
+  (`src/i18n/pending/howSections.ts`, PLAN M22); the 13 other locales fall back to English. Line timings stay in
+  `SCENARIOS`, so when translating, keep each `scripted[]`/`agent[]` array the same length as its
+  timing array.
+- **Reduced motion is the finished story.** Under `useStillMotion`, `t` rests at the scenario's
+  length (`useStoryClock.ts:66`), nothing ticks or auto-advances, the pause button is not rendered
+  (`ScenarioBar.tsx:44`), bubbles/outcome/stars render without entrances, typing dots sit still and
+  the resolve sweep is skipped (`ChatWindow.tsx:109`). The clock also stops off-screen and in a
+  hidden tab.
+- **Picking a scenario turns auto-play off** until the play button is pressed; the picked one
+  plays once and holds on its finished frame.
+- **Below `md` the art stacks.** The fork lines and the clock spine are hidden (`CustomerFork.tsx:39`,
+  `ClockSpine.tsx:18`) and the zoom tiers are off below the stage. Under 48rem (`useIsMobile`)
+  each window reserves a slot for every line of its transcript from the start - unsent lines
+  render `invisible`, the typing dots sit in the next slot - so the window is as tall as the whole
+  transcript: no line is clipped under the top edge and nothing below moves as lines land
+  (`ChatWindow.tsx:76-94`). From 48rem up the windows keep the fixed `h-[26rem]` with the
+  bottom-pinned, top-faded transcript.
+- **The ruler is 20 s.** `SPAN` is hardcoded (`ClockSpine.tsx:6`); the longest scenario ends at
+  18 s. A longer script would clamp its ticks to the bottom.
+- **Ratings are data, not validation.** `stars` must stay within 0-5; `Outcome` draws five stars
+  and fills the first `stars`.
 
 ## Related docs
+- [Off the Rails (Agents Timeline)](agents-timeline.md)
 - [Agent Playground](agent-playground.md)
-- [Agent Execution Timeline Race](agents-timeline.md)
 - [Feature index](../INDEX.md)

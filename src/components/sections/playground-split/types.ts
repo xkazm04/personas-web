@@ -1,4 +1,7 @@
 import type { LucideIcon } from "lucide-react";
+import type { PlaygroundSectionCopy } from "@/i18n/pending/playgroundSection";
+
+export type PlaygroundCopy = PlaygroundSectionCopy;
 
 export interface ToolNode {
   label: string;
@@ -13,6 +16,8 @@ export interface ResultCapabilities {
 }
 
 export interface ExamplePrompt {
+  /** Stable, untranslated identity (the `playgroundSectionCopy.examples` key). */
+  id: ExampleBase["id"];
   label: string;
   icon: LucideIcon;
   iconColor: string;
@@ -20,6 +25,17 @@ export interface ExamplePrompt {
   intentText: string;
   tools: ToolNode[];
   result: ResultCapabilities;
+}
+
+/** A sample prompt before its words are joined in (see `localizeExamples`). */
+export interface ExampleBase {
+  id: keyof PlaygroundCopy["examples"];
+  icon: LucideIcon;
+  iconColor: string;
+  intentText: string;
+  tools: { id: keyof PlaygroundCopy["tools"]; icon: LucideIcon }[];
+  /** The emitted event, shown as code. */
+  event: string;
 }
 
 export type NodeStatus = "pending" | "active" | "done";
@@ -39,7 +55,6 @@ export type PlaygroundPhase = "idle" | "running" | "done";
 
 export interface ResultDimension {
   key: keyof ResultCapabilities;
-  label: string;
   icon: LucideIcon;
   color: string;
 }

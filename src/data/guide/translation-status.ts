@@ -16,7 +16,7 @@ export type GuideTranslationStatus = "stale" | "unverified";
 export type GuideTranslationStatusTable = Readonly<Record<string, Readonly<Record<string, GuideTranslationStatus>>>>;
 
 /** Digest of the table's git-free inputs; getLocalized.test.ts recomputes it. */
-export const GUIDE_STATUS_INPUT_DIGEST = "56226649c1b42edfe11dedd9d37a4a60";
+export const GUIDE_STATUS_INPUT_DIGEST = "239304cc11222269b1982d3c8869b5bd";
 
 export const GUIDE_TRANSLATION_STATUS: GuideTranslationStatusTable = {
   "ar": {

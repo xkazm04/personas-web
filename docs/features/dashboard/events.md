@@ -70,9 +70,9 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/events/page.tsx` | Page shell, tab state, background image, title + connection dot |
-| `src/app/dashboard/events/events-page/EventsPageTabs.tsx` | Roving-tabindex tablist (events/subscriptions/visualization/swimlane) |
-| `src/app/dashboard/events/events-page/EventsVisualizationView.tsx` | Visualization tab: stats, Test-Flow button, legend, node grid, drawer |
+| `src/components/dashboard/views/events/index.tsx` | Page shell, tab state, background image, title + connection dot |
+| `src/components/dashboard/views/events/events-page/EventsPageTabs.tsx` | Roving-tabindex tablist (events/subscriptions/visualization/swimlane) |
+| `src/components/dashboard/views/events/events-page/EventsVisualizationView.tsx` | Visualization tab: stats, Test-Flow button, legend, node grid, drawer |
 | `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection |
 | `src/hooks/useEventStream.ts` | EventSource lifecycle, reconnect backoff, polling fallback |
 | `src/hooks/useEventTopology.ts` | BFS over `sourceId` links → event-chain components |
@@ -142,8 +142,7 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 - **Orchestrator** (`NEXT_PUBLIC_ORCHESTRATOR_URL`) — only contacted by the SSE proxy
   route, and only when configured; auth via `NEXT_PUBLIC_TEAM_API_KEY` /
   `x-user-token`.
-- **`eventStore`** is shared: the page header counts (`events.length`,
-  `subscriptions.length`), `ConnectionStatusIndicator`, `EventsListPanel`, and
+- **`eventStore`** is shared: the page header tab counts (`tabCounts`), `ConnectionStatusIndicator`, `EventsListPanel`, and
   `SubscriptionsPanel` all read from it; subscription mutations also
   `mutate(dashboardKeys.agentDetail(personaId))` to refresh the agents surface.
 - **`usePersonaStore`** supplies persona avatars in the list's persona column.
@@ -268,6 +267,8 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   to the *first* child (O(k), same connected component as all-pairs) — the chain
   count is correct but the implied graph edges are a star, not a clique. It runs only
   over the currently *visible* slice, so a chain can shrink as you paginate.
+
+- **Desktop plane: the list is not served.** With `NEXT_PUBLIC_DATA_SOURCE=desktop`, `desktopApi.listEvents` rejects with the proxy's typed 501 `not_on_desktop` (`GET /api/events`, no request sent). `eventStore.fetchEvents` sets `listNotServed` on that 501 (cleared by the next successful read; any other error leaves it and the rows stale), and `EventsListPanel` shows `DesktopUnsupportedNote` instead of its empty state while it is set and no events are held. Other readers of `listEvents` (home triage queue, mission readings, event bus stats, `useEventStream`) are unchanged. The subscription read is handled the same way: `desktopApi.listAllSubscriptions` and `listSubscriptions` reject locally with the 501 `not_on_desktop` body (`GET /api/personas/:id/subscriptions`, no request sent; create, update and delete are not overridden). `eventStore.fetchSubscriptions` sets `subscriptionsNotServed` on that 501 (cleared by the next successful read; reset clears it; any other error leaves it and the rows), and `SubscriptionsPanel` renders `DesktopUnsupportedNote` in place of the whole panel (no toolbar, create button or empty state) while it is set and no subscriptions are held. The Events page tab counts follow the same rule through `events-page/tabCounts.ts`: the Events count is hidden while `listNotServed` is set and no events are held, and the Subscriptions count is hidden until the first successful subscription read (`eventStore.subscriptionsRead`, cleared by reset), on every plane including demo, so it never reads 0 before the Subscriptions tab is opened. The page does not prefetch subscriptions for the badge.
 
 ## Related docs
 - [Execution History & Streaming](executions.md)

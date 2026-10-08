@@ -1,5 +1,5 @@
 /* ── Language-specific font families ─────────────── */
-/* Noto Sans fonts loaded via <link> in layout.tsx   */
+/* Noto Sans fonts: loaded per locale by i18nStore  */
 /* Font tokens defined in tokens.css                 */
 
 /* Latin-script languages — use base Geist Sans */

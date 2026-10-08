@@ -3,12 +3,12 @@
 import { BRAND_VAR, STATE_COLORS } from "@/lib/brand-theme";
 import {
   STATUS_BRAND,
-  STATUS_LABEL,
   kpiStatus,
   progressPct,
   type Kpi,
   type KpiStatus,
 } from "./kpiData";
+import { teamCanvasSectionCopy } from "@/i18n/pending/teamCanvasSection";
 
 /**
  * Shared leaf widgets for the "From goal to shipped" KPI variants — the marketing
@@ -70,7 +70,7 @@ export function StatusPill({ status, className = "" }: { status: KpiStatus; clas
       style={{ color: c, backgroundColor: `color-mix(in srgb, ${c} 16%, transparent)` }}
     >
       <span className="h-1.5 w-1.5 rounded-full" style={{ background: c }} />
-      {STATUS_LABEL[status]}
+      {teamCanvasSectionCopy.status[status]}
     </span>
   );
 }
@@ -80,6 +80,7 @@ export function StatusPill({ status, className = "" }: { status: KpiStatus; clas
  * current value as a marker, and the target as a flag. The "steer by KPI" affordance.
  */
 export function CalibrationTrack({ kpi, height = 26 }: { kpi: Kpi; height?: number }) {
+  const copy = teamCanvasSectionCopy;
   const status = kpiStatus(kpi);
   const lo = Math.min(kpi.baseline, kpi.target, kpi.critAt, kpi.current);
   const hi = Math.max(kpi.baseline, kpi.target, kpi.critAt, kpi.current);
@@ -122,8 +123,8 @@ export function CalibrationTrack({ kpi, height = 26 }: { kpi: Kpi; height?: numb
         />
       </div>
       <div className="mt-1 flex justify-between text-xs tabular-nums text-muted">
-        <span>base {kpi.baseline}{kpi.unit}</span>
-        <span style={{ color: STATE_COLORS.success }}>target {kpi.target}{kpi.unit}</span>
+        <span>{copy.base} {kpi.baseline}{kpi.unit}</span>
+        <span style={{ color: STATE_COLORS.success }}>{copy.target} {kpi.target}{kpi.unit}</span>
       </div>
     </div>
   );

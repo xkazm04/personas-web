@@ -11,6 +11,6 @@ export default function OgImage() {
     badge: "Templates",
     badgeColor: "#a855f7",
     accentColor: "#a855f7",
-    footer: "personas.ai/templates",
+    footer: "personas.so/templates",
   });
 }

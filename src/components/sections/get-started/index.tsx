@@ -1,78 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useRef } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
-import { SectionIntro, BrandCard } from "@/components/primitives";
-import { fadeUp } from "@/lib/animations";
-import { useAutoCycle } from "@/hooks/useAutoCycle";
-import { TOUR_STEPS } from "@/data/tour";
-import { AUTO_ADVANCE_MS } from "./data";
-import { STEP_VISUALS } from "./visuals";
-import StepChip from "./StepChip";
-import StepContent from "./StepContent";
+import { ArtBox, Intro, ReplayButton, StylisedTag, frame } from "./shared/ArtBox";
+import Dial from "./Dial";
+import DialWords from "./DialWords";
+import { H, W } from "./dialGeometry";
+import { useDial } from "./useDial";
+import { landingSectionsCopy } from "@/i18n/pending/landingSections";
 
 /**
- * GetStarted — the 5-step onboarding section that replaced the old /tour
- * page. Each step has a chip in the selector and its own animated visual
- * on the right side of the content card.
+ * From download to running agents, "Your day, its day" (winner of the 2026-10-05 landing review).
+ * A 24-hour dial: the only time you give is a cyan sliver at 09:00 on day one
+ * (install, describe, connect); the rest of the dial is your day going on while
+ * the agent's inner ring keeps running. The setup plays once in view; the day
+ * then turns as an ambient loop (stops off-screen, in a hidden tab, and under
+ * reduced motion, which rests on 08:15 the next morning with every run done).
  */
-
 export default function GetStarted() {
-  const [hovered, setHovered] = useState(false);
-  const { active, setActive, setPaused } = useAutoCycle({
-    count: TOUR_STEPS.length,
-    intervalMs: AUTO_ADVANCE_MS,
-    paused: hovered,
-  });
-
-  const step = TOUR_STEPS[active];
-  const Visual = STEP_VISUALS[active];
+  const c = landingSectionsCopy.getStarted;
+  const ref = useRef<HTMLDivElement>(null);
+  const { p, hour, day, passed, play, still } = useDial(ref);
+  const { place, fs } = frame(W, H);
 
   return (
-    // No id: page.tsx's always-present wrapper owns `get-started` (ids are unique
-    // per document); `lib/landing-address.ts` finds this section by its label.
-    <SectionWrapper aria-labelledby="get-started-heading">
-      <SectionIntro
-        id="get-started-heading"
-        heading="From download to"
-        gradient="running agents"
-        description="Five steps. No cloud signup, no credit card — just your machine and your tools."
-      />
-
-      {/* Step chips */}
-      <motion.div
-        variants={fadeUp}
-        className="mt-12 mx-auto max-w-5xl flex flex-wrap justify-center gap-2"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {TOUR_STEPS.map((s, i) => (
-          <StepChip
-            key={s.id}
-            step={s}
-            isActive={i === active}
-            onClick={() => {
-              setActive(i);
-              setPaused(true);
-            }}
-          />
-        ))}
-      </motion.div>
-
-      {/* Step content card */}
-      <motion.div variants={fadeUp} className="mt-10 mx-auto max-w-5xl">
-        <BrandCard interactive={false} gradientWash={false}>
-          <AnimatePresence mode="wait">
-            <StepContent
-              step={step}
-              brand={step.brand}
-              icon={step.icon}
-              visual={Visual}
-            />
-          </AnimatePresence>
-        </BrandCard>
-      </motion.div>
+    <SectionWrapper fit="fill" aria-labelledby="get-started-heading">
+      <Intro lede={c.v3.lede} />
+      <ArtBox w={W} h={H} boxRef={ref}>
+        <Dial hour={hour} day={day} label={c.v3.artLabel} />
+        <DialWords p={p} hour={hour} day={day} passed={passed} />
+        <ReplayButton onClick={play} disabled={still} className="bottom-[2%] left-[2%]" />
+        <StylisedTag style={{ ...place(900, 610, 280), ...fs(12, 12), textAlign: "right" }} />
+      </ArtBox>
     </SectionWrapper>
   );
 }

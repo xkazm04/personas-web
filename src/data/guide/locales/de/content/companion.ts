@@ -121,7 +121,7 @@ Bei einer Neuinstallation führt Athena automatisch ein kurzes Interview durch �
 
 ### Datenschutz
 
-Die Brain-Daten — alle fünf Memory-Tiers — liegen auf deinem Rechner unter \`~/.personas/companion-brain/\`. Nichts wird in einer Cloud-Datenbank gespeichert. Wenn du die lokalen Whisper-STT- und Piper-TTS-Engines nutzt, verlässt auch kein Audio deinen Rechner.
+Die Brain-Daten — alle fünf Memory-Tiers — liegen auf deinem Rechner unter \`~/.personas/companion-brain/\`. Nichts davon wird in einer Cloud-Datenbank gespeichert, mit einer Ausnahme, die du selbst einschalten musst: Wenn du in den Cloud-Sync-Einstellungen der Desktop-App „Chats synchronisieren“ einschaltest (standardmäßig aus), werden deine Unterhaltungen mit ihr in dein Personas-Konto kopiert, wobei alles maskiert wird, was wie ein Schlüssel aussieht, damit du sie auf dem Telefon lesen und beantworten kannst. Ausschalten löscht diese Kopie. Wenn du die lokalen Whisper-STT- und Piper-TTS-Engines nutzt, verlässt auch kein Audio deinen Rechner.
 
 :::tip
 Das Einführungsinterview ist kurz (ein paar Minuten) und zahlt sich sofort aus — Athenas erste Handvoll Antworten nach einem guten Interview sind spürbar treffender. Führe es vor deiner ersten echten Sitzung durch.

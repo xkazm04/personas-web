@@ -100,7 +100,6 @@ const NARRATION_ORDER = [
   // /dashboard — one recording per page. The home clip is one continuous
   // track; the spotlight sweeps across its sections in time with it.
   "dashboardHome",
-  "dashboardAgents",
   "dashboardExecutions",
   "dashboardEvents",
   "dashboardReviews",

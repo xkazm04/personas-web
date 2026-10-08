@@ -30,11 +30,18 @@ const byTitle = (title: string) => {
   return row!;
 };
 
+// A demo verdict is a review_decide to the scripted desktop (M20), which
+// answers at 2 s on real timers: the waits allow for that round trip.
+vi.setConfig({ testTimeout: 20_000 });
+
 async function settled() {
-  await vi.waitFor(() => {
-    expect(store().ledger.window).toBeNull();
-    expect(store().ledger.inFlight).toHaveLength(0);
-  });
+  await vi.waitFor(
+    () => {
+      expect(store().ledger.window).toBeNull();
+      expect(store().ledger.inFlight).toHaveLength(0);
+    },
+    { timeout: 8_000 },
+  );
 }
 
 beforeEach(async () => {

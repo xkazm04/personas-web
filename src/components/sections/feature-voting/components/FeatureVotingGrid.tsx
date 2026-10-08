@@ -7,6 +7,13 @@ import { KOFI_USERNAME } from "../data";
 import type { Comment, Feature, LoadState } from "../local-types";
 import FeatureVoteCard from "./FeatureVoteCard";
 
+// Two columns from sm, three from lg. With an odd card count the last card
+// would sit alone on the two-column row, so it spans both columns there; at lg
+// the set (three cards today) fills one row.
+const GRID =
+  "mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 " +
+  "sm:[&>*:last-child:nth-child(odd)]:col-span-2 lg:[&>*:last-child:nth-child(odd)]:col-span-1";
+
 export default function FeatureVotingGrid({
   loadState,
   sorted,
@@ -30,7 +37,7 @@ export default function FeatureVotingGrid({
 }) {
   if (loadState === "loading") {
     return (
-      <div className="mt-16 grid gap-6 sm:grid-cols-2" aria-hidden="true">
+      <div className={GRID} aria-hidden="true">
         {sorted.map((feature) => (
           <SkeletonCard key={feature.id} lines={3} />
         ))}
@@ -49,7 +56,7 @@ export default function FeatureVotingGrid({
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
       variants={staggerContainer}
-      className="mt-16 grid gap-6 sm:grid-cols-2"
+      className={GRID}
     >
       {sorted.map((feature) => (
         <FeatureVoteCard

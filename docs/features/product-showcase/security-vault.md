@@ -1,63 +1,65 @@
 # Security Vault
-> Three-pillar showcase of Personas' device-only credential security (encryption, OS keyring, zero cloud) · **Route:** `/features` (deep-dive section) · **Status:** Live
+> "Nested vault" illustration of Personas' device-only credential security: three concentric seals (device, OS keychain, AES-256-GCM) turn and lock around your keys · **Route:** `/features` (deep-dive section) · **Status:** Live
 
 ## What it does
 Reassures the visitor that Personas never ships secrets to the cloud. A centered
-heading ("Your data never *leaves*") and a one-paragraph promise sit above three
-tall illustrated cards — the "pillars" — each pairing a generated security image
-with a claim: device-only **AES-256-GCM** encryption, **OS-native** keyring
-storage (Windows Credential Manager / macOS Keychain / Linux Secret Service), and
-**zero cloud storage** (no sync, telemetry, or remote copy). A pulsing shield
-accent closes the section. It is a static marketing claim block — no live data,
-no interactivity beyond hover.
+heading ("Your keys stay *yours*") and a one-line promise ("Every credential is
+encrypted on your device and kept in your OS's own vault.") sit above a single
+animated vault door. A key drops through three aligned openings to the centre;
+then the inner ring (**AES-256-GCM**), the middle ring (**OS keychain**) and the
+outer ring (**Device**) each turn and click into a latch, one after another; the
+door bolts shoot into the frame on both sides and the key glows — *sealed*. A
+replay button in the corner re-plays it. No live data.
 
 ## How it works
-`SecurityVault` is the section shell: a `SectionWrapper id="security"` containing
-a stagger-animated heading/paragraph group, then a single `whileInView` fade that
-mounts `SecurityVaultPillars`. The pillars module holds a hardcoded `pillars`
-array (3 entries) and maps each to a `PillarCard`. Each card is a fixed
-`height: 400` flex column: a 230px illustration hero zone (`next/image` with
-`fill`, `object-cover`, hover scale + opacity lift), an absolutely-positioned
-accent tag (icon + mono kicker) top-left, a bottom gradient fade so body text
-never fights the art, a hover radial spotlight, then a body zone with title and
-detail. A per-card colored left rail and a closing pulsing `Shield` finish it.
-Color, image, icon, and copy all come from the pillar object; styling is mostly
-inline `style={{…}}` using `p.color` with hex-alpha suffixes (`${p.color}33`).
+`SecurityVault.tsx` (default export `SecurityVaultNestedVault`, an `/illustrate`
+1.1.0 "nested-vault" variant) is a `SectionWrapper(fit="fill", id="security")`
+with a stagger-animated intro (`data-section-intro` / `data-section-lede`) and a
+`data-stage-slot` holding the art frame. One framer `MotionValue` `progress`
+(0..1) drives every beat over `DURATION = 3.8`s (`SecurityVault.tsx:20`); it rests
+at `1` (the sealed end state) for the server render and reduced motion, and plays
+`0 → 1` once when the frame is in view (`useInView`, `amount: 0.35`). The replay
+button bumps a `run` counter that re-runs the effect.
 
-On `/features` the section is code-split: `LazySecurityVault`
-(`feature-lazy.tsx`) wraps it via `createLazySection(..., { ssr: false })` and the
-page mounts it inside `<LazyMount minHeight={760} label="Security">` within a
-rose-glow `StageSection id="security"`, so the chunk only hydrates when scrolled
-near.
+`NestedVaultArt` draws the SVG (viewBox 760×480 around the vault centre) and maps
+`progress` onto beats (`NestedVaultArt.tsx:13-20`): key drop 0–0.20, inner ring
+0.20–0.40, middle ring 0.40–0.60, outer ring 0.60–0.80, bolts 0.80–0.92, key glow
+0.90–1.00. Ring specs (radius, width, brand colour, turn, beat window, engraved
+label) are the `RINGS` table in `nestedVaultParts.tsx:25-29`; `Ring` renders one
+ring with its opening, notch and engraved label on a text path, and `Bolts` one
+side's frame and sliding bolts.
+
+**Stage fit (desktop).** The art frame carries `data-stage-art` with
+`--art-ar: 19/12` (`SecurityVault.tsx:70-71`), so on the stage
+(`src/styles/stage.css`) it is `min(100%, slot height × 19/12)` wide — as wide as
+the stage allows, never taller than the screen, and growing on a monitor. Frame
+radius is `rounded-2xl`.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/feature-sections/SecurityVault.tsx` | Section shell: heading, promise paragraph, mounts pillars |
-| `src/components/feature-sections/SecurityVaultPillars.tsx` | `pillars` data, `PillarCard`, shield accent |
+| `src/components/feature-sections/SecurityVault.tsx` | Section shell: heading, lede, progress value + in-view play, replay button, stage slot/art frame |
+| `src/components/feature-sections/security-vault/NestedVaultArt.tsx` | The SVG: background, bezel, door face, secret halo, rings, key + "Your keys" label |
+| `src/components/feature-sections/security-vault/nestedVaultParts.tsx` | `W`/`H`, `RINGS` spec table, `Ring`, `Bolts`, `rotateStyle` |
 | `src/components/feature-sections/feature-lazy.tsx:23` | `LazySecurityVault` code-split wrapper (`ssr: false`) |
-| `src/app/features/page.tsx:60` | Mount point inside `StageSection id="security"` + `LazyMount` |
-| `public/imgs/features/security/vault-door.png` | Pillar 1 illustration (AES-256-GCM) |
-| `public/imgs/features/security/os-keyring.png` | Pillar 2 illustration (OS-native) |
-| `public/imgs/features/security/local-shield.png` | Pillar 3 illustration (zero cloud) |
-| `src/components/SectionWrapper.tsx` | Stagger/viewport section frame + animation-pause register |
-| `src/lib/animations.ts:57` | `fadeUp` / `staggerContainer` variants used by the shell |
+| `src/app/features/page.tsx:78-82` | Mount point inside `StageSection id="security"` + `LazyMount` |
+| `src/components/SectionWrapper.tsx` | Section frame (`fit` → `data-stage`) + animation-pause register |
+| `src/lib/animations.ts` | `fadeUp` / `staggerContainer` variants used by the intro |
 
 ## Data & state
-- **Source:** fully static — hardcoded `pillars: Pillar[]` array in `SecurityVaultPillars.tsx:24`. **Stores:** none (no Zustand). **API routes:** none. **Types:** local `Pillar` interface (`SecurityVaultPillars.tsx:15`); icons typed `LucideIcon` from `lucide-react`. No props on either component.
+- **Source:** fully static — ring geometry in `RINGS`; copy in `securitySectionCopy` (`src/i18n/pending/securitySection.ts`) (heading, lede, `artLabel`, `replay`, `yourKeys`, `rings.keychain`, `rings.device`). **Stores:** none. **API routes:** none. **Local state:** the `progress` `MotionValue` and a `run` counter for replay. No props.
 
 ## Integration points
-- **Consumed by:** `src/app/features/page.tsx` only (via `LazySecurityVault`). Not used on the homepage (`src/app/page.tsx` has no SecurityVault). Anchor `id="security"` is the scroll-map target.
-- **Depends on:** `SectionWrapper`, `SectionHeading`, `GradientText`, `fadeUp`/`staggerContainer` from `@/lib/animations`, `next/image`, `lucide-react` (`Lock`, `Fingerprint`, `CloudOff`, `Shield`), three PNGs under `public/imgs/features/security/`.
-- **Shared infra (note only, NOT used here):** `CinematicBg.tsx` and `ContextHint.tsx` are shared feature-section helpers used by sibling sections — Security Vault references neither. `feature-lazy.tsx` is the shared lazy-mount barrel and *does* wrap this section.
+- **Consumed by:** `src/app/features/page.tsx` only (via `LazySecurityVault`, inside `<LazyMount minHeight={760} label="Security">` in a rose-glow `StageSection id="security"`). Not used on the homepage. Anchor `id="security"` is the scroll-map target.
+- **Depends on:** `SectionWrapper`, `SectionHeading`, `GradientText`, `fadeUp`/`staggerContainer`, `useStillMotion`, `BRAND_VAR`/`tint` from `@/lib/brand-theme`, `lucide-react` (`KeyRound`, `RotateCcw`).
+- No guided-tour step targets this section.
 
 ## Conventions & gotchas
-- **i18n violation — all copy is hardcoded English.** The heading ("Your data never leaves"), the promise paragraph (`SecurityVault.tsx:30-35`), and every pillar `title`/`kicker`/`detail` (`SecurityVaultPillars.tsx:24-52`) are literal JSX/data strings. No `useTranslation()` anywhere. CLAUDE.md requires every user-facing string to live in `src/i18n/en.ts` and ship in all 14 locales — this section breaks that rule wholesale. (Sibling note: `docs/features/marketing/features-overview.md` flags the same gap across the `/features` sections.)
-- **Reduced-motion not gated.** Neither file imports `useReducedMotion`; 21 sibling feature-section files do. The cards run `whileInView` + `whileHover={{ y: -4 }}`, the shell runs `whileInView`, and the closing shield runs a continuous `animate-ping` (`SecurityVaultPillars.tsx:166`) that never stops or respects `prefers-reduced-motion`. The custom `custom-animation/require-animation-gating` lint rule only fires on `requestAnimationFrame`/`cancelAnimationFrame` (absent here), so this passes lint while still ignoring the motion preference — a real accessibility gap, not a lint catch.
-- **Token violations — raw colors / hardcoded dark.** Cards opt out of the theme with `force-dark` and inline hex backgrounds (`rgba(12,14,22,0.7)`), per-pillar hex `color` values (`#f43f5e`, `#ec4899`, `#a855f7`) composed as `${p.color}33`, and `bg-rose-500/10` / `text-rose-500/70` raw Tailwind colors. CLAUDE.md prefers semantic tokens (`text-brand-cyan`, `border-glass`, …) over raw hex. This is a deliberate art-driven dark card design, but it bypasses the token system.
-- **Decorative images, correctly hidden.** Each illustration uses `alt=""` + `aria-hidden="true"` (`SecurityVaultPillars.tsx:79,83`) — appropriate since the adjacent title/detail carry the meaning.
-- **Hover-only no-op class.** `ContextHint.tsx:26` (shared, not this section) has `hover:text-foreground/60` matching its base `text-foreground/60` — a dead hover (no visual change); noted only because it's in the shared infra list.
-- **Magic-number layout coupling.** The left accent rail is pinned with `top-[230px]` to match the hardcoded 230px hero zone height (`SecurityVaultPillars.tsx:76,136`); changing one silently desyncs the rail.
+- **i18n — migrated, English-only for now.** All copy lives in `securitySectionCopy`. The inner ring's engraving `AES-256-GCM` is a deliberate literal (`{ literal: ... }` in `RINGS`), the other two rings take `{ key: ... }` into `securitySection.rings`. `securitySection` is pending modules in `src/i18n/pending/` in `en.ts`, so the 13 other locales fall back to English until it is translated.
+- **Animation gating — followed.** The gate is `useStillMotion` (`SecurityVault.tsx:23`): when still, `progress` is pinned to 1 and the replay button is `disabled`. DOM shape is constant (only the motion value differs). One-shot, not an ambient loop.
+- **Tokens.** SVG colours come from `BRAND_VAR` / `tint()` and `var(--foreground)` / `var(--background)`; the frame uses `border-glass`. `bg-white/[0.02]` on the frame and `bg-white/[0.03]` on the replay button are raw-colour exceptions.
+- **`useId`-scoped SVG ids.** Gradient and label-path ids are suffixed with a sanitised `useId()` so two instances cannot collide; the blur filter id `nv-soft` is not scoped.
+- **Unused assets.** `public/imgs/features/security/{vault-door,os-keyring,local-shield}.png` (the previous pillar-card art) are no longer referenced from `src/`.
 - **Lazy + SSR-off.** `ssr: false` means the section is client-only; the always-rendered `StageSection id="security"` keeps the anchor working for the scroll-map before hydration.
 
 ## Related docs

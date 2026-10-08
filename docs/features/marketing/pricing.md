@@ -1,45 +1,39 @@
 # Pricing
-> Feature-group "compare" showcase that replaced the old paid tiers with a "free forever" offer + six guide-linked capability cards · **Route:** `/` homepage section (`#pricing`, nav label "Compare") · **Status:** Live
+> "Personas is free" section: one diagram of who you pay for an agent run · **Route:** `/` homepage section (`#pricing`, nav label "Compare") · **Status:** Live
 
 ## What it does
-The section a reader reaches under the "Compare" / Pricing anchor on the homepage. Instead of price tiers it makes one offer — Personas is **free forever, self-hosted, no per-run markup, open source** — restated in a centered offer band with a "Get started free" download CTA. Below it, a responsive 1/2/3-column grid of six brand-colored capability cards (Agents & Prompts, Orchestration, Pipelines & Teams, Credentials & Security, Monitoring, Testing Lab). Each card shows a title, tagline, a checklist of concrete concepts, and a "Read the guide" link into the matching `/guide/*` page. The heading reads "Everything is **free**".
+The section a reader reaches under the "Compare" / Pricing anchor on the homepage. It states the offer plainly: **Personas itself is free** (MIT source, every feature, no account or licence key), and the **only bill is the user's own Claude Pro or Max plan, paid to Anthropic**, because agents run through Claude Code on that plan. A wide diagram ("bill") shows one agent run leaving Personas on your computer, passing the Claude Code CLI and reaching Claude at Anthropic; Personas carries a "$0, MIT licence" tag, and the only payment line runs from "Your Claude Pro or Max plan" to Anthropic. Four beat captions (Run starts / On your plan / Claude works / No bill from Personas) play once when in view, with a replay button. A "Get started free" download CTA sits under the diagram.
 
-The old Local/Cloud/Enterprise tier cards are gone from this section (see gotchas — the `t.pricing.*` tier copy still exists but is no longer rendered as a pricing surface).
+History: the section used to be an offer band plus six feature-group cards ("Everything is free"). It was replaced on 2026-09-26 by the owner's pick from the /illustrate round 3 ("bill"), without that round's per-run API-price chip (the only thing paid is the user's plan). "Everything is free" over-claimed: a Claude plan is required. There is no local-model (Ollama) path in the shipping app, so the section claims none.
 
 ## How it works
-`Pricing` (`index.tsx`) renders a `SectionWrapper aria-labelledby="compare-heading"` (no id - see gotchas) with a `SectionIntro` header, a static offer band, then maps `FEATURE_GROUPS` to a `FeatureGroupCard` each inside a `staggerContainer` motion grid (`whileInView`, `once: true`). It is loaded on the homepage as `LazyPricing` (`src/components/sections/lazy.tsx:127`) and placed by the `sections` array in `src/app/page.tsx:56` with `wrapperId: "pricing"` (purple stage). Not rendered on `/features`.
-
-`FEATURE_GROUPS` (`data.ts`) holds only the **non-translatable structure** per group: stable `id`, a lucide `icon`, a `brand` color key, and a `guideHref`. `FeatureGroupCard` reads the translatable copy from `t.compareSection.groups[group.id]` (`{ title, tagline, concepts[] }`) — so the card body is fully i18n-driven, keyed by `id`. Brand color flows through `BRAND_VAR[brand]` / `tint` / `brandShadow` from `brand-theme.ts` into the icon chip, title glow, divider gradient, check marks, and guide link.
+`Pricing` (`index.tsx`) renders `SectionWrapper fit="fill" aria-labelledby="compare-heading"` (no id - see gotchas) with a `SectionIntro id="compare-heading"`, one `data-stage-slot` holding the art in a `data-stage-art` box (`--art-ar` = the WIDE layout's 1000/400, max 1000px wide, never taller than the stage slot - `src/styles/stage.css`), and the CTA. The art is `BillArt.tsx`, drawn twice from `billGeometry.ts` (`WIDE` for md+, `TALL` for phones; one is hidden by CSS). Motion is one progress value from `usePlayOnce.ts` (rests at 1 on the server and under reduced motion via `useStillMotion`; plays once in view; replay button). `BillParts.tsx` holds the node, legend, coin, run dot and beat-caption primitives.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/sections/pricing/index.tsx` | Section: SectionIntro, static "free forever" offer band + CTA, stagger grid of cards |
-| `src/components/sections/pricing/data.ts` | `FeatureGroup` type, `FeatureGroupId` union, `FEATURE_GROUPS` (icon/brand/guideHref only) |
-| `src/components/sections/pricing/FeatureGroupCard.tsx` | Single brand card: icon chip, title+tagline, concept checklist, guide link |
-| `src/i18n/en.ts:1033` | `compareSection` source copy: heading, description, `readGuide`, per-group `{title, tagline, concepts[]}` |
-| `src/components/sections/lazy.tsx:127` | `LazyPricing` code-split wrapper |
-| `src/app/page.tsx:56` | Mounts `LazyPricing` in the homepage section list (`wrapperId: "pricing"`) |
+| `src/components/sections/pricing/index.tsx` | Section: SectionIntro, stage slot with the diagram + replay, download CTA |
+| `src/components/sections/pricing/BillArt.tsx` | The "bill" diagram (SVG), words from `pricingSectionCopy` |
+| `src/components/sections/pricing/billGeometry.ts` | WIDE / TALL layouts, beat timing (`BEAT_START`), path helpers |
+| `src/components/sections/pricing/BillParts.tsx` | Diagram primitives (Node, Legend, Coin, RunDot, WorkPulse, BeatCaption) |
+| `src/components/sections/pricing/usePlayOnce.ts` | Play-once progress value with replay, reduced-motion aware |
+| `src/i18n/pending/pricingSection.ts` | `pricingSectionCopy` (pending translation: heading, lede, art labels, beats); CTA label still from `compareSection.ctaLabel` |
+| `src/components/sections/lazy.tsx` | `LazyPricing` + `PricingSkeleton` (heading, lede, one wide box, CTA) |
+| `src/app/page.tsx` | Mounts `LazyPricing` in the homepage section list (`wrapperId: "pricing"`) |
 
 ## Data & state
-- **Source:** fully static. **Stores:** none (no Zustand). **API routes:** none for content; CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`: `/api/download` only when the installer URL passes the same https + host-allowlist rule the route enforces, else the always-present `#download-section` wrapper. The click reports `download_click` with `placement: "pricing"` via `trackDownloadClick` (`src/lib/analytics.ts`). **Types:** `FeatureGroup`, `FeatureGroupId` (`data.ts`); copy typed by the `compareSection` shape in the `Translations` interface (`en.ts`). No live/orchestrator data.
+- **Source:** fully static. **Stores:** none. CTA href is `ctaHref(DOWNLOAD_PLAN)` from the release authority `src/lib/release.ts`; the click reports `download_click` with `placement: "pricing"` via `trackDownloadClick` (`src/lib/analytics.ts`). Both are asserted against `index.tsx` by source-scan tests (`analytics.download-click.test.ts`, `release.test.ts`).
+- **Copy:** `pricingSectionCopy` is a pending module in `src/i18n/pending/` (English only by owner decision, 2026-09-25; the other locales fall back to English at runtime). Most of `t.compareSection` (offer badges, groups) is now unused - left for a dead-key pass.
 
 ## Integration points
-- **`SectionWrapper` / `SectionIntro`** (`@/components/primitives`) — section chrome + gradient heading. Wrapper drives the `whileInView` stagger reveal.
-- **`BrandCard`** (`@/components/primitives`) — themed card surface; `brand-theme.ts` (`BRAND_VAR`, `tint`, `brandShadow`) supplies all per-brand color.
-- **`PrimaryCTA`** + lucide `Download` — the offer CTA.
-- **`/guide/<group>`** — each card deep-links into the product guide (`guideHref`). Card `id`s mirror guide categories.
-- **`SCROLL_MAP_SECTIONS`** (`src/lib/constants.ts:19`) — `#pricing` anchor labeled "Compare" in the scroll map; nav and any existing `#pricing` hash links still resolve here.
-- **Navbar / `t.nav.pricing`** ("Pricing") still labels the link to this anchor.
+- **Stage system** (`src/styles/stage.css`): `fit="fill"`, `data-stage-slot`, `data-stage-art`; one stage high at every desktop size (`e2e/stage-fit.spec.ts`).
+- **`PrimaryCTA`** + lucide `Download` - the CTA.
+- **`SCROLL_MAP_SECTIONS`** (`src/lib/constants.ts`) - `#pricing` anchor labelled "Compare"; nav `t.nav.pricing` links here.
 
 ## Conventions & gotchas
-- **Copy/structure split is the rule here:** add a group by extending `FeatureGroupId` + `FEATURE_GROUPS`, then add `t.compareSection.groups[id]` in `en.ts` **and all 13 other locales** (14-locale lockstep). `tsc` enforces the shape; translation completeness is still a hard manual requirement. Locale files are mojibake on disk — anchor edits on ASCII and write correct UTF-8.
-- **Hardcoded English in `index.tsx` (real issue):** the offer band strings — "Free forever", "Self-hosted", "No per-run markup", "Open source", the paragraph, and the "Get started free" CTA `label` — are literals in JSX, not `t.*`. This violates the i18n convention (every user-facing string in `en.ts`) and ships untranslated in 13 locales. Only the `compareSection` header + cards are localized.
-- **Tier copy removed (2026-09-14):** the old `pricing` namespace (`local`/`cloud`/`enterprise`, feature rows, prices) is gone from all 14 locales; only `t.pricing.comingSoon` remains, for `WaitlistModal.tsx`.
-- **JSON-LD reconciled (2026-09-14):** `homeJsonLd.ts` builds the FAQ rich snippet from `en.faqSection`, which now says the app is free and open source with no plans, tiers or cloud execution.
-- **Animation gating:** this section is exempt from `require-animation-gating` — it uses only framer-motion `variants` (`fadeUp`, `staggerContainer`) via `whileInView`, with no `requestAnimationFrame`/canvas. The shared `useAnimationPause` (in `SectionWrapper`) pauses motion globally; no `useReducedMotion` import is needed here.
-- **Tokens:** mostly compliant (`text-foreground`, `text-muted-dark`, `border-glass`, `text-brand-cyan`, per-brand via `BRAND_VAR`/`tint`). Watch `text-foreground/80` (at the `/60` WCAG floor, allowed) and the `bg-white/[0.02]` raw wash in the offer band (mirrors `BrandCard`'s surface but bypasses the token).
-- **Anchor is load-bearing, and the page wrapper owns it:** `id="pricing"` is rendered once, by the always-present stage wrapper in `src/app/page.tsx` (`wrapperId: "pricing"`); the section itself carries no id (two elements with the same id were invalid HTML, and `getElementById` / a native `#pricing` jump picked whichever came first). `/#pricing` arrival resolves through `LABELLED_INNER` in `src/lib/landing-address.ts` to `[data-scroll-anchor="pricing"] [aria-labelledby="compare-heading"]` and focuses `#compare-heading`, the same pattern as `#get-started`; `landing-address.test.ts` pins the single id and the label. Renaming the anchor requires updating `SCROLL_MAP_SECTIONS`, `page.tsx` and any inbound links.
+- **Fidelity:** draw only what the app does. Facts behind the diagram (desktop app): Claude Code CLI is the only engine (`engine_kind.rs`); runs use the user's subscription (`cli_process.rs` strips API-key env); MIT `LICENSE`; native Ollama is deferred and not shipping (`src-tauri/engine/src/ollama.rs`). Starter/Team/Builder in the app are UI modes, not price tiers - never draw tiers.
+- **Anchor is load-bearing, and the page wrapper owns it:** `id="pricing"` is rendered once, by the always-present stage wrapper in `src/app/page.tsx`; the section carries no id. `/#pricing` resolves through `LABELLED_INNER` in `src/lib/landing-address.ts` to `[data-scroll-anchor="pricing"] [aria-labelledby="compare-heading"]`; `landing-address.test.ts` pins `<SectionWrapper ... aria-labelledby="compare-heading">` and `<SectionIntro id="compare-heading"` in `index.tsx` by regex - keep both in that file.
+- **Animation gating:** transform/opacity only, play once, no loops; resting state is the resolved end state.
 
 ## Related docs
 - [Features Overview](features-overview.md)

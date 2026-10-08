@@ -27,10 +27,10 @@
  * not the content set.
  */
 
-export type SmokeTag = "public" | "dashboard" | "mobile" | "dev";
+export type SmokeTag = "public" | "dashboard" | "dev";
 
 export interface SmokeRoute {
-  /** Path to visit. For `dashboard`/`mobile` this is reached by in-app navigation. */
+  /** Path to visit. For `dashboard` this is reached by in-app navigation. */
   readonly path: string;
   /** Short name used in the test title. */
   readonly name: string;
@@ -54,8 +54,8 @@ export interface SmokeRoute {
 
 /** Marketing, content and public product surfaces — reached by hard navigation. */
 const PUBLIC: readonly SmokeRoute[] = [
-  { path: "/", name: "home", tag: "public", expectText: "Intelligent agents" },
-  { path: "/features", name: "features", tag: "public" },
+  { path: "/", name: "home", tag: "public", expectText: "A whole team on it" },
+  { path: "/features", name: "features", tag: "public", expectText: "alive on your machine" },
   { path: "/how", name: "how it works", tag: "public" },
   { path: "/connections", name: "connectors", tag: "public" },
   { path: "/templates", name: "templates gallery", tag: "public", expectText: "Agent Templates" },
@@ -71,38 +71,38 @@ const PUBLIC: readonly SmokeRoute[] = [
  * The demo product surface. Demo mode is IN-MEMORY and never persisted, so a
  * hard navigation to any of these lands on the sign-in prompt instead of the
  * page. The runner enters demo once and then navigates by clicking the sidebar,
- * which is why every entry here is also a link in `DashboardNavigation`.
+ * which is why every entry here is also a link in `DashboardNavigation`, and
+ * why the list follows the menu: a level-2 link is only visible while its
+ * section is open.
  */
 const DASHBOARD: readonly SmokeRoute[] = [
+  // Menu order: Personas (the landing view), then Overview's level-2 views
+  // (visible only while Overview is open), then the remaining sections.
+  { path: "/dashboard/personas", name: "personas", tag: "dashboard" },
+  { path: "/dashboard/notes", name: "notes", tag: "dashboard", expectSelector: "[data-note-zone]" },
   { path: "/dashboard/home", name: "mission control", tag: "dashboard" },
-  { path: "/dashboard/agents", name: "agents", tag: "dashboard" },
+  { path: "/dashboard/reviews", name: "review queue", tag: "dashboard" },
   { path: "/dashboard/executions", name: "executions", tag: "dashboard" },
   { path: "/dashboard/events", name: "event bus", tag: "dashboard" },
-  { path: "/dashboard/reviews", name: "review queue", tag: "dashboard" },
-  { path: "/dashboard/messages", name: "messages", tag: "dashboard" },
   { path: "/dashboard/observability", name: "observability", tag: "dashboard" },
   { path: "/dashboard/leaderboard", name: "leaderboard", tag: "dashboard" },
-  { path: "/dashboard/director", name: "director coaching", tag: "dashboard" },
   { path: "/dashboard/sla", name: "sla", tag: "dashboard" },
   { path: "/dashboard/incidents", name: "incidents", tag: "dashboard" },
   { path: "/dashboard/health", name: "system health", tag: "dashboard" },
   { path: "/dashboard/knowledge", name: "knowledge base", tag: "dashboard" },
+  { path: "/dashboard/messages", name: "messages", tag: "dashboard" },
+  { path: "/dashboard/director", name: "director coaching", tag: "dashboard" },
   { path: "/dashboard/settings", name: "settings", tag: "dashboard" },
 ];
 
-/** The separate mobile route tree. Same in-memory demo constraint. */
-const MOBILE: readonly SmokeRoute[] = [
-  { path: "/m/overview", name: "mobile overview", tag: "mobile" },
-  { path: "/m/reviews", name: "mobile reviews", tag: "mobile" },
-  { path: "/m/messages", name: "mobile messages", tag: "mobile" },
-  { path: "/m/alerts", name: "mobile alerts", tag: "mobile" },
-];
+// The old /m route tree was deleted while /m is rebuilt (docs/concepts/
+// mobile-revival/PLAN.md); its URLs are temporary redirects, checked at a
+// phone viewport by e2e/mobile/baseline.spec.ts (Playwright project "mobile").
 
-export const SMOKE_ROUTES: readonly SmokeRoute[] = [...PUBLIC, ...DASHBOARD, ...MOBILE];
+export const SMOKE_ROUTES: readonly SmokeRoute[] = [...PUBLIC, ...DASHBOARD];
 
 export const PUBLIC_ROUTES = PUBLIC;
 export const DASHBOARD_ROUTES = DASHBOARD;
-export const MOBILE_ROUTES = MOBILE;
 
 /**
  * One concrete instance per parameterised route. Kept separate because these

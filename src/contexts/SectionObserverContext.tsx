@@ -126,7 +126,11 @@ export function SectionObserverProvider({
     const pending = new Set(sectionIds);
     const tryRegister = () => {
       for (const id of Array.from(pending)) {
-        const el = document.getElementById(id);
+        // Landing addresses live on always-present stage wrappers
+        // (lib/landing-address.ts); the section inside may carry another id.
+        const el =
+          document.querySelector<HTMLElement>(`[data-scroll-anchor="${CSS.escape(id)}"]`) ??
+          document.getElementById(id);
         if (el) {
           observe(id, el);
           pending.delete(id);

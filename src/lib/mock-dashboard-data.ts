@@ -18,6 +18,8 @@ import {
   type CostAnomaly,
 } from "./observabilitySeries";
 import type { HealthIssue } from "./types";
+import type { SyncedNote } from "./notes/notesModel";
+import type { ChatMessage, ChatSession } from "./chat/chatModel";
 
 function generateTimeSeries(
   days: number,
@@ -70,10 +72,6 @@ export const MOCK_FLEET_EXECUTIONS = MOCK_OBSERVABILITY_METRICS.totalExecutions;
 // `useSparklines` projects them from MOCK_DAILY_METRICS with
 // `sparklinesFromDaily`, the same function the Supabase plane uses.
 
-// Centred on the fleet's actual terminal success rate (8 of 9 finished runs
-// ≈ 89%, and 89.4% across the 14-day window) so the trend line under the home
-// success ring cannot claim a different number than the ring above it.
-export const SPARKLINE_SUCCESS = generateTimeSeries(14, (i) => 89 + Math.sin(i * 0.4) * 3, 2, 30);
 export const SPARKLINE_AGENTS = generateTimeSeries(14, (i) => 5 + Math.floor(i / 4), 1, 40);
 
 // ── Latency percentile data ─────────────────────────────────────────
@@ -513,21 +511,22 @@ const MEMORY_TITLE_POOL: Record<MemoryAction["type"], string[]> = {
   ],
 };
 
-function pickTitle(
-  type: MemoryAction["type"],
-  seed: number,
-): string {
-  const pool = MEMORY_TITLE_POOL[type];
-  return pool[seed % pool.length];
-}
+// One memory per pool title: 5 types x 4 titles = 20 distinct memories. (The
+// set used to be 60 built from these 20 titles, so every title showed 3 times.)
+const MEMORIES_PER_TYPE = 4;
 
 export const MOCK_MEMORIES: MemoryItem[] = (() => {
-  const rng = seededRandom(555);
+  // Seed chosen so the 20 still show every status (12 active, 5 pending,
+  // 3 archived) and 3 conflicts.
+  const rng = seededRandom(580);
   const items: MemoryItem[] = [];
-  const total = 60;
+  const total = MEMORY_TYPES.length * MEMORIES_PER_TYPE;
   for (let i = 0; i < total; i++) {
     const type = MEMORY_TYPES[i % MEMORY_TYPES.length];
-    const persona = MEMORY_PERSONAS[i % MEMORY_PERSONAS.length];
+    const round = Math.floor(i / MEMORY_TYPES.length);
+    // Offset the persona by the round so each agent holds a mix of types
+    // instead of owning exactly one.
+    const persona = MEMORY_PERSONAS[(i + round) % MEMORY_PERSONAS.length];
     const statusRoll = rng();
     const status: MemoryStatus =
       statusRoll < 0.65
@@ -549,7 +548,7 @@ export const MOCK_MEMORIES: MemoryItem[] = (() => {
     items.push({
       id: `mem_${i + 1}`,
       type,
-      title: pickTitle(type, i),
+      title: MEMORY_TITLE_POOL[type][round],
       description: `Learned from ${usageCount} ${persona} executions. Confidence ${score}/10 with consistent positive outcomes across the observed window.`,
       persona,
       score,
@@ -1180,7 +1179,7 @@ export const MOCK_FLEET_RECOMMENDATION: FleetRecommendation = {
   impact: "≈ $48/month saved",
   personaName: FEEDBACK.name,
   actionLabel: "Review routing policy",
-  actionHref: "/dashboard/agents",
+  actionHref: "/dashboard/personas",
 };
 
 export const MOCK_HEALTH_DIGEST: HealthDigest = {
@@ -1921,9 +1920,12 @@ export const MOCK_APPROVED_WORK: ApprovedWorkItem[] = [
 // ── Director (coaching command center) ──────────────────────────────
 // Mirrors the desktop overview's Director tab: a system-owned meta-persona
 // that scores every starred agent's latest run on a 0–5 verdict scale and
-// tracks whether coaching moves the needle. Demo-only; the story is a small
-// fleet where two agents are improving, one is flat-and-stale, one is
-// declining into low scores, and one has never been reviewed.
+// tracks whether coaching moves the needle. Demo-only, and cast on the shared
+// FLEET so the Director judges the same five agents every other page shows,
+// with momentum matching the leaderboard trends: Incident Responder and PR
+// Review Agent improving, Security Scanner (disabled) flat-and-stale, Daily
+// Standup Digest declining into low scores (the Slack retry storm), and
+// Customer Feedback Analyzer never reviewed.
 
 export type DirectorMomentum = "improving" | "flat" | "declining";
 export type DirectorSeverity = "info" | "warning" | "error";
@@ -1996,9 +1998,9 @@ export interface DirectorVerdict {
 
 const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
   {
-    id: "p-research",
-    name: "ResearchAgent",
-    color: "#06b6d4",
+    id: INCIDENT.id,
+    name: INCIDENT.name,
+    color: INCIDENT.color,
     latestScore: 5,
     scoreTrend: [3, 4, 4, 4, 5],
     valueDeliveredRate: 0.86,
@@ -2006,9 +2008,9 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     lastReviewedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
   },
   {
-    id: "p-codereview",
-    name: "CodeReviewer",
-    color: "#34d399",
+    id: PR_REVIEW.id,
+    name: PR_REVIEW.name,
+    color: PR_REVIEW.color,
     latestScore: 4,
     scoreTrend: [2, 3, 3, 4],
     valueDeliveredRate: 0.78,
@@ -2016,9 +2018,9 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     lastReviewedAt: new Date(Date.now() - 26 * 3600_000).toISOString(),
   },
   {
-    id: "p-dataproc",
-    name: "DataProcessor",
-    color: "#fbbf24",
+    id: SECURITY.id,
+    name: SECURITY.name,
+    color: SECURITY.color,
     latestScore: 3,
     scoreTrend: [3, 3, 3],
     valueDeliveredRate: 0.64,
@@ -2026,19 +2028,19 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     lastReviewedAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
   },
   {
-    id: "p-notify",
-    name: "NotifyBot",
-    color: "#a855f7",
+    id: STANDUP.id,
+    name: STANDUP.name,
+    color: STANDUP.color,
     latestScore: 2,
     scoreTrend: [4, 4, 3, 2],
     valueDeliveredRate: 0.41,
     totalExecutions: 388,
-    lastReviewedAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+    lastReviewedAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
   },
   {
-    id: "p-reportgen",
-    name: "ReportGen",
-    color: "#f43f5e",
+    id: FEEDBACK.id,
+    name: FEEDBACK.name,
+    color: FEEDBACK.color,
     latestScore: null,
     scoreTrend: [],
     valueDeliveredRate: 0.57,
@@ -2070,9 +2072,9 @@ export const MOCK_DIRECTOR_PORTFOLIO: DirectorPortfolio = {
 export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   {
     id: "dv-1",
-    personaId: "p-notify",
-    personaName: "NotifyBot",
-    personaColor: "#a855f7",
+    personaId: STANDUP.id,
+    personaName: STANDUP.name,
+    personaColor: STANDUP.color,
     severity: "error",
     category: "health",
     title: "Slack webhook retry storm burns spend on dead endpoints",
@@ -2080,29 +2082,19 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   },
   {
     id: "dv-2",
-    personaId: "p-notify",
-    personaName: "NotifyBot",
-    personaColor: "#a855f7",
+    personaId: STANDUP.id,
+    personaName: STANDUP.name,
+    personaColor: STANDUP.color,
     severity: "warning",
     category: "prompt",
-    title: "Digest prompt drifts from the notification template",
+    title: "Digest prompt drifts from the standup template",
     createdAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
   },
   {
-    id: "dv-3",
-    personaId: "p-dataproc",
-    personaName: "DataProcessor",
-    personaColor: "#fbbf24",
-    severity: "warning",
-    category: "triggers",
-    title: "Polling trigger fires 4x more often than the data changes",
-    createdAt: new Date(Date.now() - 27 * 3600_000).toISOString(),
-  },
-  {
     id: "dv-4",
-    personaId: "p-codereview",
-    personaName: "CodeReviewer",
-    personaColor: "#34d399",
+    personaId: PR_REVIEW.id,
+    personaName: PR_REVIEW.name,
+    personaColor: PR_REVIEW.color,
     severity: "info",
     category: "usefulness",
     title: "Review summaries restate the diff instead of judging it",
@@ -2110,23 +2102,33 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
   },
   {
     id: "dv-5",
-    personaId: "p-research",
-    personaName: "ResearchAgent",
-    personaColor: "#06b6d4",
+    personaId: INCIDENT.id,
+    personaName: INCIDENT.name,
+    personaColor: INCIDENT.color,
     severity: "info",
     category: "memory",
-    title: "Recall surfaces near-duplicate memories from the same crawl",
+    title: "Recall surfaces near-duplicate memories from the same outage",
     createdAt: new Date(Date.now() - 2 * 24 * 3600_000).toISOString(),
   },
   {
+    id: "dv-3",
+    personaId: SECURITY.id,
+    personaName: SECURITY.name,
+    personaColor: SECURITY.color,
+    severity: "warning",
+    category: "triggers",
+    title: "Scan schedule fires 4x more often than the repos change",
+    createdAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
+  },
+  {
     id: "dv-6",
-    personaId: "p-dataproc",
-    personaName: "DataProcessor",
-    personaColor: "#fbbf24",
+    personaId: SECURITY.id,
+    personaName: SECURITY.name,
+    personaColor: SECURITY.color,
     severity: "info",
     category: "credentials",
-    title: "Vault token scoped wider than the jobs it runs",
-    createdAt: new Date(Date.now() - 3 * 24 * 3600_000).toISOString(),
+    title: "Vault token scoped wider than the scans it runs",
+    createdAt: new Date(Date.now() - 16 * 24 * 3600_000 - 2 * 3600_000).toISOString(),
   },
 ];
 
@@ -2191,3 +2193,342 @@ export const MOCK_CREDENTIAL_ROTATIONS: CredentialRotation[] = [
   { id: "cr_gcal", secret: "GCAL_REFRESH_TOKEN", hasPolicy: true, enabled: false, anomaly: false, overdue: true, nextRotation: "—", intervalDays: 60 },
 ];
 
+
+// ---------------------------------------------------------------------------
+// Notes: the desktop Notepad's goals (synced_notes, PHASE2-SPEC.md 5.1)
+// ---------------------------------------------------------------------------
+
+const NOTE_HOUR = 3_600_000;
+const noteAt = (hoursAgo: number) => new Date(Date.now() - hoursAgo * NOTE_HOUR).toISOString();
+
+/**
+ * Demo goals across three projects plus the no-project bucket, every status on
+ * both rails, two with open reviews. Served through `mockApi.listNotes`, never
+ * imported by a view. Bodies stay inside `MarkdownReport`'s subset.
+ */
+export const MOCK_NOTES: SyncedNote[] = [
+  {
+    id: "note-cmd-plane",
+    deviceId: "demo-desktop",
+    projectName: "Personas desktop",
+    title: "Phone command plane: pause, resume and cancel",
+    bodyMd: "## Scope\n\nLet a paired phone pause, resume and cancel agents while the desktop is online.\n\n- Signed command envelope, verified on the desktop\n- Refuse when the desktop is offline: nothing is queued\n- One chip per command: Sending, Working, Done\n\n> Spending verbs ride the same trust as pause and resume.",
+    status: "scoped",
+    orderIndex: 0,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 1,
+    unreadComments: 2,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(26 * 24),
+    updatedAt: noteAt(3),
+  },
+  {
+    id: "note-notes-toggle",
+    deviceId: "demo-desktop",
+    projectName: "Personas desktop",
+    title: "Sync notes as a separate opt-in in Cloud sync",
+    bodyMd: "A **Sync notes** switch beside Sync chats, off by default. Turning it off deletes this computer's notes from the cloud.\n\n1. Toggle in `CloudSyncCard`\n2. Full-set push after the fleet queue\n3. Mask secret-looking tokens before upload",
+    status: "cut",
+    orderIndex: 1,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(20 * 24),
+    updatedAt: noteAt(9),
+  },
+  {
+    id: "note-heartbeat",
+    deviceId: "demo-desktop",
+    projectName: "Personas desktop",
+    title: "Server-stamped device heartbeat",
+    bodyMd: "The cloud stamps `last_seen_at`, so only the phone's clock matters for the online check.",
+    status: "shipped",
+    orderIndex: 2,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: noteAt(2 * 24),
+    createdAt: noteAt(30 * 24),
+    updatedAt: noteAt(2 * 24),
+  },
+  {
+    id: "note-chat-turn",
+    deviceId: "demo-desktop",
+    projectName: "Personas desktop",
+    title: "Move the chat turn into the Rust core",
+    bodyMd: "## Why\n\nA phone can only send a chat message if the desktop can run a turn without the chat window open.\n\n## Steps\n\n- Insert the user message\n- Resume the agent's session, or send the transcript on a first turn\n- Store the reply when the run completes",
+    status: "in_progress",
+    orderIndex: 3,
+    dispatchTarget: "fleet",
+    resultSummary: null,
+    openReviews: 2,
+    unreadComments: 3,
+    publishedAt: noteAt(30),
+    startedAt: noteAt(5),
+    completedAt: null,
+    createdAt: noteAt(4 * 24),
+    updatedAt: noteAt(1),
+  },
+  {
+    id: "note-queue-flake",
+    deviceId: "demo-desktop",
+    projectName: "Personas desktop",
+    title: "Find out why the Fleet queue skips a job after resume",
+    bodyMd: "Seen twice this week. Reproduce with a paused persona and two queued runs.",
+    status: "draft",
+    orderIndex: 4,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(6),
+    updatedAt: noteAt(6),
+  },
+  {
+    id: "note-web-notes-view",
+    deviceId: "demo-desktop",
+    projectName: "personas-web",
+    title: "Notes view on the phone dashboard",
+    bodyMd: "Goals zoned by project, each card with its status rail and what waits for review. A tap opens the body.\n\n- Read-only for now\n- Explain the opt-in when nothing has synced",
+    status: "published",
+    orderIndex: 0,
+    dispatchTarget: "athena_goals",
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 1,
+    publishedAt: noteAt(4),
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(2 * 24),
+    updatedAt: noteAt(4),
+  },
+  {
+    id: "note-pricing-perf",
+    deviceId: "demo-desktop",
+    projectName: "personas-web",
+    title: "Speed up the pricing page on phones",
+    bodyMd: "## Findings\n\n- The comparison table shipped its icons as one large sprite\n- Two fonts loaded before first paint\n\n## Result\n\nThe largest paint now lands under two seconds on a mid-range phone.",
+    status: "completed",
+    orderIndex: 1,
+    dispatchTarget: "fleet",
+    resultSummary: "Largest paint 3.4 s to 1.8 s on a throttled phone; the icon sprite split and one font deferred.",
+    openReviews: 1,
+    unreadComments: 1,
+    publishedAt: noteAt(3 * 24),
+    startedAt: noteAt(3 * 24 - 1),
+    completedAt: noteAt(2 * 24 + 20),
+    createdAt: noteAt(5 * 24),
+    updatedAt: noteAt(2 * 24 + 20),
+  },
+  {
+    id: "note-translate-mobile",
+    deviceId: "demo-desktop",
+    projectName: "personas-web",
+    title: "Translate the phone dashboard copy into 13 languages",
+    bodyMd: "Once the phone screens settle: hand-translate every string, no English placeholders.",
+    status: "scoped",
+    orderIndex: 2,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(3 * 24),
+    updatedAt: noteAt(3 * 24),
+  },
+  {
+    id: "note-vector-stores",
+    deviceId: "demo-desktop",
+    projectName: "Research",
+    title: "Compare local vector stores for agent memory",
+    bodyMd: "## Question\n\nWhich store keeps recall fast at 100k memories without a server?\n\n## Candidates\n\n- An embedded SQLite extension\n- A single-file index beside the database\n- A columnar file format with a vector index",
+    status: "completed",
+    orderIndex: 0,
+    dispatchTarget: "athena_goals",
+    resultSummary: "The SQLite extension wins: recall within 2% of the best, no extra process, one file to back up.",
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: noteAt(8 * 24),
+    startedAt: noteAt(8 * 24 - 2),
+    completedAt: noteAt(7 * 24),
+    createdAt: noteAt(9 * 24),
+    updatedAt: noteAt(7 * 24),
+  },
+  {
+    id: "note-digest-format",
+    deviceId: "demo-desktop",
+    projectName: "Research",
+    title: "A weekly digest Athena can write without being asked",
+    bodyMd: "What changed, what failed, what is waiting on me. One screen, no charts.",
+    status: "draft",
+    orderIndex: 1,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(28),
+    updatedAt: noteAt(28),
+  },
+  {
+    id: "note-voice-capture",
+    deviceId: "demo-desktop",
+    projectName: null,
+    title: "Capture a note by voice from the phone",
+    bodyMd: "",
+    status: "draft",
+    orderIndex: 0,
+    dispatchTarget: null,
+    resultSummary: null,
+    openReviews: 0,
+    unreadComments: 0,
+    publishedAt: null,
+    startedAt: null,
+    completedAt: null,
+    createdAt: noteAt(50),
+    updatedAt: noteAt(50),
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Chat: the demo computer's synced threads (synced_chat_*, PHASE2-SPEC.md 5.2)
+// ---------------------------------------------------------------------------
+
+/** The demo's simulated desktop (the same id `useSyncReachability` reports in the demo). */
+export const MOCK_CHAT_DEVICE_ID = "demo-desktop";
+
+const CHAT_MIN = 60_000;
+const chatAt = (minutesAgo: number) => new Date(Date.now() - minutesAgo * CHAT_MIN).toISOString();
+const CHAT_PR_REVIEW = MOCK_PERSONAS[0].id;
+const CHAT_INCIDENT = MOCK_PERSONAS[1].id;
+
+function chatSession(
+  sessionId: string,
+  threadKind: ChatSession["threadKind"],
+  personaId: string,
+  title: string,
+  createdMinutesAgo: number,
+  updatedMinutesAgo: number,
+  pinned = false,
+): ChatSession {
+  const athena = threadKind === "athena";
+  return {
+    sessionId,
+    deviceId: MOCK_CHAT_DEVICE_ID,
+    threadKind,
+    personaId,
+    title,
+    chatMode: athena ? null : "ops",
+    origin: athena ? "user" : null,
+    pinned,
+    createdAt: chatAt(createdMinutesAgo),
+    updatedAt: chatAt(updatedMinutesAgo),
+  };
+}
+
+/**
+ * Two Athena threads (one pinned) and three persona threads across two
+ * personas. Mutable for the session: the demo desktop (`mockCommandPlane`)
+ * adds threads and messages as a visitor chats. Served through `mockApi`,
+ * never imported by a view.
+ */
+export const MOCK_CHAT_SESSIONS: ChatSession[] = [
+  chatSession("default", "athena", "athena", "Daily check-in", 60 * 26, 12, true),
+  chatSession("athena-week-plan", "athena", "athena", "Plan the week", 60 * 24 * 3, 60 * 48),
+  chatSession("chat-pr-482", "persona", CHAT_PR_REVIEW, "Why did PR #482 fail review?", 90, 40),
+  chatSession("chat-pr-checklist", "persona", CHAT_PR_REVIEW, "Review checklist for the API team", 60 * 24 * 4, 60 * 24 * 3),
+  chatSession("chat-inc-502", "persona", CHAT_INCIDENT, "Last night's 502 spike", 60 * 6, 60 * 5),
+];
+
+type MockChatLine = [role: ChatMessage["role"], minutesAgo: number, content: string];
+
+function chatThread(session: ChatSession, lines: MockChatLine[]): ChatMessage[] {
+  return lines.map(([role, minutesAgo, content], i) => ({
+    id: `${session.sessionId}-m${i + 1}`,
+    deviceId: session.deviceId,
+    threadKind: session.threadKind,
+    personaId: session.personaId,
+    sessionId: session.sessionId,
+    role,
+    content,
+    executionId: role === "assistant" && session.threadKind === "persona" ? `exec-${session.sessionId}-${i + 1}` : null,
+    createdAt: chatAt(minutesAgo),
+  }));
+}
+
+const [CHAT_DAILY, CHAT_WEEK, CHAT_PR, CHAT_CHECKLIST, CHAT_INC] = MOCK_CHAT_SESSIONS;
+
+/** The threads' messages. Assistant turns stay inside `MarkdownReport`'s subset. */
+export const MOCK_CHAT_MESSAGES: ChatMessage[] = [
+  ...chatThread(CHAT_DAILY, [
+    ["user", 15, "Anything I should look at before standup?"],
+    [
+      "assistant",
+      12,
+      "Two things need you this morning:\n\n- **PR Review Agent** flagged PR #482: a missing null check in the billing webhook.\n- **Incident Responder** closed last night's 502 spike. The root cause was a cold cache after the deploy.\n\nEverything else ran clean overnight.",
+    ],
+  ]),
+  ...chatThread(CHAT_WEEK, [
+    ["user", 60 * 49, "Help me plan the week around the billing launch."],
+    [
+      "assistant",
+      60 * 48,
+      "Here is a plan that keeps Friday free for the launch:\n\n1. **Mon-Tue:** finish the webhook fixes and re-run the review.\n2. **Wed:** load test with the Incident Responder watching.\n3. **Thu:** write the release notes.\n\nWant me to turn these into goals in your Notepad?",
+    ],
+  ]),
+  ...chatThread(CHAT_PR, [
+    ["user", 42, "Why did PR #482 fail review?"],
+    [
+      "assistant",
+      40,
+      "It failed one check:\n\n- `handleInvoicePaid` reads `customer.email` without a null check. Guest checkouts have no customer, so the webhook throws.\n\nA one-line guard fixes it. I left the suggestion on the PR.",
+    ],
+  ]),
+  ...chatThread(CHAT_CHECKLIST, [
+    ["user", 60 * 24 * 4, "What do you check on every API pull request?"],
+    [
+      "assistant",
+      60 * 24 * 3,
+      "Every API pull request gets the same four checks:\n\n1. Input validation on new endpoints\n2. Auth on every route\n3. No secrets in the diff\n4. Tests for the changed handlers",
+    ],
+  ]),
+  ...chatThread(CHAT_INC, [
+    ["user", 60 * 5 + 10, "What caused the 502 spike last night?"],
+    [
+      "assistant",
+      60 * 5,
+      "The 502s came from a cold cache after the 23:10 deploy:\n\n- Error rate peaked at **4.2%** for six minutes.\n- It recovered once the cache warmed. No data was lost.\n\nI opened a follow-up to warm the cache before traffic shifts.",
+    ],
+  ]),
+];
+
+/**
+ * The demo desktop's canned reply to a phone message (demo data, like the
+ * fixtures): Athena's, or a persona's by name. Quotes the first line of the
+ * message, so the visitor sees their own words answered.
+ */
+export function mockChatReply(personaName: string | null, message: string): string {
+  const firstLine = message.split("\n")[0].trim();
+  const quoted = firstLine.length > 80 ? `${firstLine.slice(0, 77)}...` : firstLine;
+  if (personaName === null) {
+    return `On your own computer I would work on this with your agents and goals:\n\n> ${quoted}\n\n- I can check what ran overnight\n- I can draft a plan and hand it to Fleet\n\n*A demo reply from a simulated computer.*`;
+  }
+  return `**${personaName}** here. On your own computer I would answer this as a chat turn:\n\n> ${quoted}\n\n1. Read the context I have access to\n2. Answer here, and log the run in Activity\n\n*A demo reply from a simulated computer.*`;
+}

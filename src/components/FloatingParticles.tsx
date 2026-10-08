@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useQualityTier, type QualityTier } from "@/contexts/QualityContext";
 import {
   useParticleLayer,
@@ -45,7 +45,7 @@ const ALL_PARTICLES: Particle[] = Array.from({ length: MAX_PARTICLES }, (_, i) =
 }));
 
 export default function FloatingParticles() {
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useStillMotion();
   const tier = useQualityTier();
   const hostRef = useRef<HTMLDivElement>(null);
   const particles = ALL_PARTICLES.slice(0, PARTICLE_COUNTS[tier]);
@@ -89,8 +89,10 @@ export default function FloatingParticles() {
     enabled: !prefersReducedMotion && tier !== "low",
   });
 
-  if (prefersReducedMotion || tier === "low") return null;
-
+  // The host div renders in every case: returning null under reduced motion
+  // made the served hero and a reduced-motion client's first render disagree,
+  // so React threw away and re-rendered the whole hero for exactly the
+  // visitors who asked for less work. Only the particle layer is gated.
   return (
     <div
       ref={hostRef}

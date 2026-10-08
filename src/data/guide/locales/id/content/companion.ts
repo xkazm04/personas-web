@@ -121,7 +121,7 @@ Buka **Companion → Memory** untuk melihat semua yang diketahui Athena. Brain V
 
 ### Privasi
 
-Data otak — semua lima tingkatan memori — tinggal di mesin Anda di \`~/.personas/companion-brain/\`. Tidak ada yang disimpan di database cloud. Jika Anda menggunakan mesin STT Whisper lokal dan TTS Piper, tidak ada audio yang meninggalkan mesin Anda juga.
+Data otak — semua lima tingkatan memori — tinggal di mesin Anda di \`~/.personas/companion-brain/\`. Tidak ada yang disimpan di database cloud, dengan satu pengecualian opsional: jika Anda menyalakan "Sinkronkan obrolan" di pengaturan sinkronisasi cloud aplikasi desktop (mati secara default), percakapan Anda dengannya disalin ke akun Personas Anda, dengan semua yang tampak seperti kunci disamarkan, agar Anda dapat membaca dan membalasnya dari ponsel. Mematikannya akan menghapus salinan itu. Jika Anda menggunakan mesin STT Whisper lokal dan TTS Piper, tidak ada audio yang meninggalkan mesin Anda juga.
 
 :::tip
 Wawancara masuk singkat (beberapa menit) dan langsung memberikan manfaat — beberapa balasan pertama Athena setelah masuk yang baik terasa jauh lebih tepat sasaran. Jalankan sebelum sesi nyata pertama Anda.

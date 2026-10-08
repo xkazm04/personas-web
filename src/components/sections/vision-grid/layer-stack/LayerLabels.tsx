@@ -4,6 +4,7 @@ import { useRef, type KeyboardEvent } from "react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import type { StackLayer } from "./layers";
 import { LABELS_LEFT, STACK, slabMidY } from "./LayerPlates";
+import { visionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * The flat, readable side of the exploded diagram: one callout per slab,
@@ -41,7 +42,7 @@ export function LayerLabels({
   };
 
   return (
-    <div role="tablist" aria-orientation="vertical" aria-label="Platform layers" onKeyDown={onKey} className="absolute inset-0 z-30">
+    <div role="tablist" aria-orientation="vertical" aria-label={visionStackCopy.tabsLabel} onKeyDown={onKey} className="absolute inset-0 z-30">
       {layers.map((layer, i) => {
         const on = i === activeIndex;
         const color = BRAND_VAR[layer.brand];

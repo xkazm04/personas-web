@@ -31,16 +31,12 @@ import { buildPreviewRegistry } from "./derive";
  * that mounts them with default props if they need preview support.
  */
 export const PREVIEW_EXTRAS: Record<string, ComponentType> = {
-  hero: dynamic(() => import("@/components/sections/Hero")),
+  hero: dynamic(() => import("@/components/sections/hero-hive")),
   footer: dynamic(() => import("@/components/sections/Footer")),
   roadmap: dynamic(() => import("@/components/sections/roadmap")),
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
   // Preview-only: no page mounts these.
-  features: dynamic(() => import("@/components/sections/features")),
   "platform-command": dynamic(() => import("@/components/sections/platform-command")),
-  "agent-playground": dynamic(() => import("@/components/sections/agent-playground")),
-  "playground-timeline": dynamic(() => import("@/components/sections/playground-timeline")),
-  changelog: dynamic(() => import("@/components/sections/Changelog")),
 };
 
 export const PREVIEW_REGISTRY: ReadonlyMap<string, ComponentType> = buildPreviewRegistry<ComponentType>(

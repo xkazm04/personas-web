@@ -123,7 +123,7 @@ Ouvrez **Compagnon → Mémoire** pour voir tout ce qu'Athena sait. Le visionneu
 
 ### Confidentialité
 
-Les données du cerveau — les cinq niveaux de mémoire — vivent sur votre machine dans \`~/.personas/companion-brain/\`. Rien n'est stocké dans une base de données cloud. Si vous utilisez les moteurs STT Whisper local et TTS Piper, aucun audio ne quitte non plus votre machine.
+Les données du cerveau — les cinq niveaux de mémoire — vivent sur votre machine dans \`~/.personas/companion-brain/\`. Rien de tout cela n'est stocké dans une base de données cloud, à une exception près, que vous devez activer : si vous activez « Synchroniser les discussions » dans les réglages de synchronisation cloud de l'application de bureau (désactivé par défaut), vos conversations avec elle sont copiées sur votre compte Personas, tout ce qui ressemble à une clé étant masqué, pour que vous puissiez les lire et y répondre depuis votre téléphone. Le désactiver supprime cette copie. Si vous utilisez les moteurs STT Whisper local et TTS Piper, aucun audio ne quitte non plus votre machine.
 
 :::tip
 L'entretien de prise en charge est court (quelques minutes) et porte ses fruits immédiatement — les premières réponses d'Athena après un bon entretien sont nettement plus pertinentes. Lancez-le avant votre première vraie session.

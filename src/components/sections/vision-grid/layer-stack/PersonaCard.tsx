@@ -4,7 +4,9 @@ import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import { Clock, Cpu, DollarSign, FlaskConical, Inbox, LayoutGrid, Lock, Zap } from "lucide-react";
 import { BRAND_VAR, STATE_COLORS, tint } from "@/lib/brand-theme";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { SAMPLE_CONNECTORS, SAMPLE_PERSONA, type CardPart, type StackLayer } from "./layers";
+import { visionStackCopy } from "@/i18n/pending/visionStack";
 
 /**
  * The sample agent at the top of the stack, reduced from the app's persona
@@ -15,6 +17,7 @@ import { SAMPLE_CONNECTORS, SAMPLE_PERSONA, type CardPart, type StackLayer } fro
  */
 export function LayerStackPersonaCard({ active }: { active: StackLayer }) {
   const p = SAMPLE_PERSONA;
+  const words = visionStackCopy.persona;
   const lit = (part: CardPart): CSSProperties =>
     active.part === part
       ? { boxShadow: `0 0 0 1px ${BRAND_VAR[active.brand]}`, backgroundColor: tint(active.brand, 14) }
@@ -34,15 +37,15 @@ export function LayerStackPersonaCard({ active }: { active: StackLayer }) {
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="truncate text-sm font-bold text-foreground">{p.name}</span>
+            <span className="truncate text-sm font-bold text-foreground">{words.name}</span>
             <span className="flex items-center gap-1 text-xs text-muted">
               <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: STATE_COLORS.success }} aria-hidden />
-              Active
+              {words.active}
             </span>
           </div>
           <Chip style={lit("origin")} className="-ml-1 mt-0.5">
             <LayoutGrid className="h-3 w-3" aria-hidden />
-            from {p.origin}
+            {fillTemplate(words.fromOrigin, { origin: words.origin })}
           </Chip>
         </div>
         <Chip style={lit("model")} className="border border-glass">
@@ -63,18 +66,18 @@ export function LayerStackPersonaCard({ active }: { active: StackLayer }) {
               <Image src={`/tools/${c.icon}.svg`} alt={c.label} width={14} height={14} />
             </span>
           ))}
-          <Lock className="mx-1 h-3 w-3 text-muted" aria-label="Credentials stored locally" />
+          <Lock className="mx-1 h-3 w-3 text-muted" aria-label={words.credentialsLocal} />
         </div>
         <Chip style={lit("trigger")} className="border border-glass font-mono">
           <Zap className="h-3 w-3" aria-hidden />
-          {p.trigger}
+          {words.trigger}
         </Chip>
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-1 gap-y-1 border-t border-glass px-2.5 py-1.5">
         <Chip style={lit("run")}>
           <Clock className="h-3 w-3" aria-hidden />
-          {p.lastRun}
+          {words.lastRun}
         </Chip>
         <Chip>
           <DollarSign className="h-3 w-3" aria-hidden />

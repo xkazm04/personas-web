@@ -3,7 +3,6 @@ import type { AccentToken, Comment, Feature } from "./local-types";
 
 export const featureIllustrations: Record<string, string> = {
   macos: "/gen/vote/vote-macos.png",
-  i18n: "/gen/vote/vote-i18n.png",
   dashboard: "/gen/vote/vote-dashboard.png",
   enterprise: "/gen/vote/vote-enterprise.png",
 };
@@ -15,7 +14,7 @@ export const featureIllustrations: Record<string, string> = {
  * `featureVoting.features[id]` — keyed by `id`, which also links to the
  * server-side `ALLOWED_FEATURES` allowlist.
  *
- * PROVENANCE: nothing measured produced these four numbers, and every surface
+ * PROVENANCE: nothing measured produced these three numbers, and every surface
  * that renders `seed + apiCount` is therefore showing a commitment, not a
  * count. The seed itself is a deliberate product decision and stays; what it
  * must not do is wear a liveness badge unchallenged, so
@@ -25,7 +24,6 @@ export const featureIllustrations: Record<string, string> = {
  */
 export const features: Feature[] = [
   { id: "macos", accent: "cyan", votes: 342 },
-  { id: "i18n", accent: "purple", votes: 189 },
   { id: "dashboard", accent: "emerald", votes: 276 },
   { id: "enterprise", accent: "amber", votes: 214 },
 ];

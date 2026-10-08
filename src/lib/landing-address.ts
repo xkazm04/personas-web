@@ -36,14 +36,24 @@ export interface LandingAddress {
  *  forever. The test fails if page.tsx grows a wrapper this table misses. */
 const ALIASES: Readonly<Record<string, string>> = {
   "download-section": "download",
-  tools: "use-cases",
-  playground: "playground-split",
+  // The declared ids name the story (personas/concepts/triggers/private); the
+  // sections' own ids stay resolvable because links and the guided tour use them.
+  tools: "personas",
+  "use-cases": "personas",
+  playground: "concepts",
+  "playground-split": "concepts",
+  pipelines: "triggers",
+  "orchestration-hub": "triggers",
+  vision: "private",
+  "vision-grid": "private",
 };
 
 /** Declared ids whose mounted section renders a different id. */
 const INNER_IDS: Readonly<Record<string, string>> = {
-  pipelines: "orchestration-hub",
-  vision: "vision-grid",
+  personas: "use-cases",
+  concepts: "playground-split",
+  triggers: "orchestration-hub",
+  private: "vision-grid",
 };
 
 /** Addresses whose id the always-present wrapper owns (page.tsx `wrapperId`

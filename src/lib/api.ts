@@ -3,6 +3,8 @@ import { useAuthStore } from "@/stores/authStore";
 import { mockApi } from "./mockApi";
 import { supabaseApi } from "./supabaseApi";
 import { OrchestratorConfigError } from "./orchestrator-config";
+import { ApiError } from "./api-error";
+import { createDesktopApi } from "./desktopApi";
 
 export { OrchestratorConfigError };
 import type {
@@ -26,20 +28,16 @@ import type {
   PersonaExecutionStatus,
   EventStatus,
 } from "./types";
+import type { SyncedNote } from "./notes/notesModel";
+import type { ChannelSayInput } from "./commands/channelSay";
+import type { ChatMessage, ChatSendInput, ChatSession, ChatThreadRef, ListChatSessionsInput } from "./chat/chatModel";
+import { verdictEventBody, type ReviewDecisionInput } from "./commands/reviewDecide";
 
 // ---------------------------------------------------------------------------
 // Error
 // ---------------------------------------------------------------------------
 
-export class ApiError extends Error {
-  constructor(
-    public status: number,
-    public body: string,
-  ) {
-    super(`API ${status}: ${body}`);
-    this.name = "ApiError";
-  }
-}
+export { ApiError };
 
 // ---------------------------------------------------------------------------
 // Core fetch wrapper
@@ -121,6 +119,29 @@ async function orchestratorFetch<T>(
 }
 
 // ---------------------------------------------------------------------------
+// Acks: a direct plane answers with the effect, a command plane with a command
+// ---------------------------------------------------------------------------
+
+/**
+ * A command plane's answer (PHASE2-SPEC.md 6.2): the demo's scripted desktop
+ * and the live sync mirror do not act, they send a command to the desktop.
+ * Follow it in `commandStore` (`inflight[commandId]`, or `settleCommand`).
+ */
+export interface CommandAck {
+  commandId: string;
+}
+
+/** A direct plane's answer (the orchestrator REST API): the effect itself. */
+export interface ExecutionAck {
+  executionId: string;
+  status: PersonaExecutionStatus;
+}
+
+export function isCommandAck(ack: CommandAck | ExecutionAck): ack is CommandAck {
+  return "commandId" in ack;
+}
+
+// ---------------------------------------------------------------------------
 // Shared interface — enforces parity between mock and real implementations
 // ---------------------------------------------------------------------------
 
@@ -130,11 +151,22 @@ export interface ApiClient {
   deletePersona(id: string): Promise<{ deleted: boolean }>;
   listExecutions(opts?: ExecFilterOpts): Promise<PersonaExecution[]>;
   getExecution(id: string, offset?: number): Promise<ExecutionDetail>;
-  cancelExecution(id: string): Promise<{ executionId: string; status: PersonaExecutionStatus }>;
-  executePersona(personaId: string, prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }>;
+  /** `personaId` saves the command planes a lookup (`cancel_execution` names the owning persona). */
+  cancelExecution(id: string, personaId?: string): Promise<ExecutionAck | CommandAck>;
+  executePersona(personaId: string, prompt: string): Promise<ExecutionAck | CommandAck>;
+  /** Pause / resume a persona (`enabled`): a command on every plane that has one. */
+  pausePersona(id: string): Promise<CommandAck>;
+  resumePersona(id: string): Promise<CommandAck>;
   listEvents(opts?: { eventType?: string; status?: string; limit?: number; offset?: number }): Promise<PersonaEvent[]>;
   publishEvent(input: CreateEventInput): Promise<PersonaEvent>;
   updateEvent(id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent>;
+  /**
+   * Record a manual review's verdict. The orchestrator writes it at once (the
+   * updated event); the command planes send a `review_decide` (PLAN M20,
+   * PHASE2-SPEC.md 1.6), so the desktop runs its whole decision, and answer
+   * with the command to follow.
+   */
+  decideReview(input: ReviewDecisionInput): Promise<PersonaEvent | CommandAck>;
   listSubscriptions(personaId: string): Promise<PersonaEventSubscription[]>;
   listAllSubscriptions(): Promise<PersonaEventSubscription[]>;
   createSubscription(input: { personaId: string; eventType: string; sourceFilter?: string }): Promise<PersonaEventSubscription>;
@@ -149,6 +181,20 @@ export interface ApiClient {
   getObservabilityPersonaSpend(): Promise<PersonaSpend[]>;
   getObservabilityHealthIssues(): Promise<HealthIssue[]>;
   getUsageAnalytics(): Promise<{ toolUsage: ToolUsageSummary[]; toolUsageOverTime: ToolUsageOverTime[]; toolUsageByPersona: ToolUsageByPersona[] }>;
+  /** The desktop Notepad's goals (`synced_notes`, PHASE2-SPEC.md 5.1). Read-only. */
+  listNotes(): Promise<SyncedNote[]>;
+  /** Chat threads (`synced_chat_sessions`, PHASE2-SPEC.md 5.2): Athena's, or one persona's. */
+  listChatSessions(input: ListChatSessionsInput): Promise<ChatSession[]>;
+  /** One thread's messages, oldest first (`synced_chat_messages`). */
+  listChatMessages(thread: ChatThreadRef): Promise<ChatMessage[]>;
+  /** Send a chat message: a `chat_send` command (spec 5.3); the reply arrives as synced data. */
+  sendChatMessage(input: ChatSendInput): Promise<CommandAck>;
+  /**
+   * Direct an App Master: a `channel_say` command (weekend item E). The desk
+   * writes it into the master's channel and starts no run; the headless master
+   * reads it at its next wake. Answers with the command to follow.
+   */
+  sayToMaster(input: ChannelSayInput): Promise<CommandAck>;
 }
 
 // ---------------------------------------------------------------------------
@@ -184,19 +230,28 @@ const realApi: ApiClient = {
         }),
 
       cancelExecution: (id: string) =>
-        orchestratorFetch<{ executionId: string; status: PersonaExecutionStatus }>(
+        orchestratorFetch<ExecutionAck>(
           `/api/executions/${id}/cancel`,
           { method: "POST" },
         ),
 
       executePersona: (personaId: string, prompt: string) =>
-        orchestratorFetch<{ executionId: string; status: PersonaExecutionStatus }>(
+        orchestratorFetch<ExecutionAck>(
           "/api/execute",
           {
             method: "POST",
             body: { personaId, prompt },
           },
         ),
+
+      // The orchestrator has no pause endpoint, and the phone offers no
+      // action on this plane (its reachability tier is never-synced).
+      pausePersona: async () => {
+        throw new ApiError(501, "Pausing an agent is not available on the orchestrator plane.");
+      },
+      resumePersona: async () => {
+        throw new ApiError(501, "Resuming an agent is not available on the orchestrator plane.");
+      },
 
       // Events
       listEvents: (opts?: {
@@ -227,6 +282,13 @@ const realApi: ApiClient = {
         orchestratorFetch<PersonaEvent>(`/api/events/${id}`, {
           method: "PUT",
           body,
+        }),
+
+      // A review is a manual_review event here: the verdict is its status PUT.
+      decideReview: (input: ReviewDecisionInput) =>
+        orchestratorFetch<PersonaEvent>(`/api/events/${input.reviewId}`, {
+          method: "PUT",
+          body: verdictEventBody(input.decision, input.resolvedBy, input.notes),
         }),
 
       // Subscriptions
@@ -335,16 +397,38 @@ const realApi: ApiClient = {
           toolUsageOverTime: ToolUsageOverTime[];
           toolUsageByPersona: ToolUsageByPersona[];
         }>("/api/usage"),
+
+      // Notes are a sync-mirror class (synced_notes): the orchestrator has no
+      // notes endpoint, and on this plane the desktop is unreachable anyway
+      // (reachability reads "never synced"), so there is nothing to list.
+      listNotes: async () => [],
+
+      // Chat is a sync-mirror class too (synced_chat_*), and sending is a
+      // command to the desktop: the orchestrator plane has neither.
+      listChatSessions: async () => [],
+      listChatMessages: async () => [],
+      sendChatMessage: async () => {
+        throw new ApiError(501, "Chat is not available on the orchestrator plane.");
+      },
+      sayToMaster: async () => {
+        throw new ApiError(501, "Directing an App Master is not available on the orchestrator plane.");
+      },
     };
 
 /**
  * Which production data plane to use:
  *   - `supabaseApi` — the desktop → Supabase sync mirror (read-only), when
  *     `NEXT_PUBLIC_DATA_SOURCE=supabase`.
+ *   - `desktopApi` — the desktop's management API through the proxy, mapped
+ *     into the web's types, when `NEXT_PUBLIC_DATA_SOURCE=desktop`.
  *   - `realApi` — the orchestrator REST API (default; left untouched).
  * Demo/dev always use the mock.
  */
 const USE_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
+const USE_DESKTOP = process.env.NEXT_PUBLIC_DATA_SOURCE === "desktop";
+
+/** The orchestrator proxy pointed at the desktop (`ORCHESTRATOR_TARGET=desktop`): its answers mapped into the web's types. */
+const desktopApi: ApiClient = createDesktopApi(orchestratorFetch, realApi);
 
 /**
  * Dynamic API dispatch: uses mockApi when the user entered via the "Try Demo"
@@ -356,7 +440,7 @@ export const api: ApiClient = new Proxy({} as ApiClient, {
   get(_target, prop: string | symbol) {
     const { isDemo } = useAuthStore.getState();
     if (isDemo) return mockApi[prop as keyof ApiClient];
-    const impl = USE_SUPABASE ? supabaseApi : realApi;
+    const impl = USE_SUPABASE ? supabaseApi : USE_DESKTOP ? desktopApi : realApi;
     return impl[prop as keyof ApiClient];
   },
 });

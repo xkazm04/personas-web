@@ -12,7 +12,7 @@ export const Pm = "animate-pulse bg-white/[0.03] rounded-md";
 /* ── Generic fallback for sections without a specific skeleton ── */
 export function SectionSkeleton() {
   return (
-    <section className="relative px-6 py-24 md:py-32">
+    <section data-lazy-placeholder className="relative px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl flex flex-col items-center gap-4">
         <div className={`h-10 w-2/3 max-w-md sm:h-12 ${Ps}`} />
         <div className={`h-4 w-1/2 max-w-sm ${Pm}`} />

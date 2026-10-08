@@ -9,6 +9,9 @@ import { GENOME_NODES } from "../data";
 import { bestLineage, genomeSummary, nodeTone, type NodeTone } from "../genome";
 import type { GenomeNode } from "../types";
 import TabBackdrop from "./TabBackdrop";
+import { useStageBox } from "../useStageBox";
+import { fillTemplate } from "@/lib/fillTemplate";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 // Module-level: GENOME_NODES is static, so the lineage and the header figures
 // are computed once, from the same data the tree draws.
@@ -25,14 +28,17 @@ const TONE_FILL: Record<NodeTone, string> = {
 };
 
 export default function EvolutionTab() {
+  const copy = labSectionCopy.evolution;
   // The best node's halo is an ambient loop: still under reduced motion, and
   // parked while the tab is backgrounded.
   const reduced = useStillMotion();
   const tabHidden = usePageVisibility();
   const still = reduced || tabHidden;
-  const width = 600;
-  const height = 320;
-  const padY = 30;
+  // On the desktop stage the tree draws in its slot's own pixels (useStageBox).
+  const [boxRef, box] = useStageBox<HTMLDivElement>();
+  const width = box?.w ?? 600;
+  const height = box?.h ?? 320;
+  const padY = box ? Math.min(30, Math.round(box.h * 0.09)) : 30;
 
   const nodeCoord = (n: GenomeNode) => ({
     cx: n.x * width,
@@ -40,26 +46,24 @@ export default function EvolutionTab() {
   });
 
   return (
-    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden stage:h-full">
       <TabBackdrop tab="evolution" />
-      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3 stage:py-2">
         <div className="flex items-center gap-2">
           <Dna className="h-4 w-4 text-brand-amber" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
-            Genome tree
+            {copy.title}
           </span>
         </div>
         <div className="flex items-center gap-4 text-base font-mono">
           <span className="text-foreground/70">
-            Gen{" "}
-            <span className="text-foreground font-semibold tabular-nums">{SUMMARY.generation}</span>
+            {copy.gen} <span className="text-foreground font-semibold tabular-nums">{SUMMARY.generation}</span>
           </span>
           <span className="text-foreground/70">
-            Best <span className="text-brand-amber font-semibold tabular-nums">{SUMMARY.best}</span>
+            {copy.best} <span className="text-brand-amber font-semibold tabular-nums">{SUMMARY.best}</span>
           </span>
           <span className="text-foreground/70">
-            Lineage{" "}
-            <span className="text-brand-emerald font-semibold tabular-nums">
+            {copy.lineage} <span className="text-brand-emerald font-semibold tabular-nums">
               {SUMMARY.lineageGainPct >= 0 ? "+" : ""}
               {SUMMARY.lineageGainPct}%
             </span>
@@ -67,10 +71,10 @@ export default function EvolutionTab() {
         </div>
       </div>
 
-      <div className="relative">
+      <div ref={boxRef} className="relative stage:min-h-0 stage:flex-1">
         <svg
           viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-[340px] text-foreground"
+          className="w-full h-[340px] text-foreground stage:absolute stage:inset-0 stage:h-full"
           preserveAspectRatio="xMidYMid meet"
         >
           {GENS.map((g) => {
@@ -94,7 +98,7 @@ export default function EvolutionTab() {
                   fontSize={16}
                   fontFamily="monospace"
                 >
-                  G{g}
+                  {fillTemplate(copy.genAxis, { gen: g })}
                 </text>
               </g>
             );
@@ -169,23 +173,23 @@ export default function EvolutionTab() {
         </svg>
       </div>
 
-      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 text-base font-mono">
+      <div className="relative flex items-center justify-between border-t border-foreground/[0.06] px-5 py-3 stage:py-2 text-base font-mono">
         <span className="flex items-center gap-3">
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-amber" />
-            <span className="text-foreground/85">best lineage</span>
+            <span className="text-foreground/85">{copy.bestLineage}</span>
           </span>
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-brand-emerald" />
-            <span className="text-foreground/85">alive</span>
+            <span className="text-foreground/85">{copy.alive}</span>
           </span>
           <span className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-foreground/30" />
-            <span className="text-foreground/85">culled</span>
+            <span className="text-foreground/85">{copy.culled}</span>
           </span>
         </span>
         <button className="flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/15 px-3 py-1 text-amber-700 dark:text-amber-300 uppercase tracking-wider">
-          <Play className="h-3 w-3" /> breed next gen
+          <Play className="h-3 w-3" /> {copy.breed}
         </button>
       </div>
     </div>

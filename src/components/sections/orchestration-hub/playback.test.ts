@@ -141,14 +141,14 @@ describe("guards", () => {
     expect(nextDeadline(reduce(s, { type: "USER_PAUSE" }))).toBeNull();
   });
 
-  it("every trigger the Athena tour clicks exists, and HubNode keeps data-trigger-id", () => {
+  it("every trigger the Athena tour clicks exists, and the ring keeps data-trigger-id", () => {
     const here = path.dirname(fileURLToPath(import.meta.url));
     const tour = readFileSync(path.resolve(here, "../../../lib/tour-script.ts"), "utf8");
     const clicked = [...tour.matchAll(/data-trigger-id="([\w-]+)"/g)].map((m) => m[1]);
-    expect(clicked).toEqual(["schedule", "event", "polling", "webhook"]);
+    expect(clicked).toEqual(["schedule", "event_listener", "polling", "webhook"]);
     const ids = TRIGGERS.map((t) => t.id);
     for (const id of clicked) expect(ids).toContain(id);
-    expect(readFileSync(path.join(here, "HubNode.tsx"), "utf8")).toContain("data-trigger-id");
+    expect(readFileSync(path.join(here, "RingNodes.tsx"), "utf8")).toContain("data-trigger-id");
   });
 
   it("the trigger catalog keeps its 10 entries in order", () => {

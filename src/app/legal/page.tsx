@@ -11,7 +11,7 @@ export const revalidate = 86400;
 export const metadata: Metadata = {
   title: "Privacy & Terms",
   description:
-    "Privacy policy, terms of service, and cookie policy for Personas. Your data stays on your device — we believe privacy is a right, not a feature.",
+    "Privacy policy, terms of service, and cookie policy for Personas. Your agents run on your device and your keys never leave it. We believe privacy is a right, not a feature.",
   alternates: {
     canonical: `${SITE_URL}/legal`,
   },

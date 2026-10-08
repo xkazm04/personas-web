@@ -138,7 +138,7 @@ create table if not exists public.synced_manual_reviews (
   id                 text primary key,
   user_id            uuid not null default auth.uid() references auth.users(id) on delete cascade,
   device_id          text,
-  execution_id       text not null,
+  execution_id       text,
   persona_id         text not null,
   title              text not null,
   description        text,
@@ -152,6 +152,8 @@ create table if not exists public.synced_manual_reviews (
   updated_at         timestamptz not null default now(),
   synced_at          timestamptz not null default now()
 );
+-- A council Approval has no execution; the table already deployed with NOT NULL, so relax it in place.
+alter table public.synced_manual_reviews alter column execution_id drop not null;
 create index if not exists idx_synced_reviews_user_status on public.synced_manual_reviews (user_id, status);
 create index if not exists idx_synced_reviews_user_created on public.synced_manual_reviews (user_id, created_at desc);
 
@@ -298,27 +300,67 @@ create table if not exists public.synced_triggers (
 create index if not exists idx_synced_triggers_user on public.synced_triggers (user_id);
 create index if not exists idx_synced_triggers_next on public.synced_triggers (user_id, next_trigger_at);
 
+-- ── fleet dispatch queue (the twelfth synced table) ───────────────────
+-- Mirrors the desktop writer (personas src-tauri/src/cloud/sync/rows.rs,
+-- `SyncedFleetQueueRow`). NOT cursor-synced: each pass upserts the whole
+-- queued set stamped with its own `synced_at`, then deletes this device's
+-- rows with an older stamp. `synced_at` is therefore written BY THE DESKTOP
+-- (never defaulted, never touched by the trigger below) and is the web's
+-- staleness signal: an ordering older than ~45s must not be shown as live.
+-- Deliberately absent: cwd, spawn args, claude session id, budget columns.
+create table if not exists public.synced_fleet_queue (
+  user_id        uuid        not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id      text        not null,
+  session_id     text        not null,
+  rank           integer     not null,
+  lane           integer,
+  reserved_band  integer,
+  origin         text        not null,
+  state          text        not null,
+  label          text        not null,
+  persona_id     text,
+  goal_id        text,
+  queued_at_ms   bigint      not null,
+  not_before_ms  bigint,
+  synced_at      timestamptz not null,
+  primary key (user_id, device_id, session_id)
+);
+create index if not exists idx_synced_fleet_queue_user_rank on public.synced_fleet_queue (user_id, device_id, rank);
+
 -- =====================================================================
--- PHASE 2 — approval-gated remote operations (scaffold; not wired yet)
+-- PHASE 2 — approval-gated remote operations
 -- ---------------------------------------------------------------------
--- The web writes a request row; the desktop (same user) subscribes via
--- Realtime, materializes a companion-approval card, and only executes
--- LOCALLY after the user explicitly approves. Both sides are the same
--- user, so RLS is the single auth.uid() rule. No execution or credential
--- ever leaves the device.
+-- The web inserts a request row (status 'pending', target_device_id). The
+-- desktop leader POLLS every ~15s (personas src-tauri/src/cloud/remote_commands.rs;
+-- not Realtime), raises an approval card, and runs nothing until the
+-- operator approves. Approve claims the row with a compare-and-set
+-- (pending -> executing, scoped to the device), so a double approval is a
+-- no-op. Final states: completed (execution_id for run_persona, result_ref
+-- for queue verbs) | failed (error_message) | rejected (operator, or an
+-- unknown command_type: 'unsupported_command_type: ...') | expired (the
+-- desktop expires rows whose requested_at is older than 1h).
+-- Payloads: run_persona uses persona_id + prompt; queue verbs carry
+-- camelCase JSON in `prompt` and always name session ids, never ranks:
+--   queue_reorder  {"sessionIds":[...]}  head first, at least 2
+--   queue_set_lane {"sessionId":"...","lane":n|null}
+--   queue_cancel   {"sessionId":"..."}
+-- `params` and `expires_at` are reserved; the desktop does not read them.
+-- Both sides are the same user, so RLS is the single auth.uid() rule. No
+-- execution or credential ever leaves the device.
 -- =====================================================================
 create table if not exists public.pending_commands (
   id              uuid primary key default gen_random_uuid(),
   user_id         uuid not null default auth.uid() references auth.users(id) on delete cascade,
   target_device_id text,
   persona_id      text,
-  command_type    text not null check (command_type in ('run_persona','cancel_execution')),
+  command_type    text not null,   -- allowed set: see the constraint below
   prompt          text,
   params          jsonb,
   status          text not null default 'pending'
                   check (status in ('pending','approved','rejected','executing','completed','failed','expired')),
   requested_from  text,            -- 'web' | 'api'
   execution_id    text,            -- set by desktop once it spawns the local run
+  result_ref      text,            -- set by desktop when a non-run verb completes
   error_message   text,
   requested_at    timestamptz not null default now(),
   resolved_at     timestamptz,
@@ -327,7 +369,218 @@ create table if not exists public.pending_commands (
   updated_at      timestamptz not null default now()
 );
 create index if not exists idx_pending_commands_user_status on public.pending_commands (user_id, status);
+-- Idempotent upgrades for an already-deployed table: the result column the
+-- desktop writes for queue verbs, and the command set it accepts.
+alter table public.pending_commands add column if not exists result_ref text;
+-- The command set. Widened IN PLACE for command contract v1 (see the next
+-- block): a second, narrower re-add earlier in this file would fail
+-- validation on a re-run once v1 rows exist.
+-- 'chat_send' ships later (M9) but is allowed now so the desktop's refusal
+-- path is exercised. 'review_decide' (M20, 2026-10-07): a manual review's
+-- verdict from the web, run by the desktop's shared decision chokepoint.
+-- 'channel_say' (weekend E, 2026-10-08): a direction from the phone to an App
+-- Master persona, read at its next wake (personas 7653b0be85, channel_say.rs).
+alter table public.pending_commands drop constraint if exists pending_commands_command_type_check;
+alter table public.pending_commands add constraint pending_commands_command_type_check
+  check (command_type in ('run_persona','cancel_execution','pause_persona','resume_persona','chat_send',
+                          'review_decide','channel_say','queue_reorder','queue_set_lane','queue_cancel'));
 create index if not exists idx_pending_commands_device on public.pending_commands (target_device_id, status);
+
+-- =====================================================================
+-- PHASE 2 / command contract v1 — trusted controllers
+-- (docs/concepts/mobile-revival/PHASE2-SPEC.md sections 2.1, 3.2, 4.1;
+-- owner-approved 2026-10-06, PLAN.md M16)
+-- ---------------------------------------------------------------------
+-- A paired phone (a "controller") holds a non-extractable Ed25519 key. Its
+-- commands carry `envelope` (the exact signed JSON text) + `signature`
+-- (base64url Ed25519 over the envelope bytes). The desktop verifies the
+-- bytes against its OWN local trust list (settings key `cloud_controllers`)
+-- and parses the command from the envelope, never from the row's columns:
+-- jsonb reorders keys, and every holder of the user's JWT can write a row.
+-- The row's other columns stay for filters and display.
+-- v1 rows also use the reserved `params` (camelCase, = envelope.params) and
+-- `expires_at` (= requested_at + 60 s, = envelope.exp: commands never queue).
+-- =====================================================================
+alter table public.pending_commands add column if not exists controller_id uuid;
+alter table public.pending_commands add column if not exists envelope      text;   -- exact signed bytes (JSON text)
+alter table public.pending_commands add column if not exists signature     text;   -- base64url Ed25519 over envelope
+alter table public.pending_commands add column if not exists result        jsonb;  -- verb-specific outcome
+create index if not exists idx_pending_commands_user_requested on public.pending_commands (user_id, requested_at desc);
+
+-- Hardening (not a loosening): a client may only CREATE pending rows. Every
+-- later state is written by the desktop (or, for 'expired', by the web on a
+-- row still pending 15 s past expires_at) through an UPDATE.
+create or replace function public.pending_commands_insert_guard() returns trigger language plpgsql as $$
+begin
+  if new.status <> 'pending' then raise exception 'pending_commands: insert must be status=pending'; end if;
+  return new;
+end $$;
+drop trigger if exists trg_pending_commands_insert_guard on public.pending_commands;
+create trigger trg_pending_commands_insert_guard before insert on public.pending_commands
+  for each row execute function public.pending_commands_insert_guard();
+
+-- Replay guard (security scan 5e21d618, finding 1 residual). RLS is one
+-- owner_all rule, so any holder of the user's JWT may UPDATE a row: a finished
+-- signed command could be set back to 'pending' and, inside its envelope
+-- window, run again after a desktop restart (the desktop's replay ledger is
+-- process memory). A command never returns to pending and a finished one is
+-- final. Same-state writes (result, updated_at ...) pass. Legit writers: the
+-- desktop claims pending -> executing and resolves pending|executing ->
+-- completed|failed|rejected|expired; the web expires pending -> expired;
+-- 'approved' stays for the legacy flow. None of them is refused.
+create or replace function public.pending_commands_update_guard() returns trigger language plpgsql as $$
+begin
+  if new.status = old.status then return new; end if;
+  if new.status = 'pending' then
+    raise exception 'pending_commands: a command never returns to pending';
+  end if;
+  if old.status in ('completed','failed','rejected','expired') then
+    raise exception 'pending_commands: a % command is final', old.status;
+  end if;
+  return new;
+end $$;
+drop trigger if exists trg_pending_commands_update_guard on public.pending_commands;
+create trigger trg_pending_commands_update_guard before update on public.pending_commands
+  for each row execute function public.pending_commands_update_guard();
+
+-- ── command_controllers: phones paired to a desktop ──────────────────
+-- Pairing ceremony: the desktop shows a QR of
+-- /dashboard/settings#pair=<pairing_id>.<secret>; the phone generates its key
+-- and inserts a 'pending' row whose `proof` =
+-- base64url(HMAC-SHA256(secret, pairing_id|controller_id|public_key)); the
+-- desktop verifies the proof, adds the controller to its local trust list,
+-- and PATCHes the row 'active'. This table is a mailbox, NOT the trust list:
+-- the desktop's local list is authoritative, and no secret is stored here.
+-- `revoke_requested_at` is the web's "unpair this phone" request; the
+-- desktop honours it at its next poll and writes 'revoked'.
+create table if not exists public.command_controllers (
+  controller_id   uuid primary key,
+  user_id         uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id       text not null,                 -- the desktop this phone is paired to
+  pairing_id      uuid not null unique,
+  name            text not null,                 -- "iPhone · Safari", from the UA; user-editable
+  public_key      text not null,                 -- base64url, raw 32-byte Ed25519
+  proof           text not null,                 -- base64url HMAC-SHA256(secret, pairing_id|controller_id|public_key)
+  status          text not null default 'pending' check (status in ('pending','active','refused','revoked')),
+  revoke_requested_at timestamptz,
+  created_at      timestamptz not null default now(),
+  activated_at    timestamptz,
+  revoked_at      timestamptz,
+  last_command_at timestamptz
+);
+create index if not exists idx_command_controllers_user on public.command_controllers (user_id);
+
+-- ── Server-stamped heartbeat ─────────────────────────────────────────
+-- The web's online gate is `now - synced_devices.last_seen_at <= 120 s`.
+-- The desktop stamps last_seen_at with ITS clock; stamping it here instead
+-- leaves only the (NTP-synced) phone clock in the comparison.
+create or replace function public.stamp_device_seen() returns trigger language plpgsql as $$
+begin new.last_seen_at := now(); return new; end $$;
+drop trigger if exists trg_stamp_device_seen on public.synced_devices;
+create trigger trg_stamp_device_seen before insert or update on public.synced_devices
+  for each row execute function public.stamp_device_seen();
+
+-- =====================================================================
+-- PHASE 2 / new synced data — notes and chat
+-- (docs/concepts/mobile-revival/PHASE2-SPEC.md sections 5.1, 5.2; PLAN.md
+-- M16, M18, M19)
+-- ---------------------------------------------------------------------
+-- These two classes are free text the user typed (and, for chat, replies
+-- that may quote what personas read through their connectors). The desktop
+-- pushes them ONLY when the matching per-class toggle ("Sync notes", "Sync
+-- chats") is on; both default OFF, also for users who already sync. Every
+-- text field is masked token by token for secret-looking values and capped
+-- (notes body 16 KB, chat content 32 KB, truncated with a marker) BEFORE it
+-- leaves the machine. Turning a toggle off deletes this device's rows.
+-- =====================================================================
+
+-- ── notes: the Notepad / Quest Log goals (read-only on the phone) ─────
+-- Full-set replace, like synced_fleet_queue: each push upserts the whole
+-- non-archived set stamped with the desktop's own `synced_at`, then deletes
+-- this device's rows with an older stamp (a note delete has no tombstone).
+-- `synced_at` is therefore written BY THE DESKTOP, never defaulted, and is
+-- NOT re-stamped by touch_synced_at. Archived notes are not synced.
+-- Deliberately absent: dev_projects.root_path (a local filesystem path),
+-- fleet_session_id, dispatch_key, agent_id, milestone_id, raw result_json,
+-- and the comment thread bodies (only two counts ride along).
+create table if not exists public.synced_notes (
+  id              text primary key,
+  user_id         uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id       text not null,
+  project_name    text,              -- dev_projects.name only; NEVER root_path
+  title           text not null,
+  body_md         text not null default '',   -- redact_text + cap 16 KB (truncated with a marker)
+  status          text not null check (status in ('draft','published','in_progress','completed','scoped','cut','shipped')),
+  order_index     integer not null default 0,
+  dispatch_target text,              -- 'fleet' | 'athena_goals'
+  result_summary  text,              -- the `summary` field of result_json only (no artifact paths)
+  open_reviews    integer not null default 0,  -- count(dev_note_comments where verdict='pending')
+  unread_comments integer not null default 0,
+  published_at timestamptz, started_at timestamptz, completed_at timestamptz,
+  created_at timestamptz not null, updated_at timestamptz not null,
+  synced_at timestamptz not null     -- desktop-stamped reconcile key (like synced_fleet_queue)
+);
+create index if not exists idx_synced_notes_user_device on public.synced_notes (user_id, device_id);
+
+-- ── chat: one pair of tables for both kinds of thread ────────────────
+-- thread_kind = 'athena'  : Athena's companion conversations (desktop user_db
+--                           `companion_session` + its user/assistant episodes).
+--                           Ships first (PLAN.md M18).
+-- thread_kind = 'persona' : chat with a persona (`chat_session_context` +
+--                           `chat_messages`). Ships after the chat turn moves
+--                           into the desktop's Rust core.
+-- persona_id is NOT NULL for both kinds: an Athena row carries the fixed
+-- sentinel 'athena' (desktop persona ids are UUIDs, so it cannot collide),
+-- and the CHECK below ties the sentinel to the kind both ways. A sentinel
+-- rather than NULL keeps every `persona_id=eq.<x>` filter total (a NULL
+-- silently matches nothing), and it is the same value a chat_send command
+-- to Athena carries in pending_commands.persona_id and envelope.persona.
+--
+-- The key is (user_id, device_id, thread_kind, <id>), not the bare id the
+-- spec drafted: every desktop has an Athena thread named 'default' (and
+-- 'athena-notices'), and Athena message ids are 8-character short ids, so a
+-- bare-id primary key would collide across devices and across users (and an
+-- upsert onto another user's hidden row fails RLS instead of inserting).
+-- Only user and assistant turns are synced: system rows, tool rows, forwarded
+-- synthetic prompts and machine correlator records never leave the device.
+-- Not synced either: summaries, working memory, prompt hashes,
+-- claude_session_id, message metadata, archived threads.
+create table if not exists public.synced_chat_sessions (
+  user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id    text not null,
+  thread_kind  text not null default 'persona' check (thread_kind in ('persona','athena')),
+  session_id   text not null,
+  persona_id   text not null,      -- the persona; the sentinel 'athena' for Athena threads
+  title        text,
+  chat_mode    text,               -- persona chat mode; NULL for Athena
+  origin       text,               -- Athena: 'user' | 'forwarded' | 'proactive'; NULL for persona
+  pinned       boolean not null default false,
+  created_at   timestamptz not null,
+  updated_at   timestamptz not null,   -- last activity in the thread
+  synced_at    timestamptz not null default now(),
+  primary key (user_id, device_id, thread_kind, session_id),
+  constraint synced_chat_sessions_athena_sentinel check ((thread_kind = 'athena') = (persona_id = 'athena'))
+);
+create index if not exists idx_synced_chat_sessions_user_updated
+  on public.synced_chat_sessions (user_id, thread_kind, updated_at desc);
+
+create table if not exists public.synced_chat_messages (
+  user_id      uuid not null default auth.uid() references auth.users(id) on delete cascade,
+  device_id    text not null,
+  thread_kind  text not null default 'persona' check (thread_kind in ('persona','athena')),
+  id           text not null,
+  persona_id   text not null,      -- = the session's persona_id ('athena' for Athena)
+  session_id   text not null,
+  role         text not null check (role in ('user','assistant')),   -- system/tool rows are NOT synced
+  content      text not null,      -- redact_text + cap 32 KB (truncated with a marker)
+  execution_id text,               -- persona chat only; NULL for Athena
+  created_at   timestamptz not null,
+  synced_at    timestamptz not null default now(),
+  primary key (user_id, device_id, thread_kind, id),
+  constraint synced_chat_messages_athena_sentinel check ((thread_kind = 'athena') = (persona_id = 'athena'))
+);
+create index if not exists idx_synced_chat_msgs_session
+  on public.synced_chat_messages (user_id, device_id, thread_kind, session_id, created_at);
 
 -- =====================================================================
 -- Row-Level Security — every table: a user touches only their own rows
@@ -344,7 +597,12 @@ alter table public.synced_memories           enable row level security;
 alter table public.synced_knowledge_patterns enable row level security;
 alter table public.synced_healing_issues     enable row level security;
 alter table public.synced_triggers           enable row level security;
+alter table public.synced_fleet_queue        enable row level security;
 alter table public.pending_commands          enable row level security;
+alter table public.command_controllers       enable row level security;
+alter table public.synced_notes              enable row level security;
+alter table public.synced_chat_sessions      enable row level security;
+alter table public.synced_chat_messages      enable row level security;
 
 -- One owner-only policy per table covering all verbs. Re-runnable.
 do $$
@@ -354,7 +612,8 @@ declare
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers','pending_commands'
+    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands',
+    'command_controllers','synced_notes','synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop
@@ -375,7 +634,8 @@ declare
     'synced_devices','synced_personas','synced_executions','synced_events',
     'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
     'synced_tool_usage','synced_memories','synced_knowledge_patterns',
-    'synced_healing_issues','synced_triggers','pending_commands'
+    'synced_healing_issues','synced_triggers','synced_fleet_queue','pending_commands',
+    'command_controllers','synced_notes','synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop
@@ -449,8 +709,44 @@ grant select on public.synced_persona_spend to authenticated;
 grant select on public.synced_leaderboard to authenticated;
 
 -- =====================================================================
--- Realtime — publish row changes on the busiest synced tables so the web
--- dashboard can subscribe live (useSyncedRealtime) instead of polling.
+-- synced_at freshness — the desktop's upserts never send synced_at, so on
+-- the cursor tables an update kept the FIRST insert's stamp. This trigger
+-- re-stamps every update so `synced_at` means "last written by the
+-- desktop". synced_fleet_queue and synced_notes are excluded: their stamp
+-- is the desktop's reconcile key and must stay exactly what it sent.
+-- =====================================================================
+create or replace function public.touch_synced_at() returns trigger
+  language plpgsql as $$
+begin
+  new.synced_at := now();
+  return new;
+end $$;
+
+do $$
+declare
+  t text;
+  tables text[] := array[
+    'synced_personas','synced_executions','synced_events',
+    'synced_manual_reviews','synced_messages','synced_metrics_snapshots',
+    'synced_tool_usage','synced_memories','synced_knowledge_patterns',
+    'synced_healing_issues','synced_triggers',
+    'synced_chat_sessions','synced_chat_messages'
+  ];
+begin
+  foreach t in array tables loop
+    execute format('drop trigger if exists trg_touch_synced_at on public.%I', t);
+    execute format(
+      'create trigger trg_touch_synced_at before update on public.%I
+         for each row execute function public.touch_synced_at()', t);
+  end loop;
+end $$;
+
+-- =====================================================================
+-- Realtime — publish row changes so the web dashboard can subscribe live
+-- (useSyncedRealtime) instead of polling: the busiest synced tables, the
+-- inbox-style tables, the fleet queue, pending_commands (so the web can
+-- follow a command from pending to its outcome), and the notes and chat
+-- tables (a chat_send reply arrives as a synced_chat_messages insert).
 -- RLS still applies on the Realtime socket: each user only receives changes
 -- to their own rows. Idempotent — only adds a table not already published.
 -- =====================================================================
@@ -459,7 +755,9 @@ declare
   t text;
   tables text[] := array[
     'synced_personas','synced_executions','synced_events',
-    'synced_manual_reviews','synced_devices'
+    'synced_manual_reviews','synced_devices','synced_messages',
+    'synced_healing_issues','synced_fleet_queue','pending_commands',
+    'command_controllers','synced_notes','synced_chat_sessions','synced_chat_messages'
   ];
 begin
   foreach t in array tables loop

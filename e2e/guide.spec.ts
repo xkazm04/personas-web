@@ -2,6 +2,13 @@ import { test, expect } from "@playwright/test";
 import { GUIDE_TOPICS } from "../src/data/guide/topics";
 
 test.describe("User Guide", () => {
+  // The cookie banner is a fixed bottom card; at 1280x720 it covers the
+  // topic's prev/next links. These tests are about the guide, so start with
+  // consent stored, as the other page specs do.
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem("personas-cookie-consent", "essential"));
+  });
+
   test("guide JSON-LD numberOfItems matches GUIDE_TOPICS.length", async ({ page }) => {
     await page.goto("/guide");
     const ldJson = await page.locator('script[type="application/ld+json"]').first().textContent();

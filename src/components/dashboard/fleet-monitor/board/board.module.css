@@ -1,0 +1,96 @@
+/* Board prototype ("The Monitor, Relit") in the site's theme.
+   Every colour derives from the site's semantic tokens, so the board follows
+   all 11 themes. State hues are theme-stable mixes of the status tokens; ink
+   variants mix toward --foreground so state text keeps contrast on light and
+   dark surfaces alike. Team hues come from the data (`--h`), with a lightness
+   that flips for light themes. */
+
+.root {
+  --st-running: var(--brand-cyan);
+  --st-failed: var(--status-error);
+  --st-input_required: color-mix(in oklab, var(--status-warning), var(--status-error) 45%);
+  --st-draft_ready: color-mix(in oklab, var(--status-info), var(--status-error) 38%);
+  --st-queued: color-mix(in oklab, var(--status-warning) 55%, var(--muted-foreground));
+  --st-attention: var(--status-warning);
+  --st-idle: var(--muted-foreground);
+  --st-ok: var(--status-success);
+  --sev-critical: var(--status-error);
+  --sev-warning: var(--status-warning);
+  --sev-info: var(--status-info);
+  --hue-s: 78%;
+  --hue-l: 66%;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Pointer parallax for the spotlight art (written by the stage's mousemove). */
+  --px: 0;
+  --py: 0;
+  background:
+    radial-gradient(90% 70% at 18% 10%, color-mix(in oklab, var(--brand-cyan) 9%, transparent), transparent 62%),
+    radial-gradient(70% 60% at 82% 85%, color-mix(in oklab, var(--brand-purple) 6%, transparent), transparent 65%),
+    var(--background);
+}
+:global([data-theme^="light"]) .root {
+  --hue-s: 62%;
+  --hue-l: 40%;
+}
+
+/* State ink: readable text in a state's colour on any theme. */
+.ink-running { color: color-mix(in oklab, var(--st-running) 78%, var(--foreground)); }
+.ink-failed { color: color-mix(in oklab, var(--st-failed) 78%, var(--foreground)); }
+.ink-input_required { color: color-mix(in oklab, var(--st-input_required) 78%, var(--foreground)); }
+.ink-draft_ready { color: color-mix(in oklab, var(--st-draft_ready) 78%, var(--foreground)); }
+.ink-queued { color: color-mix(in oklab, var(--st-queued) 78%, var(--foreground)); }
+.ink-attention { color: color-mix(in oklab, var(--st-attention) 72%, var(--foreground)); }
+.ink-idle, .ink-off { color: var(--muted-dark); }
+
+.teamInk { color: hsl(var(--h) var(--hue-s) var(--hue-l)); }
+/* ── Emblem ── */
+.emblem {
+  --em-main: hsl(var(--h) 85% 68%);
+  --em-deep: hsl(var(--h) 70% 22%);
+  --em-light: hsl(var(--h) 95% 86%);
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+:global([data-theme^="light"]) .emblem {
+  --em-main: hsl(var(--h) 70% 44%);
+  --em-deep: hsl(var(--h) 55% 84%);
+  --em-light: hsl(var(--h) 75% 62%);
+}
+.orbit,
+.orbitLive {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+.orbitLive { animation: orbit 40s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+
+/* ── Spotlight art (agent scene): drifts against the pointer ── */
+.spotArt {
+  transform: translate(calc(var(--px) * -18px), calc(var(--py) * -14px));
+  transition: transform 0.6s var(--ease);
+}
+/* Reason chips and state pills share one recipe: tinted fill, state ink. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  border: 1px solid currentColor;
+  background: color-mix(in oklab, currentColor 10%, transparent);
+}
+.chip::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+.r-failed, .r-critical { color: color-mix(in oklab, var(--st-failed) 78%, var(--foreground)); }
+.r-input_required { color: color-mix(in oklab, var(--st-input_required) 78%, var(--foreground)); }
+.r-draft_ready { color: color-mix(in oklab, var(--st-draft_ready) 78%, var(--foreground)); }
+.r-warning { color: color-mix(in oklab, var(--st-attention) 72%, var(--foreground)); }
+.r-info { color: color-mix(in oklab, var(--sev-info) 78%, var(--foreground)); }
+

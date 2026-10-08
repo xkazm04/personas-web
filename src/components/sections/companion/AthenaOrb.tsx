@@ -1,8 +1,10 @@
 "use client";
 
-import { useId } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useId, useRef } from "react";
+import { motion } from "framer-motion";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { BRAND_VAR, brandShadow, tint, type BrandKey } from "@/lib/brand-theme";
+import { companionSectionCopy } from "@/i18n/pending/companionSection";
 
 /**
  * AthenaOrb — the section's centerpiece "art". The real Athena avatar (the
@@ -11,8 +13,10 @@ import { BRAND_VAR, brandShadow, tint, type BrandKey } from "@/lib/brand-theme";
  * rotating dashed guide-ring, and a progress-dot arc across the top (the
  * desktop "task dots"). The accent recolors to the active capability.
  *
- * All continuous motion is gated on `prefers-reduced-motion`, which also
- * swaps the looping <video> for a static poster (no decode while reduced).
+ * All continuous motion runs only while the orb is on screen, the tab is
+ * visible and motion is allowed (useLoopGate); reduced motion also swaps the
+ * looping <video> for a static poster (no decode while reduced), and the clip
+ * is paused - not just hidden - whenever the loops are.
  */
 
 const SIZE = 320;
@@ -21,7 +25,19 @@ const ORB_R = 92;
 const DOT_COUNT = 5;
 
 export default function AthenaOrb({ brand }: { brand: BrandKey }) {
-  const reduced = useReducedMotion() ?? false;
+  const avatarAlt = companionSectionCopy.avatarAlt;
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const { run, still: reduced } = useLoopGate(rootRef);
+
+  // The clip used to autoplay with preload="auto" and loop for as long as the
+  // page was open, on screen or not. It now loads only when first played.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (run) video.play().catch(() => {});
+    else video.pause();
+  }, [run]);
   const uid = useId();
   const accent = BRAND_VAR[brand];
 
@@ -34,7 +50,9 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
   });
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[360px]">
+    // On the stage the orb is sized from the slot's height (a size container),
+    // leaving room for the speech line under it.
+    <div ref={rootRef} className="relative mx-auto aspect-square w-full max-w-[360px] stage:max-w-[min(34rem,calc(100cqh_-_5.5rem))]">
       <svg
         viewBox={`0 0 ${SIZE} ${SIZE}`}
         className="absolute inset-0 h-full w-full"
@@ -48,7 +66,7 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
         </defs>
 
         {/* Breathing ambient glow */}
-        {reduced ? (
+        {!run ? (
           <circle cx={C} cy={C} r={ORB_R + 38} fill={`url(#${uid}-glow)`} opacity={0.5} />
         ) : (
           <motion.circle
@@ -63,7 +81,7 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
         )}
 
         {/* Slowly rotating dashed guide-ring */}
-        {reduced ? (
+        {!run ? (
           <circle
             cx={C}
             cy={C}
@@ -90,7 +108,7 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
 
         {/* Progress-dot arc (mirrors the desktop orb's task dots) */}
         {dots.map((d, i) =>
-          reduced ? (
+          !run ? (
             <circle key={i} cx={d.x} cy={d.y} r={3} fill={accent} opacity={0.5} />
           ) : (
             <motion.circle
@@ -120,20 +138,21 @@ export default function AthenaOrb({ brand }: { brand: BrandKey }) {
         {reduced ? (
           // eslint-disable-next-line @next/next/no-img-element -- static poster fallback; next/image adds no value for a fixed local asset
           <img
-            src="/athena/athena_baseline.jpg"
-            alt="Athena, the Personas companion"
+            src="/athena/athena_baseline_640.webp"
+            alt={avatarAlt}
             className="h-full w-full object-cover"
           />
         ) : (
           <video
+            ref={videoRef}
             src="/athena/athena_idle_loop.mp4"
-            poster="/athena/athena_baseline.jpg"
+            // 640px WebP (40 KB) - the 1024px JPEG was 476 KB for a ~200px circle.
+            poster="/athena/athena_baseline_640.webp"
             muted
             loop
-            autoPlay
             playsInline
-            preload="auto"
-            aria-label="Athena, the Personas companion"
+            preload="none"
+            aria-label={avatarAlt}
             className="h-full w-full object-cover"
           />
         )}

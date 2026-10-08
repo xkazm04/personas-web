@@ -18,9 +18,10 @@ export default function ShieldIllustration() {
       <rect x="148" y="82" width="24" height="18" rx="3" fill="none" stroke="#34d399" strokeOpacity="0.5" strokeWidth="1.5" />
       <path d="M153 82 V76 C153 72.134 156.134 69 160 69 C163.866 69 167 72.134 167 76 V82" fill="none" stroke="#34d399" strokeOpacity="0.5" strokeWidth="1.5" />
       <circle cx="160" cy="91" r="2" fill="#34d399" opacity="0.6" />
-      {/* Zero telemetry labels */}
-      <text x="60" y="80" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">NO ANALYTICS</text>
-      <text x="60" y="96" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">NO TRACKING</text>
+      {/* Privacy labels (the desktop sends anonymous, PII-stripped diagnostics,
+          so these must not claim "no analytics" — see src/data/security.ts) */}
+      <text x="60" y="80" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">PII STRIPPED</text>
+      <text x="60" y="96" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">NO REPLAYS</text>
       <text x="222" y="80" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">LOCAL ONLY</text>
       <text x="222" y="96" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">YOUR DATA</text>
     </svg>

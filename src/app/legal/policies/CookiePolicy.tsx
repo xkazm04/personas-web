@@ -1,9 +1,24 @@
-import { POLICY_META } from "@/data/policy-changelog";
+import { formatPolicyMonth } from "@/data/policy-changelog";
+import {
+  STORAGE_CATEGORIES,
+  STORAGE_REGISTER,
+  type StorageCategory,
+} from "@/data/storage-register";
 import CookieSettingsButton from "@/components/CookieSettingsButton";
+import { useTranslation } from "@/i18n/useTranslation";
 
 type Props = { changelog?: React.ReactNode };
 
+const LEGAL_EMAIL = "legal@personas.ai";
+
 export default function CookiePolicy({ changelog }: Props) {
+  const { t, language } = useTranslation();
+  const c = t.cookiePolicy;
+  const [emailBefore, emailAfter = ""] = c.managingBody.split("{email}");
+
+  const entriesFor = (category: StorageCategory) =>
+    STORAGE_REGISTER.filter((entry) => entry.category === category);
+
   return (
     <div className="space-y-8">
       <div className="rounded-xl border border-brand-cyan/20 bg-brand-cyan/[0.05] p-5">
@@ -11,88 +26,83 @@ export default function CookiePolicy({ changelog }: Props) {
           TL;DR
         </p>
         <ul className="mt-3 space-y-2 text-sm leading-relaxed text-foreground/80">
-          <li>
-            We only use two essential cookies — sign-in session and theme
-            preference.
-          </li>
-          <li>No advertising, tracking, or fingerprinting of any kind.</li>
-          <li>You can clear cookies anytime in your browser settings.</li>
+          {c.tldr.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
         </ul>
       </div>
 
-      <p className="text-base text-muted-dark">Last updated: {POLICY_META.cookies.formattedUpdate}</p>
+      <p className="text-base text-muted-dark">
+        {c.lastUpdated.replace("{date}", formatPolicyMonth("cookies", language))}
+      </p>
 
       {changelog}
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Our Approach to Cookies
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          We use the bare minimum. This website sets only essential cookies
-          required for the site to function. We do not use advertising cookies,
-          tracking pixels, or fingerprinting of any kind.
-        </p>
+        <h2 className="text-xl font-semibold text-foreground">{c.approachHeading}</h2>
+        <p className="text-base leading-relaxed text-muted-dark">{c.approachBody}</p>
+      </section>
+
+      <section className="space-y-5">
+        <div className="space-y-3">
+          <h2 className="text-xl font-semibold text-foreground">{c.registerHeading}</h2>
+          <p className="text-base leading-relaxed text-muted-dark">{c.registerIntro}</p>
+        </div>
+
+        {STORAGE_CATEGORIES.map((category) => (
+          <div key={category} className="space-y-2">
+            <h3 className="text-base font-semibold text-foreground">{c.categories[category].title}</h3>
+            <p className="text-sm leading-relaxed text-muted-dark">{c.categories[category].description}</p>
+            <dl className="divide-y divide-glass rounded-lg border border-glass">
+              {entriesFor(category).map((entry) => (
+                <div key={entry.names[0]} className="grid gap-2 p-3 text-sm sm:grid-cols-[minmax(0,14rem)_1fr]">
+                  <dt className="min-w-0 space-y-1">
+                    {entry.names.map((name) => (
+                      <code key={name} className="block break-all font-mono text-xs text-foreground/80">
+                        {name}
+                      </code>
+                    ))}
+                    <span className="block text-xs text-muted-dark">
+                      {c.mechanisms[entry.mechanism]} · {c.lifetimes[entry.lifetime]}
+                    </span>
+                  </dt>
+                  <dd className="leading-relaxed text-muted-dark">{c.purposes[entry.purpose]}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+
+        <div className="space-y-2">
+          <h3 className="text-base font-semibold text-foreground">{c.categories.analytics.title}</h3>
+          <p className="text-sm leading-relaxed text-muted-dark">{c.categories.analytics.description}</p>
+        </div>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Essential Cookies We Use
-        </h2>
+        <h2 className="text-xl font-semibold text-foreground">{c.notUsedHeading}</h2>
         <ul className="list-disc pl-5 space-y-1 text-base leading-relaxed text-muted-dark">
-          <li>
-            <strong className="text-foreground/80">
-              Authentication session
-            </strong>{" "}
-            — keeps you signed in when using cloud features (set by Supabase)
-          </li>
-          <li>
-            <strong className="text-foreground/80">Theme preference</strong> —
-            remembers your chosen color theme across visits
-          </li>
+          {c.notUsed.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
         </ul>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          What We Do Not Use
-        </h2>
-        <ul className="list-disc pl-5 space-y-1 text-base leading-relaxed text-muted-dark">
-          <li>No advertising or remarketing cookies</li>
-          <li>No cross-site tracking</li>
-          <li>No social media tracking pixels</li>
-          <li>No analytics cookies that identify individual users</li>
-        </ul>
+        <h2 className="text-xl font-semibold text-foreground">{c.thirdPartyHeading}</h2>
+        <p className="text-base leading-relaxed text-muted-dark">{c.thirdPartyBody}</p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Third-Party Cookies
-        </h2>
+        <h2 className="text-xl font-semibold text-foreground">{c.managingHeading}</h2>
         <p className="text-base leading-relaxed text-muted-dark">
-          Supabase, our authentication provider, may set cookies necessary for
-          the OAuth sign-in flow. These are strictly functional and are not
-          used for tracking.
-        </p>
-      </section>
-
-      <section className="space-y-3">
-        <h2 className="text-xl font-semibold text-foreground">
-          Managing Cookies
-        </h2>
-        <p className="text-base leading-relaxed text-muted-dark">
-          You can clear or block cookies through your browser settings at any
-          time. Note that disabling essential cookies may prevent cloud sign-in
-          from working. For questions, reach out to{" "}
-          <a
-            href="mailto:legal@personas.ai"
-            className="text-brand-cyan hover:underline"
-          >
-            legal@personas.ai
+          {emailBefore}
+          <a href={`mailto:${LEGAL_EMAIL}`} className="text-brand-cyan hover:underline">
+            {LEGAL_EMAIL}
           </a>
-          .
+          {emailAfter}
         </p>
-        <CookieSettingsButton />
+        <CookieSettingsButton label={c.manageButton} />
       </section>
     </div>
   );

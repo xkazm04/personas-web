@@ -200,7 +200,7 @@ Binárka po instalaci má kolem 90 MB. Pluginy jako Obsidian Brain (vektorové v
 
 ### Jak to funguje
 
-Aplikace ukládá svou databázi (\`personas.db\`), trezor přihlašovacích údajů, historii běhů a konfiguraci lokálně v adresáři aplikačních dat specifickém pro tvůj OS. Nic se nenahrává, pokud nepoužiješ cloudového AI poskytovatele. Pluginy, které dodávají lokální modely, stahují soubory modelů při prvním použití.
+Aplikace ukládá svou databázi (\`personas.db\`), trezor přihlašovacích údajů, historii běhů a konfiguraci lokálně v adresáři aplikačních dat specifickém pro tvůj OS. Nenahrává se nic kromě promptů, které posíláš cloudovému AI poskytovateli, pokud nezapneš volitelnou cloudovou synchronizaci, která kopíruje tvé agenty a jejich běhy do tvého účtu Personas (nikdy ne přihlašovací údaje). Pluginy, které dodávají lokální modely, stahují soubory modelů při prvním použití.
 
 Windows build používá ONNX Runtime pro embedding, když je povolena funkce vector-knowledge-base; v takovém případě je to největší jednotlivá závislost.
 

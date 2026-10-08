@@ -103,7 +103,7 @@ describe("loopTransition - the only place an infinite repeat is written", () => 
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(HERE, "..", "..", "..");
-const SECTION_DIRS = ["orchestration-hub", "event-bus-showcase", "platform-layers"].map((d) =>
+const SECTION_DIRS = ["orchestration-hub", "event-hub", "growth-dial"].map((d) =>
   path.join(REPO_ROOT, "src", "components", "sections", d),
 );
 const HOOK_FILE = path.join(REPO_ROOT, "src", "hooks", "useLoopGate.ts");
@@ -158,7 +158,9 @@ describe("adoption - the visualizer sections read the gate, not the raw inputs",
     const smil = SECTION_DIRS.flatMap((d) => walk(d)).filter((f) =>
       /repeatCount\s*=\s*["']indefinite["']/.test(readStripped(f)),
     );
-    expect(smil.length).toBeGreaterThan(0);
+    // The event-bus swarm was the last SMIL loop in these dirs; its successor
+    // (event-hub, 2026-10-06) animates with framer on the gate. The rule stays
+    // for the next SMIL loop, so an empty list is a pass, not a vacuous one.
     // Either pauses directly, or hands its loop-gate `run` to useSvgTimelineGate.
     const unpaused = smil
       .filter((f) => {
@@ -180,11 +182,12 @@ describe("adoption - the visualizer sections read the gate, not the raw inputs",
     expect(hook).not.toMatch(/\bIntersectionObserver\b/);
   });
 
-  it("guard: HubRing gates props, not elements, on the motion preference", () => {
-    const ring = readStripped(
-      path.join(REPO_ROOT, "src", "components", "sections", "orchestration-hub", "HubRing.tsx"),
-    );
-    expect(ring).not.toMatch(/\breduced\s*\?\s*\(/);
-    expect(ring).not.toMatch(/!\s*reduced\s*&&/);
-  });
+  it.each(["RingArt.tsx", "RingNodes.tsx", "AgentLens.tsx"])(
+    "guard: the hub's %s gates props, not elements, on the motion preference",
+    (file) => {
+      const ring = readStripped(path.join(REPO_ROOT, "src", "components", "sections", "orchestration-hub", file));
+      expect(ring).not.toMatch(/\b(reduced|still)\s*\?\s*\(/);
+      expect(ring).not.toMatch(/!\s*(reduced|still)\s*&&/);
+    },
+  );
 });

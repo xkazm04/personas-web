@@ -1,67 +1,183 @@
 # Mobile App Shell & Views
-> Purpose-built touch UI for phone users — a 3-tab shell over the dashboard's data layer with no desktop chrome. · **Route:** `/m`, `/m/overview`, `/m/alerts`, `/m/messages`, `/m/reviews` · **Status:** Demo-only (mocks)
+> **Phone landing live at `/m`** (not yet linked or redirected to). Plan: [docs/concepts/mobile-revival/PLAN.md](../../concepts/mobile-revival/PLAN.md), survey: [SURVEY.md](../../concepts/mobile-revival/SURVEY.md). · **Route:** `/m` (public, server-rendered, `noindex`, canonical `/`); `/m/overview|reviews|messages|alerts` are temporary redirects; `/m2` is a test landing ("Around the Clock", `noindex`, see [below](#m2-around-the-clock-test-route)) · **Status:** Phase 1 landing promoted 2026-10-06 ("Hive Reels"); phase 2 (mobile dashboard) not started
 
 ## What it does
-Phone visitors to the demo dashboard get a dedicated native-feeling app instead of the cramped desktop layout. The middleware (`src/proxy.ts`) sniffs the user-agent on any `/dashboard*` request and redirects mobile browsers into `/m`, mapping the requested dashboard subpath to the closest mobile view (messages → `/m/messages`, reviews → `/m/reviews`, incidents/health/sla/observability → `/m/alerts`, everything else → `/m/overview`) and **preserving the query string** so deep links and UTM/attribution params survive. Everything under `/m` is then a self-contained app with a fixed bottom tab bar, slide-up page transitions, bottom sheets for detail, compact stat tiles, and a "View full site" escape hatch. Four views ship:
+`/m` is the Personas landing rebuilt for one thumb: a vertical film of six one-screen posters, every picture built from
+glowing hex cells.
 
-- **Overview** (`/m/overview`) — greeting, a 2×2 stat grid (success rate, runs, agents, pending reviews), an alerts banner that drills into `/m/alerts`, and the shared `RecentActivityCard`.
-- **Alerts** (`/m/alerts`) — a drill-in (back-chevron) page consolidating the fleet's attention items: open **incidents** (D-A2), a compact **system-health** section-status grid (D-A3), health issues, and SLA breaches. Reuses the desktop `incidentFormat` / `healthFormat` helpers and the `incidentsPage` / `healthPage` i18n (no mobile-specific strings).
-- **Messages** (`/m/messages`) — thread list with unread badges, mark-all-read, and a bottom-sheet thread reader.
-- **Reviews** (`/m/reviews`) — wraps the desktop `ReviewsFocusFlow` swipe/approve flow.
+1. **Intro.** "One event in. A whole team on it." over a hive of agent cells. An event gem drops in, a ripple crosses
+   the hive, a team of cells lights and a "done" token rises. Three chips (Invoice in, New lead, Build failed) replay it;
+   cells glow under a dragged finger.
+2. **Use cases.** "One persona, many tools." A hex-prism reel spins and lands each job on the right tool; every landing
+   adds 3 jobs to the "Chief of staff" persona. Swipe, arrows or replay; tap the reel for that tool's jobs in a sheet.
+3. **Athena.** Her portrait in a lit lens with four capability satellites (always on, hold to talk, remembers, reaches
+   out first). A satellite swaps the headline and she answers in a bubble; holding the portrait is the hold-to-talk demo
+   (no microphone is used).
+4. **Free.** A run travels from Personas ($0, MIT) through Claude Code to Anthropic; the only payment line runs from
+   your own Claude Pro or Max plan.
+5. **Questions.** Four question tiles; each opens the full answer (from the site FAQ) in a layer with previous / next.
+6. **Get it.** "Take it to your computer." A phone beams the link to a computer. Pick the computer: Windows sends the
+   link through the share sheet (or copies it); macOS and Linux join the waitlist. Anyone can copy the link or download
+   a calendar reminder (`.ics`). If neither share nor clipboard is allowed, the link shows for copying by hand.
 
-This is **Approach B** (per `src/app/m/layout.tsx:11`): reuse the dashboard's auth + Zustand stores + mock fixtures, but render a separate route tree and separate components rather than responsively reflowing the desktop pages.
+The dock button is on screen at every stop: before the last poster it jumps there ("Get it on your computer"); on it,
+it does the hand-off. A hex-pip rail and the top-bar chapter name show where you are. The page follows the site theme
+(all 11); it has no theme control of its own.
+
+No request is redirected to `/m` yet (decision M1): phones get the normal responsive site. Old `/m/*` dashboard links
+still redirect to their desktop pages.
 
 ## How it works
-- **Routing.** `/m/page.tsx` is a pure `redirect("/m/overview")`. The middleware `matcher` only covers `/dashboard*` (`src/proxy.ts`), so the redirect into `/m` happens at the dashboard boundary, not inside `/m`. `mobilePathFor()` (`proxy.ts`) maps the requested dashboard subpath to its closest `/m` view and the redirect keeps `url.search`, so a deep link lands on the matching page with its params intact rather than always on a param-less overview.
-- **Layout chrome.** `m/layout.tsx` wraps children in `AuthProvider` → `AuthGuard` → `MotionConfig reducedMotion="user"`, then renders `<MobileShell>{children}</MobileShell>` plus the fixed `<MobileTabBar/>`. The single `MotionConfig` makes every framer-motion animation under `/m` honor `prefers-reduced-motion` (transform/layout dropped, opacity kept) without per-component guards — though several components still self-guard via `useReducedMotion` (see gotchas).
-- **Per-navigation transition.** `m/template.tsx` is a Next `template` (remounted on every nav), giving each tab a ~220ms slide-up + fade enter.
-- **Tab vs. drill-in nav.** Three tabs (Overview / Reviews / Messages) live in `MobileTabBar`; `/m/alerts` is a drill-in from Overview and has no tab — it keeps the Overview tab highlighted via an explicit `pathname.startsWith("/m/alerts")` check (`MobileTabBar.tsx:63`) and shows a back chevron via `MobileAppBar` instead. The active tab uses a shared `layoutId="mobileTabActivePill"` so the highlight slides between tabs.
-- **Sheets.** Detail views use `MobileSheet` (a bottom sheet) rather than centered modals. `MobileThreadSheet` composes it for message threads.
+- **Route.** `src/app/m/page.tsx` is a server component holding the metadata (`robots: { index: false }`,
+  `alternates.canonical: "/"`, title and description from `mobileLandingCopy`). It renders `HiveLanding`, a client
+  component, which still server-renders: the headline is in the initial HTML.
+- **Film.** `.hm` (page root) > `.phone` (fixed column, `100dvh`, a framed 430px phone from 500px up) > `main.film`
+  (`scroll-snap-type: y mandatory`) > six `section.poster[data-poster]`. `useChapters` watches the posters with an
+  IntersectionObserver rooted on the film (ratio 0.55), so the active poster index (`cur`) drives the `on` class, the
+  chapter name, the rail and the dock. Arrow / Page keys page through the film while no sheet is open.
+- **Styling.** `hive.css` is the winner's stylesheet ported as a stylesheet (the contest promotion rule): every selector
+  starts at `.hm`, every keyframe is prefixed `hm-`, so it cannot leak once loaded. Colours come from the site tokens
+  through page variables (`--cy`, `--em`, `--glass`, `--line` ...), with one override block for
+  `[data-theme^="light"]`. Type is the site's Geist, inherited from the root layout.
+- **Motion.** `live(i)` = poster `i` is active, the tab is visible (`usePageVisibility`) and motion is welcome
+  (`useStillMotion`). Timed beats (hero idle every 7.2 s, reel auto-advance 4.7 s, Athena capability cycle) run only
+  while `live`. Ambient CSS loops run only on the active poster (`--ps`), pause on a hidden tab (`.page-hidden`), and
+  `.hm[data-still="true"]` stops every animation and transition. Reduced motion shows each poster's finished frame
+  (hero team lit, bill fully drawn). Markup never depends on the motion preference.
+- **Hero beat.** `useHeroBeat` drives the ~150 hive cells through the DOM (React renders them once and never touches
+  their classes again), as the winner did; the event index is React state.
+- **Hand-off.** `useHandoff` uses the shared helpers in `src/components/mobile-landing/shared/handoff.ts`:
+  `shareOrCopy` + `browserShareCapabilities()` send `handoffUrl(SITE_URL)` (`/#download-section`); `buildReminderIcs` +
+  `nextLocalTime(now, 9)` build the reminder (Dates created in the click handler); macOS / Linux `POST /api/waitlist`
+  with `{ email, platform: "macos" | "linux" }`, errors mapped by `waitlistErrorMessage`. There is no email service, so
+  nothing offers to email the installer.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/app/m/page.tsx` | `/m` index → `redirect("/m/overview")` |
-| `src/app/m/layout.tsx` | Shell composition: auth guard, `MotionConfig`, `MobileShell` + `MobileTabBar` |
-| `src/app/m/template.tsx` | Per-navigation slide-up enter transition |
-| `src/app/m/overview/page.tsx` | Overview: greeting, stat grid, alerts banner, recent activity |
-| `src/app/m/alerts/page.tsx` | Drill-in: open incidents + system-health status grid + health issues + SLA breach log |
-| `src/app/m/messages/page.tsx` | Thread list, unread/mark-all-read, opens thread sheet |
-| `src/app/m/reviews/page.tsx` | Wraps desktop `ReviewsFocusFlow`, exits to `/m/overview` |
-| `src/components/mobile/MobileShell.tsx` | `max-w-md` scroll/padding container, safe-area insets, `#main-content`; renders `ViewFullSiteLink` after content |
-| `src/components/mobile/ViewFullSiteLink.tsx` | "View full site" escape hatch — sets the `prefer-full` cookie + hard-navigates to `/dashboard` |
-| `src/components/mobile/MobileTabBar.tsx` | Fixed bottom 3-tab nav with badges + active pill |
-| `src/components/mobile/MobileAppBar.tsx` | Back-chevron + title for drill-in subpages |
-| `src/components/mobile/MobileStatCard.tsx` | Compact accent-colored stat tile (optional drill-in) |
-| `src/components/mobile/MobileSheet.tsx` | Generic bottom sheet (drag-to-dismiss, backdrop, Escape, body-scroll lock) |
-| `src/components/mobile/MobileThreadSheet.tsx` | Message-thread reader composed on `MobileSheet` |
-| `src/proxy.ts` | Middleware UA redirect `/dashboard*` → matching `/m` view (path-mapped via `mobilePathFor`, query string preserved) |
+| `src/app/m/page.tsx` | Server route: metadata (noindex, canonical `/`), renders `HiveLanding` |
+| `src/components/mobile-landing/hive/HiveLanding.tsx` | Page root: film, posters, dock, sheets, toast; motion gates |
+| `src/components/mobile-landing/hive/hive.css` | The ported stylesheet, scoped `.hm`, keyframes `hm-*` |
+| `src/components/mobile-landing/hive/useChapters.ts` | Active poster, jump-to, keyboard paging |
+| `src/components/mobile-landing/hive/HiveChrome.tsx` | Top bar (brand, chapter name) and hex-pip rail |
+| `src/components/mobile-landing/hive/HeroPoster.tsx`, `useHeroBeat.ts` | Poster 1 and its arrival beat |
+| `src/components/mobile-landing/hive/ReelPoster.tsx`, `useReel.ts`, `ToolSheet.tsx` | Poster 2, the reel, the tool-jobs sheet |
+| `src/components/mobile-landing/hive/AthenaPoster.tsx` | Poster 3 (satellites, hold to talk, idle video) |
+| `src/components/mobile-landing/hive/BillPoster.tsx` | Poster 4, the bill play |
+| `src/components/mobile-landing/hive/FaqPoster.tsx` | Poster 5 and the answer sheet |
+| `src/components/mobile-landing/hive/HandoffPoster.tsx`, `useHandoff.ts`, `HiveDock.tsx` | Poster 6, the hand-off, the dock button |
+| `src/components/mobile-landing/hive/HiveSheet.tsx` | Bottom sheet (drag down, Escape, scrim, focus trap and return) |
+| `src/components/mobile-landing/hive/data.ts`, `toolIcons.ts`, `Glyphs.tsx` | Geometry and order, tool marks, the glyph sprite |
+| `src/components/mobile-landing/shared/handoff.ts` | Phone-to-computer helpers shared with `/m2` |
+| `next.config.ts` | `redirects()`: the four temporary `/m/*` view redirects |
+| `e2e/mobile/m-landing.spec.ts` | Phone spec for `/m` (see below) |
+| `src/components/primitives/BottomSheet.tsx` | Kept bottom-sheet primitive from the old `/m` (unused; `/m` ports the winner's own sheet) |
 
 ## Data & state
-- **Source:** Demo-only mocks. `MOCK_HEALTH_ISSUES`, `MOCK_SLA_BREACHES`, `MOCK_MESSAGE_THREADS`, `MOCK_UNREAD_MESSAGES` from `src/lib/mock-dashboard-data.ts`; executions/personas/reviews come from the shared stores' mock-backed fetchers.
-- **Stores:** Same Zustand stores as the desktop dashboard — `useExecutionStore`/`useEnrichedExecutions`, `usePersonaStore`, `useReviewStore` (drives both the Overview reviews tile and the tab-bar badge), `useAuthStore`. Overview and Reviews call `fetchExecutions()`/`fetchReviews()` in a `useEffect`.
-- **API routes:** None of its own. Real data (when wired) flows through the dashboard's orchestrator client (`NEXT_PUBLIC_ORCHESTRATOR_URL`); in this repo it's mocked.
-- **Types:** `MessageThread`, `MessageStatus`, `FeedbackMessage` from `mock-dashboard-data`; `StatAccent` (local to `MobileStatCard.tsx`); `Tab` (local to `MobileTabBar.tsx`).
-- **Local component state:** Messages keeps a per-message read-status `Map` override layered over the fixture (`messages/page.tsx:21`, mirrors the desktop messages page) and the open-thread id.
+- **Copy.** `mobileLandingCopy` in `src/i18n/pending/mobileLanding.ts`, an English-only pending namespace (decision M4;
+  kept off the shared en.ts bundle, M22). Tool names and jobs come from the translated `useCasesSection`, the answers from `faqSection.questions`,
+  platform names from `downloadSection`, waitlist errors from `waitlist`.
+- **State** is local React state: active poster, open sheet, reel / Athena / bill state, the hand-off (platform, mode,
+  beam). Nothing persists; visitors are anonymous.
+- **Art.** Athena's still and idle loop are `public/athena/athena_baseline_640.webp` and `athena_idle_loop.mp4`; the
+  brand mark is `public/icons/icon-192.png`. Everything else is inline SVG/CSS, tagged "Stylized illustration".
 
 ## Integration points
-- **Desktop dashboard.** Separate route tree (`/m/*` vs `/dashboard/*`) and separate mobile-specific components, but **shared stores + shared mock fixtures**, so demo data stays consistent across both. Reused desktop pieces: `RecentActivityCard`, `HealthIssueRow`, `ThreadRow`, `ReviewsFocusFlow`, `MarkdownReport`, `PersonaAvatar`, and SLA formatters (`severityPill`, `metricKey`) from `dashboard/sla/sla-page/slaFormat`.
-- **Auth.** `AuthProvider` treats `/m` as a protected surface alongside `/dashboard` (`src/components/AuthProvider.tsx:13`); `AuthGuard` is reused as-is.
-- **Entry point.** Reached via the middleware redirect. `ViewFullSiteLink` (rendered by `MobileShell`) sets `prefer-full=1` and hard-navigates to `/dashboard`, giving phone users a one-tap way to the full desktop UI. There is still no in-app link from desktop to `/m` (see gotchas).
-- **Animations.** `fadeUp` / `staggerContainer` variants from `src/lib/animations.ts`; `safe-bottom` and `focus-ring` utilities from `src/app/globals.css`.
+- **Waitlist API** (`src/app/api/waitlist/route.ts`) for macOS / Linux, the same route the waitlist modal uses.
+- **Theme.** The root layout's pre-paint script and theme store set `html[data-theme]`; `/m` only reads it.
+- **robots.** `src/app/robots.ts` still disallows `/m/` (the sub-paths); `/m` itself carries `noindex`.
+- **Auth.** `AuthProvider` initialises auth for paths starting with `/m` (`src/components/AuthProvider.tsx:12`), but it
+  is mounted only by `src/app/dashboard/layout.tsx`, so it is inert on `/m`.
+- **Bundle budget.** `/m` has its own ceiling in `bundle-budget.json`.
+
+## Verification
+`PLAYWRIGHT_PORT=<free port> npx playwright test --project=mobile` runs `e2e/mobile/**` on the iPhone 13 profile.
+`m-landing.spec.ts` asserts: the headline is in the server HTML with `noindex` and canonical `/`; no sideways scroll at
+390 and 360px and the dock CTA on screen and uncovered at all six stops; share reaches `navigator.share`, Copy link
+reaches the clipboard and a blocked clipboard shows the manual link; the reminder downloads an `.ics` with a VEVENT;
+macOS posts `{ email, platform: "macos" }` to the (stubbed) waitlist; the `light` theme applies; reduced motion leaves
+no running animation. `baseline.spec.ts` still covers the `/m/reviews` redirect.
 
 ## Conventions & gotchas
-- **`/m`→full-site opt-out now exists; desktop→`/m` still doesn't.** Phone users who want the desktop view tap "View full site" (`ViewFullSiteLink.tsx`, rendered by `MobileShell`), which sets `prefer-full=1` and navigates to `/dashboard`. There is still no "switch to mobile" link on desktop, and nothing clears `prefer-full` from the desktop side — a desktop user can only reach `/m` by typing the URL.
-- **iPad stays on desktop by design.** The UA regex deliberately omits iPad (iPadOS reports a Mac UA), so tablets get the full dashboard (`proxy.ts:3-6`). Not a bug, but non-obvious.
-- **Double reduced-motion handling.** The layout sets `MotionConfig reducedMotion="user"`, yet `MobileTabBar`, `MobileStatCard` still call `useReducedMotion()` and branch manually (e.g. suppressing `whileTap` and the `layoutId` pill). Belt-and-suspenders, but means the gating logic isn't centralized — when touching motion here, check both the `MotionConfig` and the local guard.
-- **Hardcoded raw color classes vs. semantic tokens.** These components lean heavily on raw Tailwind palette utilities (`text-cyan-300`, `bg-rose-500/[0.06]`, `text-emerald-400`, `bg-white/[0.02]`, `bg-[rgba(8,11,20,0.6)]`) rather than the project's semantic tokens (`text-brand-cyan`, `bg-surface`, `border-glass`). It's used inconsistently — some files mix `text-brand-cyan`/`border-glass` with raw palette colors in the same file (e.g. `overview/page.tsx`, `MobileTabBar.tsx`). New work should prefer the semantic tokens per CLAUDE.md convention 2.
-- **i18n reuse, mostly clean.** Strings come from existing namespaces (`t.dashboard.*`, `t.slaPage.*`, `t.observabilityPage.*`, `t.messagesPage.*`, `t.common.*`) — no hardcoded English in JSX. One smell: `t.messagesPage.unread.toLowerCase()` (`messages/page.tsx:107`) lowercases a translated string in JS, which is locale-fragile (some locales don't case-fold the way English does, and casing may be semantically wrong). `displayName` is split from `full_name` (`overview/page.tsx:42`).
-- **a11y — sheet labelling.** `MobileSheet` sets `role="dialog"` + `aria-modal="true"` and supports Escape / backdrop-tap / a visible close button (good — never swipe-only), but it does **not** wire `aria-labelledby`/`aria-describedby` to its title/subtitle, and there's no focus trap or focus-return-on-close. Drag-to-dismiss is mouse/touch only. The drag handle and the `·` separators are correctly `aria-hidden`.
-- **a11y — alerts page has no app-bar back affordance parity.** `/m/alerts` uses `MobileAppBar` with an `aria-label`-ed back link (good). Tab links use `aria-current="page"` correctly.
-- **Body-scroll lock leak risk.** `MobileSheet` saves/restores `document.body.style.overflow` in its effect; fine for a single sheet, but two simultaneous sheets would clobber the saved value. Only one is ever open per view today.
-- **Performance.** Long lists use `content-visibility:auto` + `contain-intrinsic-size` to skip off-screen layout (`alerts/page.tsx`, `messages/page.tsx`). Keep the intrinsic-size estimates in sync with row height if you restyle rows.
-- **`HealthIssueRow` gets `personaId: null` forced** on the mobile alerts page (`alerts/page.tsx:47`) so the shared desktop row renders without same-persona context.
+- **Port fidelity.** `/m` was held to the winner with the contest's style contract (31 roles, 0 deviations at
+  390x844), excluding what the owner changed: Geist type (font family everywhere; the wider Geist "$0"), the
+  PrimaryCTA look on the dock (flat cyan inside a cyan-blue-purple ring instead of a cyan-to-purple fill), and no purple
+  or pink washes or fills (section glows, the persona card, FAQ tiles 2 and 4, the "New lead" / "Build failed" teams
+  now use emerald, amber and the info blue; purple stays as rings, strokes and dots).
+- **Fixed from the host's pass.** The headline breaks only as "A whole team / on it." (two unbreakable halves), and the
+  FAQ tiles cap at a thumb-sized row instead of filling the poster.
+- **Keep the scope.** Everything in `hive.css` starts at `.hm` and every keyframe is `hm-*`. A bare selector or an
+  unprefixed keyframe (the winner had `pulse` and `spin`) would restyle the rest of the site once `/m` has loaded.
+- **The page scrolls inside `main.film`, not the window.** Tests and scripts must scroll the film.
+- **`/m` is a route path referenced from outside.** Keep the `/m/*` view redirects until phase 2 replaces them.
+
+## /m2: "Around the Clock" (test route)
+
+**What it does.** A second phone landing, on test: the owner liked it more than `/m` and wants to try it on a real
+phone first (decision M5). The page is one day. A 24-hour dial under a sky graded by the hour owns the screen, and
+scrolling turns it: the 09:00 setup ("Say it once. It works all day."), one persona's tool shifts from 09:30 to 17:00,
+Athena as the moon through the night, an all-day $0, a rotary FAQ at 21:00, and "Tomorrow, 9:00, at your computer"
+at 23:00. Tapping a bead, job, moment, step or node opens it as its own scene (Back, Escape or a swipe down closes
+it). The call to action is always on screen. It saves a real `.ics` reminder for the next 9:00, sends the download
+link through the share sheet or the clipboard (Windows), or joins the macOS / Linux waitlist. There is no email
+service, so nothing offers to email a link. Nothing redirects phones here, and the page is `noindex`.
+
+**How it works.**
+- `src/app/m2/page.tsx` is a server component holding the metadata (`robots: { index: false }`). It renders
+  `ClockLanding`, a client component, so the whole page (headline included) is in the server HTML.
+- **The column scrolls, not the window.** `.col` is a `100dvh` size container; `--u` (the smaller of 1% of its width
+  and 0.46% of its height) sizes the dial, the type and the stage together. On screens 500px and wider it becomes a
+  phone-sized card on a backdrop. The document never scrolls, so a phone's address bar stays put (a known limit of
+  the entry, kept).
+- **The engine** (`useClockEngine.ts`) maps the scroller's offset to an hour (`geometry.ts` `buildKeys` / `hourAt`)
+  and, in one rAF per scroll, turns the dial, grades the sky, cross-fades the four pinned chapters, places the sun and
+  moon, fades the stage out across its unpin (`stageLeave`) and culls dial labels on the lower half or past the edge.
+  It writes continuous values straight to the DOM through `data-k` hooks; discrete beats (chapter, tool, job, moment,
+  price beat, Athena up, flow) go to React through `onBeat`. It marks the column `data-ready` after its first frame.
+- **Motion.** `useStillMotion` makes the story snap between chapters with no tweening and no arrival; `.col[data-still]`
+  and a `prefers-reduced-motion` block stop every CSS loop. A hidden tab stops the frame loop (`usePageVisibility`).
+  The hero's step loop runs only while the hero holds the stage, motion is allowed, the tab is visible and no card is
+  open. Athena's idle loop (`/athena/athena_idle_loop.mp4`) loads only when she first rises and pauses otherwise.
+  The arrival (`data-arriving`: the dial rises, the clock counts 05:00 to 09:00) is server-rendered as CSS so it plays
+  before hydration; any touch, wheel, key or scroll ends it.
+- **The CTA** uses `src/components/mobile-landing/shared/handoff.ts` (`useHandoff.ts`): `shareOrCopy` with the
+  browser's capabilities (plus the textarea copy fallback from `waitlistUtils`), `buildReminderIcs` + `nextLocalTime`
+  for a 15-minute event at the next 9:00 (Dates made in the click), and a manual-copy fallback when share and copy
+  both fail. `Waitlist.tsx` posts `{ email, platform }` to `/api/waitlist` and maps errors through
+  `waitlistErrorMessage` with the translated `t.waitlist` labels.
+
+**Owner adjustments over the contest entry.** Geist Sans / Geist Mono instead of the entry's serif display and system
+faces (the accent lines take `GradientText`); every colour through the site tokens, so all 11 themes repaint it (the
+sky is `color-mix` over `--background`, `--primary`, `--brand-cyan` and `--brand-amber`); no purple or pink fills (the
+dawn and dusk sky grade through amber, the CTA fills are `PrimaryCTA`, Athena's active chip is a purple ring, GitHub
+and Stripe tint with their second brand colour); the entry's own theme toggle is gone and the footer carries the
+site's `ThemeSwitcher`.
+
+**Fixes over the entry (host pass).** Only the current tool shift keeps its time label on the ring (seven crowded the
+hub at 390px); the header chip steps out of the way in the FAQ and CTA; the stage fades out across its unpin so
+"Free." and the dial no longer stack over the FAQ, whose 21:00 the dial now agrees with (`FAQ_HOUR`, `CTA_HOUR`).
+
+| File | Role |
+| --- | --- |
+| `src/app/m2/page.tsx` | Server page, metadata (`noindex`) |
+| `src/components/mobile-landing/clock/ClockLanding.tsx` | Composition, beat state, cards, toast, hero step loop |
+| `src/components/mobile-landing/clock/useClockEngine.ts` | Scroll engine (rAF, gated) |
+| `src/components/mobile-landing/clock/geometry.ts` | Pure timeline, sky and cull math (`geometry.test.ts`) |
+| `src/components/mobile-landing/clock/art.ts`, `data.ts`, `tool-paths.ts` | Dial geometry, the stylized day's times, tool marks |
+| `src/components/mobile-landing/clock/{Sky,Dial,DialFace,DialFixed,StageHud,Lens}.tsx` | The art |
+| `src/components/mobile-landing/clock/{HeroChapter,ToolsChapter,NightChapters,Faq,Cta,Waitlist,Chrome,CardLayer,cards}.tsx` | Chapters, chrome and scenes |
+| `src/components/mobile-landing/clock/useHandoff.ts` | Share / copy / reminder |
+| `src/components/mobile-landing/clock/clock.module.css` | The entry's stylesheet, ported (tokens, Geist, data-attribute state) |
+| `e2e/mobile/m2-landing.spec.ts` | Phone spec: SSR headline, no sideways scroll at 390/360, CTA at every stop, every CTA action, the story's taps, light theme, reduced motion |
+
+**Gotchas.**
+- Copy lives in the English-only pending namespace `mobileLanding2` (M4), `src/i18n/pending/mobileLanding2.ts` (M22); translate it before launch.
+- The engine finds its parts by `data-k`; renaming one silently disconnects it. The e2e spec waits on `[data-ready]`.
+- The day, its times and its runs are a stylized illustration (tagged "Stylized day"); Athena's portrait and loop are
+  the only real product images.
+- Waitlist analytics (`trackWaitlistSubmit`) are not wired: `WaitlistEntryPoint` has no `/m2` member yet.
 
 ## Related docs
+- [/m revival plan](../../concepts/mobile-revival/PLAN.md)
 - [Dashboard Shell, Chrome & Realtime](../dashboard/shell-chrome.md)
 - [Feature index](../INDEX.md)

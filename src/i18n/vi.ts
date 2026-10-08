@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const vi: Translations = {
+export const vi: LocaleTranslations = {
     notFound: {
       title: "Kh\u00f4ng t\u00ecm th\u1ea5y trang",
       description: "Trang b\u1ea1n \u0111ang t\u00ecm kh\u00f4ng t\u1ed3n t\u1ea1i ho\u1eb7c \u0111\u00e3 \u0111\u01b0\u1ee3c chuy\u1ec3n \u0111i. H\u00e3y th\u1eed m\u1ed9t trong c\u00e1c m\u1ee5c sau:",
@@ -89,7 +89,7 @@ export const vi: Translations = {
             "Keyring g\u1ed1c c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh",
             "OAuth h\u1ed7 tr\u1ee3 b\u1edfi AI",
             "T\u1ef1 \u0111\u1ed9ng l\u00e0m m\u1edbi token",
-            "Kh\u00f4ng telemetry, \u01b0u ti\u00ean c\u1ee5c b\u1ed9"
+            "\u01afu ti\u00ean c\u1ee5c b\u1ed9, ch\u1ec9 telemetry \u1ea9n danh"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const vi: Translations = {
     },
     hero: {
       downloadCta: "T\u1ea3i xu\u1ed1ng",
-      trustLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng thu th\u1eadp d\u1eef li\u1ec7u telemetry.",
+      trustLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       badge: "N\u1ec1n t\u1ea3ng t\u00e1c nh\u00e2n AI",
       headingLine1: "T\u00e1c nh\u00e2n th\u00f4ng minh",
       headingLine2: "l\u00e0m vi\u1ec7c cho b\u1ea1n",
@@ -186,8 +186,7 @@ export const vi: Translations = {
       checking: "\u0110ang ki\u1ec3m tra\u2026",
       connected: "\u0110\u00e3 k\u1ebft n\u1ed1i",
       disconnected: "M\u1ea5t k\u1ebft n\u1ed1i",
-      demo: "Demo",
-      viewFullSite: "Xem trang \u0111\u1ea7y \u0111\u1ee7"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "M\u1ed9t persona,",
@@ -365,8 +364,8 @@ export const vi: Translations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Personas c\u00f3 thu th\u1eadp telemetry hay d\u1eef li\u1ec7u s\u1eed d\u1ee5ng kh\u00f4ng?",
+          a: "Ch\u1ec9 d\u1eef li\u1ec7u ch\u1ea9n \u0111o\u00e1n \u1ea9n danh. C\u00e1c b\u1ea3n ph\u00e1t h\u00e0nh c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh g\u1eedi b\u00e1o c\u00e1o l\u1ed7i v\u00e0 t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng \u1ea9n danh (phi\u00ean \u1ee9ng d\u1ee5ng, c\u00e1c m\u1ee5c b\u1ea1n m\u1edf, thao t\u00e1c ch\u00ednh) \u0111\u1ebfn Sentry. \u0110\u1ecba ch\u1ec9 IP, email v\u00e0 t\u00ean ng\u01b0\u1eddi d\u00f9ng \u0111\u01b0\u1ee3c lo\u1ea1i b\u1ecf tr\u01b0\u1edbc, c\u00f2n prompt, c\u1ea5u h\u00ecnh agent, th\u00f4ng tin x\u00e1c th\u1ef1c v\u00e0 nh\u1eadt k\u00fd th\u1ef1c thi c\u1ee7a b\u1ea1n kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c g\u1eedi k\u00e8m. B\u1ea1n c\u00f3 th\u1ec3 t\u1eaft t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng trong C\u00e0i \u0111\u1eb7t > T\u00e0i kho\u1ea3n."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +389,7 @@ export const vi: Translations = {
       exploreFirst: "Kh\u00e1m ph\u00e1 kh\u1ea3 n\u0103ng tr\u01b0\u1edbc",
       requiresCli: "Y\u00eau c\u1ea7u Claude Code",
       installerSize: "Tr\u00ecnh c\u00e0i \u0111\u1eb7t 12 MB",
-      noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n. Kh\u00f4ng \u0111o l\u01b0\u1eddng t\u1eeb xa.",
+      noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"
@@ -406,6 +405,15 @@ export const vi: Translations = {
       knowledge: "Ki\u1ebfn th\u1ee9c",
       settings: "C\u00e0i \u0111\u1eb7t",
       leaderboard: "B\u1ea3ng x\u1ebfp h\u1ea1ng",
+      personas: "Persona",
+      missionControl: "Trung tâm chỉ huy",
+      navSectionsLabel: "Các mục bảng điều khiển",
+      navGroups: {
+        mission: "Nhiệm vụ",
+        monitoring: "Giám sát",
+        reliability: "Độ tin cậy",
+        memory: "Bộ nhớ"
+      },
       director: "\u0110\u1ea1o di\u1ec5n",
       sla: "SLA",
       incidents: "S\u1ef1 c\u1ed1",
@@ -476,6 +484,99 @@ export const vi: Translations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Số liệu trong 14 ngày gần nhất",
+          hint: "Nhấn 1 đến 8 để mở một chỉ số, Esc để quay lại",
+          wallLabel: "Các chỉ số của đội tác nhân",
+          openDimension: "Mở {label}",
+          backToWall: "Quay lại tổng quan",
+          railLabel: "Tất cả chỉ số",
+          verdicts: {
+            pending: "Đang đo",
+            failed: "Không khả dụng",
+            unmeasured: "Chưa đo",
+            ok: "Ổn định",
+            watch: "Cần theo dõi",
+            yours: "Đang chờ bạn",
+            act: "Cần bạn xử lý"
+          },
+          dims: {
+            outcomes: {
+              label: "Kết quả",
+              question: "Các lần chạy có thành công không?"
+            },
+            agents: {
+              label: "Tác nhân",
+              question: "Có tác nhân nào đang gặp khó không?"
+            },
+            queue: {
+              label: "Đang chờ bạn",
+              question: "Việc gì cần bạn ra tay?"
+            },
+            recovery: {
+              label: "Tự phục hồi",
+              question: "Đội tác nhân có tự khắc phục không?"
+            },
+            spend: {
+              label: "Chi tiêu",
+              question: "Chi tiêu có bình thường không?"
+            },
+            autonomy: {
+              label: "Tự chủ",
+              question: "Việc gì chạy mà không cần bạn?"
+            },
+            vault: {
+              label: "Kho khóa",
+              question: "Thông tin xác thực có ổn không?"
+            },
+            instruments: {
+              label: "Nguồn đo",
+              question: "Trang này có được cập nhật không?"
+            }
+          },
+          evidence: {
+            outcomes: "Lần chạy {runs} · thất bại {failed}",
+            noRuns: "Không có lần chạy nào trong khoảng này",
+            agents: "Ngừng hoạt động {critical} · suy giảm {degraded} · bình thường {healthy}",
+            queue: "Cảnh báo {alerts} · đánh giá {reviews} · bộ nhớ {memory} · chưa đọc {reports}",
+            queueEmpty: "Không có việc gì đang chờ bạn",
+            recovery: "Đang mở {open} · tạm dừng {paused} · tự khắc phục {fixed}",
+            spendSpikes: "Chi phí tăng vọt: {n}",
+            spendPerDay: "{value} mỗi ngày",
+            autonomy: "Đã lên lịch {n} · lần tới sau {time}",
+            autonomyEmpty: "Chưa có lịch nào",
+            vault: "Quá hạn {overdue} · bất thường {anomalies} · sự kiện {events}",
+            instruments: "Nguồn lỗi: {failed}",
+            instrumentsOk: "Mọi nguồn đều đã phản hồi",
+            pending: "Đang chờ số liệu đầu tiên",
+            unmeasured: "Chưa có nguồn đồng bộ cho mục này"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Sự cố cần phục hồi",
+            issuesEmpty: "Không có sự cố cần phục hồi nào trong khoảng này.",
+            issueStatus: {
+              open: "Đang mở",
+              auto_fixed: "Đã tự khắc phục",
+              resolved: "Đã giải quyết"
+            },
+            pausedBadge: "Tạm dừng",
+            costTitle: "Chi phí theo ngày",
+            costSpike: "Chi phí tăng vọt",
+            sourcesTitle: "Nguồn",
+            sourceStatus: {
+              pending: "Đang chờ",
+              ok: "Đã phản hồi",
+              failed: "Thất bại"
+            },
+            sources: {
+              observability: "Giám sát",
+              healing: "Sự cố cần phục hồi",
+              reviews: "Đánh giá",
+              routines: "Quy trình"
+            }
+          }
+        },
         vitals: {
           runs: "L\u1ea7n ch\u1ea1y",
           alerts: "C\u1ea3nh b\u00e1o"
@@ -667,7 +768,9 @@ export const vi: Translations = {
       noDataAvailable: "Ch\u01b0a c\u00f3 d\u1eef li\u1ec7u",
       errors: "L\u1ed7i",
       totalLower: "t\u1ed5ng",
-      copyPayload: "Sao ch\u00e9p payload"
+      copyPayload: "Sao ch\u00e9p payload",
+      liveUnavailableTitle: "Ch\u01b0a kh\u1ea3 d\u1ee5ng cho kh\u00f4ng gian l\u00e0m vi\u1ec7c th\u1ef1c",
+      liveUnavailableDescription: "M\u00e0n h\u00ecnh n\u00e0y ch\u1ec9 ch\u1ea1y tr\u00ean d\u1eef li\u1ec7u demo. Kh\u00f4ng gian l\u00e0m vi\u1ec7c c\u1ee7a b\u1ea1n ch\u01b0a \u0111\u1ed3ng b\u1ed9 d\u1eef li\u1ec7u n\u00e0y, n\u00ean m\u00e0n h\u00ecnh \u0111\u1ec3 tr\u1ed1ng thay v\u00ec hi\u1ec3n th\u1ecb d\u1eef li\u1ec7u m\u1eabu."
     },
     memoriesPage: {
       title: "B\u1ed9 nh\u1edb",
@@ -1155,6 +1258,8 @@ export const vi: Translations = {
       noExecutions: "Ch\u01b0a c\u00f3 l\u01b0\u1ee3t th\u1ef1c thi n\u00e0o",
       noExecutionsDesc: "Th\u1ef1c thi m\u1ed9t t\u00e1c nh\u00e2n \u0111\u1ec3 xem k\u1ebft qu\u1ea3 t\u1ea1i \u0111\u00e2y",
       waitingForWorker: "\u0110ang ch\u1edd worker...",
+      openExecutionInDesktop: "M\u1edf l\u01b0\u1ee3t ch\u1ea1y trong \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh",
+      openPersonaInDesktop: "M\u1edf persona trong \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh",
       noOutputYet: "Ch\u01b0a c\u00f3 k\u1ebft qu\u1ea3 xu\u1ea5t",
       noFilteredActive: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y \u0111ang ho\u1ea1t \u0111\u1ed9ng trong khung nh\u00ecn n\u00e0y",
       noFilteredCompleted: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y ho\u00e0n t\u1ea5t trong khung nh\u00ecn n\u00e0y",
@@ -1267,6 +1372,10 @@ export const vi: Translations = {
         title: "Th\u00f4ng b\u00e1o",
         subtitle: "C\u1ea3nh b\u00e1o t\u1ef1 ph\u1ee5c h\u1ed3i v\u00e0 b\u1ea3n t\u00f3m t\u1eaft",
         weeklyDigest: "T\u00f3m t\u1eaft s\u1ee9c kh\u1ecfe h\u00e0ng tu\u1ea7n",
+        escalation: {
+          label: "Chuy\u1ec3n c\u1ea5p c\u00e1c \u0111\u00e1nh gi\u00e1 qu\u00e1 h\u1ea1n",
+          description: "C\u00e1c \u0111\u00e1nh gi\u00e1 \u0111ang ch\u1edd v\u01b0\u1ee3t qu\u00e1 SLA s\u1ebd \u0111\u01b0\u1ee3c chuy\u1ec3n c\u1ea5p. N\u1ebfu ch\u00ednh s\u00e1ch quy \u0111\u1ecbnh, ch\u00fang s\u1ebd \u0111\u01b0\u1ee3c t\u1ef1 \u0111\u1ed9ng ph\u00ea duy\u1ec7t thay v\u00e0o \u0111\u00f3 (m\u1eb7c \u0111\u1ecbnh: \u0111\u00e1nh gi\u00e1 Th\u00f4ng tin sau 8 gi\u1edd)."
+        },
         voice: {
           label: "\u0110\u1ecdc to th\u00f4ng b\u00e1o \u0111\u00e1nh gi\u00e1 m\u1edbi",
           preview: "Xem tr\u01b0\u1edbc",
@@ -1338,7 +1447,7 @@ export const vi: Translations = {
       title: "M\u1eabu Agent",
       subtitle: "Duy\u1ec7t {count} m\u1eabu agent d\u1ef1ng s\u1eb5n \u0111\u01b0\u1ee3c nh\u00f3m theo lo\u1ea1i c\u00f4ng vi\u1ec7c ch\u00fang th\u1ef1c hi\u1ec7n. Ch\u1ecdn m\u1ed9t danh m\u1ee5c \u0111\u1ec3 xem c\u00e1c m\u1eabu b\u00ean trong.",
       gridHeading: "Duy\u1ec7t m\u1eabu theo danh m\u1ee5c",
-      gridDescription: "C\u00e1c m\u1eabu l\u00e0 nh\u1eefng Persona \u0111\u01b0\u1ee3c c\u1ea5u h\u00ecnh s\u1eb5n m\u00e0 b\u1ea1n c\u00f3 th\u1ec3 \u00e1p d\u1ee5ng ch\u1ec9 v\u1edbi m\u1ed9t c\u00fa nh\u1ea5p. M\u1ed7i m\u1eabu \u0111\u00e3 c\u00f3 s\u1eb5n prompt, c\u00f4ng c\u1ee5 v\u00e0 tr\u00ecnh k\u00edch ho\u1ea1t \u0111\u01b0\u1ee3c thi\u1ebft l\u1eadp cho m\u1ed9t c\u00f4ng vi\u1ec7c c\u1ee5 th\u1ec3 \u2014 kh\u00f4ng c\u1ea7n c\u00e0i \u0111\u1eb7t th\u00eam.",
+      gridDescription: "C\u00e1c m\u1eabu l\u00e0 c\u1ea5u h\u00ecnh tham kh\u1ea3o cho t\u1eebng c\u00f4ng vi\u1ec7c c\u1ee5 th\u1ec3. M\u1ed7i m\u1eabu cho th\u1ea5y prompt, c\u00f4ng c\u1ee5 v\u00e0 tr\u00ecnh k\u00edch ho\u1ea1t m\u00e0 m\u1ed9t agent c\u1ea7n. \u0110\u1ec3 d\u00f9ng m\u1ed9t m\u1eabu, h\u00e3y c\u00e0i \u1ee9ng d\u1ee5ng Personas tr\u00ean m\u00e1y t\u00ednh v\u00e0 thi\u1ebft l\u1eadp m\u1eabu \u1edf \u0111\u00f3 b\u1eb1ng t\u00e0i kho\u1ea3n c\u1ee7a ri\u00eang b\u1ea1n.",
       changeCategory: "\u0110\u1ed5i danh m\u1ee5c",
       complexityAll: "T\u1ea5t c\u1ea3",
       complexityBasic: "C\u01a1 b\u1ea3n",
@@ -1361,16 +1470,22 @@ export const vi: Translations = {
       copyFailed: "Sao ch?p th?t b?i",
       copyConfiguration: "Sao ch?p c?u h?nh",
       getStartedTitle: "B?t ??u v?i m?u n?y",
-      getStartedDescription: "Nh?p m?u n?y tr?c ti?p v?o Personas, ho?c sao ch?p c?u h?nh ?? t? t?y ch?nh.",
-      openInPersonas: "M? trong Personas",
+      getStartedDescription: "T\u1ea3i \u1ee9ng d\u1ee5ng Personas tr\u00ean m\u00e1y t\u00ednh v\u1ec1 \u0111\u1ec3 t\u1ea1o m\u1ed9t agent nh\u01b0 th\u1ebf n\u00e0y, ho\u1eb7c sao ch\u00e9p c\u1ea5u h\u00ecnh l\u00e0m \u0111i\u1ec3m kh\u1edfi \u0111\u1ea7u.",
+      useTemplate: "D\u00f9ng m\u1eabu n\u00e0y",
       moreTemplates: "Th?m m?u {category}",
-      appNotFoundTitle: "Kh?ng t?m th?y ?ng d?ng Personas",
-      appNotFoundDescription: "C? v? Personas ch?a ???c c?i tr?n thi?t b? c?a b?n. T?i xu?ng ?? nh?p m?u tr?c ti?p, ho?c sao ch?p c?u h?nh ?? thi?t l?p th? c?ng.",
+      installTitle: "T\u1ea3i Personas \u0111\u1ec3 d\u00f9ng m\u1eabu n\u00e0y",
+      installDescription: "M\u1eabu \u0111\u01b0\u1ee3c thi\u1ebft l\u1eadp trong \u1ee9ng d\u1ee5ng Personas tr\u00ean m\u00e1y t\u00ednh, kh\u00f4ng ph\u1ea3i trong tr\u00ecnh duy\u1ec7t. T\u1ea3i \u1ee9ng d\u1ee5ng v\u1ec1 \u0111\u1ec3 t\u1ea1o m\u1ed9t agent nh\u01b0 th\u1ebf n\u00e0y, ho\u1eb7c sao ch\u00e9p c\u1ea5u h\u00ecnh l\u00e0m \u0111i\u1ec3m kh\u1edfi \u0111\u1ea7u.",
       templateNotFound: "Kh?ng t?m th?y m?u",
       templateNotFoundDescription: "M?u n?y kh?ng t?n t?i ho?c ?? b? ng?ng. Duy?t th? vi?n ?? xem b? s?u t?p hi?n t?i.",
       browseTemplates: "Duy?t m?u",
       backToHome: "V? trang ch?",
       customTrigger: "Tr?nh k?ch ho?t t?y ch?nh"
+    },
+    connectorModal: {
+      simulatedLabel: "V\u00ed d\u1ee5 m\u00f4 ph\u1ecfng \u00b7 kh\u00f4ng c\u00f3 g\u00ec th\u1ef1c s\u1ef1 ch\u1ea1y",
+      connecting: "\u0110ang k\u1ebft n\u1ed1i t\u1edbi {label}\u2026",
+      working: "\u0110ang th\u1ef1c hi\u1ec7n: {task}",
+      done: "Xong: {task}"
     },
     roadmapSection: {
       inProgress: "\u0110ang th\u1ef1c hi\u1ec7n",
@@ -1462,10 +1577,6 @@ export const vi: Translations = {
         macos: {
           title: "H\u1ed7 tr\u1ee3 macOS",
           description: "B\u1ea3n build macOS g\u1ed1c \u0111\u1ea7y \u0111\u1ee7 v\u1edbi t\u1ed1i \u01b0u h\u00f3a Apple Silicon, t\u00edch h\u1ee3p Spotlight, v\u00e0 \u0111i\u1ec1u khi\u1ec3n agent tr\u00ean thanh menu."
-        },
-        i18n: {
-          title: "Qu\u1ed1c t\u1ebf h\u00f3a",
-          description: "H\u01b0\u1edbng d\u1eabn agent \u0111a ng\u00f4n ng\u1eef, giao di\u1ec7n b\u1ea3n \u0111\u1ecba h\u00f3a, v\u00e0 l\u1eadp l\u1ecbch nh\u1eadn bi\u1ebft khu v\u1ef1c cho c\u00e1c \u0111\u1ed9i nh\u00f3m to\u00e0n c\u1ea7u."
         },
         dashboard: {
           title: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n web",
@@ -1697,7 +1808,6 @@ export const vi: Translations = {
       features5: "Nh\u1eefng agent tuy\u1ec7t v\u1eddi hi\u1ebfm khi \u0111\u00fang ngay t\u1eeb l\u1ea7n \u0111\u1ea7u, v\u00ec v\u1eady Ph\u00f2ng th\u1eed nghi\u1ec7m l\u00e0 n\u01a1i b\u1ea1n tinh ch\u1ec9nh ch\u00fang. Tr\u00f2 chuy\u1ec7n v\u1edbi m\u1ed9t persona \u0111\u1ec3 hu\u1ea5n luy\u1ec7n n\u00f3, cho hai phi\u00ean b\u1ea3n \u0111\u1ed1i \u0111\u1ea7u trong arena, ti\u1ebfn h\u00f3a n\u00f3 qua c\u00e1c th\u1ebf h\u1ec7, ho\u1eb7c ch\u1ea5m \u0111i\u1ec3m n\u00f3 theo c\u00e1c ti\u00eau ch\u00ed quan tr\u1ecdng. M\u1ecdi c\u1ea3i ti\u1ebfn b\u1ea1n gi\u1eef l\u1ea1i \u0111\u1ec1u \u0111\u01b0\u1ee3c qu\u1ea3n l\u00fd phi\u00ean b\u1ea3n v\u00e0 c\u00f3 th\u1ec3 ho\u00e0n t\u00e1c.",
       features6: "Personas \u0111i k\u00e8m v\u1edbi s\u00e1u plugin chuy\u00ean d\u1ee5ng, m\u1ed7i c\u00e1i l\u00e0 m\u1ed9t kh\u00f4ng gian l\u00e0m vi\u1ec7c \u0111\u1ed9c l\u1eadp m\u00e0 agent c\u1ee7a b\u1ea1n c\u00f3 th\u1ec3 \u0111i\u1ec1u khi\u1ec3n. L\u1ea5y v\u00ed d\u1ee5 Dev Tools: n\u00f3 bi\u1ebfn m\u1ed9t persona th\u00e0nh \u0111\u1ed3ng \u0111\u1ed9i l\u1eadp tr\u00ecnh ch\u1ea1y t\u00e1c v\u1ee5, \u0111\u1ecdc k\u1ebft qu\u1ea3, v\u00e0 l\u1eb7p l\u1ea1i. Chuy\u1ec3n sang m\u1ed9t tab kh\u00e1c v\u00e0 b\u1ea1n g\u1eb7p m\u1ed9t chuy\u00ean gia kh\u00e1c \u2014 t\u1ea5t c\u1ea3 chia s\u1ebb c\u00f9ng th\u00f4ng tin \u0111\u0103ng nh\u1eadp v\u00e0 b\u1ed9 nh\u1edb.",
       dashboardHome: "Ch\u00e0o m\u1eebng \u0111\u1ebfn trung t\u00e2m \u0111i\u1ec1u h\u00e0nh \u2014 to\u00e0n b\u1ed9 \u0111\u1ed9i agent c\u1ee7a b\u1ea1n tr\u00ean m\u1ed9t m\u00e0n h\u00ecnh. \u1ede tr\u00ean c\u00f9ng l\u00e0 c\u00e1c ch\u1ec9 s\u1ed1 s\u1ed1ng c\u00f2n: t\u1ef7 l\u1ec7 th\u00e0nh c\u00f4ng, l\u01b0\u1ee3t ch\u1ea1y \u0111ang ti\u1ebfn h\u00e0nh, agent \u0111ang ho\u1ea1t \u0111\u1ed9ng, c\u1ea3nh b\u00e1o \u0111ang m\u1edf, v\u00e0 c\u00e1c \u0111\u00e1nh gi\u00e1 \u0111ang ch\u1edd b\u1ea1n. B\u00ean d\u01b0\u1edbi, b\u1ed9 t\u1ed1i \u01b0u h\u00f3a hi\u1ec3n th\u1ecb m\u1ed9t s\u1eeda \u0111\u1ed5i c\u00f3 t\u00e1c \u0111\u1ed9ng cao m\u1ed7i l\u1ea7n \u2014 ngay b\u00e2y gi\u1edd, m\u1ed9t thay \u0111\u1ed5i \u0111\u1ecbnh tuy\u1ebfn gi\u00fap gi\u1ea3m chi ph\u00ed m\u00e0 kh\u00f4ng \u1ea3nh h\u01b0\u1edfng ch\u1ea5t l\u01b0\u1ee3ng. Hai b\u1ea3ng b\u00ean d\u01b0\u1edbi theo d\u00f5i t\u00ecnh tr\u1ea1ng c\u1ee7a t\u1eebng agent v\u00e0 nh\u1eefng b\u1ed9 nh\u1edb m\u1edbi m\u00e0 ch\u00fang \u0111\u00e3 h\u1ecdc v\u00e0 mu\u1ed1n \u0111\u01b0\u1ee3c th\u0103ng c\u1ea5p. Sau \u0111\u00f3 l\u00e0 b\u1ee9c tranh tr\u1ef1c ti\u1ebfp: m\u1ecdi l\u01b0\u1ee3t th\u1ef1c thi khi n\u00f3 x\u1ea3y ra \u1edf b\u00ean tr\u00e1i, m\u01b0\u1eddi b\u1ed1n ng\u00e0y l\u01b0u l\u01b0\u1ee3ng v\u00e0 l\u1ed7i \u1edf b\u00ean ph\u1ea3i. B\u1ea3n \u0111\u1ed3 nhi\u1ec7t cho th\u1ea5y l\u01b0\u1ee3t ch\u1ea1y theo t\u1eebng agent, theo t\u1eebng ng\u00e0y, v\u00e0 h\u00e0ng d\u01b0\u1edbi c\u00f9ng ho\u00e0n thi\u1ec7n b\u1ee9c tranh \u2014 nh\u1eefng agent ho\u1ea1t \u0111\u1ed9ng t\u1ed1t nh\u1ea5t, c\u00e1c quy tr\u00ecnh \u0111\u00e3 l\u00ean l\u1ecbch ti\u1ebfp theo, v\u00e0 m\u1ecdi l\u01b0\u1ee3t xoay v\u00f2ng th\u00f4ng tin \u0111\u0103ng nh\u1eadp. M\u1ed9t trang, to\u00e0n b\u1ed9 ho\u1ea1t \u0111\u1ed9ng.",
-      dashboardAgents: "\u0110\u00e2y l\u00e0 danh s\u00e1ch \u0111\u1ed9i agent c\u1ee7a b\u1ea1n. M\u1ed7i th\u1ebb l\u00e0 m\u1ed9t persona \u2014 m\u1ed9t agent duy nh\u1ea5t v\u1edbi m\u1ed9t danh t\u00ednh v\u00e0 t\u1eadp h\u1ee3p k\u1ef9 n\u0103ng n\u00f3 c\u00f3 th\u1ec3 k\u1ebft h\u1ee3p. Ch\u00e2n dung \u0111\u01b0\u1ee3c t\u1ea1o ra \u0111\u1ec3 ph\u00f9 h\u1ee3p v\u1edbi t\u00ednh c\u00e1ch c\u1ee7a n\u00f3; b\u00ean d\u01b0\u1edbi l\u00e0 s\u1ed1 li\u1ec7u tr\u1ef1c ti\u1ebfp: t\u1ef7 l\u1ec7 th\u00e0nh c\u00f4ng, l\u01b0\u1ee3t ch\u1ea1y, v\u00e0 chi ti\u00eau. Nh\u1ea5n Th\u1ef1c thi \u0111\u1ec3 ch\u1ea1y theo y\u00eau c\u1ea7u, ho\u1eb7c m\u1edf Chi ti\u1ebft \u0111\u1ec3 ki\u1ec3m tra c\u1ea5u h\u00ecnh v\u00e0 l\u1ecbch s\u1eed g\u1ea7n \u0111\u00e2y. N\u0103m agent t\u1ea1i \u0111\u00e2y, m\u1ed7i c\u00e1i l\u1eb7ng l\u1ebd ho\u00e0n th\u00e0nh t\u1ed1t m\u1ed9t c\u00f4ng vi\u1ec7c.",
       dashboardExecutions: "M\u1ecdi l\u01b0\u1ee3t ch\u1ea1y m\u00e0 \u0111\u1ed9i agent \u0111\u00e3 th\u1ef1c hi\u1ec7n \u0111\u1ec1u n\u1eb1m \u1edf \u0111\u00e2y, m\u1edbi nh\u1ea5t tr\u01b0\u1edbc. B\u1ea3ng hi\u1ec3n th\u1ecb persona, tr\u1ea1ng th\u00e1i, th\u1eddi l\u01b0\u1ee3ng, chi ph\u00ed, v\u00e0 th\u1eddi \u0111i\u1ec3m b\u1eaft \u0111\u1ea7u \u2014 l\u1ecdc xu\u1ed1ng ch\u1ec9 nh\u1eefng l\u01b0\u1ee3t th\u1ea5t b\u1ea1i, ho\u1eb7c nh\u1eefng l\u01b0\u1ee3t v\u1eabn \u0111ang ch\u1ea1y. Nh\u1ea5p v\u00e0o b\u1ea5t k\u1ef3 h\u00e0ng n\u00e0o v\u00e0 to\u00e0n b\u1ed9 l\u01b0\u1ee3t th\u1ef1c thi m\u1edf ra: m\u1ed9t d\u1ea3i ch\u1ec9 s\u1ed1, gi\u1ea3i th\u00edch l\u1ed7i n\u1ebfu c\u00f3, v\u00e0 k\u1ebft qu\u1ea3 xu\u1ea5t tr\u1ef1c ti\u1ebfp truy\u1ec1n t\u1eebng d\u00f2ng, ch\u00ednh x\u00e1c nh\u01b0 agent \u0111\u00e3 t\u1ea1o ra.",
       dashboardEvents: "C\u00e1c agent kh\u00f4ng ho\u1ea1t \u0111\u1ed9ng \u0111\u1ed9c l\u1eadp \u2014 ch\u00fang ph\u1ea3n \u1ee9ng v\u1edbi s\u1ef1 ki\u1ec7n. \u0110\u00e2y l\u00e0 lu\u1ed3ng s\u1ef1 ki\u1ec7n: m\u1ecdi t\u00edn hi\u1ec7u ch\u1ea3y qua h\u1ec7 th\u1ed1ng, t\u1eeb l\u1ecbch tr\u00ecnh v\u00e0 webhook \u0111\u1ebfn tin nh\u1eafn gi\u1eefa c\u00e1c agent. M\u1ed7i h\u00e0ng hi\u1ec3n th\u1ecb lo\u1ea1i s\u1ef1 ki\u1ec7n, ngu\u1ed3n g\u1ed1c, tr\u1ea1ng th\u00e1i, v\u00e0 th\u1eddi gian \u0111\u00e3 k\u00edch ho\u1ea1t t\u1eeb bao l\u00e2u. C\u00e1c s\u1ef1 ki\u1ec7n th\u1ea5t b\u1ea1i c\u00f3 th\u1ec3 \u0111\u01b0\u1ee3c th\u1eed l\u1ea1i ngay t\u1ea1i ch\u1ed7, v\u00e0 c\u00e1c s\u1ef1 ki\u1ec7n li\u00ean quan \u0111\u01b0\u1ee3c li\u00ean k\u1ebft chu\u1ed7i \u0111\u1ec3 b\u1ea1n c\u00f3 th\u1ec3 theo d\u00f5i to\u00e0n b\u1ed9 m\u1ed9t chu\u1ed7i ph\u1ea3n \u1ee9ng t\u1eeb \u0111\u1ea7u \u0111\u1ebfn cu\u1ed1i.",
       dashboardReviews: "M\u1ed9t s\u1ed1 quy\u1ebft \u0111\u1ecbnh c\u1ea7n con ng\u01b0\u1eddi. Khi m\u1ed9t agent g\u1eb7p \u0111i\u1ec1u g\u00ec \u0111\u00f3 kh\u00f4ng n\u00ean t\u1ef1 quy\u1ebft \u0111\u1ecbnh m\u1ed9t m\u00ecnh, n\u00f3 t\u1ea1m d\u1eebng v\u00e0 \u0111\u1ecbnh tuy\u1ebfn y\u00eau c\u1ea7u \u0111\u1ebfn \u0111\u00e2y. M\u1ed7i m\u1ee5c mang theo persona, ng\u1eef c\u1ea3nh, v\u00e0 h\u00e0nh \u0111\u1ed9ng n\u00f3 \u0111ang \u0111\u1ec1 xu\u1ea5t \u2014 duy\u1ec7t, t\u1eeb ch\u1ed1i, ho\u1eb7c b\u1ecf qua \u0111\u1ec3 x\u1eed l\u00fd sau, b\u1eb1ng c\u00fa nh\u1ea5p ho\u1eb7c b\u00e0n ph\u00edm. Kh\u00f4ng c\u00f3 g\u00ec r\u1ee7i ro \u0111\u01b0\u1ee3c tri\u1ec3n khai m\u00e0 kh\u00f4ng c\u00f3 s\u1ef1 ch\u1ea5p thu\u1eadn c\u1ee7a b\u1ea1n, v\u00e0 h\u00e0ng \u0111\u1ee3i gi\u1eef cho ph\u1ea7n c\u00f2n l\u1ea1i c\u1ee7a \u0111\u1ed9i agent ti\u1ebfp t\u1ee5c v\u1eadn h\u00e0nh trong khi b\u1ea1n quy\u1ebft \u0111\u1ecbnh.",
@@ -2307,5 +2417,123 @@ export const vi: Translations = {
         devTools: "\u0110\u1ed9i agent song song, d\u1ef1 \u00e1n, ph\u00e2n lo\u1ea1i",
         brain: "Vault c\u1ee7a b\u1ea1n, s\u1eb5n s\u00e0ng cho agent"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Trang web n\u00e0y kh\u00f4ng \u0111\u1eb7t cookie n\u00e0o c\u1ee7a ri\u00eang m\u00ecnh. Trang l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t v\u00e0, n\u1ebfu b\u1ea1n gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i, m\u1ed9t kh\u00f3a k\u00fd trong c\u01a1 s\u1edf d\u1eef li\u1ec7u tr\u00ecnh duy\u1ec7t c\u1ee7a \u0111i\u1ec7n tho\u1ea1i \u0111\u00f3. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",
+        "Kh\u00f4ng qu\u1ea3ng c\u00e1o, kh\u00f4ng theo d\u00f5i ch\u00e9o trang v\u00e0 kh\u00f4ng l\u1ea5y d\u1ea5u v\u00e2n tay thi\u1ebft b\u1ecb d\u01b0\u1edbi b\u1ea5t k\u1ef3 h\u00ecnh th\u1ee9c n\u00e0o.",
+        "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a t\u1ea5t c\u1ea3 b\u1ea5t c\u1ee9 l\u00fac n\u00e0o trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t."
+      ],
+      lastUpdated: "C\u1eadp nh\u1eadt l\u1ea7n cu\u1ed1i: {date}",
+      approachHeading: "C\u00e1ch ch\u00fang t\u00f4i s\u1eed d\u1ee5ng cookie v\u00e0 b\u1ed9 nh\u1edb",
+      approachBody: "Ch\u00fang t\u00f4i ch\u1ec9 l\u01b0u nh\u1eefng g\u00ec trang web c\u1ea7n. Theo quy \u0111\u1ecbnh c\u1ee7a EU, b\u1ed9 nh\u1edb tr\u00ecnh duy\u1ec7t nh\u01b0 b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 \u0111\u01b0\u1ee3c coi nh\u01b0 cookie, n\u00ean danh s\u00e1ch b\u00ean d\u01b0\u1edbi bao g\u1ed3m c\u1ea3 hai. Ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng cookie qu\u1ea3ng c\u00e1o, pixel theo d\u00f5i hay k\u1ef9 thu\u1eadt l\u1ea5y d\u1ea5u v\u00e2n tay.",
+      registerHeading: "Nh\u1eefng g\u00ec ch\u00fang t\u00f4i l\u01b0u tr\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n",
+      registerIntro: "M\u1ecdi cookie v\u00e0 kh\u00f3a l\u01b0u tr\u1eef m\u00e0 trang web n\u00e0y ghi, \u0111\u01b0\u1ee3c nh\u00f3m theo m\u1ee5c \u0111\u00edch. T\u00ean k\u1ebft th\u00fac b\u1eb1ng * \u0111\u1ea1i di\u1ec7n cho m\u1ed9t nh\u00f3m kh\u00f3a, v\u00ed d\u1ee5 m\u1ed7i ch\u00ednh s\u00e1ch ho\u1eb7c m\u1ed7i danh s\u00e1ch ki\u1ec3m tra m\u1ed9t kh\u00f3a.",
+      categories: {
+        necessary: {
+          title: "Th\u1ef1c s\u1ef1 c\u1ea7n thi\u1ebft",
+          description: "C\u1ea7n \u0111\u1ec3 trang web l\u00e0m \u0111\u01b0\u1ee3c \u0111i\u1ec1u b\u1ea1n y\u00eau c\u1ea7u. Lu\u00f4n b\u1eadt."
+        },
+        preferences: {
+          title: "T\u00f9y ch\u1ecdn",
+          description: "Ghi nh\u1edb l\u1ef1a ch\u1ecdn c\u1ee7a b\u1ea1n \u0111\u1ec3 trang web hi\u1ec3n th\u1ecb v\u00e0 ho\u1ea1t \u0111\u1ed9ng theo c\u00e1ch b\u1ea1n \u0111\u00e3 thi\u1ebft l\u1eadp."
+        },
+        functional: {
+          title: "Ch\u1ee9c n\u0103ng",
+          description: "Gi\u1eef cho c\u00e1c t\u00ednh n\u0103ng ho\u1ea1t \u0111\u1ed9ng gi\u1eefa c\u00e1c l\u1ea7n truy c\u1eadp: ti\u1ebfn \u0111\u1ed9 c\u1ee7a b\u1ea1n, nh\u1eefng g\u00ec b\u1ea1n \u0111\u00e3 xem v\u00e0 phi\u1ebfu b\u1ea7u c\u1ee7a b\u1ea1n."
+        },
+        analytics: {
+          title: "Ph\u00e2n t\u00edch",
+          description: "Kh\u00f4ng l\u01b0u g\u00ec cho m\u1ee5c \u0111\u00edch ph\u00e2n t\u00edch. N\u1ebfu b\u1ea1n ch\u1ecdn \"Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3\" tr\u00ean bi\u1ec3u ng\u1eef cookie, trang web \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh m\u00e0 kh\u00f4ng ghi g\u00ec l\u00ean thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n. N\u1ebfu b\u1ea1n ch\u1ecdn \"Ch\u1ec9 thi\u1ebft y\u1ebfu\", kh\u00f4ng c\u00f3 g\u00ec \u0111\u01b0\u1ee3c \u0111\u1ebfm."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "B\u1ed9 nh\u1edb c\u1ee5c b\u1ed9",
+        indexedDB: "C\u01a1 s\u1edf d\u1eef li\u1ec7u tr\u00ecnh duy\u1ec7t (IndexedDB)"
+      },
+      lifetimes: {
+        oneYear: "1 n\u0103m",
+        untilCleared: "Cho \u0111\u1ebfn khi b\u1ea1n x\u00f3a",
+        untilSignOut: "Cho \u0111\u1ebfn khi b\u1ea1n \u0111\u0103ng xu\u1ea5t",
+        untilUnpaired: "Cho \u0111\u1ebfn khi b\u1ea1n h\u1ee7y gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i ho\u1eb7c x\u00f3a d\u1eef li\u1ec7u trang web"
+      },
+      purposes: {
+        consent: "Ghi nh\u1edb l\u1ef1a ch\u1ecdn c\u1ee7a b\u1ea1n tr\u00ean bi\u1ec3u ng\u1eef cookie.",
+        authSession: "Gi\u1eef b\u1ea1n \u0111\u0103ng nh\u1eadp v\u00e0o b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n. Do Supabase, nh\u00e0 cung c\u1ea5p \u0111\u0103ng nh\u1eadp c\u1ee7a ch\u00fang t\u00f4i, ghi v\u00e0 ch\u1ec9 khi b\u1ea1n \u0111\u0103ng nh\u1eadp.",
+        theme: "Ghi nh\u1edb ch\u1ee7 \u0111\u1ec1 m\u00e0u b\u1ea1n \u0111\u00e3 ch\u1ecdn.",
+        language: "Ghi nh\u1edb ng\u00f4n ng\u1eef b\u1ea1n \u0111\u00e3 ch\u1ecdn.",
+        tourVolume: "Ghi nh\u1edb \u00e2m l\u01b0\u1ee3ng l\u1eddi d\u1eabn c\u1ee7a chuy\u1ebfn tham quan c\u00f3 h\u01b0\u1edbng d\u1eabn.",
+        dashboardPrefs: "Ghi nh\u1edb ch\u1ebf \u0111\u1ed9 xem, b\u1ed9 l\u1ecdc v\u00e0 c\u00e0i \u0111\u1eb7t b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n c\u1ee7a b\u1ea1n, nh\u01b0 chuy\u1ec3n c\u1ea5p \u0111\u00e1nh gi\u00e1 v\u00e0 \u0111\u1ecdc to.",
+        tourSeen: "Ghi nh\u1edb r\u1eb1ng b\u1ea1n \u0111\u00e3 xem chuy\u1ebfn tham quan c\u00f3 h\u01b0\u1edbng d\u1eabn \u0111\u1ec3 kh\u00f4ng \u0111\u1ec1 xu\u1ea5t l\u1ea1i.",
+        policySeen: "Ghi nh\u1edb l\u1ea7n cu\u1ed1i b\u1ea1n \u0111\u1ecdc t\u1eebng ch\u00ednh s\u00e1ch tr\u00ean trang n\u00e0y \u0111\u1ec3 c\u00f3 th\u1ec3 \u0111\u00e1nh d\u1ea5u c\u00e1c b\u1ea3n c\u1eadp nh\u1eadt.",
+        dashboardActivity: "Ghi nh\u1edb l\u1ea7n cu\u1ed1i b\u1ea1n m\u1edf b\u1ea3ng \u0111i\u1ec1u khi\u1ec3n v\u00e0 s\u1ed1 l\u1ea7n m\u1ed9t s\u1ef1 ki\u1ec7n demo \u0111\u01b0\u1ee3c th\u1eed l\u1ea1i.",
+        checklist: "Ghi nh\u1edb nh\u1eefng m\u1ee5c trong danh s\u00e1ch ki\u1ec3m tra c\u1ee7a h\u01b0\u1edbng d\u1eabn m\u00e0 b\u1ea1n \u0111\u00e3 \u0111\u00e1nh d\u1ea5u.",
+        voting: "M\u1ed9t ID ng\u1eabu nhi\u00ean cho ph\u00e9p b\u1ea1n b\u00ecnh ch\u1ecdn m\u1ed7i t\u00ednh n\u0103ng m\u1ed9t l\u1ea7n, v\u00e0 m\u1ed9t bi\u1ec7t danh ng\u1eabu nhi\u00ean (nh\u01b0 SwiftFox) hi\u1ec3n th\u1ecb tr\u00ean b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n. C\u1ea3 hai \u0111\u01b0\u1ee3c g\u1eedi k\u00e8m phi\u1ebfu b\u1ea7u v\u00e0 b\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n, v\u00e0 kh\u00f4ng c\u00e1i n\u00e0o ch\u1ee9a th\u00f4ng tin c\u00e1 nh\u00e2n.",
+        pairedPhoneKey: "Ch\u1ec9 c\u00f3 tr\u00ean \u0111i\u1ec7n tho\u1ea1i b\u1ea1n gh\u00e9p n\u1ed1i v\u1edbi \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh: m\u1ed9t kh\u00f3a k\u00fd do tr\u00ecnh duy\u1ec7t t\u1ea1o ra v\u00e0 kh\u00f4ng th\u1ec3 xu\u1ea5t, m\u1ed9t ID cho \u0111i\u1ec7n tho\u1ea1i n\u00e0y, ID c\u1ee7a m\u00e1y t\u00ednh m\u00e0 n\u00f3 \u0111\u01b0\u1ee3c gh\u00e9p n\u1ed1i v\u00e0 th\u1eddi \u0111i\u1ec3m gh\u00e9p n\u1ed1i. Kh\u00f3a n\u00e0y k\u00fd c\u00e1c l\u1ec7nh m\u00e0 \u0111i\u1ec7n tho\u1ea1i g\u1eedi \u0111i, \u0111\u1ec3 m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n c\u00f3 th\u1ec3 ki\u1ec3m tra r\u1eb1ng l\u1ec7nh \u0111\u1ebfn t\u1eeb ch\u00ednh \u0111i\u1ec7n tho\u1ea1i \u0111\u00f3."
+      },
+      notUsedHeading: "Nh\u1eefng g\u00ec ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng",
+      notUsed: [
+        "Kh\u00f4ng c\u00f3 cookie qu\u1ea3ng c\u00e1o hay ti\u1ebfp th\u1ecb l\u1ea1i",
+        "Kh\u00f4ng theo d\u00f5i ch\u00e9o trang",
+        "Kh\u00f4ng c\u00f3 pixel theo d\u00f5i c\u1ee7a m\u1ea1ng x\u00e3 h\u1ed9i",
+        "Kh\u00f4ng c\u00f3 cookie hay b\u1ed9 nh\u1edb d\u00f9ng cho ph\u00e2n t\u00edch"
+      ],
+      thirdPartyHeading: "Cookie c\u1ee7a b\u00ean th\u1ee9 ba",
+      thirdPartyBody: "N\u1ebfu b\u1ea1n \u0111\u0103ng nh\u1eadp, b\u1ea1n s\u1ebd \u0111i qua Supabase, nh\u00e0 cung c\u1ea5p \u0111\u0103ng nh\u1eadp c\u1ee7a ch\u00fang t\u00f4i, v\u00e0 nh\u00e0 cung c\u1ea5p t\u00e0i kho\u1ea3n b\u1ea1n ch\u1ecdn, nh\u01b0 Google. H\u1ecd c\u00f3 th\u1ec3 \u0111\u1eb7t cookie tr\u00ean t\u00ean mi\u1ec1n c\u1ee7a ch\u00ednh h\u1ecd trong l\u00fac \u0111\u0103ng nh\u1eadp, theo ch\u00ednh s\u00e1ch ri\u00eang c\u1ee7a h\u1ecd. Ch\u00fang t\u00f4i kh\u00f4ng d\u00f9ng c\u00e1c cookie \u0111\u00f3 \u0111\u1ec3 theo d\u00f5i.",
+      managingHeading: "Qu\u1ea3n l\u00fd cookie v\u00e0 b\u1ed9 nh\u1edb",
+      managingBody: "B\u1ea1n c\u00f3 th\u1ec3 x\u00f3a ho\u1eb7c ch\u1eb7n cookie v\u00e0 d\u1eef li\u1ec7u trang web trong c\u00e0i \u0111\u1eb7t tr\u00ecnh duy\u1ec7t b\u1ea5t c\u1ee9 l\u00fac n\u00e0o. X\u00f3a ch\u00fang s\u1ebd \u0111\u0103ng xu\u1ea5t b\u1ea1n v\u00e0 \u0111\u1eb7t l\u1ea1i c\u00e1c t\u00f9y ch\u1ecdn. N\u1ebfu c\u00f3 c\u00e2u h\u1ecfi, h\u00e3y li\u00ean h\u1ec7 {email}.",
+      manageButton: "Qu\u1ea3n l\u00fd t\u00f9y ch\u1ecdn cookie"
+    },
+    privacyPolicy: {
+      tldr: [
+        "Personas ch\u1ea1y c\u00e1c t\u00e1c t\u1eed c\u1ee7a b\u1ea1n tr\u00ean m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n v\u00e0 l\u01b0u ch\u00fang \u1edf \u0111\u00f3, c\u00f9ng v\u1edbi l\u1ecbch s\u1eed ch\u1ea1y, ghi ch\u00fa v\u00e0 tr\u00f2 chuy\u1ec7n. Prompt c\u1ee7a b\u1ea1n ch\u1ec9 \u0111\u01b0\u1ee3c g\u1eedi \u0111\u1ebfn nh\u00e0 cung c\u1ea5p AI m\u00e0 b\u1ea1n ch\u1ecdn.",
+        "\u0110\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y l\u00e0 t\u00f9y ch\u1ecdn v\u00e0 lu\u00f4n t\u1eaft cho \u0111\u1ebfn khi b\u1ea1n b\u1eadt. N\u00f3 sao ch\u00e9p c\u00e1c t\u00e1c t\u1eed v\u00e0 c\u00e1c l\u1ea7n ch\u1ea1y c\u1ee7a ch\u00fang v\u00e0o t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n \u0111\u1ec3 b\u1ea1n xem tr\u00ean web. Ghi ch\u00fa v\u00e0 tr\u00f2 chuy\u1ec7n ch\u1ec9 \u0111\u01b0\u1ee3c \u0111\u1ed3ng b\u1ed9 n\u1ebfu b\u1ea1n b\u1eadt th\u00eam c\u00f4ng t\u1eafc ri\u00eang c\u1ee7a ch\u00fang.",
+        "\u0110i\u1ec7n tho\u1ea1i b\u1ea1n gh\u00e9p n\u1ed1i c\u00f3 th\u1ec3 ch\u1ea1y, t\u1ea1m d\u1eebng, ti\u1ebfp t\u1ee5c v\u00e0 d\u1eebng c\u00e1c t\u00e1c t\u1eed c\u1ee7a b\u1ea1n, ph\u00ea duy\u1ec7t ho\u1eb7c t\u1eeb ch\u1ed1i \u0111\u00e1nh gi\u00e1 c\u1ee7a ch\u00fang, c\u0169ng nh\u01b0 tr\u00f2 chuy\u1ec7n v\u1edbi ch\u00fang v\u00e0 v\u1edbi Athena m\u00e0 kh\u00f4ng c\u1ea7n m\u1ed9t c\u00fa nh\u1ea5p n\u00e0o tr\u00ean m\u00e1y t\u00ednh. B\u1ea1n c\u00f3 th\u1ec3 thu h\u1ed3i b\u1ea5t c\u1ee9 l\u00fac n\u00e0o.",
+        "Kh\u00f3a API \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a b\u1eb1ng AES-256 v\u00e0 kh\u00f4ng bao gi\u1edd r\u1eddi kh\u1ecfi m\u00e1y c\u1ee7a b\u1ea1n, k\u1ec3 c\u1ea3 khi b\u1eadt \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y.",
+        "Ngo\u00e0i nh\u1eefng g\u00ec b\u1ea1n ch\u1ecdn \u0111\u1ed3ng b\u1ed9, \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh ch\u1ec9 g\u1eedi cho ch\u00fang t\u00f4i b\u00e1o c\u00e1o l\u1ed7i v\u00e0 t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng \u1ea9n danh, v\u00e0 b\u1ea1n c\u00f3 th\u1ec3 t\u1eaft h\u1ea7u h\u1ebft ch\u00fang.",
+        "Ch\u00fang t\u00f4i ch\u1ec9 thu th\u1eadp email c\u1ee7a b\u1ea1n n\u1ebfu b\u1ea1n \u0111\u0103ng nh\u1eadp \u0111\u1ec3 d\u00f9ng c\u00e1c t\u00ednh n\u0103ng \u0111\u00e1m m\u00e2y.",
+        "B\u1ea1n c\u00f3 th\u1ec3 xu\u1ea5t ho\u1eb7c x\u00f3a m\u1ecdi th\u1ee9 b\u1ea5t c\u1ee9 l\u00fac n\u00e0o. Ch\u1ec9 c\u1ea7n y\u00eau c\u1ea7u."
+      ],
+      lastUpdated: "C\u1eadp nh\u1eadt l\u1ea7n cu\u1ed1i: {date}",
+      commitmentHeading: "Cam k\u1ebft c\u1ee7a ch\u00fang t\u00f4i v\u1ec1 quy\u1ec1n ri\u00eang t\u01b0",
+      commitmentBody: "Personas \u0111\u01b0\u1ee3c x\u00e2y d\u1ef1ng tr\u00ean m\u1ed9t nguy\u00ean t\u1eafc \u0111\u01a1n gi\u1ea3n: d\u1eef li\u1ec7u c\u1ee7a b\u1ea1n thu\u1ed9c v\u1ec1 b\u1ea1n. \u1ee8ng d\u1ee5ng m\u00e1y t\u00ednh c\u1ee7a ch\u00fang t\u00f4i \u01b0u ti\u00ean ch\u1ea1y c\u1ee5c b\u1ed9. Tr\u1eeb khi b\u1ea1n b\u1eadt \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y, c\u00e1c t\u00e1c t\u1eed, prompt, k\u1ebft qu\u1ea3 \u0111\u1ea7u ra v\u00e0 th\u00f4ng tin x\u00e1c th\u1ef1c c\u1ee7a b\u1ea1n kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c g\u1eedi cho ch\u00fang t\u00f4i, v\u00e0 d\u1eef li\u1ec7u duy nh\u1ea5t \u1ee9ng d\u1ee5ng g\u1eedi cho ch\u00fang t\u00f4i l\u00e0 th\u00f4ng tin ch\u1ea9n \u0111o\u00e1n \u1ea9n danh \u0111\u01b0\u1ee3c m\u00f4 t\u1ea3 b\u00ean d\u01b0\u1edbi. Th\u00f4ng tin x\u00e1c th\u1ef1c c\u1ee7a b\u1ea1n kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c g\u1eedi cho ch\u00fang t\u00f4i, k\u1ec3 c\u1ea3 khi b\u1eadt \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y.",
+      desktopHeading: "Nh\u1eefng g\u00ec \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh l\u01b0u tr\u1eef",
+      desktopBody: "M\u1ecdi th\u1ee9 \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh Personas t\u1ea1o ra (c\u00e1c t\u00e1c t\u1eed, pipeline, l\u1ecbch s\u1eed ch\u1ea1y, ghi ch\u00fa, cu\u1ed9c tr\u00f2 chuy\u1ec7n v\u00e0 c\u1ea5u h\u00ecnh c\u1ee7a b\u1ea1n) \u0111\u1ec1u n\u1eb1m tr\u00ean m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n. Kh\u00f4ng c\u00f3 g\u00ec trong s\u1ed1 \u0111\u00f3 \u0111\u01b0\u1ee3c g\u1eedi \u0111\u1ebfn m\u00e1y ch\u1ee7 c\u1ee7a ch\u00fang t\u00f4i, tr\u1eeb khi b\u1ea1n b\u1eadt \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y \u0111\u01b0\u1ee3c m\u00f4 t\u1ea3 b\u00ean d\u01b0\u1edbi. Khi m\u1ed9t t\u00e1c t\u1eed ch\u1ea1y, prompt c\u1ee7a n\u00f3 \u0111i th\u1eb3ng t\u1eeb m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n \u0111\u1ebfn nh\u00e0 cung c\u1ea5p AI b\u1ea1n \u0111\u00e3 ch\u1ecdn: Claude c\u1ee7a Anthropic, ho\u1eb7c m\u1ed9t m\u00f4 h\u00ecnh Ollama c\u1ee5c b\u1ed9 kh\u00f4ng bao gi\u1edd r\u1eddi kh\u1ecfi m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n.",
+      telemetryHeading: "B\u00e1o c\u00e1o l\u1ed7i v\u00e0 t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh",
+      telemetryBody: "C\u00e1c b\u1ea3n ph\u00e1t h\u00e0nh c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh g\u1eedi b\u00e1o c\u00e1o l\u1ed7i (th\u00f4ng b\u00e1o l\u1ed7i, stack trace, h\u1ec7 \u0111i\u1ec1u h\u00e0nh, ki\u1ebfn tr\u00fac v\u00e0 phi\u00ean b\u1ea3n \u1ee9ng d\u1ee5ng) v\u00e0 t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng \u1ea9n danh (phi\u00ean \u1ee9ng d\u1ee5ng, c\u00e1c m\u1ee5c v\u00e0 th\u1ebb b\u1ea1n m\u1edf, c\u00e1c thao t\u00e1c ch\u00ednh nh\u01b0 t\u1ea1o t\u00e1c t\u1eed, v\u00e0 c\u00e1c c\u1ed9t m\u1ed1c m\u1ed9t l\u1ea7n) \u0111\u1ebfn Sentry. Phi\u00ean v\u00e0 c\u1ed9t m\u1ed1c ch\u1ec9 g\u1eafn v\u1edbi m\u1ed9t ID thi\u1ebft b\u1ecb ho\u1eb7c ID c\u00e0i \u0111\u1eb7t ng\u1eabu nhi\u00ean. \u0110\u1ecba ch\u1ec9 IP, \u0111\u1ecba ch\u1ec9 email, t\u00ean ng\u01b0\u1eddi d\u00f9ng, c\u00f9ng n\u1ed9i dung v\u00e0 ti\u00eau \u0111\u1ec1 c\u1ee7a y\u00eau c\u1ea7u \u0111\u1ec1u b\u1ecb lo\u1ea1i b\u1ecf tr\u01b0\u1edbc khi g\u1eedi. Kh\u00f4ng c\u00f3 d\u1ea5u v\u1ebft hi\u1ec7u n\u0103ng, kh\u00f4ng c\u00f3 b\u1ea3n ghi l\u1ea1i phi\u00ean, kh\u00f4ng c\u00f3 danh t\u00ednh ng\u01b0\u1eddi d\u00f9ng, v\u00e0 prompt, n\u1ed9i dung persona c\u0169ng nh\u01b0 th\u00f4ng tin x\u00e1c th\u1ef1c c\u1ee7a b\u1ea1n kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c \u0111\u01b0a v\u00e0o.",
+      telemetryControls: "B\u1ea1n c\u00f3 th\u1ec3 t\u1eaft t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng v\u00e0 b\u00e1o c\u00e1o l\u1ed7i c\u1ee7a giao di\u1ec7n \u1ee9ng d\u1ee5ng khi kh\u1edfi ch\u1ea1y l\u1ea7n \u0111\u1ea7u ho\u1eb7c b\u1ea5t c\u1ee9 l\u00fac n\u00e0o trong C\u00e0i \u0111\u1eb7t > T\u00e0i kho\u1ea3n. B\u00e1o c\u00e1o s\u1ef1 c\u1ed1 t\u1eeb l\u00f5i g\u1ed1c c\u1ee7a \u1ee9ng d\u1ee5ng hi\u1ec7n ch\u01b0a ch\u1ecbu s\u1ef1 \u0111i\u1ec1u khi\u1ec3n c\u1ee7a c\u00f4ng t\u1eafc \u0111\u00f3. C\u00e1c b\u1ea3n ph\u00e1t tri\u1ec3n v\u00e0 b\u1ea3n b\u1ea1n t\u1ef1 bi\u00ean d\u1ecbch t\u1eeb m\u00e3 ngu\u1ed3n kh\u00f4ng g\u1eedi g\u00ec c\u1ea3.",
+      credentialsHeading: "C\u00e1ch b\u1ea3o v\u1ec7 th\u00f4ng tin x\u00e1c th\u1ef1c",
+      credentialsBody: "Kh\u00f3a API v\u00e0 c\u00e1c b\u00ed m\u1eadt b\u1ea1n th\u00eam v\u00e0o Personas \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a khi l\u01b0u tr\u1eef b\u1eb1ng AES-256-GCM v\u00e0 l\u01b0u trong keyring c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh. Ch\u00fang kh\u00f4ng bao gi\u1edd r\u1eddi kh\u1ecfi thi\u1ebft b\u1ecb c\u1ee7a b\u1ea1n, k\u1ec3 c\u1ea3 khi b\u1ea1n d\u00f9ng \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y ho\u1eb7c \u0111i\u1ec7n tho\u1ea1i \u0111\u00e3 gh\u00e9p n\u1ed1i.",
+      syncHeading: "\u0110\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y t\u00f9y ch\u1ecdn",
+      syncIntro: "\u0110\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y lu\u00f4n t\u1eaft cho \u0111\u1ebfn khi b\u1ea1n \u0111\u0103ng nh\u1eadp v\u00e0 b\u1eadt n\u00f3 trong C\u00e0i \u0111\u1eb7t c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh. N\u00f3 cho ph\u00e9p b\u1ea1n theo d\u00f5i c\u00e1c t\u00e1c t\u1eed tr\u00ean trang web Personas, k\u1ec3 c\u1ea3 t\u1eeb \u0111i\u1ec7n tho\u1ea1i. Khi \u0111\u01b0\u1ee3c b\u1eadt, \u1ee9ng d\u1ee5ng sao ch\u00e9p nh\u1eefng th\u1ee9 sau v\u00e0o t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n: c\u00e1c t\u00e1c t\u1eed (g\u1ed3m t\u00ean, m\u00f4 t\u1ea3 v\u00e0 h\u01b0\u1edbng d\u1eabn), c\u00e1c l\u1ea7n ch\u1ea1y c\u1ee7a ch\u00fang (g\u1ed3m \u0111\u1ea7u v\u00e0o, \u0111\u1ea7u ra, chi ph\u00ed v\u00e0 l\u1ed7i), s\u1ef1 ki\u1ec7n, c\u00e1c m\u1ee5c \u0111ang ch\u1edd b\u1ea1n xem x\u00e9t, tin nh\u1eafn c\u00e1c t\u00e1c t\u1eed g\u1eedi cho b\u1ea1n, k\u00fd \u1ee9c, m\u1eabu \u0111\u00e3 h\u1ecdc, s\u1ef1 c\u1ed1 v\u1ec1 t\u00ecnh tr\u1ea1ng, th\u1eddi gian theo l\u1ecbch, h\u00e0ng \u0111\u1ee3i ch\u1ea1y v\u00e0 t\u1ed5ng s\u1ed1 theo ng\u00e0y. C\u00e1c gi\u00e1 tr\u1ecb tr\u00f4ng gi\u1ed1ng b\u00ed m\u1eadt \u0111\u01b0\u1ee3c lo\u1ea1i kh\u1ecfi d\u1eef li\u1ec7u s\u1ef1 ki\u1ec7n tr\u01b0\u1edbc khi g\u1eedi.",
+      syncNever: "Kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c \u0111\u1ed3ng b\u1ed9: kh\u00f3a API, m\u1eadt kh\u1ea9u v\u00e0 c\u00e1c th\u00f4ng tin x\u00e1c th\u1ef1c kh\u00e1c, c\u0169ng nh\u01b0 c\u00e0i \u0111\u1eb7t tr\u00ecnh k\u00edch ho\u1ea1t nh\u01b0 c\u1ea5u h\u00ecnh webhook.",
+      syncOptIns: "Hai lo\u1ea1i d\u1eef li\u1ec7u kh\u00e1c ch\u1ec9 \u0111\u01b0\u1ee3c \u0111\u1ed3ng b\u1ed9 n\u1ebfu b\u1ea1n b\u1eadt th\u00eam c\u00f4ng t\u1eafc ri\u00eang c\u1ee7a ch\u00fang trong c\u00f9ng ph\u1ea7n C\u00e0i \u0111\u1eb7t: \"\u0110\u1ed3ng b\u1ed9 ghi ch\u00fa\" v\u00e0 \"\u0110\u1ed3ng b\u1ed9 tr\u00f2 chuy\u1ec7n\". C\u1ea3 hai \u0111\u1ec1u t\u1eaft l\u00fac \u0111\u1ea7u, k\u1ec3 c\u1ea3 khi \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y \u0111\u00e3 \u0111\u01b0\u1ee3c b\u1eadt.",
+      syncNotes: "\"\u0110\u1ed3ng b\u1ed9 ghi ch\u00fa\" sao ch\u00e9p c\u00e1c m\u1ee5c ti\u00eau trong Notepad c\u1ee7a b\u1ea1n: ti\u00eau \u0111\u1ec1, n\u1ed9i dung, tr\u1ea1ng th\u00e1i v\u00e0 t\u00ean d\u1ef1 \u00e1n c\u1ee7a m\u1ed7i ghi ch\u00fa (kh\u00f4ng bao gi\u1edd c\u00f3 th\u01b0 m\u1ee5c d\u1ef1 \u00e1n tr\u00ean m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n), c\u00f9ng b\u1ea3n t\u00f3m t\u1eaft ng\u1eafn v\u1ec1 k\u1ebft qu\u1ea3 c\u1ee7a n\u00f3. Ghi ch\u00fa \u0111\u00e3 l\u01b0u tr\u1eef kh\u00f4ng \u0111\u01b0\u1ee3c \u0111\u1ed3ng b\u1ed9.",
+      syncChats: "\"\u0110\u1ed3ng b\u1ed9 tr\u00f2 chuy\u1ec7n\" sao ch\u00e9p c\u00e1c cu\u1ed9c tr\u00f2 chuy\u1ec7n c\u1ee7a b\u1ea1n v\u1edbi Athena v\u00e0 v\u1edbi c\u00e1c t\u00e1c t\u1eed, \u0111\u1ec3 b\u1ea1n c\u00f3 th\u1ec3 \u0111\u1ecdc v\u00e0 ti\u1ebfp t\u1ee5c ch\u00fang t\u1eeb \u0111i\u1ec7n tho\u1ea1i: ti\u00eau \u0111\u1ec1 c\u1ee7a m\u1ed7i cu\u1ed9c tr\u00f2 chuy\u1ec7n \u0111ang ho\u1ea1t \u0111\u1ed9ng, c\u00f9ng tin nh\u1eafn c\u1ee7a b\u1ea1n v\u00e0 c\u00e1c c\u00e2u tr\u1ea3 l\u1eddi t\u1eeb 90 ng\u00e0y tr\u01b0\u1edbc khi b\u1ea1n b\u1eadt tr\u1edf \u0111i. C\u00e1c c\u00e2u tr\u1ea3 l\u1eddi c\u00f3 th\u1ec3 tr\u00edch d\u1eabn nh\u1eefng g\u00ec c\u00e1c t\u00e1c t\u1eed \u0111\u00e3 \u0111\u1ecdc qua c\u00e1c \u1ee9ng d\u1ee5ng b\u1ea1n k\u1ebft n\u1ed1i. Tin nh\u1eafn h\u1ec7 th\u1ed1ng, tin nh\u1eafn c\u00f4ng c\u1ee5, b\u1ea3n t\u00f3m t\u1eaft cu\u1ed9c tr\u00f2 chuy\u1ec7n, b\u1ed9 nh\u1edb l\u00e0m vi\u1ec7c c\u1ee7a t\u00e1c t\u1eed v\u00e0 c\u00e1c cu\u1ed9c tr\u00f2 chuy\u1ec7n \u0111\u00e3 l\u01b0u tr\u1eef kh\u00f4ng bao gi\u1edd \u0111\u01b0\u1ee3c \u0111\u1ed3ng b\u1ed9.",
+      syncMasking: "Tr\u01b0\u1edbc khi v\u0103n b\u1ea3n ghi ch\u00fa ho\u1eb7c tr\u00f2 chuy\u1ec7n r\u1eddi kh\u1ecfi m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n, m\u1ecdi th\u1ee9 tr\u00f4ng gi\u1ed1ng kh\u00f3a, token ho\u1eb7c m\u1eadt kh\u1ea9u \u0111\u1ec1u b\u1ecb che, v\u00e0 v\u0103n b\u1ea3n d\u00e0i b\u1ecb c\u1eaft b\u1edbt: ti\u00eau \u0111\u1ec1 \u1edf 1 KB, n\u1ed9i dung ghi ch\u00fa \u1edf 16 KB v\u00e0 m\u1ed7i tin nh\u1eafn tr\u00f2 chuy\u1ec7n \u1edf 32 KB.",
+      syncDeletion: "T\u1eaft \"\u0110\u1ed3ng b\u1ed9 ghi ch\u00fa\" ho\u1eb7c \"\u0110\u1ed3ng b\u1ed9 tr\u00f2 chuy\u1ec7n\" s\u1ebd x\u00f3a c\u00e1c ghi ch\u00fa ho\u1eb7c cu\u1ed9c tr\u00f2 chuy\u1ec7n m\u00e0 m\u00e1y t\u00ednh n\u00e0y \u0111\u00e3 \u0111\u1ed3ng b\u1ed9, v\u00e0o l\u1ea7n \u0111\u1ed3ng b\u1ed9 ti\u1ebfp theo. X\u00f3a m\u1ed9t cu\u1ed9c tr\u00f2 chuy\u1ec7n v\u1edbi t\u00e1c t\u1eed tr\u00ean m\u00e1y t\u00ednh s\u1ebd x\u00f3a c\u1ea3 b\u1ea3n sao \u0111\u00e3 \u0111\u1ed3ng b\u1ed9 c\u1ee7a n\u00f3, v\u00e0 x\u00f3a m\u1ed9t t\u00e1c t\u1eed s\u1ebd x\u00f3a b\u1ea3n sao \u0111\u00e3 \u0111\u1ed3ng b\u1ed9 c\u1ee7a n\u00f3, k\u1ec3 c\u1ea3 c\u00e1c cu\u1ed9c tr\u00f2 chuy\u1ec7n. T\u1eaft ch\u00ednh \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y s\u1ebd d\u1eebng c\u00e1c b\u1ea3n sao m\u1edbi nh\u01b0ng kh\u00f4ng x\u00f3a nh\u1eefng g\u00ec \u0111\u00e3 \u0111\u01b0\u1ee3c \u0111\u1ed3ng b\u1ed9. H\u00e3y g\u1eedi email cho ch\u00fang t\u00f4i v\u00e0 ch\u00fang t\u00f4i s\u1ebd x\u00f3a.",
+      syncWhere: "D\u1eef li\u1ec7u \u0111\u1ed3ng b\u1ed9 \u0111\u01b0\u1ee3c l\u01b0u t\u1ea1i Supabase, nh\u00e0 cung c\u1ea5p \u0111\u00e1m m\u00e2y c\u1ee7a ch\u00fang t\u00f4i, trong c\u00e1c h\u00e0ng g\u1eafn v\u1edbi t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n. Quy t\u1eafc truy c\u1eadp c\u1ee7a c\u01a1 s\u1edf d\u1eef li\u1ec7u ch\u1ec9 cho ph\u00e9p t\u00e0i kho\u1ea3n \u0111\u00e3 \u0111\u0103ng nh\u1eadp c\u1ee7a b\u1ea1n \u0111\u1ecdc ho\u1eb7c thay \u0111\u1ed5i c\u00e1c h\u00e0ng \u0111\u00f3, t\u1eeb \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh ho\u1eb7c trang web. D\u1eef li\u1ec7u kh\u00f4ng \u0111\u01b0\u1ee3c m\u00e3 h\u00f3a \u0111\u1ea7u cu\u1ed1i.",
+      phonesHeading: "\u0110i\u1ec7n tho\u1ea1i \u0111\u00e3 gh\u00e9p n\u1ed1i",
+      phonesIntro: "Khi \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y \u0111ang b\u1eadt, b\u1ea1n c\u00f3 th\u1ec3 gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i b\u1eb1ng c\u00e1ch qu\u00e9t m\u00e3 hi\u1ec3n th\u1ecb trong C\u00e0i \u0111\u1eb7t c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh. T\u1eeb trang web Personas, \u0111i\u1ec7n tho\u1ea1i \u0111\u00e3 gh\u00e9p n\u1ed1i c\u00f3 th\u1ec3 ch\u1ea1y, t\u1ea1m d\u1eebng v\u00e0 ti\u1ebfp t\u1ee5c c\u00e1c t\u00e1c t\u1eed, d\u1eebng m\u1ed9t l\u1ea7n ch\u1ea1y, ph\u00ea duy\u1ec7t ho\u1eb7c t\u1eeb ch\u1ed1i c\u00e1c \u0111\u00e1nh gi\u00e1 \u0111ang ch\u1edd b\u1ea1n, v\u00e0 tr\u00f2 chuy\u1ec7n v\u1edbi Athena ho\u1eb7c v\u1edbi b\u1ea5t k\u1ef3 t\u00e1c t\u1eed n\u00e0o c\u1ee7a b\u1ea1n, k\u1ec3 c\u1ea3 t\u00e1c t\u1eed \u0111ang t\u1ea1m d\u1eebng (ch\u1ec9 khi \"\u0110\u1ed3ng b\u1ed9 tr\u00f2 chuy\u1ec7n\" \u0111ang b\u1eadt). M\u00e1y t\u00ednh c\u1ee7a b\u1ea1n th\u1ef1c hi\u1ec7n c\u00e1c vi\u1ec7c n\u00e0y m\u00e0 kh\u00f4ng h\u1ecfi b\u1ea1n tr\u01b0\u1edbc, v\u00e0 c\u00e1c l\u1ea7n ch\u1ea1y, c\u00e2u tr\u1ea3 l\u1eddi c\u0169ng nh\u01b0 c\u00f4ng vi\u1ec7c \u0111\u01b0\u1ee3c ph\u00ea duy\u1ec7t do \u0111i\u1ec7n tho\u1ea1i kh\u1edfi \u0111\u1ed9ng s\u1ebd d\u00f9ng g\u00f3i Claude c\u1ee7a b\u1ea1n. L\u1ec7nh ch\u1ec9 \u0111\u1ebfn \u0111\u01b0\u1ee3c m\u00e1y t\u00ednh khi m\u00e1y \u0111ang b\u1eadt v\u00e0 tr\u1ef1c tuy\u1ebfn. L\u1ec7nh kh\u00f4ng \u0111\u1ebfn \u0111\u01b0\u1ee3c trong v\u00f2ng m\u1ed9t ph\u00fat s\u1ebd h\u1ebft h\u1ea1n thay v\u00ec ch\u1edd.",
+      phonesLimits: "\u0110i\u1ec7n tho\u1ea1i \u0111\u00e3 gh\u00e9p n\u1ed1i kh\u00f4ng th\u1ec3 ch\u1ec9nh s\u1eeda c\u00e1c t\u00e1c t\u1eed, xem ho\u1eb7c thay \u0111\u1ed5i th\u00f4ng tin x\u00e1c th\u1ef1c, hay thay \u0111\u1ed5i h\u00e0ng \u0111\u1ee3i ch\u1ea1y khi ch\u01b0a c\u00f3 s\u1ef1 ch\u1ea5p thu\u1eadn c\u1ee7a b\u1ea1n tr\u00ean m\u00e1y t\u00ednh. N\u1ebfu ch\u01b0a gh\u00e9p n\u1ed1i, y\u00eau c\u1ea7u ch\u1ea1y t\u00e1c t\u1eed t\u1eeb trang web s\u1ebd ch\u1edd cho \u0111\u1ebfn khi b\u1ea1n ch\u1ea5p thu\u1eadn tr\u00ean m\u00e1y t\u00ednh.",
+      phonesKey: "Khi gh\u00e9p n\u1ed1i, tr\u00ecnh duy\u1ec7t c\u1ee7a \u0111i\u1ec7n tho\u1ea1i t\u1ea1o m\u1ed9t kh\u00f3a k\u00fd kh\u00f4ng th\u1ec3 xu\u1ea5t v\u00e0 gi\u1eef n\u00f3 trong b\u1ed9 nh\u1edb c\u1ee7a tr\u00ecnh duy\u1ec7t \u0111\u00f3. M\u1ecdi l\u1ec7nh \u0111\u1ec1u \u0111\u01b0\u1ee3c k\u00fd b\u1eb1ng kh\u00f3a n\u00e0y, v\u00e0 m\u00e1y t\u00ednh c\u1ee7a b\u1ea1n ki\u1ec3m tra ch\u1eef k\u00fd d\u1ef1a tr\u00ean danh s\u00e1ch \u0111i\u1ec7n tho\u1ea1i \u0111\u00e3 gh\u00e9p n\u1ed1i c\u1ee7a ri\u00eang n\u00f3. T\u00ean \u0111i\u1ec7n tho\u1ea1i (l\u1ea5y t\u1eeb tr\u00ecnh duy\u1ec7t, v\u00ed d\u1ee5 \"iPhone \u00b7 Safari\"), kh\u00f3a c\u00f4ng khai c\u1ee7a n\u00f3, c\u00f9ng c\u00e1c l\u1ec7nh n\u00f3 g\u1eedi v\u00e0 k\u1ebft qu\u1ea3 \u0111\u01b0\u1ee3c l\u01b0u c\u00f9ng d\u1eef li\u1ec7u \u0111\u1ed3ng b\u1ed9 c\u1ee7a b\u1ea1n.",
+      phonesRevoke: "B\u1ea1n c\u00f3 th\u1ec3 thu h\u1ed3i m\u1ed9t \u0111i\u1ec7n tho\u1ea1i, ho\u1eb7c t\u1ea5t c\u1ea3, trong C\u00e0i \u0111\u1eb7t c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh b\u1ea5t c\u1ee9 l\u00fac n\u00e0o. Vi\u1ec7c thu h\u1ed3i c\u00f3 hi\u1ec7u l\u1ef1c trong v\u00e0i gi\u00e2y, v\u00e0 l\u1ea7n ch\u1ea1y \u0111\u00e3 b\u1eaft \u0111\u1ea7u s\u1ebd ch\u1ea1y xong. B\u1ea1n c\u0169ng c\u00f3 th\u1ec3 h\u1ee7y gh\u00e9p n\u1ed1i ngay tr\u00ean \u0111i\u1ec7n tho\u1ea1i, thao t\u00e1c n\u00e0y x\u00f3a kh\u00f3a tr\u00ean \u0111\u00f3.",
+      accountHeading: "Nh\u1eefng g\u00ec ch\u00fang t\u00f4i thu th\u1eadp cho c\u00e1c t\u00ednh n\u0103ng \u0111\u00e1m m\u00e2y",
+      accountBody: "N\u1ebfu b\u1ea1n \u0111\u0103ng nh\u1eadp b\u1eb1ng Google \u0111\u1ec3 d\u00f9ng c\u00e1c t\u00ednh n\u0103ng \u0111\u00e1m m\u00e2y, ch\u00fang t\u00f4i l\u01b0u \u0111\u1ecba ch\u1ec9 email v\u00e0 th\u00f4ng tin h\u1ed3 s\u01a1 c\u01a1 b\u1ea3n c\u1ee7a b\u1ea1n th\u00f4ng qua Supabase, nh\u00e0 cung c\u1ea5p \u0111\u0103ng nh\u1eadp c\u1ee7a ch\u00fang t\u00f4i. N\u1ebfu b\u1ea1n b\u1eadt \u0111\u1ed3ng b\u1ed9 \u0111\u00e1m m\u00e2y ho\u1eb7c gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i, ch\u00fang t\u00f4i c\u0169ng l\u01b0u d\u1eef li\u1ec7u \u0111\u01b0\u1ee3c m\u00f4 t\u1ea3 \u1edf tr\u00ean.",
+      analyticsHeading: "Ph\u00e2n t\u00edch trang web",
+      analyticsBody: "N\u1ebfu b\u1ea1n ch\u1ecdn \"{acceptAll}\" trong bi\u1ec3u ng\u1eef cookie, trang web n\u00e0y \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh (nh\u1ea5p t\u1ea3i xu\u1ed1ng, \u0111\u0103ng k\u00fd danh s\u00e1ch ch\u1edd, b\u00ecnh ch\u1ecdn t\u00ednh n\u0103ng v\u00e0 b\u00ecnh lu\u1eadn) \u0111\u1ec3 gi\u00fap ch\u00fang t\u00f4i hi\u1ec3u trang n\u00e0o h\u1eefu \u00edch. N\u1ebfu b\u1ea1n ch\u1ecdn \"{essentialOnly}\", kh\u00f4ng c\u00f3 g\u00ec \u0111\u01b0\u1ee3c \u0111\u1ebfm. Ch\u00fang t\u00f4i kh\u00f4ng theo d\u00f5i t\u1eebng ng\u01b0\u1eddi d\u00f9ng, kh\u00f4ng x\u00e2y d\u1ef1ng h\u1ed3 s\u01a1 qu\u1ea3ng c\u00e1o v\u00e0 kh\u00f4ng b\u00e1n d\u1eef li\u1ec7u cho b\u00ean th\u1ee9 ba.",
+      thirdPartyHeading: "D\u1ecbch v\u1ee5 b\u00ean th\u1ee9 ba",
+      thirdPartySupabase: "\u0111\u0103ng nh\u1eadp, v\u00e0 l\u01b0u tr\u1eef \u0111\u00e1m m\u00e2y cho d\u1eef li\u1ec7u b\u1ea1n ch\u1ecdn \u0111\u1ed3ng b\u1ed9",
+      thirdPartySentry: "theo d\u00f5i l\u1ed7i v\u00e0 c\u00e1c s\u1ed1 li\u1ec7u \u0111\u1ebfm \u1ea9n danh n\u00eau tr\u00ean tr\u00ean trang web n\u00e0y, c\u00f9ng b\u00e1o c\u00e1o l\u1ed7i v\u00e0 t\u00edn hi\u1ec7u s\u1eed d\u1ee5ng c\u1ee7a \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh",
+      rightsHeading: "Quy\u1ec1n c\u1ee7a b\u1ea1n",
+      rightsBody: "B\u1ea1n c\u00f3 th\u1ec3 y\u00eau c\u1ea7u truy c\u1eadp, ch\u1ec9nh s\u1eeda ho\u1eb7c x\u00f3a b\u1ea5t k\u1ef3 d\u1eef li\u1ec7u c\u00e1 nh\u00e2n n\u00e0o ch\u00fang t\u00f4i l\u01b0u gi\u1eef v\u00e0o b\u1ea5t c\u1ee9 l\u00fac n\u00e0o, k\u1ec3 c\u1ea3 d\u1eef li\u1ec7u \u0111\u00e3 \u0111\u1ed3ng b\u1ed9. B\u1ea1n c\u0169ng c\u00f3 th\u1ec3 xu\u1ea5t to\u00e0n b\u1ed9 d\u1eef li\u1ec7u c\u1ee5c b\u1ed9 tr\u1ef1c ti\u1ebfp t\u1eeb \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh. \u0110\u1ec3 th\u1ef1c hi\u1ec7n c\u00e1c quy\u1ec1n n\u00e0y, h\u00e3y li\u00ean h\u1ec7 v\u1edbi ch\u00fang t\u00f4i qua {email}."
+    },
+    cookieConsent: {
+      message: "Ch\u00fang t\u00f4i l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong tr\u00ecnh duy\u1ec7t c\u1ee7a b\u1ea1n \u0111\u1ec3 trang web ho\u1ea1t \u0111\u1ed9ng. Khi ch\u1ecdn \"Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3\", ch\u00fang t\u00f4i c\u00f2n \u0111\u1ebfm \u1ea9n danh l\u01b0\u1ee3t xem trang v\u00e0 m\u1ed9t v\u00e0i thao t\u00e1c ch\u00ednh, m\u00e0 kh\u00f4ng l\u01b0u g\u00ec cho vi\u1ec7c \u0111\u00f3. Kh\u00f4ng qu\u1ea3ng c\u00e1o, kh\u00f4ng theo d\u00f5i ch\u00e9o trang.",
+      details: "Chi ti\u1ebft",
+      essentialOnly: "Ch\u1ec9 thi\u1ebft y\u1ebfu",
+      acceptAll: "Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3",
+      close: "\u0110\u00f3ng v\u00e0 ch\u1ec9 d\u00f9ng thi\u1ebft y\u1ebfu"
     }
   };

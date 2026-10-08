@@ -18,7 +18,12 @@ interface PersonaState {
    * instead of painting a reassuring empty state over a network error.
    */
   personasError: string | null;
-  fetchPersonas: () => Promise<void>;
+  /**
+   * Load the list. Skipped while the cache is fresh (5 min) unless `force`:
+   * a change pushed by the desktop (Realtime) or confirmed by a command must
+   * be read now, not after the cache ages out.
+   */
+  fetchPersonas: (opts?: { force?: boolean }) => Promise<void>;
 
   // ───────────────────────────────────────────────────────────────────────
   // DORMANT: the optimistic-write path below has NO CALLERS.
@@ -137,15 +142,24 @@ export const usePersonaStore = create<PersonaState>((set) => ({
   personasLoading: false,
   personasFetchedAt: null,
   personasError: null,
-  fetchPersonas: () => {
+  fetchPersonas: (opts) => {
     const { personas, personasFetchedAt } = usePersonaStore.getState();
     const now = Date.now();
     const hasStaleData = personas.length > 0;
     const isFresh =
       personasFetchedAt !== null && now - personasFetchedAt < PERSONA_STALE_MS;
+    // A handler may be passed straight to onClick, so `opts` can be an event:
+    // only a literal `force: true` bypasses the cache.
+    const force = opts?.force === true;
 
-    if (isFresh) return Promise.resolve();
-    if (inflight) return inflight;
+    if (isFresh && !force) return Promise.resolve();
+    // A forced read queues behind the one in flight (which may predate the
+    // change) instead of racing it, so an older response can never land last.
+    if (inflight) {
+      return force
+        ? inflight.then((): Promise<void> => usePersonaStore.getState().fetchPersonas({ force: true }))
+        : inflight;
+    }
 
     // Clear any prior error at the start of a fetch (incl. an explicit retry).
     set({ personasError: null });

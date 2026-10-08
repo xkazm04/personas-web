@@ -728,7 +728,10 @@ export const MOCK_EVENTS: PersonaEvent[] = [
 export const MOCK_SUBSCRIPTIONS: Record<string, PersonaEventSubscription[]> = {
   [id("p", 1)]: [
     { id: id("sub", 1), personaId: id("p", 1), eventType: "webhook_received", sourceFilter: "github", enabled: true, useCaseId: null, createdAt: ago(7200), updatedAt: ago(7200) },
-    { id: id("sub", 2), personaId: id("p", 1), eventType: "gitlab_merge_request", sourceFilter: null, enabled: true, useCaseId: null, createdAt: ago(3600), updatedAt: ago(3600) },
+    // Created AFTER the gitlab merge request (ev-8, 60 min ago) dead-lettered
+    // with "No subscription matched": the operator's fix, so a retry of that
+    // event would now deliver. Older than the event, it would contradict it.
+    { id: id("sub", 2), personaId: id("p", 1), eventType: "gitlab_merge_request", sourceFilter: null, enabled: true, useCaseId: null, createdAt: ago(30), updatedAt: ago(30) },
   ],
   [id("p", 2)]: [
     { id: id("sub", 3), personaId: id("p", 2), eventType: "alert_triggered", sourceFilter: "pagerduty", enabled: true, useCaseId: null, createdAt: ago(14400), updatedAt: ago(14400) },

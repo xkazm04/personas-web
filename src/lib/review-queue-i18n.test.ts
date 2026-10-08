@@ -31,7 +31,7 @@ function walk(dir: string): string[] {
 }
 
 const SURFACE_FILES = [
-  ...walk(path.join(ROOT, "app", "dashboard", "reviews")),
+  ...walk(path.join(ROOT, "components", "dashboard", "views", "reviews")),
   ...walk(path.join(ROOT, "components", "dashboard", "batch-review-modal")),
   ...[
     "components/BulkProgressBar.tsx",

@@ -59,9 +59,10 @@ export default function SectionIntro({
   const mxClass = align === "center" ? "mx-auto" : "";
 
   return (
-    <motion.div variants={fadeUp} className={`${alignClass} ${className}`}>
+    <motion.div variants={fadeUp} className={`${alignClass} ${className}`} data-section-intro>
       {eyebrow && (
         <p
+          data-section-eyebrow
           className="mb-4 text-base font-semibold uppercase tracking-widest"
           style={{ color: BRAND_VAR[eyebrowBrand] }}
         >
@@ -80,6 +81,7 @@ export default function SectionIntro({
       </SectionHeading>
       {description && (
         <p
+          data-section-lede
           className={`${mxClass} mt-6 ${descriptionMaxWidth} text-base text-muted leading-relaxed font-light`}
         >
           {description}

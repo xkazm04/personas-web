@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { useMemo } from "react";
-import { api } from "@/lib/api";
+import { api, isCommandAck } from "@/lib/api";
 import { usePersonaStore } from "./personaStore";
+import { settleCommand } from "./commandStore";
 import type {
   Persona,
   PersonaExecution,
@@ -63,6 +64,11 @@ interface ExecutionState {
   activeCount: number;
   executionsLoading: boolean;
   executionsError: string | null;
+  /**
+   * When the list last loaded, or null before the first load. Until then an
+   * empty list means "not known yet", not "no runs" (the phone's row states).
+   */
+  executionsFetchedAt: number | null;
   /** Execution ids with an in-flight cancel request. Gates the per-row button. */
   cancellingIds: Record<string, true>;
   fetchExecutions: (opts?: ExecFilterOpts) => Promise<void>;
@@ -81,6 +87,7 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
   activeCount: 0,
   executionsLoading: false,
   executionsError: null,
+  executionsFetchedAt: null,
   cancellingIds: {},
   fetchExecutions: async (opts) => {
     const seq = ++executionFetchSeq;
@@ -92,6 +99,7 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
           rawExecutions: raw,
           activeCount: countActive(raw),
           executionsError: null,
+          executionsFetchedAt: Date.now(),
         });
       }
     } catch (err) {
@@ -116,7 +124,15 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
 
     set((s) => ({ cancellingIds: { ...s.cancellingIds, [id]: true } }));
     try {
-      await api.cancelExecution(id);
+      const ack = await api.cancelExecution(id, current?.personaId);
+      // On a command plane (demo, live sync) the ack is a command, not the
+      // effect: the row flips only once the desktop reports it completed.
+      if (isCommandAck(ack)) {
+        const outcome = await settleCommand(ack.commandId);
+        if (!outcome || outcome.status !== "completed") {
+          throw new Error(outcome?.error ?? "Failed to cancel execution");
+        }
+      }
       set((s) => {
         const rawExecutions = s.rawExecutions.map((e) =>
           e.id === id ? { ...e, status: "cancelled" as const } : e,
@@ -151,6 +167,7 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
       activeCount: 0,
       executionsLoading: false,
       executionsError: null,
+      executionsFetchedAt: null,
       cancellingIds: {},
     });
   },

@@ -36,12 +36,21 @@ import { pageTransition, TRANSITION_NORMAL } from "@/lib/animations";
  * opacity/transform with `!important`: still from the first paint, even before
  * hydration, and never a re-render of anything below.
  */
+/**
+ * The remount key. The dashboard is a single-page app (`components/dashboard/spa`):
+ * all of `/dashboard/*` shares one key, so switching views neither replays the
+ * enter animation nor remounts the shell and its kept-alive views.
+ */
+export function transitionKey(pathname: string): string {
+  return pathname === "/dashboard" || pathname.startsWith("/dashboard/") ? "/dashboard" : pathname;
+}
+
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
     <motion.div
-      key={pathname}
+      key={transitionKey(pathname)}
       className="motion-reduce:opacity-100! motion-reduce:transform-none!"
       variants={pageTransition}
       initial="initial"

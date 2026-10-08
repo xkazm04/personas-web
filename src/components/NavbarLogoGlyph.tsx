@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-import { useStillMotion } from "@/hooks/useStillMotion";
 import { tint } from "@/lib/brand-theme";
 
 /**
@@ -12,44 +11,26 @@ import { tint } from "@/lib/brand-theme";
  * Large icon dominates; gradient text collapses to monogram on scroll.
  */
 export default function NavbarLogoGlyph({ scrolled }: { scrolled?: boolean }) {
-  // The pulse below is a `repeat: Infinity` loop mounted in the navbar on
-  // every page, so it is the one piece of motion a visitor can never scroll
-  // away from. It is framer-driven, which means the global reduced-motion
-  // reset in globals.css cannot reach it — that rule governs CSS animation,
-  // and this writes inline styles. An infinite loop reduces to stillness, not
-  // to a faster loop, so the gate drops the keyframes entirely.
-  const reduced = useStillMotion();
-
+  // The pulse lives in the navbar on every page - the one piece of motion a
+  // visitor can never scroll away from. It used to be a framer loop animating
+  // box-shadow: a JS tick plus a repaint on every frame for the life of the
+  // page. It is now a CSS opacity crossfade between two static shadows
+  // (compositor-only), which the global reduced-motion reset and the hidden-tab
+  // pause in globals.css both reach. Under reduced motion it holds the resting
+  // shadow.
   return (
     <Link href="/" className="group flex items-center gap-3 focus-ring">
       {/* Animated glow ring behind the icon */}
       <div className="relative flex h-10 w-10 items-center justify-center">
-        {/* Outer pulse ring */}
-        <motion.div
+        {/* Outer ring at rest, and the peak glow fading in and out over it */}
+        <div
           className="absolute inset-0 rounded-xl border border-brand-cyan/30"
-          animate={
-            reduced
-              ? // Stillness: hold the resting end of the pulse.
-                {
-                  boxShadow: `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}`,
-                }
-              : {
-                  // Brand tokens rather than the cyan/purple hexes they used to be
-                  // hardcoded as: `tint()` emits color-mix(), which framer-motion
-                  // could not interpolate before 12.37, so the pulse had to be
-                  // literal rgba and stayed cyan/purple under every theme variant.
-                  boxShadow: [
-                    `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}`,
-                    `0 0 16px ${tint("cyan", 30)}, inset 0 0 10px ${tint("purple", 20)}`,
-                    `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}`,
-                  ],
-                }
-          }
-          transition={
-            reduced
-              ? { duration: 0 }
-              : { duration: 3, repeat: Infinity, ease: "easeInOut" }
-          }
+          style={{ boxShadow: `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}` }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 rounded-xl opacity-0 animate-glow-crossfade"
+          style={{ boxShadow: `0 0 16px ${tint("cyan", 30)}, inset 0 0 10px ${tint("purple", 20)}` }}
         />
         {/* Icon */}
         <Image

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { safeHref } from "./safeHref";
 
 // Inline markdown: `code`, **bold**, *italic*, [text](url). Shared by the
 // block renderer in MarkdownReport.
@@ -27,9 +28,12 @@ export function renderInline(text: string, keyBase: string): ReactNode[] {
       out.push(<em key={key} className="italic">{tok.slice(1, -1)}</em>);
     } else {
       const lm = LINK_RE.exec(tok);
-      if (lm) {
+      const href = lm ? safeHref(lm[2]) : null;
+      // An unsafe target keeps its text, without the link.
+      if (lm && !href) out.push(lm[1]);
+      if (lm && href) {
         out.push(
-          <a key={key} href={lm[2]} target="_blank" rel="noreferrer" className="text-brand-cyan underline underline-offset-2 hover:text-brand-cyan/80">
+          <a key={key} href={href} target="_blank" rel="noreferrer" className="text-brand-cyan underline underline-offset-2 hover:text-brand-cyan/80">
             {lm[1]}
           </a>,
         );

@@ -79,27 +79,9 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
     }
   }, [template.config, scheduleReset]);
 
-  // Deep-link-installed-app detection: setting window.location.href to
-  // a personas:// URL navigates to the app if installed (OS yanks focus
-  // → window 'blur' fires → cancel the fallback). If no blur arrives
-  // within 1500ms we assume the app isn't installed and surface the
-  // "install Personas" modal. document.hidden guards against tab
-  // visibility changes that aren't an app-launch.
-  const handleOpenInPersonas = useCallback(() => {
-    const deepLink = `personas://template/${template.id}`;
-    const start = Date.now();
-    const onBlur = () => {
-      clearTimeout(timer);
-      window.removeEventListener("blur", onBlur);
-    };
-    const timer = setTimeout(() => {
-      window.removeEventListener("blur", onBlur);
-      if (Date.now() - start >= 1500 && !document.hidden) setShowFallback(true);
-    }, 1500);
-
-    window.addEventListener("blur", onBlur);
-    window.location.href = deepLink;
-  }, [template.id]);
+  // No deep link: the desktop has no `personas://template/` handler and the web
+  // template ids are not in its catalog, so the CTA routes straight to install.
+  const openInstall = useCallback(() => setShowFallback(true), []);
 
   useEffect(() => {
     if (!showFallback) return;
@@ -124,7 +106,7 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
 
           <TemplateHero template={template} />
           <TemplateConfiguration code={template.config} copied={copied} copyFailed={copyFailed} onCopy={handleCopy} />
-          <TemplateDownloadCta copied={copied} copyFailed={copyFailed} onCopy={handleCopy} onOpenInPersonas={handleOpenInPersonas} />
+          <TemplateDownloadCta copied={copied} copyFailed={copyFailed} onCopy={handleCopy} onGetPersonas={openInstall} />
           <RelatedTemplates category={template.category} templates={related} />
         </motion.div>
       </main>

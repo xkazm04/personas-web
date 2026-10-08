@@ -35,11 +35,16 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
   };
 
   return (
-    <aside aria-label={t.pageNav.landmarkLabel} className="pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-end gap-2">
-      <div className="rounded-full border border-glass bg-black/20 px-2.5 py-1 text-base uppercase tracking-[0.2em] text-muted-dark backdrop-blur-sm">
+    // At rest the rail is ticks plus the ACTIVE label only - a readout of
+    // where you are that stays inside the page's 7rem gutter, so sections can
+    // run wide (styles/stage.css --stage-max-w). Every label expands on hover
+    // or keyboard focus. Collapsed labels use max-width, not opacity, so an
+    // invisible label can never sit over the content and swallow its clicks.
+    <aside aria-label={t.pageNav.landmarkLabel} className="group/map pointer-events-none fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 lg:flex flex-col items-end gap-2">
+      <div className="max-h-0 overflow-hidden rounded-full border border-transparent px-2.5 text-xs uppercase tracking-[0.2em] text-muted-dark transition-[max-height,border-color] duration-300 group-hover/map:max-h-8 group-hover/map:border-glass group-hover/map:py-1 group-focus-within/map:max-h-8 group-focus-within/map:border-glass group-focus-within/map:py-1">
         {t.pageNav.scrollMap}
       </div>
-      <div className="flex flex-col text-base font-mono tracking-wider">
+      <div className="flex flex-col text-xs font-mono tracking-wider">
         {items.map((item, i) => (
           <button
             key={item.href}
@@ -51,7 +56,15 @@ export default function ScrollMap({ items }: { items: ScrollMapItem[] }) {
                 : "text-muted-dark hover:text-muted"
             }`}
           >
-            <span>{item.label}</span>
+            <span
+              className={
+                i === activeIndex
+                  ? "max-w-48 overflow-hidden whitespace-nowrap"
+                  : "max-w-0 overflow-hidden whitespace-nowrap transition-[max-width] duration-300 group-hover/map:max-w-48 group-focus-within/map:max-w-48"
+              }
+            >
+              {item.label}
+            </span>
             <span
               className={`h-px transition-[width,background-color] duration-300 ${
                 i === activeIndex

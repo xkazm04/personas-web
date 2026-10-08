@@ -1,0 +1,115 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
+import { CloudOff, HeartPulse } from "lucide-react";
+
+import GradientText from "@/components/GradientText";
+import ExecuteToast from "@/components/dashboard/ExecuteToast";
+import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import EmptyState from "@/components/dashboard/EmptyState";
+import SkeletonCard from "@/components/dashboard/SkeletonCard";
+import { useTranslation } from "@/i18n/useTranslation";
+import { fadeUp, staggerContainer } from "@/lib/animations";
+import type { HealthCheckItem } from "@/lib/mock-dashboard-data";
+import { DiskUsageBar } from "./health-page/DiskUsageBar";
+import { applyHealthResolutions, resolveHealthAction, type HealthResolutions } from "./health-page/healthActions";
+import { HealthSectionCard } from "./health-page/HealthSectionCard";
+import { useSystemHealth } from "./health-page/useSystemHealth";
+
+/**
+ * System Health Panel — runtime / services / resources / integrations status
+ * cards with status dots, a disk-usage gauge, and illustrative install/
+ * configure actions (the row settles to ok in-session, plus a toast - see
+ * health-page/healthActions.ts). Mirrors the desktop overview's System Health
+ * Panel; demo-only — a real (non-demo) session sees an empty state instead.
+ */
+export default function HealthPage() {
+  const { t } = useTranslation();
+  const labels = t.healthPage;
+  const { sections: fetched, diskUsage, isLoading, error, retry, liveUnavailable } = useSystemHealth();
+  const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
+  const [resolutions, setResolutions] = useState<HealthResolutions>({});
+  const sections = useMemo(
+    () =>
+      applyHealthResolutions(fetched, resolutions, {
+        configure: labels.toast.configured,
+        install: labels.toast.installed,
+      }),
+    [fetched, resolutions, labels.toast.configured, labels.toast.installed],
+  );
+
+  const handleAction = (item: HealthCheckItem) => {
+    setResolutions((prev) => resolveHealthAction(prev, item));
+    const verb = item.action === "install" ? labels.toast.installed : labels.toast.configured;
+    setToast((prev) => ({ id: (prev?.id ?? 0) + 1, message: `${item.name} ${verb}` }));
+  };
+
+  return (
+    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
+      <motion.div
+        variants={fadeUp}
+        data-tour-diagram="dashboard-health"
+        className="mb-6 flex items-center gap-3"
+      >
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+          <HeartPulse className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold tracking-tight">
+            <GradientText variant="silver">{labels.title}</GradientText>
+          </h1>
+          <p className="text-sm text-muted-dark">{labels.subtitle}</p>
+        </div>
+      </motion.div>
+
+      {error && (
+        <motion.div variants={fadeUp}>
+          <DashboardErrorBanner message={error} onRetry={retry} />
+        </motion.div>
+      )}
+
+      {liveUnavailable ? (
+        <motion.div variants={fadeUp}>
+          <EmptyState
+            icon={CloudOff}
+            title={t.dashboardUi.liveUnavailableTitle}
+            description={t.dashboardUi.liveUnavailableDescription}
+          />
+        </motion.div>
+      ) : isLoading ? (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <SkeletonCard lines={5} />
+          <SkeletonCard lines={5} />
+          <SkeletonCard lines={5} />
+          <SkeletonCard lines={5} />
+        </div>
+      ) : error && sections.length === 0 ? null : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          {sections.map((section) => (
+            <motion.div key={section.key} variants={fadeUp}>
+              <HealthSectionCard
+                section={section}
+                onAction={handleAction}
+                footer={
+                  section.key === "resources" ? (
+                    <DiskUsageBar usedGb={diskUsage.usedGb} totalGb={diskUsage.totalGb} />
+                  ) : undefined
+                }
+              />
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {toast && (
+        <ExecuteToast
+          key={toast.id}
+          status="success"
+          message={toast.message}
+          onDismiss={() => setToast(null)}
+        />
+      )}
+    </motion.div>
+  );
+}

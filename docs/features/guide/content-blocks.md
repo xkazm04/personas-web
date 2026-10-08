@@ -28,7 +28,20 @@ fallback is SSR-safe and renders without JS.
   `callout-stack`, `cards`, and the four single callouts `tip`/`warning`/`info`/`success`.
   Each parser sub-function turns its mini-DSL (e.g. `**Title** — body`, `Combo — desc`,
   `[available] Title | desc | image`) into typed props and returns the component, or
-  `null` if it parsed nothing (the block is then silently dropped).
+  `null` if it parsed nothing (the block is then dropped; in development a console
+  warning names it).
+- **Directive lint.** `directiveLint.ts` mirrors the renderer's `:::` scan and reports
+  unknown names, malformed openers (`::: tip`, `:::tip Title`), stray `:::` closers,
+  unclosed blocks, and an opener used as a closer (no nesting). `parseBlocks` logs each
+  issue in development; `npm run check:guide-content` runs it over every topic body
+  (English and all locale content modules, loaded with Node's built-in type stripping,
+  Node >= 22.18) and fails on any. `KNOWN_DIRECTIVES` is pinned to the
+  `parseCustomBlock` dispatch by `directiveLint.test.ts`. A malformed `:::` line is
+  skipped in production; it used to stall the parse loop (render hang). The same scan
+  flags a top-level `#` line that is not a heading the renderer takes (`#####`, `#tag`,
+  an indented `# x`; only `#`-`####` at column 0 plus a space count). Those also hung
+  the loop; they now render as plain paragraph text, because the paragraph collector
+  always takes the line no block branch claimed.
 - **Inline.** `parseInline` (`parseInline.tsx:12`) is a single global regex over
   images, links, `***bi***`, `**b**`, `*i*`, `` `code` ``, and `==highlight==`,
   recursing into the captured text. Bare text runs through `typography()`
@@ -53,6 +66,7 @@ fallback is SSR-safe and renders without JS.
 | `src/components/guide/GuideMarkdown.tsx` | Public entry; injects the i18n copy-anchor label and renders `parseBlocks`. |
 | `src/components/guide/guide-markdown/parseBlocks.tsx` | Core block tokenizer/dispatcher (headings, lists, quotes, tables, fences, custom blocks, paragraphs). |
 | `src/components/guide/guide-markdown/parseCustomBlock.tsx` | `:::name` dispatch table + per-block mini-DSL parsers → block components. |
+| `src/components/guide/guide-markdown/directiveLint.ts` | `KNOWN_DIRECTIVES` + `lintDirectives`: the `:::` scan shared by the dev warnings and `scripts/check-guide-content.mjs`. |
 | `src/components/guide/guide-markdown/parseInline.tsx` | Inline regex pass (emphasis/links/images/code/highlight) + `typography()` smart-punctuation. |
 | `src/components/guide/guide-markdown/parseCalloutStack.tsx` | Parses `:::callout-stack` (`[tip] …` lines) into `CalloutStack`. |
 | `src/components/guide/guide-markdown/parseCards.tsx` | Parses `:::cards` (`[status] title \| desc \| image`) into `CardsBlock`. |
@@ -99,7 +113,9 @@ fallback is SSR-safe and renders without JS.
 ## Conventions & gotchas
 - **Parser is line-based and unforgiving.** Blocks are recognized only at a line's
   start (after `trimStart`); there is no lookahead/AST. A custom block whose body fails
-  its mini-DSL returns `null` and **vanishes with no error or fallback** — e.g.
+  its mini-DSL returns `null` and **vanishes from the page** (a dev-only console warning, no
+  build check — `check:guide-content` only catches unknown/malformed directives and
+  malformed headings) — e.g.
   `:::steps` items must match `1. **Title** — body` exactly, `:::keys` lines need a
   dash separator, `:::cards` rows need a `[status]` prefix and a title. Authoring typos
   silently drop content.

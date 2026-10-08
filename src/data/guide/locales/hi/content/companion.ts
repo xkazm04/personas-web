@@ -123,7 +123,7 @@ Memory tiers में organized है, प्रत्येक एक अल�
 
 ### Privacy
 
-Brain data — सभी पाँच memory tiers — आपकी machine पर \`~/.personas/companion-brain/\` पर रहती है। कुछ भी cloud database में stored नहीं होता। यदि आप local Whisper STT और Piper TTS engines उपयोग करते हैं, तो कोई भी audio आपकी machine नहीं छोड़ता।
+Brain data — सभी पाँच memory tiers — आपकी machine पर \`~/.personas/companion-brain/\` पर रहती है। इसमें से कुछ भी cloud database में stored नहीं होता, एक वैकल्पिक अपवाद को छोड़कर: अगर आप डेस्कटॉप ऐप की cloud sync सेटिंग्स में "चैट सिंक करें" चालू करते हैं (डिफ़ॉल्ट रूप से बंद), तो उनके साथ आपकी बातचीत आपके Personas खाते में कॉपी हो जाती है, कुंजी जैसी दिखने वाली हर चीज़ छिपाकर, ताकि आप उसे अपने फ़ोन पर पढ़ और उसका जवाब दे सकें। इसे बंद करने पर वह कॉपी डिलीट हो जाती है। यदि आप local Whisper STT और Piper TTS engines उपयोग करते हैं, तो कोई भी audio आपकी machine नहीं छोड़ता।
 
 :::tip
 Intake interview छोटी है (कुछ मिनट) और तुरंत लाभ देती है — एक अच्छे intake के बाद Athena के पहले कुछ replies ध्यान देने योग्य रूप से अधिक on-point होती हैं। अपने पहले real session से पहले इसे चलाएं।

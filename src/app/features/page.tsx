@@ -27,7 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
-import DesignEngine from "@/components/feature-sections/DesignEngine";
+import DesignEngine from "@/components/feature-sections/design-blueprint";
+import MurmurationHero from "@/components/feature-sections/murmuration-hero";
 import {
   LazyMemoryLayers,
   LazyHealingCircuit,
@@ -39,6 +40,7 @@ import {
 } from "@/components/feature-sections/feature-lazy";
 
 const scrollMapItems = [
+  { label: "OVERVIEW", href: "#overview" },
   { label: "DESIGN", href: "#design" },
   { label: "MEMORY", href: "#memory-layers" },
   { label: "HEALING", href: "#healing-circuit" },
@@ -51,58 +53,60 @@ const scrollMapItems = [
 
 export default function FeaturesPage() {
   return (
-    <InfoPageLayout
-      scrollMapItems={scrollMapItems}
-      tourId="features"
-      tourBridgeHref="/demo?tour=1"
-      tourBridgeKey="dashboard"
-    >
+    // The tour launcher lives in the Design section's intro (DesignEngine),
+    // not in the layout's slot above the first section: there it pushed the
+    // first stage ~94px under a laptop's fold.
+    <InfoPageLayout scrollMapItems={scrollMapItems} snap>
       {/* First section stays eager (above the fold) for LCP + SEO. The rest are
           code-split + scroll-gated via LazyMount so their chunks load as the
           reader approaches, not all at once on first paint. The anchor id lives
           on the always-rendered StageSection so the scroll-map keeps working. */}
-      <StageSection glow="purple" showTopLine={false} toColor="purple">
+      <div id="overview">
+        <MurmurationHero />
+      </div>
+
+      <StageSection glow="purple" fromColor="purple" toColor="purple">
         <DesignEngine />
       </StageSection>
 
       <StageSection id="memory-layers" glow="purple" fromColor="purple" toColor="purple">
-        <LazyMount minHeight={760} label="Memory">
+        <LazyMount stage minHeight={760} label="Memory">
           <LazyMemoryLayers />
         </LazyMount>
       </StageSection>
 
       <StageSection id="healing-circuit" glow="emerald" fromColor="purple" toColor="rose">
-        <LazyMount minHeight={760} label="Healing">
+        <LazyMount stage minHeight={760} label="Healing">
           <LazyHealingCircuit />
         </LazyMount>
       </StageSection>
 
       <StageSection id="security" glow="emerald" fromColor="rose" toColor="rose">
-        <LazyMount minHeight={760} label="Security">
+        <LazyMount stage minHeight={760} label="Security">
           <LazySecurityVault />
         </LazyMount>
       </StageSection>
 
       <StageSection id="multi-provider" glow="cyan" fromColor="rose" toColor="cyan">
-        <LazyMount minHeight={760} label="AI models">
+        <LazyMount stage minHeight={760} label="AI models">
           <LazyMultiProviderAI />
         </LazyMount>
       </StageSection>
 
       <StageSection id="observe" glow="emerald" fromColor="cyan" toColor="emerald">
-        <LazyMount minHeight={820} label="Observe">
+        <LazyMount stage minHeight={820} label="Observe">
           <LazyObservabilityDeck />
         </LazyMount>
       </StageSection>
 
       <StageSection id="lab" glow="cyan" fromColor="emerald" toColor="cyan">
-        <LazyMount minHeight={820} label="Lab">
+        <LazyMount stage minHeight={820} label="Lab">
           <LazyLab />
         </LazyMount>
       </StageSection>
 
       <StageSection id="plugins" glow="purple" fromColor="cyan" toColor="purple">
-        <LazyMount minHeight={820} label="Plugins">
+        <LazyMount stage minHeight={820} label="Plugins">
           <LazyPlugins />
         </LazyMount>
       </StageSection>

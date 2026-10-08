@@ -45,6 +45,6 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
     badge: category?.label ?? "Blog",
     badgeColor: category?.color ?? "#06b6d4",
     accentColor: category?.color ?? "#06b6d4",
-    footer: `personas.ai/blog · ${post.readingTime} min read`,
+    footer: `personas.so/blog · ${post.readingTime} min read`,
   });
 }

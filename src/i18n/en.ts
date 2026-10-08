@@ -120,7 +120,6 @@
     connected: string;
     disconnected: string;
     demo: string;
-    viewFullSite: string;
   };
   useCasesSection: {
     heading: string;
@@ -178,6 +177,17 @@
     knowledge: string;
     settings: string;
     leaderboard: string;
+    personas: string;
+    missionControl: string;
+    /** aria-label of the dashboard's level-1 section rail. */
+    navSectionsLabel: string;
+    /** Captions of the Overview section's level-2 groups. */
+    navGroups: {
+      mission: string;
+      monitoring: string;
+      reliability: string;
+      memory: string;
+    };
     director: string;
     sla: string;
     incidents: string;
@@ -248,6 +258,67 @@
       };
     };
     home: {
+      /** Mission Control's annunciator wall (desktop parity, 2026-10). */
+      mission: {
+        windowNote: string;
+        hint: string;
+        wallLabel: string;
+        /** {label} = the dimension's label. */
+        openDimension: string;
+        backToWall: string;
+        railLabel: string;
+        verdicts: {
+          pending: string;
+          failed: string;
+          unmeasured: string;
+          ok: string;
+          watch: string;
+          yours: string;
+          act: string;
+        };
+        dims: {
+          outcomes: { label: string; question: string };
+          agents: { label: string; question: string };
+          queue: { label: string; question: string };
+          recovery: { label: string; question: string };
+          spend: { label: string; question: string };
+          autonomy: { label: string; question: string };
+          vault: { label: string; question: string };
+          instruments: { label: string; question: string };
+        };
+        /** One line under each cell's figure. Placeholders in braces are numbers. */
+        evidence: {
+          outcomes: string;
+          noRuns: string;
+          agents: string;
+          queue: string;
+          queueEmpty: string;
+          recovery: string;
+          spendSpikes: string;
+          /** {value} = a currency amount. */
+          spendPerDay: string;
+          /** {time} = a compact duration such as 6m. */
+          autonomy: string;
+          autonomyEmpty: string;
+          vault: string;
+          instruments: string;
+          instrumentsOk: string;
+          pending: string;
+          unmeasured: string;
+        };
+        scoreSuffix: string;
+        detail: {
+          issuesTitle: string;
+          issuesEmpty: string;
+          issueStatus: { open: string; auto_fixed: string; resolved: string };
+          pausedBadge: string;
+          costTitle: string;
+          costSpike: string;
+          sourcesTitle: string;
+          sourceStatus: { pending: string; ok: string; failed: string };
+          sources: { observability: string; healing: string; reviews: string; routines: string };
+        };
+      };
       vitals: {
         runs: string;
         alerts: string;
@@ -440,6 +511,9 @@
     errors: string;
     totalLower: string;
     copyPayload: string;
+    /** Empty state for a demo-only view (no synced source) in a real, non-demo session. */
+    liveUnavailableTitle: string;
+    liveUnavailableDescription: string;
   };
   memoriesPage: {
     title: string;
@@ -934,6 +1008,8 @@
     noExecutions: string;
     noExecutionsDesc: string;
     waitingForWorker: string;
+    openExecutionInDesktop: string;
+    openPersonaInDesktop: string;
     noOutputYet: string;
     noFilteredActive: string;
     noFilteredCompleted: string;
@@ -1046,6 +1122,11 @@
       title: string;
       subtitle: string;
       weeklyDigest: string;
+      /** Review escalation ladder on/off (reviewStore.escalationEnabled). */
+      escalation: {
+        label: string;
+        description: string;
+      };
       voice: {
         label: string;
         preview: string;
@@ -1087,6 +1168,83 @@
     title: string;
     heading: string;
     description: string;
+  };
+  cookiePolicy: {
+    tldr: string[];
+    lastUpdated: string;
+    approachHeading: string;
+    approachBody: string;
+    registerHeading: string;
+    registerIntro: string;
+    categories: Record<"necessary" | "preferences" | "functional" | "analytics", { title: string; description: string }>;
+    mechanisms: { cookie: string; localStorage: string; indexedDB: string };
+    lifetimes: { oneYear: string; untilCleared: string; untilSignOut: string; untilUnpaired: string };
+    purposes: {
+      consent: string;
+      authSession: string;
+      theme: string;
+      language: string;
+      tourVolume: string;
+      dashboardPrefs: string;
+      tourSeen: string;
+      policySeen: string;
+      dashboardActivity: string;
+      checklist: string;
+      voting: string;
+      pairedPhoneKey: string;
+    };
+    notUsedHeading: string;
+    notUsed: string[];
+    thirdPartyHeading: string;
+    thirdPartyBody: string;
+    managingHeading: string;
+    managingBody: string;
+    manageButton: string;
+  };
+  /** Privacy Policy body (/legal#privacy). {date}, {email}, {acceptAll}, {essentialOnly} are filled in at render. */
+  privacyPolicy: {
+    tldr: string[];
+    lastUpdated: string;
+    commitmentHeading: string;
+    commitmentBody: string;
+    desktopHeading: string;
+    desktopBody: string;
+    telemetryHeading: string;
+    telemetryBody: string;
+    telemetryControls: string;
+    credentialsHeading: string;
+    credentialsBody: string;
+    syncHeading: string;
+    syncIntro: string;
+    syncNever: string;
+    syncOptIns: string;
+    syncNotes: string;
+    syncChats: string;
+    syncMasking: string;
+    syncDeletion: string;
+    syncWhere: string;
+    phonesHeading: string;
+    phonesIntro: string;
+    phonesLimits: string;
+    phonesKey: string;
+    phonesRevoke: string;
+    accountHeading: string;
+    accountBody: string;
+    analyticsHeading: string;
+    analyticsBody: string;
+    thirdPartyHeading: string;
+    thirdPartySupabase: string;
+    thirdPartySentry: string;
+    rightsHeading: string;
+    rightsBody: string;
+  };
+  cookieConsent: {
+    message: string;
+    details: string;
+    essentialOnly: string;
+    acceptAll: string;
+    /** aria-label of the banner's close button; closing keeps essential storage only. */
+    close: string;
   };
   waitlist: {
     title: string;
@@ -1141,15 +1299,21 @@
     copyConfiguration: string;
     getStartedTitle: string;
     getStartedDescription: string;
-    openInPersonas: string;
+    useTemplate: string;
     moreTemplates: string;
-    appNotFoundTitle: string;
-    appNotFoundDescription: string;
+    installTitle: string;
+    installDescription: string;
     templateNotFound: string;
     templateNotFoundDescription: string;
     browseTemplates: string;
     backToHome: string;
     customTrigger: string;
+  };
+  connectorModal: {
+    simulatedLabel: string;
+    connecting: string;
+    working: string;
+    done: string;
   };
   roadmapSection: {
     inProgress: string;
@@ -1224,7 +1388,6 @@
     subheading: string;
     features: {
       macos: { title: string; description: string };
-      i18n: { title: string; description: string };
       dashboard: { title: string; description: string };
       enterprise: { title: string; description: string };
     };
@@ -1433,7 +1596,6 @@
     features5: string;
     features6: string;
     dashboardHome: string;
-    dashboardAgents: string;
     dashboardExecutions: string;
     dashboardEvents: string;
     dashboardReviews: string;
@@ -1759,6 +1921,16 @@
   };
 }
 
+/**
+ * The shape a non-en locale file must satisfy: all of `Translations`. Every
+ * namespace here is translated in all 14 locales. English-only copy that is
+ * waiting for translation does not go in this file (every route bundles it):
+ * it lives in `src/i18n/pending/<namespace>.ts` (PLAN M4, M22) and moves back
+ * here, translated into the 13 locales, when its translation pass lands. See
+ * docs/features/platform/internationalization.md.
+ */
+export type LocaleTranslations = Translations;
+
 export const en: Translations = {
   notFound: {
     title: 'Page not found',
@@ -1844,7 +2016,7 @@ export const en: Translations = {
           'OS-native keyring',
           'AI-assisted OAuth',
           'Automatic token refresh',
-          'Zero telemetry, local-first',
+          'Local-first, anonymous telemetry only',
         ],
       },
       monitoring: {
@@ -1887,7 +2059,7 @@ export const en: Translations = {
   },
   hero: {
     downloadCta: 'Download Personas',
-    trustLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
+    trustLine: 'No signup, no credit card. Runs on your machine.',
     badge: 'AI Agent Platform',
     headingLine1: 'Intelligent agents',
     headingLine2: 'that work for you',
@@ -1942,7 +2114,6 @@ export const en: Translations = {
     connected: 'Connected',
     disconnected: 'Disconnected',
     demo: 'Demo',
-    viewFullSite: 'View full site',
   },
   useCasesSection: {
     heading: 'One persona,',
@@ -2040,7 +2211,7 @@ export const en: Translations = {
       },
       {
         q: 'Does Personas collect any telemetry or usage data?',
-        a: 'No. Personas runs entirely on your machine with zero telemetry. We don\'t collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device.',
+        a: 'Only anonymous diagnostics. Release builds of the desktop app send error reports and anonymous usage signals (app sessions, which sections you open, key actions) to Sentry. IP addresses, emails, and usernames are stripped first, and your prompts, agent configurations, credentials, and execution logs are never included. You can turn off usage signals in Settings > Account.',
       },
       {
         q: 'Is Personas free?',
@@ -2064,7 +2235,7 @@ export const en: Translations = {
     exploreFirst: 'Explore capabilities first',
     requiresCli: 'Requires Claude Code',
     installerSize: '12 MB installer',
-    noSignupLine: 'No signup, no credit card. Runs on your machine. Zero telemetry.',
+    noSignupLine: 'No signup, no credit card. Runs on your machine.',
     windows: 'Windows',
     macos: 'macOS',
     linux: 'Linux',
@@ -2080,6 +2251,15 @@ export const en: Translations = {
     knowledge: 'Knowledge',
     settings: 'Settings',
     leaderboard: 'Leaderboard',
+    personas: 'Personas',
+    missionControl: 'Mission Control',
+    navSectionsLabel: 'Dashboard sections',
+    navGroups: {
+      mission: 'Mission',
+      monitoring: 'Monitoring',
+      reliability: 'Reliability',
+      memory: 'Memory',
+    },
     director: 'Director',
     sla: 'SLA',
     incidents: 'Incidents',
@@ -2150,6 +2330,67 @@ export const en: Translations = {
       },
     },
     home: {
+      mission: {
+        windowNote: 'Readings cover the last 14 days',
+        hint: 'Press 1 to 8 to open a dimension, Esc to return',
+        wallLabel: 'Fleet dimensions',
+        openDimension: 'Open {label}',
+        backToWall: 'Back to the wall',
+        railLabel: 'All dimensions',
+        verdicts: {
+          pending: 'Measuring',
+          failed: 'Unavailable',
+          unmeasured: 'Not measured',
+          ok: 'Steady',
+          watch: 'Watch',
+          yours: 'Waiting on you',
+          act: 'Needs you',
+        },
+        dims: {
+          outcomes: { label: 'Outcomes', question: 'Are runs succeeding?' },
+          agents: { label: 'Agents', question: 'Is any agent struggling?' },
+          queue: { label: 'Waiting on you', question: 'What needs your hand?' },
+          recovery: { label: 'Self-healing', question: 'Is the fleet fixing itself?' },
+          spend: { label: 'Spend', question: 'Is spend behaving?' },
+          autonomy: { label: 'Autonomy', question: 'What runs without you?' },
+          vault: { label: 'Vault', question: 'Are credentials sound?' },
+          instruments: { label: 'Instruments', question: 'Is this page up to date?' },
+        },
+        evidence: {
+          outcomes: 'Runs {runs} · failed {failed}',
+          noRuns: 'No runs in this window',
+          agents: 'Outage {critical} · degraded {degraded} · operational {healthy}',
+          queue: 'Alerts {alerts} · reviews {reviews} · memory {memory} · unread {reports}',
+          queueEmpty: 'Nothing waits for you',
+          recovery: 'Open {open} · paused {paused} · auto-fixed {fixed}',
+          spendSpikes: 'Cost spikes: {n}',
+          spendPerDay: '{value} per day',
+          autonomy: 'Scheduled {n} · next in {time}',
+          autonomyEmpty: 'Nothing scheduled',
+          vault: 'Overdue {overdue} · anomalies {anomalies} · events {events}',
+          instruments: 'Failed sources: {failed}',
+          instrumentsOk: 'Every source answered',
+          pending: 'Waiting for the first reading',
+          unmeasured: 'No synced source for this yet',
+        },
+        scoreSuffix: '/100',
+        detail: {
+          issuesTitle: 'Healing issues',
+          issuesEmpty: 'No healing issues in this window.',
+          issueStatus: { open: 'Open', auto_fixed: 'Auto-fixed', resolved: 'Resolved' },
+          pausedBadge: 'Paused',
+          costTitle: 'Cost by day',
+          costSpike: 'Cost spike',
+          sourcesTitle: 'Sources',
+          sourceStatus: { pending: 'Waiting', ok: 'Answered', failed: 'Failed' },
+          sources: {
+            observability: 'Observability',
+            healing: 'Healing issues',
+            reviews: 'Reviews',
+            routines: 'Routines',
+          },
+        },
+      },
       vitals: {
         runs: 'Runs',
         alerts: 'Alerts',
@@ -2342,6 +2583,8 @@ export const en: Translations = {
     errors: "Errors",
     totalLower: "total",
     copyPayload: "Copy payload",
+    liveUnavailableTitle: "Not available for live workspaces yet",
+    liveUnavailableDescription: "This view runs on demo data only. Your workspace doesn't sync this data yet, so it stays empty rather than showing sample data.",
   },
   memoriesPage: {
     title: 'Memories',
@@ -2829,6 +3072,8 @@ export const en: Translations = {
     noExecutions: 'No executions yet',
     noExecutionsDesc: 'Execute an agent to see results here',
     waitingForWorker: 'Waiting for worker...',
+    openExecutionInDesktop: 'Open execution in desktop app',
+    openPersonaInDesktop: 'Open persona in desktop app',
     noOutputYet: 'No output yet',
     noFilteredActive: 'No active runs in this view',
     noFilteredCompleted: 'No completed runs in this view',
@@ -2943,6 +3188,10 @@ export const en: Translations = {
       title: 'Notifications',
       subtitle: 'Healing alerts and digests',
       weeklyDigest: 'Weekly health digest',
+      escalation: {
+        label: "Escalate overdue reviews",
+        description: "Pending reviews that pass their SLA are escalated. Where the policy says so, they are approved automatically instead (by default, Info reviews after 8 hours).",
+      },
       voice: {
         label: 'Announce new reviews aloud',
         preview: 'Preview',
@@ -2985,6 +3234,124 @@ export const en: Translations = {
     heading: 'Legal pages coming soon',
     description: 'Our privacy policy and terms of service are being finalized. In the meantime, if you have any questions please reach out to us.',
   },
+  cookiePolicy: {
+    tldr: [
+      'This site sets no cookies of its own. It keeps a few settings in your browser\'s local storage and, if you pair a phone, a signing key in that phone\'s browser database. Every item is listed below.',
+      'No advertising, cross-site tracking, or fingerprinting of any kind.',
+      'You can clear all of it anytime in your browser settings.',
+    ],
+    lastUpdated: 'Last updated: {date}',
+    approachHeading: 'Our approach to cookies and storage',
+    approachBody: 'We store only what the site needs. Browser storage such as local storage counts as a cookie under EU rules, so the list below covers both. We do not use advertising cookies, tracking pixels, or fingerprinting.',
+    registerHeading: 'What we store on your device',
+    registerIntro: 'Every cookie and storage key this website writes, grouped by purpose. A name ending in * stands for a family of keys, such as one per policy or checklist.',
+    categories: {
+      necessary: {
+        title: 'Strictly necessary',
+        description: 'Needed for the site to do what you asked. They are always on.',
+      },
+      preferences: {
+        title: 'Preferences',
+        description: 'Remember choices you made, so the site looks and behaves the way you set it.',
+      },
+      functional: {
+        title: 'Functional',
+        description: 'Keep features working across visits: your progress, what you have already seen, and your votes.',
+      },
+      analytics: {
+        title: 'Analytics',
+        description: 'Nothing is stored for analytics. If you choose "Accept All" in the cookie banner, the site counts page views and a few key actions anonymously, without writing anything to your device. If you choose "Essential Only", nothing is counted.',
+      },
+    },
+    mechanisms: {
+      cookie: 'Cookie',
+      localStorage: 'Local storage',
+      indexedDB: 'Browser database (IndexedDB)',
+    },
+    lifetimes: {
+      oneYear: '1 year',
+      untilCleared: 'Until you clear it',
+      untilSignOut: 'Until you sign out',
+      untilUnpaired: 'Until you unpair the phone or clear site data',
+    },
+    purposes: {
+      consent: 'Remembers your choice in the cookie banner.',
+      authSession: 'Keeps you signed in to the dashboard. Written by Supabase, our sign-in provider, and only if you sign in.',
+      theme: 'Remembers the color theme you picked.',
+      language: 'Remembers the language you picked.',
+      tourVolume: 'Remembers the narration volume of the guided tour.',
+      dashboardPrefs: 'Remembers your dashboard views, filters, and settings, such as review escalation and read-aloud.',
+      tourSeen: 'Remembers that you have seen the guided tour, so it is not offered again.',
+      policySeen: 'Remembers when you last read each policy on this page, so updates can be flagged.',
+      dashboardActivity: 'Remembers when you last opened the dashboard and how often a demo event was retried.',
+      checklist: 'Remembers which guide checklist items you ticked.',
+      voting: 'A random ID that lets you vote once per feature, and a random nickname (such as SwiftFox) shown on your comments. Both are sent with your votes and comments, and neither contains personal information.',
+      pairedPhoneKey: 'Only on a phone you pair with the desktop app: a signing key that the browser created and cannot export, an ID for this phone, the ID of the computer it is paired to, and when it was paired. The key signs the commands this phone sends, so your computer can check that they came from it.',
+    },
+    notUsedHeading: 'What we do not use',
+    notUsed: [
+      'No advertising or remarketing cookies',
+      'No cross-site tracking',
+      'No social media tracking pixels',
+      'No analytics cookies or analytics storage',
+    ],
+    thirdPartyHeading: 'Third-party cookies',
+    thirdPartyBody: 'If you sign in, you pass through Supabase, our sign-in provider, and the account provider you choose, such as Google. They may set cookies on their own domains during sign-in, under their own policies. We do not use those cookies for tracking.',
+    managingHeading: 'Managing cookies and storage',
+    managingBody: 'You can clear or block cookies and site data in your browser settings at any time. Clearing them signs you out and resets your preferences. For questions, reach out to {email}.',
+    manageButton: 'Manage cookie preferences',
+  },
+  privacyPolicy: {
+    tldr: [
+      'Personas runs your agents on your computer and stores them there, with your run history, notes, and chats. Your prompts go only to the AI provider you choose.',
+      'Cloud sync is optional and off until you turn it on. It copies your agents and their runs to your account so you can see them on the web. Notes and chats sync only if you also turn on their own switches.',
+      'A phone you pair can run, pause, resume, and stop your agents, approve or reject their reviews, and chat with them and with Athena, without a click on your computer. You can revoke it at any time.',
+      'API keys are encrypted with AES-256 and never leave your machine, even with cloud sync on.',
+      'Apart from what you choose to sync, the desktop app sends us only anonymous error reports and usage signals, and you can turn most of them off.',
+      'We only collect your email if you sign in for cloud features.',
+      'You can export or delete everything at any time. Just ask.',
+    ],
+    lastUpdated: 'Last updated: {date}',
+    commitmentHeading: 'Our commitment to privacy',
+    commitmentBody: 'Personas is built on a simple principle: your data belongs to you. Our desktop app is local-first. Unless you turn on cloud sync, your agents, prompts, outputs, and credentials are never sent to us, and the only data the app sends us is the anonymous diagnostics described below. Your credentials are never sent to us, even with cloud sync on.',
+    desktopHeading: 'What the desktop app stores',
+    desktopBody: 'Everything the Personas desktop app creates (your agents, pipelines, run history, notes, conversations, and configuration) lives on your computer. None of it is sent to our servers unless you turn on cloud sync, described below. When an agent runs, its prompt goes directly from your computer to the AI provider you chose: Claude by Anthropic, or a local Ollama model that never leaves your computer.',
+    telemetryHeading: 'Desktop app error reports and usage signals',
+    telemetryBody: 'Release builds of the desktop app send error reports (error message, stack trace, operating system, architecture, and app version) and anonymous usage signals (app sessions, which sections and tabs you open, key actions such as creating an agent, and one-time milestones) to Sentry. Sessions and milestones are tied only to a random device or install ID. IP addresses, email addresses, usernames, and request bodies and headers are stripped before anything is sent. There are no performance traces, no session replays, and no user identity, and your prompts, persona content, and credentials are never included.',
+    telemetryControls: 'You can turn off usage signals and error reports from the app\'s interface at first launch or at any time in Settings > Account. Crash reports from the app\'s native core are not covered by that switch yet. Development builds and builds you compile from source send nothing.',
+    credentialsHeading: 'How credentials are protected',
+    credentialsBody: 'API keys and secrets you add to Personas are encrypted at rest using AES-256-GCM and stored in your operating system\'s keyring. They never leave your device, not even when you use cloud sync or a paired phone.',
+    syncHeading: 'Optional cloud sync',
+    syncIntro: 'Cloud sync is off until you sign in and turn it on in the desktop app\'s Settings. It lets you follow your agents on the Personas website, including from your phone. While it is on, the app copies this to your account: your agents (including their names, descriptions, and instructions), their runs (including input, output, cost, and errors), events, items waiting for your review, messages your agents send you, memories, learned patterns, health issues, schedule times, the run queue, and daily totals. Values that look like secrets are removed from event data before it is sent.',
+    syncNever: 'Never synced: API keys, passwords, and other credentials, or trigger settings such as webhook configuration.',
+    syncOptIns: 'Two more kinds of data sync only if you also turn on their own switches in the same Settings: "Sync notes" and "Sync chats". Both start off, even if cloud sync is already on.',
+    syncNotes: 'Sync notes copies your Notepad goals: each note\'s title, text, status, and project name (never the project\'s folder on your computer), and the short summary of its result. Archived notes are not synced.',
+    syncChats: 'Sync chats copies your conversations with Athena and with your agents, so you can read and continue them from your phone: each active conversation\'s title, and your messages and the replies from 90 days before you turned it on onward. Replies can quote what your agents read through the apps you connected. System and tool messages, conversation summaries, an agent\'s working memory, and archived conversations are never synced.',
+    syncMasking: 'Before note or chat text leaves your computer, anything that looks like a key, token, or password is masked, and long text is cut off: titles at 1 KB, note text at 16 KB, and each chat message at 32 KB.',
+    syncDeletion: 'Turning Sync notes or Sync chats off deletes the notes or chats this computer synced, at its next sync. Deleting a chat with an agent on your computer deletes its synced copy, and deleting an agent deletes its synced copy, chats included. Turning cloud sync itself off stops new copies but does not delete what was already synced. Email us and we will delete it.',
+    syncWhere: 'Synced data is stored with Supabase, our cloud provider, in rows tied to your account. Database access rules let only your signed-in account read or change those rows, from the desktop app or the website. The data is not end-to-end encrypted.',
+    phonesHeading: 'Paired phones',
+    phonesIntro: 'While cloud sync is on, you can pair a phone by scanning a code shown in the desktop app\'s Settings. From the Personas website, a paired phone can run, pause, and resume your agents, stop a run, approve or reject reviews that are waiting for you, and chat with Athena or with any of your agents, paused ones included (only while Sync chats is on). Your computer carries these out without asking you first, and runs, replies, and approved work it starts use your Claude plan. A command reaches your computer only while it is on and online. One that cannot reach it within a minute expires instead of waiting.',
+    phonesLimits: 'A paired phone cannot edit your agents, see or change your credentials, or change the run queue without your approval on the computer. Without pairing, a request from the website to run an agent waits until you approve it on your computer.',
+    phonesKey: 'When you pair, the phone\'s browser creates a signing key that cannot be exported and keeps it in that browser\'s storage. Every command is signed with it, and your computer checks the signature against its own list of paired phones. The phone\'s name (from its browser, such as "iPhone \u00B7 Safari"), its public key, and the commands it sends with their results are stored with your synced data.',
+    phonesRevoke: 'You can revoke one phone, or every phone, in the desktop app\'s Settings at any time. Revoking takes effect within seconds, and a run already started finishes. You can also unpair from the phone itself, which deletes its key there.',
+    accountHeading: 'What we collect for cloud features',
+    accountBody: 'If you sign in with Google to use cloud features, we store your email address and basic profile information through Supabase, our sign-in provider. If you turn on cloud sync or pair a phone, we also store the data described above.',
+    analyticsHeading: 'Website analytics',
+    analyticsBody: 'If you choose "{acceptAll}" in the cookie banner, this website counts page views and a few key actions (download clicks, waitlist sign-ups, feature votes, and comments) anonymously to help us understand which pages are useful. If you choose "{essentialOnly}", nothing is counted. We do not track individual users, build advertising profiles, or sell data to third parties.',
+    thirdPartyHeading: 'Third-party services',
+    thirdPartySupabase: 'sign-in, and cloud storage for the data you choose to sync',
+    thirdPartySentry: 'error tracking and the anonymous counts above on this website, and the desktop app\'s error reports and usage signals',
+    rightsHeading: 'Your rights',
+    rightsBody: 'You can request access to, correction of, or deletion of any personal data we hold at any time, including your synced data. You can also export all of your local data directly from the desktop app. To exercise these rights, contact us at {email}.',
+  },
+  cookieConsent: {
+    message: 'We keep a few settings in your browser so the site works. "Accept All" also lets us count page views and a few key actions anonymously, without storing anything for it. No ads, no cross-site tracking.',
+    details: 'Details',
+    essentialOnly: 'Essential Only',
+    acceptAll: 'Accept All',
+    close: 'Close and use essential only',
+  },
   waitlist: {
     title: 'Personas for {platform}',
     emailPlaceholder: 'Enter your email',
@@ -3014,7 +3381,7 @@ export const en: Translations = {
     title: 'Agent Templates',
     subtitle: 'Browse {count} ready-made agent templates grouped by the kind of work they do. Pick a category to see the templates inside.',
     gridHeading: 'Browse templates by category',
-    gridDescription: 'Templates are pre-configured Personas you can adopt with one click. Each template already has the prompt, tools, and triggers wired up for a specific job — no setup required.',
+    gridDescription: 'Templates are reference configurations for specific jobs. Each one shows the prompt, tools, and triggers an agent needs. To use one, install the Personas desktop app and set it up there with your own accounts.',
     changeCategory: 'Change category',
     complexityAll: 'All',
     complexityBasic: 'Basic',
@@ -3037,16 +3404,22 @@ export const en: Translations = {
     copyFailed: 'Copy failed',
     copyConfiguration: 'Copy Configuration',
     getStartedTitle: 'Get Started with This Template',
-    getStartedDescription: 'Import this template directly into Personas, or copy the configuration to customize it yourself.',
-    openInPersonas: 'Open in Personas',
+    getStartedDescription: 'Download the Personas desktop app to build an agent like this one, or copy the configuration as a starting point.',
+    useTemplate: 'Use This Template',
     moreTemplates: 'More {category} Templates',
-    appNotFoundTitle: 'Personas App Not Found',
-    appNotFoundDescription: "It looks like Personas isn't installed on your device yet. Download it to import templates directly, or copy the configuration to set it up manually.",
+    installTitle: 'Get Personas to use this template',
+    installDescription: 'Templates are set up in the Personas desktop app, not in the browser. Download the app to build an agent like this one, or copy the configuration as a starting point.',
     templateNotFound: 'Template not found',
     templateNotFoundDescription: "This template doesn't exist or has been retired. Browse the gallery for the current collection.",
     browseTemplates: 'Browse templates',
     backToHome: 'Back to home',
     customTrigger: 'Custom trigger',
+  },
+  connectorModal: {
+    simulatedLabel: 'Simulated example · nothing runs',
+    connecting: 'Connecting to {label}…',
+    working: 'Working on: {task}',
+    done: 'Done: {task}',
   },
   roadmapSection: {
     inProgress: 'In Progress',
@@ -3123,10 +3496,6 @@ export const en: Translations = {
       macos: {
         title: 'macOS Support',
         description: 'Full native macOS build with Apple Silicon optimization, Spotlight integration, and menu bar agent controls.',
-      },
-      i18n: {
-        title: 'Internationalization',
-        description: 'Multi-language agent instructions, localized UI, and region-aware scheduling for worldwide teams.',
       },
       dashboard: {
         title: 'Web Dashboard',
@@ -3358,7 +3727,6 @@ export const en: Translations = {
     features5: 'Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.',
     features6: 'Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.',
     dashboardHome: 'Welcome to mission control — your whole fleet on one screen. Up top, the vitals: success rate, runs in flight, active agents, open alerts, and reviews waiting on you. Below that, the optimizer surfaces one high-leverage fix at a time — right now, a routing change that trims cost without touching quality. The two panels beneath track each agent\'s health and the new memories they\'ve learned and want to promote. Then the live picture: every execution as it lands on the left, fourteen days of traffic and errors on the right. The heatmap shows runs per agent, day by day, and the bottom row rounds it out — your top performers, the next scheduled routines, and every credential rotation. One page, the entire operation.',
-    dashboardAgents: 'This is your roster. Each card is a persona — a single agent with one identity and a set of skills it can compose. The portrait is generated to match its character; below it, the live stats: success rate, runs, and spend. Hit Execute to run one on demand, or open Details to inspect its configuration and recent history. Five agents here, each quietly doing one job well.',
     dashboardExecutions: 'Every run the fleet has made lives here, newest first. The table shows the persona, status, duration, cost, and when it started — filter down to just the failures, or the ones still running. Click any row and the full execution opens: a metrics strip, any error explanation, and the live output streaming line by line, exactly as the agent produced it.',
     dashboardEvents: 'Agents don\'t work in isolation — they react to events. This is the event bus: every signal flowing through the system, from schedules and webhooks to messages between agents. Each row shows the event type, its source, status, and how long ago it fired. Failed events can be retried in place, and related events chain together so you can follow a single cascade end to end.',
     dashboardReviews: 'Some decisions need a human. When an agent hits something it shouldn\'t decide alone, it pauses and routes the call here. Each item carries the persona, the context, and the action it\'s proposing — approve it, reject it, or skip for later, by click or by keyboard. Nothing risky ships without your sign-off, and the queue keeps the rest of the fleet moving while you decide.',
@@ -3767,7 +4135,7 @@ export const en: Translations = {
     headingGradient: 'plug in',
     introAll: 'Personas ships with {shipped} plugins, and every one is at work below.',
     introSome: 'Personas ships with {shipped} plugins, and {showcased} of them are at work below.',
-    introTail: 'Each is a self-contained workspace your agents can drive, sharing the same credentials and composing with the others. Switch a tab to meet another specialist.',
+    introTail: 'Switch tabs to meet each one.',
     tabsLabel: 'Showcased plugins',
     counter: 'plugin {current} of {total}',
     taglines: {

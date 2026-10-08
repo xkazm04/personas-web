@@ -8,7 +8,7 @@ import { reopenCookieConsent } from "@/components/CookieConsent";
  * satisfying the GDPR/ePrivacy requirement that consent be as easy to withdraw as
  * to give. Rendered in the Cookie Policy "Managing Cookies" section.
  */
-export default function CookieSettingsButton() {
+export default function CookieSettingsButton({ label }: { label: string }) {
   return (
     <button
       type="button"
@@ -16,7 +16,7 @@ export default function CookieSettingsButton() {
       className="inline-flex items-center gap-2 rounded-lg border border-glass bg-white/[0.03] px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-glass-hover hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50"
     >
       <Cookie size={15} className="text-brand-cyan" />
-      Manage cookie preferences
+      {label}
     </button>
   );
 }

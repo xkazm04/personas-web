@@ -56,7 +56,7 @@ export function trackPageView(page: string) {
  *  navbar apart. The navbar reports only its installer branch: its waitlist
  *  branch opens the modal, which reports `waitlist_open` with `entry_point:
  *  "navbar"` instead. */
-export type DownloadPlacement = "download-cta" | "hero" | "pricing" | "navbar";
+export type DownloadPlacement = "download-cta" | "hero" | "features-hero" | "pricing" | "navbar";
 
 /**
  * `download_click` attributes under this build's release plan. `outcome` is
@@ -109,8 +109,10 @@ export function trackFeatureVote(featureId: string, action: "upvote" | "undo") {
   trackEvent("feature_vote", { feature: featureId, action });
 }
 
-export function trackFeatureRequest(text?: string) {
-  trackEvent("feature_request", text ? { text: text.slice(0, 200) } : undefined);
+// Counts only. The request's text is user content, and it already has its home in
+// /api/feature-requests; a copy here would be a second destination for it.
+export function trackFeatureRequest() {
+  trackEvent("feature_request");
 }
 
 export function trackFeatureComment(featureId: string, action: "add" | "reply") {

@@ -3,9 +3,12 @@ import React, { type ReactNode } from "react";
 import { CodeFence, MarkdownTable } from "../GuideBlocks";
 import { expandLineRanges } from "./expandLineRanges";
 import { HeadingAnchor } from "./HeadingAnchor";
+import { DIRECTIVE_OPENER, HEADING, KNOWN_DIRECTIVES, lintDirectives } from "./directiveLint";
 import { createHeadingIdAssigner } from "./headingId";
 import { parseCustomBlock } from "./parseCustomBlock";
 import { parseInline } from "./parseInline";
+
+const DEV = process.env.NODE_ENV === "development";
 
 function isBlockStart(line: string): boolean {
   const trimmed = line.trimStart();
@@ -28,6 +31,14 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
   const assignHeadingId = createHeadingIdAssigner();
   const emit = (node: ReactNode) =>
     elements.push(React.cloneElement(node as React.ReactElement, { key: `b${key++}` }));
+
+  // Content typos must not vanish silently. Production renders around them
+  // (and `npm run check:guide-content` fails on them); development says so.
+  if (DEV) {
+    for (const issue of lintDirectives(lines)) {
+      console.warn(`[guide] line ${issue.line}: ${issue.message}: ${issue.text.trim()}`);
+    }
+  }
 
   while (index < lines.length) {
     const line = lines[index];
@@ -53,7 +64,7 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       continue;
     }
 
-    const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
+    const headingMatch = line.match(HEADING);
     if (headingMatch) {
       // Shift in-content markdown headings down one level: the topic title is
       // the page's single <h1> (rendered in TopicView), so a content "#"
@@ -122,7 +133,7 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       continue;
     }
 
-    const customMatch = line.trimStart().match(/^:::([\w-]+)$/);
+    const customMatch = line.trimStart().match(DIRECTIVE_OPENER);
     if (customMatch) {
       const innerLines: string[] = [];
       index++;
@@ -132,6 +143,19 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       index++;
       const parsed = parseCustomBlock(customMatch[1], innerLines, `callout${key}`);
       if (parsed) emit(parsed);
+      // Unknown names are reported by lintDirectives above; this catches a
+      // known directive whose body had nothing the block parser could use.
+      else if (DEV && KNOWN_DIRECTIVES.has(customMatch[1])) {
+        console.warn(`[guide] ':::${customMatch[1]}' rendered nothing: no valid content inside it`);
+      }
+      continue;
+    }
+
+    // A malformed opener (`::: tip`, `:::tip Title`) or a stray closer. Skip
+    // the line: isBlockStart() keeps the paragraph collector below from taking
+    // it, so without this the loop never advances and the render hangs.
+    if (line.trimStart().startsWith(":::")) {
+      index++;
       continue;
     }
 
@@ -144,13 +168,15 @@ export function parseBlocks(lines: string[], opts: { copyAnchorLabel?: string } 
       continue;
     }
 
-    const paragraphLines: string[] = [];
+    // Every branch above `continue`s, so the current line is one none of them
+    // could take. It opens the paragraph unconditionally: a line that looks
+    // like a block start but is not one (`#####`, `#tag`, an indented `# x`)
+    // renders as text instead of stalling the loop (lintDirectives flags it).
+    const paragraphLines: string[] = [lines[index++]];
     while (index < lines.length && lines[index].trim() !== "" && !isBlockStart(lines[index])) {
       paragraphLines.push(lines[index++]);
     }
-    if (paragraphLines.length > 0) {
-      emit(<p className="text-base text-muted-dark leading-relaxed mb-4">{parseInline(paragraphLines.join(" "), `p${key}`)}</p>);
-    }
+    emit(<p className="text-base text-muted-dark leading-relaxed mb-4">{parseInline(paragraphLines.join(" "), `p${key}`)}</p>);
   }
 
   return elements;

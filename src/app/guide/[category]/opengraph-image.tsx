@@ -17,6 +17,6 @@ export default async function OgImage({ params }: { params: Promise<{ category: 
     badge: `${topicCount} topics`,
     badgeColor: category?.color ?? "#06b6d4",
     accentColor: category?.color ?? "#06b6d4",
-    footer: "personas.ai/guide",
+    footer: "personas.so/guide",
   });
 }

@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useI18nStore } from "@/stores/i18nStore";
 import { en } from "./en";
-import type { Translations } from "./en";
+import type { LocaleTranslations, Translations } from "./en";
 import type { Language } from "@/stores/i18nStore";
 
 const cache: Partial<Record<Language, Translations>> = { en };
 
-const loaders: Record<Exclude<Language, "en">, () => Promise<Translations>> = {
+const loaders: Record<Exclude<Language, "en">, () => Promise<LocaleTranslations>> = {
   zh: () => import("./zh").then((m) => m.zh),
   ar: () => import("./ar").then((m) => m.ar),
   hi: () => import("./hi").then((m) => m.hi),
@@ -43,7 +43,7 @@ function deepMerge(base: unknown, override: unknown): unknown {
   return result;
 }
 
-function mergeWithEnglishFallback(translations: Translations): Translations {
+function mergeWithEnglishFallback(translations: LocaleTranslations): Translations {
   return deepMerge(en, translations) as Translations;
 }
 

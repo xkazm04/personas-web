@@ -116,8 +116,8 @@ export default function LegalContent() {
           Privacy & Terms
         </h1>
         <p className="mt-3 text-base leading-relaxed text-muted-dark">
-          Your data stays on your device. We believe privacy is a right, not a
-          feature.
+          Your agents run on your device and your keys never leave it. We
+          believe privacy is a right, not a feature.
         </p>
       </motion.div>
 

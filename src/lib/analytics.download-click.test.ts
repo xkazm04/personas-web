@@ -77,7 +77,8 @@ describe("every download CTA reports its placement", () => {
   const read = (rel: string) => readFileSync(path.join(REPO_ROOT, rel), "utf8");
 
   it.each([
-    ["src/components/sections/HeroClient.tsx", "hero"],
+    ["src/components/sections/hero-hive/shared/HeroCtas.tsx", "hero"],
+    ["src/components/feature-sections/murmuration-hero/shared/HeroCtas.tsx", "features-hero"],
     ["src/components/sections/pricing/index.tsx", "pricing"],
     ["src/components/sections/DownloadCTA.tsx", "download-cta"],
   ])("%s calls trackDownloadClick with placement %s", (rel, placement) => {

@@ -1,54 +1,110 @@
 # Self-Healing Circuit
-> Animated circuit-board explainer of the failure → recovery cycle (Detect → Diagnose → Recover → Resolve), looping autonomously · **Route:** `/features` (deep-dive section) · **Status:** Live
+> A "run circuit" of one agent run (schedule, agent, Gmail/Slack/Notion, report) in which a different failure breaks a trace each cycle and gets the fix the desktop app really applies; the expired login is stopped and handed to you · **Route:** `/features` (deep-dive section) · **Status:** Live
 
 ## What it does
-A self-contained, auto-playing diagram that tells the "fixes itself" story. It renders an infrastructure circuit board — five labelled nodes (API Gateway, Database, Cache, Queue, Slack) wired by glowing traces — and continuously dramatizes one connection failing and being repaired. Each loop ("Cycle #N") breaks a different trace, then walks four stages: **Detect** (red spark at the break), **Diagnose** (amber repair-bot crawls the trace), **Recover** (cyan weld flash), **Resolve** (everything returns to green/healthy). A header status pill, a per-stage description line, a right-hand connection-status panel, and a bottom stage timeline all react to the current stage. It runs on a timer with no user input — purely illustrative motion that conveys autonomous recovery (no 3 AM alerts, no manual restarts).
+An auto-playing, also clickable, diagram of the "fixes itself when things break"
+story. It draws one agent run as a circuit board: a schedule starts the agent, the
+agent works through three real connectors (Gmail, Slack, Notion), and they feed a
+report. Each cycle breaks one trace and walks four stages, with a run log beside the
+board writing one line per stage: **Detect** (red spark), **Diagnose** (amber scan),
+**Fix** (the failure's own remedy) and **Back on track** (green seal).
+
+The four failures are the ones the app genuinely handles differently:
+- **Rate limit** (Slack): waits 30 s, then retries.
+- **Timeout** (Notion): retries with twice the time limit.
+- **Overloaded** (Claude): resumes in 10 min, mid-run, nothing lost.
+- **Expired login** (Gmail): no retry; the run stops and "waiting for you" is
+  shown, because only a person can renew it. The downstream trace starves and the
+  seal is a rose person glyph instead of a green check.
+
+Visitors can pick any failure from the pill buttons in the card header. Retried
+cases show "Retry 1 of 3" and a "Logged for the Overseer" note.
 
 ## How it works
-`useHealingCycle` (`useHealingCycle.ts`) is the state machine. It holds `activeStage` (`-1` = idle, `0..3` = the four stages), `brokenConnectionId`, and `cycleIndex`. A single `useEffect` drives a recursive `setTimeout` chain (`useHealingCycle.ts:21-52`): pick the next breakable connection (`breakableConnections` cycled by `currentCycle % 4`), reset `activeStage` to `-1`, then advance one stage at a time — first step after `1200ms`, each later step after `2200ms`; after stage 3 it waits `3500ms` and restarts with the next connection. The hook exposes two pure derivations: `getConnectionStatus(connId)` maps `(brokenConnectionId, activeStage)` → `healthy | broken | diagnosing | repairing` (only the broken connection ever leaves `healthy`), and `getNodeStatus(nodeId)` maps the two endpoints of the broken connection → `error | warning | healing | healthy` by stage.
+`healing-run-circuit/index.tsx` (`HealingCircuit`) builds the card: header with the
+title, a "Stylised" disclosure and the failure picker (`role="group"`, `aria-pressed`
+buttons); the board + `RunLog` grid (`data-tour-diagram="healing"`, `role="img"`,
+`index.tsx:94`); and the `Stepper` footer. It is wrapped in `HealingSection`
+(`shared/HealingSection.tsx`), a `SectionWrapper(fit="fill", id="healing-circuit")`
+with the heading, lede and a `data-stage-slot`. The art is sized in `em` from the
+stage slot's height (`stage:[font-size:clamp(14px,min(100cqh/29.5, 100cqw/59),26px)]`),
+so it always fits one viewport.
 
-`index.tsx` composes the UI: a `SectionIntro` heading, then a dark glass card containing `CircuitHeader` (status pill + cycle counter), a flex row of `CircuitBoard` + `StatusPanel`, `StageDescription`, and `StageTimeline`. The broken connection's geometric midpoint (`getPathMidpoint`, parsing numbers out of the SVG path `d` string, `data.ts:128`) is passed down as `breakPoint` so spark/weld effects land on the broken trace.
+**Loop.** `shared/useStepLoop.ts`: `useLoopGate(ref)` returns `running = !still &&
+visible` (`useStillMotion` + `useIsVisible`, threshold 0.25; `useIsVisible` also covers
+the backgrounded tab), and `useStepLoop(LOOP, stepMs, running, FINAL_STEP)` re-arms one
+`setTimeout` per step. A step is `caseIndex * PHASES + phase`; `PHASES = 5`
+(running, detect, diagnose, fix, done) with per-phase durations in `geometry.ts`
+(`PHASE_MS` 1.5/1.9/2.1/2.7/3.0 s), `LOOP = V1_CASES.length * PHASES`. Clicking a
+case sets the step to that case's detect phase (or its final phase when still).
 
-`CircuitBoard` renders an SVG `viewBox="0 0 660 400"` with a dotted-grid background. `CircuitTraces` draws each connection three times (invisible `<path id>` for `mpath` motion targets, a faint wide halo, a colored core) tinted by status, and conditionally mounts the per-stage effect at `breakPoint`: `DataParticle`s flow along healthy traces; `SparkEffect` (broken), `RepairBot` (diagnosing), `WeldFlash` (repairing) on the broken one. `CircuitNodes` draws each node as a chip with pins, a status dot, a pulsing glow ring when affected, and a label. SVG filters (`particleGlow`, `repairGlow`, `weldGlow`, `nodeGlow`) live in `SvgDefs`.
-
-**Reduced-motion gating** is layered. The whole loop is short-circuited at the source: `useHealingCycle.ts:22` returns before scheduling any timer when `prefersReducedMotion` is true, so `activeStage` stays `-1`, everything reads `healthy`, and no failure ever animates. Every effect component (`effects.tsx`) and node/header/timeline/panel also branches on `useReducedMotion`: `DataParticle` runs its `animateMotion` once with `repeatCount="1"`; `SparkEffect`/`WeldFlash` collapse to a single static glyph; pulsing dots/rings freeze to a constant opacity.
+**Board.** `Board.tsx` draws `TRACES`/`NODES` from `geometry.ts` (760 x 400 viewBox).
+`BREAKS[caseId]` names the broken trace, the chip it hurts and the break point.
+`phaseColor()` gives the stage colour (rose/amber/cyan/emerald; rose stays for the
+escalated login from the fix phase on). `Trace` draws halo + core + data packets
+(dashed and still while open), `Chip` draws the chip (real logo from `/tools/*.svg`
+via `TOOL_ICON`), and `BreakFx` renders the per-phase effect, with a distinct `Fix`
+animation for each case and a `Seal` at the end.
 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/feature-sections/HealingCircuit.tsx` | Public entry — re-exports `./healing-circuit/index` |
-| `src/components/feature-sections/healing-circuit/index.tsx` | Section composition (intro + glass card + all subcomponents) |
-| `src/components/feature-sections/healing-circuit/useHealingCycle.ts` | Failure→recovery state machine + `getConnectionStatus`/`getNodeStatus` |
-| `src/components/feature-sections/healing-circuit/data.ts` | `healingStages`, `nodes`, `connections`, `breakableConnections`, color maps, `sparkSeeds`, `getPathMidpoint` |
-| `src/components/feature-sections/healing-circuit/types.ts` | `HealingStage`, `CircuitNode`, `Connection`, `ConnectionStatus`, `NodeStatus` |
-| `src/components/feature-sections/healing-circuit/components/CircuitBoard.tsx` | SVG canvas (grid bg, `viewBox`), mounts defs/traces/nodes |
-| `src/components/feature-sections/healing-circuit/components/CircuitHeader.tsx` | Header: title, animated stage status pill, "Cycle #N" |
-| `src/components/feature-sections/healing-circuit/components/CircuitTraces.tsx` | Per-connection trace paths + conditional stage effects |
-| `src/components/feature-sections/healing-circuit/components/CircuitNodes.tsx` | Node chips, pins, status dots, affected-glow ring, labels |
-| `src/components/feature-sections/healing-circuit/components/StageDescription.tsx` | Animated single-line description of the active stage |
-| `src/components/feature-sections/healing-circuit/components/StageTimeline.tsx` | 4-stage progress chips + connector segments + healthy count |
-| `src/components/feature-sections/healing-circuit/components/StatusPanel.tsx` | Right rail: per-connection OK/DOWN/SCAN/FIX rows |
-| `src/components/feature-sections/healing-circuit/components/SvgDefs.tsx` | `<filter>` defs (particle/repair/weld/node glow) |
-| `src/components/feature-sections/healing-circuit/components/effects.tsx` | `DataParticle`, `SparkEffect`, `WeldFlash`, `RepairBot` |
+| `src/components/feature-sections/healing-run-circuit/index.tsx` | Card composition, case picker, step -> case/phase derivation, log lines |
+| `healing-run-circuit/shared/cases.ts` | `CaseId`, `CASE_IDS`, `CASE_COLOR`, `isEscalated`, `TOOL_ICON`, `fill()`; header comment cites the app's retry rules (`core/src/healing.rs`) |
+| `healing-run-circuit/shared/HealingSection.tsx` | Section frame: `id="healing-circuit"`, heading from `featuresSections.healing`, lede, stage slot |
+| `healing-run-circuit/shared/useStepLoop.ts` | `useLoopGate` (still + visibility) and the self-re-arming `useStepLoop` |
+| `healing-run-circuit/geometry.ts` | `NODES`, `TRACES`, `V1_CASES`, `BREAKS`, `PHASES`, `stepMs`, `LOOP`, `FINAL_STEP`, `BRAND_LABEL` |
+| `healing-run-circuit/Board.tsx` | SVG assembly, `phaseColor`, which trace/chip is hurt |
+| `healing-run-circuit/Trace.tsx`, `Chip.tsx`, `BreakFx.tsx` | Trace + packets, chip, per-case fix/seal effects |
+| `healing-run-circuit/RunLog.tsx`, `Stepper.tsx` | Log beside the board; Detect/Diagnose/Fix/Done progress strip |
+| `src/components/feature-sections/feature-lazy.tsx` | `LazyHealingCircuit` imports the folder (`:17-21`) |
 
 ## Data & state
-- **Source:** static module constants in `data.ts` (stages, nodes, connections, color maps, deterministic `sparkSeeds`) — no fetch, no mocks, no live data. **Stores:** none (no Zustand); all state is local React state inside `useHealingCycle`. **API routes:** none. **Types:** `HealingStage`, `CircuitNode`, `Connection`, `ConnectionStatus` (`healthy | broken | diagnosing | repairing`), `NodeStatus` (`healthy | error | warning | healing`) in `types.ts`.
+- **Source:** static. Geometry/cases in the files above; every word in
+  `featuresSections.healing` (`src/i18n/en.ts`: `heading`, `headingGradient`,
+  `stylised`, `overseerNote`, `retry`, `cases.<id>.{name,error,diagnosis,fix,result,note}`,
+  `stages`, and `v1.*` = lede, artLabel, title, casesLabel, schedule, agent, report, log,
+  healthy). No fetch, no API.
+- **State:** a local step counter (`useStepLoop`); `still` / `running` flags. No Zustand.
+- **Fidelity to the app (2026-10):** rate limit = `RetryWithBackoff` (30 s doubling,
+  max 5 min); timeout = `RetryWithTimeout` (2x limit); overloaded = `RetryAt` +10/20/30 min
+  and resumes the session; broken setup = AI healing on Claude Opus; credential = issue,
+  never retried; retryable categories escalate to an issue after 3 retries.
 
 ## Integration points
-- **Lazy mount:** registered as `LazyHealingCircuit` via `createLazySection(() => import("@/components/feature-sections/HealingCircuit"), …, { ssr: false })` (`src/components/feature-sections/feature-lazy.tsx:17`), so it is client-only (no SSR).
-- **`/features` page:** mounted inside `<StageSection id="healing-circuit" glow="emerald" …>` wrapped in `<LazyMount minHeight={760} label="Healing">` (`src/app/features/page.tsx:52-56`); the page is `force-static` with `revalidate=3600`. Also a left-nav anchor `{ label: "HEALING", href: "#healing-circuit" }` (`features/page.tsx:22`).
-- **Shared primitives:** `SectionWrapper`, `SectionIntro`, and `staggerContainer` from `@/lib/animations`.
-- **Product tour:** the inner diagram card carries `data-tour-diagram="healing"` (`index.tsx:54`) — a hook for the guided tour to spotlight it.
-- **`force-dark`:** the card opts into the dark color scheme via the `force-dark` class regardless of site theme (`index.tsx:54`).
+- `LazyHealingCircuit` (`feature-lazy.tsx`, `ssr: false`), mounted in
+  `<StageSection id="healing-circuit" glow="emerald" fromColor="purple" toColor="rose">`
+  + `<LazyMount stage minHeight={760} label="Healing">` (`src/app/features/page.tsx:78-82`).
+  Scroll-map entry `HEALING` -> `#healing-circuit` (`page.tsx:46`).
+- `data-tour-diagram="healing"` lets the product tour spotlight the board.
+- Uses `@/lib/brand-theme` (`BRAND_VAR`, `tint`), `useStillMotion`, `useIsVisible`,
+  `SectionWrapper`, `SectionHeading`, `GradientText`.
 
 ## Conventions & gotchas
-- **i18n violation (real issue):** all copy is hardcoded English, not i18n. The `SectionIntro` heading/description (`index.tsx:39-41`), every `healingStages` `label`/`desc`/`statusLabel` (`data.ts:19-48`), node labels (`data.ts:51-55`), and the literal UI strings — `"Circuit Board — Infrastructure"` (`CircuitHeader.tsx:20`), `"Connection Status"` (`StatusPanel.tsx:37`), `"OK/DOWN/SCAN/FIX"` (`StatusPanel.tsx:17-24`), `"N/M healthy"` (`StageTimeline.tsx:85-88`) — are inline literals. No file imports `useTranslation`. This breaks the non-negotiable rule that all user-facing strings live in `src/i18n/en.ts` across 14 locales. Migrate copy if you touch it; don't add more literals.
-- **Reduced motion stops the *story*, not just the motion.** When `prefersReducedMotion` is true the cycle never starts (`useHealingCycle.ts:22`), so the diagram is frozen in the all-healthy state — a reduced-motion user never sees a failure/recovery demonstrated. This is correct gating but worth knowing: there is no static "here's what recovery looks like" fallback frame; the headline still says it fixes itself while nothing visibly breaks.
-- **Animation gating is thorough but lint-invisible.** All motion is framer-motion `animate` arrays / SVG `animateMotion`, not `requestAnimationFrame`, so the `custom-animation/require-animation-gating` lint rule wouldn't catch a missing guard here. Gating is nonetheless implemented by hand in every animated component via `useReducedMotion`. Keep that pattern when editing effects.
-- **Hardcoded hex colors, not tokens.** Stage/status colors are raw hex (`#f43f5e`, `#fbbf24`, `#06b6d4`, `#34d399`) in `data.ts` and inline `traceColorFor`/`statusColorFor` helpers, and SVG fills use literal `rgba(...)`/`"white"`. This is a deliberate exception to the semantic-Tailwind-token rule (SVG strokes/fills can't use Tailwind classes), but note the same four hex values are duplicated across `data.ts`, `CircuitTraces.tsx`, `StatusPanel.tsx`, and `effects.tsx` — change one, change all.
-- **`getPathMidpoint` is a heuristic.** It regex-extracts numbers from the path `d` string and grabs the aligned middle coordinate pair (`data.ts:128-139`); it is not a true geometric path midpoint. It works because all `connections` paths are orthogonal polylines — if you add a curved/`C`/`Q` path, the spark/weld break point may land off the visible trace.
-- **`RepairBot.onComplete` is unused.** `RepairBot` accepts and fires an `onComplete` callback after `duration` (`effects.tsx:148-161`), but `CircuitTraces` mounts it without one — stage advancement is driven entirely by `useHealingCycle`'s timers, not by effect completion. The two timings (`2200ms` stage step vs. `2s` bot duration) are tuned to roughly agree but are independent; retune both if you change cadence.
-- **Don't rename `connection.id`.** Each `id` doubles as the SVG `<path id>` referenced by `mpath href="#id"` for `DataParticle`/`RepairBot` motion, and as the `breakableConnections` lookup key. Renaming an id in one place silently breaks particle motion.
+- **Replaced 2026-10-06** by the winner of the /features review. The previous
+  implementation (`HealingCircuit.tsx` with its "Current"/"Overnight" switcher,
+  `healing-circuit/` circuit board with `useHealingCycle`, `.overnight*` files) is in
+  git history.
+- **i18n - English-only for now.** Copy is in the pending `featuresSections.healing`
+  namespace; other locales fall back to English until it is translated. The namespace
+  still holds review-era keys nothing reads (`v2.*`, `v3.*`); `setup` exists in `cases`
+  and `CaseId` but is not in `V1_CASES`, so it is never shown.
+- **Duplicate anchor id.** `id="healing-circuit"` is set on both the page's
+  `StageSection` and the section's `SectionWrapper` (`HealingSection.tsx`), so the
+  document has two elements with that id.
+- **Motion gating.** Reduced motion (`still`) shows `FINAL_STEP`: the first failure,
+  healed - a static frame of recovery rather than an all-green board. Markup is
+  constant (only values gate), so SSR and hydration agree; clicking a case in still
+  mode jumps to that case's final phase. The loop stops off-screen and with the tab
+  hidden. Effects use `transformBox: "view-box"` with pixel origins so they scale with
+  the SVG.
+- **Colour.** Brand colours go through `BRAND_VAR`/`tint` (theme tokens), not raw hex.
+- **Font-size scaling.** Everything inside the card is `em`; do not add `px` sizes or
+  the stage fit breaks.
+- **Brand names** on the chips (Gmail, Slack, Notion, Claude) are proper nouns in
+  `BRAND_LABEL`, not translated copy.
+- Retuning cadence: `PHASE_MS` and the `Fix`/`Seal` effect durations in `BreakFx.tsx`
+  are independent; change them together.
 
 ## Related docs
 - [Trigger System](trigger-system.md)

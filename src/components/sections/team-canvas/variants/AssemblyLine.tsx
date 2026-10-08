@@ -1,11 +1,13 @@
 "use client";
 
-import { useId } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useId, useRef } from "react";
+import { motion } from "framer-motion";
+import { useLoopGate } from "@/hooks/useLoopGate";
 import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
-import { GOAL, KPIS, kpiStatus, progressPct, health } from "./kpiData";
+import { KPIS, kpiStatus, progressPct, health } from "./kpiData";
 import { CalibrationTrack, HealthRing, StatusPill, Sparkline, statusColor } from "./kpiPrimitives";
+import { teamCanvasSectionCopy } from "@/i18n/pending/teamCanvasSection";
 
 /**
  * AssemblyLine — variant 1 of 3 of the "From goal to shipped" redesign.
@@ -18,10 +20,10 @@ import { CalibrationTrack, HealthRing, StatusPill, Sparkline, statusColor } from
  */
 
 const STATIONS = [
-  { label: "Plan", sub: "scope + estimate", kpi: KPIS[0], brand: "cyan" as const },
-  { label: "Build", sub: "implement", kpi: KPIS[3], brand: "purple" as const },
-  { label: "Test", sub: "verify", kpi: KPIS[1], brand: "amber" as const },
-  { label: "Review", sub: "approve", kpi: KPIS[2], brand: "emerald" as const },
+  { key: "plan" as const, kpi: KPIS[0], brand: "cyan" as const },
+  { key: "build" as const, kpi: KPIS[3], brand: "purple" as const },
+  { key: "test" as const, kpi: KPIS[1], brand: "amber" as const },
+  { key: "review" as const, kpi: KPIS[2], brand: "emerald" as const },
 ];
 
 // Cascade slots: station 0..3 then the SHIPPED slot (4).
@@ -29,16 +31,20 @@ const SLOTS = STATIONS.length + 1;
 const SHIPPED_SLOT = STATIONS.length;
 
 export default function AssemblyLine() {
-  const reduced = useReducedMotion() ?? false;
+  const copy = teamCanvasSectionCopy;
+  // The conveyor dot and the station cascade run only while the line is on
+  // screen and the tab is visible; they used to run for the life of the page.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const { run, still: reduced } = useLoopGate(rootRef);
   const uid = useId();
-  const { active } = useAutoCycle({ count: SLOTS, intervalMs: 1400 });
+  const { active } = useAutoCycle({ count: SLOTS, intervalMs: 1400, ref: rootRef });
 
   // A slot is "produced" once the run has reached or passed it.
   const reached = (slot: number) => reduced || slot <= active;
   const composite = health(KPIS);
 
   return (
-    <div className="mx-auto flex h-[420px] w-full max-w-4xl flex-col justify-center gap-6 px-2 py-4">
+    <div ref={rootRef} className="mx-auto flex h-[420px] w-full max-w-4xl flex-col justify-center gap-6 px-2 py-4 stage:h-auto">
       {/* The line: goal → stations → shipped */}
       <div className="flex items-stretch gap-3">
         {/* GOAL */}
@@ -50,21 +56,28 @@ export default function AssemblyLine() {
           className="flex w-40 shrink-0 flex-col justify-center rounded-2xl border border-glass px-4 py-3"
           style={{ background: "rgba(var(--surface-overlay), 0.05)" }}
         >
-          <span className="text-[11px] font-medium uppercase tracking-wide text-muted">Goal</span>
-          <span className="mt-1 text-sm font-semibold leading-snug text-foreground">{GOAL}</span>
+          <span className="text-[11px] font-medium uppercase tracking-wide text-muted">{copy.goalLabel}</span>
+          <span className="mt-1 text-sm font-semibold leading-snug text-foreground">{copy.goal}</span>
         </motion.div>
 
         {/* CONVEYOR + STATIONS */}
         <div className="relative flex flex-1 items-center">
           <div className="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded-full" style={{ background: "rgba(var(--surface-overlay), 0.14)" }} />
-          {!reduced && (
+          {run && (
+            // A full-width track translated by its own width carries the dot
+            // across: transform only. It used to animate `left`, which forced a
+            // layout on every frame.
             <motion.span
               aria-hidden
-              className="absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full"
-              style={{ background: BRAND_VAR.cyan, boxShadow: `0 0 10px ${tint("cyan", 60)}` }}
-              animate={{ left: ["0%", "100%"] }}
+              className="pointer-events-none absolute inset-x-0 top-1/2 h-2 -translate-y-1/2"
+              animate={{ x: ["0%", "100%"] }}
               transition={{ duration: 1.4 * SLOTS, repeat: Infinity, ease: "linear" }}
-            />
+            >
+              <span
+                className="absolute left-0 top-0 h-2 w-2 -translate-x-1/2 rounded-full"
+                style={{ background: BRAND_VAR.cyan, boxShadow: `0 0 10px ${tint("cyan", 60)}` }}
+              />
+            </motion.span>
           )}
           <div className="relative grid w-full grid-cols-4 gap-2">
             {STATIONS.map((s, i) => {
@@ -73,7 +86,7 @@ export default function AssemblyLine() {
               const status = kpiStatus(s.kpi);
               return (
                 <motion.div
-                  key={s.label}
+                  key={s.key}
                   initial={reduced ? false : { opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -90,8 +103,8 @@ export default function AssemblyLine() {
                     <span className="text-[11px] font-mono text-muted">{String(i + 1).padStart(2, "0")}</span>
                     <span className="h-1.5 w-1.5 rounded-full" style={{ background: lit ? statusColor(status) : "rgba(var(--surface-overlay), 0.3)" }} />
                   </div>
-                  <div className="mt-0.5 text-[13px] font-semibold leading-tight text-foreground">{s.label}</div>
-                  <div className="truncate text-[10px] leading-tight text-muted">{s.sub}</div>
+                  <div className="mt-0.5 text-[13px] font-semibold leading-tight text-foreground">{copy.stations[s.key].label}</div>
+                  <div className="truncate text-[10px] leading-tight text-muted">{copy.stations[s.key].sub}</div>
                 </motion.div>
               );
             })}
@@ -111,9 +124,9 @@ export default function AssemblyLine() {
             boxShadow: reached(SHIPPED_SLOT) ? `0 0 24px ${tint("emerald", 24)}` : undefined,
           }}
         >
-          <span className="text-[11px] font-medium uppercase tracking-wide text-muted">Shipped</span>
+          <span className="text-[11px] font-medium uppercase tracking-wide text-muted">{copy.shipped}</span>
           <HealthRing value={reached(SHIPPED_SLOT) ? composite : 0} size={76} stroke={6} />
-          <span className="text-[10px] text-muted">composite health</span>
+          <span className="text-[10px] text-muted">{copy.compositeHealth}</span>
         </motion.div>
       </div>
 
@@ -127,8 +140,8 @@ export default function AssemblyLine() {
             <div key={s.kpi.id} className="flex flex-col gap-1.5" style={{ opacity: lit ? 1 : 0.5, transition: "opacity 0.5s" }}>
               <div className="flex items-center justify-between gap-2">
                 <span className="flex items-center gap-2 text-[13px] font-medium text-foreground">
-                  <span className="font-mono text-[10px] text-muted">{s.label}</span>
-                  {s.kpi.label}
+                  <span className="font-mono text-[10px] text-muted">{copy.stations[s.key].label}</span>
+                  {copy.kpis[s.kpi.id]}
                 </span>
                 <span className="flex items-center gap-2">
                   <Sparkline series={s.kpi.series} color={statusColor(status)} width={56} height={16} />

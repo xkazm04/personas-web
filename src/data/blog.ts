@@ -38,26 +38,26 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "introducing-personas",
     title: "Free Desktop AI Agent Orchestration: Introducing Personas",
     description:
-      "Build, orchestrate, and monitor multi-agent AI pipelines from your desktop. Free forever, fully private, zero telemetry.",
+      "Build, orchestrate, and monitor multi-agent AI pipelines from your desktop. Free forever, local-first, with only anonymous telemetry.",
     category: "announcement",
     author: "Personas Team",
     date: "2026-03-15",
     readingTime: 5,
     featured: true,
-    content: `Personas is a desktop application for building and orchestrating AI agent pipelines. Unlike cloud platforms that process your data on remote servers, Personas runs entirely on your machine — your prompts, credentials, and outputs never leave your device.
+    content: `Personas is a desktop application for building and orchestrating AI agent pipelines. Unlike cloud platforms that process your data on remote servers, Personas runs on your machine: your agents and outputs stay on your device unless you turn on optional cloud sync, your credentials never leave it, and your prompts go only to the AI provider you choose, or nowhere at all with a local Ollama model.
 
 ## Why Desktop-First?
 
-The AI agent ecosystem has exploded with cloud platforms: CrewAI, LangChain, Relevance AI, and dozens more. They all share one fundamental limitation — your data flows through their servers. For developers working with proprietary code, sensitive credentials, or regulated data, that's a non-starter.
+The AI agent ecosystem has exploded with cloud platforms: CrewAI, LangChain, Relevance AI, and dozens more. They all share one fundamental limitation: your data flows through their servers. For developers working with proprietary code, sensitive credentials, or regulated data, that's a non-starter.
 
-Personas takes a different approach. The entire orchestration engine runs locally. Your AES-256 encrypted credential vault uses OS-native keyring integration. There's no telemetry, no analytics, no phone-home behavior.
+Personas takes a different approach. The entire orchestration engine runs locally. Your AES-256 encrypted credential vault uses OS-native keyring integration. The only data it sends home is anonymous error reports and usage signals, with IP addresses, emails, and usernames stripped and your prompts and credentials never included.
 
 ## What You Can Build
 
-- **Multi-agent pipelines** — Chain agents together on a visual canvas. One agent's output feeds the next.
-- **Automated triggers** — Cron schedules, webhooks, clipboard monitoring, file watchers, and custom event chains.
-- **Self-healing execution** — Automatic failure detection with model failover and circuit-breaker patterns.
-- **40+ integrations** — Slack, GitHub, Jira, PostgreSQL, MongoDB, AWS, and more — all authenticated through the encrypted vault.
+- **Multi-agent pipelines**: Chain agents together on a visual canvas. One agent's output feeds the next.
+- **Automated triggers**: Cron schedules, webhooks, clipboard monitoring, file watchers, and custom event chains.
+- **Self-healing execution**: Automatic failure detection with model failover and circuit-breaker patterns.
+- **40+ integrations**: Slack, GitHub, Jira, PostgreSQL, MongoDB, AWS, and more, all authenticated through the encrypted vault.
 
 ## Getting Started
 
@@ -215,7 +215,7 @@ Personas ships with connectors for Slack, Discord, GitHub, GitLab, Jira, Linear,
     author: "Personas Team",
     date: "2026-04-10",
     readingTime: 6,
-    content: `AI agents aren't just for chatbots. Some of the highest-value use cases are in DevOps — automating the repetitive, context-heavy tasks that slow down engineering teams.
+    content: `AI agents aren't just for chatbots. Some of the highest-value use cases are in DevOps: automating the repetitive, context-heavy tasks that slow down engineering teams.
 
 Here are three workflows we've seen Personas users build in under 30 minutes each.
 
@@ -268,7 +268,7 @@ All three workflows share a pattern: high-context, time-sensitive tasks that req
 2. The outputs are templated (summaries, assessments, notifications)
 3. The judgment calls are consistent enough for AI but tedious for humans
 
-And because they run on Personas locally, your code, metrics, and incidents never leave your infrastructure.`,
+And because they run on Personas locally, your code, metrics, and incidents go only to the AI provider you choose, never through a third-party agent platform.`,
   },
   {
     slug: "email-triage-agent-tutorial",
@@ -279,7 +279,7 @@ And because they run on Personas locally, your code, metrics, and incidents neve
     author: "Personas Team",
     date: "2026-04-11",
     readingTime: 6,
-    content: `Your inbox is a firehose. Important messages hide between newsletters, automated alerts, and FYI threads. An AI agent can sort through the noise in seconds — and it never gets tired.
+    content: `Your inbox is a firehose. Important messages hide between newsletters, automated alerts, and FYI threads. An AI agent can sort through the noise in seconds, and it never gets tired.
 
 ## What You'll Build
 
@@ -297,13 +297,13 @@ Open Personas and click \`Create Agent\`. Write your instructions in plain langu
 
 *"Check my inbox for new emails. Classify each as urgent, needs-reply, informational, or spam. For urgent emails, draft a short professional reply. For everything else, create a one-line summary grouped by category."*
 
-Choose Claude as your model — it handles nuanced email classification exceptionally well.
+Choose Claude as your model. It handles nuanced email classification exceptionally well.
 
 ## Step 2: Connect Email
 
-Go to the Credential Vault and add your email connector. Personas walks you through the OAuth flow — you'll authorize read-only access to your inbox. Your credentials are AES-256 encrypted and stored in your OS keyring.
+Go to the Credential Vault and add your email connector. Personas walks you through the OAuth flow, where you'll authorize read-only access to your inbox. Your credentials are AES-256 encrypted and stored in your OS keyring.
 
-The agent only reads messages — it won't send anything unless you add write permission and explicitly approve the draft.
+The agent only reads messages. It won't send anything unless you add write permission and explicitly approve the draft.
 
 ## Step 3: Set Up the Trigger
 
@@ -317,13 +317,13 @@ Switch to the Triggers tab. For email triage, two trigger types work well:
 Hit \`Run Once\` to test with your last 20 emails. Review the classifications:
 
 - Are urgent items actually urgent? Adjust the prompt: *"Urgent means: financial deadlines, security issues, or direct requests from my manager."*
-- Are drafted replies appropriate? Add style guidance: *"Match my tone — concise, friendly, no exclamation marks."*
+- Are drafted replies appropriate? Add style guidance: *"Match my tone: concise, friendly, no exclamation marks."*
 
 Each refinement takes seconds. Run again, compare, and iterate until the output matches your expectations.
 
 ## Why This Works Locally
 
-Your emails contain some of the most sensitive content you handle — financial data, legal discussions, personal information. Running this agent locally means your email content never leaves your machine. The AI model processes it, but the data stays on your device.
+Your emails contain some of the most sensitive content you handle: financial data, legal discussions, personal information. Running this agent locally means your inbox is never copied to an agent platform's servers. The email text goes only to the AI model you choose to process it (or nowhere at all with a local Ollama model), and your credentials stay on your device, as do your results and history unless you turn on optional cloud sync.
 
 Compare this to cloud-based email assistants that upload your inbox to third-party servers. With Personas, you get the automation without the privacy tradeoff.`,
   },
@@ -336,15 +336,15 @@ Compare this to cloud-based email assistants that upload your inbox to third-par
     author: "Personas Team",
     date: "2026-04-11",
     readingTime: 8,
-    content: `The AI agent landscape splits into two camps: cloud-first platforms that run everything on remote servers, and desktop-first tools that run locally with optional cloud scaling. Neither is universally better — the right choice depends on your constraints.
+    content: `The AI agent landscape splits into two camps: cloud-first platforms that run everything on remote servers, and desktop-first tools that run locally with optional cloud scaling. Neither is universally better; the right choice depends on your constraints.
 
 ## The Cloud-First Model
 
 Platforms like CrewAI Cloud, LangChain's LangSmith, and Relevance AI follow the SaaS playbook: sign up, configure agents in a web UI, and execution happens on their infrastructure.
 
 **Strengths:**
-- Zero setup — works from any browser
-- Built-in scaling — no resource management
+- Zero setup: works from any browser
+- Built-in scaling: no resource management
 - Team collaboration is native
 - Always-on execution without keeping a machine running
 
@@ -359,11 +359,11 @@ Platforms like CrewAI Cloud, LangChain's LangSmith, and Relevance AI follow the 
 Personas and a few newer tools flip this model: the orchestration engine runs on your machine.
 
 **Strengths:**
-- Complete data privacy — nothing leaves your device
+- Data privacy: no vendor servers in the loop, and prompts go only to the AI provider you choose (or nowhere, with a local model)
 - Zero recurring cost for local execution
 - Full control over the execution environment
 - Works offline and in air-gapped networks
-- No vendor lock-in — your agents are files on disk
+- No vendor lock-in: your agents are files on disk
 
 **Trade-offs:**
 - Requires a machine running for scheduled tasks
@@ -372,17 +372,17 @@ Personas and a few newer tools flip this model: the orchestration engine runs on
 ## When Desktop-First Wins
 
 Choose desktop-first when:
-- **You handle sensitive data** — credentials, source code, financial records, customer PII. The risk of a cloud breach outweighs the convenience.
-- **You want zero recurring cost** — Personas is free forever for local use. You only pay for your own AI provider API calls.
-- **You need environment control** — custom model endpoints, local databases, internal APIs that can't be exposed to a cloud platform.
-- **Compliance matters** — GDPR, HIPAA, SOC2 requirements are simpler when data doesn't leave your infrastructure.
+- **You handle sensitive data**: credentials, source code, financial records, customer PII. The risk of a cloud breach outweighs the convenience.
+- **You want zero recurring cost**: Personas is free forever for local use. You only pay for your own AI provider API calls.
+- **You need environment control**: custom model endpoints, local databases, internal APIs that can't be exposed to a cloud platform.
+- **Compliance matters**: GDPR, HIPAA, SOC2 requirements are simpler when data doesn't leave your infrastructure.
 
 ## When Cloud-First Wins
 
 Choose cloud-first when:
-- **You need always-on agents** without managing infrastructure — cloud platforms handle uptime, scaling, and monitoring.
+- **You need always-on agents** without managing infrastructure. Cloud platforms handle uptime, scaling, and monitoring.
 - **Your team is distributed** and needs real-time collaboration on agent configurations from day one.
-- **Data sensitivity is low** — the agents process public data or non-sensitive content.`,
+- **Data sensitivity is low**: the agents process public data or non-sensitive content.`,
   },
   {
     slug: "multi-agent-pipeline-tutorial",
@@ -466,13 +466,13 @@ The result: better quality, lower cost per task, and workflows that are easier t
     author: "Personas Team",
     date: "2026-04-11",
     readingTime: 6,
-    content: `AI agents aren't just for developers. Some of the most impactful automation happens in teams that have never written code — marketing, sales, customer success, and operations.
+    content: `AI agents aren't just for developers. Some of the most impactful automation happens in teams that have never written code: marketing, sales, customer success, and operations.
 
 Personas is designed for exactly this. You describe what you want in plain English, and the system figures out the rest. No Python, no APIs, no terminal commands.
 
 ## Marketing: Content Repurposing Agent
 
-**The problem**: Your team writes one blog post a week. But you need LinkedIn posts, Twitter threads, email newsletters, and Slack announcements — all derived from the same content.
+**The problem**: Your team writes one blog post a week. But you need LinkedIn posts, Twitter threads, email newsletters, and Slack announcements, all derived from the same content.
 
 **The agent**: Feed it a blog post URL. It generates:
 - 3 LinkedIn posts with different hooks
@@ -480,11 +480,11 @@ Personas is designed for exactly this. You describe what you want in plain Engli
 - A newsletter intro paragraph
 - A Slack announcement for the team channel
 
-**How to set it up**: Create an agent with these instructions: *"Read the blog post at the URL I provide. Generate social media content in my brand voice: professional but approachable, data-driven, no jargon."* Add a file watcher trigger on your blog drafts folder — when a new post lands, the agent runs automatically.
+**How to set it up**: Create an agent with these instructions: *"Read the blog post at the URL I provide. Generate social media content in my brand voice: professional but approachable, data-driven, no jargon."* Add a file watcher trigger on your blog drafts folder. When a new post lands, the agent runs automatically.
 
 ## Sales: Lead Research Agent
 
-**The problem**: Before every sales call, your team spends 20 minutes researching the prospect — checking LinkedIn, reading their company blog, reviewing recent news.
+**The problem**: Before every sales call, your team spends 20 minutes researching the prospect: checking LinkedIn, reading their company blog, reviewing recent news.
 
 **The agent**: Give it a company name and it returns:
 - Company overview (size, industry, recent funding)
@@ -518,9 +518,9 @@ Personas is designed for exactly this. You describe what you want in plain Engli
 
 ## The Pattern
 
-Notice what all these agents have in common: they take unstructured input from multiple sources, apply judgment, and produce structured output. That's exactly what AI agents do best — and exactly what takes humans the most time.
+Notice what all these agents have in common: they take unstructured input from multiple sources, apply judgment, and produce structured output. That's exactly what AI agents do best, and exactly what takes humans the most time.
 
-None of these require code. You describe the task, connect the tools, and set a trigger. The agent handles the rest, running quietly on your machine without sending your data anywhere.`,
+None of these require code. You describe the task, connect the tools, and set a trigger. The agent handles the rest, running quietly on your machine and sending your data only to the AI model you choose (and, if you turn on cloud sync, a copy to your own account).`,
   },
   {
     slug: "why-local-first-ai-matters",
@@ -531,7 +531,7 @@ None of these require code. You describe the task, connect the tools, and set a 
     author: "Personas Team",
     date: "2026-04-11",
     readingTime: 7,
-    content: `Every major AI agent platform runs in the cloud. Your prompts, your data, your credentials — they all flow through someone else's servers. For many use cases, that's fine. But for a growing number of users, it's a dealbreaker.
+    content: `Every major AI agent platform runs in the cloud. Your prompts, your data, your credentials: they all flow through someone else's servers. For many use cases, that's fine. But for a growing number of users, it's a dealbreaker.
 
 ## The Privacy Problem Is Real
 
@@ -556,7 +556,7 @@ That's it. Your prompts go directly to the AI model you've chosen. No intermedia
 
 ## Speed: Instant Iteration
 
-Cloud platforms add latency at every step — network round-trips, queue processing, cold starts. When you're iterating on a prompt, waiting 3-5 seconds per test adds up fast.
+Cloud platforms add latency at every step: network round-trips, queue processing, cold starts. When you're iterating on a prompt, waiting 3-5 seconds per test adds up fast.
 
 Local execution eliminates the platform overhead. The only latency is the AI provider's response time. For development and testing, this means 2-3x faster iteration cycles.
 
@@ -573,19 +573,19 @@ Local execution removes these constraints. Your agents can:
 
 ## Cost: Free Forever, By Design
 
-Cloud agent platforms charge for execution. It starts small — a few dollars a month — but scales with usage. Run 50 agents on hourly schedules and you're looking at hundreds per month.
+Cloud agent platforms charge for execution. It starts small (a few dollars a month) but scales with usage. Run 50 agents on hourly schedules and you're looking at hundreds per month.
 
-Personas desktop is free. Not freemium, not time-limited — free forever. You bring your own AI provider key and pay them directly for model usage. There's no markup, no per-agent pricing, no execution caps.
+Personas desktop is free. Not freemium, not time-limited: free forever. You bring your own AI provider key and pay them directly for model usage. There's no markup, no per-agent pricing, no execution caps.
 
 ## When Cloud Still Makes Sense
 
 Local-first isn't dogma. There are genuine reasons to choose a hosted cloud platform instead:
 
-- **Always-on scheduling** — if your machine sleeps, scheduled agents pause. A hosted platform keeps them running.
-- **Team collaboration** — shared agent libraries and pipeline editing require a synchronized backend.
-- **Scale** — if you need 10+ concurrent agents processing high-volume data streams, a hosted platform distributes the load.
+- **Always-on scheduling**: if your machine sleeps, scheduled agents pause. A hosted platform keeps them running.
+- **Team collaboration**: shared agent libraries and pipeline editing require a synchronized backend.
+- **Scale**: if you need 10+ concurrent agents processing high-volume data streams, a hosted platform distributes the load.
 
-Personas is built for everything else: your data stays on your machine, under your control.`,
+Personas is built for everything else: your agents and history stay on your machine unless you turn on optional cloud sync, your credentials never leave it, and your prompts go only where you send them.`,
   },
 ];
 

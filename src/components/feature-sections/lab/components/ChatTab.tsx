@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { MessageCircle, Bot, User, RotateCcw, Rocket } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { CHAT_SCRIPT } from "../data";
 import type { ChatMsg } from "../types";
 import { REFINED_VERSION } from "../ledger";
 import TabBackdrop from "./TabBackdrop";
+import { labSectionCopy } from "@/i18n/pending/labSection";
 
 /** `liveId` + `onActivate` come from the section's version ledger: the
  *  script ends with "Want me to promote this?", and the done-state footer
@@ -21,6 +23,7 @@ export default function ChatTab({
   onActivate: (id: string) => void;
 }) {
   const { t } = useTranslation();
+  const copy = labSectionCopy.chat;
   const reduced = useStillMotion();
   const [visible, setVisible] = useState<ChatMsg[]>(() =>
     reduced ? CHAT_SCRIPT : [],
@@ -72,13 +75,13 @@ export default function ChatTab({
   }, [reduced, run]);
 
   return (
-    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden">
+    <div className="relative flex flex-col rounded-xl border border-foreground/[0.10] bg-background/80 backdrop-blur-xl overflow-hidden stage:h-full">
       <TabBackdrop tab="chat" />
-      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex items-center justify-between border-b border-foreground/[0.06] px-5 py-3 stage:py-2">
         <div className="flex items-center gap-2">
           <MessageCircle className="h-4 w-4 text-brand-cyan" />
           <span className="text-base font-mono font-semibold text-foreground uppercase tracking-wider">
-            Refinement chat
+            {copy.title}
           </span>
         </div>
         <div className="flex items-center gap-2 text-base font-mono text-foreground/70">
@@ -87,13 +90,13 @@ export default function ChatTab({
               phase === "running" ? "bg-brand-amber animate-pulse" : "bg-brand-emerald"
             }`}
           />
-          {phase === "running" ? "applying changes" : "synced"}
+          {phase === "running" ? copy.applying : copy.synced}
         </div>
       </div>
 
       <div
         ref={containerRef}
-        className="relative h-[340px] overflow-y-auto px-5 py-4 space-y-3 scrollbar-hide"
+        className="relative h-[340px] stage:h-auto stage:min-h-0 stage:flex-1 overflow-y-auto px-5 py-4 space-y-3 scrollbar-hide"
       >
         <AnimatePresence initial={false}>
           {visible.map((msg, i) => {
@@ -106,7 +109,7 @@ export default function ChatTab({
                   className="ml-10 rounded-lg border border-emerald-500/35 bg-emerald-500/10 px-3 py-2"
                 >
                   <div className="text-base font-mono uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-1">
-                    applied diff
+                    {copy.appliedDiff}
                   </div>
                   <pre className="font-mono text-base text-emerald-800 dark:text-emerald-300 leading-relaxed whitespace-pre-wrap">
                     {msg.content}
@@ -140,7 +143,7 @@ export default function ChatTab({
                       : "rounded-tl-sm border-foreground/15 bg-foreground/[0.06] text-foreground/90"
                   }`}
                 >
-                  <p className="text-base leading-relaxed">{msg.content}</p>
+                  <p className="text-base leading-relaxed">{copy.messages[msg.message]}</p>
                 </div>
               </motion.div>
             );
@@ -148,21 +151,21 @@ export default function ChatTab({
         </AnimatePresence>
       </div>
 
-      <div className="relative flex flex-wrap items-center gap-3 border-t border-foreground/[0.06] px-5 py-3">
+      <div className="relative flex flex-wrap items-center gap-3 border-t border-foreground/[0.06] px-5 py-3 stage:py-2">
         <div className="flex-1 min-w-[12rem] rounded-lg border border-foreground/[0.08] bg-foreground/[0.02] px-4 py-2 text-base text-foreground/60 font-mono">
-          Tell the agent what to change…
+          {copy.placeholder}
         </div>
         <button
           onClick={run}
           disabled={phase === "running"}
           className="flex h-9 items-center gap-1.5 rounded-lg border border-brand-cyan/30 bg-brand-cyan/10 px-3 text-base font-mono uppercase tracking-wider text-brand-cyan disabled:opacity-40"
         >
-          <RotateCcw className="h-3 w-3" /> replay
+          <RotateCcw className="h-3 w-3" /> {copy.replay}
         </button>
         {phase === "done" &&
           (liveId === REFINED_VERSION ? (
             <span className="flex h-9 items-center gap-1.5 px-1 text-base font-mono uppercase tracking-wider text-brand-emerald">
-              {t.labVersions.nowLive.replace("{version}", REFINED_VERSION)}
+              {fillTemplate(t.labVersions.nowLive, { version: REFINED_VERSION })}
             </span>
           ) : (
             <button
@@ -171,7 +174,7 @@ export default function ChatTab({
               className="flex h-9 items-center gap-1.5 rounded-lg border border-brand-emerald/40 bg-brand-emerald/10 px-3 text-base font-mono uppercase tracking-wider text-brand-emerald"
             >
               <Rocket className="h-3 w-3" aria-hidden />
-              {t.labVersions.activateVersion.replace("{version}", REFINED_VERSION)}
+              {fillTemplate(t.labVersions.activateVersion, { version: REFINED_VERSION })}
             </button>
           ))}
       </div>

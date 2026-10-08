@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 /**
  * Viewport-gate: reserves vertical space and only mounts its children once they
@@ -21,12 +21,16 @@ export default function LazyMount({
   rootMargin = "800px 0px",
   label,
   className,
+  stage = false,
 }: {
   children: ReactNode;
   minHeight?: number;
   rootMargin?: string;
   label?: string;
   className?: string;
+  /** The content is a desktop stage section (styles/stage.css): on the stage
+   *  the placeholder reserves one stage instead of `minHeight`. */
+  stage?: boolean;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [shown, setShown] = useState(false);
@@ -55,13 +59,18 @@ export default function LazyMount({
   }, [shown, rootMargin]);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} data-lazy-stage={stage ? "" : undefined}>
       {shown ? (
         children
       ) : (
         <div
-          className="flex items-center justify-center px-6"
-          style={{ minHeight }}
+          className="flex min-h-(--lazy-min-h) items-center justify-center px-6"
+          // In stage mode (styles/stage.css) the placeholder reserves one full
+          // stage instead, which is what every mounted section occupies. The
+          // height travels as a variable, not an inline min-height, so that
+          // stylesheet rule can outrank it.
+          data-lazy-placeholder
+          style={{ "--lazy-min-h": `${minHeight}px` } as CSSProperties}
         >
           {label && (
             <span className="text-[11px] font-medium uppercase tracking-[0.25em] text-muted-dark/70">

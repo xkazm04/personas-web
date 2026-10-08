@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import SectionIntro from "@/components/primitives/SectionIntro";
@@ -9,6 +9,7 @@ import { useAutoCycle } from "@/hooks/useAutoCycle";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { CAPABILITIES, AUTO_CYCLE_MS } from "./data";
 import AthenaOrb from "./AthenaOrb";
+import { companionSectionCopy } from "@/i18n/pending/companionSection";
 
 /**
  * Companion (Athena) — the flagship companion story. An auto-cycling capability
@@ -20,29 +21,33 @@ import AthenaOrb from "./AthenaOrb";
 const TAP_PAUSE_MS = AUTO_CYCLE_MS * 2;
 
 export default function Companion() {
+  const copy = companionSectionCopy;
   const [hovering, setHovering] = useState(false);
+  const gridRef = useRef<HTMLDivElement | null>(null);
   const { active, setActive, pauseFor } = useAutoCycle({
     count: CAPABILITIES.length,
     intervalMs: AUTO_CYCLE_MS,
     paused: hovering,
+    ref: gridRef,
   });
 
   const activeCap = CAPABILITIES[active] ?? CAPABILITIES[0];
 
   return (
-    <SectionWrapper id="companion" aria-labelledby="companion-heading">
+    <SectionWrapper fit="fill" id="companion" aria-labelledby="companion-heading">
       <SectionIntro
         id="companion-heading"
-        eyebrow="Companion"
-        heading="Meet"
-        gradient="Athena"
-        trailing=", always on"
-        description="A persistent orb that lives on your desktop — hold it to talk, it remembers how you work, and it reaches out before you have to ask."
+        heading={copy.heading}
+        gradient={copy.headingGradient}
+        trailing={copy.headingTrailing}
+        description={copy.description}
       />
 
       <motion.div
+        ref={gridRef}
         variants={fadeUp}
-        className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16"
+        data-stage-slot
+        className="mt-12 grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16 stage:mt-0 stage:content-center"
       >
         {/* Orb stage */}
         <div
@@ -53,7 +58,7 @@ export default function Companion() {
           <AthenaOrb brand={activeCap.brand} />
 
           {/* Athena's "speech" — a small panel the orb morphs into, changing per capability */}
-          <div className="mx-auto mt-4 flex min-h-[3.5rem] max-w-sm items-center justify-center">
+          <div className="mx-auto mt-4 flex min-h-[3.5rem] max-w-sm items-center justify-center stage:mt-[1.5svh]">
             <AnimatePresence mode="wait">
               <motion.p
                 key={activeCap.id}
@@ -69,14 +74,14 @@ export default function Companion() {
                   className="inline-block h-1.5 w-1.5 shrink-0 rounded-full"
                   style={{ backgroundColor: BRAND_VAR[activeCap.brand] }}
                 />
-                {activeCap.line}
+                {copy.capabilities[activeCap.id].line}
               </motion.p>
             </AnimatePresence>
           </div>
         </div>
 
         {/* Capability list */}
-        <ul className="flex flex-col gap-3">
+        <ul data-stage-zoom className="flex flex-col gap-3 stage:gap-2">
           {CAPABILITIES.map((cap, i) => {
             const isActive = cap.id === activeCap.id;
             const Icon = cap.icon;
@@ -90,7 +95,7 @@ export default function Companion() {
                     pauseFor(TAP_PAUSE_MS);
                   }}
                   aria-pressed={isActive}
-                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-colors ${
+                  className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-colors stage:gap-3 stage:px-3 stage:py-2.5 ${
                     isActive ? "" : "border-glass"
                   }`}
                   style={{
@@ -107,9 +112,9 @@ export default function Companion() {
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </span>
                   <span>
-                    <span className="block font-medium text-foreground">{cap.label}</span>
+                    <span className="block font-medium text-foreground">{copy.capabilities[cap.id].label}</span>
                     <span className="mt-1 block text-sm font-light leading-relaxed text-muted">
-                      {cap.blurb}
+                      {copy.capabilities[cap.id].blurb}
                     </span>
                   </span>
                 </button>

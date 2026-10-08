@@ -5,7 +5,7 @@ import { DEFAULT_ESCALATION_POLICY, countOverdue, orderByDue, slaState } from ".
 import type { ManualReviewItem, ReviewSeverity } from "./types";
 
 // The review queue's seeds spill over into Home triage (useTriageQueue), the
-// nav badge (DashboardNavigation), /m/overview and the mobile tab bar: all of
+// nav badge (DashboardNavigation: sidebar and mobile bottom nav): all of
 // them read the one pendingReviewCount / reviews the store derives from these
 // events. These cases hold the seeds to the one-fleet-truth fixtures so those
 // surfaces stay self-consistent with the agents page and the incident log.
@@ -49,7 +49,7 @@ describe("guard: review seeds stay one fleet", () => {
     }
   });
 
-  it(`the pending manual_review count is the seeded ${SEEDED_PENDING} (what the nav badge, Home triage and /m/overview show)`, () => {
+  it(`the pending manual_review count is the seeded ${SEEDED_PENDING} (what the nav badge and Home triage show)`, () => {
     expect(PENDING).toHaveLength(SEEDED_PENDING);
   });
 });

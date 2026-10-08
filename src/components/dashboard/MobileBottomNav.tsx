@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
-import { useNavItems, useNavState, type NavItem } from "./DashboardNavigation";
+import { useNavLeaves, useNavState, type NavLeaf } from "./DashboardNavigation";
+import { PHONE_BAR_VIEWS } from "./navRegistry";
+import { DashLink, handleDashLinkClick } from "@/components/dashboard/spa/navigate";
+import type { DashboardViewId } from "@/components/dashboard/spa/views";
 import { useTranslation } from "@/i18n/useTranslation";
 
-const MotionLink = motion.create(Link);
-
 export default function MobileBottomNav() {
-  const navItems = useNavItems();
-  const { getActive, getBadge } = useNavState();
+  const navItems = useNavLeaves();
+  // The bar is a chosen set in a fixed order (PHONE_BAR_VIEWS); the rest go under More.
+  const barItems = PHONE_BAR_VIEWS.flatMap((view) => navItems.filter((item) => item.view === view));
+  const moreItems = navItems.filter((item) => !PHONE_BAR_VIEWS.includes(item.view));
+  const { isViewActive, getBadge } = useNavState();
   const reducedMotion = useReducedMotion();
   const tapProps = reducedMotion ? undefined : { whileTap: { scale: 0.95 } };
 
@@ -21,15 +24,16 @@ export default function MobileBottomNav() {
     // overlay instead, the menu closes silently and the user has to tap twice.
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-glass bg-background/95 backdrop-blur-xl md:hidden safe-bottom">
       <div className="flex items-center justify-around px-1 py-1">
-        {navItems.slice(0, 5).map((item) => {
-          const active = getActive(item);
+        {barItems.map((item) => {
+          const active = isViewActive(item.view);
           const Icon = item.icon;
-          const badge = getBadge(item);
+          const badge = getBadge(item.view);
 
           return (
-            <MotionLink
-              key={item.key}
+            <motion.a
+              key={item.view}
               href={item.href}
+              onClick={(event) => handleDashLinkClick(event, item.href)}
               {...tapProps}
               className={`relative flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1.5 text-sm font-medium transition-colors ${
                 active
@@ -50,10 +54,10 @@ export default function MobileBottomNav() {
                   {badge}
                 </span>
               )}
-            </MotionLink>
+            </motion.a>
           );
         })}
-        <MobileMoreMenu items={navItems.slice(5)} getActive={getActive} tapProps={tapProps} />
+        <MobileMoreMenu items={moreItems} isViewActive={isViewActive} tapProps={tapProps} />
       </div>
     </nav>
   );
@@ -61,18 +65,18 @@ export default function MobileBottomNav() {
 
 function MobileMoreMenu({
   items,
-  getActive,
+  isViewActive,
   tapProps,
 }: {
-  items: readonly NavItem[];
-  getActive: (item: NavItem) => boolean;
+  items: readonly NavLeaf[];
+  isViewActive: (view: DashboardViewId) => boolean;
   tapProps: { whileTap: { scale: number } } | undefined;
 }) {
   const pathname = usePathname();
   const [menuState, setMenuState] = useState({ open: false, pathname });
   const open = menuState.pathname === pathname && menuState.open;
   const setOpen = (nextOpen: boolean) => setMenuState({ open: nextOpen, pathname });
-  const moreActive = items.some(getActive);
+  const moreActive = items.some((item) => isViewActive(item.view));
 
   return (
     <div className="relative">
@@ -102,11 +106,11 @@ function MobileMoreMenu({
           <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
           <div role="menu" className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-glass-hover bg-background/95 backdrop-blur-xl p-1.5 shadow-2xl">
             {items.map((item) => {
-              const active = getActive(item);
+              const active = isViewActive(item.view);
               const Icon = item.icon;
               return (
-                <Link
-                  key={item.key}
+                <DashLink
+                  key={item.view}
                   href={item.href}
                   onClick={() => setOpen(false)}
                   role="menuitem"
@@ -118,7 +122,7 @@ function MobileMoreMenu({
                 >
                   <Icon className="h-4 w-4 flex-shrink-0" />
                   {item.label}
-                </Link>
+                </DashLink>
               );
             })}
           </div>

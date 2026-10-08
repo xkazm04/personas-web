@@ -2,11 +2,11 @@ import { test, expect, type Locator, type Page } from "@playwright/test";
 import { en } from "../src/i18n/en";
 
 /**
- * The home page's orchestration hub auto-cycles through its triggers, but the
+ * The orchestration hub (on `/`, address `#triggers`) auto-cycles through its triggers, but the
  * visitor owns playback (src/components/sections/orchestration-hub/playback.ts):
  * Pause is a stop only Play lifts, Next steps by one (and stops), Play resumes
  * the cycle. The reducer is unit-tested; this drives the rendered controls
- * (PlaybackControls.tsx) and reads the "n / N" position indicator.
+ * (shared/HubControls.tsx) and reads the "n / N" position indicator.
  */
 
 // AUTO_CYCLE_MS in orchestration-hub/data.ts is 9.6s. Waits below are bounded
@@ -18,7 +18,7 @@ async function openHub(page: Page) {
   await page.goto("/");
   // The hub is lazy and viewport-gated: scroll its always-present wrapper in,
   // then wait for the mounted section.
-  await page.locator('[data-scroll-anchor="pipelines"]').scrollIntoViewIfNeeded();
+  await page.locator('[data-scroll-anchor="triggers"]').scrollIntoViewIfNeeded();
   const hub = page.locator("#orchestration-hub");
   await expect(hub).toBeVisible();
   const indicator = hub.getByText(/^\d+ \/ \d+$/);

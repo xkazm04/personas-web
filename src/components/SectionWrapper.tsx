@@ -12,6 +12,10 @@ const SectionWrapper = forwardRef<
     children: React.ReactNode;
     className?: string;
     dotGrid?: boolean;
+    /** Desktop stage fit (styles/stage.css): "fill" = exactly one viewport
+     *  high, the dominant visual goes in a `data-stage-slot`; "min" = at least
+     *  one viewport high, content centred. Omit for natural flow. */
+    fit?: "fill" | "min";
     "aria-label"?: string;
     "aria-labelledby"?: string;
     "aria-roledescription"?: string;
@@ -22,6 +26,7 @@ const SectionWrapper = forwardRef<
     children,
     className = "",
     dotGrid = false,
+    fit,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy,
     "aria-roledescription": ariaRoleDescription,
@@ -53,11 +58,14 @@ const SectionWrapper = forwardRef<
       aria-labelledby={ariaLabelledBy}
       aria-roledescription={ariaRoleDescription}
       data-animate-when-visible
+      data-stage={fit}
       // useAnimationPause toggles .animations-paused via classList; lazy
       // sections can be mutated by the observer before client hydration completes
       suppressHydrationWarning
     >
-      <div className="mx-auto w-full max-w-6xl">{children}</div>
+      <div className="mx-auto w-full max-w-6xl" data-stage-inner={fit ? "" : undefined}>
+        {children}
+      </div>
     </motion.section>
   );
 });

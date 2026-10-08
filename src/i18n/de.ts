@@ -1,6 +1,6 @@
-﻿import type { Translations } from './en';
+﻿import type { LocaleTranslations } from './en';
 
-export const de: Translations = {
+export const de: LocaleTranslations = {
     notFound: {
       title: "Seite nicht gefunden",
       description: "Die gesuchte Seite existiert nicht oder wurde verschoben. Versuchen Sie stattdessen eine davon:",
@@ -89,7 +89,7 @@ export const de: Translations = {
             "OS-eigener Schl\u00fcsselbund",
             "KI-gest\u00fctztes OAuth",
             "Automatische Token-Erneuerung",
-            "Keine Telemetrie, lokal zuerst"
+            "Lokal zuerst, nur anonyme Telemetrie"
           ]
         },
         monitoring: {
@@ -132,7 +132,7 @@ export const de: Translations = {
     },
     hero: {
       downloadCta: "Herunterladen",
-      trustLine: "Keine Anmeldung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Keine Telemetrie.",
+      trustLine: "Keine Anmeldung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner.",
       badge: "KI-Agenten-Plattform",
       headingLine1: "Intelligente Agenten",
       headingLine2: "die f\u00fcr Sie arbeiten",
@@ -186,8 +186,7 @@ export const de: Translations = {
       checking: "Wird gepr\u00fcft\u2026",
       connected: "Verbunden",
       disconnected: "Getrennt",
-      demo: "Demo",
-      viewFullSite: "Vollst\u00e4ndige Website anzeigen"
+      demo: "Demo"
     },
     useCasesSection: {
       heading: "Eine Persona,",
@@ -365,8 +364,8 @@ export const de: Translations = {
           a: "Claude Code is Anthropic's official command-line tool for working with Claude. Personas uses it under the hood to run your agents locally. It handles authentication, model access, and streaming responses. You'll need an active Claude Pro or Max subscription and Claude Code installed before launching Personas."
         },
         {
-          q: "Does Personas collect any telemetry or usage data?",
-          a: "No. Personas runs entirely on your machine with zero telemetry. We don't collect analytics, usage metrics, or any personal data. Your prompts, agent configurations, and execution logs never leave your device."
+          q: "Erfasst Personas Telemetrie- oder Nutzungsdaten?",
+          a: "Nur anonyme Diagnosedaten. Release-Builds der Desktop-App senden Fehlerberichte und anonyme Nutzungssignale (App-Sitzungen, welche Bereiche Sie \u00f6ffnen, wichtige Aktionen) an Sentry. IP-Adressen, E-Mail-Adressen und Benutzernamen werden vorher entfernt, und Ihre Prompts, Agent-Konfigurationen, Zugangsdaten und Ausf\u00fchrungsprotokolle sind nie enthalten. Die Nutzungssignale k\u00f6nnen Sie unter Einstellungen > Konto abschalten."
         },
         {
           q: "Is Personas free?",
@@ -390,7 +389,7 @@ export const de: Translations = {
       exploreFirst: "Zuerst M\u00f6glichkeiten erkunden",
       requiresCli: "Erfordert Claude Code",
       installerSize: "12 MB Installer",
-      noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner. Null Telemetrie.",
+      noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner.",
       windows: "Windows",
       macos: "macOS",
       linux: "Linux"
@@ -406,6 +405,15 @@ export const de: Translations = {
       knowledge: "Wissen",
       settings: "Einstellungen",
       leaderboard: "Rangliste",
+      personas: "Personas",
+      missionControl: "Kommandozentrale",
+      navSectionsLabel: "Dashboard-Bereiche",
+      navGroups: {
+        mission: "Mission",
+        monitoring: "\u00dcberwachung",
+        reliability: "Zuverl\u00e4ssigkeit",
+        memory: "Ged\u00e4chtnis"
+      },
       director: "Regisseur",
       sla: "SLA",
       incidents: "Vorf\u00e4lle",
@@ -476,6 +484,99 @@ export const de: Translations = {
         }
       },
       home: {
+        mission: {
+          windowNote: "Messwerte der letzten 14 Tage",
+          hint: "1 bis 8 \u00f6ffnet eine Dimension, Esc f\u00fchrt zur\u00fcck",
+          wallLabel: "Dimensionen der Flotte",
+          openDimension: "{label} \u00f6ffnen",
+          backToWall: "Zur\u00fcck zur \u00dcbersicht",
+          railLabel: "Alle Dimensionen",
+          verdicts: {
+            pending: "Wird gemessen",
+            failed: "Nicht verf\u00fcgbar",
+            unmeasured: "Nicht gemessen",
+            ok: "Stabil",
+            watch: "Beobachten",
+            yours: "Wartet auf Sie",
+            act: "Braucht Sie"
+          },
+          dims: {
+            outcomes: {
+              label: "Ergebnisse",
+              question: "Gelingen die L\u00e4ufe?"
+            },
+            agents: {
+              label: "Agenten",
+              question: "Hat ein Agent Probleme?"
+            },
+            queue: {
+              label: "Wartet auf Sie",
+              question: "Was braucht Ihr Zutun?"
+            },
+            recovery: {
+              label: "Selbstheilung",
+              question: "Repariert sich die Flotte selbst?"
+            },
+            spend: {
+              label: "Ausgaben",
+              question: "Bleiben die Ausgaben im Rahmen?"
+            },
+            autonomy: {
+              label: "Autonomie",
+              question: "Was l\u00e4uft ohne Sie?"
+            },
+            vault: {
+              label: "Tresor",
+              question: "Sind die Zugangsdaten in Ordnung?"
+            },
+            instruments: {
+              label: "Instrumente",
+              question: "Ist diese Seite aktuell?"
+            }
+          },
+          evidence: {
+            outcomes: "L\u00e4ufe {runs} \u00b7 fehlgeschlagen {failed}",
+            noRuns: "Keine L\u00e4ufe in diesem Zeitraum",
+            agents: "Ausfall {critical} \u00b7 beeintr\u00e4chtigt {degraded} \u00b7 betriebsbereit {healthy}",
+            queue: "Warnungen {alerts} \u00b7 Reviews {reviews} \u00b7 Ged\u00e4chtnis {memory} \u00b7 ungelesen {reports}",
+            queueEmpty: "Nichts wartet auf Sie",
+            recovery: "Offen {open} \u00b7 pausiert {paused} \u00b7 automatisch behoben {fixed}",
+            spendSpikes: "Kostenspitzen: {n}",
+            spendPerDay: "{value} pro Tag",
+            autonomy: "Geplant {n} \u00b7 n\u00e4chster in {time}",
+            autonomyEmpty: "Nichts geplant",
+            vault: "\u00dcberf\u00e4llig {overdue} \u00b7 Anomalien {anomalies} \u00b7 Ereignisse {events}",
+            instruments: "Fehlgeschlagene Quellen: {failed}",
+            instrumentsOk: "Alle Quellen haben geantwortet",
+            pending: "Warte auf den ersten Messwert",
+            unmeasured: "Noch keine synchronisierte Quelle daf\u00fcr"
+          },
+          scoreSuffix: "/100",
+          detail: {
+            issuesTitle: "Selbstheilungsf\u00e4lle",
+            issuesEmpty: "Keine Selbstheilungsf\u00e4lle in diesem Zeitraum.",
+            issueStatus: {
+              open: "Offen",
+              auto_fixed: "Automatisch behoben",
+              resolved: "Gel\u00f6st"
+            },
+            pausedBadge: "Pausiert",
+            costTitle: "Kosten pro Tag",
+            costSpike: "Kostenspitze",
+            sourcesTitle: "Quellen",
+            sourceStatus: {
+              pending: "Ausstehend",
+              ok: "Beantwortet",
+              failed: "Fehlgeschlagen"
+            },
+            sources: {
+              observability: "Observability",
+              healing: "Selbstheilungsf\u00e4lle",
+              reviews: "Reviews",
+              routines: "Routinen"
+            }
+          }
+        },
         vitals: {
           runs: "L\u00e4ufe",
           alerts: "Warnungen"
@@ -667,7 +768,9 @@ export const de: Translations = {
       noDataAvailable: "Noch keine Daten verf\u00fcgbar",
       errors: "Fehler",
       totalLower: "gesamt",
-      copyPayload: "Payload kopieren"
+      copyPayload: "Payload kopieren",
+      liveUnavailableTitle: "F\u00fcr Live-Workspaces noch nicht verf\u00fcgbar",
+      liveUnavailableDescription: "Diese Ansicht l\u00e4uft nur mit Demodaten. Ihr Workspace synchronisiert diese Daten noch nicht, daher bleibt sie leer, statt Beispieldaten anzuzeigen."
     },
     memoriesPage: {
       title: "Erinnerungen",
@@ -1155,6 +1258,8 @@ export const de: Translations = {
       noExecutions: "Noch keine Ausf\u00fchrungen",
       noExecutionsDesc: "F\u00fchren Sie einen Agenten aus, um Ergebnisse hier zu sehen",
       waitingForWorker: "Warte auf Worker...",
+      openExecutionInDesktop: "Ausf\u00fchrung in der Desktop-App \u00f6ffnen",
+      openPersonaInDesktop: "Persona in der Desktop-App \u00f6ffnen",
       noOutputYet: "Noch keine Ausgabe",
       noFilteredActive: "Keine aktiven Ausf\u00fchrungen in dieser Ansicht",
       noFilteredCompleted: "Keine abgeschlossenen Ausf\u00fchrungen in dieser Ansicht",
@@ -1267,6 +1372,10 @@ export const de: Translations = {
         title: "Benachrichtigungen",
         subtitle: "Healing-Warnungen und Berichte",
         weeklyDigest: "W\u00f6chentlicher Zustandsbericht",
+        escalation: {
+          label: "\u00dcberf\u00e4llige Reviews eskalieren",
+          description: "Ausstehende Reviews, die ihr SLA \u00fcberschreiten, werden eskaliert. Wo die Richtlinie es vorsieht, werden sie stattdessen automatisch genehmigt (standardm\u00e4\u00dfig Info-Reviews nach 8 Stunden)."
+        },
         voice: {
           label: "Neue Reviews laut ansagen",
           preview: "Vorschau",
@@ -1338,7 +1447,7 @@ export const de: Translations = {
       title: "Agenten-Vorlagen",
       subtitle: "Durchsuchen Sie {count} vorgefertigte Agent-Vorlagen, gruppiert nach Art der Arbeit. W\u00e4hlen Sie eine Kategorie, um die enthaltenen Vorlagen zu sehen.",
       gridHeading: "Vorlagen nach Kategorie durchsuchen",
-      gridDescription: "Vorlagen sind vorkonfigurierte Personas, die Sie mit einem Klick \u00fcbernehmen k\u00f6nnen. Jede Vorlage hat Prompt, Tools und Trigger bereits f\u00fcr eine bestimmte Aufgabe eingerichtet \u2014 keine Einrichtung erforderlich.",
+      gridDescription: "Vorlagen sind Referenzkonfigurationen f\u00fcr bestimmte Aufgaben. Jede zeigt den Prompt, die Tools und die Trigger, die ein Agent braucht. Um eine Vorlage zu nutzen, installieren Sie die Personas-Desktop-App und richten sie dort mit Ihren eigenen Konten ein.",
       changeCategory: "Kategorie \u00e4ndern",
       complexityAll: "Alle",
       complexityBasic: "Einfach",
@@ -1361,16 +1470,22 @@ export const de: Translations = {
       copyFailed: "Kopieren fehlgeschlagen",
       copyConfiguration: "Konfiguration kopieren",
       getStartedTitle: "Mit dieser Vorlage starten",
-      getStartedDescription: "Importieren Sie diese Vorlage direkt in Personas oder kopieren Sie die Konfiguration, um sie selbst anzupassen.",
-      openInPersonas: "In Personas ?ffnen",
+      getStartedDescription: "Laden Sie die Personas-Desktop-App herunter, um einen Agenten wie diesen zu erstellen, oder kopieren Sie die Konfiguration als Ausgangspunkt.",
+      useTemplate: "Diese Vorlage verwenden",
       moreTemplates: "Weitere {category}-Vorlagen",
-      appNotFoundTitle: "Personas-App nicht gefunden",
-      appNotFoundDescription: "Personas scheint auf Ihrem Ger?t noch nicht installiert zu sein. Laden Sie es herunter, um Vorlagen direkt zu importieren, oder kopieren Sie die Konfiguration f?r die manuelle Einrichtung.",
+      installTitle: "Holen Sie sich Personas, um diese Vorlage zu nutzen",
+      installDescription: "Vorlagen werden in der Personas-Desktop-App eingerichtet, nicht im Browser. Laden Sie die App herunter, um einen Agenten wie diesen zu erstellen, oder kopieren Sie die Konfiguration als Ausgangspunkt.",
       templateNotFound: "Vorlage nicht gefunden",
       templateNotFoundDescription: "Diese Vorlage existiert nicht oder wurde entfernt. Durchsuchen Sie die Galerie nach der aktuellen Sammlung.",
       browseTemplates: "Vorlagen durchsuchen",
       backToHome: "Zur Startseite",
       customTrigger: "Benutzerdefinierter Trigger"
+    },
+    connectorModal: {
+      simulatedLabel: "Simuliertes Beispiel \u00b7 es wird nichts ausgef\u00fchrt",
+      connecting: "Verbindung zu {label} wird hergestellt\u2026",
+      working: "In Arbeit: {task}",
+      done: "Erledigt: {task}"
     },
     roadmapSection: {
       inProgress: "In Bearbeitung",
@@ -1462,10 +1577,6 @@ export const de: Translations = {
         macos: {
           title: "macOS-Unterst\u00fctzung",
           description: "Vollst\u00e4ndig native macOS-Version mit Apple-Silicon-Optimierung, Spotlight-Integration und Agentensteuerung in der Men\u00fcleiste."
-        },
-        i18n: {
-          title: "Internationalisierung",
-          description: "Mehrsprachige Agentenanweisungen, lokalisierte Oberfl\u00e4che und regionsbewusste Planung f\u00fcr Teams weltweit."
         },
         dashboard: {
           title: "Web-Dashboard",
@@ -1697,7 +1808,6 @@ export const de: Translations = {
       features5: "Gro\u00dfartige Agenten sind selten beim ersten Versuch perfekt, also ist das Lab der Ort, an dem Sie sie verfeinern. Chatten Sie mit einer Persona, um sie zu coachen, lassen Sie zwei Versionen in der Arena gegeneinander antreten, entwickeln Sie sie \u00fcber Generationen, oder bewerten Sie sie in den entscheidenden Dimensionen. Jede Verbesserung, die Sie behalten, ist versioniert und umkehrbar.",
       features6: "Personas bringt sechs zweckgebaute Plugins mit, jedes ein eigenst\u00e4ndiger Arbeitsbereich, den Ihre Agenten steuern k\u00f6nnen. Nehmen Sie Dev Tools: Es macht aus einer Persona einen Programmierkollegen, der Aufgaben ausf\u00fchrt, die Ausgabe liest und iteriert. Ein Tab-Wechsel, und Sie treffen einen weiteren Spezialisten \u2014 alle teilen sich dieselben Anmeldedaten und denselben Speicher.",
       dashboardHome: "Willkommen in der Kommandozentrale \u2014 Ihre gesamte Flotte auf einem Bildschirm. Ganz oben die Vitalwerte: Erfolgsrate, laufende Aufgaben, aktive Agenten, offene Warnungen und Pr\u00fcfungen, die auf Sie warten. Darunter hebt der Optimizer eine wirkungsvolle Verbesserung nach der anderen hervor \u2014 gerade eine Routing-\u00c4nderung, die Kosten senkt, ohne die Qualit\u00e4t zu ber\u00fchren. Die zwei Panels darunter verfolgen die Gesundheit jedes Agenten und die neuen Erinnerungen, die sie gelernt haben und \u00fcbernehmen m\u00f6chten. Dann das Live-Bild: links jede Ausf\u00fchrung beim Eintreffen, rechts vierzehn Tage Traffic und Fehler. Die Heatmap zeigt L\u00e4ufe pro Agent, Tag f\u00fcr Tag, und die untere Reihe rundet alles ab \u2014 Ihre Top-Performer, die n\u00e4chsten geplanten Routinen und jede Rotation von Anmeldedaten. Eine Seite, der gesamte Betrieb.",
-      dashboardAgents: "Das ist Ihr Aufgebot. Jede Karte ist eine Persona \u2014 ein einzelner Agent mit einer Identit\u00e4t und einem Satz kombinierbarer F\u00e4higkeiten. Das Portr\u00e4t wird passend zu seinem Charakter erzeugt; darunter die Live-Statistiken: Erfolgsrate, L\u00e4ufe und Kosten. Klicken Sie auf Ausf\u00fchren, um einen Agenten auf Abruf zu starten, oder \u00f6ffnen Sie Details, um Konfiguration und j\u00fcngste Historie zu pr\u00fcfen. F\u00fcnf Agenten hier, jeder erledigt still seine eine Aufgabe gut.",
       dashboardExecutions: "Jeder Lauf, den die Flotte je gemacht hat, lebt hier \u2014 der neueste zuerst. Die Tabelle zeigt Persona, Status, Dauer, Kosten und Startzeitpunkt \u2014 filtern Sie auf nur die Fehlschl\u00e4ge oder die noch laufenden. Klicken Sie auf eine Zeile, und die vollst\u00e4ndige Ausf\u00fchrung \u00f6ffnet sich: ein Metrik-Streifen, eine etwaige Fehlererkl\u00e4rung und die Live-Ausgabe, Zeile f\u00fcr Zeile, genau so, wie der Agent sie erzeugt hat.",
       dashboardEvents: "Agenten arbeiten nicht isoliert \u2014 sie reagieren auf Ereignisse. Das ist der Event-Bus: jedes Signal, das durch das System flie\u00dft, von Zeitpl\u00e4nen und Webhooks bis zu Nachrichten zwischen Agenten. Jede Zeile zeigt den Ereignistyp, die Quelle, den Status und wie lange es her ist. Fehlgeschlagene Ereignisse lassen sich an Ort und Stelle erneut versuchen, und verwandte Ereignisse verketten sich, sodass Sie eine einzelne Kaskade von Anfang bis Ende verfolgen k\u00f6nnen.",
       dashboardReviews: "Manche Entscheidungen brauchen einen Menschen. Wenn ein Agent auf etwas st\u00f6\u00dft, das er nicht allein entscheiden sollte, h\u00e4lt er inne und leitet den Fall hierher. Jeder Eintrag enth\u00e4lt die Persona, den Kontext und die vorgeschlagene Aktion \u2014 genehmigen, ablehnen oder f\u00fcr sp\u00e4ter \u00fcberspringen, per Klick oder Tastatur. Nichts Riskantes geht ohne Ihre Freigabe live, und die Warteschlange h\u00e4lt den Rest der Flotte in Bewegung, w\u00e4hrend Sie entscheiden.",
@@ -2121,5 +2231,123 @@ export const de: Translations = {
         devTools: "Parallele Agentenflotte, Projekte, Triage",
         brain: "Ihr Vault, bereit f\u00fcr Agenten"
       }
+    },
+    cookiePolicy: {
+      tldr: [
+        "Diese Website setzt keine eigenen Cookies. Sie speichert einige Einstellungen im lokalen Speicher Ihres Browsers und, wenn Sie ein Telefon koppeln, einen Signaturschl\u00fcssel in der Browserdatenbank dieses Telefons. Jeder Eintrag ist unten aufgef\u00fchrt.",
+        "Keine Werbung, kein website\u00fcbergreifendes Tracking und kein Fingerprinting jeglicher Art.",
+        "Sie k\u00f6nnen alles jederzeit in Ihren Browsereinstellungen l\u00f6schen."
+      ],
+      lastUpdated: "Zuletzt aktualisiert: {date}",
+      approachHeading: "Unser Umgang mit Cookies und Speicher",
+      approachBody: "Wir speichern nur, was die Website braucht. Browserspeicher wie der lokale Speicher gilt nach EU-Recht wie ein Cookie, deshalb umfasst die Liste unten beides. Wir verwenden keine Werbe-Cookies, keine Tracking-Pixel und kein Fingerprinting.",
+      registerHeading: "Was wir auf Ihrem Ger\u00e4t speichern",
+      registerIntro: "Alle Cookies und Speicherschl\u00fcssel, die diese Website schreibt, nach Zweck gruppiert. Ein Name, der auf * endet, steht f\u00fcr eine Gruppe von Schl\u00fcsseln, etwa einen pro Richtlinie oder Checkliste.",
+      categories: {
+        necessary: {
+          title: "Unbedingt erforderlich",
+          description: "N\u00f6tig, damit die Website tut, was Sie angefordert haben. Sie sind immer aktiv."
+        },
+        preferences: {
+          title: "Pr\u00e4ferenzen",
+          description: "Merken sich Ihre Entscheidungen, damit die Website so aussieht und sich so verh\u00e4lt, wie Sie es eingestellt haben."
+        },
+        functional: {
+          title: "Funktional",
+          description: "Halten Funktionen \u00fcber Besuche hinweg am Laufen: Ihren Fortschritt, was Sie schon gesehen haben, und Ihre Stimmen."
+        },
+        analytics: {
+          title: "Analyse",
+          description: "F\u00fcr Analysen wird nichts gespeichert. Wenn Sie im Cookie-Banner \"Alle akzeptieren\" w\u00e4hlen, z\u00e4hlt die Website Seitenaufrufe und einige wichtige Aktionen anonym, ohne etwas auf Ihr Ger\u00e4t zu schreiben. Wenn Sie \"Nur notwendige\" w\u00e4hlen, wird nichts gez\u00e4hlt."
+        }
+      },
+      mechanisms: {
+        cookie: "Cookie",
+        localStorage: "Lokaler Speicher",
+        indexedDB: "Browserdatenbank (IndexedDB)"
+      },
+      lifetimes: {
+        oneYear: "1 Jahr",
+        untilCleared: "Bis Sie ihn l\u00f6schen",
+        untilSignOut: "Bis Sie sich abmelden",
+        untilUnpaired: "Bis Sie die Kopplung des Telefons aufheben oder die Websitedaten l\u00f6schen"
+      },
+      purposes: {
+        consent: "Merkt sich Ihre Auswahl im Cookie-Banner.",
+        authSession: "H\u00e4lt Sie im Dashboard angemeldet. Wird von Supabase, unserem Anmeldeanbieter, geschrieben, und nur, wenn Sie sich anmelden.",
+        theme: "Merkt sich das von Ihnen gew\u00e4hlte Farbschema.",
+        language: "Merkt sich die von Ihnen gew\u00e4hlte Sprache.",
+        tourVolume: "Merkt sich die Lautst\u00e4rke der Sprecherstimme in der gef\u00fchrten Tour.",
+        dashboardPrefs: "Merkt sich Ihre Dashboard-Ansichten, -Filter und -Einstellungen, etwa Review-Eskalation und Vorlesen.",
+        tourSeen: "Merkt sich, dass Sie die gef\u00fchrte Tour gesehen haben, damit sie nicht erneut angeboten wird.",
+        policySeen: "Merkt sich, wann Sie die einzelnen Richtlinien auf dieser Seite zuletzt gelesen haben, damit Aktualisierungen markiert werden k\u00f6nnen.",
+        dashboardActivity: "Merkt sich, wann Sie das Dashboard zuletzt ge\u00f6ffnet haben und wie oft ein Demo-Ereignis wiederholt wurde.",
+        checklist: "Merkt sich, welche Punkte der Checklisten im Leitfaden Sie abgehakt haben.",
+        voting: "Eine zuf\u00e4llige ID, mit der Sie pro Funktion nur einmal abstimmen k\u00f6nnen, und ein zuf\u00e4lliger Spitzname (zum Beispiel SwiftFox), der bei Ihren Kommentaren angezeigt wird. Beide werden mit Ihren Stimmen und Kommentaren gesendet, und keiner enth\u00e4lt personenbezogene Daten.",
+        pairedPhoneKey: "Nur auf einem Telefon, das Sie mit der Desktop-App koppeln: ein Signaturschl\u00fcssel, den der Browser erzeugt hat und nicht exportieren kann, eine ID f\u00fcr dieses Telefon, die ID des Computers, mit dem es gekoppelt ist, und der Zeitpunkt der Kopplung. Der Schl\u00fcssel signiert die Befehle, die dieses Telefon sendet, damit Ihr Computer pr\u00fcfen kann, dass sie von ihm stammen."
+      },
+      notUsedHeading: "Was wir nicht verwenden",
+      notUsed: [
+        "Keine Werbe- oder Remarketing-Cookies",
+        "Kein website\u00fcbergreifendes Tracking",
+        "Keine Tracking-Pixel sozialer Netzwerke",
+        "Keine Analyse-Cookies und kein Analysespeicher"
+      ],
+      thirdPartyHeading: "Cookies von Drittanbietern",
+      thirdPartyBody: "Wenn Sie sich anmelden, durchlaufen Sie Supabase, unseren Anmeldeanbieter, und den Kontoanbieter Ihrer Wahl, etwa Google. Diese k\u00f6nnen w\u00e4hrend der Anmeldung Cookies auf ihren eigenen Domains setzen, nach ihren eigenen Richtlinien. Wir verwenden diese Cookies nicht zum Tracking.",
+      managingHeading: "Cookies und Speicher verwalten",
+      managingBody: "Sie k\u00f6nnen Cookies und Websitedaten jederzeit in Ihren Browsereinstellungen l\u00f6schen oder blockieren. Dadurch werden Sie abgemeldet und Ihre Pr\u00e4ferenzen zur\u00fcckgesetzt. Bei Fragen wenden Sie sich an {email}.",
+      manageButton: "Cookie-Einstellungen verwalten"
+    },
+    privacyPolicy: {
+      tldr: [
+        "Personas f\u00fchrt Ihre Agenten auf Ihrem Computer aus und speichert sie dort, zusammen mit Ihrem Ausf\u00fchrungsverlauf, Ihren Notizen und Chats. Ihre Prompts gehen nur an den KI-Anbieter, den Sie w\u00e4hlen.",
+        "Die Cloud-Synchronisierung ist optional und bleibt aus, bis Sie sie einschalten. Sie kopiert Ihre Agenten und deren Ausf\u00fchrungen in Ihr Konto, damit Sie sie im Web sehen k\u00f6nnen. Notizen und Chats werden nur synchronisiert, wenn Sie zus\u00e4tzlich deren eigene Schalter einschalten.",
+        "Ein Telefon, das Sie koppeln, kann Ihre Agenten starten, pausieren, fortsetzen und stoppen, ihre Pr\u00fcfungen freigeben oder ablehnen und mit ihnen und mit Athena chatten, ohne dass Sie am Computer etwas anklicken. Sie k\u00f6nnen die Kopplung jederzeit widerrufen.",
+        "API-Schl\u00fcssel werden mit AES-256 verschl\u00fcsselt und verlassen Ihren Computer nie, auch nicht bei eingeschalteter Cloud-Synchronisierung.",
+        "Abgesehen von dem, was Sie synchronisieren, sendet uns die Desktop-App nur anonyme Fehlerberichte und Nutzungssignale, und die meisten davon k\u00f6nnen Sie abschalten.",
+        "Ihre E-Mail-Adresse erfassen wir nur, wenn Sie sich f\u00fcr Cloud-Funktionen anmelden.",
+        "Sie k\u00f6nnen jederzeit alles exportieren oder l\u00f6schen. Fragen Sie einfach."
+      ],
+      lastUpdated: "Zuletzt aktualisiert: {date}",
+      commitmentHeading: "Unser Bekenntnis zum Datenschutz",
+      commitmentBody: "Personas folgt einem einfachen Grundsatz: Ihre Daten geh\u00f6ren Ihnen. Unsere Desktop-App ist Local-first. Solange Sie die Cloud-Synchronisierung nicht einschalten, werden Ihre Agenten, Prompts, Ausgaben und Zugangsdaten nie an uns gesendet, und die einzigen Daten, die die App an uns sendet, sind die unten beschriebenen anonymen Diagnosedaten. Ihre Zugangsdaten werden auch bei eingeschalteter Cloud-Synchronisierung nie an uns gesendet.",
+      desktopHeading: "Was die Desktop-App speichert",
+      desktopBody: "Alles, was die Personas-Desktop-App erstellt (Ihre Agenten, Pipelines, Ihr Ausf\u00fchrungsverlauf, Notizen, Unterhaltungen und Ihre Konfiguration), liegt auf Ihrem Computer. Nichts davon wird an unsere Server gesendet, es sei denn, Sie schalten die unten beschriebene Cloud-Synchronisierung ein. Wenn ein Agent l\u00e4uft, geht sein Prompt direkt von Ihrem Computer an den KI-Anbieter Ihrer Wahl: Claude von Anthropic oder ein lokales Ollama-Modell, das Ihren Computer nie verl\u00e4sst.",
+      telemetryHeading: "Fehlerberichte und Nutzungssignale der Desktop-App",
+      telemetryBody: "Release-Builds der Desktop-App senden Fehlerberichte (Fehlermeldung, Stacktrace, Betriebssystem, Architektur und App-Version) und anonyme Nutzungssignale (App-Sitzungen, welche Bereiche und Tabs Sie \u00f6ffnen, wichtige Aktionen wie das Erstellen eines Agenten und einmalige Meilensteine) an Sentry. Sitzungen und Meilensteine sind nur mit einer zuf\u00e4lligen Ger\u00e4te- oder Installations-ID verkn\u00fcpft. IP-Adressen, E-Mail-Adressen, Benutzernamen sowie Anfrageinhalte und -header werden vor dem Senden entfernt. Es gibt keine Performance-Traces, keine Sitzungsaufzeichnungen und keine Benutzeridentit\u00e4t, und Ihre Prompts, Persona-Inhalte und Zugangsdaten sind nie enthalten.",
+      telemetryControls: "Sie k\u00f6nnen Nutzungssignale und Fehlerberichte der App-Oberfl\u00e4che beim ersten Start oder jederzeit unter Einstellungen > Konto abschalten. Absturzberichte aus dem nativen Kern der App deckt dieser Schalter noch nicht ab. Entwicklungs-Builds und Builds, die Sie selbst aus dem Quellcode kompilieren, senden nichts.",
+      credentialsHeading: "Wie Zugangsdaten gesch\u00fctzt werden",
+      credentialsBody: "API-Schl\u00fcssel und Geheimnisse, die Sie in Personas hinterlegen, werden im Ruhezustand mit AES-256-GCM verschl\u00fcsselt und im Schl\u00fcsselbund Ihres Betriebssystems gespeichert. Sie verlassen Ihr Ger\u00e4t nie, auch nicht bei Cloud-Synchronisierung oder mit einem gekoppelten Telefon.",
+      syncHeading: "Optionale Cloud-Synchronisierung",
+      syncIntro: "Die Cloud-Synchronisierung ist aus, bis Sie sich anmelden und sie in den Einstellungen der Desktop-App einschalten. Damit k\u00f6nnen Sie Ihre Agenten auf der Personas-Website verfolgen, auch auf Ihrem Telefon. Solange sie eingeschaltet ist, kopiert die App Folgendes in Ihr Konto: Ihre Agenten (einschlie\u00dflich Namen, Beschreibungen und Anweisungen), deren Ausf\u00fchrungen (einschlie\u00dflich Eingabe, Ausgabe, Kosten und Fehlern), Ereignisse, Elemente, die auf Ihre Pr\u00fcfung warten, Nachrichten Ihrer Agenten an Sie, Erinnerungen, gelernte Muster, Zustandsprobleme, Zeitplanzeiten, die Ausf\u00fchrungswarteschlange und Tagessummen. Werte, die wie Geheimnisse aussehen, werden vor dem Senden aus den Ereignisdaten entfernt.",
+      syncNever: "Nie synchronisiert: API-Schl\u00fcssel, Passw\u00f6rter und andere Zugangsdaten sowie Trigger-Einstellungen wie Webhook-Konfigurationen.",
+      syncOptIns: "Zwei weitere Datenarten werden nur synchronisiert, wenn Sie in denselben Einstellungen zus\u00e4tzlich deren eigene Schalter einschalten: \u201eNotizen synchronisieren\u201c und \u201eChats synchronisieren\u201c. Beide sind anfangs aus, auch wenn die Cloud-Synchronisierung bereits l\u00e4uft.",
+      syncNotes: "\u201eNotizen synchronisieren\u201c kopiert Ihre Ziele aus dem Notepad: Titel, Text, Status und Projektname jeder Notiz (nie den Ordner des Projekts auf Ihrem Computer) sowie die kurze Zusammenfassung ihres Ergebnisses. Archivierte Notizen werden nicht synchronisiert.",
+      syncChats: "\u201eChats synchronisieren\u201c kopiert Ihre Unterhaltungen mit Athena und mit Ihren Agenten, damit Sie sie auf Ihrem Telefon lesen und dort fortsetzen k\u00f6nnen: den Titel jeder aktiven Unterhaltung sowie Ihre Nachrichten und die Antworten ab 90 Tagen vor dem Einschalten. Die Antworten k\u00f6nnen zitieren, was Ihre Agenten \u00fcber die verbundenen Apps gelesen haben. System- und Tool-Nachrichten, Zusammenfassungen von Unterhaltungen, das Arbeitsged\u00e4chtnis eines Agenten sowie archivierte Unterhaltungen werden nie synchronisiert.",
+      syncMasking: "Bevor Notiz- oder Chattext Ihren Computer verl\u00e4sst, wird alles maskiert, was wie ein Schl\u00fcssel, Token oder Passwort aussieht, und langer Text wird gek\u00fcrzt: Titel auf 1 KB, Notiztext auf 16 KB und jede Chatnachricht auf 32 KB.",
+      syncDeletion: "Wenn Sie \u201eNotizen synchronisieren\u201c oder \u201eChats synchronisieren\u201c ausschalten, werden die Notizen bzw. Chats, die dieser Computer synchronisiert hat, bei der n\u00e4chsten Synchronisierung gel\u00f6scht. Wenn Sie auf Ihrem Computer einen Chat mit einem Agenten l\u00f6schen, wird auch seine synchronisierte Kopie gel\u00f6scht, und wenn Sie einen Agenten l\u00f6schen, wird seine synchronisierte Kopie samt seiner Chats gel\u00f6scht. Das Ausschalten der Cloud-Synchronisierung selbst stoppt neue Kopien, l\u00f6scht aber nicht, was bereits synchronisiert wurde. Schreiben Sie uns, dann l\u00f6schen wir es.",
+      syncWhere: "Synchronisierte Daten werden bei Supabase, unserem Cloud-Anbieter, in Zeilen gespeichert, die Ihrem Konto zugeordnet sind. Zugriffsregeln der Datenbank erlauben nur Ihrem angemeldeten Konto, diese Zeilen zu lesen oder zu \u00e4ndern, aus der Desktop-App oder auf der Website. Die Daten sind nicht Ende-zu-Ende-verschl\u00fcsselt.",
+      phonesHeading: "Gekoppelte Telefone",
+      phonesIntro: "Solange die Cloud-Synchronisierung eingeschaltet ist, k\u00f6nnen Sie ein Telefon koppeln, indem Sie einen Code scannen, den die Desktop-App in den Einstellungen anzeigt. \u00dcber die Personas-Website kann ein gekoppeltes Telefon Ihre Agenten starten, pausieren und fortsetzen, eine Ausf\u00fchrung stoppen, Pr\u00fcfungen, die auf Sie warten, freigeben oder ablehnen und mit Athena oder mit jedem Ihrer Agenten chatten, auch mit pausierten (nur solange \u201eChats synchronisieren\u201c eingeschaltet ist). Ihr Computer f\u00fchrt das aus, ohne Sie vorher zu fragen, und Ausf\u00fchrungen, Antworten und freigegebene Arbeit, die es startet, laufen \u00fcber Ihren Claude-Tarif. Ein Befehl erreicht Ihren Computer nur, solange er eingeschaltet und online ist. Ein Befehl, der ihn nicht innerhalb einer Minute erreicht, verf\u00e4llt, statt zu warten.",
+      phonesLimits: "Ein gekoppeltes Telefon kann Ihre Agenten nicht bearbeiten, Ihre Zugangsdaten weder sehen noch \u00e4ndern und die Ausf\u00fchrungswarteschlange nicht ohne Ihre Zustimmung am Computer \u00e4ndern. Ohne Kopplung wartet eine Anfrage der Website, einen Agenten zu starten, bis Sie sie auf Ihrem Computer best\u00e4tigen.",
+      phonesKey: "Beim Koppeln erzeugt der Browser des Telefons einen Signaturschl\u00fcssel, der nicht exportiert werden kann, und bewahrt ihn im Speicher dieses Browsers auf. Jeder Befehl wird damit signiert, und Ihr Computer pr\u00fcft die Signatur anhand seiner eigenen Liste gekoppelter Telefone. Der Name des Telefons (aus seinem Browser, etwa \u201eiPhone \u00b7 Safari\u201c), sein \u00f6ffentlicher Schl\u00fcssel und die gesendeten Befehle mit ihren Ergebnissen werden mit Ihren synchronisierten Daten gespeichert.",
+      phonesRevoke: "Sie k\u00f6nnen ein Telefon oder alle Telefone jederzeit in den Einstellungen der Desktop-App widerrufen. Der Widerruf wirkt innerhalb von Sekunden, und eine bereits gestartete Ausf\u00fchrung l\u00e4uft zu Ende. Sie k\u00f6nnen die Kopplung auch auf dem Telefon selbst aufheben, wodurch sein Schl\u00fcssel dort gel\u00f6scht wird.",
+      accountHeading: "Was wir f\u00fcr Cloud-Funktionen erfassen",
+      accountBody: "Wenn Sie sich mit Google f\u00fcr Cloud-Funktionen anmelden, speichern wir Ihre E-Mail-Adresse und grundlegende Profilinformationen \u00fcber Supabase, unseren Anmeldeanbieter. Wenn Sie die Cloud-Synchronisierung einschalten oder ein Telefon koppeln, speichern wir au\u00dferdem die oben beschriebenen Daten.",
+      analyticsHeading: "Website-Analyse",
+      analyticsBody: "Wenn Sie im Cookie-Banner \u201e{acceptAll}\u201c w\u00e4hlen, z\u00e4hlt diese Website anonym Seitenaufrufe und einige wichtige Aktionen (Download-Klicks, Wartelisten-Anmeldungen, Funktionsabstimmungen und Kommentare), damit wir verstehen, welche Seiten n\u00fctzlich sind. Wenn Sie \u201e{essentialOnly}\u201c w\u00e4hlen, wird nichts gez\u00e4hlt. Wir verfolgen keine einzelnen Nutzer, erstellen keine Werbeprofile und verkaufen keine Daten an Dritte.",
+      thirdPartyHeading: "Dienste von Drittanbietern",
+      thirdPartySupabase: "Anmeldung und Cloud-Speicher f\u00fcr die Daten, die Sie synchronisieren",
+      thirdPartySentry: "Fehlerverfolgung und die oben genannten anonymen Z\u00e4hlungen auf dieser Website sowie die Fehlerberichte und Nutzungssignale der Desktop-App",
+      rightsHeading: "Ihre Rechte",
+      rightsBody: "Sie k\u00f6nnen jederzeit Auskunft \u00fcber, Berichtigung oder L\u00f6schung aller personenbezogenen Daten verlangen, die wir \u00fcber Sie speichern, einschlie\u00dflich Ihrer synchronisierten Daten. Ihre lokalen Daten k\u00f6nnen Sie au\u00dferdem direkt aus der Desktop-App exportieren. Um diese Rechte auszu\u00fcben, schreiben Sie uns an {email}."
+    },
+    cookieConsent: {
+      message: "Wir speichern ein paar Einstellungen in Ihrem Browser, damit die Website funktioniert. Mit \"Alle akzeptieren\" z\u00e4hlen wir au\u00dferdem Seitenaufrufe und einige wichtige Aktionen anonym, ohne daf\u00fcr etwas zu speichern. Keine Werbung, kein seiten\u00fcbergreifendes Tracking.",
+      details: "Details",
+      essentialOnly: "Nur notwendige",
+      acceptAll: "Alle akzeptieren",
+      close: "Schlie\u00dfen und nur notwendige verwenden"
     }
   };

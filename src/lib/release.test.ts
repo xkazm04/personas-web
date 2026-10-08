@@ -139,14 +139,13 @@ describe("latestRelease / isFreshRelease", () => {
 });
 
 describe("the displayed version (owner decision: unchanged)", () => {
-  it("GUARD: hero and download badge render the site version, not the desktop changelog's", () => {
+  it("GUARD: the download badge renders the site version, not the desktop changelog's", () => {
     expect(siteVersion(undefined)).toBe("0.1.0");
     expect(siteVersion("0.1.0")).toBe("0.1.0");
     expect(SITE_VERSION).toBe(process.env.NEXT_PUBLIC_APP_VERSION ?? "0.1.0");
     // What feeds it is still the website's own package.json version.
     expect(read("next.config.ts")).toMatch(/NEXT_PUBLIC_APP_VERSION:\s*pkg\.version/);
-    // Both surfaces render exactly that value.
-    expect(read("src/components/sections/hero/CommandCenterIllustration.tsx")).toContain("{SITE_VERSION}");
+    // The badge renders exactly that value (the Hive hero, 2026-10-05, shows no version).
     expect(read("src/components/sections/DownloadCTA.tsx")).toContain("v{SITE_VERSION}");
     // The release authority does not pull the changelog into every chunk that asks "is it live".
     expect(read(RELEASE_MODULE)).not.toMatch(/(from|import\()\s*["']@\/data\/changelog["']/);
@@ -174,7 +173,7 @@ describe("one authority (source scans)", () => {
   it("every client 'download live' site reads the plan instead of the raw env", () => {
     for (const rel of [
       "src/components/sections/DownloadCTA.tsx",
-      "src/components/sections/HeroClient.tsx",
+      "src/components/sections/hero-hive/shared/HeroCtas.tsx",
       "src/components/sections/pricing/index.tsx",
       "src/components/Navbar.tsx",
     ]) {

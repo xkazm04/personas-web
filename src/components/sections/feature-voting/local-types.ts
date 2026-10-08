@@ -1,5 +1,5 @@
 /** Feature ids whose display copy lives in i18n (`featureVoting.features`). */
-export type FeatureId = "macos" | "i18n" | "dashboard" | "enterprise";
+export type FeatureId = "macos" | "dashboard" | "enterprise";
 
 export type Feature = {
   id: FeatureId;

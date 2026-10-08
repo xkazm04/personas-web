@@ -38,38 +38,38 @@ One page, three view modes selected by a tab switcher in the header (the choice 
 
 | File | Role |
 | --- | --- |
-| `src/app/dashboard/knowledge/page.tsx` | Route page; tab switcher (ARIA tablist + roving tabindex), localStorage persistence, loading/error, mounts one of three views |
-| `src/app/dashboard/knowledge/useKnowledgeData.ts` | Data hook; demo mocks vs. synced patterns+memories; persona-name resolution; returns `{ patterns, memories, loading, error }` |
-| `src/app/dashboard/knowledge/derived.ts` | **Orphaned/dead** — `deriveKnowledgePatterns`, `DERIVED_KNOWLEDGE_PATTERNS`, `relativeFromNow`; not imported anywhere (see gotchas) |
-| `src/app/dashboard/knowledge/KnowledgeDenseTable.tsx` | View 1 container; sort/filter/select state + `compareKnowledgePatterns` |
-| `src/app/dashboard/knowledge/KnowledgeClusterGraph.tsx` | View 2 container; ResizeObserver dimensions, hover/select/filter state |
-| `src/app/dashboard/knowledge/MemoriesView.tsx` | View 3 container; type filter, conflict resolution state, owns `BatchReviewModal` |
-| `src/app/dashboard/knowledge/knowledge-dense-table/buildKnowledgeColumns.ts` | Column defs (key/label/width/align) from `t.knowledgePage` |
-| `src/app/dashboard/knowledge/knowledge-dense-table/KnowledgePatternTable.tsx` | Header + rows + empty state; `AnimatePresence mode="popLayout"` |
-| `src/app/dashboard/knowledge/knowledge-dense-table/KnowledgePatternRow.tsx` | One pattern row (motion.button, confidence bar, formatted cells) |
-| `src/app/dashboard/knowledge/knowledge-dense-table/KnowledgePatternDetailPanel.tsx` | Height-auto inline expand panel for the selected row |
-| `src/app/dashboard/knowledge/knowledge-dense-table/KnowledgeSortHeader.tsx` | Sortable column header with up/down chevrons |
-| `src/app/dashboard/knowledge/knowledge-dense-table/KnowledgeDenseTopBar.tsx` | Stats strip + per-type filter pills + clear |
-| `src/app/dashboard/knowledge/knowledge-dense-table/knowledgeDenseConfig.ts` | `KNOWLEDGE_TYPE_CONFIG` (icon/color/textColor/bgClass per type) |
-| `src/app/dashboard/knowledge/knowledge-dense-table/knowledgeDenseFormat.ts` | `formatKnowledgeCost/Duration`, `relativeKnowledgeTime`, `knowledgeSuccessRate`, `knowledgeConfidenceColor` |
-| `src/app/dashboard/knowledge/knowledge-dense-table/knowledgeDenseTypes.ts` | `KnowledgeType`, `SortField`, `SortDir`, `ColumnDef` |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts` | `computeKnowledgeNodePositions`, `computeKnowledgeEdges`, `knowledgeClusterSuccessRate` |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts` | `KNOWLEDGE_CLUSTER_TYPE_CONFIG` (+ `clusterAngle`), `PERSONA_COLORS`, `NodePosition` |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx` | SVG: edges (motion.line) + nodes |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx` | One node (motion.g, confidence-sized circle, icon, halo label) |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx` | Floating top-right detail card for selected node |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterLabels.tsx` | Floating cluster type labels (only when filter = all) |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterLegends.tsx` | Persona color key + node-size legend |
-| `src/app/dashboard/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx` | Stats strip + All/per-type filter pills |
-| `src/app/dashboard/knowledge/memories-view/MemoryCard.tsx` | One memory card (status pill, conflict badge, score dots) |
-| `src/app/dashboard/knowledge/memories-view/MemoriesToolbar.tsx` | FilterBar + resolve-conflicts button |
-| `src/app/dashboard/knowledge/memories-view/ScoreDots.tsx` | 5-dot score indicator |
-| `src/app/dashboard/knowledge/memories-view/memoryViewConfig.ts` | `TYPES`, `typeConfig` (icon/tone/dot), `statusConfig`, `FilterKey` |
+| `src/components/dashboard/views/knowledge/index.tsx` | Route page; tab switcher (ARIA tablist + roving tabindex), localStorage persistence, loading/error, mounts one of three views |
+| `src/components/dashboard/views/knowledge/useKnowledgeData.ts` | Data hook; demo mocks vs. synced patterns+memories; persona-name resolution; returns `{ patterns, memories, loading, error }` |
+| `src/components/dashboard/views/knowledge/derived.ts` | **Orphaned/dead** — `deriveKnowledgePatterns`, `DERIVED_KNOWLEDGE_PATTERNS`, `relativeFromNow`; not imported anywhere (see gotchas) |
+| `src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx` | View 1 container; sort/filter/select state + `compareKnowledgePatterns` |
+| `src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx` | View 2 container; ResizeObserver dimensions, hover/select/filter state |
+| `src/components/dashboard/views/knowledge/MemoriesView.tsx` | View 3 container; type filter, conflict resolution state, owns `BatchReviewModal` |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/buildKnowledgeColumns.ts` | Column defs (key/label/width/align) from `t.knowledgePage` |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgePatternTable.tsx` | Header + rows + empty state; `AnimatePresence mode="popLayout"` |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgePatternRow.tsx` | One pattern row (motion.button, confidence bar, formatted cells) |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgePatternDetailPanel.tsx` | Height-auto inline expand panel for the selected row |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgeSortHeader.tsx` | Sortable column header with up/down chevrons |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgeDenseTopBar.tsx` | Stats strip + per-type filter pills + clear |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/knowledgeDenseConfig.ts` | `KNOWLEDGE_TYPE_CONFIG` (icon/color/textColor/bgClass per type) |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/knowledgeDenseFormat.ts` | `formatKnowledgeCost/Duration`, `relativeKnowledgeTime`, `knowledgeSuccessRate`, `knowledgeConfidenceColor` |
+| `src/components/dashboard/views/knowledge/knowledge-dense-table/knowledgeDenseTypes.ts` | `KnowledgeType`, `SortField`, `SortDir`, `ColumnDef` |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts` | `computeKnowledgeNodePositions`, `computeKnowledgeEdges`, `knowledgeClusterSuccessRate` |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts` | `KNOWLEDGE_CLUSTER_TYPE_CONFIG` (+ `clusterAngle`), `PERSONA_COLORS`, `NodePosition` |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx` | SVG: edges (motion.line) + nodes |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx` | One node (motion.g, confidence-sized circle, icon, halo label) |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx` | Floating top-right detail card for selected node |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterLabels.tsx` | Floating cluster type labels (only when filter = all) |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterLegends.tsx` | Persona color key + node-size legend |
+| `src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx` | Stats strip + All/per-type filter pills |
+| `src/components/dashboard/views/knowledge/memories-view/MemoryCard.tsx` | One memory card (status pill, conflict badge, score dots) |
+| `src/components/dashboard/views/knowledge/memories-view/MemoriesToolbar.tsx` | FilterBar + resolve-conflicts button |
+| `src/components/dashboard/views/knowledge/memories-view/ScoreDots.tsx` | 5-dot score indicator |
+| `src/components/dashboard/views/knowledge/memories-view/memoryViewConfig.ts` | `TYPES`, `typeConfig` (icon/tone/dot), `statusConfig`, `FilterKey` |
 | `src/components/dashboard/BatchReviewModal.tsx` | Conflict batch-review dialog (consumed only by `MemoriesView`) |
 | `src/lib/mock-dashboard-data.ts` | `KnowledgePattern`/`MemoryItem` types + `MOCK_KNOWLEDGE_PATTERNS` (~`:193`) / `MOCK_MEMORIES` (~`:488`) |
 
 ## Data & state
-- **Source:** `MOCK_KNOWLEDGE_PATTERNS` (8 patterns) and `MOCK_MEMORIES` (60 seeded memories, ~12% flagged in conflict) in `src/lib/mock-dashboard-data.ts`. Both use timestamps relative to `Date.now()` at module load so relative times stay fresh; `MOCK_MEMORIES` is built with a seeded RNG (`seededRandom(555)`) for deterministic content. In real mode the data comes from `getSyncedKnowledgePatterns()` / `getSyncedMemories()` (`src/lib/supabaseApi.ts:673` / `:646`) mapped through `mapSyncedPattern` / `mapSyncedMemory`.
+- **Source:** `MOCK_KNOWLEDGE_PATTERNS` (8 patterns) and `MOCK_MEMORIES` (20 seeded memories, one per title in `MEMORY_TITLE_POOL` so none repeats; 3 flagged in conflict) in `src/lib/mock-dashboard-data.ts`. Both use timestamps relative to `Date.now()` at module load so relative times stay fresh; `MOCK_MEMORIES` is built with a seeded RNG (`seededRandom(580)`) for deterministic content. In real mode the data comes from `getSyncedKnowledgePatterns()` / `getSyncedMemories()` (`src/lib/supabaseApi.ts:673` / `:646`) mapped through `mapSyncedPattern` / `mapSyncedMemory`.
 - **Stores:** No Zustand store for knowledge data — all data state is local to `useKnowledgeData`'s `useState`. `authStore.isDemo` selects mock vs. live mode. View-mode selection persists in `localStorage[KNOWLEDGE_VIEW_KEY]` (`"personas-dashboard-knowledge-view"`, `src/lib/constants.ts:34`), not a store.
 - **API routes:** None. Data is either in-process mocks (demo) or direct Supabase queries (live) — there are no `src/app/api/*` routes behind this surface.
 - **Types:** `KnowledgePattern`, `MemoryItem`, `MemoryAction`, `MemoryStatus` from `src/lib/mock-dashboard-data.ts`; `SyncedKnowledgePattern` / `SyncedMemory` from `src/lib/supabaseApi.ts`; `KnowledgeData` (hook return) from `useKnowledgeData.ts`; per-view `KnowledgeType` / `SortField` / `ColumnDef` / `NodePosition` / `FilterKey` / `BatchDecision` in the subfolders.
@@ -82,7 +82,7 @@ One page, three view modes selected by a tab switcher in the header (the choice 
 - **Persona colors.** `PERSONA_COLORS` (graph edges/legend) is a hardcoded map of the five mock persona names → hex. Live personas not in this map fall back to `#64748b` for edges and won't appear in the legend.
 
 ## Conventions & gotchas
-- **No reduced-motion gating anywhere in this feature — this is a real gap.** Every view animates heavily (SVG edge `pathLength` draw-on, node `scale: 0 → 1`, confidence bar width, row `layout`/`AnimatePresence`, panel transitions) yet **no file in `src/app/dashboard/knowledge/` imports `useReducedMotion`**. The repo's `custom-animation/require-animation-gating` rule keys on `requestAnimationFrame`/`cancelAnimationFrame` (which framer-motion abstracts away), so it doesn't flag these — but `CLAUDE.md` still requires GPU-intensive motion to be gated. The cluster graph (dozens of `motion.line`/`motion.g`) is the most expensive offender. If you touch these components, add `useReducedMotion()` and short-circuit durations/`pathLength`.
+- **No reduced-motion gating anywhere in this feature — this is a real gap.** Every view animates heavily (SVG edge `pathLength` draw-on, node `scale: 0 → 1`, confidence bar width, row `layout`/`AnimatePresence`, panel transitions) yet **no file in `src/components/dashboard/views/knowledge/` imports `useReducedMotion`**. The repo's `custom-animation/require-animation-gating` rule keys on `requestAnimationFrame`/`cancelAnimationFrame` (which framer-motion abstracts away), so it doesn't flag these — but `CLAUDE.md` still requires GPU-intensive motion to be gated. The cluster graph (dozens of `motion.line`/`motion.g`) is the most expensive offender. If you touch these components, add `useReducedMotion()` and short-circuit durations/`pathLength`.
 - **`derived.ts` is dead code.** Despite its docstring claiming it caches per-row fields "so neither the table nor the graph has to recompute…", nothing imports `deriveKnowledgePatterns`, `DERIVED_KNOWLEDGE_PATTERNS`, or `relativeFromNow`. The live table sorts with its own inline `compareKnowledgePatterns` (re-parsing dates per compare) and formats with `knowledgeDenseFormat.ts`. Don't trust the comment; either wire `derived.ts` in or delete it.
 - **Three duplicate formatter/config sets.** `formatCost`/`formatDuration` exist in `@/lib/format`, in `knowledgeDenseFormat.ts` (as `formatKnowledge*`), and in `derived.ts`. `KNOWLEDGE_TYPE_CONFIG` (dense) and `KNOWLEDGE_CLUSTER_TYPE_CONFIG` (graph) are near-identical type→icon/color maps that differ only by the graph's extra `clusterAngle`. Keep them in sync when changing a type's icon/color, or consolidate.
 - **Unused i18n keys.** `t.knowledgePage.tokens`, `t.knowledgePage.retries`, and `t.memoriesPage.seeAll` are declared in the `Translations` interface but referenced nowhere in this feature. Don't add columns for them assuming they're already wired.

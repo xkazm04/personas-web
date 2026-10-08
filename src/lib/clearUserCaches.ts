@@ -4,6 +4,9 @@ import { useEventStore } from "@/stores/eventStore";
 import { useExecutionStore } from "@/stores/executionStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useSystemStore } from "@/stores/systemStore";
+import { useDeviceStore } from "@/stores/deviceStore";
+import { useCommandStore } from "@/stores/commandStore";
+import { useControllerStore } from "@/stores/controllerStore";
 import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
 import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
@@ -39,6 +42,15 @@ export function clearUserScopedCaches(): void {
   useExecutionStore.getState().reset();
   useReviewStore.getState().reset();
   useSystemStore.getState().reset();
+  // The command plane: another account's devices, in-flight commands and
+  // controller phase must not leak. (The controller KEY stays in IndexedDB:
+  // it belongs to this browser, and the next account's RLS hides its row.)
+  useDeviceStore.getState().reset();
+  useCommandStore.getState().reset();
+  useControllerStore.getState().reset();
+  // Chat threads, transcripts and unsent messages. Lazy, like the chat itself:
+  // if no chat sheet ever loaded the store, there is nothing to drop.
+  void import("@/stores/chatStore").then((m) => m.useChatStore.getState().reset());
   // Filter store persists `personaId` to localStorage; without this reset
   // the next user briefly sees results filtered by the previous user's
   // selected persona.

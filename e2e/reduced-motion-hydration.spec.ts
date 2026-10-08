@@ -81,3 +81,23 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
     });
   });
 }
+
+// The home hero regressed the same way from a different cause: FloatingParticles
+// returned null under reduced motion while the server rendered its host div, so
+// React threw the served hero away for every reduced-motion visitor (reported
+// as a pageerror "Hydration failed", not as a console warning).
+for (const route of ["/", "/features"]) {
+  test.describe(`${route} hydration with prefers-reduced-motion: reduce`, () => {
+    test.use({ contextOptions: { reducedMotion: "reduce" } });
+
+    test("hydrates without a mismatch", async ({ page }) => {
+      const failures: string[] = [];
+      page.on("pageerror", (err) => {
+        if (/hydrat/i.test(err.message)) failures.push(err.message.slice(0, 300));
+      });
+      await page.goto(route);
+      await page.waitForTimeout(3_000);
+      expect(failures).toEqual([]);
+    });
+  });
+}

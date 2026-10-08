@@ -43,7 +43,7 @@ A self-contained "watch an agent think" demo. The user picks one of four example
 
 ## Integration points
 
-- **Render surface:** only the dev-only preview harness at `/preview/playground-timeline` (via `PREVIEW_EXTRAS`, `src/app/preview/registry.ts:42`), which `notFound()`s in production (`src/app/preview/[section]/page.tsx:15-17`). It is **not** in the public homepage `sections[]` — the homepage `#playground` slot mounts `LazyPlaygroundSplit`, the split-view variant, instead (`src/app/page.tsx:51`).
+- **Render surface:** only the dev-only preview harness at `/preview/playground-timeline` (via `PREVIEW_EXTRAS`, `src/app/preview/registry.ts:42`), which `notFound()`s in production (`src/app/preview/[section]/page.tsx:15-17`). It is **not** in the public homepage `sections[]` — the homepage `#playground` slot mounts `LazyPlaygroundSplit`, the split-view variant, instead (`src/app/page.tsx:53`).
 - **Shared primitives:** `SectionWrapper`, `SectionIntro`, `TerminalPanel`, `TerminalChrome`, `ThemedChip`, and `fadeUp` from `@/lib/animations`.
 - **Sentry:** `captureExceptionScrubbed` from `src/lib/sentry-pii.ts` guards an out-of-range example index (defensive; unreachable from the UI since chips pass valid indices).
 - **Icons:** `lucide-react` plus the local `Github` brand icon (`@/components/icons/brand-icons`).

@@ -37,7 +37,7 @@ export default function FeatureVoteIllustration({
             src={featureIllustrations[feature.id]}
             alt={title}
             fill
-            sizes="(max-width: 640px) 100vw, 50vw"
+            sizes="(max-width: 1023px) 100vw, 33vw"
             loading="lazy"
             className="object-cover opacity-60 group-hover:opacity-90 transition-opacity duration-700"
             onLoad={onImgLoad}

@@ -12,12 +12,19 @@
  * throw a clear error rather than silently no-op.
  */
 import { getSupabase } from "./supabase";
-import { ApiError, type ApiClient } from "./api";
+import { ApiError, type ApiClient, type CommandAck } from "./api";
+import { isDeskOnlyReview, reviewReportId } from "./commands/deskOnlyReview";
+import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { halvesTrend } from "./observabilitySeries";
 import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
+import { executionDetailFromRow, mapExecution, mapPersona, type ExecutionRow, type PersonaRow } from "./desktopRows";
+import { DEVICE_FRESH_MS } from "./sync/reachability";
+import { SYNCED_NOTE_COLUMNS, mapNoteRow, type SyncedNoteRow } from "./notes/notesModel";
+import type { ChatMessageRow, ChatSessionRow } from "./chat/chatModel";
+
+/** The chat model, loaded with the first chat call: chat is not in the dashboard's first load. */
+const chatModel = () => import("./chat/chatModel");
 import type {
-  Persona,
-  PersonaExecution,
   PersonaEvent,
   PersonaEventSubscription,
   PersonaTrigger,
@@ -33,7 +40,6 @@ import type {
   ToolUsageSummary,
   ToolUsageOverTime,
   ToolUsageByPersona,
-  PersonaExecutionStatus,
   EventStatus,
 } from "./types";
 import type {
@@ -55,6 +61,47 @@ function readOnly(): never {
   throw new ApiError(501, READ_ONLY);
 }
 
+/**
+ * The desktop a persona's command goes to when this tab has not loaded it:
+ * the persona's owner (`synced_personas.device_id`, spec 2.2), else the newest
+ * synced device. Null when neither exists or the read fails: commandStore then
+ * records the command failed `no_device`, so the row's chip says so.
+ */
+async function ownerDeviceFromMirror(personaId: string): Promise<string | null> {
+  try {
+    const sb = getSupabase();
+    const owned = await rows<{ device_id: string | null }>(
+      sb.from("synced_personas").select("device_id").eq("id", personaId).limit(1),
+    );
+    if (owned[0]?.device_id) return owned[0].device_id;
+    const newest = await rows<{ device_id: string }>(
+      sb.from("synced_devices").select("device_id").order("last_seen_at", { ascending: false, nullsFirst: false }).limit(1),
+    );
+    return newest[0]?.device_id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Send a v1 verb as a signed `pending_commands` row through `commandStore`
+ * (PHASE2-SPEC.md 2.2, 6.2): the answer is the command to follow, not the
+ * effect. Loaded lazily: commandStore reaches this module through the `api`
+ * proxy, so a static import would be a cycle.
+ */
+async function sendCommand(
+  verb: "pause_persona" | "resume_persona" | "cancel_execution" | "run_persona" | "chat_send" | "review_decide" | "channel_say",
+  personaId: string,
+  params: Record<string, unknown>,
+  /** The desktop the caller already knows (a chat thread's device); else the persona's owner. */
+  knownDevice: string | null = null,
+): Promise<CommandAck> {
+  const { sendPersonaCommand, knownOwnerDevice } = await import("./commands/personaCommands");
+  // Athena is no synced persona: the mirror lookup falls through to the newest device.
+  const deviceId = knownDevice ?? knownOwnerDevice(personaId) ?? (await ownerDeviceFromMirror(personaId));
+  return sendPersonaCommand(verb, personaId, params, { demo: false, deviceId });
+}
+
 /** Await a supabase query, throwing a uniform ApiError on failure. */
 async function rows<T>(
   builder: PromiseLike<{ data: T[] | null; error: { message: string } | null }>,
@@ -62,25 +109,6 @@ async function rows<T>(
   const { data, error } = await builder;
   if (error) throw new ApiError(500, error.message);
   return data ?? [];
-}
-
-const EXECUTION_STATUSES: ReadonlySet<string> = new Set([
-  "queued",
-  "running",
-  "completed",
-  "failed",
-  "cancelled",
-]);
-
-function mapStatus(s: string): PersonaExecutionStatus {
-  // The desktop allows an `incomplete` status the web type doesn't model.
-  if (s === "incomplete") return "failed";
-  if (EXECUTION_STATUSES.has(s)) return s as PersonaExecutionStatus;
-  // Unknown desktop status (schema drift). A blind `as` cast lets the value flow
-  // into status badges, success-rate math, and eq("status", …) filters that
-  // silently never match it. Map to the neutral non-terminal "running" and warn.
-  console.warn(`[supabaseApi] unknown execution status "${s}"; treating as "running".`);
-  return "running";
 }
 
 // Derived from the state machine rather than hand-listed: when the union grew
@@ -98,94 +126,6 @@ function mapEventStatus(s: string): EventStatus {
 // ---------------------------------------------------------------------------
 // Row shapes (snake_case, as stored) → web types (camelCase)
 // ---------------------------------------------------------------------------
-
-interface PersonaRow {
-  id: string;
-  project_id: string;
-  name: string;
-  description: string | null;
-  system_prompt: string;
-  structured_prompt: string | null;
-  icon: string | null;
-  color: string | null;
-  enabled: boolean;
-  max_concurrent: number;
-  timeout_ms: number;
-  model_profile: string | null;
-  max_budget_usd: number | null;
-  max_turns: number | null;
-  design_context: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-function mapPersona(r: PersonaRow): Persona {
-  return {
-    id: r.id,
-    projectId: r.project_id,
-    name: r.name,
-    description: r.description,
-    systemPrompt: r.system_prompt,
-    structuredPrompt: r.structured_prompt,
-    icon: r.icon,
-    color: r.color,
-    enabled: r.enabled,
-    maxConcurrent: r.max_concurrent,
-    timeoutMs: r.timeout_ms,
-    modelProfile: r.model_profile,
-    maxBudgetUsd: r.max_budget_usd,
-    maxTurns: r.max_turns,
-    designContext: r.design_context,
-    groupId: null,
-    createdAt: r.created_at,
-    updatedAt: r.updated_at,
-  };
-}
-
-interface ExecutionRow {
-  id: string;
-  persona_id: string;
-  trigger_id: string | null;
-  status: string;
-  input_data: string | null;
-  output_data: string | null;
-  claude_session_id: string | null;
-  model_used: string | null;
-  input_tokens: number;
-  output_tokens: number;
-  cost_usd: number;
-  error_message: string | null;
-  duration_ms: number | null;
-  retry_of_execution_id: string | null;
-  retry_count: number | null;
-  started_at: string | null;
-  completed_at: string | null;
-  created_at: string;
-}
-
-function mapExecution(r: ExecutionRow): PersonaExecution {
-  return {
-    id: r.id,
-    personaId: r.persona_id,
-    triggerId: r.trigger_id,
-    useCaseId: null,
-    status: mapStatus(r.status),
-    inputData: r.input_data,
-    outputData: r.output_data,
-    claudeSessionId: r.claude_session_id,
-    modelUsed: r.model_used,
-    inputTokens: r.input_tokens ?? 0,
-    outputTokens: r.output_tokens ?? 0,
-    costUsd: r.cost_usd ?? 0,
-    errorMessage: r.error_message,
-    durationMs: r.duration_ms,
-    retryOfExecutionId: r.retry_of_execution_id,
-    retryCount: r.retry_count ?? 0,
-    startedAt: r.started_at,
-    completedAt: r.completed_at,
-    createdAt: r.created_at,
-  };
-}
 
 interface EventRow {
   id: string;
@@ -222,7 +162,9 @@ function mapEvent(r: EventRow): PersonaEvent {
 
 interface ManualReviewRow {
   id: string;
-  execution_id: string;
+  device_id: string | null;
+  /** NULL for a council Approval (raised with no execution). */
+  execution_id: string | null;
   persona_id: string;
   title: string;
   description: string | null;
@@ -231,6 +173,8 @@ interface ManualReviewRow {
   reviewer_notes: string | null;
   resolved_at: string | null;
   created_at: string;
+  /** JSON text; read only to derive `deskOnly` and `reportId`, never forwarded. */
+  context_data: string | null;
 }
 
 /**
@@ -258,6 +202,12 @@ function reviewToEvent(r: ManualReviewRow): PersonaEvent {
       description: r.description ?? "",
       severity: r.severity,
       reviewerNotes: r.reviewer_notes ?? null,
+      // Where a verdict command goes (spec 2.2, review_decide targeting).
+      deviceId: r.device_id ?? null,
+      // The desktop refuses an App Master review as desk_only: only the verdict on that rides along.
+      deskOnly: isDeskOnlyReview(r.context_data),
+      // A council Approval's report: the synced_messages row with this id.
+      reportId: reviewReportId(r.context_data),
     }),
     status,
     errorMessage: null,
@@ -340,62 +290,38 @@ export const supabaseApi: ApiClient = {
     return r.map(mapExecution);
   },
 
-  getExecution: async (id: string): Promise<ExecutionDetail> => {
+  // Same contract as the orchestrator's GET /api/executions/:id?offset=N and the
+  // mock: `output` is only the lines past the caller's cursor, `outputLines` the
+  // total. The sync row always carries the FULL buffer, so slice it here —
+  // returning it whole made the 1s poller re-append the log on every tick.
+  getExecution: async (id: string, offset?: number): Promise<ExecutionDetail> => {
     const r = await rows<ExecutionRow>(
       getSupabase().from("synced_executions").select("*").eq("id", id).limit(1),
     );
     if (r.length === 0) throw new ApiError(404, "Execution not found");
-    const e = r[0];
-    const output = e.output_data ? e.output_data.split("\n") : [];
-    return {
-      executionId: e.id,
-      status: mapStatus(e.status),
-      outputLines: output.length,
-      output,
-      durationMs: e.duration_ms ?? undefined,
-      sessionId: e.claude_session_id ?? undefined,
-      totalCostUsd: e.cost_usd ?? undefined,
-    };
+    return executionDetailFromRow(r[0], offset);
   },
 
-  cancelExecution: async () => readOnly(),
-
-  // Phase 2: a run from the dashboard is a *request*, not a direct execution.
-  // Insert a pending_commands row targeting the most-recently-active device;
-  // the desktop surfaces an approval prompt and runs it locally on approval.
-  // Returns the command id as the handle (status "queued" = awaiting approval).
-  executePersona: async (personaId: string, prompt: string) => {
-    const sb = getSupabase();
-    const devices = await rows<{ device_id: string }>(
-      sb
-        .from("synced_devices")
-        .select("device_id")
-        .order("last_seen_at", { ascending: false, nullsFirst: false })
-        .limit(1),
-    );
-    if (devices.length === 0) {
-      throw new ApiError(
-        409,
-        "No synced device is available. Open the desktop app and turn on cloud sync to run from the dashboard.",
+  // Phase 2 (PHASE2-SPEC.md 2.2, 6.2): every action is a signed command to the
+  // desktop that owns the persona, run there without per-command approval when
+  // this browser is a paired controller, and answered with the command id.
+  // cancel_execution names the persona (the desktop's owner check).
+  cancelExecution: async (id: string, personaId?: string) => {
+    let owner = personaId ?? null;
+    if (!owner) {
+      const r = await rows<{ persona_id: string }>(
+        getSupabase().from("synced_executions").select("persona_id").eq("id", id).limit(1),
       );
+      if (r.length === 0) throw new ApiError(404, "Execution not found");
+      owner = r[0].persona_id;
     }
-    const inserted = await rows<{ id: string }>(
-      sb
-        .from("pending_commands")
-        .insert({
-          command_type: "run_persona",
-          persona_id: personaId,
-          prompt,
-          target_device_id: devices[0].device_id,
-          requested_from: "web",
-          status: "pending",
-        })
-        .select("id"),
-    );
-    const id = inserted[0]?.id;
-    if (!id) throw new ApiError(500, "Failed to queue the run request.");
-    return { executionId: id, status: "queued" as PersonaExecutionStatus };
+    return sendCommand("cancel_execution", owner, { executionId: id });
   },
+
+  executePersona: async (personaId: string, prompt: string) => sendCommand("run_persona", personaId, { prompt }),
+
+  pausePersona: async (id: string) => sendCommand("pause_persona", id, {}),
+  resumePersona: async (id: string) => sendCommand("resume_persona", id, {}),
 
   listEvents: async (opts?: { eventType?: string; status?: string; limit?: number }) => {
     // Reviews live in their own synced table, not the event bus — adapt them
@@ -405,7 +331,7 @@ export const supabaseApi: ApiClient = {
         getSupabase()
           .from("synced_manual_reviews")
           .select(
-            "id, execution_id, persona_id, title, description, severity, status, reviewer_notes, resolved_at, created_at",
+            "id, device_id, execution_id, persona_id, title, description, severity, status, reviewer_notes, resolved_at, created_at, context_data",
           )
           .order("created_at", { ascending: false })
           .limit(opts?.limit ?? 100),
@@ -426,6 +352,10 @@ export const supabaseApi: ApiClient = {
 
   publishEvent: async (_input: CreateEventInput) => readOnly(),
   updateEvent: async () => readOnly(),
+  // Reviews are not read-only any more (M20): a verdict is a signed
+  // `review_decide` to the desktop that raised the review, else the persona's.
+  decideReview: async (input: ReviewDecisionInput) =>
+    sendCommand("review_decide", input.personaId, { ...reviewDecideParams(input.reviewId, input.decision, input.notes) }, input.deviceId),
 
   // Subscriptions and triggers are not part of the Phase-1 sync set yet.
   listSubscriptions: async (): Promise<PersonaEventSubscription[]> => [],
@@ -439,7 +369,8 @@ export const supabaseApi: ApiClient = {
     const r = await rows<{ last_seen_at: string | null }>(
       getSupabase().from("synced_devices").select("last_seen_at"),
     );
-    const cutoff = Date.now() - 5 * 60_000;
+    // The online gate's window, so the header and the phone gate never disagree.
+    const cutoff = Date.now() - DEVICE_FRESH_MS;
     const online = r.filter(
       (d) => d.last_seen_at && new Date(d.last_seen_at).getTime() > cutoff,
     ).length;
@@ -455,7 +386,8 @@ export const supabaseApi: ApiClient = {
     const r = await rows<{ last_seen_at: string | null }>(
       getSupabase().from("synced_devices").select("last_seen_at"),
     );
-    const cutoff = Date.now() - 5 * 60_000;
+    // The online gate's window, so the header and the phone gate never disagree.
+    const cutoff = Date.now() - DEVICE_FRESH_MS;
     const online = r.filter(
       (d) => d.last_seen_at && new Date(d.last_seen_at).getTime() > cutoff,
     ).length;
@@ -623,6 +555,69 @@ export const supabaseApi: ApiClient = {
 
     return { toolUsage, toolUsageOverTime, toolUsageByPersona };
   },
+
+  // The desktop pushes notes only while its "Sync notes" opt-in is on (PLAN
+  // M19, default off), as a full-set replace: an empty result is "not synced
+  // or no notes", never an error. Rows with a status the CHECK does not know
+  // are dropped by the mapper rather than drawn with an invented one.
+  listNotes: async () => {
+    const r = await rows<SyncedNoteRow>(
+      getSupabase().from("synced_notes").select(SYNCED_NOTE_COLUMNS).order("updated_at", { ascending: false }),
+    );
+    return r.flatMap((row) => {
+      const note = mapNoteRow(row);
+      return note ? [note] : [];
+    });
+  },
+
+  // Chat (PHASE2-SPEC.md 5.2): pushed only while the desktop's "Sync chats"
+  // opt-in is on (PLAN M19, default off), so an empty list is "not synced or
+  // no chats", never an error. Keys are composite (device, kind, id).
+  listChatSessions: async ({ threadKind, personaId }) => {
+    const { CHAT_SESSION_COLUMNS, mapChatSessionRow } = await chatModel();
+    let query = getSupabase().from("synced_chat_sessions").select(CHAT_SESSION_COLUMNS).eq("thread_kind", threadKind);
+    if (threadKind === "persona" && personaId) query = query.eq("persona_id", personaId);
+    const r = await rows<ChatSessionRow>(query.order("updated_at", { ascending: false }).limit(50));
+    return r.flatMap((row) => {
+      const session = mapChatSessionRow(row);
+      return session ? [session] : [];
+    });
+  },
+
+  // The newest 200 messages of the thread, returned oldest first.
+  listChatMessages: async ({ threadKind, deviceId, sessionId }) => {
+    const { CHAT_MESSAGE_COLUMNS, mapChatMessageRow, sortMessages } = await chatModel();
+    let query = getSupabase()
+      .from("synced_chat_messages")
+      .select(CHAT_MESSAGE_COLUMNS)
+      .eq("thread_kind", threadKind)
+      .eq("session_id", sessionId);
+    if (deviceId) query = query.eq("device_id", deviceId);
+    const r = await rows<ChatMessageRow>(query.order("created_at", { ascending: false }).limit(200));
+    return sortMessages(
+      r.flatMap((row) => {
+        const message = mapChatMessageRow(row);
+        return message ? [message] : [];
+      }),
+    );
+  },
+
+  // A chat_send command (spec 5.3) to the desktop that holds the thread:
+  // persona_id and envelope.persona are the persona, or 'athena'.
+  sendChatMessage: async (input) => {
+    const { ATHENA_PERSONA_ID, chatSendParams } = await chatModel();
+    const params = chatSendParams(input.sessionId, input.message);
+    if (!params) throw new ApiError(400, input.message.trim() ? "message_too_long" : "empty_message");
+    const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;
+    return sendCommand("chat_send", personaId, params, input.deviceId);
+  },
+
+  // A channel_say command to the App Master's own desktop: persona_id and
+  // envelope.persona are the master persona; params is exactly { message }.
+  sayToMaster: async (input) => {
+    const { channelSayParams } = await import("./commands/channelSay");
+    return sendCommand("channel_say", input.personaId, { ...channelSayParams(input.message) }, input.deviceId ?? null);
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -660,6 +655,28 @@ export interface SyncedKnowledgePattern {
   createdAt: string;
   updatedAt: string;
 }
+
+/** A council report as the phone shows it: no `metadata` (it carries desktop file paths). */
+export interface SyncedReport {
+  id: string;
+  persona_id: string | null;
+  title: string | null;
+  content: string | null;
+  content_type: string | null;
+  created_at: string;
+}
+
+/** The synced report a council Approval is about, or null when it has not synced yet. */
+export const getSyncedReport = async (id: string): Promise<SyncedReport | null> => {
+  const r = await rows<SyncedReport>(
+    getSupabase()
+      .from("synced_messages")
+      .select("id, persona_id, title, content, content_type, created_at")
+      .eq("id", id)
+      .limit(1),
+  );
+  return r[0] ?? null;
+};
 
 export const getSyncedMemories = async (): Promise<SyncedMemory[]> => {
   const r = await rows<{

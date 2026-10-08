@@ -2,12 +2,17 @@
 @import "../styles/tokens.css";
 @import "../styles/themes.css";
 @import "../styles/typography.css";
+@import "../styles/stage.css";
 
 /* ── Tailwind dark variant bridge ──
    Themes are selected via html[data-theme], and every dark preset is prefixed
    `dark-…`. Map Tailwind's `dark:` variant onto that scheme so `dark:block`
    et al. flip with manual theme switches, not only OS `prefers-color-scheme`. */
 @custom-variant dark (&:where([data-theme^="dark-"] *, [data-theme^="dark-"], .dark *, .dark));
+
+/* Desktop viewport tall enough for one-section-per-screen layout; the rules
+   and tokens behind it live in styles/stage.css. */
+@custom-variant stage (@media (min-width: 64rem) and (min-height: 37.5rem));
 
 /* ── Bridge shared tokens into Tailwind @theme ──
    Raw values live in packages/tokens/tokens.css — do NOT duplicate here. */
@@ -244,6 +249,14 @@ html {
   50% { box-shadow: 0 0 40px rgba(6, 182, 212, 0.3); }
 }
 
+/* Opacity-only glow: crossfade a layer that carries the peak shadow over one
+   that carries the resting shadow. Compositor-only, unlike animating
+   box-shadow, which repaints every frame. */
+@keyframes glow-crossfade {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
 @keyframes scroll-hint {
   0%, 100% { opacity: 0.4; transform: translateY(0); }
   50% { opacity: 0.8; transform: translateY(6px); }
@@ -335,6 +348,7 @@ html {
   .animate-gradient-sweep { animation: gradient-sweep 6s ease infinite; background-size: 200% 200%; }
   .animate-glow-border { animation: glow-border 3s ease-in-out infinite; }
   .animate-glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+  .animate-glow-crossfade { animation: glow-crossfade 3s ease-in-out infinite; }
   .animate-scroll-hint { animation: scroll-hint 2s ease-in-out infinite; }
   .animate-bar-grow { animation: bar-grow 0.8s ease-out forwards; transform-origin: bottom; }
   .animate-spin-slow { animation: spin-slow 30s linear infinite; }
@@ -580,20 +594,6 @@ html {
   border-radius: 16px;
 }
 
-@keyframes section-divider-scroll-reveal {
-  0% { opacity: 0; transform: scaleX(0.6); }
-  30% { opacity: 0.15; transform: scaleX(1); }
-  70% { opacity: 0.15; transform: scaleX(1); }
-  100% { opacity: 0; transform: scaleX(0.6); }
-}
-
-.section-divider-scroll {
-  animation-name: section-divider-scroll-reveal;
-  animation-duration: 1ms;
-  animation-fill-mode: both;
-  transform-origin: center;
-}
-
 @keyframes typewriter-line-reveal {
   from {
     width: 0;
@@ -617,7 +617,7 @@ html {
   animation-timing-function: steps(24, end);
 }
 
-/* ── Typewriter Character Reveal (CinematicBreather) ── */
+/* ── Typewriter Character Reveal (/how manifesto) ── */
 
 @keyframes tw-char-reveal {
   from { opacity: 0; transform: translateY(8px); }

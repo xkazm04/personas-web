@@ -3,6 +3,8 @@ import {
   OrchestratorConfigError,
   validateOrchestratorUrl,
 } from "@/lib/orchestrator-config";
+import { matchDesktopShape } from "../desktopShapes";
+import { verifySession } from "../userSession";
 
 /**
  * Same-origin proxy for every orchestrator REST call.
@@ -10,11 +12,47 @@ import {
  * The team API key MUST NOT reach the browser bundle, so the client calls
  * `/api/orchestrator/<path>` and this handler attaches the key server-side
  * (preferring the server-only `TEAM_API_KEY`, falling back to the legacy
- * `NEXT_PUBLIC_TEAM_API_KEY` during migration). The user's own Supabase
- * session token is forwarded from the `X-User-Token` header when present.
+ * `NEXT_PUBLIC_TEAM_API_KEY` during migration). The key carries the
+ * orchestrator's full authority, so it is attached only for a caller whose
+ * `X-User-Token` Supabase verifies as a live session (`userSession.ts`); that
+ * token is forwarded too.
  */
 function orchestratorKey(): string | undefined {
   return process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
+}
+
+/**
+ * The orchestrator URL for a proxied path, or null when the path could leave
+ * the orchestrator. Every segment is percent-encoded, so only the joining
+ * slashes are structure, but an empty first segment still makes `//host`, a
+ * protocol-relative URL that swaps the host (and sends the team key there).
+ * Next redirects `//` paths today; this check does not depend on it.
+ */
+function upstreamUrl(base: string, path: string[], search: string): URL | null {
+  if (path.length === 0 || path.some((s) => s === "" || s === "." || s === "..")) return null;
+  const url = new URL("/" + path.map(encodeURIComponent).join("/"), base);
+  if (url.origin !== new URL(base).origin) return null;
+  url.search = search;
+  return url;
+}
+
+const JSON_TYPE = /^application\/(?:[\w.+-]+\+)?json\s*(?:;|$)/i;
+
+/**
+ * Headers for a relayed answer. The proxy answers on the app's own origin, the
+ * one that holds a paired phone's signing key (PHASE2-SPEC 3.5), under a site
+ * CSP that allows inline script: an HTML or SVG body relayed here would run as
+ * this origin. The orchestrator is a JSON API, so only a JSON type passes
+ * through, anything else is served as inert text, and the answer may not be
+ * sniffed, framed or run.
+ */
+function relayHeaders(upstreamType: string | null): Record<string, string> {
+  const json = upstreamType === null || JSON_TYPE.test(upstreamType.trim());
+  return {
+    "Content-Type": json ? (upstreamType ?? "application/json") : "text/plain; charset=utf-8",
+    "X-Content-Type-Options": "nosniff",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'; sandbox",
+  };
 }
 
 async function proxy(req: NextRequest, path: string[]): Promise<Response> {
@@ -28,15 +66,38 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
     throw err;
   }
 
-  const targetPath = "/" + path.map(encodeURIComponent).join("/");
-  const url = new URL(targetPath, base);
-  url.search = req.nextUrl.search;
+  const userToken = req.headers.get("x-user-token");
+  const session = await verifySession(userToken);
+  if (session === "unavailable") {
+    return Response.json({ error: "auth_unavailable" }, { status: 503 });
+  }
+  if (session !== "verified" || !userToken) {
+    return Response.json({ error: "unauthenticated" }, { status: 401 });
+  }
 
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const url = upstreamUrl(base, path, req.nextUrl.search);
+  if (!url) {
+    return Response.json({ error: "bad_path" }, { status: 400 });
+  }
+
+  // Pointed at the desktop, only the shapes its management API serves go
+  // upstream; everything else is a typed 501 rather than a bare 404.
+  if (process.env.ORCHESTRATOR_TARGET === "desktop") {
+    const shape = matchDesktopShape(req.method, path);
+    if (shape?.served !== "desktop") {
+      return Response.json(
+        { error: "not_on_desktop", method: req.method, path: "/" + path.join("/") },
+        { status: 501 },
+      );
+    }
+  }
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "X-User-Token": userToken,
+  };
   const key = orchestratorKey();
   if (key) headers["Authorization"] = `Bearer ${key}`;
-  const userToken = req.headers.get("x-user-token");
-  if (userToken) headers["X-User-Token"] = userToken;
 
   const hasBody = req.method !== "GET" && req.method !== "HEAD";
   const body = hasBody ? await req.text() : undefined;
@@ -63,9 +124,7 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
     upstream.status >= 200 && upstream.status < 600 ? upstream.status : 502;
   return new Response(respBody || null, {
     status: safeStatus,
-    headers: {
-      "Content-Type": upstream.headers.get("Content-Type") ?? "application/json",
-    },
+    headers: relayHeaders(upstream.headers.get("Content-Type")),
   });
 }
 

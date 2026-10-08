@@ -8,7 +8,10 @@ import {
   countPending,
   overlay,
   applyConfirmed,
+  reconcileConfirmed,
   transition,
+  MIRROR_LAG_MS,
+  type ConfirmedMap,
   type LedgerState,
 } from "./review-ledger";
 
@@ -165,13 +168,14 @@ function walk(dir: string): string[] {
 }
 
 describe("review ledger: source scans", () => {
-  it("no review surface or hook calls resolveReview( directly", () => {
-    const files = [
-      ...walk(path.join(SRC, "app/dashboard/reviews")),
-      ...walk(path.join(SRC, "app/m/reviews")),
-      path.join(SRC, "hooks/useReviewBulkActions.ts"),
-    ];
-    const offenders = files.filter((f) => /\bresolveReview\(/.test(readFileSync(f, "utf8")));
+  // Every review surface, whatever route tree it lives in (the desktop
+  // /dashboard/reviews today, a future /m view tomorrow), goes through the
+  // store's ledger. Scanning all of src instead of a list of surface folders
+  // means a new surface is covered the day it lands.
+  it("nothing outside the review store calls resolveReview( directly", () => {
+    const offenders = walk(SRC).filter(
+      (f) => /\bresolveReview\(/.test(readFileSync(f, "utf8")) && !f.endsWith(path.join("stores", "reviewStore.ts")),
+    );
     expect(offenders.map((f) => path.relative(SRC, f))).toEqual([]);
   });
 
@@ -180,5 +184,45 @@ describe("review ledger: source scans", () => {
       (f) => /pendingReviewCount:/.test(readFileSync(f, "utf8")) && !f.endsWith(path.join("stores", "reviewStore.ts")),
     );
     expect(offenders.map((f) => path.relative(SRC, f))).toEqual([]);
+  });
+});
+
+describe("review ledger: a confirmed verdict outlives a lagging mirror (M20)", () => {
+  // A review_decide completes when the desktop has applied it; the synced row
+  // follows a sync pass later. A fetch in between must not repaint it pending.
+  const confirmed: ConfirmedMap = {
+    r1: { verdict: "approved", resolvedBy: "You", notes: "ok", at: NOW },
+  };
+
+  it("paints a confirmed verdict over a row the mirror still has pending", () => {
+    const out = reconcileConfirmed([row("r1"), row("r2")], confirmed, NOW + 5_000);
+    expect(out.rows[0]).toMatchObject({ id: "r1", status: "approved", resolvedBy: "You", reviewerNotes: "ok" });
+    expect(out.rows[1].status).toBe("pending");
+    expect(out.confirmed).toBe(confirmed);
+  });
+
+  it("once the mirror agrees, the row is the mirror's, keeping who decided it", () => {
+    const synced = { ...row("r1", "approved"), resolvedBy: "System", reviewerNotes: "ok" };
+    const out = reconcileConfirmed([synced], confirmed, NOW + 5_000);
+    expect(out.rows[0]).toMatchObject({ status: "approved", resolvedBy: "You" });
+    expect(out.confirmed.r1).toBeDefined();
+  });
+
+  it("a row decided the other way elsewhere wins, and the echo is dropped", () => {
+    const out = reconcileConfirmed([row("r1", "rejected")], confirmed, NOW + 5_000);
+    expect(out.rows[0].status).toBe("rejected");
+    expect(out.confirmed.r1).toBeUndefined();
+  });
+
+  it("a mirror still pending after the lag allowance is believed", () => {
+    const out = reconcileConfirmed([row("r1")], confirmed, NOW + MIRROR_LAG_MS);
+    expect(out.rows[0].status).toBe("pending");
+    expect(out.confirmed.r1).toBeUndefined();
+  });
+
+  it("no echoes: the rows pass through untouched", () => {
+    const rows = [row("r1")];
+    const out = reconcileConfirmed(rows, {}, NOW);
+    expect(out.rows).toEqual(rows);
   });
 });

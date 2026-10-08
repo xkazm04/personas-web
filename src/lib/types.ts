@@ -1,5 +1,11 @@
 // ---------------------------------------------------------------------------
-// Domain types — mirrors personas-cloud/packages/shared/src/types.ts
+// Domain types — the web's OWN display contract, and the source of truth for
+// it. Every ApiClient backend (realApi, supabaseApi, mockApi) maps into these
+// shapes. They started as a subset of personas-cloud's
+// packages/shared/src/types.ts but are not kept in sync with it and have
+// diverged on purpose: fields the dashboard never reads are omitted, and
+// EventStatus follows the web's delivery FSM (src/lib/eventStatusFsm.ts), not
+// the orchestrator's. Map at the backend adapter; do not assume parity.
 // ---------------------------------------------------------------------------
 
 export interface Persona {
@@ -19,6 +25,11 @@ export interface Persona {
   maxTurns: number | null;
   designContext: string | null;
   groupId: string | null;
+  /**
+   * The desktop that owns the persona (`synced_personas.device_id`): where a
+   * remote command for it is sent. Only the sync mirror knows it.
+   */
+  deviceId?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -158,6 +169,12 @@ export interface ManualReviewItem extends WithPersonaInfo {
   resolvedAt: string | null;
   resolvedBy: string | null;
   escalatedAt: string | null;
+  /** The desktop that raised it (`synced_manual_reviews.device_id`), where the plane knows it: a verdict command goes there. */
+  deviceId?: string | null;
+  /** The desktop refuses a phone verdict on this review (App Master packet or ask): decide it at the desk. Absent means false. */
+  deskOnly?: boolean;
+  /** The synced report (`synced_messages.id`) a council Approval is about, where the plane carries it. */
+  reportId?: string | null;
   /** True when the event payload failed JSON.parse or omitted/used an invalid
    *  severity. Such reviews are fail-loud escalated to "critical" so a
    *  malformed payload can never widen the SLA via the info default. */

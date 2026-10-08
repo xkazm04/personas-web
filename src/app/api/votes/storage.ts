@@ -10,7 +10,6 @@ import { readJsonFile, writeJsonFile } from "@/lib/server/json-file-store";
 
 export const ALLOWED_FEATURES = new Set([
   "macos",
-  "i18n",
   "dashboard",
   "enterprise",
 ]);

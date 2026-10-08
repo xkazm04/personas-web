@@ -123,7 +123,7 @@ Abre **Companion → Memory** para ver todo lo que Athena sabe. El visor de Brai
 
 ### Privacidad
 
-Los datos del cerebro — los cinco niveles de memoria — viven en tu máquina en \`~/.personas/companion-brain/\`. Nada se guarda en una base de datos en la nube. Si usas los motores locales Whisper para STT y Piper para TTS, tampoco sale ningún audio de tu máquina.
+Los datos del cerebro — los cinco niveles de memoria — viven en tu máquina en \`~/.personas/companion-brain/\`. Nada de ello se guarda en una base de datos en la nube, con una única excepción opcional: si activas "Sincronizar chats" en los ajustes de sincronización en la nube de la app de escritorio (desactivado por defecto), tus conversaciones con ella se copian a tu cuenta de Personas, con todo lo que parezca una clave enmascarado, para que puedas leerlas y responderlas desde tu teléfono. Desactivarlo borra esa copia. Si usas los motores locales Whisper para STT y Piper para TTS, tampoco sale ningún audio de tu máquina.
 
 :::tip
 La entrevista inicial es breve (unos minutos) y rinde beneficios de inmediato: las primeras respuestas de Athena tras una buena entrevista son notablemente más acertadas. Ejecútala antes de tu primera sesión real.

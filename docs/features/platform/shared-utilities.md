@@ -7,7 +7,7 @@ This is the toolbox every other feature reaches for. It has no UI of its own. It
 ## How it works
 Mostly independent, single-purpose modules; the only shared theme is "centralize a cross-cutting concern so it isn't reinvented per section."
 
-**Domain types** (`src/lib/types.ts`). A hand-maintained mirror of `personas-cloud/packages/shared/src/types.ts` (`types.ts:2`): `Persona`, `PersonaExecution`, `PersonaEvent`, `PersonaTrigger`, `WorkerInfo`, API responses (`HealthResponse`, `StatusResponse`, `ExecutionDetail`), frontend enrichments (`WithPersonaInfo`, `GlobalExecution`, `ManualReviewItem`), status literal unions (`PersonaExecutionStatus`, `EventStatus`, `ReviewSeverity`/`ReviewStatus`, `BadgeStatus`), escalation policy types, and observability/usage shapes (`ObservabilityMetrics`, `DailyMetric`, `PersonaSpend`, `ToolUsage*`). `ManualReviewItem.parseError` is a fail-loud flag: a malformed event payload is escalated to "critical" rather than silently defaulting to "info" and widening the SLA (`types.ts:161-165`).
+**Domain types** (`src/lib/types.ts`). The web's own display contract and its source of truth (`types.ts:1-9`); every `ApiClient` backend maps into it. It began as a subset of `personas-cloud/packages/shared/src/types.ts` but is deliberately not kept in sync (unread fields omitted; `EventStatus` follows the web's delivery FSM): `Persona`, `PersonaExecution`, `PersonaEvent`, `PersonaTrigger`, `WorkerInfo`, API responses (`HealthResponse`, `StatusResponse`, `ExecutionDetail`), frontend enrichments (`WithPersonaInfo`, `GlobalExecution`, `ManualReviewItem`), status literal unions (`PersonaExecutionStatus`, `EventStatus`, `ReviewSeverity`/`ReviewStatus`, `BadgeStatus`), escalation policy types, and observability/usage shapes (`ObservabilityMetrics`, `DailyMetric`, `PersonaSpend`, `ToolUsage*`). `ManualReviewItem.parseError` is a fail-loud flag: a malformed event payload is escalated to "critical" rather than silently defaulting to "info" and widening the SLA (`types.ts:166-170`).
 
 **Formatters.** `format.ts` — `formatDuration(ms)` (ms→`ms`/`s`/`m`/`h`, `null`→"-"), `formatCost(usd)` (`$0.0000`, 4dp), `nonBlank` (whitespace→`undefined` so `??` chains skip empty OAuth `full_name`s), and `relativeTime(iso)` ("just now"/"Xm ago"/.../"Xd ago"). `format-date.ts` — `formatDateShort`/`formatDateLong` for content pages. **Both date paths force UTC** (parse as `iso + "T00:00:00Z"`, format with `timeZone: "UTC"`) so SSR (always UTC) and the client produce identical strings — no hydration mismatch and no west-of-UTC user seeing the prior day (`format-date.ts:5-9`).
 
@@ -28,7 +28,7 @@ Mostly independent, single-purpose modules; the only shared theme is "centralize
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/lib/types.ts` | Domain model — personas/executions/events/reviews + status unions, API & observability shapes (mirrors cloud `shared`) |
+| `src/lib/types.ts` | Domain model — personas/executions/events/reviews + status unions, API & observability shapes (web-owned; diverged from cloud `shared` on purpose) |
 | `src/lib/format.ts` | `formatDuration` / `formatCost` / `nonBlank` / `relativeTime` |
 | `src/lib/format-date.ts` | `formatDateShort` / `formatDateLong` — UTC-pinned content-page dates |
 | `src/lib/validation.ts` | `isValidEmail` (ReDoS-safe) / `isValidVoterId` (type-guard) |
@@ -50,7 +50,7 @@ Mostly independent, single-purpose modules; the only shared theme is "centralize
 ## Integration points
 - **`usePolling`** is wrapped by `src/hooks/useExecutionPolling.ts` (default 1000ms, auto-stops on terminal status) and used directly by the dashboard executions page and `reviewStore`.
 - **`useFocusTrap`** is consumed by `src/components/ConfirmDialog.tsx` and `src/components/dashboard/BatchReviewModal.tsx`.
-- **`useSearchParamState`** seeds filter/tab state in `src/app/dashboard/executions/page.tsx`, `src/app/connections/page.tsx`, and the feature-voting section.
+- **`useSearchParamState`** seeds filter/tab state in `src/components/dashboard/views/executions/index.tsx`, `src/app/connections/page.tsx`, and the feature-voting section.
 - **`lockBodyScroll`/`unlockBodyScroll`** is shared by `navbar/useMobileMenu.ts`, `navbar/DownloadModal.tsx`, `connector-modal`, `MobilePageTOC`, and `MobileTopicTOC` — the counted design is what lets these nest safely.
 - **`getClientIp`** feeds the voting/waitlist rate limiters (see [Server-Side Vote Persistence](../community/vote-persistence.md)); **`hasSupabaseEnv`** gates the Supabase-vs-file-store branch.
 - **`CHART_COLORS`** is re-exported from `@/lib/chart-theme`; **`relativeTime`** lazily imports `@sentry/nextjs` for its skew breadcrumb.

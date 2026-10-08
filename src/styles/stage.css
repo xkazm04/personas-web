@@ -1,0 +1,221 @@
+/* ── Stage fit: one section per viewport on desktop ──────────────────────
+   Every marketing section sized from the viewport's HEIGHT as well as its
+   width, so a 1366x768 laptop and a 2560x1440 monitor each see exactly one
+   section per screen. Measured before this existed (2026-09-25): every
+   section sat at a fixed 911-1704px on every viewport, 1.6-3x a laptop's
+   usable height, because padding, heading size and art were all pixel-fixed.
+
+   Scope: `stage` = (min-width: 64rem) and (min-height: 37.5rem). Below it
+   (phones, tablets, very short windows) sections keep their natural flow.
+   The variant of the same name (globals.css) lets components add their own
+   stage-only classes.
+
+   How a section opts in: `<SectionWrapper fit="fill" | "min">` renders
+   `data-stage`, which the rules below turn into a viewport-high flex column:
+   - fill: exactly one stage high. Put the dominant visual in a
+     `data-stage-slot` element; it takes the height left after the intro and
+     is a size container, so art inside can size itself with `cqh`/`cqw`
+     (e.g. `width: min(100%, 100cqh * 16 / 9)`).
+   - min:  at least one stage high (text sections whose height the reader
+     controls, like an accordion); its body goes in a `data-stage-body`
+     element, which centres in the room under the intro.
+
+   These rules are deliberately unlayered: unlayered CSS outranks Tailwind's
+   `@layer utilities`, so the stage values override the mobile-first
+   `mb-12` / `mt-6` / `py-36` the components already carry without every
+   call site being rewritten. */
+
+:root {
+  /* Fixed navbar: py-4 + 44px controls + border, measured 86px. */
+  --nav-h: 5.375rem;
+  --stage-h: calc(100svh - var(--nav-h));
+  --stage-pad-y: clamp(1rem, 3.2svh, 3.5rem);
+  /* Intro → visual gap. */
+  --stage-gap: clamp(0.875rem, 2.6svh, 2.5rem);
+  /* Content width: wide enough that a section's content sits in one row,
+     leaving a 7rem gutter each side for the fixed scroll map (ticks plus
+     the active label at rest; ScrollMap.tsx). */
+  --stage-max-w: min(100vw - 14rem, 100rem);
+  /* Display sizes follow the smaller of width and height, so a short
+     laptop screen gets a shorter heading instead of a wrapped one. */
+  --display-1: clamp(2.5rem, min(5.4vw, 8.6svh), 5.5rem);
+  --display-2: clamp(1.875rem, min(3.6vw, 5.6svh), 4.5rem);
+}
+
+@media (min-width: 64rem) and (min-height: 37.5rem) {
+  html {
+    /* Proximity by default: a page that mixes stages with free-flowing
+       content must never capture its reader between two snap points. */
+    scroll-snap-type: y proximity;
+    scroll-padding-top: var(--nav-h);
+  }
+  /* A page built only of stages (PageShell `snap`: the landing, /features)
+     snaps every scroll to exactly one section. Proximity let a scroll stop
+     anywhere, so the reader routinely saw the bottom of one section and the
+     top of the next (2026-10-06). `always` stops a fling at the next section
+     instead of skipping past it. A section taller than the viewport (an
+     opened FAQ) stays scrollable inside: browsers let a snap area larger than
+     the viewport scroll freely. */
+  html:has([data-snap-page]) {
+    scroll-snap-type: y mandatory;
+  }
+  html:has([data-snap-page]) [data-stage],
+  html:has([data-snap-page]) [data-stage-hero],
+  html:has([data-snap-page]) [data-lazy-stage] [data-lazy-placeholder] {
+    scroll-snap-stop: always;
+  }
+  /* The footer is shorter than a stage: it snaps by its bottom edge so it is
+     reachable under mandatory snapping. */
+  html:has([data-snap-page]) footer {
+    scroll-snap-align: end;
+  }
+
+  /* Every stage anchors its intro at the same height under the navbar - the
+     heading sits at one place on every section - and the body takes the room
+     left under it: a `data-stage-slot` fills it, a `data-stage-body` centres
+     in it. Centring the whole column instead put each heading at a different
+     height (135-285px on a 790px screen) and let short sections float. */
+  [data-stage] {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-block: var(--stage-pad-y);
+    scroll-snap-align: start;
+  }
+  [data-stage] [data-stage-body] {
+    margin-block: auto;
+  }
+  [data-stage="fill"] {
+    height: var(--stage-h);
+  }
+  [data-stage="min"] {
+    min-height: var(--stage-h);
+  }
+
+  [data-stage] > [data-stage-inner] {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-width: var(--stage-max-w);
+  }
+
+  /* The dominant visual: whatever height is left after the intro. */
+  [data-stage] [data-stage-slot] {
+    flex: 1 1 0;
+    min-height: 0;
+    container-type: size;
+  }
+  /* A slot that directly holds stage art centres it vertically. (Scoped with
+     :has so a slot that is itself a grid - the companion's - keeps its own
+     display.) */
+  [data-stage] [data-stage-slot]:has(> [data-stage-art]) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Aspect-ratio art inside a slot: as wide as the stage allows, but never
+     taller than the slot. The component sets --art-ar (width / height) as a
+     number; the art keeps its own aspect-ratio box inside. */
+  [data-stage] [data-stage-art] {
+    width: min(100%, calc((100cqh - 4px) * var(--art-ar, 2)));
+    max-width: none;
+    margin-inline: auto;
+    margin-block: 0;
+  }
+
+  /* Intro block (SectionIntro and hand-rolled intros that carry the attr). */
+  [data-stage] [data-section-intro] {
+    margin-bottom: var(--stage-gap);
+  }
+  [data-stage] [data-section-intro] [data-section-eyebrow] {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  [data-stage] [data-section-intro] [data-section-lede] {
+    margin-top: clamp(0.5rem, 1.4svh, 1rem);
+  }
+  [data-stage] h2[data-section-heading] {
+    font-size: var(--display-2);
+  }
+
+  /* The hero sits under the navbar: a full 100svh, content below the bar. */
+  [data-stage-hero] {
+    height: 100svh;
+    min-height: 0;
+    padding-top: var(--nav-h);
+    scroll-snap-align: start;
+    scroll-margin-top: calc(-1 * var(--nav-h));
+  }
+  [data-stage-hero] h1[data-section-heading] {
+    font-size: var(--display-1);
+  }
+
+  /* A LazyMount whose content is a stage (<LazyMount stage>) reserves exactly
+     one stage - in its placeholder and in the section skeleton that shows
+     while the chunk loads - so nothing below shifts when it mounts and
+     scroll-map jumps land on the section they name. Opt-in: other LazyMounts
+     (the dashboard's measured 1690px one) keep their own reservation. */
+  [data-lazy-stage] [data-lazy-placeholder] {
+    min-height: var(--stage-h);
+    scroll-snap-align: start;
+  }
+}
+
+/* ── Height tiers for DOM-built content ──
+   SVG art in a data-stage-slot grows with the screen on its own; a section
+   built from cards, rows and chips does not - on a 1440p monitor it kept its
+   laptop size and floated in the middle of the stage. `data-stage-zoom` on
+   the block under the intro scales that block up by tier. `zoom` (not a
+   transform) so text is re-rasterised crisp, layout reserves the scaled size,
+   and percentage widths still resolve against the unzoomed container - the
+   block grows taller and its type larger, never wider than the stage. */
+@media (min-width: 64rem) and (min-height: 56rem) {
+  [data-stage] [data-stage-zoom] {
+    zoom: 1.2;
+  }
+}
+@media (min-width: 80rem) and (min-height: 67.5rem) {
+  [data-stage] [data-stage-zoom] {
+    zoom: 1.35;
+  }
+}
+@media (min-width: 100rem) and (min-height: 78rem) {
+  [data-stage] [data-stage-zoom] {
+    zoom: 1.6;
+  }
+}
+
+/* ── Height tiers for fixed-size compositions ──
+   A few illustrations are laid out in fixed pixels (a 592px layer stack, a
+   station line) because their parts are positioned against each other.
+   `data-stage-fixed` scales such a block as a whole - down on short laptop
+   screens, up on tall monitors - so it keeps its proportions and fits the
+   stage. Designed for a composition about 600px tall. */
+@media (min-width: 64rem) and (min-height: 37.5rem) and (max-height: 42.99rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 0.68;
+  }
+}
+@media (min-width: 64rem) and (min-height: 43rem) and (max-height: 47.99rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 0.78;
+  }
+}
+@media (min-width: 64rem) and (min-height: 48rem) and (max-height: 55.99rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 0.87;
+  }
+}
+@media (min-width: 80rem) and (min-height: 67.5rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 1.15;
+  }
+}
+@media (min-width: 100rem) and (min-height: 78rem) {
+  [data-stage] [data-stage-fixed] {
+    zoom: 1.35;
+  }
+}

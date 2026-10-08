@@ -11,7 +11,7 @@ import {
   type ShippedPluginId,
 } from "@/data/desktop-plugins";
 
-export const SHOWCASE_KEYS = ["dev-tools", "obsidian-brain"] as const satisfies readonly ShippedPluginId[];
+export const SHOWCASE_KEYS = ["dev-tools", "obsidian-brain", "drive", "twin"] as const satisfies readonly ShippedPluginId[];
 
 export type ShowcaseKey = (typeof SHOWCASE_KEYS)[number];
 
@@ -38,12 +38,10 @@ export interface IntroCopy {
   introTail: string;
 }
 
-/** Replace each `{name}` with its value; an unknown placeholder stays visible. */
-export function fillTemplate(template: string, vars: Record<string, string | number>): string {
-  return template.replace(/\{(\w+)\}/g, (whole, name: string) =>
-    Object.hasOwn(vars, name) ? String(vars[name]) : whole,
-  );
-}
+import { fillTemplate } from "@/lib/fillTemplate";
+
+// Shared template helper; re-exported for this module's existing callers.
+export { fillTemplate } from "@/lib/fillTemplate";
 
 /**
  * The section intro. Both numbers are computed: `shipped` from the desktop

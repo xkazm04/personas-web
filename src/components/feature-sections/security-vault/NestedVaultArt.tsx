@@ -5,6 +5,7 @@ import { easeOut, motion, useTransform, type MotionValue } from "framer-motion";
 import { KeyRound } from "lucide-react";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { Bolts, H, RINGS, Ring, W, rotateStyle } from "./nestedVaultParts";
+import { securitySectionCopy } from "@/i18n/pending/securitySection";
 
 /*
  * Geometry (viewBox 760 x 480, drawn around the vault centre at 0,0).
@@ -21,6 +22,7 @@ import { Bolts, H, RINGS, Ring, W, rotateStyle } from "./nestedVaultParts";
 
 export default function NestedVaultArt({ progress }: { progress: MotionValue<number> }) {
   const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const copy = securitySectionCopy;
   const keyY = useTransform(progress, [0, 0.2], [-290, 0], { ease: easeOut });
   const keyOpacity = useTransform(progress, [0, 0.05], [0, 1]);
   const keyScale = useTransform(progress, [0.9, 0.95, 1], [1, 1.14, 1]);
@@ -60,7 +62,13 @@ export default function NestedVaultArt({ progress }: { progress: MotionValue<num
       <circle r={78} fill={tint("amber", 5)} stroke={tint("amber", 18)} strokeWidth={1} />
 
       {RINGS.map((spec, i) => (
-        <Ring key={spec.label} spec={spec} progress={progress} pathId={`nv-label-${uid}-${i}`} />
+        <Ring
+          key={spec.r}
+          spec={spec}
+          label={"key" in spec.label ? copy.rings[spec.label.key] : spec.label.literal}
+          progress={progress}
+          pathId={`nv-label-${uid}-${i}`}
+        />
       ))}
 
       <motion.g style={{ y: keyY, opacity: keyOpacity }}>
@@ -77,7 +85,7 @@ export default function NestedVaultArt({ progress }: { progress: MotionValue<num
         className="font-mono"
         style={{ opacity: labelOpacity }}
       >
-        Your keys
+        {copy.yourKeys}
       </motion.text>
     </svg>
   );

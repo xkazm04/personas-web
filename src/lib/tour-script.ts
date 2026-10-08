@@ -27,7 +27,6 @@ export type TourNarrationKey =
   | "features5"
   | "features6"
   | "dashboardHome"
-  | "dashboardAgents"
   | "dashboardExecutions"
   | "dashboardEvents"
   | "dashboardReviews"
@@ -37,11 +36,11 @@ export type TourNarrationKey =
 
 /**
  * A timed side effect fired while a step is on screen — used to drive a
- * diagram's animation in sync with the narration (click "Triage my Gmail",
+ * diagram's animation in sync with the narration (start the Gmail example,
  * highlight each trigger in turn, open each platform card, …). Scheduled
  * relative to the moment the step becomes active and cancelled on step
  * change / exit. Keep `run` resilient: the target may not be mounted yet, so
- * guard DOM lookups (see the `click*` helpers below).
+ * guard DOM lookups (see `clickTarget` below).
  */
 export interface TourAction {
   /** ms after the step becomes active to fire `run`. */
@@ -117,24 +116,6 @@ export function clickTarget(selector: string): void {
   el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
 }
 
-/**
- * Click the first clickable element (button / [role=button] / [data-*]) whose
- * trimmed text contains `text`. Used when a control has no stable selector but
- * a unique label (e.g. the "Triage my Gmail" example chip).
- */
-export function clickByText(text: string): void {
-  if (typeof document === "undefined") return;
-  const nodes = document.querySelectorAll<HTMLElement>(
-    'button, [role="button"]',
-  );
-  for (const el of nodes) {
-    if ((el.textContent ?? "").trim().includes(text)) {
-      el.click();
-      return;
-    }
-  }
-}
-
 // `INTRO_AUDIO_SRC` lives in `@/lib/tour-audio` — TourProvider mounts on every
 // page and must not pull these step scripts into the above-fold chunk.
 
@@ -153,7 +134,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     dwellMs: 12000,
     audioSrc: "/tour/step1.mp3",
   },
-  // 2. Agent mind — start the "Triage my Gmail" run so the agent visibly
+  // 2. Agent mind — start the Gmail example run so the agent visibly
   //    parses, plans, and executes while it's narrated.
   {
     id: "agent-mind",
@@ -162,7 +143,8 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     narration: "step2",
     dwellMs: 13000,
     audioSrc: "/tour/step2.mp3",
-    actions: [{ atMs: 2200, run: () => clickByText("Triage my Gmail") }],
+    // Aimed by the example's id, not its label: the label is translated copy.
+    actions: [{ atMs: 2200, run: () => clickTarget('[data-example-id="gmail"]') }],
   },
   // 3. Orchestration — highlight four trigger types in turn as they're named.
   {
@@ -174,7 +156,7 @@ export const HOME_TOUR_STEPS: TourStep[] = [
     audioSrc: "/tour/step3.mp3",
     actions: [
       { atMs: 2500, run: () => clickTarget('[data-trigger-id="schedule"]') },
-      { atMs: 5000, run: () => clickTarget('[data-trigger-id="event"]') },
+      { atMs: 5000, run: () => clickTarget('[data-trigger-id="event_listener"]') },
       { atMs: 7500, run: () => clickTarget('[data-trigger-id="polling"]') },
       { atMs: 10000, run: () => clickTarget('[data-trigger-id="webhook"]') },
     ],
@@ -306,7 +288,7 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
 
 // /dashboard — one recording per page. The home clip is a single ~46s track
 // whose spotlight sweeps the six home regions in time with the narration; each
-// dashboard tab (Agents, Executions, Events, Reviews) is then its own step on
+// dashboard view (Executions, Events, Reviews) is then its own step on
 // its own route, navigated to in turn. `dwellMs` is only the audio-error
 // fallback here — auto-advance is driven by each clip's `ended` event. No
 // bridge: Reviews is the end of the journey.
@@ -326,15 +308,6 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
     narration: "dashboardHome",
     dwellMs: 48000,
     audioSrc: "/tour/dashboardHome.mp3",
-  },
-  {
-    id: "agents",
-    route: "/dashboard/agents",
-    scrollTarget: '[data-tour-diagram="dashboard-agents"]',
-    spotlightTarget: '[data-tour-diagram="dashboard-agents"]',
-    narration: "dashboardAgents",
-    dwellMs: 27000,
-    audioSrc: "/tour/dashboardAgents.mp3",
   },
   {
     id: "executions",

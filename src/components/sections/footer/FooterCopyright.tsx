@@ -10,7 +10,7 @@ export function FooterCopyright({ copyright, slogan }: { copyright: string; slog
       <span>&copy; <ClientYear /> {copyright}</span>
       {/* LanguageSwitcher renders null in production (dev/QA-gated), so the
           footer layout is unchanged unless NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER. */}
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <ThemeSwitcher />
         <LanguageSwitcher />
       </div>

@@ -25,6 +25,9 @@ import {
   MOCK_DIRECTOR_VERDICTS,
   MOCK_ATHENA_ACTION_MIX,
   MOCK_ATHENA_LEDGER,
+  MOCK_NOTES,
+  MOCK_CHAT_SESSIONS,
+  MOCK_CHAT_MESSAGES,
   type AthenaActionCost,
   type AthenaLedgerTotals,
   type AthenaUsagePoint,
@@ -34,7 +37,17 @@ import {
   type HealthCheckSection,
   type ValueRollup,
 } from "./mock-dashboard-data";
-import { ApiError, type ApiClient } from "./api";
+import { ApiError, type ApiClient, type CommandAck } from "./api";
+import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
+import type { SyncedNote } from "./notes/notesModel";
+import type {
+  ChatMessage,
+  ChatSendInput,
+  ChatSession,
+  ChatThreadRef,
+  ListChatSessionsInput,
+} from "./chat/chatModel";
+import type { ChannelSayInput } from "./commands/channelSay";
 import type {
   Persona,
   PersonaExecution,
@@ -53,9 +66,11 @@ import type {
   ToolUsageSummary,
   ToolUsageOverTime,
   ToolUsageByPersona,
-  PersonaExecutionStatus,
   EventStatus,
 } from "./types";
+
+/** The demo's commands go to the scripted desktop, which needs no device id. */
+const DEMO_TARGET = { demo: true, deviceId: null } as const;
 
 function delay(ms = 300): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
@@ -127,14 +142,28 @@ export const mockApi: ApiClient = {
     return getMockExecutionDetail(id, offset);
   },
 
-  cancelExecution: async (id: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
-    await delay();
-    return { executionId: id, status: "cancelled" };
+  // The demo is a command plane like the live mirror (PHASE2-SPEC.md 6.3):
+  // these send to the scripted desktop in mockCommandPlane, which answers on
+  // realistic timings and writes the effect through to the fixtures.
+  cancelExecution: async (id: string, personaId?: string): Promise<CommandAck> => {
+    const owner = personaId ?? MOCK_EXECUTIONS.find((e) => e.id === id)?.personaId ?? "";
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("cancel_execution", owner, { executionId: id }, DEMO_TARGET);
   },
 
-  executePersona: async (_personaId: string, _prompt: string): Promise<{ executionId: string; status: PersonaExecutionStatus }> => {
-    await delay(500);
-    return { executionId: `e-new-${Date.now()}`, status: "queued" };
+  executePersona: async (personaId: string, prompt: string): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("run_persona", personaId, { prompt }, DEMO_TARGET);
+  },
+
+  pausePersona: async (id: string): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("pause_persona", id, {}, DEMO_TARGET);
+  },
+
+  resumePersona: async (id: string): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("resume_persona", id, {}, DEMO_TARGET);
   },
 
   listEvents: async (opts?: {
@@ -199,6 +228,14 @@ export const mockApi: ApiClient = {
     };
     MOCK_EVENTS[idx] = updated;
     return { ...updated };
+  },
+
+  // A verdict is a `review_decide` to the scripted desktop (M20), which writes
+  // it back through `updateEvent` above, as a desktop's sync would.
+  decideReview: async (input: ReviewDecisionInput): Promise<CommandAck> => {
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    const params = reviewDecideParams(input.reviewId, input.decision, input.notes);
+    return sendPersonaCommand("review_decide", input.personaId, { ...params }, DEMO_TARGET);
   },
 
   listSubscriptions: async (personaId: string): Promise<PersonaEventSubscription[]> => {
@@ -322,6 +359,44 @@ export const mockApi: ApiClient = {
       toolUsageOverTime: [...MOCK_TOOL_USAGE_OVER_TIME],
       toolUsageByPersona: [...MOCK_TOOL_USAGE_BY_PERSONA],
     };
+  },
+
+  listNotes: async (): Promise<SyncedNote[]> => {
+    await delay(250);
+    return MOCK_NOTES.map((note) => ({ ...note }));
+  },
+
+  // Chat (PHASE2-SPEC.md 5.2, 5.3): the fixtures are the demo computer's synced
+  // threads; a send goes to the scripted desktop, which writes the message and,
+  // about 4 s later, a canned reply into these same fixtures.
+  listChatSessions: async ({ threadKind, personaId }: ListChatSessionsInput): Promise<ChatSession[]> => {
+    await delay(200);
+    return MOCK_CHAT_SESSIONS.filter(
+      (s) => s.threadKind === threadKind && (threadKind === "athena" || !personaId || s.personaId === personaId),
+    ).map((s) => ({ ...s }));
+  },
+
+  listChatMessages: async ({ threadKind, deviceId, sessionId }: ChatThreadRef): Promise<ChatMessage[]> => {
+    await delay(150);
+    return MOCK_CHAT_MESSAGES.filter(
+      (m) => m.threadKind === threadKind && m.sessionId === sessionId && (deviceId === null || m.deviceId === deviceId),
+    ).map((m) => ({ ...m }));
+  },
+
+  sendChatMessage: async (input: ChatSendInput): Promise<CommandAck> => {
+    // Lazy, like the command plane: chat is not in the dashboard's first load.
+    const { ATHENA_PERSONA_ID, chatSendParams } = await import("./chat/chatModel");
+    const params = chatSendParams(input.sessionId, input.message);
+    if (!params) throw new ApiError(400, input.message.trim() ? "message_too_long" : "empty_message");
+    const personaId = input.threadKind === "athena" ? ATHENA_PERSONA_ID : input.personaId;
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("chat_send", personaId, params, DEMO_TARGET);
+  },
+
+  sayToMaster: async (input: ChannelSayInput): Promise<CommandAck> => {
+    const { channelSayParams } = await import("./commands/channelSay");
+    const { sendPersonaCommand } = await import("./commands/personaCommands");
+    return sendPersonaCommand("channel_say", input.personaId, { ...channelSayParams(input.message) }, DEMO_TARGET);
   },
 };
 

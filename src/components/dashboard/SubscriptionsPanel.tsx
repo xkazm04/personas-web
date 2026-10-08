@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { Zap } from "lucide-react";
 
 import EmptyState from "@/components/dashboard/EmptyState";
+import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useEventStore } from "@/stores/eventStore";
 import { usePersonaStore } from "@/stores/personaStore";
@@ -19,6 +20,7 @@ export default function SubscriptionsPanel() {
   const subscriptions = useEventStore((state) => state.subscriptions);
   const subscriptionsLoading = useEventStore((state) => state.subscriptionsLoading);
   const fetchSubscriptions = useEventStore((state) => state.fetchSubscriptions);
+  const subscriptionsNotServed = useEventStore((state) => state.subscriptionsNotServed);
   const events = useEventStore((state) => state.events);
   const fetchPersonas = usePersonaStore((state) => state.fetchPersonas);
   const personas = usePersonaStore((state) => state.personas);
@@ -84,6 +86,8 @@ export default function SubscriptionsPanel() {
     () => subscriptions.filter((subscription) => subscription.enabled).length,
     [subscriptions],
   );
+
+  if (subscriptionsNotServed && subscriptions.length === 0) return <DesktopUnsupportedNote />;
 
   return (
     <div className="space-y-4">

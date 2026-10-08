@@ -3,7 +3,13 @@ import type { PersonaEvent } from "@/lib/types";
 
 const listEvents = vi.fn();
 const updateEvent = vi.fn();
-vi.mock("@/lib/api", () => ({ api: { listEvents, updateEvent } }));
+// The orchestrator plane: a verdict is the event PATCH (realApi.decideReview).
+vi.mock("@/lib/api", async () => {
+  const { verdictEventBody } = await import("@/lib/commands/reviewDecide");
+  type Input = { reviewId: string; decision: "approved" | "rejected"; resolvedBy: string; notes: string | null };
+  const decideReview = (i: Input) => updateEvent(i.reviewId, verdictEventBody(i.decision, i.resolvedBy, i.notes));
+  return { api: { listEvents, updateEvent, decideReview } };
+});
 vi.mock("@sentry/nextjs", () => ({ captureMessage: vi.fn() }));
 vi.mock("@/stores/personaStore", () => ({ usePersonaStore: { getState: () => ({ personas: [] }) } }));
 
@@ -138,5 +144,32 @@ describe("reviewStore decision ledger", () => {
     expect(store().reviews.map((r) => r.status)).toEqual(["approved", "pending"]);
     expect((store().lastResult as { failedIds: string[] }).failedIds).toEqual(["r2"]);
     expect(store().pendingReviewCount).toBe(1);
+  });
+
+  it("a 501 from the list read sets listNotServed and keeps the rows; a success clears it; another error leaves it", async () => {
+    const { ApiError } = await import("@/lib/api-error");
+    await load([ev("r1", "high", 5)]);
+    listEvents.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await store().fetchReviews();
+    expect(store().listNotServed).toBe(true);
+    expect(store().reviews.map((r) => r.id)).toEqual(["r1"]);
+    listEvents.mockRejectedValueOnce(new ApiError(500, "boom"));
+    await store().fetchReviews();
+    expect(store().listNotServed).toBe(true);
+    await load([ev("r1", "high", 5)]);
+    expect(store().listNotServed).toBe(false);
+    listEvents.mockRejectedValueOnce(new Error("network"));
+    await store().fetchReviews();
+    expect(store().listNotServed).toBe(false);
+  });
+});
+
+describe("council Approval reportId", () => {
+  it("carries a string payload reportId onto the review and ignores a non-string one", async () => {
+    const withReport = { ...ev("a1", "info", 1), payload: JSON.stringify({ title: "a1", severity: "info", reportId: "r1" }) };
+    const bad = { ...ev("a2", "info", 2), payload: JSON.stringify({ title: "a2", severity: "info", reportId: 7 }) };
+    await load([withReport, bad]);
+    expect(store().reviews.find((r) => r.id === "a1")?.reportId).toBe("r1");
+    expect(store().reviews.find((r) => r.id === "a2")?.reportId).toBeUndefined();
   });
 });

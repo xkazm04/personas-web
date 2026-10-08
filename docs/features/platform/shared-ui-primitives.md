@@ -22,8 +22,8 @@ The **illustration library** is plain inline `<svg>` — no props, fixed `viewBo
 | --- | --- |
 | `src/components/primitives/index.ts` | Barrel: re-exports `SectionIntro`, `BrandCard`/`CornerGlow`/`Pill`, `ThemedChip`, `TerminalPanel`, terminal primitives + `TerminalOutputLine` type |
 | `src/components/primitives/BrandCard.tsx:27` | `BrandCard` themed glass feature card (`brand`, `gradientWash`, `interactive`); plus `CornerGlow` ambient blob (`BrandCard.tsx:70`) and `Pill` brand badge (`BrandCard.tsx:106`) |
-| `src/components/primitives/SectionIntro.tsx:45` | Eyebrow + `SectionHeading` + optional `GradientText` word + subtitle trio; `fadeUp` variant; `align`, `as` (h1/h2), `id` for `aria-labelledby` |
-| `src/components/primitives/TerminalPanel.tsx:62` | `forwardRef` dark glass shell; `header`/`footer` slots, `shadow` (none/soft/hero), `bg` (40/50) |
+| `src/components/primitives/SectionIntro.tsx:45` | Eyebrow + `SectionHeading` + optional `GradientText` word + subtitle trio; `fadeUp` variant; `align`, `as` (h1/h2), `id` for `aria-labelledby`; emits `data-section-intro` / `data-section-eyebrow` / `data-section-lede` so the desktop stage (`src/styles/stage.css`) can tighten its gaps |
+| `src/components/primitives/TerminalPanel.tsx:70` | `forwardRef` dark glass shell; `header`/`footer` slots, `shadow` (none/soft/hero), `bg` (40/50), `glass` (default `true`; `false` drops `backdrop-blur-xl` for an almost-opaque `bg-background/95`, used by the large playground terminal where a backdrop filter re-rendered on every change underneath) |
 | `src/components/primitives/ThemedChip.tsx:34` | Brand-tinted `rounded-full` filter/tab button; `active`, `brand`, `glow`, `mono`, `size`; sets `aria-pressed` |
 | `src/components/primitives/terminal/TerminalLine.tsx:12` | One animated output row (flat `text`/`colorClass`/`indent` props) |
 | `src/components/primitives/terminal/TerminalHistory.tsx:16` | `command` + `output[]` history block; consumer `colorClasses` map; dev-warns unknown colors |

@@ -27,6 +27,14 @@ interface TerminalPanelProps {
    * page, download FAQ, comparison table) use a slightly dimmer 40.
    */
   bg?: 40 | 50;
+  /**
+   * Frosted glass (backdrop-blur-xl over the translucent fill). Default true.
+   * Pass false for a large panel over a plain background: a backdrop filter is
+   * re-rendered whenever anything underneath changes (glows, particles, the
+   * page scrolling under it), and on a near-uniform background it shows
+   * nothing - the panel gets an almost-opaque fill instead.
+   */
+  glass?: boolean;
 }
 
 const SHADOW_CLASS = {
@@ -70,13 +78,14 @@ const TerminalPanel = forwardRef<HTMLDivElement, TerminalPanelProps>(
       style,
       shadow = "soft",
       bg = 50,
+      glass = true,
     },
     ref,
   ) {
     return (
       <div
         ref={ref}
-        className={`rounded-2xl border border-glass-hover backdrop-blur-xl overflow-hidden ${BG_CLASS[bg]} ${SHADOW_CLASS[shadow]} ${className}`}
+        className={`rounded-2xl border border-glass-hover overflow-hidden ${glass ? `backdrop-blur-xl ${BG_CLASS[bg]}` : "bg-background/95"} ${SHADOW_CLASS[shadow]} ${className}`}
         style={style}
       >
         {header && (

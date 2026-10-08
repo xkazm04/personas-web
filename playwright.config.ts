@@ -1,4 +1,9 @@
-import { defineConfig } from "@playwright/test";
+import { defineConfig, devices } from "@playwright/test";
+
+// The port is overridable because `reuseExistingServer` trusts whatever already
+// listens on it: on a machine that runs other projects' dev servers, :3002 can
+// be a different app entirely and every spec would run against it.
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3002);
 
 export default defineConfig({
   testDir: "./e2e",
@@ -20,16 +25,29 @@ export default defineConfig({
   // produces friction without producing a record.
   failOnFlakyTests: !!process.env.CI,
   use: {
-    baseURL: "http://localhost:3002",
+    baseURL: `http://localhost:${PORT}`,
     trace: "on-first-retry",
     navigationTimeout: 30_000,
   },
   projects: [
-    { name: "chromium", use: { browserName: "chromium" } },
+    // Desktop. Phone specs live in e2e/mobile/** and run only under "mobile",
+    // so a default run does not execute them twice at the wrong viewport.
+    { name: "chromium", use: { browserName: "chromium" }, testIgnore: "**/mobile/**" },
+    // Phone verification instrument for the /m revival
+    // (docs/concepts/mobile-revival/PLAN.md): iPhone 13 UA, touch, isMobile,
+    // DPR 3, 390px wide. The descriptor's default engine is WebKit; it runs on
+    // Chromium here because the WebKit build this Playwright pins is not
+    // installed on the dev machine (`npx playwright install webkit` + dropping
+    // the browserName override switches it). Run: `npx playwright test --project=mobile`.
+    {
+      name: "mobile",
+      testDir: "./e2e/mobile",
+      use: { ...devices["iPhone 13"], browserName: "chromium" },
+    },
   ],
   webServer: {
-    command: "npm run build && npm run start -- --port 3002",
-    port: 3002,
+    command: `npm run build && npm run start -- --port ${PORT}`,
+    port: PORT,
     // Local convenience only — CI must never test against a stale server.
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
