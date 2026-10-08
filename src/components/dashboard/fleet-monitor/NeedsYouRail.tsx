@@ -29,6 +29,8 @@ interface NeedsYouRailProps {
    *  empty line, so a filtered-empty rail never reads as "nobody needs you". */
   total?: number;
   emptyText?: string;
+  /** A control in the header, after the count (the Board's Triage button). */
+  action?: ReactNode;
 }
 
 /**
@@ -37,16 +39,17 @@ interface NeedsYouRailProps {
  * fit on a 900px screen; the list scrolls past that. Hovering a row should
  * light the agent in the field; the view wires `onHover` to its own attention.
  */
-export default function NeedsYouRail({ items, activeId, onHover, onSelect, footer, total, emptyText }: NeedsYouRailProps) {
+export default function NeedsYouRail({ items, activeId, onHover, onSelect, footer, total, emptyText, action }: NeedsYouRailProps) {
   const copy = personasMonitorCopy.rail;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex items-baseline justify-between px-3 pb-1.5 pt-2.5">
+      <div className="flex items-center gap-2 px-3 pb-1.5 pt-2.5">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-dark">{copy.title}</h2>
         <span className="text-sm font-semibold tabular-nums" style={{ color: ATTENTION_COLOR.needs }}>
           {total != null && total !== items.length ? fill(copy.of, { n: items.length, total }) : items.length}
         </span>
+        {action && <span className="ml-auto">{action}</span>}
       </div>
       {items.length === 0 ? (
         <p className="px-3 text-sm text-muted-dark">{emptyText ?? copy.empty}</p>

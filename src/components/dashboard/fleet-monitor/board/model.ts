@@ -33,7 +33,8 @@ export interface CallTick {
 
 export type Decision =
   | { act: "approve" | "sendback"; title: string }
-  | { act: "retry" | "answer" | "pause" | "resume" | "run" | "cancel" }
+  | { act: "retry" | "pause" | "resume" | "run" | "cancel" | "publish" | "revise" }
+  | { act: "answer"; text?: string }
   | { act: "read"; n: number }
   | { act: "pauseAll"; n: number; stopped: number }
   | { act: "resumeAll"; n: number };

@@ -19,7 +19,7 @@ interface OperatorDeps {
  */
 export function makeOperator({ commands, toast, copy: c, hostName, offline }: OperatorDeps) {
   const host = { host: hostName };
-  const agentVerb = (verb: Exclude<Verb, "approve" | "sendback" | "pauseAll" | "resumeAll">, a: SimAgent, text: string) => {
+  const agentVerb = (verb: Exclude<Verb, "approve" | "sendback" | "publish" | "revise" | "answer" | "pauseAll" | "resumeAll">, a: SimAgent, text: string) => {
     if (offline) return;
     commands.send({ verb, agentId: a.id });
     toast(text);
@@ -35,7 +35,17 @@ export function makeOperator({ commands, toast, copy: c, hostName, offline }: Op
     run: (a: SimAgent) => agentVerb("run", a, fill(c.cmd.toasts.run, { callsign: a.callsign })),
     cancel: (a: SimAgent) => agentVerb("cancel", a, fill(c.cmd.toasts.cancel, { callsign: a.callsign })),
     retry: (a: SimAgent) => agentVerb("retry", a, fill(c.toasts.retry, { callsign: a.callsign })),
-    answer: (a: SimAgent) => agentVerb("answer", a, fill(c.toasts.answer, { callsign: a.callsign })),
+    answer: (a: SimAgent, text?: string) => {
+      if (offline) return;
+      commands.send({ verb: "answer", agentId: a.id, text: text?.trim() || undefined });
+      toast(fill(c.toasts.answer, { callsign: a.callsign }));
+    },
+    /** A draft with no review of its own: publish it, or send it back to revise. Held for Undo. */
+    draft: (a: SimAgent, approve: boolean) => {
+      if (offline) return;
+      const id = commands.send({ verb: approve ? "publish" : "revise", agentId: a.id }, true);
+      toast(fill(approve ? c.cmd.toasts.publish : c.cmd.toasts.revise, { callsign: a.callsign }), { label: c.cmd.undo, run: () => undo(id) });
+    },
     read: (a: SimAgent) => {
       const n = a.unreadMessages.length;
       agentVerb("read", a, fill(plural(n, c.toasts.readOne, c.toasts.read), { callsign: a.callsign, n }));

@@ -54,6 +54,7 @@ export function eventText(e: BoardEvent, c: BoardCopy): string {
     if (d.act === "read") return fill(plural(d.n, c.decisions.readOne, c.decisions.read), { n: d.n });
     if (d.act === "pauseAll") return fill(d.stopped ? c.decisions.pauseAllStop : c.decisions.pauseAll, { n: d.n, m: d.stopped });
     if (d.act === "resumeAll") return fill(c.decisions.resumeAll, { n: d.n });
+    if (d.act === "answer" && d.text) return fill(c.decisions.answerText, { text: d.text });
     return c.decisions[d.act];
   }
   if (e.kind === "run_completed" || e.kind === "run_failed" || e.kind === "self_heal") return c.simEvents[e.kind];

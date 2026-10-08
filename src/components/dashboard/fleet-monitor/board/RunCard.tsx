@@ -82,11 +82,13 @@ interface RunCardProps {
   live: boolean;
   /** A command is in flight or the machine is offline: the actions wait. */
   busy: boolean;
-  onAct: (act: "retry" | "answer") => void;
+  onRetry: () => void;
+  /** Decide a draft that has no review of its own. */
+  onDraft: (approve: boolean) => void;
 }
 
 /** The middle column of the agent scene: the current run, or how it rests. */
-export default function RunCard({ agent: a, simMs, copy, live, busy, onAct }: RunCardProps) {
+export default function RunCard({ agent: a, simMs, copy, live, busy, onRetry, onDraft }: RunCardProps) {
   const run = a.state === "running";
   const traced = currentStep(a) >= 0;
   const frac = run ? a.progress ?? 0 : a.successRate;
@@ -125,10 +127,15 @@ export default function RunCard({ agent: a, simMs, copy, live, busy, onAct }: Ru
         </div>
       )}
       <div className="mt-2 flex min-h-11 flex-wrap items-center gap-3">
-        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => onAct("retry")}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
-        {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => onAct("answer")}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
+        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={onRetry}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
+        {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => document.querySelector<HTMLElement>("[data-answer]")?.focus()}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
         {a.state === "queued" && <span className={`text-base ${b["ink-queued"]}`}>{copy.agent.queuedNote}</span>}
-        {a.state === "draft_ready" && <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span>}
+        {a.state === "draft_ready" && (a.reviews.length ? <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span> : (
+          <>
+            <button type="button" data-agent-act className={`${btn} bg-brand-cyan text-background`} disabled={busy} onClick={() => onDraft(true)}>{copy.triage.publish}</button>
+            <button type="button" className={`${btn} text-foreground shadow-[inset_0_0_0_1px_var(--border-glass-hover)]`} disabled={busy} onClick={() => onDraft(false)}>{copy.triage.revise}</button>
+          </>
+        ))}
       </div>
       <Plan agent={a} simMs={simMs} copy={copy} />
       <div className="mt-auto grid grid-cols-[auto_1fr] gap-6 pt-2">

@@ -37,11 +37,13 @@ export interface SimState {
 /** The agent id of a fleet-wide event (pause all, resume all). */
 export const FLEET_EVENT_ID = "*";
 
-export type AgentVerb = "retry" | "answer" | "read" | "pause" | "resume" | "run" | "cancel";
+export type AgentVerb = "retry" | "read" | "pause" | "resume" | "run" | "cancel";
 
 export type SimAction =
   | { type: "advance"; dt: number; scale: number; still: boolean }
   | { type: "review"; id: string; rid: string; approve: boolean }
+  | { type: "draft"; id: string; approve: boolean }
+  | { type: "answer"; id: string; text?: string }
   | { type: AgentVerb; id: string }
   | { type: "pauseAll"; stop: boolean }
   | { type: "resumeAll" };
@@ -265,8 +267,15 @@ export function simReducer(state: SimState, action: SimAction): SimState {
     a.health = "degraded";
     d.push({ ...base, decision: { act: "retry" } }, simMs);
   } else if (action.type === "answer") {
+    if (a.state !== "input_required") return state;
     startOrQueue(d, a, scale, simMs, null, "resuming");
-    d.push({ ...base, decision: { act: "answer" } }, simMs);
+    d.push({ ...base, decision: { act: "answer", text: action.text?.trim() || undefined } }, simMs);
+  } else if (action.type === "draft") {
+    // A draft with no review of its own: approving publishes it, sending it back revises.
+    if (a.state !== "draft_ready") return state;
+    if (action.approve) stopRun(a);
+    else startOrQueue(d, a, scale, simMs, null, "revising");
+    d.push({ ...base, decision: { act: action.approve ? "publish" : "revise" } }, simMs);
   } else if (action.type === "pause") {
     if (!a.enabled) return state;
     a.enabled = false;

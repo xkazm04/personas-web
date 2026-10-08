@@ -114,6 +114,9 @@ export interface PersonasMonitorCopy {
       pauseAll: string;
       pauseAllStop: string;
       resumeAll: string;
+      publish: string;
+      revise: string;
+      answerText: string;
     };
     toasts: {
       approve: string;
@@ -293,6 +296,8 @@ export interface PersonasMonitorCopy {
         read: string;
         approve: string;
         sendback: string;
+        publish: string;
+        revise: string;
         pauseAll: string;
         resumeAll: string;
       };
@@ -311,6 +316,8 @@ export interface PersonasMonitorCopy {
         pauseAll: string;
         pauseAllStop: string;
         resumeAll: string;
+        publish: string;
+        revise: string;
       };
       decided: {
         approve: string;
@@ -393,6 +400,7 @@ export interface PersonasMonitorCopy {
       agentVerb: string;
       teamMeta: string;
       actions: {
+        triage: string;
         next: string;
         pauseAll: string;
         resumeAll: string;
@@ -403,6 +411,59 @@ export interface PersonasMonitorCopy {
         city: string;
         scale: string;
       };
+    };
+    triage: {
+      start: string;
+      startHint: string;
+      title: string;
+      label: string;
+      progress: string;
+      decided: string;
+      skipped: string;
+      exit: string;
+      upNext: string;
+      nothingNext: string;
+      kinds: {
+        failed: string;
+        input: string;
+        draft: string;
+        review: string;
+      };
+      since: string;
+      skip: string;
+      console: string;
+      pauseAgent: string;
+      approve: string;
+      sendBack: string;
+      publish: string;
+      revise: string;
+      retry: string;
+      failedLog: string;
+      draftNote: string;
+      reviewNote: string;
+      agentNote: string;
+      agentNoteOne: string;
+      doneTitle: string;
+      allClear: string;
+      doneStats: string;
+      stillNeed: string;
+      again: string;
+      backToBoard: string;
+      offline: string;
+    };
+    answer: {
+      label: string;
+      asks: string;
+      placeholder: string;
+      quickLabel: string;
+      quick: {
+        go: string;
+        safe: string;
+        hold: string;
+        overseer: string;
+      };
+      send: string;
+      sent: string;
     };
   };
   city: {
@@ -582,6 +643,9 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       pauseAll: 'You paused {n} agents',
       pauseAllStop: 'You paused {n} agents and stopped {m} runs',
       resumeAll: 'You resumed {n} agents',
+      publish: 'You approved the draft',
+      revise: 'You sent the draft back to revise',
+      answerText: 'You answered: “{text}”',
     },
     toasts: {
       approve: '{callsign}: approved “{title}”',
@@ -761,6 +825,8 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         read: 'Marking read',
         approve: 'Approving',
         sendback: 'Sending back',
+        publish: 'Approving the draft',
+        revise: 'Sending the draft back',
         pauseAll: 'Pausing all',
         resumeAll: 'Resuming all',
       },
@@ -779,6 +845,8 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         pauseAll: 'Pausing {n} agents on {host}',
         pauseAllStop: 'Pausing {n} agents and stopping {m} runs on {host}',
         resumeAll: 'Resuming {n} agents on {host}',
+        publish: '{callsign}: draft approved',
+        revise: '{callsign}: draft sent back to revise',
       },
       decided: {
         approve: 'Approved',
@@ -861,6 +929,7 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       agentVerb: '{verb} {callsign} {name}',
       teamMeta: '{n} agents · {need} need you',
       actions: {
+        triage: 'Start triage: every decision waiting on you, one at a time',
         next: 'Go to the next agent that needs you',
         pauseAll: 'Pause every agent on {host}',
         resumeAll: 'Resume the {n} agents Pause all switched off',
@@ -871,6 +940,59 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         city: 'Switch to Night shift',
         scale: 'Show {n} agents',
       },
+    },
+    triage: {
+      start: 'Triage',
+      startHint: 'Work through everyone who needs you, one decision at a time (T)',
+      title: 'Triage',
+      label: 'Triage: decisions waiting on you, one at a time',
+      progress: '{i} of {n}',
+      decided: '{n} decided',
+      skipped: '{n} skipped',
+      exit: 'Done',
+      upNext: 'Up next',
+      nothingNext: 'Nothing after this one.',
+      kinds: {
+        failed: 'Run failed',
+        input: 'Needs your answer',
+        draft: 'Draft ready',
+        review: 'Review',
+      },
+      since: 'waiting {age}',
+      skip: 'Skip',
+      console: 'Open console',
+      pauseAgent: 'Pause agent',
+      approve: 'Approve',
+      sendBack: 'Send back',
+      publish: 'Approve and publish',
+      revise: 'Send back to revise',
+      retry: 'Retry run',
+      failedLog: 'How the run ended',
+      draftNote: 'It publishes when you approve. Sending it back starts a revision run.',
+      reviewNote: 'Approving lets it go ahead. Sending it back returns it with your note.',
+      agentNote: '{n} more decisions waiting on this agent',
+      agentNoteOne: '1 more decision waiting on this agent',
+      doneTitle: 'Triage done',
+      allClear: 'All clear. Nobody needs you right now.',
+      doneStats: '{d} decided · {s} skipped',
+      stillNeed: '{n} decisions still wait on you, including the ones you skipped and any that came in while you worked.',
+      again: 'Go through the {n} left',
+      backToBoard: 'Back to the board',
+      offline: '{host} is offline. You can look, but decisions wait until it is back.',
+    },
+    answer: {
+      label: 'Your answer to {callsign}',
+      asks: 'It asks',
+      placeholder: 'Type your answer. Enter sends, Shift+Enter adds a line.',
+      quickLabel: 'Quick answers',
+      quick: {
+        go: 'Go ahead as proposed',
+        safe: 'Use the safer option',
+        hold: 'Hold until I have checked',
+        overseer: 'Ask the Overseer to decide',
+      },
+      send: 'Send and resume',
+      sent: 'Answer sent. The run resumes when {host} picks it up.',
     },
   },
   city: {

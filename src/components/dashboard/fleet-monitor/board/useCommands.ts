@@ -14,7 +14,7 @@ import type { SimAction } from "./sim";
  * then sent; an undone command never leaves the browser.
  */
 
-export type Verb = "pause" | "resume" | "run" | "cancel" | "retry" | "answer" | "read" | "approve" | "sendback" | "pauseAll" | "resumeAll";
+export type Verb = "pause" | "resume" | "run" | "cancel" | "retry" | "answer" | "read" | "approve" | "sendback" | "publish" | "revise" | "pauseAll" | "resumeAll";
 export type CmdStatus = "held" | "sending" | "acked" | "done" | "undone";
 
 export interface Command {
@@ -26,6 +26,8 @@ export interface Command {
   rid?: string;
   /** Pause all: also stop the runs in progress. */
   stop?: boolean;
+  /** An answer's words. */
+  text?: string;
   status: CmdStatus;
 }
 
@@ -46,6 +48,8 @@ export function toAction(c: CommandSpec): SimAction | null {
   if (c.verb === "resumeAll") return { type: "resumeAll" };
   if (!c.agentId) return null;
   if (c.verb === "approve" || c.verb === "sendback") return c.rid ? { type: "review", id: c.agentId, rid: c.rid, approve: c.verb === "approve" } : null;
+  if (c.verb === "publish" || c.verb === "revise") return { type: "draft", id: c.agentId, approve: c.verb === "publish" };
+  if (c.verb === "answer") return { type: "answer", id: c.agentId, text: c.text };
   return { type: c.verb, id: c.agentId };
 }
 

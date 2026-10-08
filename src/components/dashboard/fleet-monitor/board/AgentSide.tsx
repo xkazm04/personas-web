@@ -4,7 +4,8 @@ import { Loader2 } from "lucide-react";
 import { formatAge } from "../fleet-data";
 import { Overline, ReasonChip } from "./parts";
 import { ago, type BoardCopy } from "./copy";
-import { fill, type SimAgent } from "./model";
+import { fill, reasonOf, type SimAgent } from "./model";
+import AnswerBox from "./AnswerBox";
 import { HOLD_MS, isOpen, type Command } from "./useCommands";
 import type { CSSProperties } from "react";
 import b from "./board.module.css";
@@ -20,6 +21,9 @@ interface AgentSideProps {
   onReview: (rid: string, approve: boolean) => void;
   onUndo: (commandId: number) => void;
   onRead: () => void;
+  onAnswer: (text: string) => void;
+  /** An answer or another run command is already on its way. */
+  busy: boolean;
 }
 
 const SEV_ORDER = { critical: 0, warning: 1, info: 2 } as const;
@@ -49,12 +53,17 @@ function Decided({ cmd, copy, still, hostName, onUndo }: { cmd: Command; copy: B
 }
 
 /** The right column of the agent scene: decisions waiting, and its inbox. */
-export default function AgentSide({ agent: a, simMs, copy, cmds, still, offline, hostName, onReview, onUndo, onRead }: AgentSideProps) {
+export default function AgentSide({ agent: a, simMs, copy, cmds, still, offline, hostName, onReview, onUndo, onRead, onAnswer, busy }: AgentSideProps) {
   const verdictOn = (rid: string) => cmds.find((c) => c.agentId === a.id && c.rid === rid && isOpen(c));
   const reading = cmds.some((c) => c.agentId === a.id && c.verb === "read" && isOpen(c));
   const reviews = [...a.reviews].sort((x, y) => SEV_ORDER[x.severity] - SEV_ORDER[y.severity] || y.ageMin - x.ageMin);
   return (
     <div className="h-full overflow-y-auto pb-8 [mask-image:linear-gradient(180deg,#000_90%,transparent)]">
+      {a.state === "input_required" && (
+        <section aria-label={copy.triage.kinds.input} className="mb-5 rounded-2xl bg-[color-mix(in_oklab,var(--st-input_required)_8%,transparent)] p-3.5 shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--st-input_required)_35%,transparent)]">
+          <AnswerBox agent={a} copy={copy} question={reasonOf(a).title} disabled={offline || busy} onSend={onAnswer} />
+        </section>
+      )}
       <Overline className="mb-2.5 justify-between">
         <span>{fill(copy.agent.reviewsCount, { n: a.reviews.length })}</span>
         {a.reviews.length > 0 && <span className="normal-case tracking-normal">{copy.agent.oldestDecides}</span>}

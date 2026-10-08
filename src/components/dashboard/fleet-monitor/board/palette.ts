@@ -72,6 +72,7 @@ export interface PaletteDeps {
   openTeam: (id: string) => void;
   agentVerb: (verb: Exclude<AgentVerb, "open">, a: SimAgent) => void;
   nextNeeds: () => void;
+  startTriage: () => void;
   pauseAll: () => void;
   resumeAll: () => void;
   showPile: (p: Attention) => void;
@@ -85,6 +86,7 @@ export function buildItems(d: PaletteDeps): PaletteItem[] {
   const c = d.copy;
   const p = c.palette;
   const items: PaletteItem[] = [
+    { id: "a:triage", group: "actions", label: p.actions.triage, kbd: "T", run: d.startTriage },
     { id: "a:next", group: "actions", label: p.actions.next, kbd: "N", run: d.nextNeeds },
     d.fleetPaused
       ? { id: "a:resumeAll", group: "actions", label: fill(p.actions.resumeAll, { n: d.fleetPaused }), disabled: d.offline, run: d.resumeAll }

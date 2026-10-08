@@ -6,7 +6,6 @@ import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { FLEET, type FleetScale } from "../fleet-data";
 import FleetFrame from "../FleetFrame";
-import NeedsYouRail from "../NeedsYouRail";
 import { ATTENTION_COLOR, countAttention } from "../attention";
 import Field, { computeLayout } from "./Field";
 import TeamScene from "./TeamScene";
@@ -16,7 +15,9 @@ import BottomStrip from "./BottomStrip";
 import { TEAM_BY_ID, fill, orderInBay } from "./model";
 import { NO_FOCUS, inFocus, isFocusing, matchesQuery, type FocusFilter } from "./focus";
 import { railItems } from "./copy";
-import HostCard, { OfflineBanner } from "./HostCard";
+import { OfflineBanner } from "./HostCard";
+import BoardRail from "./BoardRail";
+import TriageView from "./TriageView";
 import Toast from "./Toast";
 import { readHost } from "./host";
 import { useArrival, useBoardSim, useHostStatus, useSize, useToast } from "./useBoardRuntime";
@@ -67,16 +68,23 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const [confirmPause, setConfirmPause] = useState(false);
   const [focus, setFocus] = useState<FocusFilter>(NO_FOCUS);
   const [palette, setPalette] = useState(false);
+  const [triage, setTriage] = useState(false);
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
   const nav = useBoardNav({
     scope, scale, stageRef, still, toast: showToast, nobodyToast: copy.toasts.nobody,
     nextToast: (i, n, a) => fill(copy.toasts.next, { i: i + 1, n, callsign: a.callsign, name: a.name }),
+    onTriage: () => startTriage(),
   });
+  function startTriage() {
+    nav.closeAgent(false);
+    nav.closeTeam(false);
+    setTriage(true);
+  }
   const openAgent = nav.agentOpen ? scope.find((a) => a.id === nav.agentOpen) : undefined;
   const bayRect = nav.teamOpen ? computeLayout(teams, scope, width, height).bays[nav.teamOpen] : undefined;
-  const deep = !!(openAgent || nav.teamOpen);
+  const deep = !!(openAgent || nav.teamOpen || triage);
   const host = readHost(scope, scale, sim.simMs, sim.beatAt, hostStatus);
   const op = makeOperator({ commands, toast: showToast, copy, hostName: host.name, offline });
   // Find and focus: what matches, in the field's reading order (Enter opens the first).
@@ -112,6 +120,12 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
           )}
         </AnimatePresence>
         <AnimatePresence>
+          {triage && (
+            <TriageView key="triage" scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} op={op} hostName={host.name} still={still}
+              onClose={() => setTriage(false)} onConsole={(id) => { setTriage(false); nav.openAgent(id, null); }} />
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
           {openAgent && (
             <AgentScene key="agent" agent={openAgent} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live} op={op} cmds={commands.cmds} hostName={host.name} onStep={nav.stepAgent} />
           )}
@@ -138,25 +152,13 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
         top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} onPalette={() => setPalette(true)} />}
         main={main}
         rail={
-          <>
-            <HostCard
-              host={host}
-              copy={copy}
-              live={live}
-              fleetPaused={fleetPaused}
-              pending={commands.cmds.find((c) => c.agentId === null && isOpen(c))}
-              onPauseAll={() => setConfirmPause(true)}
-              onResumeAll={() => op.resumeAll((sim.fleetPaused ?? []).length)}
-            />
-            <NeedsYouRail
-              items={railItems(railScope, sim.simMs, sim.events, copy)}
-              total={railScope === scope ? undefined : countAttention(scope).needs}
-              emptyText={railScope === scope ? undefined : personasMonitorCopy.rail.emptyFiltered}
-              activeId={nav.att?.type === "agent" ? nav.att.id : null}
-              onHover={(id) => (id ? nav.attend({ type: "agent", id }) : nav.unattend())}
-              onSelect={(id) => nav.openAgent(id, document.activeElement as HTMLElement | null)}
-            />
-          </>
+          <BoardRail
+            host={host} copy={copy} live={live} nav={nav} fleetPaused={fleetPaused}
+            pendingFleet={commands.cmds.find((c) => c.agentId === null && isOpen(c))}
+            items={railItems(railScope, sim.simMs, sim.events, copy)}
+            total={railScope === scope ? undefined : countAttention(scope).needs}
+            onPauseAll={() => setConfirmPause(true)} onResumeAll={() => op.resumeAll(fleetPaused)} onTriage={startTriage}
+          />
         }
         bottom={<BottomStrip scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} nav={nav} live={live} offline={offline} />}
       />
@@ -166,7 +168,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
         deps={{
           scope, teams, copy, hostName: host.name, offline, fleetPaused, scale, onView, onScale,
           openAgent: (id) => nav.openAgent(id, null), openTeam: (id) => nav.openTeam(id, null), agentVerb: (v, a) => op[v](a),
-          nextNeeds: nav.nextNeeds, pauseAll: () => setConfirmPause(true), resumeAll: () => op.resumeAll(fleetPaused),
+          nextNeeds: nav.nextNeeds, startTriage, pauseAll: () => setConfirmPause(true), resumeAll: () => op.resumeAll(fleetPaused),
           showPile: (p) => setFocus({ query: "", piles: [p] }), clearFocus: () => setFocus(NO_FOCUS),
         }}
       />
