@@ -9,6 +9,8 @@ import { stateText, taskText, type BoardCopy } from "./copy";
 import { TEAM_BY_ID, fill, plural, reasonOf, topReview, type SimAgent } from "./model";
 import type { Rect } from "./Tile";
 import b from "./board.module.css";
+import { pendingText } from "./Controls";
+import type { Command } from "./useCommands";
 
 interface HoverCardProps {
   agent: SimAgent;
@@ -19,6 +21,8 @@ interface HoverCardProps {
   copy: BoardCopy;
   live: boolean;
   tone: AttentionTone;
+  pending?: Command;
+  hostName: string;
 }
 
 const W = 300;
@@ -26,7 +30,7 @@ const H = 200;
 
 /** The spotlight, shrunk to a card that floats beside the tile under attention.
  *  It overlays the field and never takes space from it. */
-export default function HoverCard({ agent: a, anchor, width, height, copy, live, tone }: HoverCardProps) {
+export default function HoverCard({ agent: a, anchor, width, height, copy, live, tone, pending, hostName }: HoverCardProps) {
   const right = anchor.x + anchor.w + 12;
   const x = right + W <= width - 8 ? right : Math.max(8, anchor.x - W - 12);
   const y = Math.min(Math.max(8, anchor.y + anchor.h / 2 - H / 2), height - H - 8);
@@ -68,6 +72,7 @@ export default function HoverCard({ agent: a, anchor, width, height, copy, live,
           <span className="text-foreground">{top.title}</span>
         </p>
       )}
+      {pending && <p className="relative mt-2 text-xs font-semibold text-brand-cyan">{pendingText(pending, copy, hostName)}</p>}
       {a.unreadMessages.length > 0 && (
         <p className="relative mt-1 text-xs text-muted-dark">{fill(plural(a.unreadMessages.length, copy.card.unreadOne, copy.card.unread), { n: a.unreadMessages.length })}</p>
       )}

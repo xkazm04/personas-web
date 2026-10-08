@@ -115,7 +115,7 @@ function PersonasStage() {
         aria-labelledby={`fleet-view-${view}`}
         className="relative min-h-0 flex-1 overflow-hidden bg-background"
       >
-        {view === "board" && <BoardView scale={scale} />}
+        {view === "board" && <BoardView scale={scale} onView={setView} onScale={setScale} />}
         {view === "city" && <NightCity scale={scale} />}
       </section>
     </div>

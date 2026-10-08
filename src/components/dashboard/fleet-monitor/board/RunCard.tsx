@@ -3,18 +3,18 @@
 import type { CSSProperties } from "react";
 import { FLEET } from "../fleet-data";
 import { Bars, Beads, Overline, Ring } from "./parts";
-import { ago, eventText, hm, stateText, taskText, type BoardCopy } from "./copy";
-import { formatRunFor, hash, mulberry32, type BoardEvent, type SimAgent } from "./model";
+import { hm, stateText, taskText, type BoardCopy } from "./copy";
+import { fill, formatRunFor, hash, mulberry32, type SimAgent } from "./model";
+import { STEP_KEYS, agentPlan, currentStep } from "./agentLog";
+import { CalendarClock, Zap } from "lucide-react";
+import { lastRunLine } from "./AgentActivity";
 import b from "./board.module.css";
-
-const STEP_KEYS = ["plan", "gather", "tools", "check", "write", "handoff"] as const;
 
 /** The run as six steps with tool-call ticks. Stylised: labelled as such. */
 function Trace({ agent: a, copy, live }: { agent: SimAgent; copy: BoardCopy; live: boolean }) {
   const W = 520, n = STEP_KEYS.length, x0 = 34, x1 = W - 34, y = 50;
   const run = a.state === "running";
-  const cur = run ? Math.min(n - 1, Math.floor((a.progress ?? 0) * n))
-    : a.state === "failed" ? 2 : a.state === "input_required" ? 3 : a.state === "draft_ready" ? 4 : -1;
+  const cur = currentStep(a);
   const col = `var(--st-${a.state})`;
   const r = mulberry32(hash(a.id));
   const ticks = Array.from({ length: Math.min(60, Math.max(0, a.liveToolCalls)) }, () => {
@@ -49,19 +49,48 @@ function Trace({ agent: a, copy, live }: { agent: SimAgent; copy: BoardCopy; liv
   );
 }
 
+/** What starts the agent: its schedule with the next slot, and its trigger. */
+function Plan({ agent: a, simMs, copy: c }: { agent: SimAgent; simMs: number; copy: BoardCopy }) {
+  const p = agentPlan(a, simMs);
+  const every = p.everyMin == null ? c.console.triggerOnly
+    : p.everyMin < 60 ? fill(c.console.everyMin, { n: p.everyMin })
+    : p.everyMin === 60 ? c.console.everyHour : fill(c.console.everyHours, { n: p.everyMin / 60 });
+  return (
+    <div className={`${b.planBlock} mt-4`}>
+      <Overline>{c.console.schedule}</Overline>
+      {a.enabled ? (
+        <ul className="mt-1.5 space-y-1 text-sm text-foreground">
+          <li className="flex items-center gap-2">
+            <CalendarClock aria-hidden className="h-4 w-4 shrink-0 text-muted-dark" />
+            {every}
+            {p.nextMs != null && <span className="text-muted-dark">· {fill(c.console.nextAt, { time: hm(p.nextMs) })}</span>}
+          </li>
+          <li className="flex items-center gap-2">
+            <Zap aria-hidden className="h-4 w-4 shrink-0 text-muted-dark" />
+            <span className="truncate">{fill(c.console.trigger, { trigger: p.trigger })}</span>
+          </li>
+        </ul>
+      ) : <p className="mt-1.5 text-sm text-muted-dark">{c.console.pausedPlan}</p>}
+    </div>
+  );
+}
+
 interface RunCardProps {
   agent: SimAgent;
   simMs: number;
-  events: BoardEvent[];
   copy: BoardCopy;
   live: boolean;
-  onAct: (act: "retry" | "answer") => void;
+  /** A command is in flight or the machine is offline: the actions wait. */
+  busy: boolean;
+  onRetry: () => void;
+  /** Decide a draft that has no review of its own. */
+  onDraft: (approve: boolean) => void;
 }
 
 /** The middle column of the agent scene: the current run, or how it rests. */
-export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: RunCardProps) {
+export default function RunCard({ agent: a, simMs, copy, live, busy, onRetry, onDraft }: RunCardProps) {
   const run = a.state === "running";
-  const traced = run || a.state === "failed" || a.state === "input_required";
+  const traced = currentStep(a) >= 0;
   const frac = run ? a.progress ?? 0 : a.successRate;
   const runFor = simMs - (a.startSim ?? 0);
   const facts: [string, string | number][] = run
@@ -69,8 +98,8 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
       [copy.agent.started, `${hm(FLEET.nowMs + simMs - runFor)} UTC`], [copy.agent.health, copy.health[a.health]]]
     : [[copy.agent.state, stateText(a, copy)], [copy.agent.health, copy.health[a.health]],
       [copy.agent.runsToday, a.runsToday], [copy.agent.lastResult, copy.agent.results[a.recentStatuses[0]]]];
-  const recent = events.filter((e) => e.agentId === a.id || e.toAgentId === a.id).slice(0, 2);
-  const btn = "inline-flex items-center rounded-xl px-4 py-2 text-base font-semibold transition-transform active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
+  const last = traced ? null : lastRunLine(a, simMs, copy);
+  const btn = "inline-flex items-center rounded-xl px-4 py-2 text-base font-semibold transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground";
   const warnBtn = { background: "var(--st-input_required)", color: "color-mix(in oklab, var(--st-input_required) 18%, black)" } as CSSProperties;
 
   return (
@@ -92,27 +121,27 @@ export default function RunCard({ agent: a, simMs, events, copy, live, onAct }: 
         </dl>
       </div>
       {traced ? <Trace agent={a} copy={copy} live={live} /> : (
-        <div className="mt-3">
-          <Overline>{copy.agent.recentEvents}</Overline>
-          {recent.length ? recent.map((e, i) => (
-            <div key={i} className="flex gap-3 border-b border-glass py-2 text-base text-muted-dark">
-              <span className="w-32 shrink-0 text-xs text-muted">{copy.kinds[e.kind]}</span>
-              <span className="truncate">{eventText(e, copy)}</span>
-              <span className="ml-auto whitespace-nowrap text-xs">{ago(FLEET.nowMs + simMs - e.tsMs, copy)}</span>
-            </div>
-          )) : <p className="py-2 text-base text-muted-dark">{copy.agent.nothingLogged}</p>}
+        <div className="mt-4">
+          <Overline>{copy.console.lastRun}</Overline>
+          <p className="mt-1.5 text-base text-foreground">{last ?? copy.agent.nothingLogged}</p>
         </div>
       )}
       <div className="mt-2 flex min-h-11 flex-wrap items-center gap-3">
-        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} onClick={() => onAct("retry")}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
-        {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} onClick={() => onAct("answer")}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
+        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={onRetry}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
+        {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => document.querySelector<HTMLElement>("[data-answer]")?.focus()}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
         {a.state === "queued" && <span className={`text-base ${b["ink-queued"]}`}>{copy.agent.queuedNote}</span>}
-        {a.state === "draft_ready" && <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span>}
+        {a.state === "draft_ready" && (a.reviews.length ? <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span> : (
+          <>
+            <button type="button" data-agent-act className={`${btn} bg-brand-cyan text-background`} disabled={busy} onClick={() => onDraft(true)}>{copy.triage.publish}</button>
+            <button type="button" className={`${btn} text-foreground shadow-[inset_0_0_0_1px_var(--border-glass-hover)]`} disabled={busy} onClick={() => onDraft(false)}>{copy.triage.revise}</button>
+          </>
+        ))}
       </div>
+      <Plan agent={a} simMs={simMs} copy={copy} />
       <div className="mt-auto grid grid-cols-[auto_1fr] gap-6 pt-2">
         <div><Overline>{copy.stats.last12}</Overline><Beads agent={a} copy={copy} /></div>
         <div>
-          <Overline className="justify-between"><span>{copy.stats.runs24h}</span><span className="tracking-normal">{a.spark24h.reduce((x, v) => x + v, 0)}</span></Overline>
+          <Overline className="justify-between whitespace-nowrap"><span>{copy.stats.runs24h}</span><span className="tracking-normal">{a.spark24h.reduce((x, v) => x + v, 0)}</span></Overline>
           <Bars agent={a} height={34} />
         </div>
       </div>

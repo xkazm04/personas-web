@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import type { CSSProperties } from "react";
 import type { FleetTeam } from "../fleet-data";
 import Emblem from "./Emblem";
-import { needGlyph, type Rect } from "./Tile";
+import { NeedGlyph, type Rect } from "./Tile";
 import { attentionOf, needsTone } from "../attention";
 import { agentAria, shortState, taskText, type BoardCopy } from "./copy";
 import { fill, gridFit, orderInBay, plural, type SimAgent } from "./model";
@@ -104,8 +104,8 @@ export default function TeamScene({ team, list: unordered, from, width, height, 
                 {a.spark24h.map((v, i) => <i key={i} style={{ height: `${Math.max(6, (v / m) * 100).toFixed(0)}%` }} />)}
               </span>
               {pile === "needs" && (
-                <span className="text-2xl font-extrabold leading-none" style={{ color: "color-mix(in oklab, var(--tone) 80%, var(--foreground))" }} aria-hidden="true">
-                  {needGlyph(a)}
+                <span className="leading-none" style={{ color: "color-mix(in oklab, var(--tone) 80%, var(--foreground))" }} aria-hidden="true">
+                  <NeedGlyph agent={a} size={24} />
                 </span>
               )}
               <span className="whitespace-nowrap text-right text-xs text-muted-dark">
