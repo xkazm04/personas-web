@@ -3,6 +3,7 @@
 import { MessageCircle } from "lucide-react";
 
 import { MarkdownReport } from "@/components/dashboard/MarkdownReport";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { Modal } from "@/components/dashboard/Modal";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { relativeTime } from "@/lib/format";
@@ -13,7 +14,20 @@ import type { FeedbackMessage, MessageThread } from "@/lib/mock-dashboard-data";
  * in chronological order, each rendered as its own markdown article.
  * Mirrors the desktop sub_messages thread view in a single modal so the
  * full context is visible at once.
+ *
+ * The modal's title and subtitle are chrome and paint with the open; the
+ * markdown-rendered conversation is the deep (T3) body, so it mounts in the
+ * view's arrival queue (one idle slot after the open) instead of on top of
+ * the panel's entrance. The renderer is dependency-free, so nothing is
+ * code-split — only the mount waits.
  */
+/**
+ * One message article's settled minimum: header (57 px) + body padding and a
+ * couple of markdown lines. A floor, not a size — the panel grows downward
+ * from its top-anchored position, so nothing above the body moves.
+ */
+const THREAD_BODY_FLOOR = 140;
+
 export function ThreadDetailModal({
   thread,
   onClose,
@@ -53,12 +67,14 @@ export function ThreadDetailModal({
       }
     >
       {thread && (
-        <div className="space-y-4">
-          <ConversationMessage message={thread.parent} />
-          {thread.replies.map((reply) => (
-            <ConversationMessage key={reply.id} message={reply} isReply />
-          ))}
-        </div>
+        <Deferred minHeight={THREAD_BODY_FLOOR} order={0}>
+          <div className="space-y-4">
+            <ConversationMessage message={thread.parent} />
+            {thread.replies.map((reply) => (
+              <ConversationMessage key={reply.id} message={reply} isReply />
+            ))}
+          </div>
+        </Deferred>
       )}
     </Modal>
   );

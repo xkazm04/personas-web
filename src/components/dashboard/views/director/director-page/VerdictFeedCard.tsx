@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
@@ -36,7 +37,21 @@ const SEVERITY_ACCENT: Record<DirectorSeverity, string> = {
  * the scope, newest first, each carrying a severity accent and a category
  * chip. Desktop parity: the coaching-history verdict list (feed form).
  */
-export function VerdictFeedCard({ verdicts }: { verdicts: DirectorVerdict[] }) {
+/** Ghost rows drawn on a cold load — each one a settled row's geometry (58 px). */
+const GHOST_ROWS = ["g0", "g1", "g2", "g3", "g4"];
+
+export function VerdictFeedCard({
+  verdicts,
+  ghost = false,
+  settle = false,
+}: {
+  /** `null` while the snapshot is pending: the chrome paints, the list is held. */
+  verdicts: DirectorVerdict[] | null;
+  /** Cold load with nothing held: delayed, row-shaped ghosts. */
+  ghost?: boolean;
+  /** The view mounted without data: rows cascade in when they land. */
+  settle?: boolean;
+}) {
   const { t } = useTranslation();
   const lp = t.directorPage.verdictFeed;
 
@@ -45,25 +60,41 @@ export function VerdictFeedCard({ verdicts }: { verdicts: DirectorVerdict[] }) {
       <div className="mb-4 flex items-center gap-2">
         <MessageSquareQuote className="h-4 w-4 text-brand-cyan" />
         <h2 className="text-base font-semibold text-foreground">{lp.title}</h2>
-        {verdicts.length > 0 && (
+        {verdicts !== null && verdicts.length > 0 && (
           <span className="ml-auto rounded-full border border-cyan-500/20 bg-cyan-500/8 px-2 py-0.5 text-sm font-medium tabular-nums text-cyan-300">
             {verdicts.length}
           </span>
         )}
       </div>
 
-      {verdicts.length === 0 ? (
+      {verdicts === null ? (
+        ghost ? (
+          <div aria-hidden className="dash-ghost -mx-1 space-y-1">
+            {GHOST_ROWS.map((key) => (
+              <div key={key} className="flex items-start gap-2.5 px-2 py-2">
+                <span className="mt-1 h-8 w-1 flex-shrink-0 rounded-full bg-glass" />
+                <span className="h-7 w-7 flex-shrink-0 rounded-lg bg-glass" />
+                <div className="min-w-0 flex-1 space-y-2 py-[5px]">
+                  <span className="block h-3 w-28 rounded bg-glass" />
+                  <span className="block h-3 w-3/4 rounded bg-glass" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null
+      ) : verdicts.length === 0 ? (
         <p className="flex flex-1 items-center justify-center py-8 text-sm text-muted-dark">
           {lp.empty}
         </p>
       ) : (
         <div className="-mx-1 space-y-1">
-          {verdicts.map((verdict) => {
+          {verdicts.map((verdict, i) => {
             const meta = CATEGORY_META[verdict.category];
             return (
               <div
                 key={verdict.id}
-                className="flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-white/[0.03]"
+                className={`flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-white/[0.03]${settle ? ` ${ARRIVE}` : ""}`}
+                style={settle ? arriveAt(i) : undefined}
               >
                 <span
                   className={`mt-1 h-8 w-1 flex-shrink-0 rounded-full ${SEVERITY_ACCENT[verdict.severity]}`}

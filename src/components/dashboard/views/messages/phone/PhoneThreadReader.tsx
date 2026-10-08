@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { ArrowLeft } from "lucide-react";
 
 import { MarkdownReport } from "@/components/dashboard/MarkdownReport";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { mobileCopy } from "@/i18n/pending/mobile";
@@ -14,7 +15,14 @@ import type { FeedbackMessage, MessageThread } from "@/lib/mock-dashboard-data";
  * A whole conversation in place of the list: Back, the subject, then the
  * parent and each reply as an article. `message.payload` (synced metadata with
  * desktop file paths) is deliberately never rendered here.
+ *
+ * Back, the subject and the meta line are chrome and paint at once (focus
+ * lands on the heading); the markdown-rendered articles are the deep (T3)
+ * body and mount in the view's arrival queue below them.
  */
+/** One article's settled minimum (header + padding + a couple of lines): a floor, not a size. */
+const THREAD_BODY_FLOOR = 140;
+
 export default function PhoneThreadReader({
   thread,
   onBack,
@@ -52,10 +60,12 @@ export default function PhoneThreadReader({
           {thread.persona} · {relativeTime(thread.latestTimestamp)}
         </p>
       </div>
-      <ReaderMessage message={thread.parent} />
-      {thread.replies.map((reply) => (
-        <ReaderMessage key={reply.id} message={reply} isReply />
-      ))}
+      <Deferred minHeight={THREAD_BODY_FLOOR} order={0} className="flex flex-col gap-4">
+        <ReaderMessage message={thread.parent} />
+        {thread.replies.map((reply) => (
+          <ReaderMessage key={reply.id} message={reply} isReply />
+        ))}
+      </Deferred>
     </div>
   );
 }

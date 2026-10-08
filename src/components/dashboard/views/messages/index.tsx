@@ -1,16 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { Mail, MailOpen } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
-import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import FilterBar from "@/components/dashboard/FilterBar";
+import { ARRIVE, ARRIVE_CAP, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 import {
   type FeedbackMessage,
   type MessageThread,
@@ -18,6 +16,7 @@ import {
 
 import { MessagesPagination } from "./messages-page/MessagesPagination";
 import { MessageRow } from "./messages-page/MessageRow";
+import { MessageRowGhosts } from "./messages-page/MessageRowGhosts";
 import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
 import { ThreadRow } from "@/components/dashboard/ThreadRow";
 import { useMessagesData } from "./useMessagesData";
@@ -35,6 +34,11 @@ const PAGE_SIZE = 10;
  * it is the paginated desk list with the detail modal below. The view is
  * client-only (next/dynamic ssr:false), so choosing by media query cannot
  * mismatch a server render.
+ *
+ * Loading tiers (docs/features/dashboard/loading-orchestration.md): the header
+ * is T0 (never animated), the toolbar T1, the rows T2 (a delayed row-shaped
+ * ghost on a cold load, then a cascade keyed by id), and a thread's
+ * markdown body T3 (a `<Deferred>` slot inside the reader).
  */
 export default function MessagesView() {
   const phone = useIsMobile();
@@ -88,8 +92,8 @@ function MessagesPage() {
     .replace("{total}", String(totalPages));
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6 flex items-start gap-3">
+    <div>
+      <div className="mb-6 flex items-start gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-rose-500/25 bg-rose-500/10">
           <Mail className="h-5 w-5 text-rose-300" />
         </div>
@@ -100,9 +104,9 @@ function MessagesPage() {
           <p className="mt-1 text-base text-muted-dark">{t.messagesPage.subtitle}</p>
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
-      </motion.div>
+      </div>
 
-      <motion.div variants={fadeUp} className="mb-3 flex items-center gap-2">
+      <div className={`${ARRIVE} mb-3 flex items-center gap-2`} style={arriveAt(0)}>
         <span className="rounded-full border border-glass bg-white/[0.03] px-2.5 py-1 text-sm font-medium text-muted tabular-nums">
           {unreadCount} {t.messagesPage.unread.toLowerCase()}
         </span>
@@ -130,40 +134,38 @@ function MessagesPage() {
             ]}
           />
         </div>
-      </motion.div>
+      </div>
 
       {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
-        <div className="space-y-2" aria-busy="true">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <SkeletonCard key={i} lines={1} />
-          ))}
-        </div>
+        <MessageRowGhosts />
       ) : isEmpty ? (
-        <p className="py-12 text-center text-sm text-muted-dark">{t.messagesPage.empty}</p>
+        <p className={`${ARRIVE} py-12 text-center text-sm text-muted-dark`} style={arriveAt(1)}>
+          {t.messagesPage.empty}
+        </p>
       ) : (
-        <motion.div variants={fadeUp} className="space-y-2">
+        // T2 rows: keyed by id, so only rows that are genuinely new (first
+        // arrival, a page turn, the view toggle) enter; a read-state change
+        // keeps the element and never replays.
+        <div className="space-y-2">
           {isList
-            ? messagePageItems.map((message) => (
-                <MessageRow
-                  key={message.id}
-                  message={message}
-                  onOpen={() => openMessage(message)}
-                />
+            ? messagePageItems.map((message, i) => (
+                <div key={message.id} className={ARRIVE} style={arriveAt(i + 1)}>
+                  <MessageRow message={message} onOpen={() => openMessage(message)} />
+                </div>
               ))
-            : threadPageItems.map((thread) => (
-                <ThreadRow
-                  key={thread.id}
-                  thread={thread}
-                  onOpen={() => openThread(thread)}
-                />
+            : threadPageItems.map((thread, i) => (
+                <div key={thread.id} className={ARRIVE} style={arriveAt(i + 1)}>
+                  <ThreadRow thread={thread} onOpen={() => openThread(thread)} />
+                </div>
               ))}
-        </motion.div>
+        </div>
       )}
 
       {!loading && !isEmpty && (
         <MessagesPagination
+          arriveIndex={ARRIVE_CAP}
           pageLabel={pageLabel}
           isFirstPage={clampedPage === 0}
           isLastPage={clampedPage >= totalPages - 1}
@@ -177,6 +179,6 @@ function MessagesPage() {
         thread={openThread_value}
         onClose={() => setOpenThreadId(null)}
       />
-    </motion.div>
+    </div>
   );
 }

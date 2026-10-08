@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { BarChart3 } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { ScoreBand } from "@/components/dashboard/ScoreDistributionChart";
 import type { DirectorScoreBand } from "@/lib/mock-dashboard-data";
@@ -12,15 +13,15 @@ import type { DirectorScoreBand } from "@/lib/mock-dashboard-data";
 import { scoreTone, type RosterFacet } from "./directorMeta";
 
 // recharts (+ d3) is a 344 KB chunk; importing it here put it in this route's
-// first load. Deferred, it is fetched when the card mounts. Matches
-// PerformanceLatencyCard / PerformanceSpendCard on the observability route.
-const ScoreDistributionChart = dynamic(
-  () => import("@/components/dashboard/ScoreDistributionChart"),
-  {
-    ssr: false,
-    loading: () => <div className="h-[200px] animate-pulse rounded-lg bg-white/[0.03]" />,
-  },
-);
+// first load. Split out, it is fetched when the card mounts (the `<Deferred>`
+// slot's `preload` starts it at once, before the slot is released), and only
+// its mount waits for the view's arrival queue. Matches PerformanceLatencyCard
+// / PerformanceSpendCard on the observability route.
+const loadScoreDistributionChart = () => import("@/components/dashboard/ScoreDistributionChart");
+const ScoreDistributionChart = dynamic(loadScoreDistributionChart, { ssr: false });
+
+/** The chart's own height (ResponsiveContainer height={200}): the slot's reservation. */
+const CHART_HEIGHT = 200;
 
 /**
  * Score distribution — how the latest 0–5 verdicts spread across the coaching
@@ -34,21 +35,23 @@ export function ScoreDistributionCard({
   facet,
   onFacetChange,
 }: {
-  distribution: DirectorScoreBand[];
+  /** `null` while the snapshot is pending: the chrome and the chart slot are held. */
+  distribution: DirectorScoreBand[] | null;
   avgScore: number | null;
   facet: RosterFacet | null;
   onFacetChange: (facet: RosterFacet | null) => void;
 }) {
   const { t } = useTranslation();
   const lp = t.directorPage.distribution;
-  const hasScores = distribution.some((band) => band.count > 0);
+  const pending = distribution === null;
+  const hasScores = pending || distribution.some((band) => band.count > 0);
   const selectedScore = facet?.type === "score" ? facet.score : null;
 
   // Resolve the per-band colour here so the chart module stays free of
   // director-page imports (and so importing it cannot drag recharts back in).
   const bands = useMemo<ScoreBand[]>(
     () =>
-      distribution.map((band) => ({
+      (distribution ?? []).map((band) => ({
         score: band.score,
         count: band.count,
         fill: scoreTone(band.score).series,
@@ -73,14 +76,22 @@ export function ScoreDistributionCard({
           {lp.empty}
         </p>
       ) : (
-        <ScoreDistributionChart
-          bands={bands}
-          selectedScore={selectedScore}
-          onSelectScore={(score) =>
-            onFacetChange(selectedScore === score ? null : { type: "score", score })
-          }
-          agentsLabel={lp.agents}
-        />
+        // T3: the slot mounts with the card (so the chunk starts downloading
+        // and the 200 px are held from the first frame) and is released first
+        // in the view's queue — this histogram is the view's main chart. If the
+        // snapshot is still pending at release, the chart mounts when it lands.
+        <Deferred minHeight={CHART_HEIGHT} order={0} preload={loadScoreDistributionChart}>
+          {!pending && (
+            <ScoreDistributionChart
+              bands={bands}
+              selectedScore={selectedScore}
+              onSelectScore={(score) =>
+                onFacetChange(selectedScore === score ? null : { type: "score", score })
+              }
+              agentsLabel={lp.agents}
+            />
+          )}
+        </Deferred>
       )}
     </GlowCard>
   );

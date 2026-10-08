@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Loader2, Smartphone } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
-import { fadeUp } from "@/lib/animations";
+import { ArriveCell } from "./ArriveCell";
 import { useAuthStore } from "@/stores/authStore";
 import { useControllerStore, type ControllerPhase } from "@/stores/controllerStore";
 import { useDeviceStore } from "@/stores/deviceStore";
@@ -32,7 +32,7 @@ function takePairFragment() {
  * fragment, pairs this browser (a new non-extractable key + an HMAC proof),
  * and then shows the phase the desktop answers with. Live plane only.
  */
-export function PhoneControlCard() {
+export function PhoneControlCard({ arriveIndex }: { arriveIndex: number }) {
   const copy = mobileCopy.pairing;
   const { isDemo, isAuthenticated } = useAuthStore(useShallow((s) => ({ isDemo: s.isDemo, isAuthenticated: s.isAuthenticated })));
   const live = IS_SUPABASE && isAuthenticated && !isDemo;
@@ -84,26 +84,28 @@ export function PhoneControlCard() {
   const paired = phase === "active" || phase === "pending";
 
   return (
-    <GlowCard accent={phase === "active" ? "emerald" : "cyan"} variants={fadeUp} className="p-6">
-      <div className="mb-3 flex items-center gap-2">
-        <Smartphone aria-hidden className="h-4 w-4 text-brand-cyan" />
-        <h2 className="text-base font-semibold text-foreground">{copy.title}</h2>
-      </div>
-      <p className="text-sm text-muted">{copy.body}</p>
-      <p aria-live="polite" className="mt-3 flex items-center gap-2 text-sm text-foreground">
-        {busy && <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />}
-        {noDevice ? copy.noDevice : status[phase] ?? ""}
-      </p>
-      {!paired && !busy && <p className="mt-2 text-sm text-muted-dark">{copy.howTo}</p>}
-      {paired && (
-        <button
-          type="button"
-          onClick={() => void useControllerStore.getState().unpair()}
-          className="mt-4 inline-flex min-h-[44px] items-center rounded-xl border border-glass-hover px-4 text-sm font-medium text-foreground transition-colors hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-brand-cyan"
-        >
-          {copy.unpair}
-        </button>
-      )}
-    </GlowCard>
+    <ArriveCell index={arriveIndex}>
+      <GlowCard accent={phase === "active" ? "emerald" : "cyan"} className="flex-1 p-6">
+        <div className="mb-3 flex items-center gap-2">
+          <Smartphone aria-hidden className="h-4 w-4 text-brand-cyan" />
+          <h2 className="text-base font-semibold text-foreground">{copy.title}</h2>
+        </div>
+        <p className="text-sm text-muted">{copy.body}</p>
+        <p aria-live="polite" className="mt-3 flex items-center gap-2 text-sm text-foreground">
+          {busy && <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />}
+          {noDevice ? copy.noDevice : status[phase] ?? ""}
+        </p>
+        {!paired && !busy && <p className="mt-2 text-sm text-muted-dark">{copy.howTo}</p>}
+        {paired && (
+          <button
+            type="button"
+            onClick={() => void useControllerStore.getState().unpair()}
+            className="mt-4 inline-flex min-h-[44px] items-center rounded-xl border border-glass-hover px-4 text-sm font-medium text-foreground transition-colors hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-brand-cyan"
+          >
+            {copy.unpair}
+          </button>
+        )}
+      </GlowCard>
+    </ArriveCell>
   );
 }

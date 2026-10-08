@@ -24,7 +24,20 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 
 **Pagination** — `MessagesPagination` (`messages-page/MessagesPagination.tsx`) is a presentational prev/next bar with a `Page {n} of {total}` label (built in `page.tsx:101` via string interpolation) and `isFirstPage`/`isLastPage` to disable buttons. The page clamps `page` against `totalPages` so deletions/filters can't strand you on an empty page.
 
-**Header chrome** — `GradientText` title, subtitle, and a `StalenessIndicator` seeded from a lazily-initialized `fetchedAt = Date.now()` (React 19 purity rule — captured in `useState(() => …)`). Loading shows four `SkeletonCard`s; `error` shows a `DashboardErrorBanner`; empty page shows `t.messagesPage.empty`.
+**Header chrome** — `GradientText` title, subtitle, and a `StalenessIndicator` seeded from a lazily-initialized `fetchedAt = Date.now()` (React 19 purity rule — captured in `useState(() => …)`). Loading shows four delayed, row-shaped ghosts (`MessageRowGhosts`); `error` shows a `DashboardErrorBanner`; empty page shows `t.messagesPage.empty`.
+
+### Loading tiers
+
+Per the [loading standard](loading-orchestration.md). The framer `staggerContainer`/`fadeUp` page entrance is gone (it animated the T0 header); fixed regions use the CSS cascade instead.
+
+| Tier | Desk (`index.tsx`) | Phone (`phone/`) |
+| --- | --- | --- |
+| **T0** | Header: icon, title, subtitle, `StalenessIndicator` — no entrance | `h1` title |
+| **T1** | Toolbar (unread pill, mark-all-read, `FilterBar`) `arriveAt(0)` — `index.tsx:109`; pagination bar `arriveAt(ARRIVE_CAP)` — `index.tsx:168`, `MessagesPagination.tsx:25` | Unread toolbar `arriveAt(0)` — `PhoneMessages.tsx:85` |
+| **T2** | Rows, each wrapped and keyed by `thread.id` / `message.id`, `arriveAt(i + 1)` — `index.tsx:154,159`; empty line `arriveAt(1)`. Cold load: `MessageRowGhosts` (`messages-page/MessageRowGhosts.tsx:12`), four `dash-ghost` rows with a settled row's geometry (~68 px) | Rows keyed by `thread.id`; a "Show more" batch cascades from its own first row (`arriveAt(i - (shown - STEP) + 1)`) — `PhoneMessages.tsx:114`; same ghosts — `PhoneMessages.tsx:104` |
+| **T3** | Conversation body in the modal — `<Deferred minHeight={140} order={0}>` (`ThreadDetailModal.tsx:70`); modal title/subtitle stay chrome | Reader articles — `<Deferred minHeight={140} order={0}>` (`PhoneThreadReader.tsx:63`); Back, subject, meta line stay chrome |
+
+`MarkdownReport` is dependency-free, so the T3 body is **not** code-split — only its mount waits one queue slot. `140` is a floor (one article's header + a few lines); the modal is top-anchored, so a longer thread grows downward without moving anything above it.
 
 ## Key files
 | File | Role |
@@ -37,6 +50,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 | `src/components/dashboard/views/messages/messages-page/MessageRow.tsx` | One flat-list row (single message; reply chevron for non-parents) — opens the parent thread |
 | `src/components/dashboard/views/messages/messages-page/ThreadDetailModal.tsx` | Conversation modal — parent + replies as markdown articles |
 | `src/components/dashboard/views/messages/messages-page/MessagesPagination.tsx` | Presentational prev/next pagination bar |
+| `src/components/dashboard/views/messages/messages-page/MessageRowGhosts.tsx` | Cold-load ghost rows (desk + phone), `dash-ghost`-delayed |
 | `src/lib/mock-dashboard-data.ts` | `MessageThread`/`FeedbackMessage` types, `MOCK_MESSAGE_THREADS` fixture generator, `MOCK_UNREAD_MESSAGES` |
 | `src/components/dashboard/Modal.tsx` | Shared modal primitive (backdrop, esc/click-out close, header/body/footer) |
 | `src/components/dashboard/DashboardNavigation.tsx` | Nav badge — `getBadge` returns `MOCK_UNREAD_MESSAGES` for the Messages item |
@@ -50,7 +64,7 @@ Messages is an inbox-style surface listing **threads** — one per persona conve
 ## Integration points
 - **Dashboard shell:** rendered inside the `/dashboard` layout; nav entry registered in `DashboardNavigation.tsx` (`{ key: "messages", icon: Mail, href: "/dashboard/messages" }`).
 - **Nav unread badge:** `useNavState().getBadge` in `DashboardNavigation.tsx` returns `MOCK_UNREAD_MESSAGES` (when `> 0`) for the messages item; consumed by `DesktopSidebar` and `MobileBottomNav`. Note this badge is the static constant `7`, not the live `unreadCount` derived on the page — marking messages read here does not change the nav badge.
-- **Shared primitives:** `Modal` (`components/dashboard/Modal.tsx`), `MarkdownReport`, `PersonaAvatar`, `SkeletonCard`, `StalenessIndicator`, `DashboardErrorBanner`, `GradientText`; `relativeTime` from `src/lib/format.ts`; `fadeUp`/`staggerContainer` from `src/lib/animations.ts`.
+- **Shared primitives:** `Modal` (`components/dashboard/Modal.tsx`), `MarkdownReport`, `PersonaAvatar`, `StalenessIndicator`, `DashboardErrorBanner`, `GradientText`; `relativeTime` from `src/lib/format.ts`; `ARRIVE`/`arriveAt` + `Deferred` from `src/components/dashboard/arrival/`.
 - **i18n namespace:** `t.messagesPage` (title, subtitle, unread, read, empty, expand, collapse, markAllRead, viewThreads, viewList, reply, pagination.{prev,next,page}); nav label is `t.dashboard.messages`.
 
 ## Conventions & gotchas
