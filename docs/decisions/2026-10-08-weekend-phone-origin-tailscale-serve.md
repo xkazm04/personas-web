@@ -21,9 +21,16 @@ Reconstructed from the constraints; the options the operator was offered are not
 ## Consequences
 
 - The phone works only while the tailnet and the Director's served build are up.
-- The pairing QR must open the `*.ts.net` origin, not the default. The operator-only pairing origin setting is on personas master as `0706c0d811` (`cloud_pairing_origin_get` / `cloud_pairing_origin_set`; the default stays `https://personas.so` when unset). The brief described this follow-up (run `afe2afb6`) as held; when this record was written the commit was on master, and this record does not confirm it is that run's commit.
+- The pairing QR must open the `*.ts.net` origin, not the default. The operator-only pairing origin setting is on personas master as `0706c0d811` (`cloud_pairing_origin_get` / `cloud_pairing_origin_set`; the default stays `https://personas.so` when unset). See [Status, 2026-10-08 evening](#status-2026-10-08-evening) for which run landed it.
 - The `*.ts.net` name is not recorded here.
 
 ## Evidence
 
 personas-web: `src/lib/commands/signer.ts:37,43,96`; `src/lib/commands/pairing.ts:39`. personas: `0706c0d811` on master (its message states the hardcoded origin and the NXDOMAIN reason); `src-tauri/src/cloud/pairing.rs:52` (`DEFAULT_PAIRING_ORIGIN`). The secure-context requirement is a platform fact, not tested here. Source: the operator's decision relayed by the Director.
+
+
+## Status, 2026-10-08 evening
+
+The sections above are not edited. Run `afe2afb6` (item B) merged on personas master as `0706c0d811`, `3e3ed19246` and `53d746b537` (verify with `git -C C:/Users/kazda/kiro/personas log --oneline 0706c0d811~1..53d746b537`). The setting is the Pairing address field in the desktop's Paired phones panel.
+
+Open and undecided: when the address is unset, the QR still falls back to `https://personas.so`, which does not resolve, so a user who never sets the address would send pairing secrets to whoever registers that domain. The served `*.ts.net` name is still not recorded.
