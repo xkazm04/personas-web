@@ -1,6 +1,6 @@
 import { attentionOf, type Attention } from "../attention";
 import { stateText, taskText, type BoardCopy } from "./copy";
-import { TEAM_BY_ID, type SimAgent } from "./model";
+import { TEAM_BY_ID, orderInBay, type SimAgent } from "./model";
 
 /* ── Find and focus ─────────────────────────────────────────────────
  *
@@ -40,4 +40,19 @@ export function inFocus(a: SimAgent, f: FocusFilter, c: BoardCopy): boolean {
 /** Toggle one pile in the filter. */
 export function togglePile(f: FocusFilter, p: Attention): FocusFilter {
   return { ...f, piles: f.piles.includes(p) ? f.piles.filter((x) => x !== p) : [...f.piles, p] };
+}
+
+/** What a focus filter shows: the matching agents in the field's reading order
+ *  (Enter opens the first), their ids for dimming (null when not focusing),
+ *  and the rail's scope (narrowed by the search only, never by piles). */
+export function focusView(scope: readonly SimAgent[], teamIds: readonly string[], f: FocusFilter, c: BoardCopy) {
+  const reading = teamIds.flatMap((t) => orderInBay(scope.filter((a) => a.team === t)));
+  const focusing = isFocusing(f);
+  const matches = focusing ? reading.filter((a) => inFocus(a, f, c)) : reading;
+  return {
+    matches,
+    matchIds: focusing ? new Set(matches.map((a) => a.id)) : null,
+    railScope: f.query.trim() ? scope.filter((a) => matchesQuery(a, f.query, c)) : [...scope],
+    narrowed: f.query.trim() !== "",
+  };
 }

@@ -10,6 +10,8 @@ interface OperatorDeps {
   copy: BoardCopy;
   hostName: string;
   offline: boolean;
+  /** Now, in sim time: stamped on each command for the activity log. */
+  simMs: number;
 }
 
 /**
@@ -18,8 +20,9 @@ interface OperatorDeps {
  * machine is offline nothing is sent: the controls are disabled with the reason,
  * and these calls are no-ops as a second line.
  */
-export function makeOperator({ commands, toast, copy: c, hostName, offline }: OperatorDeps) {
+export function makeOperator({ commands: raw, toast, copy: c, hostName, offline, simMs }: OperatorDeps) {
   const host = { host: hostName };
+  const commands = { ...raw, send: (spec: Parameters<Commands["send"]>[0], hold?: boolean) => raw.send({ ...spec, atSim: simMs }, hold) };
   const agentVerb = (verb: Exclude<Verb, "approve" | "sendback" | "publish" | "revise" | "answer" | "pauseAll" | "resumeAll">, a: SimAgent, text: string) => {
     if (offline) return;
     commands.send({ verb, agentId: a.id });

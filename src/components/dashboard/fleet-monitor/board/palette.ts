@@ -77,6 +77,7 @@ export interface PaletteDeps {
   resumeAll: () => void;
   showPile: (p: Attention) => void;
   clearFocus: () => void;
+  toggleActivity: () => void;
   onView?: (v: "board" | "city") => void;
   onScale?: (n: FleetScale) => void;
 }
@@ -95,6 +96,7 @@ export function buildItems(d: PaletteDeps): PaletteItem[] {
     { id: "a:working", group: "actions", label: p.actions.showWorking, run: () => d.showPile("working") },
     { id: "a:off", group: "actions", label: p.actions.showOff, run: () => d.showPile("off") },
     { id: "a:clear", group: "actions", label: p.actions.clear, run: d.clearFocus },
+    { id: "a:activity", group: "actions", label: p.actions.activity, kbd: "E", run: d.toggleActivity },
   ];
   const queue = new Map(queueOf([...d.scope]).map((a, i) => [a.id, i]));
   const agents = [...d.scope].sort((x, y) => (queue.get(x.id) ?? 999) - (queue.get(y.id) ?? 999) || x.idx - y.idx);

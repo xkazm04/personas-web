@@ -28,6 +28,8 @@ export interface Command {
   stop?: boolean;
   /** An answer's words. */
   text?: string;
+  /** Sim time it was sent at (for the activity log's clock). */
+  atSim?: number;
   status: CmdStatus;
 }
 

@@ -408,6 +408,7 @@ export interface PersonasMonitorCopy {
         showWorking: string;
         showOff: string;
         clear: string;
+        activity: string;
         city: string;
         scale: string;
       };
@@ -503,6 +504,38 @@ export interface PersonasMonitorCopy {
       };
       teamFilter: string;
       none: string;
+    };
+    activity: {
+      toggle: string;
+      toggleHint: string;
+      label: string;
+      filtersLabel: string;
+      filters: {
+        all: string;
+        attention: string;
+        decisions: string;
+        messages: string;
+        runs: string;
+        commands: string;
+      };
+      empty: string;
+      commandsEmpty: string;
+      commandsNote: string;
+      cmdStatus: {
+        held: string;
+        sending: string;
+        acked: string;
+        done: string;
+        undone: string;
+      };
+      fleetTarget: string;
+      alertsOn: string;
+      alertsOff: string;
+      alertsHint: string;
+      justIn: string;
+      openAgent: string;
+      dismiss: string;
+      close: string;
     };
   };
   city: {
@@ -976,6 +1009,7 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         showWorking: 'Show only working agents',
         showOff: 'Show only agents that are off',
         clear: 'Clear search and filters',
+        activity: 'Show or hide the activity log and the commands you sent',
         city: 'Switch to Night shift',
         scale: 'Show {n} agents',
       },
@@ -1071,6 +1105,38 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       },
       teamFilter: 'Show only {team}',
       none: 'No agent matches the search or filters.',
+    },
+    activity: {
+      toggle: 'Activity',
+      toggleHint: 'Show the activity log (E)',
+      label: 'Activity log',
+      filtersLabel: 'Show',
+      filters: {
+        all: 'All',
+        attention: 'Needs you',
+        decisions: 'Your decisions',
+        messages: 'Messages',
+        runs: 'Runs',
+        commands: 'Commands',
+      },
+      empty: 'Nothing here yet.',
+      commandsEmpty: 'You have not sent anything to {host} yet.',
+      commandsNote: 'Everything you sent to {host} this session, newest first',
+      cmdStatus: {
+        held: 'Held for Undo',
+        sending: 'Sending',
+        acked: 'Received',
+        done: 'Done',
+        undone: 'Undone, never sent',
+      },
+      fleetTarget: 'every agent',
+      alertsOn: 'Alerts on',
+      alertsOff: 'Alerts off',
+      alertsHint: 'Show a card when an agent newly needs you',
+      justIn: 'Just in',
+      openAgent: 'Open',
+      dismiss: 'Dismiss',
+      close: 'Close the activity log',
     },
   },
   city: {

@@ -5,6 +5,7 @@ import { parseDemoDesktop } from "@/lib/sync/reachability";
 import { initSim, simReducer } from "./sim";
 import type { HostStatus } from "./host";
 import { HOLD_MS } from "./useCommands";
+import type { JustInAlert } from "./JustIn";
 
 /** Drives the seeded simulation once per second while the tab is visible.
  *  Reduced motion keeps the data ticking (slower), only the motion goes still.
@@ -71,4 +72,42 @@ export function useArrival(still: boolean) {
     return () => window.clearTimeout(id);
   }, []);
   return arriving && !still;
+}
+
+/** Agents that newly need you, as alerts that leave on their own after 8 s
+ *  (the oldest first). Nothing alerts on load or while alerts are muted. */
+export function useJustIn(needIds: readonly string[], enabled: boolean) {
+  const key = needIds.join(",");
+  const [prev, setPrev] = useState(key);
+  const [seq, setSeq] = useState(0);
+  const [alerts, setAlerts] = useState<JustInAlert[]>([]);
+  if (key !== prev) {
+    const before = new Set(prev.split(","));
+    const added = needIds.filter((id) => !before.has(id));
+    setPrev(key);
+    if (enabled && added.length) {
+      setSeq(seq + added.length);
+      setAlerts((cur) => [...added.map((id, i) => ({ id, key: `${id}#${seq + i}` })), ...cur].slice(0, 3));
+    }
+  }
+  useEffect(() => {
+    if (!alerts.length) return;
+    const id = window.setTimeout(() => setAlerts((cur) => cur.slice(0, -1)), 8000);
+    return () => window.clearTimeout(id);
+  }, [alerts]);
+  const dismiss = (k: string) => setAlerts((cur) => cur.filter((x) => x.key !== k));
+  const clear = () => setAlerts([]);
+  return { alerts, dismiss, clear };
+}
+
+/** "(23) Personas ...": the tab says how many need you while the Board is shown. */
+export function useTitleBadge(count: number) {
+  useEffect(() => {
+    const strip = (t: string) => t.replace(/^\(\d+\)\s*/, "");
+    const base = strip(document.title);
+    document.title = count ? `(${count}) ${base}` : base;
+    return () => {
+      document.title = strip(document.title);
+    };
+  }, [count]);
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Bell, BellOff, ChevronUp } from "lucide-react";
 import { FLEET, formatAge } from "../fleet-data";
 import { ATTENTION_COLOR } from "../attention";
 import { ago, eventText, type BoardCopy } from "./copy";
@@ -15,24 +16,36 @@ interface BottomStripProps {
   nav: BoardNav;
   live: boolean;
   offline: boolean;
+  /** The activity log is open. */
+  expanded: boolean;
+  onToggle: () => void;
+  alerts: boolean;
+  onAlerts: () => void;
 }
 
-const KIND_COLOR: Record<BoardEvent["kind"], string> = {
+export const KIND_COLOR: Record<BoardEvent["kind"], string> = {
   run_completed: "var(--status-success)", run_failed: ATTENTION_COLOR.critical, review_requested: ATTENTION_COLOR.warning,
   message: "var(--status-info)", handoff: "var(--status-info)", self_heal: "var(--status-success)", decision: "var(--foreground)",
 };
 
 /** L0's bottom edge, one line: the newest events, then app-level work. */
-export default function BottomStrip({ scope, simMs, events, copy, nav, live, offline }: BottomStripProps) {
+export default function BottomStrip({ scope, simMs, events, copy, nav, live, offline, expanded, onToggle, alerts, onAlerts }: BottomStripProps) {
   const byId = new Map(scope.map((a) => [a.id, a]));
   const latest = events.filter((e) => byId.has(e.agentId) || e.agentId === FLEET_EVENT_ID).slice(0, 3);
 
   return (
     <>
-      <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-dark">
+      <button type="button" onClick={onToggle} aria-expanded={expanded} title={copy.activity.toggleHint} data-activity-toggle
+        className="flex shrink-0 items-center gap-1.5 rounded-md px-1.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-muted-dark hover:bg-foreground/[0.06] hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground">
         <i className={`h-1.5 w-1.5 rounded-full ${offline ? "shadow-[inset_0_0_0_1.5px_var(--muted-foreground)]" : "bg-[var(--status-success)]"} ${live ? "animate-pulse" : ""}`} aria-hidden="true" />
         {offline ? copy.host.offline : copy.band.live}
-      </span>
+        <span className="normal-case tracking-normal text-foreground">· {copy.activity.toggle}</span>
+        <ChevronUp aria-hidden className={`h-3.5 w-3.5 transition-transform ${expanded ? "rotate-180" : ""}`} />
+      </button>
+      <button type="button" onClick={onAlerts} aria-pressed={alerts} title={copy.activity.alertsHint} aria-label={alerts ? copy.activity.alertsOn : copy.activity.alertsOff}
+        className="grid h-6 w-6 shrink-0 place-items-center rounded-md text-muted-dark hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground">
+        {alerts ? <Bell aria-hidden className="h-3.5 w-3.5" /> : <BellOff aria-hidden className="h-3.5 w-3.5" />}
+      </button>
       <ul className="flex min-w-0 flex-1 items-center gap-5 overflow-hidden" aria-label={copy.band.liveNote}>
         {latest.map((e) => {
           const a = byId.get(e.agentId);

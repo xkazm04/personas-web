@@ -8,20 +8,20 @@ import { FLEET, type FleetScale } from "../fleet-data";
 import FleetFrame from "../FleetFrame";
 import { ATTENTION_COLOR, countAttention } from "../attention";
 import Field, { computeLayout } from "./Field";
-import TeamScene from "./TeamScene";
-import AgentScene from "./AgentScene";
 import TopStrip from "./TopStrip";
 import BottomStrip from "./BottomStrip";
-import { TEAM_BY_ID, fill, orderInBay } from "./model";
-import { NO_FOCUS, inFocus, isFocusing, matchesQuery, type FocusFilter } from "./focus";
+import BoardScenes from "./BoardScenes";
+import ActivityDrawer from "./ActivityDrawer";
+import JustIn from "./JustIn";
+import { fill, queueOf } from "./model";
+import { NO_FOCUS, focusView, type FocusFilter } from "./focus";
 import { railItems } from "./copy";
 import { OfflineBanner } from "./HostCard";
 import BoardRail from "./BoardRail";
-import TriageView from "./TriageView";
 import FleetList from "./FleetList";
 import Toast from "./Toast";
 import { readHost } from "./host";
-import { useArrival, useBoardSim, useHostStatus, useSize, useToast } from "./useBoardRuntime";
+import { useArrival, useBoardSim, useHostStatus, useJustIn, useSize, useTitleBadge, useToast } from "./useBoardRuntime";
 import { isOpen, useCommands } from "./useCommands";
 import FleetPauseDialog from "./FleetPauseDialog";
 import CommandPalette from "./CommandPalette";
@@ -71,6 +71,8 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const [palette, setPalette] = useState(false);
   const [triage, setTriage] = useState(false);
   const [layout, setLayout] = useState<"field" | "list">("field");
+  const [activity, setActivity] = useState(false);
+  const [alertsOn, setAlertsOn] = useState(true);
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
@@ -79,24 +81,26 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
     nextToast: (i, n, a) => fill(copy.toasts.next, { i: i + 1, n, callsign: a.callsign, name: a.name }),
     onTriage: () => startTriage(),
     onLayout: () => setLayout((l) => (l === "field" ? "list" : "field")),
+    onActivity: () => setActivity((v) => !v),
   });
   function startTriage() {
     nav.closeAgent(false);
     nav.closeTeam(false);
+    setActivity(false);
     setTriage(true);
   }
-  const openAgent = nav.agentOpen ? scope.find((a) => a.id === nav.agentOpen) : undefined;
-  const bayRect = nav.teamOpen ? computeLayout(teams, scope, width, height).bays[nav.teamOpen] : undefined;
-  const deep = !!(openAgent || nav.teamOpen || triage);
+  const openAgentFrom = (id: string) => {
+    setActivity(false);
+    nav.openAgent(id, null);
+  };
+  const counts = countAttention(scope);
+  const deep = !!(nav.agentOpen || nav.teamOpen || triage);
   const host = readHost(scope, scale, sim.simMs, sim.beatAt, hostStatus);
-  const op = makeOperator({ commands, toast: showToast, copy, hostName: host.name, offline });
-  // Find and focus: what matches, in the field's reading order (Enter opens the first).
-  const focusing = isFocusing(focus);
-  const reading = teams.flatMap((t) => orderInBay(scope.filter((a) => a.team === t.id)));
-  const matches = focusing ? reading.filter((a) => inFocus(a, focus, copy)) : reading;
-  const matchIds = focusing ? new Set(matches.map((a) => a.id)) : null;
-  const railScope = focus.query.trim() ? scope.filter((a) => matchesQuery(a, focus.query, copy)) : scope;
+  const op = makeOperator({ commands, toast: showToast, copy, hostName: host.name, offline, simMs: sim.simMs });
+  const fv = focusView(scope, teams.map((t) => t.id), focus, copy);
   const fleetPaused = (sim.fleetPaused ?? []).filter((id) => scope.some((a) => a.id === id && !a.enabled)).length;
+  const justIn = useJustIn(queueOf(scope).map((a) => a.id), alertsOn && !offline);
+  useTitleBadge(counts.needs);
 
   const main = (
     <div className="absolute inset-0 flex flex-col">
@@ -104,37 +108,20 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
       <div ref={mainRef} className="relative min-h-0 flex-1">
         <div inert={deep} className={`absolute inset-0 transition-[opacity,transform,filter] duration-500 ${deep ? "pointer-events-none scale-[1.02] opacity-0" : ""} ${offline ? "saturate-[.4]" : ""}`}>
           {layout === "field" ? (
-            <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={matchIds} />
+            <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={fv.matchIds} />
           ) : (
-            <FleetList agents={matches} copy={copy} op={op} cmds={commands.cmds} hostName={host.name} onOpen={nav.openAgent} onTeam={(t) => setFocus({ ...focus, query: t })} />
+            <FleetList agents={fv.matches} copy={copy} op={op} cmds={commands.cmds} hostName={host.name} onOpen={nav.openAgent} onTeam={(t) => setFocus({ ...focus, query: t })} />
           )}
         </div>
+        <BoardScenes
+          scope={scope} nav={nav} bayRect={nav.teamOpen ? computeLayout(teams, scope, width, height).bays[nav.teamOpen] : undefined}
+          width={width} height={height} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live}
+          op={op} cmds={commands.cmds} hostName={host.name} triage={triage} onTriageClose={() => setTriage(false)}
+        />
+        {!deep && <JustIn alerts={justIn.alerts} scope={scope} copy={copy} onOpen={(id) => { justIn.clear(); openAgentFrom(id); }} onDismiss={justIn.dismiss} />}
         <AnimatePresence>
-          {nav.teamOpen && bayRect && (
-            <TeamScene
-              key={nav.teamOpen}
-              covered={!!openAgent}
-              team={TEAM_BY_ID[nav.teamOpen]}
-              list={scope.filter((a) => a.team === nav.teamOpen)}
-              from={bayRect}
-              width={width}
-              height={height}
-              copy={copy}
-              nav={nav}
-              still={still}
-              live={live}
-            />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {triage && (
-            <TriageView key="triage" scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} op={op} hostName={host.name} still={still}
-              onClose={() => setTriage(false)} onConsole={(id) => { setTriage(false); nav.openAgent(id, null); }} />
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {openAgent && (
-            <AgentScene key="agent" agent={openAgent} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live} op={op} cmds={commands.cmds} hostName={host.name} onStep={nav.stepAgent} />
+          {activity && (
+            <ActivityDrawer key="activity" events={sim.events} scope={scope} cmds={commands.cmds} simMs={sim.simMs} copy={copy} hostName={host.name} still={still} onClose={() => setActivity(false)} onOpenAgent={openAgentFrom} />
           )}
         </AnimatePresence>
         <Toast toast={toast} />
@@ -156,27 +143,27 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
     >
       <FleetFrame
         label={copy.label}
-        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} onPalette={() => setPalette(true)} layout={layout} onLayout={setLayout} />}
+        top={<TopStrip counts={counts} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={fv.matches} onPalette={() => setPalette(true)} layout={layout} onLayout={setLayout} />}
         main={main}
         rail={
           <BoardRail
             host={host} copy={copy} live={live} nav={nav} fleetPaused={fleetPaused}
             pendingFleet={commands.cmds.find((c) => c.agentId === null && isOpen(c))}
-            items={railItems(railScope, sim.simMs, sim.events, copy)}
-            total={railScope === scope ? undefined : countAttention(scope).needs}
+            items={railItems(fv.railScope, sim.simMs, sim.events, copy)}
+            total={fv.narrowed ? counts.needs : undefined}
             onPauseAll={() => setConfirmPause(true)} onResumeAll={() => op.resumeAll(fleetPaused)} onTriage={startTriage}
           />
         }
-        bottom={<BottomStrip scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} nav={nav} live={live} offline={offline} />}
+        bottom={<BottomStrip scope={scope} simMs={sim.simMs} events={sim.events} copy={copy} nav={nav} live={live} offline={offline} expanded={activity} onToggle={() => setActivity((v) => !v)} alerts={alertsOn} onAlerts={() => setAlertsOn((v) => !v)} />}
       />
       <CommandPalette
         open={palette}
         onOpenChange={setPalette}
         deps={{
           scope, teams, copy, hostName: host.name, offline, fleetPaused, scale, onView, onScale,
-          openAgent: (id) => nav.openAgent(id, null), openTeam: (id) => nav.openTeam(id, null), agentVerb: (v, a) => op[v](a),
+          openAgent: openAgentFrom, openTeam: (id) => nav.openTeam(id, null), agentVerb: (v, a) => op[v](a),
           nextNeeds: nav.nextNeeds, startTriage, pauseAll: () => setConfirmPause(true), resumeAll: () => op.resumeAll(fleetPaused),
-          showPile: (p) => setFocus({ query: "", piles: [p] }), clearFocus: () => setFocus(NO_FOCUS),
+          showPile: (p) => setFocus({ query: "", piles: [p] }), clearFocus: () => setFocus(NO_FOCUS), toggleActivity: () => setActivity((v) => !v),
         }}
       />
       <FleetPauseDialog open={confirmPause} onClose={() => setConfirmPause(false)} scope={scope} hostName={host.name} copy={copy} onConfirm={op.pauseAll} />

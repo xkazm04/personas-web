@@ -9,7 +9,7 @@ const verbs = { pause: c.cmd.pause, resume: c.cmd.resume, run: c.cmd.run, cancel
 const noop = () => {};
 const deps = (over: Partial<PaletteDeps> = {}): PaletteDeps => ({
   scope: initSim(99).agents, teams: FLEET.teams, copy: c, hostName: "Studio PC", offline: false, fleetPaused: 0, scale: 99, verb: "open",
-  openAgent: noop, openTeam: noop, agentVerb: noop, nextNeeds: noop, startTriage: noop, pauseAll: noop, resumeAll: noop, showPile: noop, clearFocus: noop,
+  openAgent: noop, openTeam: noop, agentVerb: noop, nextNeeds: noop, startTriage: noop, pauseAll: noop, resumeAll: noop, showPile: noop, clearFocus: noop, toggleActivity: noop,
   ...over,
 });
 const item = (label: string, meta?: string): PaletteItem => ({ id: label, group: "agents", label, meta, run: noop });
