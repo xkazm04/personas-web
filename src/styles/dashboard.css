@@ -1,0 +1,168 @@
+/**
+ * Dashboard canvas + arrival choreography.
+ *
+ * Dashboard-only styles.
+ *
+ * `.dash-canvas` — the dashboard's backdrop. Every theme gets a faint
+ *    glow + a pattern of its own so the working surface is never one flat
+ *    colour. The layers sit on a fixed, composited `::before` (no repaint on
+ *    scroll, no layout), fade out toward the edges through a mask, and are
+ *    dropped entirely under forced colours and print.
+ */
+
+/* ── Canvas: per-theme tokens ───────────────────────────────────────────
+   --dash-glow-a / --dash-glow-b : two soft radial lights (top-left, bottom-right)
+   --dash-pattern               : the theme's texture (gradients only, no images)
+   --dash-pattern-size          : its tile size
+   --dash-pattern-mask          : where the texture is allowed to show        */
+
+:root {
+  /* Midnight (default): blue dusk, a quiet dot grid. */
+  --dash-glow-a: rgba(59, 130, 246, 0.07);
+  --dash-glow-b: rgba(99, 102, 241, 0.05);
+  --dash-pattern: radial-gradient(circle at 1px 1px, rgba(148, 163, 255, 0.07) 1px, transparent 1.5px);
+  --dash-pattern-size: 24px 24px;
+  --dash-pattern-mask: radial-gradient(ellipse 85% 70% at 30% 0%, #000 0%, rgba(0, 0, 0, 0.35) 55%, transparent 100%);
+}
+
+/* Cyan: deep water, a hairline grid. */
+[data-theme="dark-cyan"] {
+  --dash-glow-a: rgba(34, 211, 238, 0.07);
+  --dash-glow-b: rgba(14, 165, 233, 0.045);
+  --dash-pattern:
+    linear-gradient(rgba(34, 211, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.035) 1px, transparent 1px);
+  --dash-pattern-size: 32px 32px;
+}
+
+/* Bronze: forge warmth, a diagonal hatch. */
+[data-theme="dark-bronze"] {
+  --dash-glow-a: rgba(245, 158, 11, 0.06);
+  --dash-glow-b: rgba(217, 119, 6, 0.05);
+  --dash-pattern: repeating-linear-gradient(
+    135deg,
+    rgba(251, 191, 36, 0.03) 0 1px,
+    transparent 1px 14px
+  );
+  --dash-pattern-size: auto;
+}
+
+/* Frost: cold steel, dotted hairlines. */
+[data-theme="dark-frost"] {
+  --dash-glow-a: rgba(203, 213, 225, 0.05);
+  --dash-glow-b: rgba(148, 163, 184, 0.04);
+  --dash-pattern:
+    radial-gradient(circle at 1px 1px, rgba(226, 232, 240, 0.08) 1px, transparent 1.5px),
+    linear-gradient(90deg, rgba(226, 232, 240, 0.025) 1px, transparent 1px);
+  --dash-pattern-size: 20px 20px;
+}
+
+/* Purple: nebula — two lights, sparse stars. */
+[data-theme="dark-purple"] {
+  --dash-glow-a: rgba(192, 132, 252, 0.08);
+  --dash-glow-b: rgba(236, 72, 153, 0.045);
+  --dash-pattern:
+    radial-gradient(circle at 3px 5px, rgba(216, 180, 254, 0.09) 0.8px, transparent 1.4px),
+    radial-gradient(circle at 19px 23px, rgba(216, 180, 254, 0.05) 0.8px, transparent 1.4px);
+  --dash-pattern-size: 34px 34px;
+}
+
+/* Pink: magenta haze, soft counter-diagonal lines. */
+[data-theme="dark-pink"] {
+  --dash-glow-a: rgba(244, 114, 182, 0.07);
+  --dash-glow-b: rgba(219, 39, 119, 0.05);
+  --dash-pattern: repeating-linear-gradient(
+    45deg,
+    rgba(244, 114, 182, 0.028) 0 1px,
+    transparent 1px 18px
+  );
+  --dash-pattern-size: auto;
+}
+
+/* Red: near-black, crimson vignette, faint scanlines. */
+[data-theme="dark-red"] {
+  --dash-glow-a: rgba(204, 0, 0, 0.06);
+  --dash-glow-b: rgba(153, 27, 27, 0.06);
+  --dash-pattern: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.018) 0 1px,
+    transparent 1px 4px
+  );
+  --dash-pattern-size: auto;
+}
+
+/* Matrix: black, green glow, falling-column rules. */
+[data-theme="dark-matrix"] {
+  --dash-glow-a: rgba(0, 255, 65, 0.05);
+  --dash-glow-b: rgba(0, 204, 51, 0.035);
+  --dash-pattern:
+    repeating-linear-gradient(90deg, rgba(0, 255, 65, 0.035) 0 1px, transparent 1px 22px),
+    repeating-linear-gradient(0deg, rgba(0, 255, 65, 0.02) 0 1px, transparent 1px 3px);
+  --dash-pattern-size: auto;
+  --dash-pattern-mask: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.4) 45%, transparent 90%);
+}
+
+/* Light: parchment, paper grain. */
+[data-theme="light"] {
+  --dash-glow-a: rgba(37, 84, 176, 0.06);
+  --dash-glow-b: rgba(180, 83, 9, 0.05);
+  --dash-pattern: radial-gradient(circle at 1px 1px, rgba(28, 28, 40, 0.07) 0.9px, transparent 1.4px);
+  --dash-pattern-size: 18px 18px;
+}
+
+/* Ice: blueprint grid on frosted glass. */
+[data-theme="light-ice"] {
+  --dash-glow-a: rgba(56, 189, 248, 0.1);
+  --dash-glow-b: rgba(99, 102, 241, 0.06);
+  --dash-pattern:
+    linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
+  --dash-pattern-size: 28px 28px;
+}
+
+/* News: newsprint halftone. */
+[data-theme="light-news"] {
+  --dash-glow-a: rgba(0, 0, 0, 0.035);
+  --dash-glow-b: rgba(0, 0, 0, 0.03);
+  --dash-pattern: radial-gradient(circle, rgba(17, 17, 17, 0.09) 0.7px, transparent 1.1px);
+  --dash-pattern-size: 6px 6px;
+  --dash-pattern-mask: radial-gradient(ellipse 60% 55% at 100% 0%, #000 0%, rgba(0, 0, 0, 0.25) 60%, transparent 100%);
+}
+
+/* ── Canvas: the layer ──────────────────────────────────────────────── */
+
+.dash-canvas {
+  background-color: var(--background);
+  isolation: isolate;
+}
+
+.dash-canvas::before,
+.dash-canvas::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Lights: never masked, so the whole surface carries a gentle tonal shift. */
+.dash-canvas::before {
+  background:
+    radial-gradient(ellipse 70% 55% at 12% -5%, var(--dash-glow-a), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 105%, var(--dash-glow-b), transparent 70%);
+}
+
+/* Texture: masked so it fades out where content is densest. */
+.dash-canvas::after {
+  background: var(--dash-pattern);
+  background-size: var(--dash-pattern-size);
+  -webkit-mask-image: var(--dash-pattern-mask);
+  mask-image: var(--dash-pattern-mask);
+}
+
+@media (forced-colors: active), print {
+  .dash-canvas::before,
+  .dash-canvas::after {
+    display: none;
+  }
+}
