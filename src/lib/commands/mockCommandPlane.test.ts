@@ -361,4 +361,14 @@ describe("channel_say (mock plane)", () => {
     expect(run("say-5", personaId, { message: "😀".repeat(2000) })?.status).toBe("completed");
     expect(run("say-6", "nobody", { message: "hi" })?.error_message).toBe("not_found");
   });
+
+  it("caps new says at 10 per 10 minutes, frees up after the window, and never caps a repeated id", () => {
+    const personaId = MOCK_PERSONAS[0].id;
+    vi.setSystemTime(new Date("2030-01-01T00:00:00Z"));
+    for (let i = 0; i < 10; i++) expect(run(`cap-${i}`, personaId, { message: "hi" })?.status).toBe("completed");
+    expect(run("cap-10", personaId, { message: "hi" })).toMatchObject({ status: "failed", error_message: "rate_limited" });
+    expect(run("cap-3", personaId, { message: "hi" })).toEqual({ id: "cap-3", status: "completed", result: { messageId: "cap-3", changed: false } });
+    vi.setSystemTime(new Date("2030-01-01T00:11:00Z"));
+    expect(run("cap-10", personaId, { message: "hi" })).toEqual({ id: "cap-10", status: "completed", result: { messageId: "cap-10", changed: true } });
+  });
 });

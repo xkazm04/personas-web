@@ -280,12 +280,22 @@ function executeChat(cmd: MockCommand, schedule: Schedule, changed: () => void):
 /** Command ids a mock `channel_say` has delivered: the same id again writes nothing. */
 const saidCommandIds = new Set<string>();
 
+/** The desk's cap on a paired controller's says (personas `2c65f9f0ea`): this many in any window. */
+const SAY_CAP = 10;
+const SAY_WINDOW_MS = 10 * 60 * 1000;
+
+/** When each mock `channel_say` was delivered (changed true), for the cap. */
+const saidAtMs: number[] = [];
+
 /**
  * `channel_say` (contract: params `{ message }`; result `{ messageId, changed }`).
  * The message id is the command id; the same id again completes with
  * `changed: false`. Refuses like the desktop: a bad / empty / over-2000-code-
- * point message, an unknown persona. It starts no run and gets no reply. The
- * demo has no App Master marker, so every known persona takes a direction.
+ * point message, an unknown persona, and `rate_limited` for a NEW id when 10
+ * or more says were delivered in the last 10 minutes (a re-delivered id is
+ * never counted or capped). It starts no run and gets no reply. The demo does
+ * not refuse `not_app_master`: it has no App Master marker, so every known
+ * persona takes a direction.
  */
 function executeSay(cmd: MockCommand): CommandRowUpdate {
   const raw = cmd.params.message;
@@ -295,6 +305,11 @@ function executeSay(cmd: MockCommand): CommandRowUpdate {
   if (Array.from(message).length > SAY_MAX_CHARS) return { id: cmd.id, status: "failed", error_message: "message_too_long" };
   if (!MOCK_PERSONAS.some((p) => p.id === cmd.personaId)) return { id: cmd.id, status: "failed", error_message: "not_found" };
   const changed = !saidCommandIds.has(cmd.id);
+  if (changed) {
+    const now = Date.now();
+    if (saidAtMs.filter((t) => now - t < SAY_WINDOW_MS).length >= SAY_CAP) return { id: cmd.id, status: "failed", error_message: "rate_limited" };
+    saidAtMs.push(now);
+  }
   saidCommandIds.add(cmd.id);
   return { id: cmd.id, status: "completed", result: { messageId: cmd.id, changed } };
 }
