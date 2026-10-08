@@ -1259,6 +1259,7 @@
             "src/components/dashboard/fleet-monitor/board/HoverCard.tsx",
             "src/components/dashboard/fleet-monitor/board/JustIn.tsx",
             "src/components/dashboard/fleet-monitor/board/RunCard.tsx",
+            "src/components/dashboard/fleet-monitor/board/ShortcutMap.tsx",
             "src/components/dashboard/fleet-monitor/board/TeamScene.tsx",
             "src/components/dashboard/fleet-monitor/board/Tile.tsx",
             "src/components/dashboard/fleet-monitor/board/Toast.tsx",

@@ -28,6 +28,7 @@ interface TopStripProps {
   onPalette: () => void;
   layout: "field" | "list";
   onLayout: (l: "field" | "list") => void;
+  onShortcuts: () => void;
 }
 
 const PILES = ["needs", "working", "resting", "off"] as const;
@@ -71,7 +72,7 @@ function Crumbs({ scope, copy, nav }: Pick<TopStripProps, "scope" | "copy" | "na
 }
 
 /** L0's top edge, one line: the way back, the verdict, the fleet's mix, usage pace, the clock. */
-export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, focus, onFocus, matches, onPalette, layout, onLayout }: TopStripProps) {
+export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, focus, onFocus, matches, onPalette, layout, onLayout, onShortcuts }: TopStripProps) {
   const piles = personasMonitorCopy.attention;
   const verdict = c.needs ? plural(c.needs, copy.top.needsOne, copy.top.needsMany) : copy.top.allClear;
   // Below the fleet level the way back needs the room: the pile legend yields.
@@ -136,10 +137,10 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, foc
         ) : (
           <span className="text-sm text-muted-dark">{fill(copy.host.asOf, { time: formatClock(simNow(simMs) - host.beatAgeMs).slice(0, 5) })}</span>
         )}
-        <span className="hidden items-center gap-1.5 whitespace-nowrap text-xs text-muted-dark min-[1700px]:flex">
-          <kbd className={kbd} title={copy.nav.nextHint}>N</kbd>
-          <kbd className={kbd} title={copy.nav.escHint}>Esc</kbd>
-        </span>
+        <button type="button" onClick={onShortcuts} title={copy.keys.open} aria-label={copy.keys.open} data-shortcuts
+          className="hidden h-6 w-6 place-items-center rounded-md font-mono text-xs text-muted-dark shadow-[inset_0_0_0_1px_var(--border-glass-hover)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground md:grid">
+          ?
+        </button>
       </div>
     </>
   );

@@ -25,6 +25,7 @@ import { useArrival, useBoardSim, useHostStatus, useJustIn, useSize, useTitleBad
 import { isOpen, useCommands } from "./useCommands";
 import FleetPauseDialog from "./FleetPauseDialog";
 import CommandPalette from "./CommandPalette";
+import ShortcutMap from "./ShortcutMap";
 import { makeOperator } from "./operator";
 import { useBoardNav } from "./useBoardNav";
 import b from "./board.module.css";
@@ -73,6 +74,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const [layout, setLayout] = useState<"field" | "list">("field");
   const [activity, setActivity] = useState(false);
   const [alertsOn, setAlertsOn] = useState(true);
+  const [keysOpen, setKeysOpen] = useState(false);
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
@@ -82,6 +84,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
     onTriage: () => startTriage(),
     onLayout: () => setLayout((l) => (l === "field" ? "list" : "field")),
     onActivity: () => setActivity((v) => !v),
+    onShortcuts: () => setKeysOpen(true),
   });
   function startTriage() {
     nav.closeAgent(false);
@@ -143,7 +146,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
     >
       <FleetFrame
         label={copy.label}
-        top={<TopStrip counts={counts} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={fv.matches} onPalette={() => setPalette(true)} layout={layout} onLayout={setLayout} />}
+        top={<TopStrip counts={counts} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={fv.matches} onPalette={() => setPalette(true)} layout={layout} onLayout={setLayout} onShortcuts={() => setKeysOpen(true)} />}
         main={main}
         rail={
           <BoardRail
@@ -166,6 +169,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
           showPile: (p) => setFocus({ query: "", piles: [p] }), clearFocus: () => setFocus(NO_FOCUS), toggleActivity: () => setActivity((v) => !v),
         }}
       />
+      <ShortcutMap open={keysOpen} onClose={() => setKeysOpen(false)} copy={copy} />
       <FleetPauseDialog open={confirmPause} onClose={() => setConfirmPause(false)} scope={scope} hostName={host.name} copy={copy} onConfirm={op.pauseAll} />
     </div>
   );

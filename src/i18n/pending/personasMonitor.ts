@@ -145,8 +145,6 @@ export interface PersonasMonitorCopy {
       backToFleet: string;
       backToTeam: string;
       breadcrumb: string;
-      nextHint: string;
-      escHint: string;
     };
     bay: {
       agentsCount: string;
@@ -537,6 +535,34 @@ export interface PersonasMonitorCopy {
       dismiss: string;
       close: string;
     };
+    keys: {
+      title: string;
+      open: string;
+      groups: {
+        move: string;
+        act: string;
+        triage: string;
+      };
+      items: {
+        palette: string;
+        find: string;
+        next: string;
+        step: string;
+        back: string;
+        layout: string;
+        activity: string;
+        triage: string;
+        keys: string;
+        approve: string;
+        sendBack: string;
+        retry: string;
+        pause: string;
+        quick: string;
+        send: string;
+        skip: string;
+        console: string;
+      };
+    };
   };
   city: {
     label: string;
@@ -746,8 +772,6 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       backToFleet: 'Back to fleet',
       backToTeam: 'Back to {team}',
       breadcrumb: 'Breadcrumb',
-      nextHint: 'next agent that needs you',
-      escHint: 'back',
     },
     bay: {
       agentsCount: '{n} agents',
@@ -1137,6 +1161,34 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       openAgent: 'Open',
       dismiss: 'Dismiss',
       close: 'Close the activity log',
+    },
+    keys: {
+      title: 'Keyboard shortcuts',
+      open: 'Keyboard shortcuts (?)',
+      groups: {
+        move: 'Move around',
+        act: 'Act',
+        triage: 'In triage',
+      },
+      items: {
+        palette: 'Command palette: any agent, team or action',
+        find: 'Find an agent',
+        next: 'Next agent that needs you',
+        step: 'Previous or next agent, in the console',
+        back: 'Back one level, or close',
+        layout: 'Switch between field and list',
+        activity: 'Show or hide the activity log',
+        triage: 'Start triage',
+        keys: 'This list',
+        approve: 'Approve, or approve and publish',
+        sendBack: 'Send back',
+        retry: 'Retry a failed run',
+        pause: 'Pause the agent',
+        quick: 'Pick a quick answer',
+        send: 'Send the answer',
+        skip: 'Skip to the next decision',
+        console: 'Open the agent\'s console',
+      },
     },
   },
   city: {
