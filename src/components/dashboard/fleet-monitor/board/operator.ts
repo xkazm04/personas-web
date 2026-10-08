@@ -2,6 +2,7 @@ import { fill, plural, type SimAgent } from "./model";
 import type { BoardCopy } from "./copy";
 import type { Commands, Verb } from "./useCommands";
 import type { ToastAction } from "./useBoardRuntime";
+import { eligible, type BulkVerb } from "./fleetTable";
 
 interface OperatorDeps {
   commands: Commands;
@@ -58,6 +59,14 @@ export function makeOperator({ commands, toast, copy: c, hostName, offline }: Op
         label: c.cmd.undo,
         run: () => undo(id),
       });
+    },
+    /** One verb to many agents: a command each (only where it applies), one toast. */
+    bulk: (verb: BulkVerb, agents: readonly SimAgent[]) => {
+      if (offline) return 0;
+      const ok = agents.filter((a) => eligible(verb, a));
+      for (const a of ok) commands.send({ verb, agentId: a.id });
+      if (ok.length) toast(fill(c.list.bulkToasts[verb], { n: ok.length, ...host }));
+      return ok.length;
     },
     pauseAll: (n: number, stop: number) => {
       if (offline) return;

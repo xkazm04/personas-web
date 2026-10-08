@@ -18,6 +18,7 @@ import { railItems } from "./copy";
 import { OfflineBanner } from "./HostCard";
 import BoardRail from "./BoardRail";
 import TriageView from "./TriageView";
+import FleetList from "./FleetList";
 import Toast from "./Toast";
 import { readHost } from "./host";
 import { useArrival, useBoardSim, useHostStatus, useSize, useToast } from "./useBoardRuntime";
@@ -69,6 +70,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const [focus, setFocus] = useState<FocusFilter>(NO_FOCUS);
   const [palette, setPalette] = useState(false);
   const [triage, setTriage] = useState(false);
+  const [layout, setLayout] = useState<"field" | "list">("field");
 
   const scope = sim.agents.slice(0, scale);
   const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
@@ -76,6 +78,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
     scope, scale, stageRef, still, toast: showToast, nobodyToast: copy.toasts.nobody,
     nextToast: (i, n, a) => fill(copy.toasts.next, { i: i + 1, n, callsign: a.callsign, name: a.name }),
     onTriage: () => startTriage(),
+    onLayout: () => setLayout((l) => (l === "field" ? "list" : "field")),
   });
   function startTriage() {
     nav.closeAgent(false);
@@ -100,7 +103,11 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
       {offline && <OfflineBanner host={host} copy={copy} />}
       <div ref={mainRef} className="relative min-h-0 flex-1">
         <div inert={deep} className={`absolute inset-0 transition-[opacity,transform,filter] duration-500 ${deep ? "pointer-events-none scale-[1.02] opacity-0" : ""} ${offline ? "saturate-[.4]" : ""}`}>
-          <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={matchIds} />
+          {layout === "field" ? (
+            <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={matchIds} />
+          ) : (
+            <FleetList agents={matches} copy={copy} op={op} cmds={commands.cmds} hostName={host.name} onOpen={nav.openAgent} onTeam={(t) => setFocus({ ...focus, query: t })} />
+          )}
         </div>
         <AnimatePresence>
           {nav.teamOpen && bayRect && (
@@ -149,7 +156,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
     >
       <FleetFrame
         label={copy.label}
-        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} onPalette={() => setPalette(true)} />}
+        top={<TopStrip counts={countAttention(scope)} scope={scope} simMs={sim.simMs} copy={copy} nav={nav} host={host} focus={focus} onFocus={setFocus} matches={matches} onPalette={() => setPalette(true)} layout={layout} onLayout={setLayout} />}
         main={main}
         rail={
           <BoardRail

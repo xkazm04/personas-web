@@ -465,6 +465,45 @@ export interface PersonasMonitorCopy {
       send: string;
       sent: string;
     };
+    list: {
+      layoutLabel: string;
+      field: string;
+      list: string;
+      fieldHint: string;
+      listHint: string;
+      label: string;
+      cols: {
+        agent: string;
+        team: string;
+        state: string;
+        now: string;
+        runs: string;
+        success: string;
+        cost: string;
+        last12: string;
+      };
+      sortBy: string;
+      attentionSort: string;
+      selectAll: string;
+      selectRow: string;
+      selected: string;
+      clearSel: string;
+      bulkLabel: string;
+      bulk: {
+        pause: string;
+        resume: string;
+        run: string;
+        cancel: string;
+      };
+      bulkToasts: {
+        pause: string;
+        resume: string;
+        run: string;
+        cancel: string;
+      };
+      teamFilter: string;
+      none: string;
+    };
   };
   city: {
     label: string;
@@ -993,6 +1032,45 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       },
       send: 'Send and resume',
       sent: 'Answer sent. The run resumes when {host} picks it up.',
+    },
+    list: {
+      layoutLabel: 'Layout',
+      field: 'Field',
+      list: 'List',
+      fieldHint: 'Every agent as a tile in its team\'s bay (L switches)',
+      listHint: 'Every agent as a sortable row, with bulk actions (L switches)',
+      label: 'All agents as a table',
+      cols: {
+        agent: 'Agent',
+        team: 'Team',
+        state: 'State',
+        now: 'Now',
+        runs: 'Runs today',
+        success: 'Success',
+        cost: 'Cost today',
+        last12: 'Last 12 runs',
+      },
+      sortBy: 'Sort by {col}',
+      attentionSort: 'Sort by who needs you, then what is working',
+      selectAll: 'Select all {n} shown',
+      selectRow: 'Select {callsign}',
+      selected: '{n} selected',
+      clearSel: 'Clear',
+      bulkLabel: 'Actions for the selected agents',
+      bulk: {
+        pause: 'Pause {n}',
+        resume: 'Resume {n}',
+        run: 'Run {n} now',
+        cancel: 'Cancel {n} runs',
+      },
+      bulkToasts: {
+        pause: 'Pausing {n} agents on {host}',
+        resume: 'Resuming {n} agents on {host}',
+        run: 'Starting {n} runs on {host}',
+        cancel: 'Cancelling {n} runs on {host}',
+      },
+      teamFilter: 'Show only {team}',
+      none: 'No agent matches the search or filters.',
     },
   },
   city: {

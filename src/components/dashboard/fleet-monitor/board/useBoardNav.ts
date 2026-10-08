@@ -16,6 +16,8 @@ interface NavInput {
   nobodyToast: string;
   /** `T` at the fleet or team level starts triage. */
   onTriage?: () => void;
+  /** `L` at the fleet level switches between the field and the list. */
+  onLayout?: () => void;
 }
 
 /**
@@ -23,7 +25,7 @@ interface NavInput {
  * Escape closes the top layer only and hands focus back to whatever opened it;
  * `N` walks the ranked needs-you queue from anywhere on the page.
  */
-export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, nobodyToast, onTriage }: NavInput) {
+export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, nobodyToast, onTriage, onLayout }: NavInput) {
   const [teamOpen, setTeamOpen] = useState<string | null>(null);
   const [agentOpen, setAgentOpen] = useState<string | null>(null);
   const [att, setAtt] = useState<Attention>(null);
@@ -141,6 +143,9 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     } else if ((e.key === "t" || e.key === "T") && onTriage && !agentOpen) {
       e.preventDefault();
       onTriage();
+    } else if ((e.key === "l" || e.key === "L") && onLayout && !agentOpen && !teamOpen) {
+      e.preventDefault();
+      onLayout();
     } else if (agentOpen && (e.key === "j" || e.key === "k")) {
       e.preventDefault();
       stepAgent(e.key === "j" ? 1 : -1);
