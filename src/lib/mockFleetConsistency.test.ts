@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   FLEET,
   MOCK_DIRECTOR_PORTFOLIO,
@@ -39,6 +39,25 @@ describe("Director fixtures judge the shared demo fleet (D20a)", () => {
       const at = lastReviewed.get(v.personaId);
       expect(at, v.id).not.toBeNull();
       expect(Date.parse(v.createdAt)).toBeLessThanOrEqual(Date.parse(at!));
+    }
+  });
+
+  it("holds when the clock ticks between fixture reads", async () => {
+    let n = 0;
+    const spy = vi.spyOn(Date, "now").mockImplementation(() => 1_790_000_000_000 + n++);
+    try {
+      vi.resetModules();
+      const fresh = await import("./mock-dashboard-data");
+      const lastReviewed = new Map(
+        fresh.MOCK_DIRECTOR_PORTFOLIO.roster.map((r) => [r.id, r.lastReviewedAt]),
+      );
+      for (const v of fresh.MOCK_DIRECTOR_VERDICTS) {
+        const at = lastReviewed.get(v.personaId);
+        expect(at, v.id).not.toBeNull();
+        expect(Date.parse(v.createdAt)).toBeLessThanOrEqual(Date.parse(at!));
+      }
+    } finally {
+      spy.mockRestore();
     }
   });
 });

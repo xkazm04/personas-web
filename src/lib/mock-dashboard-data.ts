@@ -1996,6 +1996,9 @@ export interface DirectorVerdict {
   createdAt: string;
 }
 
+// The roster and the verdicts are compared with each other, so they share one clock read.
+const DIRECTOR_NOW = Date.now();
+
 const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
   {
     id: INCIDENT.id,
@@ -2005,7 +2008,7 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     scoreTrend: [3, 4, 4, 4, 5],
     valueDeliveredRate: 0.86,
     totalExecutions: 1240,
-    lastReviewedAt: new Date(Date.now() - 2 * 3600_000).toISOString(),
+    lastReviewedAt: new Date(DIRECTOR_NOW - 2 * 3600_000).toISOString(),
   },
   {
     id: PR_REVIEW.id,
@@ -2015,7 +2018,7 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     scoreTrend: [2, 3, 3, 4],
     valueDeliveredRate: 0.78,
     totalExecutions: 812,
-    lastReviewedAt: new Date(Date.now() - 26 * 3600_000).toISOString(),
+    lastReviewedAt: new Date(DIRECTOR_NOW - 26 * 3600_000).toISOString(),
   },
   {
     id: SECURITY.id,
@@ -2025,7 +2028,7 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     scoreTrend: [3, 3, 3],
     valueDeliveredRate: 0.64,
     totalExecutions: 964,
-    lastReviewedAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
+    lastReviewedAt: new Date(DIRECTOR_NOW - 16 * 24 * 3600_000).toISOString(),
   },
   {
     id: STANDUP.id,
@@ -2035,7 +2038,7 @@ const DIRECTOR_ROSTER: DirectorRosterEntry[] = [
     scoreTrend: [4, 4, 3, 2],
     valueDeliveredRate: 0.41,
     totalExecutions: 388,
-    lastReviewedAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
+    lastReviewedAt: new Date(DIRECTOR_NOW - 3 * 3600_000).toISOString(),
   },
   {
     id: FEEDBACK.id,
@@ -2078,7 +2081,7 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
     severity: "error",
     category: "health",
     title: "Slack webhook retry storm burns spend on dead endpoints",
-    createdAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
+    createdAt: new Date(DIRECTOR_NOW - 3 * 3600_000).toISOString(),
   },
   {
     id: "dv-2",
@@ -2088,7 +2091,7 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
     severity: "warning",
     category: "prompt",
     title: "Digest prompt drifts from the standup template",
-    createdAt: new Date(Date.now() - 5 * 3600_000).toISOString(),
+    createdAt: new Date(DIRECTOR_NOW - 5 * 3600_000).toISOString(),
   },
   {
     id: "dv-4",
@@ -2098,7 +2101,7 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
     severity: "info",
     category: "usefulness",
     title: "Review summaries restate the diff instead of judging it",
-    createdAt: new Date(Date.now() - 30 * 3600_000).toISOString(),
+    createdAt: new Date(DIRECTOR_NOW - 30 * 3600_000).toISOString(),
   },
   {
     id: "dv-5",
@@ -2108,7 +2111,7 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
     severity: "info",
     category: "memory",
     title: "Recall surfaces near-duplicate memories from the same outage",
-    createdAt: new Date(Date.now() - 2 * 24 * 3600_000).toISOString(),
+    createdAt: new Date(DIRECTOR_NOW - 2 * 24 * 3600_000).toISOString(),
   },
   {
     id: "dv-3",
@@ -2118,7 +2121,7 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
     severity: "warning",
     category: "triggers",
     title: "Scan schedule fires 4x more often than the repos change",
-    createdAt: new Date(Date.now() - 16 * 24 * 3600_000).toISOString(),
+    createdAt: new Date(DIRECTOR_NOW - 16 * 24 * 3600_000).toISOString(),
   },
   {
     id: "dv-6",
@@ -2128,7 +2131,7 @@ export const MOCK_DIRECTOR_VERDICTS: DirectorVerdict[] = [
     severity: "info",
     category: "credentials",
     title: "Vault token scoped wider than the scans it runs",
-    createdAt: new Date(Date.now() - 16 * 24 * 3600_000 - 2 * 3600_000).toISOString(),
+    createdAt: new Date(DIRECTOR_NOW - 16 * 24 * 3600_000 - 2 * 3600_000).toISOString(),
   },
 ];
 
