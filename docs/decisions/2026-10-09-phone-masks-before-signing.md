@@ -33,3 +33,7 @@ Five calls.
 ## Evidence
 
 personas-web: `dccf5776` (port, fixture and tests), `e454b7b9` (wiring and test changes), `758a44b2` (docs). personas: `ddae928324` (the fixture and the desk's test of it). Sources: the `brief.md` and `result.json` files of runs `48226f7e` and `ac09e27a`. Related: [the phone say hardening record](2026-10-08-phone-say-hardening-calls.md) and [the channel_say record](2026-10-08-weekend-directions-channel-say-verb.md).
+
+## Status, 2026-10-09 (later)
+
+Call 5's reopen trigger fired and was carried out: desk `8fe3fbfb76` and `4dcd9f18b4`, port `7018a456` and `06683609`, and `NOT_IDEMPOTENT` is dropped. Call 3's open edge is closed by copy in `3fccfd41`. The CRLF checkout effect is closed by `7aba4178`. The review note is masked the same way as the say (`188bec8a`). The new record is [the masker keeps its marker, fixture v2](2026-10-09-masker-keeps-its-marker-fixture-v2.md). The record above is left as written.
