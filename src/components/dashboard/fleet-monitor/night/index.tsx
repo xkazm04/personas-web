@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type CSSProperties } from "react";
+import { Activity, startTransition, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import FleetFrame from "../FleetFrame";
@@ -64,7 +64,7 @@ export default function NightCity({ scale }: { scale: FleetScale }) {
   const L = useMemo(() => (field.w && field.h ? layoutCity(scoped, FLEET.teams, field.w, field.h) : null), [scoped, field.w, field.h]);
   const queue = useMemo(() => ranked(scoped), [scoped]);
   const items = useMemo(() => railItems(copy, queue, sim.simMs), [copy, queue, sim.simMs]);
-  const usage = meters(sim.simMs);
+  const usage = useMemo(() => meters(sim.simMs), [sim.simMs]);
   const openAgent = agentOpen ? byId.get(agentOpen) : undefined;
   // Hover wins while it lasts; the pinned card comes back when it ends.
   const att = hover ?? focus ?? pinned;
@@ -73,9 +73,12 @@ export default function NightCity({ scale }: { scale: FleetScale }) {
   /** Open an agent's console over the city; Escape hands focus back to whatever opened it. */
   const showAgent = useStableHandler((id: string) => {
     if (!agentOpen) origin.current = document.activeElement as HTMLElement | null;
-    setHover(null);
-    setFocus(null);
     setAgentOpen(id);
+    // Clearing the hover is not part of the opening frame (the city is frozen under the console).
+    startTransition(() => {
+      setHover(null);
+      setFocus(null);
+    });
     window.setTimeout(() => {
       fieldRef.current?.parentElement?.querySelector<HTMLElement>("[data-agent-act], [data-agent-title]")?.focus({ preventScroll: true });
     }, still ? 0 : 380);
@@ -87,6 +90,12 @@ export default function NightCity({ scale }: { scale: FleetScale }) {
   };
   const pinTeam = useCallback((id: string) => setPinned({ kind: "team", id }), []);
   const unpin = useCallback(() => setPinned(null), []);
+  const toggleLegend = useCallback(() => setLegend((v) => !v), []);
+  const hoverRow = useCallback((id: string | null) => setHover(id ? { kind: "agent", id } : null), []);
+  // Once the console has faded the city out, the city leaves the page (display
+  // none, effects paused, its loops stopped) until the console closes.
+  const [covered, setCovered] = useState(false);
+  if (covered && !openAgent) setCovered(false);
   /** The console's ‹ › and J / K: the city's reading order, building by building. */
   const stepAgent = (delta: number) => {
     if (!agentOpen || !L) return;
@@ -140,16 +149,21 @@ export default function NightCity({ scale }: { scale: FleetScale }) {
       <div
         ref={fieldRef}
         inert={!!openAgent}
+        onTransitionEnd={(e) => {
+          if (e.target === e.currentTarget && e.propertyName === "opacity" && openAgent) setCovered(true);
+        }}
         className={`${s.sky} ${still ? s.still : ""} absolute inset-0 overflow-hidden transition-[opacity,transform] duration-500 ${openAgent ? "pointer-events-none scale-[1.02] opacity-0" : ""}`}
       >
-        {L && (
-          <CityField
-            L={L} scale={scale} copy={copy} boardCopy={boardCopy} still={still} live={live} att={att} byId={byId} meters={usage}
-            procs={FLEET.systemProcesses} packet={packet} cmds={cmds} hostName={hostName} pinned={pinned}
-            setHover={setHover} setFocus={setFocus} openAgent={showAgent} pinTeam={pinTeam} unpin={unpin}
-          />
-        )}
-        {legend && <Legend copy={copy} still={still} />}
+        <Activity mode={covered ? "hidden" : "visible"}>
+          {L && (
+            <CityField
+              L={L} scale={scale} copy={copy} boardCopy={boardCopy} still={still} live={live} att={att} byId={byId} meters={usage}
+              procs={FLEET.systemProcesses} packet={packet} cmds={cmds} hostName={hostName} pinned={pinned}
+              setHover={setHover} setFocus={setFocus} openAgent={showAgent} pinTeam={pinTeam} unpin={unpin} frozen={!!openAgent}
+            />
+          )}
+          {legend && <Legend copy={copy} still={still} />}
+        </Activity>
       </div>
       <AnimatePresence>
         {openAgent && (
@@ -167,9 +181,9 @@ export default function NightCity({ scale }: { scale: FleetScale }) {
     <div className={`${s.theme} ${b.tokens} ${still ? tiles.still : ""} h-full`} style={ATTENTION_VARS}>
       <FleetFrame
         label={copy.label}
-        top={<TopStrip copy={copy} agents={scoped} meters={usage} legend={legend} legendRef={legendBtn} onLegend={() => setLegend((v) => !v)} />}
+        top={<TopStrip copy={copy} agents={scoped} meters={usage} legend={legend} legendRef={legendBtn} onLegend={toggleLegend} />}
         main={main}
-        rail={<NeedsYouRail items={items} activeId={attAgentId} onHover={(id) => setHover(id ? { kind: "agent", id } : null)} onSelect={showAgent} />}
+        rail={<NeedsYouRail items={items} activeId={attAgentId} onHover={hoverRow} onSelect={showAgent} />}
         bottom={<BottomStrip copy={copy} events={scopedEvents} byId={byId} procs={FLEET.systemProcesses} simMs={sim.simMs} />}
       />
     </div>

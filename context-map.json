@@ -1318,6 +1318,7 @@
             "src/components/dashboard/fleet-monitor/night/palette.ts",
             "src/components/dashboard/fleet-monitor/night/rail.ts",
             "src/components/dashboard/fleet-monitor/night/rank.ts",
+            "src/components/dashboard/fleet-monitor/night/useCityArrival.ts",
             "src/components/dashboard/fleet-monitor/night/useFieldSize.ts",
             "src/components/dashboard/fleet-monitor/night/useNightRuntime.ts",
             "src/components/dashboard/fleet-monitor/night/vocab.ts",

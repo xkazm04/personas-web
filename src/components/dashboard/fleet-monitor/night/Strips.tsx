@@ -1,4 +1,4 @@
-import type { ReactNode, RefObject } from "react";
+import { memo, type ReactNode, type RefObject } from "react";
 import { ATTENTION_COLOR, countAttention } from "../attention";
 import { formatClock, type FleetAgent, type FleetProcess } from "../fleet-data";
 import type { Meter } from "./Moon";
@@ -70,7 +70,7 @@ interface BottomProps {
 
 /** The bottom strip: the newest event on one line, then the app's own work
  *  (compaction, sync, backup) as chips. */
-export function BottomStrip({ copy, events, byId, procs, simMs }: BottomProps) {
+export const BottomStrip = memo(function BottomStrip({ copy, events, byId, procs, simMs }: BottomProps) {
   const e = events[0];
   const P = copy.processes;
   return (
@@ -105,7 +105,7 @@ export function BottomStrip({ copy, events, byId, procs, simMs }: BottomProps) {
       </div>
     </>
   );
-}
+});
 
 interface TopProps {
   copy: CityCopy;
@@ -117,7 +117,7 @@ interface TopProps {
 }
 
 /** The top strip: the verdict, the usage meters, the `N` hint and the legend toggle. */
-export function TopStrip({ copy, agents, meters, legend, legendRef, onLegend }: TopProps) {
+export const TopStrip = memo(function TopStrip({ copy, agents, meters, legend, legendRef, onLegend }: TopProps) {
   return (
     <>
       <AttentionSummary agents={agents} />
@@ -138,4 +138,4 @@ export function TopStrip({ copy, agents, meters, legend, legendRef, onLegend }: 
       </button>
     </>
   );
-}
+});

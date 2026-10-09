@@ -16,6 +16,8 @@ interface WindowArtProps {
   still: boolean;
   /** Shown on needs and working windows when it fits (12px mono). */
   callsign?: string;
+  /** An office whose persona has not arrived yet: glass, frame and sill only. */
+  vacant?: boolean;
 }
 
 const INK = { fill: "var(--ns-ink)" };
@@ -27,7 +29,7 @@ const INK = { fill: "var(--ns-ink)" };
  * failed or critical) with a glyph for why; resting is dark glass with a faint
  * figure (a dim lamp when queued); off is shutters.
  */
-export default function WindowArt({ a, x, y, w, h, hue, still, callsign }: WindowArtProps) {
+export default function WindowArt({ a, x, y, w, h, hue, still, callsign, vacant = false }: WindowArtProps) {
   const att = attentionOf(a);
   const label = callsign && (att === "needs" || att === "working") && labelFits(callsign, w, h) ? callsign : null;
   const top = label ? LABEL_H : 0;
@@ -38,27 +40,31 @@ export default function WindowArt({ a, x, y, w, h, hue, still, callsign }: Windo
   return (
     <g>
       <rect x={x} y={y} width={w} height={h} rx={2} style={{ fill: "var(--ns-glass)" }} />
-      {att === "working" && <Working x={x} y={y} w={w} h={h} cx={cx} progress={a.progress ?? 0} still={still} />}
-      {att === "needs" && (
-        <g>
-          <rect x={x} y={y} width={w} height={h} style={{ fill: tone }} opacity={0.88} />
-          <rect x={x + 2} y={y + 2} width={w - 4} height={h - 4} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={1} opacity={0.35} />
-          <Glyph rank={rankOf(a as FleetAgent)} cx={cx} cy={y + top + (h - top) / 2} size={Math.min(w, h - top) * 0.58} />
-          {a.enabled && a.state === "running" && (
-            <rect x={x} y={y + h - 3} width={w * (a.progress ?? 0)} height={3} style={{ fill: ATTENTION_COLOR.working }} />
+      {!vacant && (
+        <g className={s.peopleIn}>
+          {att === "working" && <Working x={x} y={y} w={w} h={h} cx={cx} progress={a.progress ?? 0} still={still} />}
+          {att === "needs" && (
+            <g>
+              <rect x={x} y={y} width={w} height={h} style={{ fill: tone }} opacity={0.88} />
+              <rect x={x + 2} y={y + 2} width={w - 4} height={h - 4} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={1} opacity={0.35} />
+              <Glyph rank={rankOf(a as FleetAgent)} cx={cx} cy={y + top + (h - top) / 2} size={Math.min(w, h - top) * 0.58} />
+              {a.enabled && a.state === "running" && (
+                <rect x={x} y={y + h - 3} width={w * (a.progress ?? 0)} height={3} style={{ fill: ATTENTION_COLOR.working }} />
+              )}
+            </g>
           )}
+          {att === "resting" && <Resting x={x} y={y} w={w} h={h} cx={cx} queued={a.state === "queued"} />}
+          {att === "off" &&
+            Array.from({ length: Math.ceil(h / 5) }, (_, k) => (
+              <rect key={k} x={x} y={y + k * 5} width={w} height={Math.min(3, h - k * 5)} style={{ fill: "var(--ns-rail)" }} />
+            ))}
+          {label && <CallsignLabel text={label} cx={cx} y={y} onTone={att === "needs"} />}
         </g>
       )}
-      {att === "resting" && <Resting x={x} y={y} w={w} h={h} cx={cx} queued={a.state === "queued"} />}
-      {att === "off" &&
-        Array.from({ length: Math.ceil(h / 5) }, (_, k) => (
-          <rect key={k} x={x} y={y + k * 5} width={w} height={Math.min(3, h - k * 5)} style={{ fill: "var(--ns-rail)" }} />
-        ))}
-      {label && <CallsignLabel text={label} cx={cx} y={y} onTone={att === "needs"} />}
       <rect x={x} y={y} width={w} height={h} rx={2} fill="none" style={{ stroke: frame }} strokeWidth={2} />
       <rect x={x - 2} y={y + h} width={w + 4} height={3} style={{ fill: hueTone(hue, 40, 44, 34) }} />
-      {a.unreadMessages.length > 0 && (
-        <g opacity={0.85}>
+      {!vacant && a.unreadMessages.length > 0 && (
+        <g className={s.peopleIn} opacity={0.85}>
           <rect x={x + 3} y={y + h - 11} width={12} height={8} rx={1} style={{ fill: "var(--foreground)" }} />
           <path d={`M ${x + 3} ${y + h - 11} l 6 4.5 l 6 -4.5`} style={{ stroke: "var(--background)" }} strokeWidth={1} fill="none" />
         </g>

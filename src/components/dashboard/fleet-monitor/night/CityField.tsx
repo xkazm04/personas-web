@@ -10,6 +10,7 @@ import type { CityLayout } from "./city-layout";
 import { HoverCard, TeamCardBody, type Anchor } from "./HoverCard";
 import MoonArt, { type Meter } from "./Moon";
 import Packets, { type Packet } from "./Packets";
+import { stageOf, useCityArrival } from "./useCityArrival";
 import Vehicles from "./Vehicles";
 import { AgentWires, RoofWires as RoofWiresArt } from "./Wires";
 import type { CityCopy } from "./vocab";
@@ -38,6 +39,9 @@ interface CityFieldProps {
   openAgent: (id: string) => void;
   pinTeam: (id: string) => void;
   unpin: () => void;
+  /** A layer (the agent console) covers the city: hold the last frame and do
+   *  no work until it is uncovered. */
+  frozen: boolean;
 }
 
 // The art that does not follow attention: a hover re-renders none of it.
@@ -50,7 +54,9 @@ const RoofWires = memo(RoofWiresArt);
  * thing under attention gets a card floating beside it; nothing reserves
  * space for it. A click on the sky or the street unpins the card.
  */
-export default function CityField({ L, scale, copy, boardCopy, still, live, att, byId, meters, procs, packet, cmds, hostName, pinned, setHover, setFocus, openAgent, pinTeam, unpin }: CityFieldProps) {
+function CityField({ L, scale, copy, boardCopy, still, live, att, byId, meters, procs, packet, cmds, hostName, pinned, setHover, setFocus, openAgent, pinTeam, unpin }: CityFieldProps) {
+  const arrival = useCityArrival(L.teams, scale);
+  const arrived = arrival === Infinity;
   const attAgent = att?.kind === "agent" ? byId.get(att.id) ?? null : null;
   const attTeamId = att?.kind === "team" ? att.id : attAgent?.team ?? null;
   const moonR = Math.round(L.sky * 0.24);
@@ -64,7 +70,7 @@ export default function CityField({ L, scale, copy, boardCopy, still, live, att,
   return (
     <>
       <div
-        className={`${s.cityWrap} ${att ? s.hasAtt : ""}`}
+        className={`${s.cityWrap} ${att ? s.hasAtt : ""} ${arrived ? s.arrived : ""}`}
         onMouseLeave={() => setHover(null)}
         onClick={(e) => {
           if (pinned && !(e.target as Element).closest('[role="button"]')) unpin();
@@ -85,7 +91,7 @@ export default function CityField({ L, scale, copy, boardCopy, still, live, att,
           </defs>
           <Backdrop W={L.W} H={L.H} ground={L.ground} />
           <Moon cx={L.W - moonR * 2.6} cy={L.sky / 2 + 2} r={moonR} five={meters[0]} seven={meters[1]} />
-          <RoofWires layout={L} byId={byId} />
+          {arrived && <g className={s.wiresIn}><RoofWires layout={L} byId={byId} /></g>}
           {L.teams.map((b) => (
             <Building
               key={`${b.t.id}-${scale}`}
@@ -93,6 +99,7 @@ export default function CityField({ L, scale, copy, boardCopy, still, live, att,
               L={L}
               copy={copy}
               still={still}
+              stage={stageOf(b, arrival)}
               lifted={attTeamId === b.t.id}
               attAgent={attAgent?.team === b.t.id ? attAgent.id : null}
               attTeam={att?.kind === "team" && att.id === b.t.id}
@@ -118,3 +125,11 @@ export default function CityField({ L, scale, copy, boardCopy, still, live, att,
     </>
   );
 }
+
+/** Frozen while covered: the city keeps its last frame and skips every tick
+ *  and attention change; uncovering renders it once with the latest state. */
+export default memo(CityField, (p, n) => {
+  if (n.frozen) return true;
+  for (const k of Object.keys(n) as (keyof CityFieldProps)[]) if (p[k] !== n[k]) return false;
+  return true;
+});

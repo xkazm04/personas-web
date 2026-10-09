@@ -4,6 +4,7 @@ import { needsYou } from "../fleet-data";
 import { emptySlots, type BuildingBox, type CityLayout, type WinBox } from "./city-layout";
 import Ornament from "./Ornament";
 import { hueText, teamTones } from "./palette";
+import type { Stage } from "./useCityArrival";
 import WindowArt from "./WindowArt";
 import { fill, windowAria, type CityCopy } from "./vocab";
 import s from "./night.module.css";
@@ -15,6 +16,8 @@ interface BuildingProps {
   L: CityLayout;
   copy: CityCopy;
   still: boolean;
+  /** How much of it has arrived (frame, floors of offices, floors of personas). */
+  stage: Stage;
   lifted: boolean;
   attAgent: string | null;
   attTeam: boolean;
@@ -32,17 +35,18 @@ export const activate = (fn: () => void) => (e: KeyboardEvent) => {
   }
 };
 
-function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFocusAtt, onOpenAgent, onPinTeam }: BuildingProps) {
+function Building({ b, L, copy, still, stage, lifted, attAgent, attTeam, onHover, onFocusAtt, onOpenAgent, onPinTeam }: BuildingProps) {
   const { t } = b;
   const tones = teamTones(t.hue);
   const x0 = b.cx - b.w / 2;
   const bodyH = L.ground - b.top;
   const team = { kind: "team" as const, id: t.id };
-  const needs = b.wins.filter((wv) => attentionOf(wv.a) === "needs");
+  const needs = b.wins.filter((wv) => wv.row < stage.people && attentionOf(wv.a) === "needs");
   const signFits = t.name.length * 13 * 0.55 <= b.w - 14;
+  if (!stage.frame) return null;
 
   return (
-    <g className={`${s.bldg} ${lifted ? s.lift : ""} ${still ? "" : s.rise}`} style={{ animationDelay: `${b.i * 55}ms` }}>
+    <g className={`${s.bldg} ${lifted ? s.lift : ""} ${s.frameIn}`}>
       <g
         className={`${s.bshape} ${attTeam ? s.att : ""}`}
         role="button"
@@ -64,14 +68,14 @@ function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFoc
         <text x={b.cx} y={L.ground - 10} textAnchor="middle" fontSize={13} fontWeight={600} className="font-sans" style={{ fill: hueText(t.hue) }} {...(signFits ? {} : { textLength: b.w - 16, lengthAdjust: "spacingAndGlyphs" })}>
           {t.name}
         </text>
-        {emptySlots(L, b).map((p, k) => (
+        {stage.offices >= b.rows && emptySlots(L, b).map((p, k) => (
           <rect key={k} x={p.x} y={p.y} width={L.ww} height={L.wh} style={{ fill: tones.sign, stroke: tones.roof }} strokeWidth={1.5} strokeDasharray="3 3" />
         ))}
         <rect className={s.bring} x={x0 - 6} y={b.anchor - 6} width={b.w + 12} height={L.ground - b.anchor + 8} rx={8} fill="none" style={{ stroke: hueText(t.hue) }} strokeWidth={2} strokeDasharray="6 5" />
       </g>
       {needs.map((wv) => <Beacon key={wv.a.id} wv={wv} top={b.top} still={still} />)}
-      {b.wins.map((wv) => (
-        <Window key={wv.a.id} wv={wv} copy={copy} still={still} att={attAgent === wv.a.id} onHover={onHover} onFocusAtt={onFocusAtt} onOpenAgent={onOpenAgent} />
+      {b.wins.map((wv) => wv.row < stage.offices && (
+        <Window key={wv.a.id} wv={wv} copy={copy} still={still} occupied={wv.row < stage.people} att={attAgent === wv.a.id} onHover={onHover} onFocusAtt={onFocusAtt} onOpenAgent={onOpenAgent} />
       ))}
     </g>
   );
@@ -81,6 +85,7 @@ function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFoc
  *  its members: a tick re-renders only the buildings whose agents changed, and
  *  a hover only the one or two buildings it enters and leaves. */
 function sameBuilding(p: BuildingProps, n: BuildingProps): boolean {
+  if (p.stage.frame !== n.stage.frame || p.stage.offices !== n.stage.offices || p.stage.people !== n.stage.people) return false;
   if (p.lifted !== n.lifted || p.attAgent !== n.attAgent || p.attTeam !== n.attTeam || p.still !== n.still || p.copy !== n.copy) return false;
   if (p.onHover !== n.onHover || p.onFocusAtt !== n.onFocusAtt || p.onOpenAgent !== n.onOpenAgent || p.onPinTeam !== n.onPinTeam) return false;
   const [x, y] = [p.b, n.b];
@@ -112,6 +117,8 @@ interface WindowProps {
   wv: WinBox;
   copy: CityCopy;
   still: boolean;
+  /** The persona has taken its desk (the arrival's last step); before it, an empty lit office. */
+  occupied: boolean;
   att: boolean;
   onHover: (att: Att) => void;
   onFocusAtt: (att: Att) => void;
@@ -119,14 +126,13 @@ interface WindowProps {
   onOpenAgent: (id: string) => void;
 }
 
-const Window = memo(function Window({ wv, copy, still, att, onHover, onFocusAtt, onOpenAgent }: WindowProps) {
+const Window = memo(function Window({ wv, copy, still, occupied, att, onHover, onFocusAtt, onOpenAgent }: WindowProps) {
   const { a, x, y, w, h, b } = wv;
   const me = { kind: "agent" as const, id: a.id };
-  const delay = 0.15 + b.i * 0.09 + wv.row * 0.06 + ((Number(a.id.slice(1)) * 37) % 35) / 100;
   return (
     <g
       id={`ns-w-${a.id}`}
-      className={`${s.win} ${att ? s.att : ""}`}
+      className={`${s.win} ${s.officeIn} ${att ? s.att : ""}`}
       role="button"
       tabIndex={0}
       aria-label={windowAria(copy, a, b.t.name)}
@@ -138,13 +144,12 @@ const Window = memo(function Window({ wv, copy, still, att, onHover, onFocusAtt,
       onKeyDown={activate(() => onOpenAgent(a.id))}
     >
       <rect x={x - 4} y={y - 4} width={w + 8} height={h + 8} fill="transparent" />
-      <WindowArt a={a} x={x} y={y} w={w} h={h} hue={b.t.hue} still={still} callsign={a.callsign} />
+      <WindowArt a={a} x={x} y={y} w={w} h={h} hue={b.t.hue} still={still} callsign={a.callsign} vacant={!occupied} />
       <rect className={s.ring} x={x - 4} y={y - 4} width={w + 8} height={h + 9} rx={4} fill="none" style={{ stroke: "var(--foreground)" }} strokeWidth={2.5} />
-      {!still && <rect className={s.lightsOn} x={x - 1} y={y - 1} width={w + 2} height={h + 2} style={{ fill: "var(--ns-glass)", ["--d" as string]: `${delay.toFixed(2)}s` }} />}
     </g>
   );
 }, (p, n) =>
   p.wv.a === n.wv.a && p.wv.x === n.wv.x && p.wv.y === n.wv.y && p.wv.w === n.wv.w && p.wv.h === n.wv.h && p.wv.row === n.wv.row &&
-  p.wv.b.i === n.wv.b.i && p.wv.b.t === n.wv.b.t && p.att === n.att && p.still === n.still && p.copy === n.copy &&
+  p.wv.b.i === n.wv.b.i && p.wv.b.t === n.wv.b.t && p.occupied === n.occupied && p.att === n.att && p.still === n.still && p.copy === n.copy &&
   p.onHover === n.onHover && p.onFocusAtt === n.onFocusAtt && p.onOpenAgent === n.onOpenAgent,
 );
