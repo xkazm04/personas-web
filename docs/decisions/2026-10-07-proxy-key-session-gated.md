@@ -29,3 +29,8 @@ Three layered controls on the one route:
 
 personas-web: `8b40c08`, `db41c87`, `fa4c402` (all resolve with `git cat-file -e`; each is a cherry-pick whose trailer names the original). Code: `src/app/api/orchestrator/[...path]/route.ts`, `userSession.ts`, `proxy.test.ts`.
 personas: none.
+
+## Status, 2026-10-09
+
+The SSE routes that the Consequences left out have been gated the same way since `050c9709` (docs `ad0b569c`).
+See [the SSE gate and production no-eval record](2026-10-09-sse-session-gate-and-production-no-eval.md).
