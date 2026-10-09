@@ -30,7 +30,7 @@ The dashboard is a **single-page app**: one route (`/dashboard/[view]`) prerende
 
 **Skeletons** — `DashboardSkeleton` is the whole-page placeholder (sidebar + 6-card grid) rendered by `AuthGuard` during `isLoading`. `SkeletonCard` / `SkeletonChart` are per-card placeholders that gate their shimmer/pulse on `useReducedMotion`; their randomized line widths / bar heights are computed once in a lazy `useState(() => …)` initializer (React 19 purity).
 
-**Realtime** — `SyncedRealtimeProvider` renders nothing; it just runs `useSyncedRealtime()` and `useReviewVoice()`. `useSyncedRealtime` no-ops unless `NEXT_PUBLIC_DATA_SOURCE === "supabase"` **and** the user is authenticated **and** not demo. When active it opens one Supabase channel (`"synced-changes"`) subscribed to `postgres_changes` on five `synced_*` tables; each change debounces a 400 ms per-table refetch of the matching Zustand store. An `INSERT` on `synced_manual_reviews` also emits a new-review signal (`emitNewReview`) consumed by `useReviewVoice` for spoken announcements (with a `seen` set guarding socket-reconnect replays). Cleanup clears timers and removes the channel. RLS makes row isolation automatic; polling stays as a backstop.
+**Realtime** — `SyncedRealtimeProvider` renders nothing; it just runs `useSyncedRealtime()` and `useReviewVoice()`. `useSyncedRealtime` no-ops unless `NEXT_PUBLIC_DATA_SOURCE === "supabase"` **and** the user is authenticated **and** not demo. When active it opens one Supabase channel (`"synced-changes"`) subscribed to `postgres_changes` INSERT and UPDATE on the eight `synced_*` tables in `WATCHED_TABLES` (`syncedRealtimeBindings.ts`); each change debounces a 400 ms per-table refetch of the matching Zustand store. An `INSERT` on `synced_manual_reviews` also emits a new-review signal (`emitNewReview`) consumed by `useReviewVoice` for spoken announcements (with a `seen` set guarding socket-reconnect replays). Cleanup clears timers and removes the channel. Realtime applies RLS to INSERT and UPDATE but **not to DELETE** (the old record is just the primary key and cannot be filtered), so DELETE and `'*'` are deliberately not subscribed (scan d4b90e7a F11; `syncedRealtimeBindings.test.ts` pins it). A delete that arrives alone (a sync toggle turned off, a device removed) waits for the next refetch, view mount or refresh; a desktop sync pass writes before it deletes, and those writes already trigger the refetch. Polling stays as a backstop.
 
 ## Key files
 | File | Role |
@@ -60,6 +60,7 @@ The dashboard is a **single-page app**: one route (`/dashboard/[view]`) prerende
 | `src/components/dashboard/Modal.tsx` | Shared modal primitive — backdrop, esc/click-out close, header/body/footer |
 | `src/components/dashboard/FleetOptimizationCard.tsx` | Dismissible/expandable fleet recommendation banner (severity-styled) |
 | `src/components/dashboard/SyncedRealtimeProvider.tsx` | Mounts `useSyncedRealtime` + `useReviewVoice`; renders nothing |
+| `src/hooks/syncedRealtimeBindings.ts` | `WATCHED_TABLES` + the channel bindings (INSERT/UPDATE only), testable without stores |
 | `src/hooks/useSyncedRealtime.ts` | Supabase Realtime subscription → debounced per-store refetch + new-review signal |
 
 ## Data & state

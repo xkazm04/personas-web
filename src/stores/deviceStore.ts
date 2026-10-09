@@ -27,8 +27,8 @@ interface DeviceState {
   loaded: boolean;
   error: string | null;
   fetchDevices: () => Promise<void>;
-  /** A Realtime change on `synced_devices`: upsert on INSERT/UPDATE, drop on DELETE. */
-  applyRealtime: (payload: { eventType?: string; new?: Record<string, unknown> | null; old?: Record<string, unknown> | null }) => void;
+  /** A Realtime change on `synced_devices`: upsert on INSERT/UPDATE (DELETE is not subscribed: scan d4b90e7a F11). */
+  applyRealtime: (payload: { eventType?: string; new?: Record<string, unknown> | null }) => void;
   reset: () => void;
 }
 
@@ -57,11 +57,6 @@ export const useDeviceStore = create<DeviceState>((set) => ({
     return inflight;
   },
   applyRealtime: (payload) => {
-    if (payload.eventType === "DELETE") {
-      const id = payload.old?.device_id;
-      if (typeof id === "string") set((s) => ({ devices: s.devices.filter((d) => d.deviceId !== id) }));
-      return;
-    }
     const row = payload.new;
     if (!row || typeof row.device_id !== "string") return;
     const next = mapDevice(row as unknown as DeviceRow);

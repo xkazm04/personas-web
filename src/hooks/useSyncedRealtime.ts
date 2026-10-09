@@ -17,34 +17,25 @@ import { useControllerStore } from "@/stores/controllerStore";
 import { useNotesStore } from "@/stores/notesStore";
 import { emitNewReview } from "@/lib/review-voice";
 import type { ReviewSeverity } from "@/lib/types";
+import { registerSyncedBindings } from "./syncedRealtimeBindings";
 
 /**
  * Live dashboard updates (v2). When the desktop sync writer pushes into the
  * user's Supabase tenant, Postgres emits change events; we subscribe to them
  * and refetch the affected store instead of waiting for the next poll tick.
  *
- * Row isolation is automatic: Realtime enforces the same RLS as reads, so the
- * socket only delivers changes to *this* user's rows. Only active in supabase
- * data-source mode for a signed-in (non-demo) user; otherwise a no-op. Polling
- * stays in place as a backstop — this just collapses the latency to ~instant.
+ * Realtime applies RLS to INSERT and UPDATE events but not to DELETE (a DELETE
+ * carries only the primary key and cannot be filtered), so DELETE is not
+ * subscribed (scan d4b90e7a F11); see syncedRealtimeBindings.ts. A delete that
+ * arrives alone shows at the next refetch, view mount or refresh. Only active
+ * in supabase data-source mode for a signed-in (non-demo) user; otherwise a
+ * no-op. Polling stays in place as a backstop.
  */
 
 const IS_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
 
 /** Coalesce bursts (a sync pass touches many rows of one table at once). */
 const DEBOUNCE_MS = 400;
-
-/** Synced tables whose changes drive a store refetch. */
-const WATCHED_TABLES = [
-  "synced_personas",
-  "synced_executions",
-  "synced_events",
-  "synced_manual_reviews",
-  "synced_devices",
-  "synced_notes",
-  "synced_chat_sessions",
-  "synced_chat_messages",
-] as const;
 
 const REVIEW_SEVERITIES = new Set<string>(["critical", "warning", "info"]);
 
@@ -99,8 +90,9 @@ function refetchFor(table: string): (() => void) | null {
         void useSystemStore.getState().fetchStatus();
       };
     case "synced_notes":
-      // A full-set replace lands as a burst of upserts and deletes; the
-      // debounce above folds it into one refetch.
+      // A full-set replace lands as a burst of upserts; the debounce above
+      // folds it into one refetch. Deletes are not subscribed and wait for the
+      // next refetch.
       return () => void useNotesStore.getState().fetchNotes();
     case "synced_chat_sessions":
     case "synced_chat_messages":
@@ -143,31 +135,21 @@ export function useSyncedRealtime(): void {
     try {
       const supabase = getSupabase();
       channel = supabase.channel("synced-changes");
-      for (const table of WATCHED_TABLES) {
-        channel.on(
-          "postgres_changes",
-          { event: "*", schema: "public", table },
-          (payload) => {
-            scheduleRefetch(table);
-            // A new review is an event, not just a list change — surface it so
-            // the voice announcer can react. The debounced refetch still runs.
-            if (table === "synced_manual_reviews") {
-              maybeAnnounceNewReview(payload, announcedReviews);
-            }
-            // The heartbeat itself feeds the online gate (useSyncReachability),
-            // applied as it arrives rather than after a refetch.
-            if (table === "synced_devices") {
-              useDeviceStore.getState().applyRealtime(payload);
-            }
-          },
-        );
-      }
-      // The command plane (PHASE2-SPEC 2.4): a command's status changes are
-      // applied straight from the payload, no refetch. RLS scopes the socket.
-      channel.on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "pending_commands" },
-        (payload) => {
+      registerSyncedBindings(channel, {
+        onTableChange: (table, payload) => {
+          scheduleRefetch(table);
+          // A new review is an event, not just a list change - surface it so
+          // the voice announcer can react. The debounced refetch still runs.
+          if (table === "synced_manual_reviews") {
+            maybeAnnounceNewReview(payload, announcedReviews);
+          }
+          // The heartbeat itself feeds the online gate (useSyncReachability),
+          // applied as it arrives rather than after a refetch.
+          if (table === "synced_devices") {
+            useDeviceStore.getState().applyRealtime(payload);
+          }
+        },
+        onCommandUpdate: (payload) => {
           const row = payload.new as Record<string, unknown> | null;
           if (!row || typeof row.id !== "string" || typeof row.status !== "string") return;
           useCommandStore.getState().applyRow({
@@ -177,13 +159,9 @@ export function useSyncedRealtime(): void {
             error_message: typeof row.error_message === "string" ? row.error_message : null,
           });
         },
-      );
-      // The desktop activating (or revoking) this browser's controller.
-      channel.on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "command_controllers" },
-        (payload) => useControllerStore.getState().applyRow(payload.new as Record<string, unknown> | null),
-      );
+        onControllerUpdate: (payload) =>
+          useControllerStore.getState().applyRow(payload.new as Record<string, unknown> | null),
+      });
       // Reflect the real socket state in the connection indicator. Previously
       // subscribe() had no status callback, so eventStore.connectionStatus stayed
       // at its "polling" default and the dot was pure decoration in supabase mode.

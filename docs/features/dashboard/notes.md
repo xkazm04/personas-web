@@ -26,7 +26,7 @@ The desktop Notepad keeps a short list of goals (at most 10 in a working slot) p
 - **supabase:** `supabaseApi.listNotes` reads `synced_notes` (`scripts/setup-sync-db.sql`), newest change first, through RLS.
 - **orchestrator:** `realApi.listNotes` returns `[]`. The orchestrator has no notes endpoint, and on that plane reachability reads "never synced", so the view shows the connect card and no list.
 
-**Realtime** — `synced_notes` is in `WATCHED_TABLES` in `useSyncedRealtime.ts`; a change refetches `notesStore` after the shared 400 ms debounce, which folds the desktop's full-set replace (a burst of upserts and deletes) into one read.
+**Realtime** — `synced_notes` is in `WATCHED_TABLES` in `useSyncedRealtime.ts`; a change refetches `notesStore` after the shared 400 ms debounce, which folds the desktop's full-set replace (a burst of upserts) into one read. Deletes are not subscribed (Realtime does not apply RLS to DELETE, scan d4b90e7a F11), so a note removed alone shows at the next refetch, view mount or refresh.
 
 ## Key files
 | File | Role |
