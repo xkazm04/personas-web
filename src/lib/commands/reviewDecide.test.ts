@@ -72,7 +72,7 @@ describe("review_decide (PHASE2-SPEC.md 1.6, 2.2; PLAN M20)", () => {
 });
 
 describe("review notes are masked before signing", () => {
-  const fixture = JSON.parse(readFileSync(join(process.cwd(), "fixtures", "redact-text-v1.json"), "utf8")) as {
+  const fixture = JSON.parse(readFileSync(join(process.cwd(), "fixtures", "redact-text-v2.json"), "utf8")) as {
     cases: { name: string; input: string; expected: string }[];
   };
   const len = (s: string) => Array.from(s).length;

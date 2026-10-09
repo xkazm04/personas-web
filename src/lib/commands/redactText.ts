@@ -123,6 +123,22 @@ function unwrapToken(tok: string): [string, string, string] {
   return [tok.slice(0, start), rest.slice(0, coreLen), rest.slice(coreLen)];
 }
 
+/**
+ * Whether a value is already the `[redacted]` marker, so masking it again
+ * would only nest it (`[[redacted]]`). After the value's wrappers are split
+ * off, the core is exactly the word `redacted` and the leading wrappers end
+ * with `[`. The trailing wrappers are not looked at, because an outer unwrap
+ * may already have taken the closing `]` (in `{"client_secret":"[redacted]"}`
+ * the value reaches this check as `"[redacted`). `redacted` with no bracket,
+ * or with any other character stuck to it (`[redacted]hunter2` has the core
+ * `redacted]hunter2`), is not the marker and is masked as before. The check
+ * applies wherever `REDACTED` would replace a value: both loops of
+ * `maskCore` and the forced branch of `maskToken`.
+ */
+function isMarker(lead: string, core: string): boolean {
+  return core === "redacted" && lead.endsWith("[");
+}
+
 function keyIsSecret(key: string): boolean {
   const k = asciiLower(key);
   return SECRET_KEY_NEEDLES.some((n) => k.includes(n));
@@ -233,13 +249,16 @@ function maskCore(core: string): string | null {
     if (!isSep(core[i])) continue;
     const name = core.slice(0, i + 1);
     const [vlead, vcore, vtrail] = unwrapToken(core.slice(i + 1));
-    if (vcore.length > 0 && namesASecret(name)) return `${name}${vlead}${REDACTED}${vtrail}`;
+    if (vcore.length > 0 && namesASecret(name)) {
+      if (isMarker(vlead, vcore)) return null;
+      return `${name}${vlead}${REDACTED}${vtrail}`;
+    }
   }
   for (let i = core.length - 1; i >= 0; i--) {
     if (!isSep(core[i])) continue;
     const name = core.slice(0, i + 1);
     const [vlead, vcore, vtrail] = unwrapToken(core.slice(i + 1));
-    if (vcore.length > 0 && looksSecret(vcore)) return `${name}${vlead}${REDACTED}${vtrail}`;
+    if (vcore.length > 0 && looksSecret(vcore) && !isMarker(vlead, vcore)) return `${name}${vlead}${REDACTED}${vtrail}`;
     break;
   }
   return looksSecret(core) ? REDACTED : null;
@@ -318,7 +337,10 @@ function maskUrl(input: string): string | null {
 function maskToken(tok: string, forced: boolean): string | null {
   const [lead, core, trail] = unwrapToken(tok);
   if (core.length === 0) return null;
-  if (forced) return `${lead}${REDACTED}${trail}`;
+  if (forced) {
+    if (isMarker(lead, core)) return null;
+    return `${lead}${REDACTED}${trail}`;
+  }
   const masked = core.includes("://") ? maskUrl(core) : maskPairs(core);
   return masked === null ? null : `${lead}${masked}${trail}`;
 }
