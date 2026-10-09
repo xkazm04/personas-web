@@ -97,4 +97,17 @@ describe("/api/events/stream", () => {
     });
     expect(await res.text()).toContain("data: hello");
   });
+
+  it("sends no Authorization header when only the legacy NEXT_PUBLIC_TEAM_API_KEY is set", async () => {
+    delete process.env.TEAM_API_KEY;
+    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret";
+    try {
+      const res = await get({ "X-User-Token": "live-ev-legacy" });
+      expect(res.status).toBe(200);
+      expect(upstream).toHaveLength(1);
+      expect(upstream[0].init?.headers).not.toHaveProperty("Authorization");
+    } finally {
+      delete process.env.NEXT_PUBLIC_TEAM_API_KEY;
+    }
+  });
 });

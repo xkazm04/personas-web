@@ -59,7 +59,7 @@ const desktopUrl = env.PROBE_DESKTOP_URL || "http://127.0.0.1:9420";
 const webUrl = env.PROBE_WEB_URL || "http://localhost:3000";
 const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL || undefined;
 const anonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY || undefined;
-const teamKey = env.TEAM_API_KEY || env.NEXT_PUBLIC_TEAM_API_KEY || undefined;
+const teamKey = env.TEAM_API_KEY || undefined;
 
 const refusal = desktopUrlRefusal(desktopUrl) ?? webUrlRefusal(webUrl) ?? supabaseUrlRefusal(supabaseUrl);
 if (refusal) {

@@ -11,14 +11,15 @@ import { verifySession } from "../userSession";
  *
  * The team API key MUST NOT reach the browser bundle, so the client calls
  * `/api/orchestrator/<path>` and this handler attaches the key server-side
- * (preferring the server-only `TEAM_API_KEY`, falling back to the legacy
- * `NEXT_PUBLIC_TEAM_API_KEY` during migration). The key carries the
+ * (the server-only `TEAM_API_KEY`; the `NEXT_PUBLIC_TEAM_API_KEY` name is no
+ * longer read because Next would inline it into any client bundle that
+ * referenced it). The key carries the
  * orchestrator's full authority, so it is attached only for a caller whose
  * `X-User-Token` Supabase verifies as a live session (`userSession.ts`); that
  * token is forwarded too.
  */
 function orchestratorKey(): string | undefined {
-  return process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
+  return process.env.TEAM_API_KEY;
 }
 
 /**

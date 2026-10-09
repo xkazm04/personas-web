@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 
   const streamUrl = new URL("/api/events/stream", base);
 
-  const apiKey = process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
+  const apiKey = process.env.TEAM_API_KEY;
   const headers: Record<string, string> = {
     Accept: "text/event-stream",
     "X-User-Token": userToken,

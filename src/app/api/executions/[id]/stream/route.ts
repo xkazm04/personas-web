@@ -61,7 +61,7 @@ export async function GET(
     return Response.json({ error: "bad_path" }, { status: 400 });
   }
 
-  const apiKey = process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
+  const apiKey = process.env.TEAM_API_KEY;
   const headers: Record<string, string> = {
     Accept: "text/event-stream",
     "X-User-Token": userToken,

@@ -137,6 +137,19 @@ describe("orchestrator proxy", () => {
     expect(upstream[0].init?.headers).toMatchObject({ Authorization: "Bearer team-secret", "X-User-Token": "live-user-1" });
   });
 
+  it("sends no Authorization header when only the legacy NEXT_PUBLIC_TEAM_API_KEY is set", async () => {
+    delete process.env.TEAM_API_KEY;
+    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret";
+    try {
+      const res = await call(GET, ["personas"], { "X-User-Token": "live-user-legacy" });
+      expect(res.status).toBe(200);
+      expect(upstream).toHaveLength(1);
+      expect(upstream[0].init?.headers).not.toHaveProperty("Authorization");
+    } finally {
+      delete process.env.NEXT_PUBLIC_TEAM_API_KEY;
+    }
+  });
+
   it("never lets a path leave the orchestrator's origin", async () => {
     for (const path of [["", "evil.test", "steal"], ["..", "admin"], ["personas", "."]]) {
       const res = await call(GET, path, { "X-User-Token": "live-user-4" });
