@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Check, X } from "lucide-react";
 import { FLEET, formatClock } from "../fleet-data";
 import { ago, eventText, hm, type BoardCopy } from "./copy";
@@ -20,7 +20,9 @@ interface AgentActivityProps {
 
 const hasRun = (a: SimAgent) => a.state === "running" || a.state === "failed" || a.state === "input_required" || a.state === "draft_ready";
 
-function LogRow({ line, copy: c, phase }: { line: LogLine; copy: BoardCopy; phase: boolean }) {
+/** The log is rebuilt every tick with the same lines plus new ones: compare
+ *  a row by its line's values, so only the new rows render. */
+const LogRow = memo(function LogRow({ line, copy: c, phase }: { line: LogLine; copy: BoardCopy; phase: boolean }) {
   const end = line.end;
   const tone = end === "failed" ? "text-[color-mix(in_oklab,var(--status-error)_80%,var(--foreground))]" : end === "paused" ? "text-[color-mix(in_oklab,var(--status-warning)_75%,var(--foreground))]" : "text-foreground";
   return (
@@ -42,7 +44,10 @@ function LogRow({ line, copy: c, phase }: { line: LogLine; copy: BoardCopy; phas
       </div>
     </li>
   );
-}
+}, (p, n) =>
+  p.phase === n.phase && p.copy === n.copy && p.line.key === n.line.key && p.line.tsMs === n.line.tsMs && p.line.tool === n.line.tool &&
+  p.line.detail === n.line.detail && p.line.latencyMs === n.line.latencyMs && p.line.end === n.line.end && p.line.step === n.line.step,
+);
 
 /**
  * The console's middle column: what the agent is doing, as a live log of its

@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { memo, type ReactNode } from "react";
 import { ATTENTION_COLOR, type AttentionTone } from "./attention";
 import { fill } from "./board/model";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
@@ -39,7 +39,7 @@ interface NeedsYouRailProps {
  * fit on a 900px screen; the list scrolls past that. Hovering a row should
  * light the agent in the field; the view wires `onHover` to its own attention.
  */
-export default function NeedsYouRail({ items, activeId, onHover, onSelect, footer, total, emptyText, action }: NeedsYouRailProps) {
+function NeedsYouRail({ items, activeId, onHover, onSelect, footer, total, emptyText, action }: NeedsYouRailProps) {
   const copy = personasMonitorCopy.rail;
 
   return (
@@ -85,3 +85,15 @@ export default function NeedsYouRail({ items, activeId, onHover, onSelect, foote
     </div>
   );
 }
+
+const sameItem = (x: RailItem, y: RailItem) =>
+  x.id === y.id && x.callsign === y.callsign && x.name === y.name && x.reason === y.reason && x.tone === y.tone && x.age === y.age;
+
+/** The rows are rebuilt on every simulation tick, so compare them by value: the
+ *  rail re-renders only when who needs you (or their reason or age) changes, or
+ *  when the highlighted row moves. Hosts pass stable handlers. */
+export default memo(NeedsYouRail, (p, n) =>
+  p.activeId === n.activeId && p.onHover === n.onHover && p.onSelect === n.onSelect && p.footer === n.footer &&
+  p.total === n.total && p.emptyText === n.emptyText && p.action === n.action &&
+  p.items.length === n.items.length && p.items.every((it, i) => sameItem(it, n.items[i])),
+);

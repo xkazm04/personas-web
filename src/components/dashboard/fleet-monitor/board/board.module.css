@@ -71,6 +71,16 @@
 .orbitLive { animation: orbit 40s linear infinite; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 
+/* The run trace's current step, pulsing while the run is live. A transform,
+   not an animated `r`: a geometry attribute changing every frame re-laid out
+   the whole run column (a size container) twice a frame. */
+.tracePulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tracePulse 1.8s ease-out infinite;
+}
+@keyframes tracePulse { from { transform: scale(1); opacity: 0.9; } to { transform: scale(2); opacity: 0; } }
+
 /* The run column's schedule block yields first when the column is short
    (laptop screens): the run itself and its actions come before what starts it. */
 @container (max-height: 560px) {

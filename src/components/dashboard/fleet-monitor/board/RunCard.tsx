@@ -33,10 +33,7 @@ function Trace({ agent: a, copy, live }: { agent: SimAgent; copy: BoardCopy; liv
           <g key={k}>
             <circle cx={sx(i)} cy={y} r={now ? 11 : 8} strokeWidth="2.5" style={{ fill: done ? col : "var(--background)", stroke: done || now ? col : "color-mix(in oklab, var(--foreground) 28%, transparent)" }} />
             {now && run && live && (
-              <circle cx={sx(i)} cy={y} r="11" fill="none" strokeWidth="2" style={{ stroke: col }}>
-                <animate attributeName="r" values="11;22" dur="1.8s" repeatCount="indefinite" />
-                <animate attributeName="opacity" values=".9;0" dur="1.8s" repeatCount="indefinite" />
-              </circle>
+              <circle className={b.tracePulse} cx={sx(i)} cy={y} r="11" fill="none" strokeWidth="2" style={{ stroke: col }} />
             )}
             {now && a.state === "failed" && <path d={`M${sx(i) - 5} ${y - 5} L${sx(i) + 5} ${y + 5} M${sx(i) + 5} ${y - 5} L${sx(i) - 5} ${y + 5}`} strokeWidth="2.5" style={{ stroke: "var(--foreground)" }} />}
             <text x={sx(i)} y={y - 22} textAnchor="middle" fontSize="16" fontWeight={now ? 600 : 500} style={{ fill: now ? "var(--foreground)" : "var(--muted-dark)" }}>

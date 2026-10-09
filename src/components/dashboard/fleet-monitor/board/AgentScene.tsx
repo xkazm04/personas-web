@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { CSSProperties } from "react";
+import { useDeferredValue, type CSSProperties } from "react";
 import RunCard from "./RunCard";
 import AgentSide from "./AgentSide";
 import AgentHeader from "./AgentHeader";
@@ -30,6 +30,10 @@ const EASE = [0.2, 0.8, 0.2, 1] as const;
  *  then its run, what it is doing, and what waits on you. */
 export default function AgentScene({ agent: a, simMs, events, copy, still, live, op, cmds, hostName, onStep }: AgentSceneProps) {
   const pending = openControl(cmds, a.id);
+  // The console's frame (header, column shells) paints in the opening commit;
+  // the columns' content (run card, live log, inbox) follows in a deferred,
+  // interruptible render, so opening never waits on the log's rows.
+  const ready = useDeferredValue(true, false);
   const col = (dy: number, delay: number) => ({
     initial: { opacity: 0, y: still ? 0 : dy },
     animate: { opacity: 1, y: 0 },
@@ -52,13 +56,13 @@ export default function AgentScene({ agent: a, simMs, events, copy, still, live,
       <AgentHeader agent={a} copy={copy} live={live} op={op} pending={pending} hostName={hostName} onStep={onStep} />
       <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(260px,0.82fr)] gap-4 p-4">
         <motion.div className="min-h-0 min-w-0 [container-type:size]" {...col(16, 0.05)}>
-          <RunCard agent={a} simMs={simMs} copy={copy} live={live} busy={op.offline || !!pending} onRetry={() => op.retry(a)} onDraft={(approve) => op.draft(a, approve)} />
+          {ready && <RunCard agent={a} simMs={simMs} copy={copy} live={live} busy={op.offline || !!pending} onRetry={() => op.retry(a)} onDraft={(approve) => op.draft(a, approve)} />}
         </motion.div>
         <motion.div className="min-h-0 min-w-0" {...col(16, 0.1)}>
-          <AgentActivity agent={a} simMs={simMs} events={events} copy={copy} />
+          {ready && <AgentActivity agent={a} simMs={simMs} events={events} copy={copy} />}
         </motion.div>
         <motion.div className="min-h-0 min-w-0 border-l border-glass pl-4" {...col(16, 0.15)}>
-          <AgentSide agent={a} simMs={simMs} copy={copy} cmds={cmds} still={still} offline={op.offline} hostName={hostName} onReview={(rid, approve) => op.verdict(a, rid, approve)} onUndo={op.undo} onRead={() => op.read(a)} onAnswer={(text) => op.answer(a, text)} busy={!!pending} />
+          {ready && <AgentSide agent={a} simMs={simMs} copy={copy} cmds={cmds} still={still} offline={op.offline} hostName={hostName} onReview={(rid, approve) => op.verdict(a, rid, approve)} onUndo={op.undo} onRead={() => op.read(a)} onAnswer={(text) => op.answer(a, text)} busy={!!pending} />}
         </motion.div>
       </div>
     </motion.section>
