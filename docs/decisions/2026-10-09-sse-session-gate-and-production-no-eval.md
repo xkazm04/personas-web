@@ -39,3 +39,8 @@ Two calls, and one item left open.
 ## Evidence
 
 personas-web: `050c9709` (SSE gate, 13 tests), `ad0b569c` (docs), `411aac3f` (production script-src and `e2e/csp.spec.ts`, 16 passed). Related: `dfc34a4f` retired the phone redirect and is not part of this change. Sources: the `result.json` files of runs `a0eff604` (SSE gate) and `7d08c921` (CSP and the nonce design). Related: [the proxy-key record](2026-10-07-proxy-key-session-gated.md).
+
+## Status, 2026-10-09
+
+The operator decided call 3 as "not now" (ask `f95629a2`). `'unsafe-inline'` stays as an accepted risk until a deployment is planned: [the accepted-risk record](2026-10-09-accepted-risk-unsafe-inline-script-src.md).
+The eval refusal (`411aac3f`) stays.
