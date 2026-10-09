@@ -1,9 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { AlarmClock, Focus } from "lucide-react";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import GradientText from "@/components/GradientText";
 import { countOverdue } from "@/lib/review-sla";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -45,8 +44,10 @@ function ReviewsPage() {
   const overdue = useMemo(() => countOverdue(reviews, policy, now), [reviews, policy, now]);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-4 flex items-start gap-3">
+    // Tiers: the header is T0 (never animated); the notices and the pane
+    // chrome are T1 and cascade in once (CSS, replay-guarded by ViewOutlet).
+    <div>
+      <header className="mb-4 flex items-start gap-3">
         <div className="flex-1">
           <h1 className="text-2xl font-bold tracking-tight">
             <GradientText variant="silver">{t.dashboardUi.manualReviews}</GradientText>
@@ -74,25 +75,25 @@ function ReviewsPage() {
             {t.reviewsPage.focus.enter}
           </button>
         )}
-      </motion.div>
+      </header>
 
       {(unserved || gate.blocked) && (
-        <div className="mb-4">
+        <div className={`${ARRIVE} mb-4`} style={arriveAt(0)}>
           {unserved || gate.reach.desktopPlane ? <DesktopUnsupportedNote /> : <ReachabilityNotice reach={gate.reach} />}
         </div>
       )}
-      <div className="mb-4 empty:hidden">
+      <div className={`${ARRIVE} mb-4 empty:hidden`} style={arriveAt(0)}>
         <EscalationFailureNotice />
       </div>
 
       {/* Hidden, not unmounted: the split pane owns the poll that notices when the list becomes served. */}
-      <div data-tour-diagram="dashboard-reviews" hidden={unserved}>
+      <div data-tour-diagram="dashboard-reviews" hidden={unserved} className={ARRIVE} style={arriveAt(1)}>
         {mode === "split" ? (
           <ReviewsSplitPane now={now} canDecide={gate.canDecide} />
         ) : (
           <ReviewsFocusFlow now={now} onExit={() => setMode("split")} canDecide={gate.canDecide} />
         )}
       </div>
-    </motion.div>
+    </div>
   );
 }

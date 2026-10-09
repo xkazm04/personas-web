@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { CloudOff, Loader2 } from "lucide-react";
+import { CloudOff } from "lucide-react";
 
 import CompareToggle from "@/components/dashboard/CompareToggle";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
+import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useTranslation } from "@/i18n/useTranslation";
 import { AthenaActionMixCard } from "./activity-view/AthenaActionMixCard";
 import { AthenaSpendLane } from "./activity-view/AthenaSpendLane";
@@ -45,25 +47,20 @@ export default function ActivityMetricsView() {
     return <DashboardErrorBanner message={error} onRetry={retry} />;
   }
 
-  if (isLoading || !valueRollup) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-dark" />
-      </div>
-    );
-  }
+  // First load: a held, shapeless reservation, never a spinner.
+  if (isLoading || !valueRollup) return <ViewGap />;
 
   return (
     <div>
-      <div className="mb-6 flex justify-end">
+      <div className={`${ARRIVE} mb-6 flex justify-end`} style={arriveAt(1)}>
         <CompareToggle enabled={compare} onToggle={() => setCompare((prev) => !prev)} />
       </div>
-      <div className="grid gap-6 lg:grid-cols-5">
+      <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(2)}>
         <AthenaUsageCard data={athenaUsage} compare={compare} />
         <ValueRollupCard rollup={valueRollup} compare={compare} />
       </div>
       {athenaLedger && (
-        <div className="mt-6 grid gap-6 lg:grid-cols-5">
+        <div className={`${ARRIVE} mt-6 grid gap-6 lg:grid-cols-5`} style={arriveAt(3)}>
           <AthenaActionMixCard actions={athenaActionMix} />
           <AthenaSpendLane ledger={athenaLedger} />
         </div>

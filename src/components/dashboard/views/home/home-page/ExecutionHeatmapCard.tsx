@@ -13,12 +13,9 @@ import { useLiveClock } from "./useLiveClock";
 /** Weekday headers only need minute resolution to survive a midnight rollover. */
 const WEEKDAY_TICK_MS = 60_000;
 
-function CardSpinner() {
-  return (
-    <div className="flex items-center justify-center py-10">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
-    </div>
-  );
+/** First-load reservation: the empty body's height, held without a spinner placeholder. */
+function CardReservation() {
+  return <div aria-busy="true" className="h-24" />;
 }
 
 // Violet intensity ramp (0 = no activity … 4 = peak), mirroring the desktop
@@ -77,11 +74,11 @@ export function ExecutionHeatmapCard() {
         <span className="ml-auto text-sm text-muted-dark">{labels.subtitle}</span>
       </div>
 
-      {/* Spinner while loading and error banner on failure precede the empty
+      {/* Reservation while loading and error banner on failure precede the empty
           state, so "no activity" only means resolved-and-truly-empty — not a
           fetch in flight or a swallowed error. */}
       {loading ? (
-        <CardSpinner />
+        <CardReservation />
       ) : error ? (
         <DashboardErrorBanner message={error} onRetry={retry} />
       ) : isEmpty ? (

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 import GradientText from "@/components/GradientText";
 import FilterBar from "@/components/dashboard/FilterBar";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import PerformanceView from "./PerformanceView";
 import UsageView from "./UsageView";
 import ActivityMetricsView from "./ActivityMetricsView";
@@ -17,8 +16,9 @@ export default function ObservabilityPage() {
   const [tab, setTab] = useState<Tab>("performance");
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6">
+    <div>
+      {/* T0: the view header paints with the frame and never animates. */}
+      <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">
           <GradientText variant="silver">
             {t.observabilityPage.title}
@@ -27,9 +27,11 @@ export default function ObservabilityPage() {
         <p className="mt-1 text-base text-muted-dark">
           {t.observabilityPage.subtitle}
         </p>
-      </motion.div>
+      </div>
 
-      <motion.div variants={fadeUp} className="mb-6">
+      {/* T1: the tab strip (cascade index 0); each tab continues the cascade
+          from 1 for its own sections. */}
+      <div className={`${ARRIVE} mb-6`} style={arriveAt(0)}>
         <FilterBar
           options={[
             { key: "performance", label: t.observabilityPage.tabPerformance },
@@ -39,7 +41,7 @@ export default function ObservabilityPage() {
           active={tab}
           onChange={(k) => setTab(k as Tab)}
         />
-      </motion.div>
+      </div>
 
       {tab === "performance" ? (
         <PerformanceView />
@@ -48,6 +50,6 @@ export default function ObservabilityPage() {
       ) : (
         <ActivityMetricsView />
       )}
-    </motion.div>
+    </div>
   );
 }

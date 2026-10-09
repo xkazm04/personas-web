@@ -3,7 +3,6 @@ import { Activity, Loader2, Search, ShieldAlert } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import HealthyShieldIllustration from "@/components/illustrations/HealthyShieldIllustration";
-import { fadeUp } from "@/lib/animations";
 import type { MockHealthIssue, ObservabilityLabels, SeverityFilter } from "./performanceViewTypes";
 import { PerformanceHealthIssueRow } from "./PerformanceHealthIssueRow";
 import { SeverityFilterChips } from "./SeverityFilterChips";
@@ -28,7 +27,7 @@ export function PerformanceHealthPanel({
   labels: ObservabilityLabels;
 }) {
   return (
-    <motion.div variants={fadeUp} className="lg:col-span-3">
+    <div className="lg:col-span-3">
       <GlowCard accent={openIssues.length > 0 ? "amber" : "emerald"} className="p-5 h-full">
         <PerformanceHealthHeader openIssues={openIssues} healingActive={healingActive} onRunAnalysis={onRunAnalysis} labels={labels} />
         <div className="mb-3">
@@ -37,7 +36,7 @@ export function PerformanceHealthPanel({
         <HealingAnalysisBanner active={healingActive} label={labels.runningAnalysis} />
         <PerformanceHealthContent filteredHealthIssues={filteredHealthIssues} severityFilter={severityFilter} labels={labels} />
       </GlowCard>
-    </motion.div>
+    </div>
   );
 }
 

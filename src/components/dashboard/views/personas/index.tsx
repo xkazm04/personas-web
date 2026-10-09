@@ -5,14 +5,29 @@ import { useState } from "react";
 import { Bot } from "lucide-react";
 import { DEFAULT_FLEET_SCALE, FLEET_SCALES, type FleetScale } from "@/components/dashboard/fleet-monitor/fleet-data";
 import StageLoading from "@/components/dashboard/fleet-monitor/StageLoading";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import PhonePersonas from "./phone/PhonePersonas";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 /* Each view is a client-only chunk: they carry the 130 KB demo fleet and
-   their own artwork, none of which belongs in the dashboard's first load. */
-const BoardView = dynamic(() => import("@/components/dashboard/fleet-monitor/board"), { ssr: false, loading: StageLoading });
-const NightCity = dynamic(() => import("@/components/dashboard/fleet-monitor/night"), { ssr: false, loading: StageLoading });
+   their own artwork, none of which belongs in the dashboard's first load.
+   The loaders are named so the stage's <Deferred> can start the default
+   view's download while the frame paints (fetch early, mount late). */
+const loadBoard = () => import("@/components/dashboard/fleet-monitor/board");
+const loadNightCity = () => import("@/components/dashboard/fleet-monitor/night");
+
+/** The chunk gap inside the stage: held, and shown only after the ghost delay. */
+function StageGap() {
+  return (
+    <div className="dash-ghost h-full">
+      <StageLoading />
+    </div>
+  );
+}
+
+const BoardView = dynamic(loadBoard, { ssr: false, loading: StageGap });
+const NightCity = dynamic(loadNightCity, { ssr: false, loading: StageGap });
 
 type View = "board" | "city";
 const VIEWS: readonly View[] = ["board", "city"];
@@ -115,8 +130,13 @@ function PersonasStage() {
         aria-labelledby={`fleet-view-${view}`}
         className="relative min-h-0 flex-1 overflow-hidden bg-background"
       >
-        {view === "board" && <BoardView scale={scale} />}
-        {view === "city" && <NightCity scale={scale} />}
+        {/* T3: the stage body mounts on the view's first deep turn; the
+            toolbar above is T0 and paints at once. The section already fills
+            the remaining height, so the slot reserves it all. */}
+        <Deferred className="h-full" minHeight="100%" order={0} preload={loadBoard}>
+          {view === "board" && <BoardView scale={scale} onView={setView} onScale={setScale} />}
+          {view === "city" && <NightCity scale={scale} />}
+        </Deferred>
       </section>
     </div>
   );

@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { Star } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import Deferred from "@/components/dashboard/arrival/Deferred";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
@@ -22,6 +23,11 @@ import {
   type RosterFacet,
 } from "./directorMeta";
 
+/** One settled row's floor (py-2.5 + 36 px name block + rule); delta rows run taller. */
+const ROW_HEIGHT = 57;
+/** Rows held while the snapshot is pending (the demo scope is five agents). */
+const PENDING_ROWS = 5;
+
 /**
  * Coaching scope — the per-agent verdict-history table: latest 0–5 score,
  * trend sparkline over recent reviews, value-delivered rate, attention flags
@@ -36,7 +42,8 @@ export function CoachingTable({
   facet,
   onFacetChange,
 }: {
-  roster: DirectorRosterEntry[];
+  /** `null` while the snapshot is pending: chrome + column header paint, rows are held. */
+  roster: DirectorRosterEntry[] | null;
   now: number;
   facet: RosterFacet | null;
   onFacetChange: (facet: RosterFacet | null) => void;
@@ -51,13 +58,14 @@ export function CoachingTable({
       declining: 0,
       stale: 0,
     };
-    for (const entry of roster) {
+    for (const entry of roster ?? []) {
       for (const flag of attentionFlags(entry, now)) counts[flag] += 1;
     }
     return counts;
   }, [roster, now]);
 
   const rows = useMemo(() => {
+    if (!roster) return null;
     const sorted = [...roster].sort((a, b) => {
       const aFlags = attentionFlags(a, now);
       const bFlags = attentionFlags(b, now);
@@ -86,12 +94,14 @@ export function CoachingTable({
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <Star className="h-4 w-4 text-amber-400" />
         <h2 className="text-base font-semibold text-foreground">{lp.title}</h2>
-        <AttentionTriageBar
-          flagCounts={flagCounts}
-          facetLabel={facetLabel}
-          facet={facet}
-          onFacetChange={onFacetChange}
-        />
+        {roster && (
+          <AttentionTriageBar
+            flagCounts={flagCounts}
+            facetLabel={facetLabel}
+            facet={facet}
+            onFacetChange={onFacetChange}
+          />
+        )}
       </div>
 
       <div className="overflow-x-auto">
@@ -105,72 +115,79 @@ export function CoachingTable({
             <span className="text-right">{lp.lastReview}</span>
           </div>
 
-          {rows.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-dark">{lp.filterEmpty}</p>
-          ) : (
-            rows.map((entry) => {
-              const flags = attentionFlags(entry, now);
-              const tone = entry.latestScore !== null ? scoreTone(entry.latestScore) : null;
-              return (
-                <div
-                  key={entry.id}
-                  className="grid grid-cols-[1.6fr_72px_80px_88px_1.2fr_auto] items-center gap-x-3 border-b border-glass px-2 py-2.5 transition-colors last:border-b-0 hover:bg-white/[0.03]"
-                >
-                  <div className="flex min-w-0 items-center gap-2.5">
-                    <PersonaAvatar color={entry.color} name={entry.name} />
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-foreground">{entry.name}</p>
-                      <p className="text-xs tabular-nums text-muted-dark">
-                        {entry.totalExecutions.toLocaleString()}
-                      </p>
+          {/* T3 rows (sparkline, chips, bar each): last in the view, released
+              last and only near the viewport; the floor tracks the row count. */}
+          <Deferred
+            minHeight={rows === null ? PENDING_ROWS * ROW_HEIGHT : rows.length * ROW_HEIGHT}
+            order={1}
+          >
+            {rows === null ? null : rows.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-dark">{lp.filterEmpty}</p>
+            ) : (
+              rows.map((entry) => {
+                const flags = attentionFlags(entry, now);
+                const tone = entry.latestScore !== null ? scoreTone(entry.latestScore) : null;
+                return (
+                  <div
+                    key={entry.id}
+                    className="grid grid-cols-[1.6fr_72px_80px_88px_1.2fr_auto] items-center gap-x-3 border-b border-glass px-2 py-2.5 transition-colors last:border-b-0 hover:bg-white/[0.03]"
+                  >
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <PersonaAvatar color={entry.color} name={entry.name} />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-foreground">{entry.name}</p>
+                        <p className="text-xs tabular-nums text-muted-dark">
+                          {entry.totalExecutions.toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-start gap-0.5">
-                    {entry.latestScore !== null && tone ? (
-                      <>
+                    <div className="flex flex-col items-start gap-0.5">
+                      {entry.latestScore !== null && tone ? (
+                        <>
+                          <span
+                            className={`inline-flex items-center rounded-md border px-1.5 py-0.5 text-xs font-semibold tabular-nums ${tone.chip}`}
+                          >
+                            {entry.latestScore}/5
+                          </span>
+                          <ScoreDelta delta={scoreDelta(entry)} />
+                        </>
+                      ) : (
+                        <span className="text-sm text-muted-dark">—</span>
+                      )}
+                    </div>
+                    <div title={entry.scoreTrend.join(" → ")}>
+                      <ScoreSparkline scores={entry.scoreTrend} />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="h-1 w-8 overflow-hidden rounded-full bg-white/[0.06]">
                         <span
-                          className={`inline-flex items-center rounded-md border px-1.5 py-0.5 text-xs font-semibold tabular-nums ${tone.chip}`}
-                        >
-                          {entry.latestScore}/5
-                        </span>
-                        <ScoreDelta delta={scoreDelta(entry)} />
-                      </>
-                    ) : (
-                      <span className="text-sm text-muted-dark">—</span>
-                    )}
-                  </div>
-                  <div title={entry.scoreTrend.join(" → ")}>
-                    <ScoreSparkline scores={entry.scoreTrend} />
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="h-1 w-8 overflow-hidden rounded-full bg-white/[0.06]">
-                      <span
-                        className="block h-full rounded-full bg-emerald-400"
-                        style={{ width: `${Math.round(entry.valueDeliveredRate * 100)}%` }}
-                      />
-                    </span>
-                    <span className="text-sm tabular-nums text-muted-dark">
-                      {Math.round(entry.valueDeliveredRate * 100)}%
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {flags.map((flag) => (
-                      <span
-                        key={flag}
-                        title={lp.flagHints[flag]}
-                        className={`inline-flex items-center rounded-md border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ${FLAG_TONE[flag].chip}`}
-                      >
-                        {lp.flags[flag]}
+                          className="block h-full rounded-full bg-emerald-400"
+                          style={{ width: `${Math.round(entry.valueDeliveredRate * 100)}%` }}
+                        />
                       </span>
-                    ))}
+                      <span className="text-sm tabular-nums text-muted-dark">
+                        {Math.round(entry.valueDeliveredRate * 100)}%
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {flags.map((flag) => (
+                        <span
+                          key={flag}
+                          title={lp.flagHints[flag]}
+                          className={`inline-flex items-center rounded-md border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide ${FLAG_TONE[flag].chip}`}
+                        >
+                          {lp.flags[flag]}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-right text-sm tabular-nums text-muted-dark">
+                      {entry.lastReviewedAt !== null ? relativeTime(entry.lastReviewedAt) : lp.never}
+                    </span>
                   </div>
-                  <span className="text-right text-sm tabular-nums text-muted-dark">
-                    {entry.lastReviewedAt !== null ? relativeTime(entry.lastReviewedAt) : lp.never}
-                  </span>
-                </div>
-              );
-            })
-          )}
+                );
+              })
+            )}
+          </Deferred>
         </div>
       </div>
     </GlowCard>

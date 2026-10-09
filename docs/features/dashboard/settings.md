@@ -14,7 +14,7 @@ Settings is a two-column grid of glass cards covering five concerns:
 The right-hand cards (`NotificationsCard`, `ModelProvidersCard`, `RotationOverviewCard`) are self-contained client components; the left two (Account, Cloud Connection) are rendered inline in `page.tsx`.
 
 ## How it works
-**Page composition** — `page.tsx` is a `"use client"` component wrapped in a `motion.div` with `staggerContainer`; each card is a `GlowCard` carrying the `fadeUp` variant. A decorative `bg-settings.png` background sits behind the header at `opacity-[0.12]` with a gradient fade. The header is `SettingsHeader` (silver `GradientText` title + muted subtitle, both from `t.settingsPage`).
+**Page composition** — `page.tsx` is a `"use client"` component; each card is a `GlowCard` inside an `ArriveCell` (the T1 CSS cascade, see *Loading tiers*). A decorative `bg-settings.png` background sits behind the header at `opacity-[0.12]` with a gradient fade. The header is `SettingsHeader` (silver `GradientText` title + muted subtitle, both from `t.settingsPage`).
 
 **Account + cloud status** (`page.tsx:18-145`) — pulls `user`, `signOut`, `isDemo`, `isSigningOut` from `useAuthStore` and `health`, `status`, `healthChecked`, `fetchStatus`, `fetchHealth` from `useSystemStore`, both via `useShallow`. An effect fires `fetchStatus()` + `fetchHealth()` on mount. The connection pill uses `isChecking = !healthChecked` (neutral "checking" state) and `isConnected = health?.status === "ok"` — the `healthChecked` guard exists specifically so a healthy system doesn't flash a red "Disconnected" error before the first health check resolves (see comment at `page.tsx:46-48`). The orchestrator row prints `mock://demo-data` in demo mode, otherwise `NEXT_PUBLIC_ORCHESTRATOR_URL` or the `notConfigured` string. Worker/queue/execution rows render only when `health`/`status` are present.
 
@@ -25,6 +25,17 @@ The right-hand cards (`NotificationsCard`, `ModelProvidersCard`, `RotationOvervi
 **Model providers** (`ModelProvidersCard.tsx`) — early-returns `null` when `!isDemo` (BYOM config is device-local, with no Supabase source). In demo mode it renders one row per `MOCK_MODEL_PROVIDERS` entry (name, mono model id, request count when allowed & `requests > 0`) and a `SettingToggle` that writes `settingsStore.setProviderAllowed`. The effective state is `isProviderAllowed(provider, providerOverrides)` (override, else the fixture default); `countAllowedProviders` applies the same rule for the home Status Ticker (`useTickerItems.ts`). Both helpers are pure exports of `src/stores/settingsStore.ts`, pinned by `settingsStore.test.ts`.
 
 **Credential rotation** (`RotationOverviewCard.tsx`) — early-returns `null` when `!isDemo` (like the providers card; the vault is local-by-design with no Supabase source). Renders one row per `MOCK_CREDENTIAL_ROTATIONS` entry (mono secret name + status chips): Policy/No-policy, Auto/Manual (only when a policy exists), an Anomaly chip when `anomaly`, and a right-aligned next-rotation ETA — `Overdue` (rose) when `overdue`, the `—` placeholder when there's no policy, else `Next {nextRotation}`. Read-only (no toggles).
+
+### Loading tiers
+
+Per the [loading standard](loading-orchestration.md). The framer `staggerContainer`/`fadeUp` entrance is gone (it also animated the T0 header).
+
+- **T0** — background image + `SettingsHeader` (`SettingsHeader.tsx:4`): no entrance.
+- **T1** — every card, through `ArriveCell` (`settings-sections/ArriveCell.tsx:17`: `.dash-arrive` + `arriveAt`, a `flex-col` cell so the `flex-1` card still stretches to its grid row). Order by visual position (`index.tsx:52-55`): Account `0`, Cloud connection `1`, Phone control `2` (live only), then Notifications / Model providers / Rotation from `afterPhone` (`2` in demo, `3` live) so hidden cards leave no gap in the cascade. The demo-/live-only cards return `null` *before* their `ArriveCell`, so no empty grid cell is left behind. `ArriveCell` without an `index` is a no-op (Home's vault detail reuses `RotationOverviewCard` with no index).
+- **T2** — the Cloud connection status rows (workers / queue / active executions). While the first health check is out the row list holds four rows' height (`min-h-[164px]`, `index.tsx:125`) so they land without growing the card.
+- **T3** — none. Every card is a light form or a short mock list; nothing is deferred.
+
+The pulsing "checking" pill and the pairing `Loader2` are status indicators, not placeholders, and stay.
 
 **SettingToggle** (`SettingToggle.tsx`) — the shared switch used by both cards: a controlled `<button role="switch" aria-checked={on} aria-label={label}>` with a sliding knob; cyan when on, glass when off. No internal state — fully driven by `on`/`onChange`.
 
@@ -37,6 +48,7 @@ The right-hand cards (`NotificationsCard`, `ModelProvidersCard`, `RotationOvervi
 | `src/components/dashboard/views/settings/settings-sections/ModelProvidersCard.tsx` | BYOM provider allow-list (demo-only; hidden when not `isDemo`) |
 | `src/components/dashboard/views/settings/settings-sections/RotationOverviewCard.tsx` | Per-credential rotation status: policy / auto-vs-manual / anomaly / next-rotation (demo-only) |
 | `src/components/dashboard/views/settings/settings-sections/SettingToggle.tsx` | Shared controlled `role="switch"` toggle |
+| `src/components/dashboard/views/settings/settings-sections/ArriveCell.tsx` | T1 cascade cell around each card (no-op without an index) |
 | `src/components/dashboard/views/settings/settings-sections/PhoneControlCard.tsx` | Phone pairing: takes the `#pair=` fragment, pairs via `controllerStore`, shows the phase, unpairs (live plane only) |
 | `src/lib/review-voice.ts` | Framework-free voice bus + Web Speech: `emitNewReview`, `onNewReview`, `armSpeech`, `speak`, `composeAnnouncement`, `localeToSpeechLang` |
 | `src/stores/reviewVoiceStore.ts` | Zustand store for the voice `enabled` flag, persisted to `localStorage` (`review-voice-enabled`) |
@@ -55,7 +67,7 @@ The right-hand cards (`NotificationsCard`, `ModelProvidersCard`, `RotationOvervi
 - **Voice announcer bus:** `NotificationsCard`'s Preview button emits on the same `emitNewReview` bus that `useSyncedRealtime` uses in Supabase mode, so the announcement path is exercised without a live tenant. `useReviewVoice` (the subscriber) is mounted once in `SyncedRealtimeProvider` (`src/components/dashboard/SyncedRealtimeProvider.tsx`), which runs in **every** mode including demo — that's why Preview works here.
 - **Voice copy is shared i18n:** the spoken sentence template lives in `t.settingsPage.notifications.voice` (`announcement` with `{severity}`/`{persona}` placeholders, `unknownPersona`, `severity.{critical,warning,info}`) and is consumed by `composeAnnouncement` — so this Settings namespace also drives runtime speech, not just labels.
 - **System status:** the Cloud Connection card shares `useSystemStore` with the rest of the dashboard (e.g. overview/health widgets); `fetchStatus`/`fetchHealth` hit mocks in demo mode.
-- **Shared primitives:** `GlowCard`, `GradientText`, `Image`; `fadeUp`/`staggerContainer` from `src/lib/animations`; lucide icons (`User`, `Cloud`, `Wifi`, `WifiOff`, `Loader2`, `LogOut`, `Bell`, `Volume2`, `Network`).
+- **Shared primitives:** `GlowCard`, `GradientText`, `Image`; `ARRIVE`/`arriveAt` from `src/components/dashboard/arrival/arrive`; lucide icons (`User`, `Cloud`, `Wifi`, `WifiOff`, `Loader2`, `LogOut`, `Bell`, `Volume2`, `Network`).
 - **i18n namespaces:** `t.settingsPage` (title, subtitle, account, cloudConnection, orchestrator, notConfigured, totalWorkers, queueLength, activeExecutions, `notifications.*`, `providers.*`) and `t.common` (signOut, checking, connected, disconnected, active, idle, total).
 
 ## Conventions & gotchas

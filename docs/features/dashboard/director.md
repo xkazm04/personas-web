@@ -31,7 +31,18 @@ The demo story runs on the shared demo fleet (`FLEET`, the same five agents ever
 - `RosterFacet` + `matchesFacet` — the single-facet filter union (`flag` | `score` | `momentum`).
 - `sparklinePoints` — polyline geometry anchored to the fixed 0–5 range so a "4" sits at the same height in every row.
 
-**Page composition — `page.tsx`.** Standard dashboard shell (staggerContainer + fadeUp, `GradientText` header with a violet `Clapperboard` tile, `StalenessIndicator`). Facet state (`useState<RosterFacet | null>`) lives here and is shared by MomentumStrip, ScoreDistributionCard, and CoachingTable. `now` is snapshotted once in a lazy `useState(() => Date.now())` initializer (React 19 purity) and passed to the attention/staleness math. Loading renders KPI/chart/table skeletons (`aria-busy`); a failed fetch renders `DashboardErrorBanner` with retry.
+**Page composition — `page.tsx`.** Dashboard shell (`GradientText` header with a violet `Clapperboard` tile, `StalenessIndicator`); sections enter by the CSS tier cascade (see *Loading tiers*). Facet state (`useState<RosterFacet | null>`) lives here and is shared by MomentumStrip, ScoreDistributionCard, and CoachingTable. `now` is snapshotted once in a lazy `useState(() => Date.now())` initializer (React 19 purity) and passed to the attention/staleness math. Loading renders every card's chrome at once with its body held (delayed ghosts, see *Loading tiers*; `aria-busy` on the section wrapper); a failed fetch renders `DashboardErrorBanner` with retry and keeps the chrome, empty.
+
+### Loading tiers
+
+Per the [loading standard](loading-orchestration.md). The generic `SkeletonCard`/`SkeletonChart` grid and the framer `staggerContainer`/`fadeUp` entrance (which animated the T0 header) are gone: the card components take `null` data and render their own chrome around a held body.
+
+- **T0** — header (icon, title, subtitle, period label once known, staleness pill): no entrance.
+- **T1** — section chrome, `.dash-arrive` by visual order (`index.tsx:85-113`): KPI grid `0`, momentum strip `1`, left column (Value breakdown + Score distribution) `2`, verdict feed `3`, coaching table `4`. The live-unavailable `EmptyState` is `0` (`index.tsx:76`).
+- **T2** — content inside that chrome. `ghost = isLoading && !portfolio` draws delayed (`dash-ghost`) geometry-true ghosts only on a cold load; `settle` (`useState(() => !portfolio)`, i.e. the view mounted without data) adds the entrance on the loading -> settled edge. KPI values/captions hold their line boxes (`h-8` / `min-h-5`) — `DirectorKpiGrid.tsx:46,78`; momentum chips hold one chip row (`min-h-[30px]`, `MomentumStrip.tsx:54`); value bar + legend hold `min-h-[68px]` (`ValueBreakdownCard.tsx:55`); verdict rows keyed by `verdict.id` cascade `arriveAt(i)` after five ghost rows (`VerdictFeedCard.tsx:72,96`).
+- **T3** — `<Deferred>` slots:
+  - `order={0}` **score histogram** — `<Deferred minHeight={200} preload={loadScoreDistributionChart}>` (`ScoreDistributionCard.tsx:83`). `loadScoreDistributionChart` is the one loader shared by `dynamic(..., { ssr: false })` and `preload`, so the recharts chunk downloads while the frame paints; the slot mounts with the card even while the snapshot is pending (the chart renders when it lands). The old immediate `animate-pulse` `loading` box is dropped — the slot's 200 px reservation holds the space.
+  - `order={1}` **coaching rows** — `<Deferred minHeight={rows x 57}>` (`CoachingTable.tsx:120`; 5 rows held while pending). Card title, triage bar and column header stay T1. Last in the view, so it also waits for the table to near the viewport.
 
 **Components** (`director-page/`):
 - `DirectorKpiGrid.tsx` — four `GlowCard` KPI tiles; derives value rate and cost-per-value from the breakdown (cost/value is `null`→em-dash when nothing delivered value).
@@ -72,8 +83,8 @@ The demo story runs on the shared demo fleet (`FLEET`, the same five agents ever
 
 - **i18n:** `directorPage` namespace in `src/i18n/en.ts` (title/subtitle/period, `kpi.*`, `momentum.*`, `breakdown.*`, `distribution.*`, `coaching.*` incl. `flags`/`flagHints`, `verdictFeed.*`) plus the `dashboard.director` nav label — translated in all 14 locales. Interpolation via literal `{n}` / `{count}` / `{reviewed}` / `{unreviewed}` tokens + `String.replace`.
 - **Nav:** one entry in `navItemDefs` (`src/components/dashboard/DashboardNavigation.tsx`), `scoped: false` — the page has its own period window and ignores the persona/date-range scope bar. Sits after Leaderboard, so it lands in the mobile "More" menu.
-- **Shared chrome:** `GlowCard`, `PersonaAvatar`, `StalenessIndicator`, `SkeletonCard`/`SkeletonChart`, `DashboardErrorBanner`, `GradientText`.
-- **Charting/animation:** Recharts via `src/lib/chart-theme.tsx`; `useChartAnimation()` gates the histogram, framer-motion `fadeUp`/`staggerContainer` gate the page reveal.
+- **Shared chrome:** `GlowCard`, `PersonaAvatar`, `StalenessIndicator`, `DashboardErrorBanner`, `GradientText`; `Deferred` + `ARRIVE`/`arriveAt` from `src/components/dashboard/arrival/`.
+- **Charting/animation:** Recharts via `src/lib/chart-theme.tsx`; `useChartAnimation()` gates the histogram; section entrances are the CSS `.dash-arrive` / `.dash-settle` tiers (reduced motion handled in `dashboard.css`).
 
 ## Conventions & gotchas
 

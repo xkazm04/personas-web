@@ -9,7 +9,7 @@
   border-radius: 14px;
   background: linear-gradient(180deg, hsl(var(--h) 70% 55% / 0.07), hsl(var(--h) 70% 50% / 0.01) 70%);
   box-shadow: inset 0 0 0 1px var(--border-glass);
-  transition: left 0.6s var(--ease), top 0.6s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease), box-shadow 0.3s;
+  transition: left 0.6s var(--ease), top 0.6s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease), box-shadow 0.3s, opacity 0.3s;
 }
 .bayAtt { box-shadow: inset 0 0 0 1px hsl(var(--h) var(--hue-s) var(--hue-l) / 0.5); }
 .hueTick {
@@ -34,8 +34,54 @@
   text-align: left;
   border: 1px solid transparent;
   transition: left 0.7s var(--ease), top 0.7s var(--ease), width 0.6s var(--ease), height 0.6s var(--ease),
-    background-color 0.4s, border-color 0.4s, box-shadow 0.4s, color 0.4s;
+    background-color 0.4s, border-color 0.4s, box-shadow 0.4s, color 0.4s, opacity 0.3s, filter 0.3s;
 }
+/* A change of pile, once: a ring and a wash in the tile's own colour that fade. */
+.flash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: color-mix(in oklab, currentColor 20%, transparent);
+  box-shadow: inset 0 0 0 2px currentColor;
+  animation: flash 1.2s var(--ease) forwards;
+}
+@keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+.still .flash { display: none; }
+
+/* Light themes: tiles become paper. Resting is a plain card, working a card
+   tinted by the brand with a clean fill (the dark-theme mix turned muddy grey
+   on a light ground), off stays hatched. */
+:global([data-theme^="light"]) .resting {
+  background: color-mix(in oklab, var(--surface) 60%, transparent);
+  border-color: color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+:global([data-theme^="light"]) .working {
+  background: color-mix(in oklab, var(--at-working) 6%, var(--surface));
+  border-color: color-mix(in oklab, var(--at-working) 50%, transparent);
+  color: color-mix(in oklab, var(--at-working) 82%, var(--foreground));
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--at-working) 14%, transparent);
+}
+:global([data-theme^="light"]) .fill {
+  background: linear-gradient(0deg, color-mix(in oklab, var(--at-working) 16%, transparent), color-mix(in oklab, var(--at-working) 3%, transparent));
+}
+:global([data-theme^="light"]) .sweep {
+  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--at-working) 9%, transparent), transparent);
+}
+:global([data-theme^="light"]) .bay {
+  background: linear-gradient(180deg, hsl(var(--h) 60% 50% / 0.08), hsl(var(--h) 60% 50% / 0.02) 70%);
+}
+
+/* Out of focus: present (it keeps its place) but receded. */
+.dim {
+  opacity: 0.16;
+  filter: saturate(0.3);
+  animation: none;
+}
+.dim:hover,
+.dim:focus-visible { opacity: 0.6; }
+.bayDim { opacity: 0.55; }
+
 .tile:focus-visible { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 6; }
 .att { outline: 2px solid var(--foreground); outline-offset: 2px; z-index: 5; }
 
@@ -94,7 +140,7 @@
 /* needs: solid tone, thick halo; the glyph says why */
 .needs {
   z-index: 2;
-  background: var(--tone);
+  background: linear-gradient(155deg, color-mix(in oklab, var(--tone), white 10%), var(--tone) 55%, color-mix(in oklab, var(--tone), black 6%));
   border-color: var(--tone);
   color: color-mix(in oklab, var(--tone) 14%, black);
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--tone) 35%, transparent), 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent);
@@ -106,6 +152,29 @@
   70%, 100% { box-shadow: 0 0 0 9px transparent, 0 0 24px color-mix(in oklab, var(--tone) 45%, transparent); }
 }
 .glyph { font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+
+/* A command on its way to the machine: a small spinning ring by the callsign
+   (still under reduced motion: one lit quadrant). */
+.pendingRing {
+  display: inline-block;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, currentColor 28%, transparent);
+  border-top-color: currentColor;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+/* Paused while its last run finishes: two bars. */
+.pauseMark {
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 9px;
+  border-left: 2.5px solid currentColor;
+  border-right: 2.5px solid currentColor;
+}
 
 .mailDot {
   width: 7px;
@@ -124,6 +193,14 @@
   background: color-mix(in oklab, black 70%, var(--tone));
   color: var(--tone);
 }
+
+/* An overlay panel arriving (palette, triage). */
+.pop { animation: pop 0.18s var(--ease, ease-out) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(-6px) scale(0.985); } }
+
+/* A console log line arriving. */
+.logIn { animation: logIn 0.45s var(--ease) both; }
+@keyframes logIn { from { opacity: 0; translate: 0 6px; } }
 
 .rise { animation: rise 0.7s var(--ease) both; animation-delay: var(--ad, 0s); }
 @keyframes rise { from { opacity: 0; translate: 0 12px; } }

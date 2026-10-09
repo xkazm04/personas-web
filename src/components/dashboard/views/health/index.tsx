@@ -1,17 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { CloudOff, HeartPulse } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import ExecuteToast from "@/components/dashboard/ExecuteToast";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
-import SkeletonCard from "@/components/dashboard/SkeletonCard";
+import { ARRIVE, arrive, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
-import type { HealthCheckItem } from "@/lib/mock-dashboard-data";
+import { HEALTH_SECTION_ORDER, type HealthCheckItem, type HealthCheckSection } from "@/lib/mock-dashboard-data";
 import { DiskUsageBar } from "./health-page/DiskUsageBar";
 import { applyHealthResolutions, resolveHealthAction, type HealthResolutions } from "./health-page/healthActions";
 import { HealthSectionCard } from "./health-page/HealthSectionCard";
@@ -39,6 +37,17 @@ export default function HealthPage() {
     [fetched, resolutions, labels.toast.configured, labels.toast.installed],
   );
 
+  // A cold load with nothing held paints the four card chromes (T1) from the
+  // fixed section order, with ghost rows as the T2 placeholder. The cards are
+  // keyed by section key in both states, so the same elements carry on when
+  // the data lands (no chrome replay). `coldStart` gives rows that land after
+  // such a load the T2 entrance; a warm SWR cache paints settled.
+  const [coldStart] = useState(isLoading);
+  const pending = isLoading && sections.length === 0;
+  const shown: HealthCheckSection[] = pending
+    ? HEALTH_SECTION_ORDER.map((key) => ({ key, items: [] }))
+    : sections;
+
   const handleAction = (item: HealthCheckItem) => {
     setResolutions((prev) => resolveHealthAction(prev, item));
     const verb = item.action === "install" ? labels.toast.installed : labels.toast.configured;
@@ -46,12 +55,9 @@ export default function HealthPage() {
   };
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div
-        variants={fadeUp}
-        data-tour-diagram="dashboard-health"
-        className="mb-6 flex items-center gap-3"
-      >
+    <div>
+      {/* T0 frame: header paints with the view and never animates. */}
+      <div data-tour-diagram="dashboard-health" className="mb-6 flex items-center gap-3">
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
           <HeartPulse className="h-5 w-5" />
         </div>
@@ -61,43 +67,40 @@ export default function HealthPage() {
           </h1>
           <p className="text-sm text-muted-dark">{labels.subtitle}</p>
         </div>
-      </motion.div>
+      </div>
 
-      {error && (
-        <motion.div variants={fadeUp}>
-          <DashboardErrorBanner message={error} onRetry={retry} />
-        </motion.div>
-      )}
+      {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {liveUnavailable ? (
-        <motion.div variants={fadeUp}>
+        <div {...arrive(0)}>
           <EmptyState
             icon={CloudOff}
             title={t.dashboardUi.liveUnavailableTitle}
             description={t.dashboardUi.liveUnavailableDescription}
           />
-        </motion.div>
-      ) : isLoading ? (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <SkeletonCard lines={5} />
-          <SkeletonCard lines={5} />
-          <SkeletonCard lines={5} />
-          <SkeletonCard lines={5} />
         </div>
-      ) : error && sections.length === 0 ? null : (
-        <div className="grid gap-6 lg:grid-cols-2">
-          {sections.map((section) => (
-            <motion.div key={section.key} variants={fadeUp}>
+      ) : error && sections.length === 0 && !isLoading ? null : (
+        <div className="grid gap-6 lg:grid-cols-2" aria-busy={pending || undefined}>
+          {shown.map((section, index) => (
+            // T1 card chrome, cascaded by fixed visual order (0-3).
+            <div key={section.key} className={ARRIVE} style={arriveAt(index)}>
               <HealthSectionCard
                 section={section}
+                pending={pending}
+                settle={coldStart && !pending}
                 onAction={handleAction}
                 footer={
                   section.key === "resources" ? (
-                    <DiskUsageBar usedGb={diskUsage.usedGb} totalGb={diskUsage.totalGb} />
+                    pending ? (
+                      // Held reservation at the gauge's own height (no ghost).
+                      <div aria-hidden className="h-[54px]" />
+                    ) : (
+                      <DiskUsageBar usedGb={diskUsage.usedGb} totalGb={diskUsage.totalGb} />
+                    )
                   ) : undefined
                 }
               />
-            </motion.div>
+            </div>
           ))}
         </div>
       )}
@@ -110,6 +113,6 @@ export default function HealthPage() {
           onDismiss={() => setToast(null)}
         />
       )}
-    </motion.div>
+    </div>
   );
 }

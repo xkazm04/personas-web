@@ -3,6 +3,7 @@
 @import "../styles/themes.css";
 @import "../styles/typography.css";
 @import "../styles/stage.css";
+@import "../styles/dashboard.css";
 
 /* ── Tailwind dark variant bridge ──
    Themes are selected via html[data-theme], and every dark preset is prefixed

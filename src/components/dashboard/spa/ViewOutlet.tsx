@@ -1,11 +1,12 @@
 "use client";
 
-import { Activity, useLayoutEffect, useRef, useState } from "react";
+import { Activity, useEffect, useLayoutEffect, useRef, useState, type AnimationEvent } from "react";
 import { usePathname } from "next/navigation";
 import DashboardErrorBoundary from "@/components/dashboard/DashboardErrorBoundary";
 import DashboardScopeBar from "@/components/dashboard/DashboardScopeBar";
+import { ArrivalProvider } from "@/components/dashboard/arrival/ArrivalProvider";
 import { DASHBOARD_VIEW_IDS, viewIdFromPath, viewTraits, type DashboardViewId } from "./views";
-import { viewComponent } from "./viewRegistry";
+import { viewComponent, warmLikelyViews } from "./viewRegistry";
 
 /** How many views stay alive (state, scroll, fetched data) after you leave them. */
 const KEEP_ALIVE = 4;
@@ -16,6 +17,11 @@ const KEEP_ALIVE = 4;
  * simulations, timers) but keeps its state, so coming back is instant and
  * lands where you left it. The least recently used view beyond `KEEP_ALIVE`
  * is unmounted.
+ *
+ * Loading is tiered (docs/features/dashboard/loading-orchestration.md): each
+ * view gets its own arrival queue for deep (T3) slots, and an entrance that
+ * has finished is marked `data-arrived` so re-showing a kept view (Activity
+ * toggles `display`, which restarts CSS animations) never replays it.
  */
 export default function ViewOutlet({ children }: { children?: React.ReactNode }) {
   const pathname = usePathname();
@@ -32,8 +38,12 @@ export default function ViewOutlet({ children }: { children?: React.ReactNode })
 
   useViewScroll(current);
 
+  // Once the first view has settled, warm the likely-next views in idle time.
+  const [firstView] = useState(current);
+  useEffect(() => warmLikelyViews(firstView), [firstView]);
+
   return (
-    <div className={traits?.fullBleed ? undefined : "mx-auto max-w-7xl"}>
+    <div className={traits?.fullBleed ? undefined : "mx-auto max-w-7xl"} onAnimationEnd={markArrived}>
       {traits?.scoped && <DashboardScopeBar />}
       {/* The route's own output: null for a view, the 404 for anything else. */}
       {children}
@@ -44,13 +54,28 @@ export default function ViewOutlet({ children }: { children?: React.ReactNode })
         return (
           <Activity key={id} mode={active ? "visible" : "hidden"} name={id}>
             <DashboardErrorBoundary resetKey={active ? "visible" : "hidden"}>
-              <View />
+              <ArrivalProvider>
+                <View />
+              </ArrivalProvider>
             </DashboardErrorBoundary>
           </Activity>
         );
       })}
     </div>
   );
+}
+
+const ENTRANCES = new Set(["dash-arrive", "dash-settle"]);
+
+/**
+ * One delegated listener for every entrance in every view: the attribute is
+ * written straight to the node (React does not own it), so later renders keep
+ * it and the CSS `:not([data-arrived])` guard stops the animation for good.
+ */
+function markArrived(event: AnimationEvent<HTMLDivElement>) {
+  if (!ENTRANCES.has(event.animationName)) return;
+  const target = event.target;
+  if (target instanceof HTMLElement) target.dataset.arrived = "";
 }
 
 /**

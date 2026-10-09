@@ -3,8 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
 import FilterBar from "@/components/dashboard/FilterBar";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { fadeUp } from "@/lib/animations";
 import type { SLAMetricType, SLATarget } from "@/lib/mock-dashboard-data";
 
 import { complianceBand, formatTarget, formatValue, metricKey } from "@/lib/slaFormat";
@@ -13,9 +13,15 @@ type StatusFilter = "all" | "atRisk" | "healthy";
 
 export function SLATargetGrid({
   targets,
+  pending,
+  settle,
   labels,
 }: {
   targets: SLATarget[];
+  /** Cold load with nothing held: reserve the toolbar row and one card row. */
+  pending: boolean;
+  /** Content that lands after a cold load plays the T2 entrance once. */
+  settle: boolean;
   labels: {
     metricType: Record<SLAMetricType, string>;
     target: string;
@@ -40,7 +46,10 @@ export function SLATargetGrid({
         );
 
   return (
-    <motion.div variants={fadeUp} className="mb-6">
+    <div className={`${ARRIVE} mb-6`} style={arriveAt(1)} aria-busy={pending || undefined}>
+      {/* Held empty reservations (no ghost): the compact FilterBar's 34px row
+          and one 168px card row, so the first data does not push the log. */}
+      {pending && <div aria-hidden className="mb-3 h-[34px]" />}
       {targets.length > 0 && (
         <div className="mb-3 flex justify-end">
           <FilterBar
@@ -60,7 +69,11 @@ export function SLATargetGrid({
           />
         </div>
       )}
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div
+        className={`grid gap-3 md:grid-cols-2 xl:grid-cols-3${pending ? " min-h-[168px]" : ""}${
+          settle && !pending ? ` ${ARRIVE}` : ""
+        }`}
+      >
         <AnimatePresence initial={false}>
           {filtered.map((target) => {
             const band = complianceBand(target.timeInSLA);
@@ -133,6 +146,6 @@ export function SLATargetGrid({
           })}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </div>
   );
 }

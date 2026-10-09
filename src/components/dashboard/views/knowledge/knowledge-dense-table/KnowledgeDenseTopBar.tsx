@@ -5,6 +5,7 @@ import type { KnowledgeType } from "./knowledgeDenseTypes";
 
 export function KnowledgeDenseTopBar({
   stats,
+  pending = false,
   typeFilters,
   toggleTypeFilter,
   clearTypeFilters,
@@ -16,6 +17,8 @@ export function KnowledgeDenseTopBar({
     totalFailure: number;
     avgCost: number;
   };
+  /** Cold load with nothing held: labels paint (T1), values are ghosted (T2). */
+  pending?: boolean;
   typeFilters: Set<KnowledgeType>;
   toggleTypeFilter: (type: KnowledgeType) => void;
   clearTypeFilters: () => void;
@@ -25,15 +28,15 @@ export function KnowledgeDenseTopBar({
   return (
     <div className="flex items-center gap-4 flex-wrap mb-2 shrink-0">
       <div className="flex items-center gap-4 text-sm mr-auto">
-        <TopMetric label={t.knowledgePage.patterns} value={stats.total} />
+        <TopMetric pending={pending} label={t.knowledgePage.patterns} value={stats.total} />
         <Divider />
-        <TopMetric label={t.knowledgePage.avgConfidence} value={`${Math.round(stats.avgConfidence * 100)}%`} tone="text-cyan-400" />
+        <TopMetric pending={pending} label={t.knowledgePage.avgConfidence} value={`${Math.round(stats.avgConfidence * 100)}%`} tone="text-cyan-400" />
         <Divider />
-        <TopMetric label={t.knowledgePage.success} value={stats.totalSuccess.toLocaleString()} tone="text-emerald-400" />
+        <TopMetric pending={pending} label={t.knowledgePage.success} value={stats.totalSuccess.toLocaleString()} tone="text-emerald-400" />
         <Divider />
-        <TopMetric label={t.knowledgePage.fails} value={stats.totalFailure.toLocaleString()} tone="text-rose-400" />
+        <TopMetric pending={pending} label={t.knowledgePage.fails} value={stats.totalFailure.toLocaleString()} tone="text-rose-400" />
         <Divider />
-        <TopMetric label={t.knowledgePage.avgCost} value={`$${stats.avgCost.toFixed(3)}`} />
+        <TopMetric pending={pending} label={t.knowledgePage.avgCost} value={`$${stats.avgCost.toFixed(3)}`} />
       </div>
       <div className="flex items-center gap-1.5">
         {(Object.keys(KNOWLEDGE_TYPE_CONFIG) as KnowledgeType[]).map((type) => {
@@ -63,10 +66,28 @@ export function KnowledgeDenseTopBar({
   );
 }
 
-function TopMetric({ label, value, tone = "text-foreground" }: { label: string; value: string | number; tone?: string }) {
+function TopMetric({
+  label,
+  value,
+  tone = "text-foreground",
+  pending = false,
+}: {
+  label: string;
+  value: string | number;
+  tone?: string;
+  pending?: boolean;
+}) {
   return (
     <span className="text-muted-dark">
-      {label} <span className={`${tone} font-bold tabular-nums`}>{value}</span>
+      {label}{" "}
+      <span className={`${tone} font-bold tabular-nums`}>
+        {pending ? (
+          // A delayed, value-sized ghost in the value's own line box.
+          <span aria-hidden className="dash-ghost inline-block h-3.5 w-7 rounded-sm bg-glass align-middle" />
+        ) : (
+          value
+        )}
+      </span>
     </span>
   );
 }

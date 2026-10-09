@@ -5,19 +5,19 @@ import { AlarmClock, Bell, Volume2 } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp } from "@/lib/animations";
 import { useReviewVoiceStore } from "@/stores/reviewVoiceStore";
 import { useSettingsStore, type AlertSeverity } from "@/stores/settingsStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { armSpeech, emitNewReview } from "@/lib/review-voice";
+import { ArriveCell } from "./ArriveCell";
 import { SettingToggle } from "./SettingToggle";
 
 /** Healing-alert severity toggles + weekly digest (persisted in settingsStore),
  *  the spoken new-review announcement toggle (persisted in reviewVoiceStore),
  *  and the review escalation ladder on/off switch (reviewStore; off by default,
  *  read by the Reviews split pane to run `checkEscalations`). */
-export function NotificationsCard() {
+export function NotificationsCard({ arriveIndex }: { arriveIndex: number }) {
   const { t } = useTranslation();
   const n = t.settingsPage.notifications;
   const sev = useSettingsStore((s) => s.alertSeverity);
@@ -63,46 +63,48 @@ export function NotificationsCard() {
   ];
 
   return (
-    <GlowCard accent="amber" variants={fadeUp} className="p-6">
-      <div className="mb-4 flex items-center gap-2">
-        <Bell className="h-4 w-4 text-amber-400" />
-        <h2 className="text-base font-semibold text-foreground">{n.title}</h2>
-        <span className="ml-auto text-sm text-muted-dark">{n.subtitle}</span>
-      </div>
-      <div className="divide-y divide-glass">
-        {rows.map((r) => (
-          <div key={r.key} className="flex items-center gap-3 py-2.5">
-            <span className={`h-2 w-2 flex-shrink-0 rounded-full ${r.dot}`} />
-            <span className="flex-1 text-sm text-foreground">{r.label}</span>
-            <SettingToggle on={sev[r.key]} onChange={(v) => setAlertSeverity(r.key, v)} label={r.label} />
+    <ArriveCell index={arriveIndex}>
+      <GlowCard accent="amber" className="flex-1 p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <Bell className="h-4 w-4 text-amber-400" />
+          <h2 className="text-base font-semibold text-foreground">{n.title}</h2>
+          <span className="ml-auto text-sm text-muted-dark">{n.subtitle}</span>
+        </div>
+        <div className="divide-y divide-glass">
+          {rows.map((r) => (
+            <div key={r.key} className="flex items-center gap-3 py-2.5">
+              <span className={`h-2 w-2 flex-shrink-0 rounded-full ${r.dot}`} />
+              <span className="flex-1 text-sm text-foreground">{r.label}</span>
+              <SettingToggle on={sev[r.key]} onChange={(v) => setAlertSeverity(r.key, v)} label={r.label} />
+            </div>
+          ))}
+          <div className="flex items-center gap-3 py-2.5">
+            <span className="flex-1 text-sm text-foreground">{n.weeklyDigest}</span>
+            <SettingToggle on={digest} onChange={setWeeklyDigest} label={n.weeklyDigest} />
           </div>
-        ))}
-        <div className="flex items-center gap-3 py-2.5">
-          <span className="flex-1 text-sm text-foreground">{n.weeklyDigest}</span>
-          <SettingToggle on={digest} onChange={setWeeklyDigest} label={n.weeklyDigest} />
-        </div>
-        <div className="flex items-center gap-3 py-2.5">
-          <Volume2 className="h-3.5 w-3.5 flex-shrink-0 text-brand-cyan" />
-          <span className="flex-1 text-sm text-foreground">{n.voice.label}</span>
-          <button
-            type="button"
-            onClick={handlePreview}
-            disabled={!voiceEnabled}
-            className="rounded-md border border-glass px-2 py-1 text-xs text-muted-dark transition-colors hover:border-glass-hover hover:text-foreground focus-ring disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {n.voice.preview}
-          </button>
-          <SettingToggle on={voiceEnabled} onChange={handleVoiceToggle} label={n.voice.label} />
-        </div>
-        <div className="py-2.5">
-          <div className="flex items-center gap-3">
-            <AlarmClock className="h-3.5 w-3.5 flex-shrink-0 text-rose-400" aria-hidden />
-            <span className="flex-1 text-sm text-foreground">{n.escalation.label}</span>
-            <SettingToggle on={escalationEnabled} onChange={setEscalationEnabled} label={n.escalation.label} />
+          <div className="flex items-center gap-3 py-2.5">
+            <Volume2 className="h-3.5 w-3.5 flex-shrink-0 text-brand-cyan" />
+            <span className="flex-1 text-sm text-foreground">{n.voice.label}</span>
+            <button
+              type="button"
+              onClick={handlePreview}
+              disabled={!voiceEnabled}
+              className="rounded-md border border-glass px-2 py-1 text-xs text-muted-dark transition-colors hover:border-glass-hover hover:text-foreground focus-ring disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {n.voice.preview}
+            </button>
+            <SettingToggle on={voiceEnabled} onChange={handleVoiceToggle} label={n.voice.label} />
           </div>
-          <p className="mt-1 text-sm text-muted-dark">{n.escalation.description}</p>
+          <div className="py-2.5">
+            <div className="flex items-center gap-3">
+              <AlarmClock className="h-3.5 w-3.5 flex-shrink-0 text-rose-400" aria-hidden />
+              <span className="flex-1 text-sm text-foreground">{n.escalation.label}</span>
+              <SettingToggle on={escalationEnabled} onChange={setEscalationEnabled} label={n.escalation.label} />
+            </div>
+            <p className="mt-1 text-sm text-muted-dark">{n.escalation.description}</p>
+          </div>
         </div>
-      </div>
-    </GlowCard>
+      </GlowCard>
+    </ArriveCell>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Loader2, Smartphone } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
-import { fadeUp } from "@/lib/animations";
+import { ArriveCell } from "./ArriveCell";
 import { useAuthStore } from "@/stores/authStore";
 import { replaceNeedsConfirm, useControllerStore, type ControllerPhase } from "@/stores/controllerStore";
 import { useDeviceStore } from "@/stores/deviceStore";
@@ -20,7 +20,7 @@ const IS_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
  * fragment, pairs this browser (a new non-extractable key + an HMAC proof),
  * and then shows the phase the desktop answers with. Live plane only.
  */
-export function PhoneControlCard() {
+export function PhoneControlCard({ arriveIndex }: { arriveIndex: number }) {
   const copy = mobileCopy.pairing;
   const { isDemo, isAuthenticated } = useAuthStore(useShallow((s) => ({ isDemo: s.isDemo, isAuthenticated: s.isAuthenticated })));
   const live = IS_SUPABASE && isAuthenticated && !isDemo;
@@ -90,35 +90,37 @@ export function PhoneControlCard() {
   };
 
   return (
-    <GlowCard accent={phase === "active" ? "emerald" : "cyan"} variants={fadeUp} className="p-6">
-      <div className="mb-3 flex items-center gap-2">
-        <Smartphone aria-hidden className="h-4 w-4 text-brand-cyan" />
-        <h2 className="text-base font-semibold text-foreground">{copy.title}</h2>
-      </div>
-      <p className="text-sm text-muted">{copy.body}</p>
-      <p aria-live="polite" className="mt-3 flex items-center gap-2 text-sm text-foreground">
-        {busy && <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />}
-        {noDevice ? copy.noDevice : status[phase] ?? ""}
-      </p>
-      {!paired && !busy && <p className="mt-2 text-sm text-muted-dark">{copy.howTo}</p>}
-      {kept && (
-        <div className="mt-4">
-          <p className="text-sm text-foreground">{copy.replaceConfirm}</p>
-          <div className="mt-3 flex flex-wrap gap-3">
-            <button type="button" onClick={() => answer(true)} className={buttonClass}>
-              {copy.replaceYes}
-            </button>
-            <button type="button" onClick={() => answer(false)} className={buttonClass}>
-              {copy.replaceNo}
-            </button>
-          </div>
+    <ArriveCell index={arriveIndex}>
+      <GlowCard accent={phase === "active" ? "emerald" : "cyan"} className="flex-1 p-6">
+        <div className="mb-3 flex items-center gap-2">
+          <Smartphone aria-hidden className="h-4 w-4 text-brand-cyan" />
+          <h2 className="text-base font-semibold text-foreground">{copy.title}</h2>
         </div>
-      )}
-      {paired && !kept && (
-        <button type="button" onClick={() => void useControllerStore.getState().unpair()} className={`mt-4 ${buttonClass}`}>
-          {copy.unpair}
-        </button>
-      )}
-    </GlowCard>
+        <p className="text-sm text-muted">{copy.body}</p>
+        <p aria-live="polite" className="mt-3 flex items-center gap-2 text-sm text-foreground">
+          {busy && <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />}
+          {noDevice ? copy.noDevice : status[phase] ?? ""}
+        </p>
+        {!paired && !busy && <p className="mt-2 text-sm text-muted-dark">{copy.howTo}</p>}
+        {kept && (
+          <div className="mt-4">
+            <p className="text-sm text-foreground">{copy.replaceConfirm}</p>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <button type="button" onClick={() => answer(true)} className={buttonClass}>
+                {copy.replaceYes}
+              </button>
+              <button type="button" onClick={() => answer(false)} className={buttonClass}>
+                {copy.replaceNo}
+              </button>
+            </div>
+          </div>
+        )}
+        {paired && !kept && (
+          <button type="button" onClick={() => void useControllerStore.getState().unpair()} className={`mt-4 ${buttonClass}`}>
+            {copy.unpair}
+          </button>
+        )}
+      </GlowCard>
+    </ArriveCell>
   );
 }

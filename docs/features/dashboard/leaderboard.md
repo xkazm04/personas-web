@@ -22,7 +22,7 @@ It then renders two side-by-side panels (a 5-column grid: table spans 3, radar s
 - **Demo mode** (this repo's default): the `useState` initializer seeds `MOCK_LEADERBOARD`, `loading` starts `false`, and the effect early-returns (`if (useMock) return;` at `useLeaderboardData.ts:38`) — no fetch runs.
 - **Real/Supabase mode**: the effect calls `getSyncedLeaderboard()` (`src/lib/supabaseApi.ts:754`), which reads the `synced_leaderboard` view and normalizes per-persona execution stats into the five radar axes + composite. Errors are captured to Sentry with `tags: { scope: "useLeaderboardData" }` (`useLeaderboardData.ts:50`) and surfaced via `error`. A `cancelled` flag guards the async setState on unmount.
 
-**Page composition — `page.tsx`.** `LeaderboardPage` calls `useLeaderboardData()`, then manages selection without a sync effect (`page.tsx:24`): `pickedId` is `string | null` (`null` = "no explicit pick yet"). `selected` is a `useMemo` that resolves `pickedId` to a persona or falls back to `personas[0]` — so the selection stays valid as data loads or changes, with no reset-on-prop effect (React 19 rule). `benchmark` is `personas[0]` (the #1 persona); `isComparing` is true when the selection isn't the benchmark. `fetchedAt` is captured once in a lazy `useState(() => Date.now())` initializer (React 19 purity rule) and fed to `StalenessIndicator`. The `radarData` memo (`page.tsx:41`) zips the five axis keys against `t.leaderboardPage.metrics.*` labels into `{ metric, value, benchmark }[]`. While `loading`, it renders a `SkeletonCard` + `SkeletonChart` (`aria-busy`); `error` renders a `DashboardErrorBanner`. The whole page is a `staggerContainer` with `fadeUp` children (framer-motion).
+**Page composition — `page.tsx`.** `LeaderboardPage` calls `useLeaderboardData()`, then manages selection without a sync effect (`page.tsx:24`): `pickedId` is `string | null` (`null` = "no explicit pick yet"). `selected` is a `useMemo` that resolves `pickedId` to a persona or falls back to `personas[0]` — so the selection stays valid as data loads or changes, with no reset-on-prop effect (React 19 rule). `benchmark` is `personas[0]` (the #1 persona); `isComparing` is true when the selection isn't the benchmark. `fetchedAt` is captured once in a lazy `useState(() => Date.now())` initializer (React 19 purity rule) and fed to `StalenessIndicator`. The `radarData` memo (`page.tsx:41`) zips the five axis keys against `t.leaderboardPage.metrics.*` labels into `{ metric, value, benchmark }[]`. While `loading` (real mode only), it holds a shapeless `ViewGap` reservation; `error` renders a `DashboardErrorBanner`. Sections enter through the CSS arrival cascade (see **Loading tiers**).
 
 **Table — `LeaderboardTable.tsx`.** Holds the sort state (`sortField` defaults to `"composite"`, `sortDir` to `"desc"`). Two memos: `rankByComposite(personas)` (the stable rank map, recomputed only on `personas`) and `sortPersonas(personas, sortField, sortDir)` (the display order). `handleSort` toggles direction if you click the active column, else switches column and applies `defaultDirFor(field)`. Each row is a `<motion.button>` with `layout="position"` (gated off when `useReducedMotion()` is true → `layout={false}`) so rows animate when re-sorted. Selected row = cyan border/bg; an optional `compareId` prop highlights a second row in amber (currently unused by the page — `compareId` defaults to `""`). The composite bar width is an inline `style={{ width: \`${persona.composite}%\` }}` and its band classes come from `compositeBand`. The delta color comes from the shared `trendColor(delta, { neutralAtZero: true })` helper.
 
@@ -67,10 +67,22 @@ It then renders two side-by-side panels (a 5-column grid: table spans 3, radar s
 
 ## Integration points
 - **i18n:** strings under `t.leaderboardPage.*` (`src/i18n/en.ts:1660`): `title`, `subtitle`, `rank`, `composite`, `delta`, `sortBy` (`"Sort by {field}"`), `radarTitle`, `rankBy`, `overall` (podium rank-dimension labels), and `metrics.{reliability,cost,speed,quality,volume}`. The agent column label reuses `t.dashboardUi.agent`. Nav label is `t.dashboard.leaderboard` (`en.ts:1368`).
-- **Shared dashboard chrome:** `StalenessIndicator`, `DashboardErrorBanner`, `SkeletonCard` / `SkeletonChart`, `PersonaAvatar` (all under `src/components/dashboard/`), plus the shared `trendColor` helper.
-- **Animation/theme:** `fadeUp` / `staggerContainer` from `src/lib/animations`, `useChartAnimation` from `src/lib/chart-theme.tsx`, `BRAND_VAR` from `src/lib/brand-theme`, `GradientText` for the title.
+- **Shared dashboard chrome:** `StalenessIndicator`, `DashboardErrorBanner`, `ViewGap` / `Deferred` / `arrive` (arrival), `PersonaAvatar` (all under `src/components/dashboard/`), plus the shared `trendColor` helper.
+- **Animation/theme:** the `.dash-arrive` cascade (`arrival/arrive.ts`), `useChartAnimation` from `src/lib/chart-theme.tsx`, `BRAND_VAR` from `src/lib/brand-theme`, `GradientText` for the title.
 - **Charting:** Recharts (`RadarChart` + polar axes, `Legend`, `Tooltip`).
 - **Real-mode coupling:** the radar axes are *derived*, not measured — `getSyncedLeaderboard` normalizes cost/speed/volume relative to the cohort max, so a persona's axis scores are relative to its peers in that fetch.
+
+## Loading tiers
+
+Per the [loading standard](loading-orchestration.md):
+
+- **T0** — trophy, title, subtitle, `StalenessIndicator` (`index.tsx:72`), no entrance.
+- **First load** — real mode only (demo data is synchronous): `ViewGap` (`index.tsx:96`) replaces the immediate, generic `SkeletonCard`/`SkeletonChart` grid, which matched neither the podium nor the table.
+- **T1** — the rank-dimension tabs, `ARRIVE` index 0 (`index.tsx:121`); the radar card chrome (title + selected-persona chip) paints with the grid.
+- **T2** — the podium, index 1 (`index.tsx:125`; cards keyed by persona id); the table + radar grid, index 2 (`index.tsx:130`; rows keyed by persona id, framer `layout` re-sort kept).
+- **T3** — the radar chart body: `<Deferred order={0} minHeight={300} preload={loadRadarChart}>` inside the fixed 300px box (`LeaderboardRadarCard.tsx:49`). The chunk's `loading` is now empty (was an undelayed `animate-pulse` block).
+
+The framer `staggerContainer`/`fadeUp` wrappers (page, podium, table, radar card) became plain elements. The `ScoreRing` sweep keeps its own framer entrance.
 
 ## Conventions & gotchas
 - **`quality` is a documented PROXY in real mode.** The `synced_leaderboard` view has no quality signal, so `getSyncedLeaderboard` synthesizes quality as `successRate * 0.7 + (1 - retryRate) * 0.3` (`supabaseApi.ts:782`). Don't present it as a measured quality metric.

@@ -28,7 +28,17 @@ function FilterGroup({ label, children }: { label: string; children: React.React
  * Pill counts reflect the full incident set (stable as other filters change).
  * Selections live in the persisted incidents filter store.
  */
-export function IncidentsFilters({ incidents }: { incidents: AuditIncident[] }) {
+export function IncidentsFilters({
+  incidents,
+  pending = false,
+}: {
+  incidents: AuditIncident[];
+  /**
+   * Cold load with nothing held: the toolbar (T1) still paints, but pill
+   * counts are omitted rather than shown as false zeros.
+   */
+  pending?: boolean;
+}) {
   const { t } = useTranslation();
   const labels = t.incidentsPage;
   const status = useIncidentsFilterStore((s) => s.status);
@@ -64,8 +74,8 @@ export function IncidentsFilters({ incidents }: { incidents: AuditIncident[] }) 
           active={status}
           onChange={(k) => setStatus(k as StatusFilter)}
           options={[
-            { key: "all", label: labels.status.all, count: statusCounts.all ?? 0 },
-            ...INCIDENT_STATUSES.map((s) => ({ key: s, label: labels.status[s], count: statusCounts[s] ?? 0 })),
+            { key: "all", label: labels.status.all, count: pending ? undefined : (statusCounts.all ?? 0) },
+            ...INCIDENT_STATUSES.map((s) => ({ key: s, label: labels.status[s], count: pending ? undefined : (statusCounts[s] ?? 0) })),
           ]}
         />
       </FilterGroup>
@@ -76,8 +86,8 @@ export function IncidentsFilters({ incidents }: { incidents: AuditIncident[] }) 
           active={severity}
           onChange={(k) => setSeverity(k as SeverityFilter)}
           options={[
-            { key: "all", label: labels.status.all, count: severityCounts.all ?? 0 },
-            ...INCIDENT_SEVERITIES.map((s) => ({ key: s, label: labels.severity[s], count: severityCounts[s] ?? 0 })),
+            { key: "all", label: labels.status.all, count: pending ? undefined : (severityCounts.all ?? 0) },
+            ...INCIDENT_SEVERITIES.map((s) => ({ key: s, label: labels.severity[s], count: pending ? undefined : (severityCounts[s] ?? 0) })),
           ]}
         />
       </FilterGroup>

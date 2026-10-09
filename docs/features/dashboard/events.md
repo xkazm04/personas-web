@@ -160,6 +160,17 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 - **`useReducedMotion`** (framer-motion) gates every animated surface here.
 - `data-tour-diagram="dashboard-events"` on the Events tab anchors the guided tour.
 
+## Loading tiers
+
+Per the [loading standard](loading-orchestration.md):
+
+- **T0** — title, `ConnectionStatusIndicator`, subtitle (`index.tsx:45`), no entrance; the decorative background image is outside the tiers.
+- **T1** — the page tab strip, `ARRIVE` index 0 (`index.tsx:54`).
+- **T2** — the active tab's panel (`EventsListPanel` / `SubscriptionsPanel` / `EventSwimlane` / the visualization tab's `EventBusStats` + persona grid), one `ARRIVE` wrapper at index 1 (`index.tsx:73`). It is shared by every tab, so the entrance plays once with the view and a tab switch swaps content in place.
+- **T3** — the event-bus swarm SVG (`EventsVisualizationView.tsx:98`): `<Deferred order={0} preload={loadEventBusVisualization}>`. The SVG is a responsive square (`w-full max-w-[560px]`, 500×500 viewBox), so the reservation is an invisible `ghost` of exactly that square (`SWARM_BOX`) with `minHeight={0}`, and the chunk's `loading` is the same empty square (the old `animate-pulse` 420px block was neither delayed nor the right height). The chunk still downloads only when the visualization tab opens.
+
+The framer `staggerContainer`/`fadeUp` entrance was replaced by the CSS cascade. `EventSwimlane` is a visualization but keeps its card chrome inside the shared component, so it cannot be split into T1 chrome + T3 body from this view; it mounts as T2.
+
 ## Conventions & gotchas
 
 - **The real SSE proxy is dormant in this repo.** `useEventStream` short-circuits to

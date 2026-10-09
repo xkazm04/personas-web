@@ -14,7 +14,7 @@ A check that is one fragment of a wider incident (today: Slack's "Webhook circui
 Each card's header dot reflects the worst item status. Like the rest of `/dashboard/*`, all data is **mock** — there's no real host to probe in this repo.
 
 ## How it works
-The page (`src/components/dashboard/views/health/index.tsx`) is a `"use client"` component in a `staggerContainer`/`fadeUp` tree. It loads via `useSystemHealth` (SWR over a standalone mock fetcher) and renders the four sections in a 2-column grid of `HealthSectionCard`s; the Resources card receives a `DiskUsageBar` as its footer. A demo action records the check in a local `resolutions` map (pure reducer in `health-page/healthActions.ts`) that is projected onto the fetched sections, and sets a `toast` state that renders a reused `ExecuteToast`.
+The page (`src/components/dashboard/views/health/index.tsx`) is a `"use client"` component that loads per the dashboard tier standard (see **Loading tiers** below). It loads via `useSystemHealth` (SWR over a standalone mock fetcher) and renders the four sections in a 2-column grid of `HealthSectionCard`s; the Resources card receives a `DiskUsageBar` as its footer. A demo action records the check in a local `resolutions` map (pure reducer in `health-page/healthActions.ts`) that is projected onto the fetched sections, and sets a `toast` state that renders a reused `ExecuteToast`.
 
 Key behaviors:
 - **Demo-only fetch** — `getSystemHealth` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface — no real/supabase client changes); the hook calls it through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`, for a brief loading state. Returns the four sections + the disk-usage gauge. In a real (non-demo) session the key is `null`, nothing is fetched, and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) instead of the fixture.
@@ -22,6 +22,15 @@ Key behaviors:
 - **Demo actions** — items with an `action` (`install` | `configure`) render a button; clicking calls `onAction`, which (1) `resolveHealthAction(prev, item)` - records `{ [item.id]: item.action }`, same reference when nothing changes - and (2) composes a localized toast message (`{name} {verb}`) for `ExecuteToast`. `applyHealthResolutions(sections, resolutions, detail)` (memoized in the page) turns each resolved check into `status: "ok"`, no `action`, and `detail` = the matching `t.healthPage.toast` string; untouched sections keep their reference, the fixture is never mutated, and because it is keyed by id a resolution survives an SWR refetch. It lasts for the page's lifetime (no persistence). Toast `key` increments per action so the dismiss timer restarts.
 - **Focus + related links** — `HealthSectionCard` reads `useFocusParam()` once and passes `focused` to each `HealthCheckRow`, which adds a `ring-brand-cyan/50` class (class only — markup shape never depends on the URL, and the server/hydrating render see `null`) and calls `useScrollIntoViewWhen`. Rows whose id is in an incident thread (`causeKey` on the fixture, `src/lib/incidentThreads.ts`) render `RelatedIncidentLinks` under the detail line; the rest render nothing extra.
 - **Nav badge** — `MOCK_HEALTH_ALERTS` (count of `error` items) drives the sidebar badge. It is a module constant, so resolving Slack on this page does not lower it.
+
+### Loading tiers
+
+Follows [loading-orchestration](loading-orchestration.md).
+
+- **T0** - the header (`data-tour-diagram="dashboard-health"`), plain and never animated (`src/components/dashboard/views/health/index.tsx:60`).
+- **T1** - the four section cards (border, icon, title), `arriveAt(index)` in the fixed `HEALTH_SECTION_ORDER` (`src/components/dashboard/views/health/index.tsx:86`). On a cold load they render from that order with no items, keyed by section key both ways, so the same card elements carry on when the data lands.
+- **T2** - the check rows, the worst-status dot/tint and the disk gauge. While `pending` (`src/components/dashboard/views/health/index.tsx:46`) each card draws four delayed 52px ghost rows matching `HealthCheckRow` (`health-page/HealthSectionCard.tsx:59`), the header dot makes no claim (`:51`), and the Resources footer holds the gauge's 54px (`src/components/dashboard/views/health/index.tsx:96`). Rows landing after a cold load take `.dash-arrive` once on the persistent list node (`coldStart`, `src/components/dashboard/views/health/index.tsx:45`). Rows are keyed by check id.
+- **T3** - none. The gauge is a light bar, and rows must be mounted for a `?focus=<check id>` deep link to ring and scroll them.
 
 ## Key files
 | File | Role |
@@ -41,7 +50,7 @@ Key behaviors:
 
 ## Integration points
 - **Dashboard shell** — nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `HeartPulse` icon) with a `MOCK_HEALTH_ALERTS` badge in `getBadge`. Not in `SCOPED_ROUTE_PREFIXES` (no persona scoping).
-- **Shared primitives** — `GlowCard`, `GradientText`, `SkeletonCard`, and `ExecuteToast` (reused from the agents surface for the demo-action toast). Status ramp matches the dashboard standard (emerald/amber/rose/cyan).
+- **Shared primitives** — `GlowCard`, `GradientText`, and `ExecuteToast` (reused from the agents surface for the demo-action toast). Status ramp matches the dashboard standard (emerald/amber/rose/cyan).
 - **i18n** — nav label `t.dashboard.health` + the `t.healthPage` namespace (`src/i18n/en.ts`), hand-translated into all 13 non-en locales.
 
 ## Conventions & gotchas

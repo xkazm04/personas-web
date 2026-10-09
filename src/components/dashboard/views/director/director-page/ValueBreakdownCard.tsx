@@ -3,6 +3,7 @@
 import { Layers } from "lucide-react";
 
 import GlowCard from "@/components/GlowCard";
+import { ARRIVE } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { DirectorValueBreakdown } from "@/lib/mock-dashboard-data";
 
@@ -26,9 +27,16 @@ const BAND_TONE: Record<BandKey, { bar: string; dot: string }> = {
 export function ValueBreakdownCard({
   breakdown,
   total,
+  ghost = false,
+  settle = false,
 }: {
-  breakdown: DirectorValueBreakdown;
+  /** `null` while the snapshot is pending: the chrome paints, the body is held. */
+  breakdown: DirectorValueBreakdown | null;
   total: number;
+  /** Cold load with nothing held: a delayed, geometry-true ghost of bar + legend. */
+  ghost?: boolean;
+  /** The view mounted without data: the body enters when it lands. */
+  settle?: boolean;
 }) {
   const { t } = useTranslation();
   const lp = t.directorPage.breakdown;
@@ -38,13 +46,28 @@ export function ValueBreakdownCard({
       <div className="mb-4 flex items-center gap-2">
         <Layers className="h-4 w-4 text-emerald-400" />
         <h2 className="text-base font-semibold text-foreground">{lp.title}</h2>
-        <span className="ml-auto text-sm tabular-nums text-muted-dark">{total}</span>
+        {breakdown && <span className="ml-auto text-sm tabular-nums text-muted-dark">{total}</span>}
       </div>
 
-      {total === 0 ? (
+      {!breakdown ? (
+        // Bar (h-2.5) + a legend that wraps to two 20px rows in a half-width
+        // card (mt-3, gap-y-1.5): the settled body's usual height.
+        <div className="min-h-[68px]" aria-hidden>
+          {ghost && (
+            <div className="dash-ghost">
+              <div className="h-2.5 w-full rounded-full bg-glass" />
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
+                {BAND_ORDER.map((key) => (
+                  <span key={key} className="my-1 block h-3 w-20 rounded bg-glass" />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      ) : total === 0 ? (
         <p className="py-6 text-center text-sm text-muted-dark">{lp.empty}</p>
       ) : (
-        <>
+        <div className={settle ? ARRIVE : undefined}>
           <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/[0.05]" aria-hidden>
             {BAND_ORDER.map((key) =>
               breakdown[key] > 0 ? (
@@ -68,7 +91,7 @@ export function ValueBreakdownCard({
               </span>
             ))}
           </div>
-        </>
+        </div>
       )}
     </GlowCard>
   );

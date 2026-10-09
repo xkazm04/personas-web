@@ -80,13 +80,11 @@ export function StatusTicker({
 
       <span aria-hidden className="h-4 w-px flex-shrink-0 bg-glass" />
 
-      {/* Until the executions land, the strip shows the same spinner the rest
-          of the dashboard uses rather than ticking a fabricated "Fleet success
-          0%" as its opening frame. */}
+      {/* Until the executions land, the strip holds its row empty rather than
+          ticking a fabricated "Fleet success 0%" as its opening frame (and
+          rather than a spinner placeholder). */}
       {loading ? (
-        <div className="flex min-w-0 flex-1 items-center py-1" aria-hidden>
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-glass-hover border-t-brand-cyan" />
-        </div>
+        <div className="h-6 min-w-0 flex-1" aria-hidden />
       ) : reduced ? (
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-5 gap-y-1">
           {items.map((item) => {

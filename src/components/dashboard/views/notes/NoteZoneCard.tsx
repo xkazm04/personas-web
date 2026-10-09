@@ -1,11 +1,22 @@
-import { useId } from "react";
+import { useId, type CSSProperties } from "react";
 import { FolderGit2 } from "lucide-react";
 import type { NoteZone } from "@/lib/notes/notesModel";
 import NoteCard from "./NoteCard";
 import { mobileCopy } from "@/i18n/pending/mobile";
 
 /** A project's zone, as in the desktop Quest Log: its name, how many goals, then the goals in rail order. */
-export default function NoteZoneCard({ zone, onOpen }: { zone: NoteZone; onOpen: (id: string) => void }) {
+export default function NoteZoneCard({
+  zone,
+  onOpen,
+  className = "",
+  style,
+}: {
+  zone: NoteZone;
+  onOpen: (id: string) => void;
+  /** The view's arrival cascade (zones are keyed by project, so position is identity). */
+  className?: string;
+  style?: CSSProperties;
+}) {
   const copy = mobileCopy.notes;
   const headingId = useId();
   const count = zone.notes.length === 1 ? copy.goalsOne : copy.goals.replace("{count}", String(zone.notes.length));
@@ -14,7 +25,8 @@ export default function NoteZoneCard({ zone, onOpen }: { zone: NoteZone; onOpen:
     <section
       aria-labelledby={headingId}
       data-note-zone={zone.key}
-      className="min-w-0 rounded-2xl border border-glass bg-white/[0.02] p-3 sm:p-4"
+      className={`min-w-0 rounded-2xl border border-glass bg-white/[0.02] p-3 sm:p-4 ${className}`}
+      style={style}
     >
       <header className="mb-3 flex items-baseline justify-between gap-3">
         <h2 id={headingId} className="flex min-w-0 items-center gap-2 text-base font-semibold text-foreground">

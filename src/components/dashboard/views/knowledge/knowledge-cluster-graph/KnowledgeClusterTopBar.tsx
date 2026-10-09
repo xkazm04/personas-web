@@ -3,11 +3,14 @@ import { KNOWLEDGE_CLUSTER_TYPE_CONFIG, type KnowledgeType } from "./knowledgeCl
 
 export function KnowledgeClusterTopBar({
   stats,
+  pending = false,
   activeFilter,
   setActiveFilter,
   clearSelection,
 }: {
   stats: { total: number; avgConfidence: number; personas: number; types: number };
+  /** Cold load with nothing held: labels paint (T1), values are ghosted (T2). */
+  pending?: boolean;
   activeFilter: "all" | KnowledgeType;
   setActiveFilter: (filter: "all" | KnowledgeType) => void;
   clearSelection: () => void;
@@ -17,13 +20,13 @@ export function KnowledgeClusterTopBar({
   return (
     <div className="flex items-center gap-4 flex-wrap mb-3 shrink-0">
       <div className="flex items-center gap-4 text-sm mr-auto">
-        <TopMetric label={t.knowledgePage.nodes} value={stats.total} />
+        <TopMetric pending={pending} label={t.knowledgePage.nodes} value={stats.total} />
         <Divider />
-        <TopMetric label={t.knowledgePage.agents} value={stats.personas} tone="text-cyan-400" />
+        <TopMetric pending={pending} label={t.knowledgePage.agents} value={stats.personas} tone="text-cyan-400" />
         <Divider />
-        <TopMetric label={t.knowledgePage.clusters} value={stats.types} tone="text-purple-400" />
+        <TopMetric pending={pending} label={t.knowledgePage.clusters} value={stats.types} tone="text-purple-400" />
         <Divider />
-        <TopMetric label={t.knowledgePage.avgConfidence} value={`${Math.round(stats.avgConfidence * 100)}%`} tone="text-emerald-400" />
+        <TopMetric pending={pending} label={t.knowledgePage.avgConfidence} value={`${Math.round(stats.avgConfidence * 100)}%`} tone="text-emerald-400" />
       </div>
       <div className="flex items-center gap-1.5">
         <FilterButton active={activeFilter === "all"} onClick={() => { setActiveFilter("all"); clearSelection(); }}>
@@ -60,10 +63,28 @@ function FilterButton({ active, onClick, children }: { active: boolean; onClick:
   );
 }
 
-function TopMetric({ label, value, tone = "text-foreground" }: { label: string; value: string | number; tone?: string }) {
+function TopMetric({
+  label,
+  value,
+  tone = "text-foreground",
+  pending = false,
+}: {
+  label: string;
+  value: string | number;
+  tone?: string;
+  pending?: boolean;
+}) {
   return (
     <span className="text-muted-dark">
-      {label} <span className={`${tone} font-bold tabular-nums`}>{value}</span>
+      {label}{" "}
+      <span className={`${tone} font-bold tabular-nums`}>
+        {pending ? (
+          // A delayed, value-sized ghost in the value's own line box.
+          <span aria-hidden className="dash-ghost inline-block h-3.5 w-7 rounded-sm bg-glass align-middle" />
+        ) : (
+          value
+        )}
+      </span>
     </span>
   );
 }

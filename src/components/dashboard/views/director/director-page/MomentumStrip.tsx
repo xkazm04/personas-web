@@ -39,21 +39,23 @@ export function MomentumStrip({
   facet,
   onFacetChange,
 }: {
-  roster: DirectorRosterEntry[];
+  /** `null` while the snapshot is pending: the label paints, the chip row is held. */
+  roster: DirectorRosterEntry[] | null;
   facet: RosterFacet | null;
   onFacetChange: (facet: RosterFacet | null) => void;
 }) {
   const { t } = useTranslation();
   const lp = t.directorPage.momentum;
-  const counts = momentumCounts(roster);
-  const moving = counts.improving > 0 || counts.declining > 0;
+  const counts = roster ? momentumCounts(roster) : null;
+  const moving = counts !== null && (counts.improving > 0 || counts.declining > 0);
 
+  // min-h holds one chip row (py-1 + 20px line + border) so chips land in place.
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex min-h-[30px] flex-wrap items-center gap-2">
       <span className="text-xs font-medium uppercase tracking-wider text-muted-dark">
         {lp.label}
       </span>
-      {!moving ? (
+      {counts === null ? null : !moving ? (
         <span className="inline-flex items-center gap-1.5 text-sm text-muted-dark">
           <Minus className="h-3.5 w-3.5" />
           {lp.steady}

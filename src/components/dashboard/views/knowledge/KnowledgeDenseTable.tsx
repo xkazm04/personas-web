@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { fadeUp, staggerContainer } from "@/lib/animations";
+import { AnimatePresence } from "framer-motion";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
 import { type KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { buildKnowledgeColumns } from "./knowledge-dense-table/buildKnowledgeColumns";
@@ -12,10 +12,20 @@ import { KnowledgePatternTable } from "./knowledge-dense-table/KnowledgePatternT
 import { knowledgeSuccessRate } from "./knowledge-dense-table/knowledgeDenseFormat";
 import type { KnowledgeType, SortDir, SortField } from "./knowledge-dense-table/knowledgeDenseTypes";
 
+/**
+ * Dense-table tab (the default). T1: the stats/type-pill top bar and the table
+ * frame with its column headers (cascade 0-1). T2: the stat values and rows,
+ * ghosted geometry-true while a cold load is pending. No T3: the table is the
+ * view's answer, and the detail panel is a user-triggered response.
+ */
 export default function KnowledgeDenseTable({
   patterns: allPatterns,
+  pending = false,
+  settle = false,
 }: {
   patterns: KnowledgePattern[];
+  pending?: boolean;
+  settle?: boolean;
 }) {
   const { t } = useTranslation();
   const [sortField, setSortField] = useState<SortField>("confidence");
@@ -69,11 +79,11 @@ export default function KnowledgeDenseTable({
   const columns = useMemo(() => buildKnowledgeColumns(t.knowledgePage), [t.knowledgePage]);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="flex flex-col h-[calc(100vh-10rem)] relative">
+    <div className="flex flex-col h-[calc(100vh-10rem)] relative">
       <div className="absolute inset-0 pointer-events-none rounded-xl" style={{ background: "radial-gradient(ellipse 80% 60% at 50% 0%, color-mix(in srgb, var(--brand-cyan) 4%, transparent), transparent 70%)" }} />
-      <motion.div variants={fadeUp}>
-        <KnowledgeDenseTopBar stats={stats} typeFilters={typeFilters} toggleTypeFilter={toggleTypeFilter} clearTypeFilters={() => setTypeFilters(new Set())} />
-      </motion.div>
+      <div className={ARRIVE} style={arriveAt(0)}>
+        <KnowledgeDenseTopBar stats={stats} pending={pending} typeFilters={typeFilters} toggleTypeFilter={toggleTypeFilter} clearTypeFilters={() => setTypeFilters(new Set())} />
+      </div>
       <KnowledgePatternTable
         columns={columns}
         patterns={sortedPatterns}
@@ -82,11 +92,13 @@ export default function KnowledgeDenseTable({
         sortDir={sortDir}
         onSort={handleSort}
         onSelect={handleSelect}
+        pending={pending}
+        settle={settle}
       />
       <AnimatePresence>
         {selectedPattern && <KnowledgePatternDetailPanel key={selectedPattern.id} pattern={selectedPattern} onClose={() => setSelectedPattern(null)} />}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 

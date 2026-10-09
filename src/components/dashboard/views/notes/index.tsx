@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { Loader2, NotebookPen } from "lucide-react";
+import { NotebookPen } from "lucide-react";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import EmptyState from "@/components/dashboard/EmptyState";
 import { Modal } from "@/components/dashboard/Modal";
 import BottomSheet from "@/components/primitives/BottomSheet";
@@ -17,6 +18,9 @@ import NoteDetail from "./NoteDetail";
 import NoteZoneCard from "./NoteZoneCard";
 import { REVIEW_PILL, UNREAD_PILL } from "./NoteCard";
 import { mobileCopy } from "@/i18n/pending/mobile";
+
+/** First-load zone ghosts: as many as the widest board shows in one row. */
+const GHOST_ZONES = ["a", "b", "c"] as const;
 
 /** Tiers that get the reachability banner here. Pairing is for commands; reading notes needs none. */
 const NOTICE_TIERS: ReadonlySet<ReachabilityTier> = new Set(["offline", "never-synced", "no-account"]);
@@ -73,19 +77,34 @@ export default function NotesView() {
       </div>
     );
   } else if (!loaded || (loading && notes.length === 0)) {
+    // First load: zone-shaped ghosts (NoteZoneCard's header + two NoteCards),
+    // drawn only after the ghost delay. One column on a phone, as the board is.
     body = (
-      <p className="flex items-center gap-2 text-sm text-muted-dark" aria-busy="true">
-        <Loader2 aria-hidden className="h-4 w-4 motion-safe:animate-spin" />
-        {copy.loading}
-      </p>
+      <div role="status" aria-busy="true">
+        <span className="sr-only">{copy.loading}</span>
+        <div aria-hidden className="dash-ghost grid items-start gap-3 md:grid-cols-2 md:gap-4 xl:grid-cols-3">
+          {GHOST_ZONES.map((key, i) => (
+            <div
+              key={key}
+              className={`rounded-2xl border border-glass bg-white/[0.02] p-3 sm:p-4 ${i === 2 ? "hidden xl:block" : i === 1 ? "hidden md:block" : ""}`}
+            >
+              <div className="mb-3 h-6" />
+              <div className="flex flex-col gap-2">
+                <div className="h-[76px] rounded-xl border border-glass" />
+                <div className="h-[76px] rounded-xl border border-glass" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     );
   } else if (notes.length === 0) {
     body = <EmptyState icon={NotebookPen} title={copy.emptyTitle} description={copy.emptyBody} />;
   } else {
     body = (
       <div className="grid items-start gap-3 md:grid-cols-2 md:gap-4 xl:grid-cols-3">
-        {zones.map((zone) => (
-          <NoteZoneCard key={zone.key} zone={zone} onOpen={setOpenId} />
+        {zones.map((zone, i) => (
+          <NoteZoneCard key={zone.key} zone={zone} onOpen={setOpenId} className={ARRIVE} style={arriveAt(i + 1)} />
         ))}
       </div>
     );
@@ -109,7 +128,7 @@ export default function NotesView() {
       {tier === "offline" && notes.length > 0 && <p className="text-sm text-muted">{copy.offlineNote}</p>}
 
       {!noData && notes.length > 0 && (totals.needsReview > 0 || totals.unreadComments > 0) && (
-        <p className="flex flex-wrap gap-2" data-notes-totals>
+        <p className={`${ARRIVE} flex flex-wrap gap-2`} style={arriveAt(0)} data-notes-totals>
           {totals.needsReview > 0 && (
             <span className={REVIEW_PILL}>{copy.totalNeedsReview.replace("{count}", String(totals.needsReview))}</span>
           )}

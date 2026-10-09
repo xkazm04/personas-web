@@ -8,11 +8,13 @@ import type { PersonasMonitorCopy } from "@/i18n/pending/personasMonitor";
 export type BoardCopy = PersonasMonitorCopy["board"];
 
 export function stateText(a: SimAgent, c: BoardCopy): string {
+  if (!a.enabled && a.state === "running") return c.cmd.pausedRunning;
   if (!a.enabled) return c.states.off;
   return c.states[a.state] + (a.state === "running" && a.progress != null ? ` ${pct(a.progress)}` : "");
 }
 
 export function shortState(a: SimAgent, c: BoardCopy): string {
+  if (!a.enabled && a.state === "running") return c.cmd.pausingShort + (a.progress != null ? ` ${pct(a.progress)}` : "");
   if (!a.enabled) return c.shortStates.off;
   return c.shortStates[a.state] + (a.state === "running" && a.progress != null ? ` ${pct(a.progress)}` : "");
 }
@@ -50,6 +52,9 @@ export function eventText(e: BoardEvent, c: BoardCopy): string {
   if (d) {
     if (d.act === "approve" || d.act === "sendback") return fill(c.decisions[d.act], { title: d.title });
     if (d.act === "read") return fill(plural(d.n, c.decisions.readOne, c.decisions.read), { n: d.n });
+    if (d.act === "pauseAll") return fill(d.stopped ? c.decisions.pauseAllStop : c.decisions.pauseAll, { n: d.n, m: d.stopped });
+    if (d.act === "resumeAll") return fill(c.decisions.resumeAll, { n: d.n });
+    if (d.act === "answer" && d.text) return fill(c.decisions.answerText, { text: d.text });
     return c.decisions[d.act];
   }
   if (e.kind === "run_completed" || e.kind === "run_failed" || e.kind === "self_heal") return c.simEvents[e.kind];

@@ -1,12 +1,16 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LayoutGrid, List } from "lucide-react";
 import type { CSSProperties } from "react";
 import { ATTENTION_COLOR, type AttentionCounts } from "../attention";
-import { FLEET, formatAge, formatClock } from "../fleet-data";
+import { formatClock } from "../fleet-data";
 import { simNow, type BoardCopy } from "./copy";
 import { TEAM_BY_ID, fill, plural, type SimAgent } from "./model";
 import type { BoardNav } from "./useBoardNav";
+import type { HostReading } from "./host";
+import FindBox from "./FindBox";
+import UsageMeters from "./UsageMeters";
+import { NO_FOCUS, isFocusing, togglePile, type FocusFilter } from "./focus";
 import b from "./board.module.css";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
@@ -16,6 +20,15 @@ interface TopStripProps {
   simMs: number;
   copy: BoardCopy;
   nav: BoardNav;
+  host: HostReading;
+  focus: FocusFilter;
+  onFocus: (f: FocusFilter) => void;
+  /** Agents in focus, in reading order. */
+  matches: readonly SimAgent[];
+  onPalette: () => void;
+  layout: "field" | "list";
+  onLayout: (l: "field" | "list") => void;
+  onShortcuts: () => void;
 }
 
 const PILES = ["needs", "working", "resting", "off"] as const;
@@ -59,7 +72,7 @@ function Crumbs({ scope, copy, nav }: Pick<TopStripProps, "scope" | "copy" | "na
 }
 
 /** L0's top edge, one line: the way back, the verdict, the fleet's mix, usage pace, the clock. */
-export default function TopStrip({ counts: c, scope, simMs, copy, nav }: TopStripProps) {
+export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, focus, onFocus, matches, onPalette, layout, onLayout, onShortcuts }: TopStripProps) {
   const piles = personasMonitorCopy.attention;
   const verdict = c.needs ? plural(c.needs, copy.top.needsOne, copy.top.needsMany) : copy.top.allClear;
   // Below the fleet level the way back needs the room: the pile legend yields.
@@ -68,43 +81,66 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav }: TopStri
   return (
     <>
       <Crumbs scope={scope} copy={copy} nav={nav} />
+      {!deep && (
+        <div role="group" aria-label={copy.list.layoutLabel} className="flex shrink-0 gap-0.5 rounded-lg p-0.5 shadow-[inset_0_0_0_1px_var(--border-glass)]">
+          {(["field", "list"] as const).map((l) => {
+            const Icon = l === "field" ? LayoutGrid : List;
+            return (
+              <button key={l} type="button" aria-pressed={layout === l} title={l === "field" ? copy.list.fieldHint : copy.list.listHint} onClick={() => onLayout(l)} data-layout={l}
+                className={`inline-flex h-6 items-center gap-1 rounded-md px-1.5 text-xs transition-colors focus-visible:outline-2 focus-visible:outline-foreground ${layout === l ? "bg-foreground/10 text-foreground" : "text-muted-dark hover:text-foreground"}`}>
+                <Icon aria-hidden className="h-3.5 w-3.5" />
+                <span className="hidden min-[1800px]:inline">{copy.list[l]}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
       <div className="flex shrink-0 items-baseline gap-2">
         <span className="text-2xl font-bold leading-none tabular-nums" style={{ color: c.needs ? ATTENTION_COLOR[c.critical ? "critical" : "needs"] : ATTENTION_COLOR.working }}>{c.needs}</span>
         <span className="text-sm font-semibold text-foreground">{verdict}</span>
       </div>
-      <div className="flex min-w-0 items-center gap-3" role="img" aria-label={PILES.map((p) => `${c[p]} ${piles[p]}`).join(", ")}>
-        <div className="flex h-2 w-[clamp(96px,12vw,220px)] shrink-0 gap-0.5 overflow-hidden rounded-full">
-          {PILES.filter((p) => c[p]).map((p) => <i key={p} className="h-full transition-[flex-grow] duration-700" style={{ flexGrow: c[p], background: ATTENTION_COLOR[p] }} />)}
+      <div className="flex min-w-0 items-center gap-3">
+        {/* At the fleet level the pile toggles carry the mix; the bar stands in below that and on small screens. */}
+        <div role="img" aria-label={PILES.map((p) => `${c[p]} ${piles[p]}`).join(", ")} className={`h-2 w-[clamp(72px,9vw,180px)] shrink-0 gap-0.5 overflow-hidden rounded-full ${deep ? "flex" : "flex lg:hidden"}`}>
+          {PILES.filter((p) => c[p]).map((p) => <i key={p} className="h-full transition-[flex-grow] duration-700" style={{ flexGrow: c[p], background: ATTENTION_COLOR[p], opacity: focus.piles.length && !focus.piles.includes(p) ? 0.3 : 1 }} />)}
         </div>
-        <span className={`hidden items-center gap-3 whitespace-nowrap text-xs tabular-nums text-muted-dark ${deep ? "" : "lg:flex"}`}>
-          {PILES.map((p) => (
-            <span key={p} className="inline-flex items-center gap-1"><i className="h-2 w-2 rounded-sm" style={{ background: ATTENTION_COLOR[p] }} />{c[p]} {piles[p]}</span>
-          ))}
-        </span>
+        {!deep && (
+          <div role="group" aria-label={copy.find.pilesLabel} className="hidden items-center gap-0.5 whitespace-nowrap text-xs tabular-nums lg:flex">
+            {PILES.map((p) => {
+              const on = focus.piles.includes(p);
+              return (
+                <button
+                  key={p}
+                  type="button"
+                  aria-pressed={on}
+                  title={fill(copy.find.pileHint, { pile: piles[p] })}
+                  onClick={() => onFocus(togglePile(focus, p))}
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 transition-colors focus-visible:outline-2 focus-visible:outline-foreground ${on ? "bg-foreground/10 text-foreground shadow-[inset_0_0_0_1px_var(--border-glass-hover)]" : "text-muted-dark hover:text-foreground"}`}
+                >
+                  <i className="h-2 w-2 rounded-sm" style={{ background: ATTENTION_COLOR[p] }} />
+                  {c[p]} {piles[p]}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
+      {!deep && <FindBox query={focus.query} onQuery={(q) => onFocus({ ...focus, query: q })} matches={matches} focusing={isFocusing(focus)} onOpen={nav.openAgent} onClear={() => onFocus(NO_FOCUS)} copy={copy} />}
+      <button type="button" onClick={onPalette} title={copy.palette.label} aria-label={copy.palette.label} className="hidden shrink-0 items-center gap-1.5 rounded-lg px-2 py-1 text-xs text-muted-dark shadow-[inset_0_0_0_1px_var(--border-glass)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground md:inline-flex" data-palette-open>
+        <span className="hidden min-[1800px]:inline">{copy.palette.open}</span>
+        <kbd className={kbd}>{"⌘K"}</kbd>
+      </button>
       <div className="ml-auto flex shrink-0 items-center gap-4">
-        {FLEET.usage.windows.map((w) => {
-          const rem = Math.max(0, w.resetsInMs - simMs);
-          const el = ((w.windowMs - rem) / w.windowMs) * 100;
-          const d = w.utilizationPct - el;
-          const [verdictText, col] = d > 5 ? [copy.band.hot, ATTENTION_COLOR.warning] : d < -15 ? [copy.band.headroom, "var(--status-info)"] : [copy.band.onPace, "var(--status-success)"];
-          const full = `${fill(copy.band.used, { label: w.label })} ${w.utilizationPct}%, ${verdictText}. ${fill(copy.band.elapsed, { pct: Math.round(el), time: formatAge(rem) })}`;
-          return (
-            <div key={w.label} className="flex items-center gap-2 text-xs" title={full} role="img" aria-label={full}>
-              <span className="text-muted-dark">{w.label}</span>
-              <span className="relative h-1.5 w-16 rounded-full bg-[color-mix(in_oklab,var(--foreground)_10%,transparent)]">
-                <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${w.utilizationPct}%`, background: col }} />
-                <span className="absolute -top-1 h-3.5 w-0.5 rounded-sm bg-foreground" style={{ left: `calc(${el.toFixed(1)}% - 1px)` }} />
-              </span>
-              <span className="font-semibold tabular-nums" style={{ color: `color-mix(in oklab, ${col} 75%, var(--foreground))` }}>{w.utilizationPct}%</span>
-            </div>
-          );
-        })}
-        <span className="font-mono text-sm font-semibold tabular-nums text-foreground" aria-hidden="true">{formatClock(simNow(simMs))} UTC</span>
-        <span className="hidden items-center gap-1.5 whitespace-nowrap text-xs text-muted-dark xl:flex">
-          <kbd className={kbd} title={copy.nav.nextHint}>N</kbd> <span className="hidden 2xl:inline">{copy.nav.nextHint}</span>
-          <kbd className={`${kbd} ml-1`} title={copy.nav.escHint}>Esc</kbd> <span className="hidden 2xl:inline">{copy.nav.escHint}</span>
-        </span>
+        <span className="hidden items-center gap-4 min-[1500px]:flex"><UsageMeters simMs={simMs} copy={copy} /></span>
+        {host.status === "online" ? (
+          <span className="font-mono text-sm font-semibold tabular-nums text-foreground" aria-hidden="true">{formatClock(simNow(simMs))} UTC</span>
+        ) : (
+          <span className="text-sm text-muted-dark">{fill(copy.host.asOf, { time: formatClock(simNow(simMs) - host.beatAgeMs).slice(0, 5) })}</span>
+        )}
+        <button type="button" onClick={onShortcuts} title={copy.keys.open} aria-label={copy.keys.open} data-shortcuts
+          className="hidden h-6 w-6 place-items-center rounded-md font-mono text-xs text-muted-dark shadow-[inset_0_0_0_1px_var(--border-glass-hover)] hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground md:grid">
+          ?
+        </button>
       </div>
     </>
   );

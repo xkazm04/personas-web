@@ -2,19 +2,16 @@
 
 import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
-import StageLoading from "@/components/dashboard/fleet-monitor/StageLoading";
-import SkeletonCard from "@/components/dashboard/SkeletonCard";
+import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import type { DashboardViewId } from "./views";
 
-/** Placeholder while a padded view's chunk loads. */
+/** The held, shapeless gap while a view's chunk loads (the view draws its own frame). */
 function ViewLoading() {
-  return (
-    <div className="grid gap-6 lg:grid-cols-3" aria-busy="true">
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-    </div>
-  );
+  return <ViewGap />;
+}
+
+function StageViewLoading() {
+  return <ViewGap fill />;
 }
 
 /* One lazy chunk per view: the dashboard's first load is the shell only, and a
@@ -40,7 +37,7 @@ const LOADERS = {
 } satisfies Record<DashboardViewId, () => Promise<{ default: ComponentType }>>;
 
 const VIEWS: Record<DashboardViewId, ComponentType> = {
-  personas: dynamic(LOADERS.personas, { ssr: false, loading: StageLoading }),
+  personas: dynamic(LOADERS.personas, { ssr: false, loading: StageViewLoading }),
   notes: dynamic(LOADERS.notes, { ssr: false, loading: ViewLoading }),
   home: dynamic(LOADERS.home, { ssr: false, loading: ViewLoading }),
   reviews: dynamic(LOADERS.reviews, { ssr: false, loading: ViewLoading }),
@@ -66,4 +63,41 @@ export function preloadView(id: DashboardViewId) {
   void LOADERS[id]().catch(() => {
     // A failed warm-up is harmless: the real mount retries and surfaces errors.
   });
+}
+
+/**
+ * The views most sessions open next, warmed in idle time once the current
+ * view has settled (registry: lazy-section-loading, "idle warm-up").
+ */
+const IDLE_WARM: DashboardViewId[] = ["home", "reviews", "executions", "observability", "events"];
+
+/**
+ * Warm the likely-next view chunks one per idle callback, skipping the one on
+ * screen. Polite by construction: never on save-data / 2g, never competing
+ * with the current view (the first warm waits for a quiet main thread).
+ * Returns a cancel function.
+ */
+export function warmLikelyViews(current: DashboardViewId | null): () => void {
+  if (typeof window === "undefined" || !("requestIdleCallback" in window)) return () => {};
+  const connection = (navigator as Navigator & {
+    connection?: { saveData?: boolean; effectiveType?: string };
+  }).connection;
+  if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType ?? "")) return () => {};
+
+  const queue = IDLE_WARM.filter((id) => id !== current);
+  let handle = 0;
+  const next = () => {
+    const id = queue.shift();
+    if (!id) return;
+    preloadView(id);
+    handle = window.requestIdleCallback(next, { timeout: 4000 });
+  };
+  // Give the current view's own deep slots the first idle windows.
+  const start = setTimeout(() => {
+    handle = window.requestIdleCallback(next, { timeout: 4000 });
+  }, 1500);
+  return () => {
+    clearTimeout(start);
+    window.cancelIdleCallback(handle);
+  };
 }

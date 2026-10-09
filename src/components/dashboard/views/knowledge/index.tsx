@@ -1,28 +1,25 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
-import { motion } from "framer-motion";
 import { Table2, GitFork, Brain } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
-import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { KNOWLEDGE_VIEW_KEY } from "@/lib/constants";
 import { useTranslation } from "@/i18n/useTranslation";
+// The Graph tab's shell (top bar + frame) is light and ships with the view so
+// its chrome paints with the tab. Its body - SVG layout math, five
+// sub-components, framer-motion - is the code-split part (`loadClusterCanvas`)
+// and is fetched only on intent (Graph tab hover/focus) or selection, then
+// mounted through the view's arrival queue.
+import KnowledgeClusterGraph, { loadClusterCanvas } from "./KnowledgeClusterGraph";
 import KnowledgeDenseTable from "./KnowledgeDenseTable";
 import MemoriesView from "./MemoriesView";
 import { useKnowledgeData } from "./useKnowledgeData";
-import { EASE_CURVE } from "@/lib/animations";
 
-// The cluster graph is one of three view variants and NOT the default
-// ("dense-table" is), yet a static import shipped its whole subtree - SVG
-// layout math, five sub-components, framer-motion - to every visitor of this
-// route regardless of which tab they opened. Deferred, it is fetched only when
-// the tab is actually selected.
-const KnowledgeClusterGraph = dynamic(() => import("./KnowledgeClusterGraph"), {
-  ssr: false,
-  loading: () => <div className="h-[500px] animate-pulse rounded-2xl bg-white/[0.03]" />,
-});
+/** Prefetch on intent: a failed warm-up is harmless (the real mount retries). */
+const warmClusterCanvas = () => {
+  void loadClusterCanvas().catch(() => {});
+};
 
 type ViewVariant = "dense-table" | "cluster-graph" | "memories";
 
@@ -45,6 +42,12 @@ export default function KnowledgeGraphPage() {
   const { patterns, memories, loading, error, retry } = useKnowledgeData();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  // T2 placeholders only on a first load with nothing held (a retry keeps the
+  // last data). `coldStart` gives content that lands after such a load its
+  // entrance; mock data present on the first frame paints settled.
+  const [coldStart] = useState(loading);
+  const pending = loading && patterns.length === 0 && memories.length === 0;
+  const settle = coldStart && !pending;
 
   // Restore the persisted view on mount. Navigation remounts this page, which
   // would otherwise reset the switcher to "dense-table" on every visit.
@@ -89,12 +92,8 @@ export default function KnowledgeGraphPage() {
 
   return (
     <div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25, ease: EASE_CURVE }}
-        className="flex items-center justify-between mb-6"
-      >
+      {/* T0 frame: title + the view switcher paint with the view, never animated. */}
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
             <GradientText variant="silver">{t.knowledgePage.title}</GradientText>
@@ -127,6 +126,8 @@ export default function KnowledgeGraphPage() {
                 tabIndex={isActive ? 0 : -1}
                 onClick={() => selectVariant(v.key)}
                 onKeyDown={handleTabKeyDown}
+                onPointerEnter={v.key === "cluster-graph" ? warmClusterCanvas : undefined}
+                onFocus={v.key === "cluster-graph" ? warmClusterCanvas : undefined}
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? "bg-white/[0.08] text-foreground shadow-sm"
@@ -139,7 +140,7 @@ export default function KnowledgeGraphPage() {
             );
           })}
         </div>
-      </motion.div>
+      </div>
 
       {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
@@ -149,19 +150,13 @@ export default function KnowledgeGraphPage() {
         aria-labelledby={`knowledge-tab-${activeVariant}`}
         aria-busy={loading}
       >
-        {loading ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <SkeletonCard key={i} lines={4} />
-            ))}
-          </div>
-        ) : (
-          <>
-            {activeVariant === "dense-table" && <KnowledgeDenseTable patterns={patterns} />}
-            {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} />}
-            {activeVariant === "memories" && <MemoriesView memories={memories} />}
-          </>
+        {/* Each variant paints its own T1 chrome at once and holds its T2
+            placeholder while a cold load is pending (see each component). */}
+        {activeVariant === "dense-table" && (
+          <KnowledgeDenseTable patterns={patterns} pending={pending} settle={settle} />
         )}
+        {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} pending={pending} />}
+        {activeVariant === "memories" && <MemoriesView memories={memories} pending={pending} settle={settle} />}
       </div>
     </div>
   );

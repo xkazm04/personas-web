@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { fadeUp } from "@/lib/animations";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 
 export function MessagesPagination({
+  arriveIndex,
   pageLabel,
   isFirstPage,
   isLastPage,
@@ -11,6 +11,8 @@ export function MessagesPagination({
   onPrevious,
   onNext,
 }: {
+  /** T1 cascade slot: after the rows it pages. */
+  arriveIndex: number;
   pageLabel: string;
   isFirstPage: boolean;
   isLastPage: boolean;
@@ -19,9 +21,9 @@ export function MessagesPagination({
   onNext: () => void;
 }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      className="mt-4 flex items-center justify-between"
+    <div
+      className={`${ARRIVE} mt-4 flex items-center justify-between`}
+      style={arriveAt(arriveIndex)}
     >
       <button
         type="button"
@@ -42,6 +44,6 @@ export function MessagesPagination({
         {labels.next}
         <ChevronRight className="h-3 w-3" />
       </button>
-    </motion.div>
+    </div>
   );
 }

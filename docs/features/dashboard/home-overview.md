@@ -51,6 +51,15 @@ On the desktop plane the review list is not served (`reviewStore.listNotServed`)
 - Guided tour: the wall carries `dashboard-vitals`; cells carry `dashboard-activity` (Outcomes), `dashboard-heatmap` (Agents), `dashboard-intelligence` (Waiting on you), `dashboard-fleet` (Self-healing), `dashboard-instruments` (Instruments) via `TOUR_ANCHORS`.
 - Desktop reference: `personas/src/features/overview/sub_missionControl/variants/annunciator-wall/` and `variants/shared/readings.ts`.
 
+### Loading tiers
+
+Per [loading-orchestration](loading-orchestration.md).
+
+- **T0** — the header (title, greeting, tour launcher).
+- **T1/T2** — the eight wall cells, keyed by dimension id, cascade with `arriveAt(index)` (cap 6; `views/home/index.tsx:96-100`). In detail mode the rail and the detail header (`mission/WallDetail.tsx`) are T1 and paint at once.
+- **T3** — the evidence body: `<Deferred className="space-y-6" minHeight={288} order={0}>` around `DimDetail` (`index.tsx:88`), with `preload={loadTrafficChart}` when the open dimension is *outcomes* (the loader is exported from `home-page/TrafficErrorsCard.tsx:10` and shared with its `dynamic()`). Not keyed by dimension, so after the first release switching dimensions renders immediately. Going wall ↔ detail remounts the subtree, so the wall cascade plays again on return (a new arrival, not a replay).
+- **Placeholders** — the spinners in `TrafficErrorsCard` (`:18`), `ExecutionHeatmapCard` (`:17`), `TopPerformersCard` (`:60`), `UpcomingRoutinesCard` (`:44`) and `StatusTicker` are now empty height reservations (`aria-busy`) of the same size.
+
 ## Conventions & gotchas
 - **The tour's home narration (`public/tour/dashboardHome.mp3`) was recorded against the old cockpit** (vitals, fleet card, instruments bay). Its spotlights now land on the closest wall cells, but the words describe the previous layout until the clip is re-recorded.
 - The desktop wall has its own 7/30/90-day switch and persona filter; the web wall does not yet (no view honours `dashboardFilterStore` for real).

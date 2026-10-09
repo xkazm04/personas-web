@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Clapperboard, CloudOff } from "lucide-react";
 
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
-import SkeletonCard, { SkeletonChart } from "@/components/dashboard/SkeletonCard";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
-import { fadeUp, staggerContainer } from "@/lib/animations";
 
 import { CoachingTable } from "./director-page/CoachingTable";
 import { DirectorKpiGrid } from "./director-page/DirectorKpiGrid";
@@ -29,6 +27,12 @@ import { useDirectorData } from "./useDirectorData";
  * attention flag); re-clicking clears it. Demo-only — mirrors the desktop
  * overview's Director tab on mock data; a real (non-demo) session sees an
  * empty state instead.
+ *
+ * Loading follows the tier standard (docs/features/dashboard/loading-orchestration.md):
+ * the header (T0) and every card's chrome (T1, CSS cascade) paint at once,
+ * even before the snapshot lands; values fill the chrome (T2, delayed ghosts
+ * while nothing is held); the histogram and the coaching rows are deep (T3)
+ * `<Deferred>` slots.
  */
 export default function DirectorPage() {
   const { t } = useTranslation();
@@ -38,10 +42,15 @@ export default function DirectorPage() {
   // Snapshot the clock once per mount: attention flags and staleness are
   // stable for the life of the page (React 19 purity — no Date.now in render).
   const [now] = useState(() => Date.now());
+  // Ghosts only on a cold load; a failed fetch keeps the chrome, empty.
+  const ghost = isLoading && !portfolio;
+  // Mounted without data (SWR cache cold): T2 values enter when they land.
+  // A warm mount has nothing to settle — the section cascade is the entrance.
+  const [settle] = useState(() => !portfolio);
 
   return (
-    <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
-      <motion.div variants={fadeUp} className="mb-6 flex items-start gap-3">
+    <div>
+      <div className="mb-6 flex items-start gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-purple-500/25 bg-purple-500/10">
           <Clapperboard className="h-5 w-5 text-purple-400" />
         </div>
@@ -59,70 +68,58 @@ export default function DirectorPage() {
           )}
           {!liveUnavailable && <StalenessIndicator fetchedAt={now} />}
         </div>
-      </motion.div>
+      </div>
 
       {error && !portfolio && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {liveUnavailable ? (
-        <motion.div variants={fadeUp}>
+        <div className={ARRIVE} style={arriveAt(0)}>
           <EmptyState
             icon={CloudOff}
             title={t.dashboardUi.liveUnavailableTitle}
             description={t.dashboardUi.liveUnavailableDescription}
           />
-        </motion.div>
-      ) : isLoading || !portfolio ? (
-        <div className="space-y-6" aria-busy="true">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <SkeletonCard lines={2} />
-            <SkeletonCard lines={2} />
-            <SkeletonCard lines={2} />
-            <SkeletonCard lines={2} />
-          </div>
-          <div className="grid gap-6 lg:grid-cols-2">
-            <SkeletonChart />
-            <SkeletonChart />
-          </div>
-          <SkeletonCard lines={5} />
         </div>
       ) : (
-        <>
-          <motion.div variants={fadeUp}>
-            <DirectorKpiGrid portfolio={portfolio} />
-          </motion.div>
+        <div aria-busy={ghost || undefined}>
+          <div className={ARRIVE} style={arriveAt(0)}>
+            <DirectorKpiGrid portfolio={portfolio} ghost={ghost} settle={settle} />
+          </div>
 
-          <motion.div variants={fadeUp} className="mt-6">
-            <MomentumStrip roster={portfolio.roster} facet={facet} onFacetChange={setFacet} />
-          </motion.div>
+          <div className={`${ARRIVE} mt-6`} style={arriveAt(1)}>
+            <MomentumStrip roster={portfolio?.roster ?? null} facet={facet} onFacetChange={setFacet} />
+          </div>
 
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            <motion.div variants={fadeUp} className="flex flex-col gap-6">
+            <div className={`${ARRIVE} flex flex-col gap-6`} style={arriveAt(2)}>
               <ValueBreakdownCard
-                breakdown={portfolio.breakdown}
-                total={portfolio.assessedExecutions}
+                breakdown={portfolio?.breakdown ?? null}
+                total={portfolio?.assessedExecutions ?? 0}
+                ghost={ghost}
+                settle={settle}
               />
               <ScoreDistributionCard
-                distribution={portfolio.scoreDistribution}
-                avgScore={portfolio.avgScore}
+                distribution={portfolio?.scoreDistribution ?? null}
+                avgScore={portfolio?.avgScore ?? null}
                 facet={facet}
                 onFacetChange={setFacet}
               />
-            </motion.div>
-            <motion.div variants={fadeUp}>
-              <VerdictFeedCard verdicts={verdicts} />
-            </motion.div>
+            </div>
+            <div className={ARRIVE} style={arriveAt(3)}>
+              <VerdictFeedCard verdicts={portfolio ? verdicts : null} ghost={ghost} settle={settle} />
+            </div>
           </div>
 
-          <motion.div variants={fadeUp} className="mt-6">
+          <div className={`${ARRIVE} mt-6`} style={arriveAt(4)}>
             <CoachingTable
-              roster={portfolio.roster}
+              roster={portfolio?.roster ?? null}
               now={now}
               facet={facet}
               onFacetChange={setFacet}
             />
-          </motion.div>
-        </>
+          </div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 }

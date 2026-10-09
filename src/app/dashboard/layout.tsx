@@ -34,7 +34,7 @@ export default function DashboardLayout({
         <TourProvider>
           {/* Live dashboard updates from the desktop sync writer (supabase mode). */}
           <SyncedRealtimeProvider />
-          <div className="flex min-h-screen flex-col bg-[var(--background)] relative z-0">
+          <div className="dash-canvas relative z-0 flex min-h-screen flex-col">
             <DashboardNavbar />
             <div className="flex flex-1">
               <DashboardNavigation />
