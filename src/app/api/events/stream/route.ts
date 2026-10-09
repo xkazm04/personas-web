@@ -1,26 +1,56 @@
 import { NextRequest } from "next/server";
-import { getOptionalEnv } from "@/lib/server/env";
+import { verifySession } from "@/app/api/orchestrator/userSession";
+import {
+  OrchestratorConfigError,
+  validateOrchestratorUrl,
+} from "@/lib/orchestrator-config";
 
 /**
- * SSE proxy endpoint that connects to the orchestrator's event stream
- * and forwards events to the browser. In production this proxies
- * /api/events/stream from the orchestrator; in dev it's unused since
- * the client mock handles it.
+ * SSE proxy that relays the orchestrator's event stream to the browser.
+ *
+ * The team API key carries the orchestrator's full authority, so it is
+ * attached only for a caller whose X-User-Token Supabase verifies as a live
+ * session (`userSession.ts`). An anonymous caller gets 401 and nothing
+ * leaves this server. The desktop serves no stream, so with
+ * ORCHESTRATOR_TARGET=desktop the route answers 501 not_on_desktop.
+ * EventSource sends no token, so the browser falls back to polling until a
+ * transport that carries the session exists.
  */
 export async function GET(req: NextRequest) {
-  const orchestratorUrl = getOptionalEnv("NEXT_PUBLIC_ORCHESTRATOR_URL");
-  if (!orchestratorUrl) {
-    return new Response("Orchestrator URL not configured", { status: 503 });
+  let base: string;
+  try {
+    base = validateOrchestratorUrl(process.env.NEXT_PUBLIC_ORCHESTRATOR_URL);
+  } catch (err) {
+    if (err instanceof OrchestratorConfigError) {
+      return Response.json({ error: "orchestrator_not_configured" }, { status: 503 });
+    }
+    throw err;
   }
 
-  const streamUrl = new URL("/api/events/stream", orchestratorUrl);
-
-  // Forward auth headers (prefer the server-only key name)
-  const apiKey = getOptionalEnv("TEAM_API_KEY") ?? getOptionalEnv("NEXT_PUBLIC_TEAM_API_KEY");
   const userToken = req.headers.get("x-user-token");
-  const headers: Record<string, string> = { Accept: "text/event-stream" };
+  const session = await verifySession(userToken);
+  if (session === "unavailable") {
+    return Response.json({ error: "auth_unavailable" }, { status: 503 });
+  }
+  if (session !== "verified" || !userToken) {
+    return Response.json({ error: "unauthenticated" }, { status: 401 });
+  }
+
+  if (process.env.ORCHESTRATOR_TARGET === "desktop") {
+    return Response.json(
+      { error: "not_on_desktop", method: "GET", path: "/api/events/stream" },
+      { status: 501 },
+    );
+  }
+
+  const streamUrl = new URL("/api/events/stream", base);
+
+  const apiKey = process.env.TEAM_API_KEY ?? process.env.NEXT_PUBLIC_TEAM_API_KEY;
+  const headers: Record<string, string> = {
+    Accept: "text/event-stream",
+    "X-User-Token": userToken,
+  };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
-  if (userToken) headers["X-User-Token"] = userToken;
 
   let upstream: Response;
   try {
