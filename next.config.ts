@@ -35,7 +35,14 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      // 'unsafe-eval' only for `next dev` (React Refresh and dev source maps
+      // eval). The production bundle needs no eval and no WebAssembly; shiki
+      // runs its JavaScript regex engine, not Oniguruma. 'unsafe-inline' stays
+      // until the per-request nonce step (F5 part 2): the theme bootstrap and
+      // Next's own self.__next_f / $RC scripts are inline.
+      process.env.NODE_ENV !== "production"
+        ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
+        : "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
       "font-src 'self' data: https://fonts.gstatic.com",
