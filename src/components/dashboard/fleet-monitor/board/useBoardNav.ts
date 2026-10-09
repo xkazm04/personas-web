@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useEffectEvent, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useEffectEvent, useRef, useState, type RefObject } from "react";
 import { FLEET } from "../fleet-data";
+import { useStableHandler } from "../useStableHandler";
+import { createAttStore, type Attention } from "./attStore";
 import { orderInBay, queueOf, type SimAgent } from "./model";
 
-export type Attention = { type: "agent" | "team"; id: string } | null;
+export type { Attention } from "./attStore";
 
 interface NavInput {
   scope: SimAgent[];
@@ -32,7 +34,8 @@ interface NavInput {
 export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, nobodyToast, onTriage, onLayout, onActivity, onShortcuts }: NavInput) {
   const [teamOpen, setTeamOpen] = useState<string | null>(null);
   const [agentOpen, setAgentOpen] = useState<string | null>(null);
-  const [att, setAtt] = useState<Attention>(null);
+  // Hover and focus live in a store, not in state: a hover must not re-render the board.
+  const [attStore] = useState(createAttStore);
   const [nextIdx, setNextIdx] = useState(-1);
   const unattTimer = useRef(0);
   const teamOrigin = useRef<HTMLElement | null>(null);
@@ -60,36 +63,40 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
     }, still ? 0 : delay);
   };
 
-  const attend = (t: NonNullable<Attention>) => {
+  const attend = useCallback((t: NonNullable<Attention>) => {
     window.clearTimeout(unattTimer.current);
-    setAtt(t);
-  };
-  const unattend = () => {
+    attStore.set(t);
+  }, [attStore]);
+  const unattend = useCallback(() => {
     window.clearTimeout(unattTimer.current);
-    unattTimer.current = window.setTimeout(() => setAtt(null), 160);
+    unattTimer.current = window.setTimeout(() => attStore.set(null), 160);
+  }, [attStore]);
+  const setAtt = (t: Attention) => {
+    window.clearTimeout(unattTimer.current);
+    attStore.set(t);
   };
 
-  const openTeam = (id: string, origin?: HTMLElement | null) => {
+  const openTeam = useStableHandler((id: string, origin?: HTMLElement | null) => {
     if (!scope.some((a) => a.team === id)) return;
     setAgentOpen(null);
     teamOrigin.current = origin ?? null;
     setTeamOpen(id);
     setAtt(null);
     focusLater(["[data-team-title]"], 420);
-  };
+  });
   const closeTeam = (restore: boolean) => {
     setTeamOpen(null);
     setAtt(null);
     const o = teamOrigin.current;
     if (restore && o?.isConnected) o.focus({ preventScroll: true });
   };
-  const openAgent = (id: string, origin?: HTMLElement | null) => {
+  const openAgent = useStableHandler((id: string, origin?: HTMLElement | null) => {
     if (!scope.some((a) => a.id === id)) return;
     if (!agentOpen) agentOrigin.current = origin ?? (document.activeElement as HTMLElement | null);
     setAgentOpen(id);
     setAtt(null);
     focusLater(["[data-agent-act]", "[data-agent-title]"], 380);
-  };
+  });
   const closeAgent = (restore: boolean) => {
     setAgentOpen(null);
     setAtt(null);
@@ -168,7 +175,7 @@ export function useBoardNav({ scope, scale, stageRef, still, toast, nextToast, n
   }, []);
 
   return {
-    teamOpen, agentOpen, att,
+    teamOpen, agentOpen, attStore,
     attend, unattend, openTeam, closeTeam, openAgent, closeAgent, back, nextNeeds, stepAgent,
   };
 }

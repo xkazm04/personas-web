@@ -7,6 +7,7 @@ import type { BoardCopy } from "./copy";
 import type { HostReading } from "./host";
 import type { Command } from "./useCommands";
 import type { BoardNav } from "./useBoardNav";
+import { useAttendedAgent } from "./attStore";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 interface BoardRailProps {
@@ -27,6 +28,7 @@ interface BoardRailProps {
 /** The Board's right rail: the machine first, then everyone who needs you,
  *  with the way into triage. */
 export default function BoardRail({ host, copy, live, fleetPaused, pendingFleet, items, total, nav, onPauseAll, onResumeAll, onTriage }: BoardRailProps) {
+  const activeId = useAttendedAgent(nav.attStore);
   return (
     <>
       <HostCard host={host} copy={copy} live={live} fleetPaused={fleetPaused} pending={pendingFleet} onPauseAll={onPauseAll} onResumeAll={onResumeAll} />
@@ -34,7 +36,7 @@ export default function BoardRail({ host, copy, live, fleetPaused, pendingFleet,
         items={items}
         total={total}
         emptyText={total != null ? personasMonitorCopy.rail.emptyFiltered : undefined}
-        activeId={nav.att?.type === "agent" ? nav.att.id : null}
+        activeId={activeId}
         onHover={(id) => (id ? nav.attend({ type: "agent", id }) : nav.unattend())}
         onSelect={(id) => nav.openAgent(id, document.activeElement as HTMLElement | null)}
         action={(total ?? items.length) > 0 && (

@@ -9,6 +9,7 @@ import { attentionOf, needsTone } from "../attention";
 import { agentAria, shortState, taskText, type BoardCopy } from "./copy";
 import { fill, gridFit, orderInBay, plural, type SimAgent } from "./model";
 import type { BoardNav } from "./useBoardNav";
+import { useAttendedAgent } from "./attStore";
 import b from "./board.module.css";
 import s from "./tiles.module.css";
 
@@ -37,6 +38,7 @@ export default function TeamScene({ team, list: unordered, from, width, height, 
   const gh = fit.rows * fit.th + (fit.rows - 1) * G;
   const ox = (width - gw) / 2;
   const oy = (height - gh) / 2;
+  const attId = useAttendedAgent(nav.attStore);
   const collapsed = { x: from.x, y: from.y, scaleX: from.w / width, scaleY: from.h / height, opacity: 0 };
 
   return (
@@ -56,7 +58,7 @@ export default function TeamScene({ team, list: unordered, from, width, height, 
       {list.map((a, j) => {
         const run = a.state === "running";
         const m = Math.max(1, ...a.spark24h);
-        const att = nav.att?.type === "agent" && nav.att.id === a.id;
+        const att = attId === a.id;
         const pile = attentionOf(a);
         const cls = [
           s.card, pile === "working" && s.cardWorking, pile === "needs" && s.cardNeeds, pile === "needs" && needsTone(a) === "critical" && s.critical,

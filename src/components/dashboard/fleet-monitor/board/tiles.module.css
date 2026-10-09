@@ -50,7 +50,7 @@
 .still .flash { display: none; }
 
 /* Light themes: tiles become paper. Resting is a plain card, working a card
-   tinted by the brand with a clean fill (the dark-theme mix turned muddy grey
+   tinted by the brand with a clean top line (the dark-theme mix turned muddy grey
    on a light ground), off stays hatched. */
 :global([data-theme^="light"]) .resting {
   background: color-mix(in oklab, var(--surface) 60%, transparent);
@@ -62,11 +62,8 @@
   color: color-mix(in oklab, var(--at-working) 82%, var(--foreground));
   box-shadow: 0 1px 2px color-mix(in oklab, var(--at-working) 14%, transparent);
 }
-:global([data-theme^="light"]) .fill {
-  background: linear-gradient(0deg, color-mix(in oklab, var(--at-working) 16%, transparent), color-mix(in oklab, var(--at-working) 3%, transparent));
-}
-:global([data-theme^="light"]) .sweep {
-  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--at-working) 9%, transparent), transparent);
+:global([data-theme^="light"]) .glint {
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--at-working) 40%, white), transparent);
 }
 :global([data-theme^="light"]) .bay {
   background: linear-gradient(180deg, hsl(var(--h) 60% 50% / 0.08), hsl(var(--h) 60% 50% / 0.02) 70%);
@@ -100,42 +97,55 @@
   color: var(--muted-foreground);
 }
 
-/* working: lit, with its progress rising inside it */
+/* working: lit, with its progress running along the top edge, left to right */
 .working {
   background: color-mix(in oklab, var(--at-working) 9%, var(--background));
   border-color: color-mix(in oklab, var(--at-working) 55%, transparent);
   color: color-mix(in oklab, var(--at-working) 62%, var(--foreground));
   box-shadow: 0 0 16px color-mix(in oklab, var(--at-working) 16%, transparent);
 }
-.fill {
-  position: absolute;
-  inset: 0;
-  transform-origin: 50% 100%;
-  transform: scaleY(var(--p, 0));
-  transition: transform 1.2s var(--ease);
-  background: linear-gradient(0deg, color-mix(in oklab, var(--at-working) 26%, transparent), color-mix(in oklab, var(--at-working) 6%, transparent));
-  pointer-events: none;
-}
-.sweep {
+.topline {
   position: absolute;
   inset: 0 0 auto;
-  height: 55%;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent, color-mix(in oklab, var(--at-working) 18%, transparent), transparent);
-  animation: sweep 3.2s linear infinite;
-  animation-delay: var(--sd, 0s);
-}
-@keyframes sweep { from { transform: translateY(-110%); } to { transform: translateY(200%); } }
-.bar {
-  position: absolute;
-  left: 0;
-  bottom: 0;
   height: 3px;
-  width: calc(var(--p, 0) * 100%);
+  overflow: hidden;
+  pointer-events: none;
+  background: color-mix(in oklab, var(--at-working) 22%, transparent);
+}
+.topline::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--p, 0));
+  transition: transform 1.2s var(--ease);
   background: var(--at-working);
   box-shadow: 0 0 8px var(--at-working);
-  transition: width 1.2s var(--ease);
 }
+/* A glint travelling the top edge left to right while the run is live. */
+.glint {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--at-working) 45%, var(--foreground)), transparent);
+  animation: glint 2.4s linear infinite;
+  animation-delay: var(--sd, 0s);
+  will-change: transform;
+}
+@keyframes glint { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+/* On a needs tile the line keeps the tone's ink (a paused or waiting run). */
+.needs .topline { background: color-mix(in oklab, currentColor 18%, transparent); }
+.needs .topline::before { background: currentColor; box-shadow: none; }
+
+/* The persona's emblem, drawn in the tile's own ink so the colour stays the state
+   (the emblem sets its team colour on the svg itself, hence the svg selector). */
+.mark { pointer-events: none; }
+.tile .mark :global(svg) { --em-main: currentColor; }
+/* Beside a name it is a corner mark, quieter than the name it sits with. */
+.corner { opacity: 0.5; }
+.working .corner,
+.needs .corner { opacity: 0.7; }
 
 /* needs: solid tone, thick halo; the glyph says why */
 .needs {

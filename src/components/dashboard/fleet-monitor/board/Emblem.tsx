@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useId, type CSSProperties } from "react";
+import { createElement, memo, useId, type CSSProperties } from "react";
 import type { FleetAgent } from "../fleet-data";
 import { familyShapes, type Shape } from "./emblem-shapes";
 import { hash, mulberry32 } from "./model";
@@ -30,7 +30,7 @@ function draw(shapes: Shape[], stroke: CSSProperties, fill: CSSProperties | null
 }
 
 /** A persona's procedural emblem. Stylised art: callers label it as such. */
-export default function Emblem({ agent, rich = false, live = false, className }: EmblemProps) {
+function Emblem({ agent, rich = false, live = false, className }: EmblemProps) {
   const uid = useId().replace(/:/g, "");
   const r = mulberry32(hash(agent.callsign + agent.id));
   const rot = f1((r() - 0.5) * 14);
@@ -90,3 +90,10 @@ export default function Emblem({ agent, rich = false, live = false, className }:
     </svg>
   );
 }
+
+/** Drawn from the agent's identity only, so a tick that moves its progress or
+ *  state does not redraw the art. */
+export default memo(Emblem, (p, n) =>
+  p.agent.id === n.agent.id && p.agent.callsign === n.agent.callsign && p.agent.team === n.agent.team && p.agent.hue === n.agent.hue &&
+  p.rich === n.rich && p.live === n.live && p.className === n.className,
+);

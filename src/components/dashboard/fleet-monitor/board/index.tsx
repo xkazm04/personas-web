@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import { useRef, useState, type CSSProperties } from "react";
+import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { FLEET, type FleetScale } from "../fleet-data";
@@ -76,8 +76,11 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const [alertsOn, setAlertsOn] = useState(true);
   const [keysOpen, setKeysOpen] = useState(false);
 
-  const scope = sim.agents.slice(0, scale);
-  const teams = FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id));
+  // Memoised so a render that is not a tick (a layer opening, a toggle) reuses
+  // the layout, and memoised tiles see the same places.
+  const scope = useMemo(() => sim.agents.slice(0, scale), [sim.agents, scale]);
+  const teams = useMemo(() => FLEET.teams.filter((tm) => scope.some((a) => a.team === tm.id)), [scope]);
+  const fieldLayout = useMemo(() => computeLayout(teams, scope, width, height), [teams, scope, width, height]);
   const nav = useBoardNav({
     scope, scale, stageRef, still, toast: showToast, nobodyToast: copy.toasts.nobody,
     nextToast: (i, n, a) => fill(copy.toasts.next, { i: i + 1, n, callsign: a.callsign, name: a.name }),
@@ -111,13 +114,13 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
       <div ref={mainRef} className="relative min-h-0 flex-1">
         <div inert={deep} className={`absolute inset-0 transition-[opacity,transform,filter] duration-500 ${deep ? "pointer-events-none scale-[1.02] opacity-0" : ""} ${offline ? "saturate-[.4]" : ""}`}>
           {layout === "field" ? (
-            <Field width={width} height={height} teams={teams} scope={scope} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={fv.matchIds} />
+            <Field width={width} height={height} teams={teams} layout={fieldLayout} nav={nav} copy={copy} live={live} arriving={arriving} cmds={commands.cmds} hostName={host.name} matchIds={fv.matchIds} />
           ) : (
             <FleetList agents={fv.matches} copy={copy} op={op} cmds={commands.cmds} hostName={host.name} onOpen={nav.openAgent} onTeam={(t) => setFocus({ ...focus, query: t })} />
           )}
         </div>
         <BoardScenes
-          scope={scope} nav={nav} bayRect={nav.teamOpen ? computeLayout(teams, scope, width, height).bays[nav.teamOpen] : undefined}
+          scope={scope} nav={nav} bayRect={nav.teamOpen ? fieldLayout.bays[nav.teamOpen] : undefined}
           width={width} height={height} simMs={sim.simMs} events={sim.events} copy={copy} still={still} live={live}
           op={op} cmds={commands.cmds} hostName={host.name} triage={triage} onTriageClose={() => setTriage(false)}
         />
