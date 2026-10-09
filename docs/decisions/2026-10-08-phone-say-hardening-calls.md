@@ -30,3 +30,7 @@ Four calls.
 ## Evidence
 
 personas: `2c65f9f0ea` (F1), `693fc11e77` (F2), `78c5fcd8e6` (F4), `6edb84e889`, `11895b575e`, `8c7d3587f7` (H2). Sources: the `result.json` files of runs `8183f591` and `eb59af72`. Related: [the channel_say record](2026-10-08-weekend-directions-channel-say-verb.md) and [the phone-origin record](2026-10-08-weekend-phone-origin-tailscale-serve.md).
+
+## Status, 2026-10-09
+
+Call 4's two stale statements are fixed in personas `019f919c0e` and `1f61b4c237`. The first (`git show --stat`) changed 8 lines in two files: the `CloudPairingOrigin` field docs in `src-tauri/src/commands/infrastructure/cloud_sync.rs` and the matching generated doc comment in `src/lib/bindings/CloudPairingOrigin.ts`, to say pairing is off while the address is unset. The second changed one line in `src/features/settings/sub_account/components/CloudSyncCard.tsx`, a comment that now names the paired web app. The `cloud::` suite re-ran at personas master `39b6d996f3` with 217 passed and 0 failed (run `c176930d`). The record above is left as written.
