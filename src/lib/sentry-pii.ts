@@ -54,6 +54,9 @@ const QUOTED_RE = /'[^']{1,200}'|"[^"]{1,200}"/g;
 
 const URL_RE = /https?:\/\/[^\s,)}\]]+/g;
 
+// `pair=<value>` up to whitespace, `&`, `#`, a quote or the end.
+const PAIR_RE = /pair=[^\s&#"'`]*/gi;
+
 // Bare email addresses — the scrubber's denylist drops known PII *keys*, but a
 // free-text value (an off-list `extra`/`tag`/message field, a stack-frame var)
 // can still carry an email that no UUID/URL/quoted pattern catches. Redacting
@@ -259,6 +262,9 @@ export function scrubPii(input: string): string {
   // 2. Redact bare email addresses (before the quoted pass so they're caught
   //    even when not quoted)
   result = result.replace(EMAIL_RE, "[redacted-email]");
+  // 2b. A pairing secret (`#pair=<id>.<secret>`) survives URL_RE when the URL is
+  //     relative, and must go before the UUID pass marks only its id half.
+  result = result.replace(PAIR_RE, "pair=[redacted]");
   // 3. Replace UUIDs with a keyed correlation marker (never a slice of the id)
   result = result.replace(UUID_RE, (match) => correlationMarker(match));
   // 4. Redact quoted strings (credential names, persona names, etc.)
@@ -545,6 +551,11 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
   if (event.request) {
     delete event.request.headers;
     delete event.request.data;
+    // A fragment never reaches a server, but it does reach the page URL.
+    if (typeof event.request.url === "string") {
+      const hash = event.request.url.indexOf("#");
+      if (hash !== -1) event.request.url = event.request.url.slice(0, hash);
+    }
   }
   // Scrub PII from the event message
   if (event.message) {
@@ -608,25 +619,7 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
   }
   // Scrub PII from breadcrumbs attached to the event
   if (event.breadcrumbs) {
-    for (const bc of event.breadcrumbs) {
-      if (bc.message) {
-        bc.message = scrubPii(bc.message);
-      }
-      if (bc.data) {
-        for (const key of Object.keys(bc.data)) {
-          if (SENSITIVE_FIELDS.has(key)) {
-            delete bc.data[key];
-            continue;
-          }
-          const val = bc.data[key];
-          if (typeof val === "string") {
-            bc.data[key] = scrubPii(val);
-          } else if (val && typeof val === "object") {
-            bc.data[key] = scrubData(val);
-          }
-        }
-      }
-    }
+    for (const bc of event.breadcrumbs) scrubBreadcrumb(bc);
   }
   return event;
 }
@@ -640,6 +633,13 @@ export function scrubBreadcrumb(breadcrumb: Breadcrumb): Breadcrumb {
     for (const key of Object.keys(breadcrumb.data)) {
       if (SENSITIVE_FIELDS.has(key)) {
         delete breadcrumb.data[key];
+        continue;
+      }
+      const val = breadcrumb.data[key];
+      if (typeof val === "string") {
+        breadcrumb.data[key] = scrubPii(val);
+      } else if (val && typeof val === "object") {
+        breadcrumb.data[key] = scrubData(val);
       }
     }
   }

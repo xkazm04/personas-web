@@ -5,6 +5,7 @@ import {
   correlationMarker,
   safeScrubBreadcrumb,
   safeScrubEvent,
+  scrubBreadcrumb,
   scrubEvent,
   scrubPii,
   sha256,
@@ -235,5 +236,50 @@ describe("fail-closed hooks (Wave-4 fix: a throwing scrubber must not send the o
     expect(baseSentryConfig.beforeSend).toBe(safeScrubEvent);
     expect(baseSentryConfig.beforeBreadcrumb).toBe(safeScrubBreadcrumb);
     expect(baseSentryConfig.sendDefaultPii).toBe(false);
+  });
+});
+
+describe("pairing secret (#pair=<id>.<secret>)", () => {
+  const SECRET = "Zm9vYmFyYmF6cXV4MTIzNDU2Nzg5MGFiY2RlZmdoaWo";
+  const PAIRING_ID = "9a1b2c3d-4e5f-4a6b-8c7d-0e1f2a3b4c5d";
+  const REL = `/dashboard/settings#pair=${PAIRING_ID}.${SECRET}`;
+  const nav = (): Breadcrumb => ({
+    category: "navigation",
+    data: { from: REL, to: "/dashboard/settings" },
+  });
+  const event = () =>
+    ({
+      type: undefined,
+      request: { url: `https://example.test${REL}` },
+      message: `failed at ${REL}`,
+      extra: { where: REL },
+      breadcrumbs: [nav()],
+    }) as unknown as ErrorEvent;
+  const clean = (v: unknown) => {
+    const json = JSON.stringify(v);
+    expect(json).not.toContain(SECRET);
+    expect(json).not.toContain(PAIRING_ID);
+  };
+
+  it("scrubEvent removes it from url, message, extra and breadcrumbs", () => {
+    const out = scrubEvent(event());
+    clean(out);
+    expect(out.request?.url).toBe("https://example.test/dashboard/settings");
+  });
+
+  it("scrubBreadcrumb removes it from a navigation breadcrumb", () => {
+    const out = scrubBreadcrumb(nav());
+    clean(out);
+    expect(out.data?.to).toBe("/dashboard/settings");
+  });
+
+  it("the fail-closed wrappers remove it too", () => {
+    clean(safeScrubEvent(event()));
+    clean(safeScrubBreadcrumb(nav()));
+  });
+
+  it("a breadcrumb without a secret keeps its value", () => {
+    const out = scrubBreadcrumb({ category: "navigation", data: { to: "/dashboard/personas" } });
+    expect(out.data?.to).toBe("/dashboard/personas");
   });
 });
