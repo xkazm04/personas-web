@@ -295,6 +295,7 @@ create table if not exists public.command_controllers (
 2. **Phone.** It must be signed in with the same Google account. The settings view (`spa:src/components/dashboard/views/settings`) reads the fragment and immediately runs `history.replaceState`, so the fragment can't land in Sentry breadcrumbs. `sentry-pii` already reduces URLs to the host (web CLAUDE.md rule 5).
    - It generates an Ed25519 key with WebCrypto `generateKey({name:"Ed25519"}, false, ["sign"])`. The key is **non-extractable** and kept in IndexedDB.
    - It inserts a `command_controllers` row with `status='pending'`, `device_id` from the QR (or from `synced_devices`), and `proof`. The HMAC key is imported from `secret` and then dropped.
+   - If this browser already holds an active or pending controller, the card asks once before it replaces it (scan F7). A first pairing needs no click on the phone either.
 3. **Desktop.** While the QR is up, it polls `command_controllers?pairing_id=eq.<id>` every 2 s.
    - It verifies `proof` in constant time (the `ct_eq` precedent at `pairing.rs`), using the `hmac 0.12` + `sha2` dependencies (`desk:src-tauri/Cargo.toml:64,382`).
    - It stores `{controller_id, name, public_key, created_at}` in a new settings-table key `cloud_controllers`. This is **the authoritative trust list**, and it holds no secret.
