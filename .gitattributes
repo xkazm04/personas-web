@@ -1,0 +1,2 @@
+# Pin JSON fixtures to LF so byte-exact tests pass under core.autocrlf=true
+fixtures/*.json text eol=lf
