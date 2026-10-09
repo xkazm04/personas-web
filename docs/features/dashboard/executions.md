@@ -8,7 +8,7 @@ The Executions surface lists every persona run (queued, running, completed, fail
 For the product user this reads as "see what my agents are doing right now, drill into one, watch it work." Two pieces of plumbing back it:
 
 - The **list + detail output** run entirely on mocks in this repo (`src/lib/mockApi.ts` → `src/lib/mockData.ts`). The viewer pulls new lines by **HTTP polling**, not a socket.
-- A **real Next.js route handler** at `/api/executions/[id]/stream` proxies Server-Sent Events from the external orchestrator to the browser. It is production code (auth injection, abort handling, status normalization) but, in this repo, **nothing in `src/` actually opens that EventSource** — see gotchas.
+- A **real Next.js route handler** at `/api/executions/[id]/stream` proxies Server-Sent Events from the external orchestrator to the browser. It is production code (session-gated key, abort handling, status normalization) but, in this repo, **nothing in `src/` actually opens that EventSource**. See gotchas.
 
 The dashboard nav badge next to "Executions" shows the count of active (running + queued) runs, sourced from a pre-aggregated store field so the nav doesn't re-render on every list mutation.
 
@@ -21,7 +21,7 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 5. **Detail modal.** `ExecutionDetailModal` shows KPIs + error, then mounts `ExecutionOutput` keyed by `execution.id`. It also renders two plain `personas://execution/<id>` and `personas://persona/<id>` anchors (built by `src/lib/deepLinks/desktopLinks.ts`) that open the run or its persona in the desktop app; they are hidden at phone width and when `authStore.isDemo`.
 6. **Output streaming (via polling).** `ExecutionOutput` calls `useExecutionPolling(executionId)` (`useExecutionPolling.ts:20`), which polls `api.getExecution(id, offset)` every 1s, appending only new lines (offset-based), capping at 500 lines, and auto-stopping once status is terminal. The viewer auto-follows the bottom unless the user scrolls up, exposing a "Jump to latest" pill.
 7. **Cancel.** Per-row cancel calls `executionStore.cancelExecution` (`executionStore.ts:110`), which is client-idempotent (skips if already in-flight or terminal) and passes the run's persona to `api.cancelExecution(id, personaId)`. On the orchestrator plane the answer is the effect (`ExecutionAck`) and the row flips to "cancelled" at once. On a command plane (demo, live sync) the answer is a `CommandAck` (PHASE2-SPEC.md 6.2): the row keeps its "cancelling" state until `settleCommand` reports the `cancel_execution` command terminal, flips only on `completed`, and surfaces the desktop's reason in the error banner otherwise. In demo the scripted desktop (`mockCommandPlane`) completes it in 2 s and writes the cancelled run through to `MOCK_EXECUTIONS`, so the 3 s poll no longer reverts it.
-8. **SSE proxy (real, separate path).** `GET /api/executions/[id]/stream` (`route.ts:9`) builds the orchestrator URL, injects the team API key server-side (EventSource can't send headers), forwards an optional `x-user-token`, and pipes `upstream.body` back with `text/event-stream` headers. It maps client aborts to 499, upstream failures to a JSON 502, and clamps out-of-range upstream statuses to avoid a 500-driven reconnect storm.
+8. **SSE proxy (real, separate path).** `GET /api/executions/[id]/stream` (`route.ts`) checks the orchestrator URL, then verifies the `x-user-token` header with `verifySession` (`src/app/api/orchestrator/userSession.ts`). Only a verified session gets the server-side `TEAM_API_KEY` (legacy fallback `NEXT_PUBLIC_TEAM_API_KEY`) and the user token on the upstream request. An anonymous caller gets 401 `unauthenticated`, an unreachable Supabase gets 503 `auth_unavailable`, and with `ORCHESTRATOR_TARGET=desktop` the route answers 501 `not_on_desktop` since the desktop serves no execution stream. An id of empty, `.` or `..` gets 400 `bad_path`. `EventSource` sends no token, so a browser stream request is refused today and the UI relies on its polling. The route maps client aborts to 499, upstream failures to a JSON 502, and clamps out-of-range upstream statuses to avoid a 500-driven reconnect storm.
 
 ## Key files
 
@@ -39,7 +39,7 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 | `src/stores/dashboardFilterStore.ts` | Persisted persona/date-range/compare filters (cross-dashboard) |
 | `src/components/dashboard/DataTable.tsx` | Generic table (reused); supports row-click and expandable rows |
 | `src/components/dashboard/FilterBar.tsx` | Generic pill bar with animated sliding selection (reused) |
-| `src/app/api/executions/[id]/stream/route.ts` | **Real** SSE proxy: auth injection, abort/status handling |
+| `src/app/api/executions/[id]/stream/route.ts` | **Real** SSE proxy: session-gated key, 401/501 refusals, abort/status handling (tests in `stream.test.ts`) |
 | `src/components/dashboard/MarkdownReport.tsx` + `markdown-report/markdownInline.tsx` | Dependency-free markdown renderer — **not used by this feature** (see gotchas) |
 
 ## Data & state

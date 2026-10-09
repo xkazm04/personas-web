@@ -43,12 +43,21 @@ non-chain rows.
 
 **SSE proxy (the one real backend touch-point).** `src/app/api/events/stream/route.ts`
 is a genuine streaming route handler. It proxies the orchestrator's
-`/api/events/stream`, forwarding `Authorization: Bearer <NEXT_PUBLIC_TEAM_API_KEY>`
-and an optional `X-User-Token`, then wraps the upstream body in a
-`ReadableStream` that injects a `: keep-alive` SSE comment every 25s so idle
-connections survive load-balancer/CDN idle timeouts. It maps AbortError → 499,
-upstream-unreachable → a structured `{ error: "upstream_unreachable" }` 502, and
-clamps out-of-range upstream statuses to 502 to avoid `Response` `RangeError`. It
+`/api/events/stream`, and it forwards `Authorization: Bearer <TEAM_API_KEY>` (the
+server-only key, with `NEXT_PUBLIC_TEAM_API_KEY` as a legacy fallback) only for a
+verified session: the `X-User-Token` header must pass `verifySession`
+(`src/app/api/orchestrator/userSession.ts`). An anonymous caller gets 401
+`unauthenticated`, an unreachable Supabase gets 503 `auth_unavailable`, an unset
+orchestrator URL gets 503 `orchestrator_not_configured`, and with
+`ORCHESTRATOR_TARGET=desktop` the route answers 501 `not_on_desktop` because the
+desktop serves no events stream. None of these reads the key or fetches the
+orchestrator. `EventSource` sends no token, so today the browser's stream request is
+refused and `useEventStream` falls back to its 10s polling. A transport that carries
+the session is a later choice. When the request is allowed, the route wraps the
+upstream body in a `ReadableStream` that injects a `: keep-alive` SSE comment every
+25s so idle connections survive load-balancer/CDN idle timeouts. It maps AbortError
+to 499, upstream-unreachable to a structured `{ error: "upstream_unreachable" }` 502,
+and clamps out-of-range upstream statuses to 502 to avoid `Response` `RangeError`. It
 never leaks the orchestrator hostname.
 
 **Visualization.** `EventBusVisualization` is loaded with `dynamic(..., { ssr: false })` from `EventsVisualizationView` — it sits behind the non-default `visualization` tab, and `ssr: false` also keeps it off the server-rendered path, which matters because it branches its markup on `prefersReduced`. It lays out nodes with `nodePosition` (polar
@@ -73,7 +82,7 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/components/dashboard/views/events/index.tsx` | Page shell, tab state, background image, title + connection dot |
 | `src/components/dashboard/views/events/events-page/EventsPageTabs.tsx` | Roving-tabindex tablist (events/subscriptions/visualization/swimlane) |
 | `src/components/dashboard/views/events/events-page/EventsVisualizationView.tsx` | Visualization tab: stats, Test-Flow button, legend, node grid, drawer |
-| `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection |
+| `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection; forwards the team key only for a verified session (401 otherwise, 501 `not_on_desktop` on the desktop target); tested in `stream.test.ts` |
 | `src/hooks/useEventStream.ts` | EventSource lifecycle, reconnect backoff, polling fallback |
 | `src/hooks/useEventTopology.ts` | BFS over `sourceId` links → event-chain components |
 | `src/lib/eventStatusFsm.ts` | The event delivery FSM: transition table, `assertEventTransition`, retry-budget landing |
