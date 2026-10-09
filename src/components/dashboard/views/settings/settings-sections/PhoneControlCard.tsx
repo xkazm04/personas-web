@@ -6,7 +6,7 @@ import { Loader2, Smartphone } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import { fadeUp } from "@/lib/animations";
 import { useAuthStore } from "@/stores/authStore";
-import { useControllerStore, type ControllerPhase } from "@/stores/controllerStore";
+import { replaceNeedsConfirm, useControllerStore, type ControllerPhase } from "@/stores/controllerStore";
 import { useDeviceStore } from "@/stores/deviceStore";
 import { takePairFragment, type PairFragment } from "@/lib/commands/pairing";
 import { newestDevice } from "@/lib/sync/reachability";
@@ -26,6 +26,8 @@ export function PhoneControlCard() {
   const live = IS_SUPABASE && isAuthenticated && !isDemo;
   const { phase, error } = useControllerStore(useShallow((s) => ({ phase: s.phase, error: s.error })));
   const [noDevice, setNoDevice] = useState(false);
+  // A fragment held back while the user decides whether to replace the current pairing.
+  const [kept, setKept] = useState<{ fragment: PairFragment; deviceId: string } | null>(null);
   // Taken once; kept here so a session that resolves after mount (live flips
   // to true and the effect re-runs) still pairs with what the URL carried.
   const fragmentRef = useRef<PairFragment | null | undefined>(undefined);
@@ -50,6 +52,14 @@ export function PhoneControlCard() {
         return;
       }
       fragmentRef.current = null; // one pairing per QR scan
+      // The shared load promise answers even when another component started the read.
+      const before = useControllerStore.getState().phase;
+      if (before === "unknown" || before === "loading") await useControllerStore.getState().load();
+      if (cancelled) return;
+      if (replaceNeedsConfirm(useControllerStore.getState().phase)) {
+        setKept({ fragment, deviceId: device.deviceId });
+        return;
+      }
       await useControllerStore.getState().pair(fragment, device.deviceId);
     })();
     return () => {
@@ -71,6 +81,14 @@ export function PhoneControlCard() {
   const busy = phase === "pairing" || phase === "loading" || phase === "unknown";
   const paired = phase === "active" || phase === "pending";
 
+  const buttonClass =
+    "inline-flex min-h-[44px] items-center rounded-xl border border-glass-hover px-4 text-sm font-medium text-foreground transition-colors hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-brand-cyan";
+  const answer = (replace: boolean) => {
+    const held = kept;
+    setKept(null);
+    if (replace && held) void useControllerStore.getState().pair(held.fragment, held.deviceId);
+  };
+
   return (
     <GlowCard accent={phase === "active" ? "emerald" : "cyan"} variants={fadeUp} className="p-6">
       <div className="mb-3 flex items-center gap-2">
@@ -83,12 +101,21 @@ export function PhoneControlCard() {
         {noDevice ? copy.noDevice : status[phase] ?? ""}
       </p>
       {!paired && !busy && <p className="mt-2 text-sm text-muted-dark">{copy.howTo}</p>}
-      {paired && (
-        <button
-          type="button"
-          onClick={() => void useControllerStore.getState().unpair()}
-          className="mt-4 inline-flex min-h-[44px] items-center rounded-xl border border-glass-hover px-4 text-sm font-medium text-foreground transition-colors hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-brand-cyan"
-        >
+      {kept && (
+        <div className="mt-4">
+          <p className="text-sm text-foreground">{copy.replaceConfirm}</p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            <button type="button" onClick={() => answer(true)} className={buttonClass}>
+              {copy.replaceYes}
+            </button>
+            <button type="button" onClick={() => answer(false)} className={buttonClass}>
+              {copy.replaceNo}
+            </button>
+          </div>
+        </div>
+      )}
+      {paired && !kept && (
+        <button type="button" onClick={() => void useControllerStore.getState().unpair()} className={`mt-4 ${buttonClass}`}>
           {copy.unpair}
         </button>
       )}

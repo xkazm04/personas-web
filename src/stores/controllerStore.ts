@@ -43,26 +43,40 @@ function phaseOf(row: { status: string; revoke_requested_at?: unknown } | null):
     : "error";
 }
 
-export const useControllerStore = create<ControllerState>((set, get) => ({
+/** One read at a time: a load() made during a load shares its promise. */
+let inflightLoad: Promise<void> | null = null;
+
+/** Would pairing now replace a pairing worth keeping? Only phases with none to lose say no. */
+export function replaceNeedsConfirm(phase: ControllerPhase): boolean {
+  return !(phase === "none" || phase === "revoked" || phase === "refused" || phase === "unsupported");
+}
+
+export const useControllerStore =create<ControllerState>((set, get) => ({
   phase: "unknown",
   controllerId: null,
   error: null,
-  load: async () => {
-    if (get().phase === "loading" || get().phase === "pairing") return;
+  load: () => {
+    if (inflightLoad) return inflightLoad;
+    if (get().phase === "pairing") return Promise.resolve();
     set({ phase: "loading", error: null });
-    try {
-      const p = await plane();
-      const identity = await p.loadController();
-      if (!identity) {
-        set({ phase: (await p.signingSupported()) ? "none" : "unsupported", controllerId: null });
-        return;
+    inflightLoad = (async () => {
+      try {
+        const p = await plane();
+        const identity = await p.loadController();
+        if (!identity) {
+          set({ phase: (await p.signingSupported()) ? "none" : "unsupported", controllerId: null });
+          return;
+        }
+        const row = await p.fetchControllerRow(identity.controllerId);
+        set({ phase: phaseOf(row), controllerId: identity.controllerId });
+      } catch (err) {
+        captureExceptionScrubbed(err, { tags: { scope: "controllerLoad" } });
+        set({ phase: "error", error: err instanceof Error ? err.message : String(err) });
+      } finally {
+        inflightLoad = null;
       }
-      const row = await p.fetchControllerRow(identity.controllerId);
-      set({ phase: phaseOf(row), controllerId: identity.controllerId });
-    } catch (err) {
-      captureExceptionScrubbed(err, { tags: { scope: "controllerLoad" } });
-      set({ phase: "error", error: err instanceof Error ? err.message : String(err) });
-    }
+    })();
+    return inflightLoad;
   },
   pair: async (fragment, deviceId) => {
     set({ phase: "pairing", error: null });

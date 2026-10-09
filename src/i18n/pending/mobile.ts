@@ -81,6 +81,9 @@ export interface MobileCopy {
     error: string;
     noDevice: string;
     unpair: string;
+    replaceConfirm: string;
+    replaceYes: string;
+    replaceNo: string;
   };
   /** Chat from the phone: Athena's row and sheet, a persona's Chat tab (PHASE2-SPEC.md 5.2, 5.3). */
   chat: {
@@ -295,6 +298,9 @@ export const mobileCopy: MobileCopy = {
     error: 'Pairing didn\'t work: {reason}',
     noDevice: 'No synced computer found. Turn on sync in Personas on your computer first.',
     unpair: 'Unpair this phone',
+    replaceConfirm: 'This phone is already paired. Pairing again ends the current pairing.',
+    replaceYes: 'Pair again',
+    replaceNo: 'Keep current pairing',
   },
   chat: {
     athenaName: 'Athena',
