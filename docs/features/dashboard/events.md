@@ -44,7 +44,7 @@ non-chain rows.
 **SSE proxy (the one real backend touch-point).** `src/app/api/events/stream/route.ts`
 is a genuine streaming route handler. It proxies the orchestrator's
 `/api/events/stream`, and it forwards `Authorization: Bearer <TEAM_API_KEY>` (the
-server-only key, with `NEXT_PUBLIC_TEAM_API_KEY` as a legacy fallback) only for a
+server-only key) only for a
 verified session: the `X-User-Token` header must pass `verifySession`
 (`src/app/api/orchestrator/userSession.ts`). An anonymous caller gets 401
 `unauthenticated`, an unreachable Supabase gets 503 `auth_unavailable`, an unset
@@ -149,7 +149,7 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 ## Integration points
 
 - **Orchestrator** (`NEXT_PUBLIC_ORCHESTRATOR_URL`) — only contacted by the SSE proxy
-  route, and only when configured; auth via `NEXT_PUBLIC_TEAM_API_KEY` /
+  route, and only when configured; auth via `TEAM_API_KEY` /
   `x-user-token`.
 - **`eventStore`** is shared: the page header tab counts (`tabCounts`), `ConnectionStatusIndicator`, `EventsListPanel`, and
   `SubscriptionsPanel` all read from it; subscription mutations also

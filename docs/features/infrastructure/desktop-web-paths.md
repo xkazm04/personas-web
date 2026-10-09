@@ -11,7 +11,7 @@ It is the measure of plan milestone 5 goal 1, and the proof tool for milestone 2
 node --env-file=<path-to-.env> scripts/probe-paths.mjs          # aligned table + summary
 node --env-file=<path-to-.env> scripts/probe-paths.mjs --json   # the verdict array
 ```
-Env (all optional; see `.env.example`): `PROBE_DESKTOP_URL` (default `http://127.0.0.1:9420`, must be loopback), `PROBE_WEB_URL` (default `http://localhost:3000`), `TEAM_API_KEY` (or the deprecated `NEXT_PUBLIC_TEAM_API_KEY`), `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and a session from `PROBE_ACCESS_TOKEN` or from `PROBE_EMAIL` + `PROBE_PASSWORD` (a password sign-in with the anon key). The user must belong to the test project.
+Env (all optional; see `.env.example`): `PROBE_DESKTOP_URL` (default `http://127.0.0.1:9420`, must be loopback), `PROBE_WEB_URL` (default `http://localhost:3000`), `TEAM_API_KEY`, `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and a session from `PROBE_ACCESS_TOKEN` or from `PROBE_EMAIL` + `PROBE_PASSWORD` (a password sign-in with the anon key). The user must belong to the test project.
 
 **Exit codes:** `0` every path working or retired · `1` any path broken · `3` none broken but any blocked · `2` config refusal (only the failed check is printed). A crash also exits `1` and prints the error's name only.
 
