@@ -29,6 +29,23 @@ export function parsePairFragment(hash: string): PairFragment | null {
   return { pairingId: pairingId.toLowerCase(), secret };
 }
 
+/**
+ * Take the pairing fragment off the URL at once, before anything (a
+ * breadcrumb, a copied link, the next pushState) can carry the secret on.
+ * Returns what it held, parsed, or null; a malformed fragment is still scrubbed.
+ * The state is null on purpose: Next's replaceState patch hands data that
+ * carries __NA straight to the browser without syncing the router, so passing
+ * window.history.state would leave the secret in the router's URL.
+ */
+export function takePairFragment(
+  loc: { hash: string; pathname: string; search: string },
+  history: Pick<History, "replaceState">,
+): PairFragment | null {
+  if (!loc.hash.startsWith("#pair=")) return null;
+  history.replaceState(null, "", loc.pathname + loc.search);
+  return parsePairFragment(loc.hash);
+}
+
 /** The exact message the proof covers. */
 export function proofMessage(pairingId: string, controllerId: string, publicKey: string): string {
   return `${pairingId}|${controllerId}|${publicKey}`;

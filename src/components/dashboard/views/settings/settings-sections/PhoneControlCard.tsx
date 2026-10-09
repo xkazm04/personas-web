@@ -8,23 +8,11 @@ import { fadeUp } from "@/lib/animations";
 import { useAuthStore } from "@/stores/authStore";
 import { useControllerStore, type ControllerPhase } from "@/stores/controllerStore";
 import { useDeviceStore } from "@/stores/deviceStore";
-import { parsePairFragment, type PairFragment } from "@/lib/commands/pairing";
+import { takePairFragment, type PairFragment } from "@/lib/commands/pairing";
 import { newestDevice } from "@/lib/sync/reachability";
 import { mobileCopy } from "@/i18n/pending/mobile";
 
 const IS_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
-
-/**
- * Take the pairing fragment off the URL at once, before anything (a
- * breadcrumb, a copied link, the next pushState) can carry the secret on.
- * Returns what it held, parsed, or null.
- */
-function takePairFragment() {
-  const { hash, pathname, search } = window.location;
-  if (!hash.startsWith("#pair=")) return null;
-  window.history.replaceState(window.history.state, "", pathname + search);
-  return parsePairFragment(hash);
-}
 
 /**
  * Settings > Phone control (PHASE2-SPEC.md 3.2, 3.4). The desktop's QR opens
@@ -44,7 +32,7 @@ export function PhoneControlCard() {
 
   useEffect(() => {
     // Scrub first, in every mode: a demo or signed-out visit must not keep the secret either.
-    if (fragmentRef.current === undefined) fragmentRef.current = takePairFragment();
+    if (fragmentRef.current === undefined) fragmentRef.current = takePairFragment(window.location, window.history);
     const fragment = fragmentRef.current;
     if (!live) return;
     let cancelled = false;
