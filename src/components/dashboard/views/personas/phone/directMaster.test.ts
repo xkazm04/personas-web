@@ -27,6 +27,13 @@ describe("sayRefusalText: every desk and plane token has its own words", () => {
     expect(text).toContain("10 minutes");
   });
 
+  it("message_too_long explains that hiding keys lengthened the direction", () => {
+    const text = sayRefusalText(copy, "message_too_long", false);
+    expect(text).toContain("[redacted]");
+    expect(text).toContain("2000");
+    expect(text).not.toContain("{max}");
+  });
+
   it("an unknown token shows as sent; none at all is the generic line", () => {
     expect(sayRefusalText(copy, "weird_thing", false)).toBe("Couldn't send: weird thing");
     expect(sayRefusalText(copy, null, false)).toBe(copy.errors.unknown);

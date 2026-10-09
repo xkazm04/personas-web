@@ -369,7 +369,7 @@ export const mobileCopy: MobileCopy = {
     errors: {
       bad_params: 'Your computer couldn\'t read that direction. Try again.',
       empty_message: 'Write a direction first. That one was empty.',
-      message_too_long: 'That direction is too long. Keep it under {max} characters.',
+      message_too_long: 'Keys in this direction are hidden as [redacted] before sending, which makes it longer than {max} characters. Shorten it a little and send again.',
       not_found: 'This agent is gone from your computer.',
       not_app_master: 'Only a project\'s App Master takes directions. Send this to that project\'s App Master instead.',
       rate_limited: 'This phone sent 10 directions in the last 10 minutes. Wait a few minutes, then send again.',
