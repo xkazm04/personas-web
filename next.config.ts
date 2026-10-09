@@ -69,6 +69,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  // Hostnames (comma-separated, no scheme or port) besides localhost that may
+  // load dev-only assets, e.g. a Tailscale name serving the dev server.
+  allowedDevOrigins: process.env.DEV_ALLOWED_ORIGINS?.split(",").map((h) => h.trim()).filter(Boolean),
   env: {
     NEXT_PUBLIC_APP_VERSION: pkg.version,
     NEXT_PUBLIC_RELEASE_TITLE: process.env.RELEASE_TITLE ?? "",
