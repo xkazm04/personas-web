@@ -1,4 +1,8 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { AUTO_APPROVE_NOTE } from "../review-display";
+import { redactText } from "./redactText";
 import { buildEnvelope } from "./envelope";
 import type { InflightCommand } from "./commandReducer";
 import { REVIEW_NOTES_MAX, reviewCommandOutcome, reviewDecideParams, reviewTargetDevice } from "./reviewDecide";
@@ -64,5 +68,50 @@ describe("review_decide (PHASE2-SPEC.md 1.6, 2.2; PLAN M20)", () => {
     expect(reviewCommandOutcome(settled({ status: "rejected", error: "controller_revoked" }))).toEqual({ ok: false, reason: "controller_revoked" });
     expect(reviewCommandOutcome(settled({ status: "expired", error: null }))).toEqual({ ok: false, reason: "expired" });
     expect(reviewCommandOutcome(null)).toEqual({ ok: false, reason: "unknown" });
+  });
+});
+
+describe("review notes are masked before signing", () => {
+  const fixture = JSON.parse(readFileSync(join(process.cwd(), "fixtures", "redact-text-v1.json"), "utf8")) as {
+    cases: { name: string; input: string; expected: string }[];
+  };
+  const len = (s: string) => Array.from(s).length;
+
+  it("a note carrying a fixture secret comes back masked", () => {
+    const c = fixture.cases.find((x) => x.expected !== x.input && x.expected.includes("[redacted]"))!;
+    const out = reviewDecideParams("r1", "approved", c.input).notes!;
+    expect(out).toBe(c.expected);
+    expect(out).toContain("[redacted]");
+  });
+
+  it("an ordinary note serializes exactly as before", () => {
+    expect(JSON.stringify(reviewDecideParams("r1", "approved", "flaky is not green"))).toBe(
+      '{"reviewId":"r1","decision":"approved","notes":"flaky is not green"}',
+    );
+  });
+
+  it("a note at the cap that masking lengthens throws notes_too_long", () => {
+    const tail = " DB_PASSWORD=hunter2";
+    const note = "word ".repeat(Math.ceil((REVIEW_NOTES_MAX - tail.length) / 5)).slice(0, REVIEW_NOTES_MAX - tail.length) + tail;
+    expect(len(note)).toBe(REVIEW_NOTES_MAX);
+    expect(len(redactText(note))).toBeGreaterThan(REVIEW_NOTES_MAX);
+    expect(() => reviewDecideParams("r1", "approved", note)).toThrow("notes_too_long");
+  });
+
+  it("the cap counts code points, not UTF-16 units", () => {
+    const ok = Array.from({ length: REVIEW_NOTES_MAX }, (_, i) => (i % 2 === 0 ? "😀" : " ")).join("");
+    expect(len(ok)).toBe(REVIEW_NOTES_MAX);
+    expect(ok.length).toBeGreaterThan(REVIEW_NOTES_MAX);
+    expect(redactText(ok)).toBe(ok);
+    expect(reviewDecideParams("r1", "approved", ok).notes).toBe(ok);
+    expect(() => reviewDecideParams("r1", "approved", ok + "x")).toThrow("notes_too_long");
+  });
+
+  it("a dense run at the cap is masked whole", () => {
+    expect(reviewDecideParams("r1", "approved", "a".repeat(REVIEW_NOTES_MAX)).notes).toBe("[redacted]");
+  });
+
+  it("the system's auto-approve note is unchanged", () => {
+    expect(reviewDecideParams("r1", "approved", AUTO_APPROVE_NOTE).notes).toBe(AUTO_APPROVE_NOTE);
   });
 });

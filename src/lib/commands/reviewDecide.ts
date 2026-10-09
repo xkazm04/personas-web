@@ -4,8 +4,14 @@
  * body (status write, learned memory, team-step resume...), not a bare status
  * write. Pure: the params in the contract's key order, the target desktop, and
  * how a settled command reads as a verdict.
+ *
+ * The phone masks the notes with the desk's rules (`redactText`) before it
+ * signs, so a pasted key never reaches the cloud row. Both the typed notes and
+ * the masked notes are bounded by `REVIEW_NOTES_MAX` (masking can make a short
+ * value longer). The desk masks again on arrival and keeps 500 characters.
  */
 import type { InflightCommand } from "./commandReducer";
+import { redactText } from "./redactText";
 
 export type ReviewDecision = "approved" | "rejected";
 
@@ -15,7 +21,8 @@ export const REVIEW_NOTES_MAX = 2000;
 /**
  * What the desktop keeps of a phone note, in characters: it redacts credential-
  * looking tokens, then cuts to `PHONE_NOTES_CAP_CHARS` (500, marker included),
- * `review_decide.rs` at personas 66888d389d. The note fields stop here so
+ * `review_decide.rs` at personas 66888d389d. The phone has already masked the
+ * notes by then, so a pasted key never reached the cloud row. The note fields stop here so
  * nothing typed is silently cut; `REVIEW_NOTES_MAX` stays the envelope bound.
  */
 export const REVIEW_NOTES_KEPT = 500;
@@ -29,14 +36,19 @@ export interface ReviewDecideParams {
 
 /**
  * `{"reviewId","decision","notes"}`, in that order (the envelope is signed
- * over exact bytes). Blank notes are null. Notes over the cap are refused
- * rather than cut: the note fields stop at the cap, so this only trips on a
- * caller that skipped them.
+ * over exact bytes). Blank notes are null, otherwise untrimmed (the desk
+ * trims). The notes are masked with the desk's rules before signing, so a
+ * pasted key never reaches the cloud row. Refused rather than cut: typed notes
+ * over the cap, or masked notes over it, throw `notes_too_long`, counted in
+ * code points as the desk does. The desk masks again on arrival and keeps 500
+ * characters.
  */
 export function reviewDecideParams(reviewId: string, decision: ReviewDecision, notes: string | null | undefined): ReviewDecideParams {
-  const text = notes && notes.trim() ? notes : null;
-  if (text !== null && text.length > REVIEW_NOTES_MAX) throw new Error("notes_too_long");
-  return { reviewId, decision, notes: text };
+  if (!notes || !notes.trim()) return { reviewId, decision, notes: null };
+  if (Array.from(notes).length > REVIEW_NOTES_MAX) throw new Error("notes_too_long");
+  const masked = redactText(notes);
+  if (Array.from(masked).length > REVIEW_NOTES_MAX) throw new Error("notes_too_long");
+  return { reviewId, decision, notes: masked };
 }
 
 /** Spec 2.2, targeting note: the desktop that raised the review, else the persona's owner. */
