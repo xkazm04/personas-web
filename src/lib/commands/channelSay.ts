@@ -4,8 +4,14 @@
  * message in the master's channel and starts no run; the headless App Master
  * reads it at its next wake (personas 7653b0be85, `channel_say.rs`). Pure: the
  * params, the size rule, and how a settled command reads as a delivery.
+ *
+ * The phone masks credential-looking tokens with the desk's own rules
+ * (`redactText`) before it signs, so a pasted key never reaches the cloud row.
+ * Both the typed text and the masked text are bounded by `SAY_MAX_CHARS`
+ * (masking can make a short value longer). The desk masks again on arrival.
  */
 import type { InflightCommand } from "./commandReducer";
+import { redactText } from "./redactText";
 
 /** The contract's cap on a say, in Unicode code points, counted after the trim. */
 export const SAY_MAX_CHARS = 2000;
@@ -20,14 +26,19 @@ export function sayLength(message: string): number {
 }
 
 /**
- * `{"message"}`: the one key, trimmed. Refused rather than cut: an empty
- * message throws `empty_message`, one over the cap `message_too_long`.
+ * `{"message"}`: the one key, trimmed, then masked with the desk's rules before
+ * signing so a pasted key never reaches the cloud row. Refused rather than cut:
+ * an empty message throws `empty_message`; a typed text over the cap, or a
+ * masked text over it, throws `message_too_long`. The desk masks again on
+ * arrival.
  */
 export function channelSayParams(message: string): ChannelSayParams {
   const text = message.trim();
   if (text.length === 0) throw new Error("empty_message");
   if (Array.from(text).length > SAY_MAX_CHARS) throw new Error("message_too_long");
-  return { message: text };
+  const masked = redactText(text);
+  if (Array.from(masked).length > SAY_MAX_CHARS) throw new Error("message_too_long");
+  return { message: masked };
 }
 
 /**
