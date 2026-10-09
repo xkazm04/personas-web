@@ -1,13 +1,17 @@
-import { FLEET, type FleetAgent } from "../fleet-data";
+import { memo } from "react";
+import { needsTone } from "../attention";
+import BoardHoverCard from "../board/HoverCard";
+import type { BoardCopy } from "../board/copy";
+import type { SimAgent } from "../board/model";
+import { inFlightFor, type Command } from "../board/useCommands";
 import Backdrop from "./Backdrop";
 import Building, { type Att } from "./Building";
 import type { CityLayout } from "./city-layout";
-import { AgentCardBody, HoverCard, TeamCardBody, type Anchor } from "./HoverCard";
-import Moon, { type Meter } from "./Moon";
-import type { Packet } from "./nightStore";
-import Packets from "./Packets";
+import { HoverCard, TeamCardBody, type Anchor } from "./HoverCard";
+import MoonArt, { type Meter } from "./Moon";
+import Packets, { type Packet } from "./Packets";
 import Vehicles from "./Vehicles";
-import { AgentWires, RoofWires } from "./Wires";
+import { AgentWires, RoofWires as RoofWiresArt } from "./Wires";
 import type { CityCopy } from "./vocab";
 import type { FleetProcess } from "../fleet-data";
 import s from "./night.module.css";
@@ -16,20 +20,29 @@ interface CityFieldProps {
   L: CityLayout;
   scale: number;
   copy: CityCopy;
+  boardCopy: BoardCopy;
   still: boolean;
+  live: boolean;
   att: Att;
-  byId: Map<string, FleetAgent>;
+  byId: Map<string, SimAgent>;
   meters: Meter[];
   procs: FleetProcess[];
   packet: Packet | null;
-  simMs: number;
+  cmds: readonly Command[];
+  hostName: string;
   pinned: Att;
+  /** Stable handlers (state setters or stable callbacks), so memoised buildings
+   *  re-render only for their own windows and attention. */
   setHover: (a: Att) => void;
   setFocus: (a: Att) => void;
-  pinAgent: (id: string) => void;
+  openAgent: (id: string) => void;
   pinTeam: (id: string) => void;
   unpin: () => void;
 }
+
+// The art that does not follow attention: a hover re-renders none of it.
+const Moon = memo(MoonArt);
+const RoofWires = memo(RoofWiresArt);
 
 /**
  * The city filling the field edge to edge: a thin sky band with the moon (the
@@ -37,7 +50,7 @@ interface CityFieldProps {
  * thing under attention gets a card floating beside it; nothing reserves
  * space for it. A click on the sky or the street unpins the card.
  */
-export default function CityField({ L, scale, copy, still, att, byId, meters, procs, packet, simMs, pinned, setHover, setFocus, pinAgent, pinTeam, unpin }: CityFieldProps) {
+export default function CityField({ L, scale, copy, boardCopy, still, live, att, byId, meters, procs, packet, cmds, hostName, pinned, setHover, setFocus, openAgent, pinTeam, unpin }: CityFieldProps) {
   const attAgent = att?.kind === "agent" ? byId.get(att.id) ?? null : null;
   const attTeamId = att?.kind === "team" ? att.id : attAgent?.team ?? null;
   const moonR = Math.round(L.sky * 0.24);
@@ -85,7 +98,7 @@ export default function CityField({ L, scale, copy, still, att, byId, meters, pr
               attTeam={att?.kind === "team" && att.id === b.t.id}
               onHover={setHover}
               onFocusAtt={setFocus}
-              onPinAgent={pinAgent}
+              onOpenAgent={openAgent}
               onPinTeam={pinTeam}
             />
           ))}
@@ -94,13 +107,12 @@ export default function CityField({ L, scale, copy, still, att, byId, meters, pr
           <Vehicles procs={procs} W={L.W} ground={L.ground} street={L.H - L.ground} />
         </svg>
       </div>
-      {anchor && (
+      {attAgent && anchor && (
+        <BoardHoverCard agent={attAgent} anchor={anchor} width={L.W} height={L.H} copy={boardCopy} live={live} tone={needsTone(attAgent)} pending={inFlightFor(cmds, attAgent.id)} hostName={hostName} />
+      )}
+      {!attAgent && bAtt && anchor && (
         <HoverCard anchor={anchor} field={{ w: L.W, h: L.H }}>
-          {attAgent ? (
-            <AgentCardBody copy={copy} a={attAgent} team={FLEET.teams.find((x) => x.id === attAgent.team)?.name ?? ""} simMs={simMs} hint={copy.pinHint} />
-          ) : (
-            bAtt && <TeamCardBody copy={copy} team={bAtt.t} members={bAtt.mem} hint={copy.pinHint} />
-          )}
+          <TeamCardBody copy={copy} team={bAtt.t} members={bAtt.mem} hint={copy.pinHint} />
         </HoverCard>
       )}
     </>

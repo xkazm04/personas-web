@@ -5,7 +5,9 @@
    dark surfaces alike. Team hues come from the data (`--h`), with a lightness
    that flips for light themes. */
 
-.root {
+/* The board's tokens alone, for a host that shares its layers (Night shift). */
+.root,
+.tokens {
   --st-running: var(--brand-cyan);
   --st-failed: var(--status-error);
   --st-input_required: color-mix(in oklab, var(--status-warning), var(--status-error) 45%);
@@ -23,12 +25,15 @@
   /* Pointer parallax for the spotlight art (written by the stage's mousemove). */
   --px: 0;
   --py: 0;
+}
+.root {
   background:
     radial-gradient(90% 70% at 18% 10%, color-mix(in oklab, var(--brand-cyan) 9%, transparent), transparent 62%),
     radial-gradient(70% 60% at 82% 85%, color-mix(in oklab, var(--brand-purple) 6%, transparent), transparent 65%),
     var(--background);
 }
-:global([data-theme^="light"]) .root {
+:global([data-theme^="light"]) .root,
+:global([data-theme^="light"]) .tokens {
   --hue-s: 62%;
   --hue-l: 40%;
 }

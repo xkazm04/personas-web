@@ -1,6 +1,6 @@
-import { topSeverity, type FleetAgent } from "../fleet-data";
+import type { FleetAgent } from "../fleet-data";
 import { SEVERITY_COLOR, STATE_COLOR } from "./palette";
-import { rankOf } from "./useNightSim";
+import { rankOf } from "./rank";
 import type { PersonasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 export type CityCopy = PersonasMonitorCopy["city"];
@@ -14,8 +14,6 @@ export function stateWord(c: CityCopy, a: FleetAgent): string {
   if (!a.enabled) return c.states.off;
   return fill(c.states[a.state], { pct: Math.round((a.progress ?? 0) * 100) });
 }
-
-export const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** The short reason a lantern tag gives, with its colour. */
 export function reasonShort(c: CityCopy, a: FleetAgent): { text: string; color: string; key: string } {
@@ -70,4 +68,3 @@ export function windowAria(c: CityCopy, a: FleetAgent, team: string): string {
   return s;
 }
 
-export const sevOf = (a: FleetAgent) => topSeverity(a);

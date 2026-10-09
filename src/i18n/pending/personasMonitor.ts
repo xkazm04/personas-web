@@ -600,7 +600,6 @@ export interface PersonasMonitorCopy {
       hour: string;
       day: string;
     };
-    runningFor: string;
     reviewsOne: string;
     reviewsMany: string;
     unreadOne: string;
@@ -1227,7 +1226,6 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       hour: '{n}h ago',
       day: '{n}d ago',
     },
-    runningFor: 'running for {t} · {n} live tool calls',
     reviewsOne: '1 review · oldest {age}',
     reviewsMany: '{n} reviews · oldest {age}',
     unreadOne: '1 unread message',

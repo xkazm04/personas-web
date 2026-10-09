@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { needsYou, type FleetAgent, type FleetTeam } from "../fleet-data";
-import { hueText, SEVERITY_COLOR, stateColor, textTone } from "./palette";
-import { cap, fill, fmtDur, reviewsLine, sevOf, stateWord, unreadLine, type CityCopy } from "./vocab";
+import { hueText } from "./palette";
+import { fill, type CityCopy } from "./vocab";
 
 export interface Anchor { x: number; y: number; w: number; h: number }
 
@@ -9,7 +9,7 @@ const CARD_W = 300;
 const CARD_H = 210;
 
 /**
- * A card floating beside whatever is under attention, overlaying the field
+ * A building's card floating beside it (a window gets the Board's agent card), overlaying the field
  * and never reserving space in it. Sits right of its anchor when there is
  * room, else left; always inside the field.
  */
@@ -25,33 +25,6 @@ export function HoverCard({ anchor, field, children }: { anchor: Anchor; field: 
     >
       {children}
     </div>
-  );
-}
-
-/** What a hovered agent card says: who, what state, what it is doing, what waits. */
-export function AgentCardBody({ copy, a, team, simMs, hint }: { copy: CityCopy; a: FleetAgent; team: string; simMs: number; hint: string }) {
-  const sev = sevOf(a);
-  return (
-    <>
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono text-2xl font-bold" style={{ color: hueText(a.hue) }}>{a.callsign}</span>
-        <span className="truncate text-[13px] text-muted-dark">{team}</span>
-      </div>
-      <div className="truncate text-lg font-semibold text-foreground">{a.name}</div>
-      <div className="mt-0.5 text-sm font-semibold" style={{ color: textTone(stateColor(a)) }}>{cap(stateWord(copy, a))}</div>
-      {a.task && <div className="mt-1 line-clamp-2 text-base text-muted-dark">{a.task}</div>}
-      {a.enabled && a.state === "running" && (
-        <>
-          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-foreground/10">
-            <i className="block h-full bg-brand-cyan" style={{ width: `${Math.round((a.progress ?? 0) * 100)}%`, transition: "width .8s" }} />
-          </div>
-          <div className="mt-1 text-[13px] text-muted-dark">{fill(copy.runningFor, { t: fmtDur(a.runningSinceMs ?? 0), n: a.liveToolCalls })}</div>
-        </>
-      )}
-      {sev && <div className="mt-1 text-[13px]" style={{ color: textTone(SEVERITY_COLOR[sev]) }}>{reviewsLine(copy, a, simMs)}</div>}
-      {a.unreadMessages.length > 0 && <div className="mt-0.5 text-[13px]" style={{ color: textTone("var(--ns-wire)") }}>{unreadLine(copy, a)}</div>}
-      <div className="mt-2 text-xs text-muted-dark">{hint}</div>
-    </>
   );
 }
 

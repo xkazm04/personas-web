@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import type { ReactNode, RefObject } from "react";
 import { ATTENTION_COLOR, countAttention } from "../attention";
 import { formatClock, type FleetAgent, type FleetProcess } from "../fleet-data";
 import type { Meter } from "./Moon";
-import type { NightEvent } from "./nightStore";
+import { eventText } from "../board/copy";
+import type { BoardEvent } from "../board/model";
 import { KIND_COLOR, textTone } from "./palette";
 import { fill, fmtAgo, fmtDur, type CityCopy } from "./vocab";
 import s from "./night.module.css";
@@ -61,7 +62,7 @@ export function MeterChips({ copy, meters }: { copy: CityCopy; meters: Meter[] }
 
 interface BottomProps {
   copy: CityCopy;
-  events: NightEvent[];
+  events: BoardEvent[];
   byId: Map<string, FleetAgent>;
   procs: FleetProcess[];
   simMs: number;
@@ -80,13 +81,13 @@ export function BottomStrip({ copy, events, byId, procs, simMs }: BottomProps) {
       </span>
       <div aria-label={copy.tickerLabel} className="min-w-0 flex-1 truncate text-sm text-foreground">
         {e && (
-          <span key={e.id} className={s.tickerIn}>
+          <span key={`${e.tsMs}-${e.agentId}-${e.kind}`} className={s.tickerIn}>
             <span className="mr-2 font-mono text-xs text-muted-dark">{formatClock(e.tsMs).slice(0, 5)}</span>
-            <b className="mr-2 font-mono" style={{ color: textTone(KIND_COLOR[e.kind]) }}>
+            <b className="mr-2 font-mono" style={{ color: textTone(e.kind === "decision" ? "var(--brand-cyan)" : KIND_COLOR[e.kind]) }}>
               {byId.get(e.agentId)?.callsign}
               {e.toAgentId ? ` → ${byId.get(e.toAgentId)?.callsign}` : ""}
             </b>
-            {e.text}
+            {eventText(e, personasMonitorCopy.board)}
           </span>
         )}
       </div>
@@ -102,6 +103,39 @@ export function BottomStrip({ copy, events, byId, procs, simMs }: BottomProps) {
           return <Chip key={p.label} color={color}>{text}</Chip>;
         })}
       </div>
+    </>
+  );
+}
+
+interface TopProps {
+  copy: CityCopy;
+  agents: FleetAgent[];
+  meters: Meter[];
+  legend: boolean;
+  legendRef: RefObject<HTMLButtonElement | null>;
+  onLegend: () => void;
+}
+
+/** The top strip: the verdict, the usage meters, the `N` hint and the legend toggle. */
+export function TopStrip({ copy, agents, meters, legend, legendRef, onLegend }: TopProps) {
+  return (
+    <>
+      <AttentionSummary agents={agents} />
+      <MeterChips copy={copy} meters={meters} />
+      <span className="ml-auto hidden whitespace-nowrap text-xs text-muted-dark lg:inline">
+        <kbd className="mr-1 rounded border border-glass-hover px-1.5 font-mono text-foreground">N</kbd>
+        {copy.hintNext}
+      </span>
+      <button
+        ref={legendRef}
+        type="button"
+        aria-expanded={legend}
+        aria-controls="ns-legend"
+        onClick={onLegend}
+        className="flex-none rounded-lg border border-glass-hover px-2.5 py-0.5 text-sm text-foreground transition-colors hover:border-brand-cyan/60 focus-visible:outline-2 focus-visible:outline-brand-cyan lg:ml-0 ml-auto"
+      >
+        {copy.legendButton}
+      </button>
     </>
   );
 }

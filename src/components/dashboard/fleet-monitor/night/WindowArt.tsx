@@ -1,7 +1,7 @@
 import { ATTENTION_COLOR, attentionOf, needsTone } from "../attention";
 import type { FleetAgent } from "../fleet-data";
 import { f1, hue as hueTone } from "./palette";
-import { rankOf } from "./useNightSim";
+import { rankOf } from "./rank";
 import s from "./night.module.css";
 
 export type WindowAgent = Pick<FleetAgent, "enabled" | "state" | "progress" | "reviews" | "unreadMessages">;

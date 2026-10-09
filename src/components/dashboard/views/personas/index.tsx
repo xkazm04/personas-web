@@ -47,8 +47,8 @@ export default function PersonasView() {
 /**
  * The desktop stage: the dashboard's main view, every persona in the fleet
  * on one screen. Board (every agent in team bays, drill-down to team and
- * agent) is the working view; Night shift (the fleet as a city) is kept as a
- * showcase without drill-down. One thin toolbar row; the stage takes the rest
+ * agent) is the working view; Night shift (the fleet as a city) runs on the
+ * Board's simulation and opens the same hover card and agent console. One thin toolbar row; the stage takes the rest
  * of the viewport, edge to edge (the view is full-bleed in `spa/views.ts`).
  */
 function PersonasStage() {

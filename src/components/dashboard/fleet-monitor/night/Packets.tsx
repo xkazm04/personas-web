@@ -4,7 +4,14 @@ import { useEffect, useRef } from "react";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { arcPath, type CityLayout } from "./city-layout";
-import type { Packet } from "./nightStore";
+
+/** One message or handoff travelling between two windows; `id` launches it once. */
+export interface Packet {
+  id: number;
+  from: string;
+  to: string;
+  kind: "message" | "handoff";
+}
 
 const NS = "http://www.w3.org/2000/svg";
 const DUR = 2600;

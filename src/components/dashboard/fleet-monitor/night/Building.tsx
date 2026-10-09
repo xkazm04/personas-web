@@ -20,7 +20,8 @@ interface BuildingProps {
   attTeam: boolean;
   onHover: (att: Att) => void;
   onFocusAtt: (att: Att) => void;
-  onPinAgent: (id: string) => void;
+  /** Opens the agent's console (the Board's nested detail). */
+  onOpenAgent: (id: string) => void;
   onPinTeam: (teamId: string) => void;
 }
 
@@ -31,7 +32,7 @@ export const activate = (fn: () => void) => (e: KeyboardEvent) => {
   }
 };
 
-function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFocusAtt, onPinAgent, onPinTeam }: BuildingProps) {
+function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFocusAtt, onOpenAgent, onPinTeam }: BuildingProps) {
   const { t } = b;
   const tones = teamTones(t.hue);
   const x0 = b.cx - b.w / 2;
@@ -70,13 +71,26 @@ function Building({ b, L, copy, still, lifted, attAgent, attTeam, onHover, onFoc
       </g>
       {needs.map((wv) => <Beacon key={wv.a.id} wv={wv} top={b.top} still={still} />)}
       {b.wins.map((wv) => (
-        <Window key={wv.a.id} wv={wv} copy={copy} still={still} att={attAgent === wv.a.id} onHover={onHover} onFocusAtt={onFocusAtt} onPinAgent={onPinAgent} />
+        <Window key={wv.a.id} wv={wv} copy={copy} still={still} att={attAgent === wv.a.id} onHover={onHover} onFocusAtt={onFocusAtt} onOpenAgent={onOpenAgent} />
       ))}
     </g>
   );
 }
 
-export default memo(Building);
+/** The layout is rebuilt on every tick, so compare a building by its place and
+ *  its members: a tick re-renders only the buildings whose agents changed, and
+ *  a hover only the one or two buildings it enters and leaves. */
+function sameBuilding(p: BuildingProps, n: BuildingProps): boolean {
+  if (p.lifted !== n.lifted || p.attAgent !== n.attAgent || p.attTeam !== n.attTeam || p.still !== n.still || p.copy !== n.copy) return false;
+  if (p.onHover !== n.onHover || p.onFocusAtt !== n.onFocusAtt || p.onOpenAgent !== n.onOpenAgent || p.onPinTeam !== n.onPinTeam) return false;
+  const [x, y] = [p.b, n.b];
+  if (x.t !== y.t || x.i !== y.i || x.cx !== y.cx || x.w !== y.w || x.top !== y.top || x.anchor !== y.anchor || x.cols !== y.cols || x.rows !== y.rows || x.mem.length !== y.mem.length) return false;
+  const [l, m] = [p.L, n.L];
+  if (l.ground !== m.ground || l.ww !== m.ww || l.wh !== m.wh || l.gap !== m.gap || l.vgap !== m.vgap || l.pad !== m.pad) return false;
+  return x.mem.every((a, i) => a === y.mem[i]);
+}
+
+export default memo(Building, sameBuilding);
 
 /** A needs-you window lights a beacon on its roof edge, tied to it by a beam
  *  and throwing a short shaft of light into the sky. */
@@ -101,10 +115,11 @@ interface WindowProps {
   att: boolean;
   onHover: (att: Att) => void;
   onFocusAtt: (att: Att) => void;
-  onPinAgent: (id: string) => void;
+  /** Opens the agent's console (the Board's nested detail). */
+  onOpenAgent: (id: string) => void;
 }
 
-function Window({ wv, copy, still, att, onHover, onFocusAtt, onPinAgent }: WindowProps) {
+const Window = memo(function Window({ wv, copy, still, att, onHover, onFocusAtt, onOpenAgent }: WindowProps) {
   const { a, x, y, w, h, b } = wv;
   const me = { kind: "agent" as const, id: a.id };
   const delay = 0.15 + b.i * 0.09 + wv.row * 0.06 + ((Number(a.id.slice(1)) * 37) % 35) / 100;
@@ -119,8 +134,8 @@ function Window({ wv, copy, still, att, onHover, onFocusAtt, onPinAgent }: Windo
       onMouseLeave={() => onHover(null)}
       onFocus={() => onFocusAtt(me)}
       onBlur={() => onFocusAtt(null)}
-      onClick={() => onPinAgent(a.id)}
-      onKeyDown={activate(() => onPinAgent(a.id))}
+      onClick={() => onOpenAgent(a.id)}
+      onKeyDown={activate(() => onOpenAgent(a.id))}
     >
       <rect x={x - 4} y={y - 4} width={w + 8} height={h + 8} fill="transparent" />
       <WindowArt a={a} x={x} y={y} w={w} h={h} hue={b.t.hue} still={still} callsign={a.callsign} />
@@ -128,4 +143,8 @@ function Window({ wv, copy, still, att, onHover, onFocusAtt, onPinAgent }: Windo
       {!still && <rect className={s.lightsOn} x={x - 1} y={y - 1} width={w + 2} height={h + 2} style={{ fill: "var(--ns-glass)", ["--d" as string]: `${delay.toFixed(2)}s` }} />}
     </g>
   );
-}
+}, (p, n) =>
+  p.wv.a === n.wv.a && p.wv.x === n.wv.x && p.wv.y === n.wv.y && p.wv.w === n.wv.w && p.wv.h === n.wv.h && p.wv.row === n.wv.row &&
+  p.wv.b.i === n.wv.b.i && p.wv.b.t === n.wv.b.t && p.att === n.att && p.still === n.still && p.copy === n.copy &&
+  p.onHover === n.onHover && p.onFocusAtt === n.onFocusAtt && p.onOpenAgent === n.onOpenAgent,
+);
