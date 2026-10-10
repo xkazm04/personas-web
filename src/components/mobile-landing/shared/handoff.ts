@@ -1,17 +1,57 @@
 /**
  * Phone -> computer handoff for the /m landings. Personas is a desktop app, so a phone visitor
  * cannot install it; these are the honest ways to carry the intent to their computer, all without
- * a backend: the native share sheet, the clipboard, and a calendar reminder file. (macOS and Linux
- * visitors use the existing waitlist API instead - see waitlist-modal/waitlistUtils.)
+ * a backend: the native share sheet, the clipboard, and a calendar reminder file.
+ *
+ * A phone cannot know which computer its owner has, so the primary action is the same for everyone:
+ * send the one link (phoneSendAction). The link is marked as a phone hand-off (handoffUrl), and the
+ * computer's download section picks its own installer or waitlist (src/lib/handoff-arrival.ts).
+ * A platform's waitlist stays on the phone as an explicit, secondary opt-in.
  *
  * Pure apart from shareOrCopy, which takes its browser capabilities as an argument so it is
  * testable. Callers create Dates in event handlers, never during render (React purity rule).
  */
+import { handoffQuery, type HandoffSource } from "@/lib/handoff-arrival";
+import { BUILD_ROUTES, type HandoffPlatform, type HandoffRoutes } from "./handoffMachine";
 
-/** The page a visitor should open on their computer: the site's download section. */
-export function handoffUrl(siteUrl: string): string {
-  return `${siteUrl.replace(/\/+$/, "")}/#download-section`;
+/**
+ * The page a visitor should open on their computer: the site's download section. A phone landing
+ * passes its `source`, which marks the link as a phone hand-off (two fixed tokens, before the hash);
+ * without one (the dashboard's reachability notice) the link stays bare.
+ */
+export function handoffUrl(siteUrl: string, source?: HandoffSource): string {
+  return `${siteUrl.replace(/\/+$/, "")}/${source ? handoffQuery(source) : ""}#download-section`;
 }
+
+export type PhoneSendAction = { kind: "share-link" } | { kind: "waitlist"; platform: HandoffPlatform };
+
+export interface PhoneSendInput {
+  /** The platform picked in the opt-in waitlist panel. */
+  platform: HandoffPlatform;
+  /** The typed email. It never decides the route: the waitlist machine validates it. */
+  email?: string;
+  /** Set only while the visitor has opened the "email me when it is ready" panel. */
+  optIn?: "waitlist";
+}
+
+/**
+ * What the phone's primary button does. Everyone sends the one link; only a visitor who opted into
+ * the waitlist panel joins it, and only for a platform with no live installer.
+ */
+export function phoneSendAction(input: PhoneSendInput, routes: HandoffRoutes = BUILD_ROUTES): PhoneSendAction {
+  if (input.optIn === "waitlist" && routes[input.platform] === "waitlist") return { kind: "waitlist", platform: input.platform };
+  return { kind: "share-link" };
+}
+
+const ALL_PLATFORMS: HandoffPlatform[] = ["windows", "macos", "linux"];
+
+/** The platforms the opt-in waitlist panel offers: those without a live installer, in display order. */
+export function waitlistPlatforms(routes: HandoffRoutes = BUILD_ROUTES): HandoffPlatform[] {
+  return ALL_PLATFORMS.filter((p) => routes[p] === "waitlist");
+}
+
+/** Every route "share": the machine as the one-link sender. */
+export const SHARE_ROUTES: HandoffRoutes = { windows: "share", macos: "share", linux: "share" };
 
 /** The next occurrence of `hour`:00 in local time, strictly after `now`. */
 export function nextLocalTime(now: Date, hour: number): Date {

@@ -1,10 +1,40 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildReminderIcs, handoffUrl, nextLocalTime, shareOrCopy } from "./handoff";
+import { resolveLandingAddress } from "@/lib/landing-address";
+import { buildReminderIcs, handoffUrl, nextLocalTime, phoneSendAction, shareOrCopy, waitlistPlatforms } from "./handoff";
+import { handoffRoutes } from "./handoffMachine";
+import { downloadPlan } from "@/lib/release";
 
 describe("handoffUrl", () => {
-  it("points at the desktop download section of the site, without a doubled slash", () => {
-    expect(handoffUrl("https://personas.so")).toBe("https://personas.so/#download-section");
+  it("marks the link as a phone hand-off from its landing, before the hash, without a doubled slash", () => {
+    expect(handoffUrl("https://personas.so/", "m")).toBe("https://personas.so/?via=phone&from=m#download-section");
+    expect(handoffUrl("https://personas.so", "m2")).toBe("https://personas.so/?via=phone&from=m2#download-section");
+  });
+  it("stays bare without a source (the dashboard's reachability notice)", () => {
     expect(handoffUrl("https://personas.so/")).toBe("https://personas.so/#download-section");
+  });
+  it("still lands on the download section (arrival reads the hash only)", () => {
+    expect(resolveLandingAddress(new URL(handoffUrl("https://personas.so", "m")).hash)?.id).toBe("download");
+  });
+});
+
+describe("phoneSendAction", () => {
+  it("sends the one link whatever computer the phone guesses", () => {
+    expect(phoneSendAction({ platform: "macos", email: "" })).toEqual({ kind: "share-link" });
+    expect(phoneSendAction({ platform: "windows", email: "" })).toEqual({ kind: "share-link" });
+  });
+  it("joins a waitlist only when the visitor opted into it", () => {
+    expect(phoneSendAction({ platform: "macos", email: "a@b.co", optIn: "waitlist" })).toEqual({ kind: "waitlist", platform: "macos" });
+  });
+  it("never waitlists a platform whose installer is live", () => {
+    const live = handoffRoutes(downloadPlan("https://github.com/x/personas/releases/download/v1/setup.exe"));
+    expect(phoneSendAction({ platform: "windows", email: "a@b.co", optIn: "waitlist" }, live)).toEqual({ kind: "share-link" });
+  });
+});
+
+describe("waitlistPlatforms", () => {
+  it("lists only the platforms without a live installer", () => {
+    expect(waitlistPlatforms(handoffRoutes(downloadPlan(undefined)))).toEqual(["windows", "macos", "linux"]);
+    expect(waitlistPlatforms(handoffRoutes(downloadPlan("https://github.com/x/personas/releases/download/v1/setup.exe")))).toEqual(["macos", "linux"]);
   });
 });
 
