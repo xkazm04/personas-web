@@ -22,7 +22,7 @@ import FleetList from "./FleetList";
 import Toast from "./Toast";
 import { readHost } from "./host";
 import { useArrival, useBoardSim, useHostStatus, useJustIn, useSize, useTitleBadge, useToast } from "./useBoardRuntime";
-import { isOpen, useCommands } from "./useCommands";
+import { isOpen, openControl, useCommands } from "./useCommands";
 import FleetPauseDialog from "./FleetPauseDialog";
 import CommandPalette from "./CommandPalette";
 import ShortcutMap from "./ShortcutMap";
@@ -66,7 +66,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const { width, height } = useSize(mainRef);
   const [sim, dispatch] = useBoardSim(scale, still, hidden, offline);
   const [toast, showToast] = useToast();
-  const commands = useCommands(dispatch);
+  const commands = useCommands(dispatch, sim);
   const [confirmPause, setConfirmPause] = useState(false);
   const [focus, setFocus] = useState<FocusFilter>(NO_FOCUS);
   const [palette, setPalette] = useState(false);
@@ -167,7 +167,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
         onOpenChange={setPalette}
         deps={{
           scope, teams, copy, hostName: host.name, offline, fleetPaused, scale, onView, onScale,
-          openAgent: openAgentFrom, openTeam: (id) => nav.openTeam(id, null), agentVerb: (v, a) => op[v](a),
+          openAgent: openAgentFrom, openTeam: (id) => nav.openTeam(id, null), agentVerb: (v, a) => op[v](a), pending: (id) => !!openControl(commands.cmds, id),
           nextNeeds: nav.nextNeeds, startTriage, pauseAll: () => setConfirmPause(true), resumeAll: () => op.resumeAll(fleetPaused),
           showPile: (p) => setFocus({ query: "", piles: [p] }), clearFocus: () => setFocus(NO_FOCUS), toggleActivity: () => setActivity((v) => !v),
         }}

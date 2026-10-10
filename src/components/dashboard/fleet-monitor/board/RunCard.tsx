@@ -8,6 +8,7 @@ import { fill, formatRunFor, hash, mulberry32, type SimAgent } from "./model";
 import { STEP_KEYS, agentPlan, currentStep } from "./agentLog";
 import { CalendarClock, Zap } from "lucide-react";
 import { lastRunLine } from "./AgentActivity";
+import { admit } from "./verbs";
 import b from "./board.module.css";
 
 /** The run as six steps with tool-call ticks. Stylised: labelled as such. */
@@ -124,7 +125,7 @@ export default function RunCard({ agent: a, simMs, copy, live, busy, onRetry, on
         </div>
       )}
       <div className="mt-2 flex min-h-11 flex-wrap items-center gap-3">
-        {a.state === "failed" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={onRetry}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></>}
+        {a.state === "failed" && (admit("retry", a) === null ? <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={onRetry}>{copy.agent.retry}</button><span className="text-base text-muted-dark">{copy.agent.retryNote}</span></> : <span className="text-base text-muted-dark">{copy.cmd.refusals.paused}</span>)}
         {a.state === "input_required" && <><button type="button" data-agent-act className={btn} style={warnBtn} disabled={busy} onClick={() => document.querySelector<HTMLElement>("[data-answer]")?.focus()}>{copy.agent.answer}</button><span className="text-base text-muted-dark">{copy.agent.answerNote}</span></>}
         {a.state === "queued" && <span className={`text-base ${b["ink-queued"]}`}>{copy.agent.queuedNote}</span>}
         {a.state === "draft_ready" && (a.reviews.length ? <span className={`text-base ${b["ink-draft_ready"]}`}>{copy.agent.draftNote}</span> : (

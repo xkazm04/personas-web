@@ -15,7 +15,7 @@ import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
  */
 export function useNightRuntime(scale: number, still: boolean, hidden: boolean) {
   const [sim, dispatch] = useBoardSim(scale, still, hidden, false);
-  const commands = useCommands(dispatch);
+  const commands = useCommands(dispatch, sim);
   const [toast, showToast] = useToast();
 
   const scoped = useMemo(() => sim.agents.slice(0, scale), [sim.agents, scale]);

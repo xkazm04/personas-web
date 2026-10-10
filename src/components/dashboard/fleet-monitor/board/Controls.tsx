@@ -5,6 +5,7 @@ import type { BoardCopy } from "./copy";
 import { fill, type SimAgent } from "./model";
 import type { Command } from "./useCommands";
 import type { Operator } from "./operator";
+import { offeredVerbs } from "./verbs";
 
 /** "Pausing · Sending to Studio PC": an open command in words. */
 export function pendingText(cmd: Command, c: BoardCopy, host: string): string {
@@ -33,16 +34,15 @@ interface ControlsProps {
  * they are off.
  */
 export default function Controls({ agent: a, copy: c, op, pending, hostName, reserve = false }: ControlsProps) {
-  const running = a.state === "running";
-  const canRun = a.enabled && !running && a.state !== "input_required" && a.state !== "draft_ready";
+  const offered = offeredVerbs(a);
   const off = op.offline || !!pending;
   const reasonId = `ctl-why-${a.id}`;
-  const why = op.offline ? fill(c.cmd.offline, { host: hostName }) : pending ? pendingText(pending, c, hostName) : !a.enabled && running ? c.cmd.pausedRunning : null;
+  const why = op.offline ? fill(c.cmd.offline, { host: hostName }) : pending ? pendingText(pending, c, hostName) : !a.enabled && a.state === "running" ? c.cmd.pausedRunning : null;
 
   return (
     <div role="group" aria-label={fill(c.cmd.controls, { callsign: a.callsign })} aria-describedby={why ? reasonId : undefined}>
       <div className="flex flex-wrap gap-2">
-        {a.enabled ? (
+        {offered.includes("pause") ? (
           <button type="button" className={ghost} disabled={off} title={c.cmd.hints.pause} onClick={() => op.pause(a)} data-ctl="pause">
             <Pause aria-hidden className="h-4 w-4" />
             {c.cmd.pause}
@@ -53,13 +53,13 @@ export default function Controls({ agent: a, copy: c, op, pending, hostName, res
             {c.cmd.resume}
           </button>
         )}
-        {canRun && (
+        {offered.includes("run") && (
           <button type="button" className={ghost} disabled={off} title={c.cmd.hints.run} onClick={() => op.run(a)} data-ctl="run">
             <Play aria-hidden className="h-4 w-4" />
             {c.cmd.run}
           </button>
         )}
-        {running && (
+        {offered.includes("cancel") && (
           <button type="button" className={ghost} disabled={off} title={c.cmd.hints.cancel} onClick={() => op.cancel(a)} data-ctl="cancel">
             <Square aria-hidden className="h-3.5 w-3.5" />
             {c.cmd.cancel}

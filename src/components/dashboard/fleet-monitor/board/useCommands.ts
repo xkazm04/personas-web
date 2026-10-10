@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { SimAction } from "./sim";
+import { refusalOf, type SimAction, type SimState } from "./sim";
+import type { Refusal } from "./verbs";
 
 /* ── Commands to the machine ───────────────────────────────────────
  *
@@ -11,11 +12,14 @@ import type { SimAction } from "./sim";
  * A command is `sending` while it travels, `acked` once the PC has picked it
  * up, then `done`, which is the moment the simulation applies it. Reversible
  * verdicts (approve, send back) are first `held` for an Undo window and only
- * then sent; an undone command never leaves the browser.
+ * then sent; an undone command never leaves the browser. When it lands, the
+ * machine checks it against the rulebook (verbs.ts) as things stand then: a
+ * cancel whose run finished in flight, or an approve whose review was settled
+ * elsewhere, ends `refused` with its reason instead of `done`.
  */
 
 export type Verb = "pause" | "resume" | "run" | "cancel" | "retry" | "answer" | "read" | "approve" | "sendback" | "publish" | "revise" | "pauseAll" | "resumeAll";
-export type CmdStatus = "held" | "sending" | "acked" | "done" | "undone";
+export type CmdStatus = "held" | "sending" | "acked" | "done" | "refused" | "undone";
 
 export interface Command {
   id: number;
@@ -31,9 +35,11 @@ export interface Command {
   /** Sim time it was sent at (for the activity log's clock). */
   atSim?: number;
   status: CmdStatus;
+  /** Why the machine refused it (status "refused"). */
+  reason?: Refusal;
 }
 
-export type CommandSpec = Omit<Command, "id" | "status">;
+export type CommandSpec = Omit<Command, "id" | "status" | "reason">;
 
 /** The Undo window of a held verdict. */
 export const HOLD_MS = 4000;
@@ -55,6 +61,20 @@ export function toAction(c: CommandSpec): SimAction | null {
   return { type: c.verb, id: c.agentId };
 }
 
+/** What happens when a command lands on the machine in `state`: the action it
+ *  applies, or why it is refused (then nothing is applied). */
+export function settle(spec: CommandSpec, state: Pick<SimState, "agents">): { action: SimAction | null; refusal: Refusal | null } {
+  const action = toAction(spec);
+  if (!action) return { action: null, refusal: "gone" };
+  const refusal = refusalOf(state, action);
+  return refusal ? { action: null, refusal } : { action, refusal: null };
+}
+
+/** A landed command's final record: done, or refused with its reason. */
+export function closeCommand(c: Command, refusal: Refusal | null): Command {
+  return refusal ? { ...c, status: "refused", reason: refusal } : { ...c, status: "done" };
+}
+
 /** The open command on an agent (newest first), if any. */
 export function openFor(cmds: readonly Command[], agentId: string): Command | undefined {
   return cmds.find((c) => c.agentId === agentId && isOpen(c));
@@ -73,8 +93,16 @@ export function inFlightFor(cmds: readonly Command[], agentId: string): Command 
   return cmds.find((c) => c.agentId === agentId && (c.status === "sending" || c.status === "acked"));
 }
 
-export function useCommands(dispatch: (a: SimAction) => void) {
+/**
+ * The command plane. `sim` is the machine's current state: a landing command
+ * is settled against the latest one (kept in a ref, read only in timers).
+ */
+export function useCommands(dispatch: (a: SimAction) => void, sim: Pick<SimState, "agents">) {
   const [cmds, setCmds] = useState<Command[]>([]);
+  const simRef = useRef(sim);
+  useEffect(() => {
+    simRef.current = sim;
+  }, [sim]);
   const timers = useRef(new Map<number, number[]>());
   const held = useRef(new Set<number>());
   const seq = useRef(0);
@@ -97,9 +125,9 @@ export function useCommands(dispatch: (a: SimAction) => void) {
       at(t0 + SEND_MS, () => setStatus(id, "acked")),
       at(t0 + SEND_MS + ACK_MS, () => {
         timers.current.delete(id);
-        const action = toAction(spec);
+        const { action, refusal } = settle(spec, simRef.current);
         if (action) dispatch(action);
-        setStatus(id, "done");
+        setCmds((cs) => cs.map((c) => (c.id === id ? closeCommand(c, refusal) : c)));
       }),
     ]);
     return id;

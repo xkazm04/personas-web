@@ -1,5 +1,6 @@
 import { attentionOf, type Attention } from "../attention";
 import { TEAM_BY_ID, rank, type SimAgent } from "./model";
+import { admit, type AdmitContext } from "./verbs";
 
 /* ── The fleet as a table: sorting and bulk eligibility ─────────────── */
 
@@ -38,12 +39,9 @@ export function sortAgents(list: readonly SimAgent[], key: SortKey, dir: SortDir
 export type BulkVerb = "pause" | "resume" | "run" | "cancel";
 export const BULK_VERBS: readonly BulkVerb[] = ["pause", "resume", "run", "cancel"];
 
-/** Whether a bulk verb applies to an agent (the same rules as its own controls). */
-export function eligible(verb: BulkVerb, a: SimAgent): boolean {
-  if (verb === "pause") return a.enabled;
-  if (verb === "resume") return !a.enabled;
-  if (verb === "cancel") return a.state === "running";
-  return a.enabled && a.state !== "running" && a.state !== "input_required" && a.state !== "draft_ready";
+/** Whether a bulk verb applies to an agent: the rulebook's answer (verbs.ts). */
+export function eligible(verb: BulkVerb, a: SimAgent, ctx?: AdmitContext): boolean {
+  return admit(verb, a, ctx) === null;
 }
 
 /** The ids between two rows of the shown order, inclusive (shift-click). */

@@ -11,6 +11,7 @@ import { runLog } from "./agentLog";
 import { itemReview, type TriageItem } from "./triage";
 import { ctlBtn } from "./Controls";
 import type { Operator } from "./operator";
+import { admit } from "./verbs";
 import b from "./board.module.css";
 
 export interface TriageAction {
@@ -28,9 +29,12 @@ export function triageActions(item: TriageItem, a: SimAgent, op: Operator, c: Bo
     fn();
     done();
   };
+  // A paused agent is not retried (pause stops new runs): it offers Resume instead.
   if (item.kind === "failed") return [
-    { key: "r", label: c.triage.retry, tone: "warn", run: act(() => op.retry(a)) },
-    ...(a.enabled ? [{ key: "p", label: c.triage.pauseAgent, run: act(() => op.pause(a)) }] : []),
+    ...(admit("retry", a) === null ? [{ key: "r", label: c.triage.retry, tone: "warn" as const, run: act(() => op.retry(a)) }] : []),
+    admit("pause", a) === null
+      ? { key: "p", label: c.triage.pauseAgent, run: act(() => op.pause(a)) }
+      : { key: "p", label: c.cmd.resume, tone: "primary" as const, run: act(() => op.resume(a)) },
   ];
   if (item.kind === "draft") return [
     { key: "a", label: c.triage.publish, tone: "primary", run: act(() => op.draft(a, true)) },

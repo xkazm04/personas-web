@@ -3,6 +3,7 @@ import type { FleetScale, FleetTeam } from "../fleet-data";
 import { countAttention } from "../attention";
 import { shortState, type BoardCopy } from "./copy";
 import { TEAM_BY_ID, fill, queueOf, type SimAgent } from "./model";
+import { admit } from "./verbs";
 
 /* ── The command palette's items, and how a query ranks them ──────── */
 
@@ -68,6 +69,8 @@ export interface PaletteDeps {
   fleetPaused: number;
   scale: FleetScale;
   verb: AgentVerb;
+  /** Whether an agent has an open run command (the palette then does not offer it a verb). */
+  pending?: (agentId: string) => boolean;
   openAgent: (id: string) => void;
   openTeam: (id: string) => void;
   agentVerb: (verb: Exclude<AgentVerb, "open">, a: SimAgent) => void;
@@ -103,8 +106,7 @@ export function buildItems(d: PaletteDeps): PaletteItem[] {
   for (const a of agents) {
     const pile = attentionOf(a);
     const verb = d.verb;
-    const can = verb === "open" || (!d.offline && (verb === "pause" ? a.enabled : verb === "resume" ? !a.enabled : verb === "cancel" ? a.state === "running" : a.enabled && a.state !== "running"));
-    if (!can) continue;
+    if (verb !== "open" && admit(verb, a, { offline: d.offline, pending: d.pending?.(a.id) })) continue;
     items.push({
       id: `g:${verb}:${a.id}`,
       group: "agents",

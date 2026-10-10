@@ -1,8 +1,9 @@
 import { fill, plural, type SimAgent } from "./model";
 import type { BoardCopy } from "./copy";
-import type { Commands, Verb } from "./useCommands";
+import { openControl, type Commands } from "./useCommands";
 import type { ToastAction } from "./useBoardRuntime";
-import { eligible, type BulkVerb } from "./fleetTable";
+import type { BulkVerb } from "./fleetTable";
+import { admit, type RuleVerb } from "./verbs";
 
 interface OperatorDeps {
   commands: Commands;
@@ -18,13 +19,18 @@ interface OperatorDeps {
  * Everything the operator can do to the fleet, as commands to the machine with
  * the toast that says so. Verdicts are held for an Undo window first. While the
  * machine is offline nothing is sent: the controls are disabled with the reason,
- * and these calls are no-ops as a second line.
+ * and these calls are no-ops as a second line. Run verbs (pause, resume, run,
+ * cancel, retry) go through the rulebook (verbs.ts) with the plane's context:
+ * a verb the agent does not admit, or one on an agent whose previous run
+ * command is still open, is not sent.
  */
 export function makeOperator({ commands: raw, toast, copy: c, hostName, offline, simMs }: OperatorDeps) {
   const host = { host: hostName };
   const commands = { ...raw, send: (spec: Parameters<Commands["send"]>[0], hold?: boolean) => raw.send({ ...spec, atSim: simMs }, hold) };
-  const agentVerb = (verb: Exclude<Verb, "approve" | "sendback" | "publish" | "revise" | "answer" | "pauseAll" | "resumeAll">, a: SimAgent, text: string) => {
-    if (offline) return;
+  /** Why this run verb would not be sent to this agent now (null: it is sent). */
+  const refusal = (verb: RuleVerb, a: SimAgent) => admit(verb, a, { offline, pending: !!openControl(raw.cmds, a.id) });
+  const agentVerb = (verb: RuleVerb | "read", a: SimAgent, text: string) => {
+    if (verb === "read" ? offline : refusal(verb, a)) return;
     commands.send({ verb, agentId: a.id });
     toast(text);
   };
@@ -33,6 +39,7 @@ export function makeOperator({ commands: raw, toast, copy: c, hostName, offline,
   };
   return {
     offline,
+    refusal,
     undo,
     pause: (a: SimAgent) => agentVerb("pause", a, fill(c.cmd.toasts.pause, { callsign: a.callsign })),
     resume: (a: SimAgent) => agentVerb("resume", a, fill(c.cmd.toasts.resume, { callsign: a.callsign })),
@@ -63,10 +70,11 @@ export function makeOperator({ commands: raw, toast, copy: c, hostName, offline,
         run: () => undo(id),
       });
     },
-    /** One verb to many agents: a command each (only where it applies), one toast. */
+    /** One verb to many agents: a command each (only where the rulebook admits it
+     *  and no run command is already open on the agent), one toast. */
     bulk: (verb: BulkVerb, agents: readonly SimAgent[]) => {
       if (offline) return 0;
-      const ok = agents.filter((a) => eligible(verb, a));
+      const ok = agents.filter((a) => refusal(verb, a) === null);
       for (const a of ok) commands.send({ verb, agentId: a.id });
       if (ok.length) toast(fill(c.list.bulkToasts[verb], { n: ok.length, ...host }));
       return ok.length;

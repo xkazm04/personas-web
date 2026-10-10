@@ -39,7 +39,7 @@ interface ActivityDrawerProps {
 }
 
 const STATUS_TONE: Record<Command["status"], string> = {
-  held: "var(--status-warning)", sending: "var(--brand-cyan)", acked: "var(--brand-cyan)", done: "var(--status-success)", undone: "var(--muted-foreground)",
+  held: "var(--status-warning)", sending: "var(--brand-cyan)", acked: "var(--brand-cyan)", done: "var(--status-success)", refused: "var(--status-error)", undone: "var(--muted-foreground)",
 };
 
 /**
@@ -86,7 +86,7 @@ export default function ActivityDrawer({ events, scope, cmds, simMs, copy: c, ho
                 <span className="font-mono text-xs tabular-nums text-muted-dark">{cmd.atSim != null ? formatClock(FLEET.nowMs + cmd.atSim) : ""}</span>
                 <span className="truncate text-foreground">{c.cmd.doing[cmd.verb]}</span>
                 <span className="truncate font-mono text-xs font-semibold text-foreground">{cmd.agentId ? who(cmd.agentId) : c.activity.fleetTarget}</span>
-                <span className="truncate text-muted-dark">{cmd.text ? `“${cmd.text}”` : ""}</span>
+                <span className="truncate text-muted-dark">{cmd.reason ? fill(c.cmd.refusals[cmd.reason], { host: hostName }) : cmd.text ? `“${cmd.text}”` : ""}</span>
                 <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs" style={{ color: `color-mix(in oklab, ${STATUS_TONE[cmd.status]} 80%, var(--foreground))` }}>
                   <i aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ background: STATUS_TONE[cmd.status] }} />
                   {c.activity.cmdStatus[cmd.status]}

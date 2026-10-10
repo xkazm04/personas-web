@@ -8,6 +8,7 @@ import {
   type SimAgent,
   type TaskKey,
 } from "./model";
+import { RULE_VERBS, admit, admitDecision, type Refusal, type RuleVerb } from "./verbs";
 
 /* ── The seeded live simulation, as a pure reducer ──────────────────
  *
@@ -232,6 +233,18 @@ function simTick(d: Draft, scale: number, simMs: number) {
   } else replayEdge(d, scale, simMs);
 }
 
+/** Why the machine would refuse an agent action right now (verbs.ts is the
+ *  rulebook), or null when it applies. Fleet-wide actions are never refused. */
+export function refusalOf(state: Pick<SimState, "agents">, action: SimAction): Refusal | null {
+  if (action.type === "advance" || action.type === "pauseAll" || action.type === "resumeAll") return null;
+  const a = state.agents.find((x) => x.id === action.id);
+  if (!a) return "gone";
+  if (action.type === "review") return admitDecision("review", a, action.rid);
+  if (action.type === "draft" || action.type === "answer") return admitDecision(action.type, a);
+  if ((RULE_VERBS as readonly string[]).includes(action.type)) return admit(action.type as RuleVerb, a);
+  return null;
+}
+
 export function simReducer(state: SimState, action: SimAction): SimState {
   const d = new Draft(state);
   let { simMs, nextTickAt, beatAt } = state;
@@ -246,13 +259,13 @@ export function simReducer(state: SimState, action: SimAction): SimState {
   }
   const scale = state.scale;
   if (action.type === "pauseAll" || action.type === "resumeAll") return fleetDecision(d, state, action);
+  if (refusalOf(state, action)) return state;
   const idx = state.agents.findIndex((a) => a.id === action.id);
   if (idx < 0) return state;
   const a = d.edit(idx);
   const base = { agentId: a.id, toAgentId: null, kind: "decision" as const, text: null };
   if (action.type === "review") {
-    const rv = a.reviews.find((x) => x.id === action.rid);
-    if (!rv) return state;
+    const rv = a.reviews.find((x) => x.id === action.rid)!;
     a.reviews = a.reviews.filter((x) => x.id !== rv.id);
     if (!a.reviews.length && (a.state === "attention" || (a.state === "draft_ready" && action.approve))) {
       a.state = "idle";
@@ -267,31 +280,25 @@ export function simReducer(state: SimState, action: SimAction): SimState {
     a.health = "degraded";
     d.push({ ...base, decision: { act: "retry" } }, simMs);
   } else if (action.type === "answer") {
-    if (a.state !== "input_required") return state;
     startOrQueue(d, a, scale, simMs, null, "resuming");
     d.push({ ...base, decision: { act: "answer", text: action.text?.trim() || undefined } }, simMs);
   } else if (action.type === "draft") {
     // A draft with no review of its own: approving publishes it, sending it back revises.
-    if (a.state !== "draft_ready") return state;
     if (action.approve) stopRun(a);
     else startOrQueue(d, a, scale, simMs, null, "revising");
     d.push({ ...base, decision: { act: action.approve ? "publish" : "revise" } }, simMs);
   } else if (action.type === "pause") {
-    if (!a.enabled) return state;
     a.enabled = false;
     // A queued run never starts; a run in progress finishes (pause stops new runs).
     if (a.state === "queued") stopRun(a);
     d.push({ ...base, decision: { act: "pause" } }, simMs);
   } else if (action.type === "resume") {
-    if (a.enabled) return state;
     a.enabled = true;
     d.push({ ...base, decision: { act: "resume" } }, simMs);
   } else if (action.type === "run") {
-    if (!a.enabled || a.state === "running" || a.state === "input_required" || a.state === "draft_ready") return state;
     startOrQueue(d, a, scale, simMs, ...teamTask(d, a));
     d.push({ ...base, decision: { act: "run" } }, simMs);
   } else if (action.type === "cancel") {
-    if (a.state !== "running") return state;
     stopRun(a);
     fillSlot(d, scale, simMs, a, false);
     d.push({ ...base, decision: { act: "cancel" } }, simMs);
