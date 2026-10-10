@@ -1706,6 +1706,8 @@
             "src/components/mobile-landing/shared/handoffMachine.test.ts",
             "src/components/mobile-landing/shared/submitWaitlist.ts",
             "src/components/mobile-landing/shared/submitWaitlist.test.ts",
+            "src/lib/handoff-arrival.ts",
+            "src/lib/handoff-arrival.test.ts",
             "e2e/mobile/dashboard-personas.spec.ts",
             "src/hooks/useKeyboardInset.ts",
             "src/hooks/useKeyboardInset.test.ts",
