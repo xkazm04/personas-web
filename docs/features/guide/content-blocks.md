@@ -59,6 +59,21 @@ fallback is SSR-safe and renders without JS.
   links and copy-link anchors always match. `page.tsx` parses once on the server and passes
   `headingsOf(doc)` to `TopicView`, and builds the HowTo JSON-LD from `stepsOf(doc)`, the
   same steps (continuation lines included) `StepWizard` renders.
+- **Sections & search arrival.** `sectionsOf(doc)` (wrapped by `extractSections`) slices the
+  same tree at its heading nodes: an optional preamble (`id: null`, depth 0), then one
+  section per heading carrying exactly that heading's `headingsOf` fields plus `body`, the
+  inline-stripped text of every node up to the next heading (code blocks excluded). A
+  directive belongs to the section it sits in, so `:::tabs` labels never start one. The
+  search body index is built from it (see [Data & content](data-content.md)), so every
+  search anchor is a rendered heading id. When a body hit navigates to `#<section>`,
+  `useArrivalMark(bodyRef, topic.id)` in `TopicView` takes the query handed off by
+  `armArrivalMark`, finds its first match in the text between that heading and the next
+  `h1-h4[id]`, and registers it as `CSS.highlights` `guide-hit` (styled by
+  `::highlight(guide-hit)` in `globals.css`). It never mutates the DOM. A match below the
+  fold is scrolled to the centre (instant under `useStillMotion`); the mark clears on the
+  reader's next wheel/touch/pointer/key intent, and an `aria-live` line announces
+  `t.guide.searchHitMarked`. The h1 focus on topic change uses `preventScroll` when the URL
+  has a hash, so it does not undo the section landing.
 - **Code highlighting.** `CodeFence` (`CodeFence.tsx:95`) lazy-loads a Shiki core
   highlighter (single shared promise, `CodeFence.tsx:35`) with a fixed lang allowlist
   and `github-dark-default` theme, then crossfades the highlighted HTML over the plain
@@ -69,11 +84,12 @@ fallback is SSR-safe and renders without JS.
 | File | Role |
 | --- | --- |
 | `src/components/guide/GuideMarkdown.tsx` | Public entry; injects the i18n copy-anchor label and renders `parseBlocks`. |
-| `src/components/guide/guide-markdown/parseGuide.ts` | The grammar: `parseGuide` -> typed tree + diagnostics; `GRAMMAR`, `KNOWN_DIRECTIVES`, heading ids, `headingsOf`/`stepsOf` projections. Node-loadable. |
+| `src/components/guide/guide-markdown/parseGuide.ts` | The grammar: `parseGuide` -> typed tree + diagnostics; `GRAMMAR`, `KNOWN_DIRECTIVES`, heading ids, `headingsOf`/`stepsOf`/`sectionsOf` projections. Node-loadable. |
 | `src/components/guide/guide-markdown/renderGuideDoc.tsx` | Total switch from tree nodes to block components. |
 | `src/components/guide/guide-markdown/parseBlocks.tsx` | `renderGuideDoc(parseGuide(lines).doc)` plus dev warnings. |
 | `src/components/guide/guide-markdown/directiveLint.ts` | `lintDirectives` = `parseGuide(lines).diagnostics`, for TS callers. |
-| `src/components/guide/guide-markdown/extractHeadings.ts` | `headingsOf(parseGuide(content).doc)`; `GuideHeading` type. |
+| `src/components/guide/guide-markdown/extractHeadings.ts` | `extractHeadings` = `headingsOf(parseGuide(content).doc)`, `extractSections` = `sectionsOf(...)`; `GuideHeading`/`GuideSection` types. |
+| `src/components/guide/guide-markdown/useArrivalMark.ts` | Client hook + `armArrivalMark` hand-off: marks a search hit inside its section with the CSS Custom Highlight API. |
 | `src/components/guide/guide-markdown/headingId.ts`, `slugify.ts` | Re-exports of the id assigner and slugifier from `parseGuide.ts`. |
 | `src/components/guide/guide-markdown/parseInline.tsx` | Inline regex pass (emphasis/links/images/code/highlight) + `typography()` smart-punctuation. |
 | `src/components/guide/guide-markdown/HeadingAnchor.tsx` | Renders `<h2..h4 id>` with a hover/focus `#` copy-link affordance. |
@@ -95,7 +111,7 @@ fallback is SSR-safe and renders without JS.
   `extractHeadings` for the TOC (`TopicView.tsx:66`). **Stores:** none in the renderer
   (Zustand is upstream; `extractHeadings` re-runs only when the localized body differs
   from the server-extracted headings). **API routes:** none. **Types:** `GuideNode`,
-  `GuideDiagnostic`, `GuideHeading` (`parseGuide.ts`), `CardItem` (`blocks/CardsBlock.tsx:5`); block prop shapes are
+  `GuideDiagnostic`, `GuideHeading`, `GuideSection` (`parseGuide.ts`), `CardItem` (`blocks/CardsBlock.tsx:5`); block prop shapes are
   local interfaces per component.
 - **Client persistence:** `Checklist` writes per-list progress to `localStorage` under
   a stable content hash (`blocks/Checklist.tsx:11`), hydrated post-mount to avoid SSR
