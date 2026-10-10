@@ -37,6 +37,8 @@ export interface Command {
   status: CmdStatus;
   /** Why the machine refused it (status "refused"). */
   reason?: Refusal;
+  /** The batch it was sent in (a grouped triage verdict): one Undo takes back all of it. */
+  batch?: number;
 }
 
 export type CommandSpec = Omit<Command, "id" | "status" | "reason">;
@@ -88,6 +90,13 @@ export function openControl(cmds: readonly Command[], agentId: string): Command 
   return cmds.find((c) => c.agentId === agentId && isOpen(c) && CONTROL_VERBS.has(c.verb));
 }
 
+/** What Undo can still take back of a batch: its held commands; the rest have left. */
+export function planBatchUndo(cmds: readonly Pick<Command, "id" | "batch" | "status">[], batchId: number): { undo: number[]; alreadySent: number } {
+  const members = cmds.filter((c) => c.batch === batchId && c.status !== "undone");
+  const undo = members.filter((c) => c.status === "held").map((c) => c.id);
+  return { undo, alreadySent: members.length - undo.length };
+}
+
 /** A command that has left the browser and not yet been done. */
 export function inFlightFor(cmds: readonly Command[], agentId: string): Command | undefined {
   return cmds.find((c) => c.agentId === agentId && (c.status === "sending" || c.status === "acked"));
@@ -103,6 +112,10 @@ export function useCommands(dispatch: (a: SimAction) => void, sim: Pick<SimState
   useEffect(() => {
     simRef.current = sim;
   }, [sim]);
+  const batchSeq = useRef(0);
+  /** Each open batch's command ids (kept here, not read from `cmds`, which an
+   *  Undo from an older render's toast would see stale, and which is capped). */
+  const batches = useRef(new Map<number, number[]>());
   const timers = useRef(new Map<number, number[]>());
   const held = useRef(new Set<number>());
   const seq = useRef(0);
@@ -119,6 +132,7 @@ export function useCommands(dispatch: (a: SimAction) => void, sim: Pick<SimState
     setCmds((cs) => [{ ...spec, id, status: hold ? ("held" as const) : ("sending" as const) }, ...cs].slice(0, 40));
     const t0 = hold ? HOLD_MS : 0;
     if (hold) held.current.add(id);
+    if (spec.batch != null) batches.current.set(spec.batch, [...(batches.current.get(spec.batch) ?? []), id]);
     const at = (ms: number, fn: () => void) => window.setTimeout(fn, ms);
     timers.current.set(id, [
       ...(hold ? [at(t0, () => { held.current.delete(id); setStatus(id, "sending"); })] : []),
@@ -143,7 +157,24 @@ export function useCommands(dispatch: (a: SimAction) => void, sim: Pick<SimState
     return true;
   };
 
-  return { cmds, send, undo };
+  /** A new batch id for a grouped verdict's commands. */
+  const newBatch = (): number => {
+    const id = ++batchSeq.current;
+    // Only a recent batch can still be undone (its toast is gone after HOLD_MS).
+    batches.current.delete(id - 20);
+    return id;
+  };
+
+  /** Take back what is still held of a batch, and say how many had already left. */
+  const undoBatch = (batchId: number): { undone: number; alreadySent: number } => {
+    const ids = batches.current.get(batchId) ?? [];
+    batches.current.delete(batchId);
+    const plan = planBatchUndo(ids.map((id) => ({ id, batch: batchId, status: held.current.has(id) ? "held" : "sending" })), batchId);
+    const undone = plan.undo.filter((id) => undo(id)).length;
+    return { undone, alreadySent: plan.alreadySent + plan.undo.length - undone };
+  };
+
+  return { cmds, send, undo, newBatch, undoBatch };
 }
 
 export type Commands = ReturnType<typeof useCommands>;

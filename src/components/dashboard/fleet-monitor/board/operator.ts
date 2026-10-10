@@ -3,7 +3,8 @@ import type { BoardCopy } from "./copy";
 import { openControl, type Commands } from "./useCommands";
 import type { ToastAction } from "./useBoardRuntime";
 import type { BulkVerb } from "./fleetTable";
-import { admit, type RuleVerb } from "./verbs";
+import { admit, admitDecision, type RuleVerb } from "./verbs";
+import { groupVerdicts, type TriageGroup } from "./triageGroups";
 
 interface OperatorDeps {
   commands: Commands;
@@ -37,6 +38,12 @@ export function makeOperator({ commands: raw, toast, copy: c, hostName, offline,
   const undo = (id: number) => {
     if (commands.undo(id)) toast(fill(c.cmd.undone, host));
   };
+  /** One Undo for a batch: says how many it took back, and how many had already left. */
+  const undoBatch = (batch: number) => {
+    const { undone, alreadySent } = raw.undoBatch(batch);
+    if (!undone) return;
+    toast(alreadySent ? fill(c.triage.batchSplit, { n: undone, m: alreadySent, ...host }) : fill(c.triage.batchUndone, { n: undone, ...host }));
+  };
   return {
     offline,
     refusal,
@@ -69,6 +76,46 @@ export function makeOperator({ commands: raw, toast, copy: c, hostName, offline,
         label: c.cmd.undo,
         run: () => undo(id),
       });
+    },
+    /**
+     * One verdict for a whole triage group: a held command per member (only
+     * where the decision is still there, per the rulebook), all in one batch
+     * with one toast and one Undo. Approve is refused for a group that does not
+     * earn it (a critical member). Returns the batch id (0: nothing sent).
+     */
+    verdictBatch: (g: TriageGroup, approve: boolean, scope: readonly SimAgent[]): number => {
+      if (offline || !groupVerdicts(g).includes(approve ? "approve" : "sendback")) return 0;
+      const byId = new Map(scope.map((a) => [a.id, a]));
+      const draft = g.kind === "draft";
+      const ok = g.members.filter((m) => {
+        const a = byId.get(m.agentId);
+        return !!a && admitDecision(draft ? "draft" : "review", a, m.rid) === null;
+      });
+      if (!ok.length) return 0;
+      const batch = raw.newBatch();
+      for (const m of ok) {
+        commands.send(
+          draft
+            ? { verb: approve ? "publish" : "revise", agentId: m.agentId, batch }
+            : { verb: approve ? "approve" : "sendback", agentId: m.agentId, rid: m.rid, batch },
+          true,
+        );
+      }
+      const verb = draft ? (approve ? "publish" : "revise") : approve ? "approve" : "sendback";
+      toast(fill(c.triage.batchToasts[verb], { n: ok.length, title: g.title ?? "" }), { label: c.cmd.undo, run: () => undoBatch(batch) });
+      return batch;
+    },
+    /** Retry a failure group: only the members the rulebook admits now. Returns the keys retried. */
+    retryBatch: (g: TriageGroup, scope: readonly SimAgent[]): string[] => {
+      if (offline) return [];
+      const byId = new Map(scope.map((a) => [a.id, a]));
+      const ok = g.members.filter((m) => {
+        const a = byId.get(m.agentId);
+        return !!a && refusal("retry", a) === null;
+      });
+      for (const m of ok) commands.send({ verb: "retry", agentId: m.agentId });
+      if (ok.length) toast(fill(c.triage.batchToasts.retry, { n: ok.length, ...host }));
+      return ok.map((m) => m.key);
     },
     /** One verb to many agents: a command each (only where the rulebook admits it
      *  and no run command is already open on the agent), one toast. */
