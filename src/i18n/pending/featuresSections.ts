@@ -40,6 +40,15 @@ export interface FeaturesSectionsCopy {
       lede: string;
       stylised: string;
     };
+    revise: {
+      change: string;
+      notNeeded: string;
+      routine: string;
+      urgent: string;
+      testRunTwo: string;
+      rebuilt: string;
+      short: { triggers: string[]; review: string[] };
+    };
   };
   memory: {
     stylised: string;
@@ -283,6 +292,15 @@ export const featuresSectionsCopy: FeaturesSectionsCopy = {
     v3: {
       lede: 'One sentence in. Eight decisions out, grown into one agent.',
       stylised: 'Stylised',
+    },
+    revise: {
+      change: 'Change: {label}',
+      notNeeded: 'Not needed',
+      routine: 'Routine',
+      urgent: 'Urgent',
+      testRunTwo: 'Test run: one routine email, one urgent',
+      rebuilt: 'Rebuilt with your answers: {triggers}, {review}.',
+      short: { triggers: ['15 min', '1 hour', 'Webhook'], review: ['Auto', 'Approve', 'Urgent only'] },
     },
   },
   memory: {
