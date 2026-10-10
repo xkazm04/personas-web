@@ -1,0 +1,25 @@
+{
+  "$generated": "by scripts/sync-desktop-facts.mjs from the personas desktop repo - do not hand-edit; run npm run sync:desktop-facts",
+  "sources": {
+    "memoryCategories": "src-tauri/core/src/validation/memory.rs",
+    "cellKeys": "src/lib/constants/dimensionMapping.ts"
+  },
+  "memoryCategories": [
+    "fact",
+    "preference",
+    "instruction",
+    "context",
+    "learned",
+    "constraint"
+  ],
+  "cellKeys": [
+    "use-cases",
+    "connectors",
+    "triggers",
+    "human-review",
+    "memory",
+    "error-handling",
+    "messages",
+    "events"
+  ]
+}
