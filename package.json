@@ -37,7 +37,8 @@
     "report:i18n-hardcoded": "node scripts/report-hardcoded-ui-strings.mjs",
     "db:migrate": "node scripts/run-voting-migration.mjs",
     "db:migrate:sync": "node scripts/run-sync-migration.mjs",
-    "prepare": "node scripts/install-git-hooks.mjs"
+    "prepare": "node scripts/install-git-hooks.mjs",
+    "sync:desktop-facts": "node scripts/sync-desktop-facts.mjs"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.69.0",

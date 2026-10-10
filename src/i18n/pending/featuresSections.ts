@@ -43,7 +43,7 @@ export interface FeaturesSectionsCopy {
   };
   memory: {
     stylised: string;
-    categories: { fact: string; decision: string; insight: string; learning: string; warning: string; preference: string; instruction: string; context: string; learned: string; constraint: string };
+    categories: { fact: string; preference: string; instruction: string; context: string; learned: string; constraint: string };
     v1: { artLabel: string; retries: string; noRetries: string; recalled: string };
     v2: {
       artLabel: string;
@@ -71,7 +71,7 @@ export interface FeaturesSectionsCopy {
       legend: string;
       show: string;
       hint: string;
-      examples: { fact: string; decision: string; insight: string; learning: string; warning: string; preference: string; instruction: string; context: string; learned: string; constraint: string };
+      examples: { fact: string; preference: string; instruction: string; context: string; learned: string; constraint: string };
     };
   };
   healing: {
@@ -287,7 +287,7 @@ export const featuresSectionsCopy: FeaturesSectionsCopy = {
   },
   memory: {
     stylised: 'Stylised',
-    categories: { fact: 'Fact', decision: 'Decision', insight: 'Insight', learning: 'Learning', warning: 'Warning', preference: 'Preference', instruction: 'Instruction', context: 'Context', learned: 'Learned', constraint: 'Constraint' },
+    categories: { fact: 'Fact', preference: 'Preference', instruction: 'Instruction', context: 'Context', learned: 'Learned', constraint: 'Constraint' },
     v1: {
       artLabel: 'The same task run twice. Run 1 wanders and fails twice; each failure is kept as a memory, a warning and a learning. Before run 12 the agent recalls both and goes straight to the goal with no retries.',
       retries: '{n} retries',
@@ -322,10 +322,6 @@ export const featuresSectionsCopy: FeaturesSectionsCopy = {
       hint: 'Pick one to see an example.',
       examples: {
         fact: 'Invoices go out on the first of the month.',
-        decision: 'Chose express shipping: the order was urgent.',
-        insight: 'Support tickets spike every Monday morning.',
-        learning: 'Shorter subject lines get more opens.',
-        warning: 'Never invoice before the contract is signed.',
         preference: 'The client prefers formal language.',
         instruction: 'Always copy the account manager on replies.',
         context: 'This quarter the team is focused on renewals.',

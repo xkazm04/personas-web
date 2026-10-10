@@ -283,7 +283,12 @@
             "src/components/feature-sections/models-router/geometry.ts",
             "src/components/feature-sections/models-router/index.tsx",
             "src/components/feature-sections/models-router/shared/Frame.tsx",
-            "src/components/feature-sections/models-router/shared/motion.ts"
+            "src/components/feature-sections/models-router/shared/motion.ts",
+            "src/components/feature-sections/memory-rings/rings.test.ts",
+            "src/lib/product-facts/index.ts",
+            "src/lib/product-facts/desktop-facts.json",
+            "src/lib/product-facts/desktopFacts.test.ts",
+            "scripts/sync-desktop-facts.mjs"
           ],
           "target": null,
           "apiRoutes": []
