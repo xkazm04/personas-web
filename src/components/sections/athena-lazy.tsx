@@ -1,6 +1,13 @@
 "use client";
 
 import { createLazySection } from "./LazySection";
+import { registerSection } from "@/i18n/catalog";
+import { athenaPageSection } from "@/i18n/sections/athenaPage";
+
+// The athenaPage namespace is a catalog section, not core copy: it joins the catalog here,
+// at module scope, because this module is what every reader is loaded through
+// (/athena's page and the dev-only /preview registry both import it).
+registerSection(athenaPageSection);
 
 /*
  * The /athena page's sections, lazily mounted.

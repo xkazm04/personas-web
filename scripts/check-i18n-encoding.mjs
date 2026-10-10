@@ -35,6 +35,9 @@
  *
  * Pending modules (src/i18n/pending/*.ts, English-only copy kept off the shared
  * bundle) are scanned too and held to en.ts's zero; they are not in the baseline.
+ * So are catalog sections (every .ts under src/i18n/sections/: route-owned namespaces,
+ * every locale's part included): they were moved out of files whose baseline is
+ * zero, so they are held to zero too and stay out of the baseline.
  *
  * Selection: any *.ts in src/i18n that is not a known non-locale module. This
  * is deliberately broader than a bare two-letter match so that region-coded
@@ -90,7 +93,20 @@ const pendingFiles = fs.existsSync(PENDING_DIR)
       .sort()
       .map((f) => `pending/${f}`)
   : [];
-const mustBeClean = (f) => f === "en.ts" || f.startsWith("pending/");
+// Catalog sections (src/i18n/sections/**): every locale's
+// part of a route-owned namespace, moved verbatim out of files at baseline zero.
+const SECTIONS_DIR = path.join(I18N_DIR, "sections");
+function walkSections(dir, rel) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((d) =>
+    d.isDirectory()
+      ? walkSections(path.join(dir, d.name), `${rel}${d.name}/`)
+      : d.name.endsWith(".ts")
+        ? [`${rel}${d.name}`]
+        : [],
+  );
+}
+const sectionFiles = fs.existsSync(SECTIONS_DIR) ? walkSections(SECTIONS_DIR, "sections/").sort() : [];
+const mustBeClean = (f) => f === "en.ts" || f.startsWith("pending/") || f.startsWith("sections/");
 
 // ── Instrument assertions ───────────────────────────────────────────────────
 // Assert the instrument before trusting the result.
@@ -106,7 +122,7 @@ if (files.length === 0) {
 
 const counts = {};
 const samples = {};
-for (const f of [...files, ...pendingFiles]) {
+for (const f of [...files, ...pendingFiles, ...sectionFiles]) {
   const text = fs.readFileSync(path.join(I18N_DIR, f), "utf8");
   const lines = text.split("\n");
   let n = 0;
@@ -149,12 +165,12 @@ if (unscanned.length > 0) {
 
 let failed = false;
 let improved = false;
-for (const f of [...files, ...pendingFiles]) {
+for (const f of [...files, ...pendingFiles, ...sectionFiles]) {
   const now = counts[f];
   const base = baseline[f] ?? 0;
   if (mustBeClean(f) && now > 0) {
     failed = true;
-    console.error(`[i18n-encoding] FAIL ${f}: ${now} mojibake sequence(s) — English copy (en.ts, pending/) ships to production and must be clean:`);
+    console.error(`[i18n-encoding] FAIL ${f}: ${now} mojibake sequence(s) — en.ts, pending/ and sections/ are held to zero and must be clean:`);
     for (const s of samples[f]) console.error(s);
   } else if (now > base) {
     failed = true;
@@ -175,7 +191,7 @@ if (improved) {
 const dirty = files.filter((f) => counts[f] > 0);
 console.log(
   dirty.length === 0
-    ? `[i18n-encoding] OK — all ${files.length} locale files and ${pendingFiles.length} pending module(s) clean`
+    ? `[i18n-encoding] OK — all ${files.length} locale files, ${pendingFiles.length} pending module(s) and ${sectionFiles.length} section file(s) clean`
     : `[i18n-encoding] OK — scanned ${files.length} locale files, no new corruption ` +
         `(${dirty.length} file(s) still carry known baseline debt: ` +
         `${dirty.map((f) => `${f}=${counts[f]}`).join(", ")})`,

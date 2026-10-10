@@ -8,12 +8,19 @@ import PrivacyPolicy from "./policies/PrivacyPolicy";
 import TermsOfService from "./policies/TermsOfService";
 import CookiePolicy from "./policies/CookiePolicy";
 import PolicyChangelog from "./PolicyChangelog";
+import { registerSection } from "@/i18n/catalog";
+import { legalSection } from "@/i18n/sections/legal";
 import {
   hasUnseenUpdate,
   readLastSeen,
   writeLastSeen,
   type PolicyId,
 } from "@/data/policy-changelog";
+
+// `t.privacyPolicy` / `t.cookiePolicy` / `t.legalPage` are a catalog section:
+// they join the catalog here, at module scope, because this module loads every
+// reader (./policies/*). Every other route ships without them.
+registerSection(legalSection);
 
 type TabId = PolicyId;
 

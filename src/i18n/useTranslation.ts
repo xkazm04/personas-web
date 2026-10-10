@@ -1,87 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import { useI18nStore } from "@/stores/i18nStore";
-import { en } from "./en";
-import type { LocaleTranslations, Translations } from "./en";
-import type { Language } from "@/stores/i18nStore";
+import { catalog } from "./catalog";
 
-const cache: Partial<Record<Language, Translations>> = { en };
-
-const loaders: Record<Exclude<Language, "en">, () => Promise<LocaleTranslations>> = {
-  zh: () => import("./zh").then((m) => m.zh),
-  ar: () => import("./ar").then((m) => m.ar),
-  hi: () => import("./hi").then((m) => m.hi),
-  ru: () => import("./ru").then((m) => m.ru),
-  id: () => import("./id").then((m) => m.id),
-  es: () => import("./es").then((m) => m.es),
-  fr: () => import("./fr").then((m) => m.fr),
-  bn: () => import("./bn").then((m) => m.bn),
-  ja: () => import("./ja").then((m) => m.ja),
-  vi: () => import("./vi").then((m) => m.vi),
-  de: () => import("./de").then((m) => m.de),
-  ko: () => import("./ko").then((m) => m.ko),
-  cs: () => import("./cs").then((m) => m.cs),
-};
-
-/**
- * Recursively merge `override` on top of `base`. Plain objects merge key by
- * key; primitives, arrays, and null replace wholesale.
+/*
+ * A selector over the one catalog store (./catalog.ts). Every caller reads the
+ * same memoised catalog object, so a locale switch does one load and one merge
+ * for the whole app, and the server snapshot is English so the hydrating render
+ * matches the static HTML.
+ *
+ * While a requested locale is loading the previous catalog stays visible - a
+ * brief stale view of the prior locale is strictly less jarring than flickering
+ * the whole UI through English.
  */
-function deepMerge(base: unknown, override: unknown): unknown {
-  if (override === undefined) return base;
-  if (override === null) return override;
-  if (Array.isArray(override) || Array.isArray(base)) return override;
-  if (typeof base !== "object" || base === null) return override;
-  if (typeof override !== "object") return override;
-
-  const result: Record<string, unknown> = { ...(base as Record<string, unknown>) };
-  for (const key of Object.keys(override as Record<string, unknown>)) {
-    result[key] = deepMerge(
-      (base as Record<string, unknown>)[key],
-      (override as Record<string, unknown>)[key],
-    );
-  }
-  return result;
-}
-
-function mergeWithEnglishFallback(translations: LocaleTranslations): Translations {
-  return deepMerge(en, translations) as Translations;
-}
-
 export function useTranslation() {
   const language = useI18nStore((s) => s.language);
-  const [t, setTranslations] = useState<Translations>(() => cache[language] ?? en);
+  const t = useSyncExternalStore(catalog.subscribe, catalog.getActiveCatalog, catalog.getServerCatalog);
 
   useEffect(() => {
-    let cancelled = false;
-    const cached = cache[language];
-
-    if (cached) {
-      queueMicrotask(() => {
-        if (!cancelled) setTranslations(cached);
-      });
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    // Don't flash the user with English while the requested locale is
-    // loading. The previous shape unconditionally set en in a
-    // microtask, then replaced it once the loader resolved — so a
-    // user switching from de to ja saw the entire UI flicker through
-    // English for one frame on first switch (and on every cold visit
-    // until the bundle was cached). Keep the current translations
-    // visible until the new locale resolves; it's a network round-trip
-    // either way and the brief stale view of the prior locale is
-    // strictly less jarring than English-flicker.
-    loaders[language as Exclude<Language, "en">]?.().then((next) => {
-      const merged = mergeWithEnglishFallback(next);
-      cache[language] = merged;
-      if (!cancelled) setTranslations(merged);
-    });
-
-    return () => {
-      cancelled = true;
-    };
+    catalog.activate(language);
   }, [language]);
 
   return useMemo(() => ({ t, language }), [t, language]);

@@ -12,6 +12,7 @@
   "sources": [
     { "path": "src/i18n/en.ts", "kind": "ts-module" },
     { "path": "src/i18n/pending/*.ts", "kind": "ts-module" },
+    { "path": "src/i18n/sections/en/*.ts", "kind": "ts-module" },
     { "path": "src/lib/seo.ts", "kind": "ts-module" },
     { "path": "src/app/layout.tsx", "kind": "jsx" },
     { "path": "src/components/sections/*/data.ts", "kind": "ts-module" },

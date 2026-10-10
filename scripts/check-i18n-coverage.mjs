@@ -185,6 +185,75 @@ for (const locale of targetLocales) {
   }
 }
 
+// Catalog sections (src/i18n/catalog.ts): route-owned namespaces that left en.ts
+// and the locale files so only their routes ship them. Each section is a
+// definition module src/i18n/sections/<name>.ts plus one data module per locale,
+// src/i18n/sections/<lang>/<name>.ts exporting `<lang>`. They are translated
+// copy, held to the same 100% as the core: each locale's part is compared with
+// the English part, and a section namespace may never also sit in a core file.
+const sectionsDir = path.join(i18nDir, "sections");
+const sectionNames = fs.existsSync(sectionsDir)
+  ? fs
+      .readdirSync(sectionsDir)
+      .filter((filename) => filename.endsWith(".ts") && !filename.endsWith(".test.ts"))
+      .map((filename) => path.basename(filename, ".ts"))
+      .sort((a, b) => a.localeCompare(b))
+  : [];
+
+function loadSectionPart(locale, name) {
+  const file = path.join(sectionsDir, locale, `${name}.ts`);
+  if (!fs.existsSync(file)) return undefined;
+  const compiled = ts.transpileModule(fs.readFileSync(file, "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
+    fileName: file,
+  }).outputText;
+  const sandbox = { exports: {}, module: { exports: {} } };
+  sandbox.exports = sandbox.module.exports;
+  sandbox.require = (specifier) => {
+    throw new Error(`Unexpected runtime import "${specifier}" in section part ${locale}/${name}.ts`);
+  };
+  vm.runInNewContext(compiled, sandbox, { filename: file });
+  const part = sandbox.module.exports[locale];
+  if (!part || typeof part !== "object") {
+    console.error(`src/i18n/sections/${locale}/${name}.ts must export a const named "${locale}".`);
+    process.exit(1);
+  }
+  return part;
+}
+
+const sectionBaselines = {};
+for (const name of sectionNames) {
+  const part = loadSectionPart(baselineLocale, name);
+  if (!part) {
+    console.error(`Section "${name}" has no English part (src/i18n/sections/${baselineLocale}/${name}.ts).`);
+    process.exit(1);
+  }
+  for (const ns of Object.keys(part)) {
+    if (ns in fullBaseline || ns in pendingModuleCopy) {
+      console.error(
+        `"${ns}" is in section "${name}" and also in en.ts or a pending module. ` +
+          "A namespace lives in exactly one place.",
+      );
+      process.exit(1);
+    }
+  }
+  sectionBaselines[name] = part;
+}
+for (const locale of targetLocales) {
+  const translations = loadLocale(locale);
+  for (const name of sectionNames) {
+    for (const ns of Object.keys(sectionBaselines[name])) {
+      if (ns in translations) {
+        console.error(
+          `${locale}.ts carries "${ns}", which is a catalog section (src/i18n/sections/${name}.ts). ` +
+            `Its ${locale} copy lives in src/i18n/sections/${locale}/${name}.ts.`,
+        );
+        process.exit(1);
+      }
+    }
+  }
+}
+
 const pendingNamespaces = Object.keys(pendingModuleCopy);
 const baseline = fullBaseline;
 
@@ -193,6 +262,14 @@ let failed = false;
 for (const locale of targetLocales) {
   const issues = [];
   compareShape(baseline, loadLocale(locale), [locale], issues);
+  for (const name of sectionNames) {
+    const part = loadSectionPart(locale, name);
+    if (!part) {
+      issues.push(`${locale}: section "${name}" has no part (src/i18n/sections/${locale}/${name}.ts)`);
+      continue;
+    }
+    compareShape(sectionBaselines[name], part, [locale], issues);
+  }
 
   if (issues.length > 0) {
     failed = true;
@@ -219,4 +296,7 @@ if (failed) {
   process.exit(1);
 }
 
-console.log(`\nI18n coverage is 100% across ${targetLocales.length} locale${targetLocales.length === 1 ? "" : "s"}.`);
+console.log(
+  `\nI18n coverage is 100% across ${targetLocales.length} locale${targetLocales.length === 1 ? "" : "s"}` +
+    (sectionNames.length > 0 ? ` (core + ${sectionNames.length} catalog sections: ${sectionNames.join(", ")}).` : "."),
+);
