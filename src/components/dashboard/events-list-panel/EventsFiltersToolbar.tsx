@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Link2, Loader2, Search, X } from "lucide-react";
+import { Layers, Link2, Loader2, Search, X } from "lucide-react";
 import FilterBar from "@/components/dashboard/FilterBar";
 import { fadeUp } from "@/lib/animations";
+import type { FailureCluster } from "@/lib/deadLetterTriage";
 import type { EventPanelLabels } from "./eventPanelTypes";
 
 export function EventsFiltersToolbar({
@@ -21,6 +22,8 @@ export function EventsFiltersToolbar({
   clearActiveChain,
   filteredCount,
   eventsLoading,
+  causes,
+  onSelectCause,
   labels,
 }: {
   query: string;
@@ -39,6 +42,9 @@ export function EventsFiltersToolbar({
   clearActiveChain: () => void;
   filteredCount: number;
   eventsLoading: boolean;
+  /** Dead letters grouped by failure story; empty outside the Dead Letter filter. */
+  causes: FailureCluster[];
+  onSelectCause: (ids: string[]) => void;
   labels: EventPanelLabels;
 }) {
   return (
@@ -77,7 +83,41 @@ export function EventsFiltersToolbar({
           {eventsLoading && <Loader2 className="h-4 w-4 animate-spin text-muted-dark" />}
         </div>
       </motion.div>
+      <CauseChips causes={causes} onSelectCause={onSelectCause} labels={labels} />
     </>
+  );
+}
+
+/** A cohort is one selection: a chip per failure story shared by 2+ rows. */
+const MAX_CAUSE_CHIPS = 6;
+
+function CauseChips({ causes, onSelectCause, labels }: { causes: FailureCluster[]; onSelectCause: (ids: string[]) => void; labels: EventPanelLabels }) {
+  const cohorts = causes.filter((c) => c.ids.length > 1).slice(0, MAX_CAUSE_CHIPS);
+  if (cohorts.length === 0) return null;
+  const copy = labels.eventsPage.triage;
+  return (
+    <div role="group" aria-label={copy.causes} className="mb-4 flex flex-wrap items-center gap-2">
+      <span className="flex items-center gap-1 text-sm text-muted-dark">
+        <Layers aria-hidden="true" className="h-3.5 w-3.5" />
+        {copy.causes}
+      </span>
+      {cohorts.map((c) => {
+        const cause = c.sample ?? copy.noReason;
+        return (
+          <button
+            key={c.signature}
+            type="button"
+            onClick={() => onSelectCause(c.ids)}
+            title={cause}
+            aria-label={copy.selectCause.replace("{count}", String(c.ids.length)).replace("{cause}", cause)}
+            className="flex max-w-full items-center gap-2 rounded-lg border border-glass bg-white/[0.03] px-2.5 py-1.5 text-sm text-muted transition-colors hover:border-glass-strong hover:text-foreground"
+          >
+            <span className="max-w-[16rem] truncate">{cause}</span>
+            <span className="rounded-md bg-rose-500/10 px-1.5 text-rose-300 tabular-nums">{c.ids.length}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

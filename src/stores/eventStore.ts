@@ -9,6 +9,16 @@ import {
   isEventRetryable,
 } from "@/lib/eventStatusFsm";
 import { MAX_MANUAL_RETRIES } from "@/lib/eventWireStatus";
+import {
+  overlayWith,
+  transition,
+  type LedgerBatch,
+  type LedgerEffect,
+  type LedgerEvent,
+  type LedgerState,
+  type RefusalReason,
+} from "@/lib/review-ledger";
+import { summarizeOutcome, type DeadLetterFailure, type OutcomeSummary } from "@/lib/deadLetterTriage";
 import { mutate } from "swr";
 import { dashboardKeys } from "@/lib/dashboard-queries";
 
@@ -39,6 +49,55 @@ export function isReplayLocked(event: Pick<PersonaEvent, "retryCount">): boolean
 }
 
 export type ConnectionStatus = "connected" | "reconnecting" | "polling";
+
+/** The operator's two dead-letter verdicts, armed through the commit window. */
+export type EventVerdict = "retry" | "discard";
+
+/** A bulk verb's per-row result, the shape of the desktop's `BulkDeadLetterOutcome`. */
+export interface DeadLetterRunResult {
+  succeeded: string[];
+  failed: DeadLetterFailure[];
+  /** The circuit breaker stopped the run; the rows it never tried are `aborted`. */
+  aborted: boolean;
+}
+
+/** The last committed verdict that left rows unresolved: shown, never swallowed. */
+export type DeadLetterOutcome = OutcomeSummary & { batchId: number; verb: EventVerdict };
+
+const IDLE_EVENT_LEDGER: LedgerState<EventVerdict> = { window: null, inFlight: [], nextBatchId: 1 };
+let windowTimer: { batchId: number; handle: ReturnType<typeof setTimeout> } | null = null;
+
+/** Why one row's verb threw, in the desktop's reason vocabulary. */
+function failureReason(err: unknown): DeadLetterFailure["reason"] {
+  if (err instanceof ReplayLockedError) return "retry_exhausted";
+  if (err instanceof IllegalEventTransitionError) return "wrong_status";
+  return "write_failed";
+}
+
+/**
+ * Paint a pending verdict over a row, so no poll can repaint it during its
+ * window. Eligibility is the FSM's (and the row's retry budget): a row the
+ * verdict could not move is left as it is, and the commit reports it.
+ */
+function applyEventVerdict(row: PersonaEvent, batch: LedgerBatch<EventVerdict>): PersonaEvent {
+  if (batch.verdict === "discard") {
+    return isEventDiscardable(row.status) ? { ...row, status: "discarded" } : row;
+  }
+  return isEventRetryable(row.status) && !isReplayLocked(row) ? { ...row, status: "pending" } : row;
+}
+
+/** Buffered rows with every armed or committing verdict painted over them. */
+export function overlayEventVerdicts(
+  events: readonly PersonaEvent[],
+  ledger: LedgerState<EventVerdict>,
+): PersonaEvent[] {
+  return overlayWith(events, ledger, applyEventVerdict);
+}
+
+/** What the operator sees: the store's rows under its pending verdicts. */
+export function selectVisibleEvents(s: Pick<EventState, "events" | "ledger">): PersonaEvent[] {
+  return overlayEventVerdicts(s.events, s.ledger);
+}
 
 type EventSetter = (partial: (state: EventState) => Partial<EventState>) => void;
 
@@ -89,9 +148,30 @@ interface EventState {
    * any row that is not in `dead_letter`.
    */
   replayEvent: (event: PersonaEvent) => Promise<void>;
-  replayEvents: (events: PersonaEvent[]) => Promise<{ succeeded: number; failed: number; aborted: boolean; skipped: number }>;
+  /**
+   * The verbs a committed verdict runs. Every id comes back by name: done, or
+   * failed with its reason (`not_found`, `retry_exhausted`, `wrong_status`,
+   * `write_failed`, `aborted`). Surfaces never call these: they `decide`.
+   */
+  replayEvents: (ids: readonly string[]) => Promise<DeadLetterRunResult>;
   discardEvent: (event: PersonaEvent) => Promise<void>;
-  discardEvents: (events: PersonaEvent[]) => Promise<{ succeeded: number; failed: number; skipped: number }>;
+  discardEvents: (ids: readonly string[]) => Promise<DeadLetterRunResult>;
+
+  /** The commit window (review-ledger.ts) holding the operator's verdicts. */
+  ledger: LedgerState<EventVerdict>;
+  /**
+   * The one door for an operator's retry or discard: opens a 5 s undoable
+   * window and writes when it closes. Returns false when the ledger refused
+   * the arm (see `refusal`).
+   */
+  decide: (ids: readonly string[], verdict: EventVerdict) => boolean;
+  undoDecision: () => void;
+  /** Teardown: commit the open window now (unmount, pagehide, sign-out). */
+  flushDecisions: () => void;
+  /** Last refused arm; shown on the open undo toast. */
+  refusal: { reason: RefusalReason; batchId: number | null } | null;
+  lastOutcome: DeadLetterOutcome | null;
+  dismissOutcome: () => void;
 
   subscriptions: PersonaEventSubscription[];
   subscriptionsLoading: boolean;
@@ -107,7 +187,91 @@ interface EventState {
   reset: () => void;
 }
 
-export const useEventStore = create<EventState>((set, get) => ({
+export const useEventStore = create<EventState>((set, get) => {
+  function dispatch(event: LedgerEvent<EventVerdict>): boolean {
+    const t = transition(get().ledger, event);
+    if (t.refused) {
+      set({ refusal: { reason: t.refused.reason, batchId: get().ledger.window?.batchId ?? null } });
+      return false;
+    }
+    if (t.state === get().ledger) return true;
+    set({ ledger: t.state, refusal: event.type === "arm" ? null : get().refusal });
+    for (const e of t.effects) runEffect(e);
+    return true;
+  }
+
+  function runEffect(e: LedgerEffect<EventVerdict>) {
+    if (e.type === "schedule") {
+      if (windowTimer) clearTimeout(windowTimer.handle);
+      const handle = setTimeout(() => {
+        windowTimer = null;
+        dispatch({ type: "expire", batchId: e.batchId });
+      }, Math.max(0, e.deadline - Date.now()));
+      windowTimer = { batchId: e.batchId, handle };
+    } else if (e.type === "cancelTimer") {
+      if (windowTimer?.batchId === e.batchId) {
+        clearTimeout(windowTimer.handle);
+        windowTimer = null;
+      }
+    } else {
+      void commit(e.batch);
+    }
+  }
+
+  async function commit(batch: LedgerBatch<EventVerdict>) {
+    let result: DeadLetterRunResult;
+    try {
+      result = batch.verdict === "retry" ? await get().replayEvents(batch.ids) : await get().discardEvents(batch.ids);
+    } catch {
+      result = { succeeded: [], failed: batch.ids.map((id) => ({ id, reason: "write_failed" as const })), aborted: false };
+    }
+    if (result.failed.length > 0) {
+      set({ lastOutcome: { ...summarizeOutcome(result), batchId: batch.batchId, verb: batch.verdict } });
+    }
+    dispatch({ type: "settled", batchId: batch.batchId, failedIds: result.failed.map((f) => f.id) });
+  }
+
+  /** Run `verb` over `ids` in batches; every id comes back by name. */
+  async function runVerb(
+    ids: readonly string[],
+    refuse: (row: PersonaEvent) => DeadLetterFailure["reason"] | null,
+    verb: (row: PersonaEvent) => Promise<void>,
+    breaker: boolean,
+  ): Promise<DeadLetterRunResult> {
+    const succeeded: string[] = [];
+    const failed: DeadLetterFailure[] = [];
+    const queue: PersonaEvent[] = [];
+    // Pre-filter rows the verb would only throw on, so batches are not churned.
+    for (const id of new Set(ids)) {
+      const row = get().events.find((e) => e.id === id);
+      const reason = row ? refuse(row) : "not_found";
+      if (reason) failed.push({ id, reason });
+      else if (row) queue.push(row);
+    }
+    let consecutiveFailures = 0;
+    for (let i = 0; i < queue.length; i += REPLAY_BATCH_SIZE) {
+      const batch = queue.slice(i, i + REPLAY_BATCH_SIZE);
+      const results = await Promise.allSettled(batch.map(verb));
+      results.forEach((r, j) => {
+        if (r.status === "fulfilled") {
+          succeeded.push(batch[j].id);
+          consecutiveFailures = 0;
+        } else {
+          failed.push({ id: batch[j].id, reason: failureReason(r.reason) });
+          consecutiveFailures++;
+        }
+      });
+      // A sustained outage stops the run; the rows it never tried are named.
+      const rest = queue.slice(i + REPLAY_BATCH_SIZE);
+      if (breaker && consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD && rest.length > 0) {
+        for (const row of rest) failed.push({ id: row.id, reason: "aborted" });
+        return { succeeded, failed, aborted: true };
+      }
+    }
+    return { succeeded, failed, aborted: false };
+  }
+
+  return {
   events: [],
   eventIds: new Set(),
   eventsLoading: false,
@@ -229,45 +393,13 @@ export const useEventStore = create<EventState>((set, get) => ({
       clearReplaying(set, event.id);
     }
   },
-  replayEvents: async (events) => {
-    let succeeded = 0;
-    let failed = 0;
-    let skipped = 0;
-    let aborted = false;
-    let consecutiveFailures = 0;
-
-    // Pre-filter out locked and non-retryable rows so we don't churn batches
-    // calling them just to throw. Both are reported as `skipped`.
-    const eligible: PersonaEvent[] = [];
-    for (const e of events) {
-      const current = get().events.find((x) => x.id === e.id) ?? e;
-      if (isReplayLocked(current) || !isEventRetryable(current.status)) skipped++;
-      else eligible.push(e);
-    }
-
-    outer: for (let i = 0; i < eligible.length; i += REPLAY_BATCH_SIZE) {
-      const batch = eligible.slice(i, i + REPLAY_BATCH_SIZE);
-      const results = await Promise.allSettled(
-        batch.map((e) => get().replayEvent(e)),
-      );
-
-      for (const r of results) {
-        if (r.status === "fulfilled") {
-          succeeded++;
-          consecutiveFailures = 0;
-        } else {
-          failed++;
-          consecutiveFailures++;
-          if (consecutiveFailures >= CIRCUIT_BREAKER_THRESHOLD) {
-            aborted = true;
-            break outer;
-          }
-        }
-      }
-    }
-
-    return { succeeded, failed, aborted, skipped };
-  },
+  replayEvents: (ids) =>
+    runVerb(
+      ids,
+      (row) => (!isEventRetryable(row.status) ? "wrong_status" : isReplayLocked(row) ? "retry_exhausted" : null),
+      (row) => get().replayEvent(row),
+      true,
+    ),
   discardEvent: async (event) => {
     const currentEvent = get().events.find((e) => e.id === event.id) ?? event;
     if (!isEventDiscardable(currentEvent.status)) {
@@ -285,26 +417,26 @@ export const useEventStore = create<EventState>((set, get) => ({
       });
     }
   },
-  discardEvents: async (events) => {
-    let succeeded = 0;
-    let failed = 0;
-    let skipped = 0;
-    const eligible = events.filter((e) => {
-      const current = get().events.find((x) => x.id === e.id) ?? e;
-      if (isEventDiscardable(current.status)) return true;
-      skipped++;
-      return false;
-    });
-    for (let i = 0; i < eligible.length; i += REPLAY_BATCH_SIZE) {
-      const batch = eligible.slice(i, i + REPLAY_BATCH_SIZE);
-      const results = await Promise.allSettled(batch.map((e) => get().discardEvent(e)));
-      for (const r of results) {
-        if (r.status === "fulfilled") succeeded++;
-        else failed++;
-      }
-    }
-    return { succeeded, failed, skipped };
+  discardEvents: (ids) =>
+    runVerb(
+      ids,
+      (row) => (isEventDiscardable(row.status) ? null : "wrong_status"),
+      (row) => get().discardEvent(row),
+      false,
+    ),
+
+  ledger: IDLE_EVENT_LEDGER,
+  refusal: null,
+  lastOutcome: null,
+  decide: (ids, verdict) => dispatch({ type: "arm", ids, verdict, now: Date.now() }),
+  undoDecision: () => {
+    const w = get().ledger.window;
+    if (w) dispatch({ type: "undo", batchId: w.batchId });
   },
+  flushDecisions: () => {
+    dispatch({ type: "flush" });
+  },
+  dismissOutcome: () => set({ lastOutcome: null }),
 
   subscriptions: [],
   subscriptionsLoading: false,
@@ -345,6 +477,9 @@ export const useEventStore = create<EventState>((set, get) => ({
   },
 
   reset: () => {
+    // A verdict made before sign-out is still the operator's: commit it
+    // rather than drop it, then forget the rows.
+    get().flushDecisions();
     set({
       events: [],
       eventIds: new Set(),
@@ -356,6 +491,14 @@ export const useEventStore = create<EventState>((set, get) => ({
       subscriptionsLoading: false,
       subscriptionsNotServed: false,
       subscriptionsRead: false,
+      refusal: null,
+      lastOutcome: null,
     });
   },
-}));
+  };
+});
+
+// Commit any open verdict window when the page goes away (flush-on-teardown).
+if (typeof window !== "undefined") {
+  window.addEventListener("pagehide", () => useEventStore.getState().flushDecisions());
+}

@@ -8,14 +8,16 @@ import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/
 import { fadeUp } from "@/lib/animations";
 import type { PersonaEvent } from "@/lib/types";
 import { isEventDiscardable, isEventRetryable } from "@/lib/eventStatusFsm";
+import { clusterByFailure } from "@/lib/deadLetterTriage";
 import { useEventStream } from "@/hooks/useEventStream";
 import { useEventTopology } from "@/hooks/useEventTopology";
 import { useTranslation } from "@/i18n/useTranslation";
-import { useEventStore } from "@/stores/eventStore";
+import { overlayEventVerdicts, useEventStore } from "@/stores/eventStore";
 import { usePersonaStore } from "@/stores/personaStore";
 import { EventExpandedContent } from "./events-list-panel/EventExpandedContent";
 import { EventsBulkRetryBar } from "./events-list-panel/EventsBulkRetryBar";
 import { EventsFiltersToolbar } from "./events-list-panel/EventsFiltersToolbar";
+import { EventsTriageToasts } from "./events-list-panel/EventsTriageToasts";
 import { DataTable, buildEventColumns } from "./events-list-panel/EventsListColumns";
 import type { EventPanelLabels } from "./events-list-panel/eventPanelTypes";
 
@@ -24,21 +26,20 @@ const EVENTS_LOAD_STEP = 200;
 
 export default function EventsListPanel() {
   const { t } = useTranslation();
-  const events = useEventStore((s) => s.events);
+  const storeEvents = useEventStore((s) => s.events);
+  const ledger = useEventStore((s) => s.ledger);
+  // Pending verdicts painted over the rows: a poll cannot un-discard a row
+  // inside its undo window, and the lane drains the moment a verdict is armed.
+  const events = useMemo(() => overlayEventVerdicts(storeEvents, ledger), [storeEvents, ledger]);
   const eventsLoading = useEventStore((s) => s.eventsLoading);
   const listNotServed = useEventStore((s) => s.listNotServed);
   const fetchEvents = useEventStore((s) => s.fetchEvents);
-  const replayEvent = useEventStore((s) => s.replayEvent);
-  const replayEvents = useEventStore((s) => s.replayEvents);
+  const decide = useEventStore((s) => s.decide);
   const replayingIds = useEventStore((s) => s.replayingIds);
-  const discardEvent = useEventStore((s) => s.discardEvent);
-  const discardEvents = useEventStore((s) => s.discardEvents);
   const discardingIds = useEventStore((s) => s.discardingIds);
   const personas = usePersonaStore((s) => s.personas);
   const [filter, setFilter] = useState("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [bulkRetrying, setBulkRetrying] = useState(false);
-  const [bulkDiscarding, setBulkDiscarding] = useState(false);
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
   const [eventTypeFilter, setEventTypeFilter] = useState("");
@@ -49,6 +50,8 @@ export default function EventsListPanel() {
   useEffect(() => {
     void fetchEvents();
   }, [fetchEvents]);
+  // Leaving the tab commits an open verdict window rather than dropping it.
+  useEffect(() => () => useEventStore.getState().flushDecisions(), []);
   useEventStream();
 
   const personaMap = useMemo(() => new Map(personas.map((persona) => [persona.id, persona])), [personas]);
@@ -73,9 +76,13 @@ export default function EventsListPanel() {
   const visibleEvents = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
   const chainMap = useEventTopology(visibleEvents);
   const counts = useEventCounts(events);
+  // Causes are offered in the dead letter only: one chip selects a cohort.
+  const causes = useMemo(() => (filter === "dead_letter" ? clusterByFailure(filtered) : []), [filter, filtered]);
 
-  const handleReplay = useCallback((event: PersonaEvent) => void replayEvent(event).catch(() => undefined), [replayEvent]);
-  const handleDiscard = useCallback((event: PersonaEvent) => void discardEvent(event).catch(() => undefined), [discardEvent]);
+  // Every verb arms the commit window; a refusal shows on the undo toast and
+  // a failed commit in the outcome toast, so nothing is swallowed.
+  const handleReplay = useCallback((event: PersonaEvent) => void decide([event.id], "retry"), [decide]);
+  const handleDiscard = useCallback((event: PersonaEvent) => void decide([event.id], "discard"), [decide]);
   const toggleSelectEvent = useCallback((id: string) => {
     setSelectedIds((prev) => {
       const next = new Set(prev);
@@ -84,22 +91,15 @@ export default function EventsListPanel() {
       return next;
     });
   }, []);
-  const handleBulkRetry = useCallback(async () => {
-    const selected = events.filter((event) => selectedIds.has(event.id) && isEventRetryable(event.status));
-    if (selected.length === 0) return;
-    setBulkRetrying(true);
-    await replayEvents(selected);
-    setSelectedIds(new Set());
-    setBulkRetrying(false);
-  }, [events, selectedIds, replayEvents]);
-  const handleBulkDiscard = useCallback(async () => {
-    const selected = events.filter((event) => selectedIds.has(event.id) && isEventDiscardable(event.status));
-    if (selected.length === 0) return;
-    setBulkDiscarding(true);
-    await discardEvents(selected);
-    setSelectedIds(new Set());
-    setBulkDiscarding(false);
-  }, [events, selectedIds, discardEvents]);
+  // A locked row stays in a retry batch: the commit reports it as budget spent.
+  const handleBulk = useCallback(
+    (verdict: "retry" | "discard") => {
+      const eligible = verdict === "retry" ? isEventRetryable : isEventDiscardable;
+      const ids = events.filter((event) => selectedIds.has(event.id) && eligible(event.status)).map((event) => event.id);
+      if (ids.length > 0 && decide(ids, verdict)) setSelectedIds(new Set());
+    },
+    [events, selectedIds, decide],
+  );
 
   useEffect(() => {
     queueMicrotask(() => setSelectedIds(new Set()));
@@ -136,6 +136,8 @@ export default function EventsListPanel() {
         clearActiveChain={() => setActiveChain(null)}
         filteredCount={filtered.length}
         eventsLoading={eventsLoading}
+        causes={causes}
+        onSelectCause={(ids) => setSelectedIds(new Set(ids))}
         labels={t}
       />
       <motion.div variants={fadeUp}>
@@ -148,7 +150,8 @@ export default function EventsListPanel() {
           </button>
         </motion.div>
       )}
-      <EventsBulkRetryBar selectedIds={selectedIds} visibleEvents={visibleEvents} setSelectedIds={setSelectedIds} bulkRetrying={bulkRetrying} onBulkRetry={() => void handleBulkRetry()} bulkDiscarding={bulkDiscarding} onBulkDiscard={() => void handleBulkDiscard()} labels={t} />
+      <EventsBulkRetryBar selectedIds={selectedIds} visibleEvents={visibleEvents} setSelectedIds={setSelectedIds} bulkRetrying={ledger.inFlight.some((b) => b.verdict === "retry")} onBulkRetry={() => handleBulk("retry")} bulkDiscarding={ledger.inFlight.some((b) => b.verdict === "discard")} onBulkDiscard={() => handleBulk("discard")} labels={t} />
+      <EventsTriageToasts onReselect={(ids) => setSelectedIds(new Set(ids))} />
     </>
   );
 }

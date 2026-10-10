@@ -1,4 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import path from "node:path";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import type { PersonaEvent, PersonaEventSubscription } from "@/lib/types";
 
 const publishEvent = vi.fn();
@@ -15,7 +17,9 @@ vi.mock("@/lib/api", () => ({
 
 vi.mock("swr", () => ({ mutate: vi.fn() }));
 
-const { useEventStore, MAX_MANUAL_RETRIES, ReplayLockedError } = await import("./eventStore");
+const { useEventStore, MAX_MANUAL_RETRIES, ReplayLockedError, selectVisibleEvents } = await import("./eventStore");
+const { COMMIT_WINDOW_MS, transition } = await import("@/lib/review-ledger");
+type EventVerdict = import("./eventStore").EventVerdict;
 const { IllegalEventTransitionError } = await import("@/lib/eventStatusFsm");
 
 let seq = 0;
@@ -149,32 +153,53 @@ describe("replayEvent — the dead letter drains", () => {
   });
 });
 
-describe("replayEvents — bulk goes through the same path", () => {
-  it("re-queues every selected dead-letter row", async () => {
+describe("replayEvents — bulk goes through the same path, and names every row", () => {
+  it("re-queues every selected dead-letter row and returns their ids", async () => {
     const events = [event(), event(), event()];
     seed(events);
-    const result = await useEventStore.getState().replayEvents(events);
-    expect(result).toMatchObject({ succeeded: 3, failed: 0, skipped: 0, aborted: false });
+    const result = await useEventStore.getState().replayEvents(events.map((e) => e.id));
+    expect(result).toEqual({ succeeded: events.map((e) => e.id), failed: [], aborted: false });
     for (const e of events) expect(statusOf(e.id)).toBe("pending");
   });
 
-  it("skips locked rows and leaves them in the dead letter", async () => {
+  it("reports a locked row as retry_exhausted and leaves it in the dead letter", async () => {
     const locked = event({ retryCount: MAX_MANUAL_RETRIES });
     const fresh = event();
     seed([locked, fresh]);
-    const result = await useEventStore.getState().replayEvents([locked, fresh]);
-    expect(result.skipped).toBe(1);
-    expect(result.succeeded).toBe(1);
+    const result = await useEventStore.getState().replayEvents([locked.id, fresh.id]);
+    expect(result.failed).toEqual([{ id: locked.id, reason: "retry_exhausted" }]);
+    expect(result.succeeded).toEqual([fresh.id]);
     expect(statusOf(locked.id)).toBe("dead_letter");
     expect(statusOf(fresh.id)).toBe("pending");
   });
 
-  it("skips rows that are not in a retryable state at all", async () => {
+  it("reports rows the FSM will not retry as wrong_status and unknown ids as not_found", async () => {
     const done = event({ status: "processed" });
     const failing = event({ status: "failed" });
     seed([done, failing]);
-    const result = await useEventStore.getState().replayEvents([done, failing]);
-    expect(result).toMatchObject({ succeeded: 0, failed: 0, skipped: 2 });
+    const result = await useEventStore.getState().replayEvents([done.id, failing.id, "gone"]);
+    expect(result).toEqual({
+      succeeded: [],
+      failed: [
+        { id: done.id, reason: "wrong_status" },
+        { id: failing.id, reason: "wrong_status" },
+        { id: "gone", reason: "not_found" },
+      ],
+      aborted: false,
+    });
+    expect(updateEvent).not.toHaveBeenCalled();
+  });
+
+  it("a write that fails is write_failed; the breaker names the rows it never attempted", async () => {
+    updateEvent.mockRejectedValue(new Error("bus down"));
+    const events = Array.from({ length: 12 }, () => event());
+    seed(events);
+    const result = await useEventStore.getState().replayEvents(events.map((e) => e.id));
+    expect(result.aborted).toBe(true);
+    expect(result.succeeded).toEqual([]);
+    expect(result.failed.filter((f) => f.reason === "write_failed").length).toBeGreaterThanOrEqual(5);
+    expect(result.failed.map((f) => f.id).sort()).toEqual(events.map((e) => e.id).sort());
+    expect(result.failed.some((f) => f.reason === "aborted")).toBe(true);
   });
 });
 
@@ -196,13 +221,20 @@ describe("discard — the operator's verdict", () => {
     expect(updateEvent).not.toHaveBeenCalled();
   });
 
-  it("discards in bulk and reports what it skipped", async () => {
+  it("discards in bulk and names each row it could not discard", async () => {
     const a = event();
     const b = event({ status: "failed" });
     const done = event({ status: "processed" });
     seed([a, b, done]);
-    const result = await useEventStore.getState().discardEvents([a, b, done]);
-    expect(result).toMatchObject({ succeeded: 1, failed: 0, skipped: 2 });
+    const result = await useEventStore.getState().discardEvents([a.id, b.id, done.id]);
+    expect(result).toEqual({
+      succeeded: [a.id],
+      failed: [
+        { id: b.id, reason: "wrong_status" },
+        { id: done.id, reason: "wrong_status" },
+      ],
+      aborted: false,
+    });
     expect(statusOf(a.id)).toBe("discarded");
     expect(statusOf(b.id)).toBe("failed");
     expect(statusOf(done.id)).toBe("processed");
@@ -303,5 +335,145 @@ describe("behaviours the FSM must not regress", () => {
     expect(useEventStore.getState().subscriptionsRead).toBe(true);
     useEventStore.getState().reset();
     expect(useEventStore.getState().subscriptionsRead).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Challenge event-B: the operator's verdict is undoable. A retry or discard is
+// ARMED through the shared commit-window ledger (review-ledger.ts, generic over
+// its verdict) and written only when the 5 s window closes. The old contract,
+// where a click wrote at once, is forbidden below.
+// ---------------------------------------------------------------------------
+
+describe("dead-letter verdicts go through the commit window", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+  });
+  afterEach(() => {
+    useEventStore.getState().flushDecisions();
+    vi.useRealTimers();
+  });
+
+  it("arm discard [a,b] opens a 5 s window with no write; undo drops it without one", async () => {
+    const t = transition<EventVerdict>({ window: null, inFlight: [], nextBatchId: 1 }, {
+      type: "arm",
+      ids: ["a", "b"],
+      verdict: "discard",
+      now: 0,
+    });
+    expect(t.state.window?.deadline).toBe(COMMIT_WINDOW_MS);
+    expect(COMMIT_WINDOW_MS).toBe(5000);
+    expect(t.effects.some((e) => e.type === "schedule")).toBe(true);
+    expect(t.effects.some((e) => e.type === "commit")).toBe(false);
+    const undone = transition(t.state, { type: "undo", batchId: t.state.window!.batchId });
+    expect(undone.state.window).toBeNull();
+    expect(undone.effects.some((e) => e.type === "commit")).toBe(false);
+
+    const a = event();
+    const b = event();
+    seed([a, b]);
+    expect(useEventStore.getState().decide([a.id, b.id], "discard")).toBe(true);
+    expect(useEventStore.getState().ledger.window?.deadline).toBe(5000);
+    useEventStore.getState().undoDecision();
+    expect(useEventStore.getState().ledger.window).toBeNull();
+    await vi.advanceTimersByTimeAsync(10_000);
+    expect(updateEvent).toHaveBeenCalledTimes(0);
+    expect(statusOf(a.id)).toBe("dead_letter");
+  });
+
+  it("a disjoint arm commits the open window; an overlapping arm is refused", async () => {
+    const one = transition<EventVerdict>({ window: null, inFlight: [], nextBatchId: 1 }, {
+      type: "arm",
+      ids: ["a"],
+      verdict: "discard",
+      now: 0,
+    });
+    const two = transition(one.state, { type: "arm", ids: ["c"], verdict: "retry", now: 1 });
+    expect(two.effects).toContainEqual({ type: "commit", batch: one.state.window });
+    expect(two.state.window).toMatchObject({ ids: ["c"], verdict: "retry" });
+    expect(transition(two.state, { type: "arm", ids: ["a"], verdict: "retry", now: 2 }).refused).toEqual({
+      reason: "overlap",
+    });
+
+    const a = event();
+    const c = event();
+    seed([a, c]);
+    const store = useEventStore.getState();
+    expect(store.decide([a.id], "discard")).toBe(true);
+    expect(store.decide([c.id], "retry")).toBe(true);
+    await vi.advanceTimersByTimeAsync(0);
+    expect(updateEvent).toHaveBeenCalledWith(a.id, { status: "discarded" });
+    expect(updateEvent).toHaveBeenCalledTimes(1);
+    expect(useEventStore.getState().ledger.window).toMatchObject({ ids: [c.id], verdict: "retry" });
+    expect(useEventStore.getState().decide([c.id], "discard")).toBe(false);
+    expect(useEventStore.getState().refusal).toMatchObject({ reason: "overlap" });
+  });
+
+  it("a poll that still shows a row dead_letter cannot repaint a pending discard", async () => {
+    const { api } = await import("@/lib/api");
+    const list = api.listEvents as unknown as ReturnType<typeof vi.fn>;
+    const a = event();
+    seed([a]);
+    useEventStore.getState().decide([a.id], "discard");
+    list.mockResolvedValueOnce([{ ...a }]);
+    await useEventStore.getState().fetchEvents();
+    const visible = selectVisibleEvents(useEventStore.getState());
+    expect(visible.find((e) => e.id === a.id)?.status).toBe("discarded");
+    expect(updateEvent).not.toHaveBeenCalled();
+  });
+
+  it("the window is committed, not dropped, on flush (unmount / pagehide)", async () => {
+    const a = event();
+    seed([a]);
+    useEventStore.getState().decide([a.id], "retry");
+    useEventStore.getState().flushDecisions();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(updateEvent).toHaveBeenCalledTimes(1);
+    expect(updateEvent).toHaveBeenCalledWith(a.id, { status: "pending", retryCount: 1 });
+    expect(statusOf(a.id)).toBe("pending");
+  });
+
+  it("forbids the old contract: no write before the deadline, exactly one at it", async () => {
+    const a = event();
+    seed([a]);
+    useEventStore.getState().decide([a.id], "discard");
+    await vi.advanceTimersByTimeAsync(COMMIT_WINDOW_MS - 1);
+    expect(updateEvent).not.toHaveBeenCalled();
+    expect(statusOf(a.id)).toBe("dead_letter");
+    await vi.advanceTimersByTimeAsync(1);
+    expect(updateEvent).toHaveBeenCalledTimes(1);
+    expect(statusOf(a.id)).toBe("discarded");
+  });
+
+  it("a commit with failures is reported per row, with the ids to reselect", async () => {
+    const locked = event({ retryCount: MAX_MANUAL_RETRIES });
+    const fresh = event();
+    seed([locked, fresh]);
+    useEventStore.getState().decide([locked.id, fresh.id], "retry");
+    await vi.advanceTimersByTimeAsync(COMMIT_WINDOW_MS);
+    expect(useEventStore.getState().lastOutcome).toMatchObject({
+      verb: "retry",
+      ok: 1,
+      failedByReason: { retry_exhausted: [locked.id] },
+      reselect: [locked.id],
+    });
+    expect(useEventStore.getState().ledger.inFlight).toEqual([]);
+  });
+});
+
+describe("one door: no surface calls a retry/discard verb directly", () => {
+  const SRC = path.resolve(__dirname, "..");
+  const walk = (dir: string): string[] =>
+    readdirSync(dir).flatMap((name) => {
+      const p = path.join(dir, name);
+      return statSync(p).isDirectory() ? walk(p) : /\.tsx?$/.test(name) && !/\.test\.ts$/.test(name) ? [p] : [];
+    });
+  it("only the event store calls replayEvent(s) / discardEvent(s)", () => {
+    const roots = ["components", "app", "hooks"].map((d) => path.join(SRC, d));
+    const offenders = roots
+      .flatMap(walk)
+      .filter((f) => /\b(replayEvents?|discardEvents?)\(/.test(readFileSync(f, "utf8")));
+    expect(offenders.map((f) => path.relative(SRC, f))).toEqual([]);
   });
 });

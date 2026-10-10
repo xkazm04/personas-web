@@ -4,7 +4,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { isEventRetryable } from "@/lib/eventStatusFsm";
 import { relativeTime } from "@/lib/format";
 import type { PersonaEvent } from "@/lib/types";
-import { useEventStore } from "@/stores/eventStore";
+import { isReplayLocked, MAX_MANUAL_RETRIES, useEventStore } from "@/stores/eventStore";
 
 export function EventExpandedContent({ event }: { event: PersonaEvent }) {
   const { t } = useTranslation();
@@ -31,12 +31,17 @@ export function EventExpandedContent({ event }: { event: PersonaEvent }) {
 
 function RetryButton({ event }: { event: PersonaEvent }) {
   const { t } = useTranslation();
-  const replayEvent = useEventStore((s) => s.replayEvent);
+  const decide = useEventStore((s) => s.decide);
   const replayingIds = useEventStore((s) => s.replayingIds);
   const isReplaying = replayingIds.has(event.id);
+  // At the desktop's manual cap the retry is spent: disabled, and says why.
+  const locked = isReplayLocked(event);
+  const lockedTitle = locked ? t.eventsPage.triage.retryLocked.replaceAll("{max}", String(MAX_MANUAL_RETRIES)) : undefined;
 
   return (
-    <button onClick={() => void replayEvent(event)} disabled={isReplaying} className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-sm font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50 flex-shrink-0">
+    // `decide` arms the undo window and never throws: a failure is reported
+    // by the outcome toast, not left as an unhandled rejection.
+    <button onClick={() => decide([event.id], "retry")} disabled={isReplaying || locked} title={lockedTitle} className="flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-sm font-medium text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50 flex-shrink-0">
       {isReplaying ? <Loader2 className="h-3 w-3 animate-spin" /> : <RotateCcw className="h-3 w-3" />}
       {t.eventsPage.retry}
     </button>

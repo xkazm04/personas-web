@@ -5,6 +5,7 @@ import StatusBadge from "@/components/dashboard/StatusBadge";
 import { relativeTime } from "@/lib/format";
 import type { EventStatus, Persona, PersonaEvent } from "@/lib/types";
 import { isEventDiscardable, isEventRetryable } from "@/lib/eventStatusFsm";
+import { isReplayLocked, MAX_MANUAL_RETRIES } from "@/stores/eventStore";
 import type { EventPanelLabels } from "./eventPanelTypes";
 import { EventTypeBadge } from "./EventTypeBadge";
 
@@ -147,10 +148,12 @@ function EventRowActions({ event, labels, replayingIds, onReplay, discardingIds,
   const isReplaying = replayingIds.has(event.id);
   const isDiscarding = discardingIds.has(event.id);
   const busy = isReplaying || isDiscarding;
+  const locked = isReplayLocked(event);
+  const retryTitle = locked ? labels.eventsPage.triage.retryLocked.replaceAll("{max}", String(MAX_MANUAL_RETRIES)) : labels.eventsPage.retryEvent;
   return (
     <div className="flex items-center gap-1">
       {canRetry && (
-        <button onClick={(e) => { e.stopPropagation(); onReplay(event); }} disabled={busy} title={labels.eventsPage.retryEvent} aria-label={labels.eventsPage.retryEvent} className="flex items-center justify-center rounded-md border border-amber-500/30 bg-amber-500/10 p-1 text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50">
+        <button onClick={(e) => { e.stopPropagation(); onReplay(event); }} disabled={busy || locked} title={retryTitle} aria-label={retryTitle} className="flex items-center justify-center rounded-md border border-amber-500/30 bg-amber-500/10 p-1 text-amber-400 transition-all hover:bg-amber-500/20 disabled:opacity-50">
           {isReplaying ? <Loader2 className="h-3 w-3 animate-spin" /> : <RotateCcw className="h-3 w-3" />}
         </button>
       )}

@@ -17,7 +17,13 @@ email) into the persona agents that react to them. It has four tabs:
   verb: like on the desktop, the automatic retry owns it until it re-queues or
   escalates to the dead letter. The **Dead Letter** filter is
   a working queue, not a read-out: every row in it carries both verbs, and the
-  lane drains to empty as you resolve them.
+  lane drains to empty as you resolve them. It is triaged **by cause**: a row of
+  chips groups the lane by failure story ("Rate limited by the PagerDuty API
+  (429)... 5"), and one click selects that whole cohort. Every retry or
+  discard, single or bulk, opens a **5-second undo window** before anything is
+  written. A run that leaves rows unresolved says how many and why
+  ("budget spent (1), no longer listed (1)") and offers to select them again.
+  At the retry cap (5) the Retry buttons are disabled and say why.
 - **Subscriptions** — which personas subscribe to which event types (handled by
   `SubscriptionsPanel`, documented elsewhere).
 - **Visualization** — an animated SVG topology: source nodes on an outer ring,
@@ -93,14 +99,18 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/lib/eventStatusFsm.test.ts` | FSM transition + retry-budget specs |
 | `src/lib/eventStatusFsm.desktopParity.test.ts` | Parity against a literal copy of the desktop's `can_transition_to` (event.rs:108-128); verbs on `dead_letter` only |
 | `src/lib/mockApi.eventLifecycle.test.ts` | Mock write-through of a retry count; the `failed -> dead_letter` auto-retry sweep |
-| `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ/discard, subscriptions |
-| `src/stores/eventStore.test.ts` | Store specs: retry re-queues the row, discard verdict, lockout |
+| `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ/discard, the verdict ledger (`decide` / `undoDecision` / `flushDecisions`, `lastOutcome`), `overlayEventVerdicts`, subscriptions |
+| `src/stores/eventStore.test.ts` | Store specs: retry re-queues the row, discard verdict, lockout, per-id bulk outcomes, the commit window (arm/undo/overlap/flush, poll overlay), the one-door source scan |
+| `src/lib/deadLetterTriage.ts` | Pure triage: `failureSignature`, `clusterByFailure`, `summarizeOutcome`, the per-id failure reasons |
+| `src/lib/deadLetterTriage.test.ts` | Signature, clustering over the demo lane (the PagerDuty 429 cohort), outcome summary |
+| `src/lib/review-ledger.ts` | The shared commit-window ledger (Manual Review Queue's), generic over its verdict; Events arms `"retry" \| "discard"` |
+| `src/components/dashboard/events-list-panel/EventsTriageToasts.tsx` | The verdict undo toast (`UndoToast`) and the outcome toast with "Select the N" |
 | `src/stores/eventStore.rowRetry.test.ts` | Row-owned retry: one `updateEvent`, no publish, budget 5, in-flight rows survive a poll |
-| `src/components/dashboard/EventsListPanel.tsx` | Events tab: fetch, stream, filter, chains, bulk retry |
+| `src/components/dashboard/EventsListPanel.tsx` | Events tab: fetch, stream, filter, chains, cause clusters, verdicts through `decide`, flush on unmount |
 | `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry, discard) |
-| `src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx` | Search input + status/eventType/sourceType filters + chain pill |
-| `src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx` | Sticky bottom bulk-retry bar |
-| `src/components/dashboard/events-list-panel/EventExpandedContent.tsx` | Expanded row: ids, payload viewer, error + retry |
+| `src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx` | Search input + status/eventType/sourceType filters + chain pill + cause chips (Dead Letter only) |
+| `src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx` | Sticky bottom bulk bar; its verbs arm the commit window |
+| `src/components/dashboard/events-list-panel/EventExpandedContent.tsx` | Expanded row: ids, payload viewer, error + retry (through `decide`, disabled at the cap) |
 | `src/components/dashboard/events-list-panel/EventTypeBadge.tsx` | Icon+color badge per event type |
 | `src/components/dashboard/events-list-panel/eventPanelTypes.ts` | `EventPanelLabels` = the `t` translation tree type |
 | `src/components/dashboard/JsonViewer.tsx` | `formatPayload` / `highlightJson` + copy-to-clipboard payload box |
@@ -139,7 +149,8 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   are pure simulation (a `setInterval` jittering numbers).
 - **Stores:** `eventStore` (Zustand) — `events: PersonaEvent[]` (newest-first, capped
   at `MAX_EVENTS_BUFFER = 1000`), an incremental `eventIds: Set` for O(1) dedupe,
-  `connectionStatus`, `replayingIds`, `discardingIds`, and the subscription slice.
+  `connectionStatus`, `replayingIds`, `discardingIds`, the verdict `ledger`
+  (`LedgerState<EventVerdict>`), `refusal`, `lastOutcome`, and the subscription slice.
   The retry count lives on the row (`PersonaEvent.retryCount`), not in the store
   or the browser. Also reads `usePersonaStore` (persona avatars/names) and
   `useAuthStore` (`isDemo`). `fetchEvents` **merges** rather than replaces, so SSE
@@ -152,6 +163,8 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
   `EventStatus` — `pending | processing | processed | skipped | failed |
   dead_letter | discarded` (`src/lib/types.ts`), the desktop's eight statuses
   read through `fromWireEventStatus` (`delivered`/`completed` -> `processed`);
+  `EventVerdict`, `DeadLetterRunResult`, `DeadLetterOutcome` (`eventStore.ts`);
+  `DeadLetterFailureReason`, `FailureCluster` (`deadLetterTriage.ts`);
   `PersonaEvent.retryCount: number | null` (null on the Supabase plane: the
   sync mirror does not ship `retry_count`); the transition table, `assertEventTransition`
   and the `isEventRetryable` / `isEventDiscardable` predicates
@@ -222,11 +235,16 @@ The framer `staggerContainer`/`fadeUp` entrance was replaced by the CSS cascade.
   pending` is rolled back (not transitioned) if the write fails. A row at
   `MAX_MANUAL_RETRIES = 5` (the desktop's cap) is **replay-locked**: it throws
   `ReplayLockedError` with no api call. A null count (Supabase plane) is unknown,
-  not spent, so the backend's own cap decides. `replayEvents` (bulk) is the same
-  code path per item. It pre-filters locked and non-retryable rows as `skipped`,
-  batches in groups of 10 via `Promise.allSettled`, and trips a **circuit
-  breaker** after 5 *consecutive* failures (resets on any success), returning
-  `{ succeeded, failed, aborted, skipped }`. Before 2026-10 a retry published a
+  not spent, so the backend's own cap decides. `replayEvents(ids)` (bulk) is the
+  same code path per item. It batches in groups of 10 via `Promise.allSettled`
+  and trips a **circuit breaker** after 5 *consecutive* failures (resets on any
+  success). It returns every id by name, like the desktop's
+  `BulkDeadLetterOutcome`: `{ succeeded: string[], failed: { id, reason }[],
+  aborted }`. The reasons are `not_found` (not in the buffer), `retry_exhausted`
+  (locked), `wrong_status` (not `dead_letter`), `write_failed` and `aborted`
+  (never tried, because the breaker stopped the run). Before 2026-10 the bulk
+  verbs returned only totals, and the panel threw them away. Before 2026-10 a
+  retry published a
   brand-new event, marked the original `processed`, and kept a 3-try budget in
   one browser's localStorage (`event-replay-retry-counts`, now gone from the
   storage register).
@@ -234,14 +252,42 @@ The framer `staggerContainer`/`fadeUp` entrance was replaced by the CSS cascade.
   `discardEvents` write `discarded` through `api.updateEvent` and track in-flight
   rows in `discardingIds` (the mirror of `replayingIds`). Both are exposed per-row
   in the actions column and in bulk from `EventsBulkRetryBar`. `store.reset()`
-  clears the buffer and both id sets.
+  flushes an open verdict window, then clears the buffer and both id sets.
+- **One door: every verdict is armed, then committed.** No surface calls a verb.
+  The row buttons, the expanded-row Retry and the bulk bar call
+  `decide(ids, "retry" | "discard")`. That arms the Manual Review Queue's ledger
+  (`review-ledger.ts`, generic over its verdict since 2026-10; the review queue
+  still uses `Verdict`). The ledger holds the verdict for `COMMIT_WINDOW_MS` (5 s),
+  and only then runs `replayEvents` / `discardEvents`. `undoDecision` drops the
+  window with no write. A disjoint new verdict commits the open one first; an
+  overlapping one is refused, and the undo toast says so.
+  `flushDecisions` commits on unmount (`EventsListPanel`), on `pagehide`, and on
+  `reset`. `overlayEventVerdicts` paints armed and committing verdicts over
+  the buffered rows. The panel reads `events` through it, so a 10 s poll cannot
+  un-discard a row inside its window. It paints only a move the FSM allows (and
+  not a retry on a locked row); anything else is left as-is and reported by the
+  commit. A commit with failures sets `lastOutcome`
+  (`summarizeOutcome`: counts by reason plus `reselect`), which
+  `EventsTriageToasts` shows with "Select the N". The source scan in
+  `eventStore.test.ts` fails if `src/components`, `src/app` or `src/hooks` call
+  a verb directly.
+- **Cause clusters.** `failureSignature` lowercases the error and strips quoted
+  names, uuids, hosts and file names, mixed letter-digit ids and every number
+  except a 1xx-5xx status code. `clusterByFailure` groups the filtered dead
+  letters by signature, largest first. A row with no message gets its own
+  "no reason recorded" cluster. Chips appear only for clusters of 2 or more
+  (up to 6). The demo lane has one real cohort: ev-19..22 plus ev-11 (which
+  escalates from `failed`), the five PagerDuty 429s.
 - **Supabase plane: mapper only.** `supabaseApi.mapEventStatus` reads the
   synced desktop string through `fromWireEventStatus` (it used to send
   `delivered`, `completed` and `skipped` to `pending`). `publishEvent` /
   `updateEvent` there are still read-only stubs.
-- **Known gap:** the `RetryButton` in `EventExpandedContent.tsx` calls
-  `void replayEvent(event)` with no `.catch`, so a lock or a failed write is an
-  unhandled rejection (owned by the dead-letter triage card).
+- **Fixed 2026-10:** the expanded row's `RetryButton` used to call
+  `void replayEvent(event)` with no `.catch`, so a lock or a failed write was an
+  unhandled rejection, and the per-row verbs swallowed theirs with
+  `.catch(() => undefined)`. Both now go through `decide`, which never throws:
+  a failure is reported in the outcome toast. A row at the cap has its Retry
+  disabled, with the reason as its title.
 - **Animation gating.** `useEventBusParticles.ts` disables
   `custom-animation/require-animation-gating` (plus `react-hooks/refs` and
   `react-hooks/immutability`) at the top of the file by design: reduced-motion
