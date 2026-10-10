@@ -11,9 +11,11 @@ email) into the persona agents that react to them. It has four tabs:
   source, target persona, event type, retry count, and time. You can full-text
   search, filter by status / event type / source type, drill into a row to see its
   JSON payload and error, follow "related event" chains (events linked by
-  `sourceId`), retry a single failed event, **discard** one you have judged
-  unrecoverable, or multi-select failed / dead-lettered events and **bulk-retry
-  or bulk-discard** them from a sticky bottom bar. The **Dead Letter** filter is
+  `sourceId`), retry a single dead-lettered event, **discard** one you have
+  judged unrecoverable, or multi-select dead-lettered events and **bulk-retry
+  or bulk-discard** them from a sticky bottom bar. A `failed` event offers no
+  verb: like on the desktop, the automatic retry owns it until it re-queues or
+  escalates to the dead letter. The **Dead Letter** filter is
   a working queue, not a read-out: every row in it carries both verbs, and the
   lane drains to empty as you resolve them.
 - **Subscriptions** — which personas subscribe to which event types (handled by
@@ -85,10 +87,15 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/app/api/events/stream/route.ts` | **Real** SSE proxy to the orchestrator with heartbeat injection; forwards the team key only for a verified session (401 otherwise, 501 `not_on_desktop` on the desktop target); tested in `stream.test.ts` |
 | `src/hooks/useEventStream.ts` | EventSource lifecycle, reconnect backoff, polling fallback |
 | `src/hooks/useEventTopology.ts` | BFS over `sourceId` links → event-chain components |
-| `src/lib/eventStatusFsm.ts` | The event delivery FSM: transition table, `assertEventTransition`, retry-budget landing |
+| `src/lib/eventWireStatus.ts` | Desktop status vocabulary on the wire -> web `EventStatus` (`fromWireEventStatus`), the desktop transition pairs, `MAX_MANUAL_RETRIES` / `AUTO_RETRY_LIMIT` |
+| `src/lib/eventWireStatus.test.ts` | Wire adapter specs (`delivered`/`completed` -> `processed`, `skipped`) |
+| `src/lib/eventStatusFsm.ts` | The event delivery FSM: the desktop matrix projected through the adapter, `assertEventTransition`, retry-budget landing |
 | `src/lib/eventStatusFsm.test.ts` | FSM transition + retry-budget specs |
+| `src/lib/eventStatusFsm.desktopParity.test.ts` | Parity against a literal copy of the desktop's `can_transition_to` (event.rs:108-128); verbs on `dead_letter` only |
+| `src/lib/mockApi.eventLifecycle.test.ts` | Mock write-through of a retry count; the `failed -> dead_letter` auto-retry sweep |
 | `src/stores/eventStore.ts` | Zustand store: events buffer, replay/DLQ/discard, subscriptions |
-| `src/stores/eventStore.test.ts` | Store specs: retry drains the lane, discard verdict, lockout parking |
+| `src/stores/eventStore.test.ts` | Store specs: retry re-queues the row, discard verdict, lockout |
+| `src/stores/eventStore.rowRetry.test.ts` | Row-owned retry: one `updateEvent`, no publish, budget 5, in-flight rows survive a poll |
 | `src/components/dashboard/EventsListPanel.tsx` | Events tab: fetch, stream, filter, chains, bulk retry |
 | `src/components/dashboard/events-list-panel/EventsListColumns.tsx` | `DataTable` column builder (select, status, persona, chain, retry, discard) |
 | `src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx` | Search input + status/eventType/sourceType filters + chain pill |
@@ -117,34 +124,41 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 - **Source:** Demo-only. List/replay/discard/subscriptions read mocks via `api.*` →
   `src/lib/mockApi.ts` (`listEvents`, `publishEvent`, `updateEvent`,
   `listAllSubscriptions`, …) backed by `MOCK_EVENTS` (`src/lib/mockData.ts`) /
-  `MOCK_SUBSCRIPTIONS`. `publishEvent` mints a real event from its input and
-  `updateEvent` writes the transition back into the `MOCK_EVENTS` array — both
-  used to be inert (`publishEvent` literally returned `MOCK_EVENTS[0]`, which the
-  store's id dedupe then swallowed, so every demo retry was a silent no-op, and
-  `updateEvent` returned a detached copy that the next 10s poll overwrote).
-  `MOCK_EVENTS` carries eight dead-letter/failed fixtures so the Dead Letter
-  filter can be watched draining to empty. The
+  `MOCK_SUBSCRIPTIONS`. `updateEvent` writes the status (and a re-queue's
+  `retryCount`) back into the `MOCK_EVENTS` array, so the next poll sees it.
+  Every fixture carries `retryCount`. `MOCK_EVENTS` has dead-letter and failed
+  fixtures, so the Dead Letter filter can be watched draining. The "No subscription
+  matched" fixture (ev-8) is `skipped`, as the desktop records it. The demo has no
+  dispatcher, so `listEvents` plays the desktop's auto-retry sweep on each read:
+  a `failed` row spends one attempt and escalates to `dead_letter` once
+  `AUTO_RETRY_LIMIT` (3) is spent (`increment_retry_or_dead_letter`). A re-queued
+  row stays `pending`, like on a desktop that has not dispatched it yet. The
   visualization, swimlane, and drawer use static fixtures from
   `src/lib/mock-dashboard-data.ts` (`SWARM_PERSONAS`, `SWARM_SOURCES`, `EVENT_TYPES`,
   `MOCK_SWIMLANE_EVENTS`, `SWIMLANE_WINDOW_MS`, `SwarmNode`). `EventBusStats` counters
   are pure simulation (a `setInterval` jittering numbers).
 - **Stores:** `eventStore` (Zustand) — `events: PersonaEvent[]` (newest-first, capped
   at `MAX_EVENTS_BUFFER = 1000`), an incremental `eventIds: Set` for O(1) dedupe,
-  `connectionStatus`, `replayingIds`, `retryCounts` (persisted), and the
-  subscription slice. Also reads `usePersonaStore` (persona avatars/names) and
+  `connectionStatus`, `replayingIds`, `discardingIds`, and the subscription slice.
+  The retry count lives on the row (`PersonaEvent.retryCount`), not in the store
+  or the browser. Also reads `usePersonaStore` (persona avatars/names) and
   `useAuthStore` (`isDemo`). `fetchEvents` **merges** rather than replaces, so SSE
-  events that arrived mid-flight aren't dropped on a refetch.
+  events that arrived mid-flight aren't dropped on a refetch, and a row with a
+  retry or discard in flight keeps its local version until the write settles.
 - **API routes:** `/api/events/stream` (real SSE proxy; the only server route this
   surface owns). Everything else routes through the `api` client, which is the mock
   layer in this repo.
 - **Types:** `PersonaEvent`, `PersonaEventSubscription`, `CreateEventInput`,
-  `EventStatus` — `pending | processing | processed | failed | dead_letter |
-  discarded` (`src/lib/types.ts`); the transition table, `assertEventTransition`
+  `EventStatus` — `pending | processing | processed | skipped | failed |
+  dead_letter | discarded` (`src/lib/types.ts`), the desktop's eight statuses
+  read through `fromWireEventStatus` (`delivered`/`completed` -> `processed`);
+  `PersonaEvent.retryCount: number | null` (null on the Supabase plane: the
+  sync mirror does not ship `retry_count`); the transition table, `assertEventTransition`
   and the `isEventRetryable` / `isEventDiscardable` predicates
   (`src/lib/eventStatusFsm.ts`); `SwarmNode`, `SwimlaneEvent`, `EventFlow`
   (`src/lib/mock-dashboard-data.ts`); `Particle`, `BurstRing`, `Point`
   (`eventBusGeometry.ts`); `ConnectionStatus`, `ReplayLockedError`,
-  `MAX_REPLAY_RETRIES` (`eventStore.ts`).
+  `MAX_MANUAL_RETRIES`, `isReplayLocked` (`eventStore.ts`).
 
 ## Integration points
 
@@ -193,31 +207,41 @@ The framer `staggerContainer`/`fadeUp` entrance was replaced by the CSS cascade.
 - **The status FSM is the only writer of `event.status`.** `eventStore.transitionEvent`
   calls `assertEventTransition` *before* its `set()`, so an illegal move throws
   `IllegalEventTransitionError` and leaves the buffer untouched — a discarded event
-  cannot be resurrected and a processed one cannot be re-failed. The table lives in
-  `src/lib/eventStatusFsm.ts`:
-  `pending -> processing`; `processing -> processed | pending | failed | dead_letter`;
-  `failed -> processing | dead_letter | discarded`; `dead_letter -> processing | discarded`;
-  `processed` and `discarded` are terminal.
-- **Replay lockout & retry budget.** `replayEvent` counts the *attempt* up front
-  (not success) and persists `retryCounts` to `localStorage`
-  (`event-replay-retry-counts`); once an event hits `MAX_REPLAY_RETRIES = 3` it's
-  **replay-locked**, is moved into `dead_letter`, and throws `ReplayLockedError`.
-  A retry transitions the ORIGINAL event `-> processing`, then `-> processed` on
-  success (via `api.updateEvent`, which had zero call sites before this) or
-  `-> failed` / `-> dead_letter` on failure depending on whether the budget is
-  spent (`statusAfterFailedAttempt`). `replayEvents` (bulk) is the same code path
-  per item — it pre-filters locked and non-retryable events as `skipped` (parking
-  locked ones in the dead letter as it goes), batches in groups of 10 via
-  `Promise.allSettled`, and trips a **circuit breaker** after 5 *consecutive*
-  failures (resets on any success), returning `{ succeeded, failed, aborted, skipped }`.
+  cannot be resurrected and a processed one cannot be re-failed. The table in
+  `src/lib/eventStatusFsm.ts` is derived, not hand-written: the desktop's
+  `can_transition_to` projected through `eventWireStatus.ts`, pinned by
+  `eventStatusFsm.desktopParity.test.ts`:
+  `pending -> processing | processed | skipped | failed`;
+  `processing -> processed | skipped | failed`; `failed -> pending | dead_letter`;
+  `dead_letter -> pending | discarded`; `processed`, `skipped` and `discarded` are
+  terminal. Retry and discard are offered on `dead_letter` only: the desktop's DLQ
+  commands run `WHERE status = 'dead_letter'`.
+- **Retry re-queues the same row; the budget lives on it.** `replayEvent` is the
+  desktop's `retry_dead_letter`: one `api.updateEvent(id, { status: "pending",
+  retryCount: n + 1 })`, no publish, no new event. The optimistic `dead_letter ->
+  pending` is rolled back (not transitioned) if the write fails. A row at
+  `MAX_MANUAL_RETRIES = 5` (the desktop's cap) is **replay-locked**: it throws
+  `ReplayLockedError` with no api call. A null count (Supabase plane) is unknown,
+  not spent, so the backend's own cap decides. `replayEvents` (bulk) is the same
+  code path per item. It pre-filters locked and non-retryable rows as `skipped`,
+  batches in groups of 10 via `Promise.allSettled`, and trips a **circuit
+  breaker** after 5 *consecutive* failures (resets on any success), returning
+  `{ succeeded, failed, aborted, skipped }`. Before 2026-10 a retry published a
+  brand-new event, marked the original `processed`, and kept a 3-try budget in
+  one browser's localStorage (`event-replay-retry-counts`, now gone from the
+  storage register).
 - **Discard is the second verb the dead letter needs.** `discardEvent` /
   `discardEvents` write `discarded` through `api.updateEvent` and track in-flight
   rows in `discardingIds` (the mirror of `replayingIds`). Both are exposed per-row
   in the actions column and in bulk from `EventsBulkRetryBar`. `store.reset()`
-  clears the persisted counts and both id sets.
-- **Counts attempts globally, not per-handler** — the retry budget is keyed by event
-  id, and `localStorage` is shared across all browser tabs, so retries in one tab
-  count against another. Lockout survives reloads but not `reset()`.
+  clears the buffer and both id sets.
+- **Supabase plane: mapper only.** `supabaseApi.mapEventStatus` reads the
+  synced desktop string through `fromWireEventStatus` (it used to send
+  `delivered`, `completed` and `skipped` to `pending`). `publishEvent` /
+  `updateEvent` there are still read-only stubs.
+- **Known gap:** the `RetryButton` in `EventExpandedContent.tsx` calls
+  `void replayEvent(event)` with no `.catch`, so a lock or a failed write is an
+  unhandled rejection (owned by the dead-letter triage card).
 - **Animation gating.** `useEventBusParticles.ts` disables
   `custom-animation/require-animation-gating` (plus `react-hooks/refs` and
   `react-hooks/immutability`) at the top of the file by design: reduced-motion
