@@ -111,6 +111,8 @@ export interface MobileLanding2Copy {
     joined: string;
     already: string;
     need: string;
+    /** The Windows button note while no installer is live (DOWNLOAD_PLAN). */
+    platWaitlist: string;
   };
   share: { title: string; text: string };
   toast: { copied: string; shared: string; reminder: string; reminderFailed: string };
@@ -392,6 +394,7 @@ export const mobileLanding2Copy: MobileLanding2Copy = {
     joined: "You're on the {platform} waitlist.",
     already: 'That address is already on the {platform} waitlist.',
     need: 'Requires Claude Code and your own Claude Pro or Max plan.',
+    platWaitlist: 'Waitlist',
   },
   share: {
     title: 'Personas',

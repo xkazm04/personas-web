@@ -119,6 +119,8 @@ export interface MobileLandingCopy {
     reminderBody: string;
     shareTitle: string;
     shareText: string;
+    /** The Windows hint while no installer is live (DOWNLOAD_PLAN): it is on the waitlist too. */
+    hintWaitlist: string;
   };
 }
 
@@ -241,5 +243,6 @@ export const mobileLandingCopy: MobileLandingCopy = {
     reminderBody: 'Open {url} on your computer. Personas is free; it needs Claude Code and your own Claude Pro or Max plan.',
     shareTitle: 'Personas',
     shareText: 'A free desktop app for designing AI agents in plain words. Open this on your computer.',
+    hintWaitlist: 'The Windows installer is not out yet. Leave your email and we will tell you when it is ready.',
   },
 };
