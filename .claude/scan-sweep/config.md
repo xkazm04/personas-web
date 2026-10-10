@@ -78,3 +78,8 @@ Repo law a builder will trip - `.claude/CLAUDE.md` binds in full; read `.claude/
   synthesis pass (themes + merge candidates) or the deck asks the owner the same question 4 times.
   Grounding against `../personas` (desktop) produced the run's sharpest defects (dead deep link,
   404'd gallery contract, false zero-telemetry claim); give scouts the sibling path up front.
+- 2026-10-10 (second `--challenge`): `copy:check` runs `.claude/skills/native-copy/scripts/...`, so it only exists once
+  the registry skills are LINKED - on a checkout where `link-registry.mjs` never ran it is not red, it is absent, and
+  pre-existing EN-SPELLING errors surfaced mid-run as if a builder caused them. Run `link-registry.mjs --check` before
+  the baseline gates. Whole-tree source-scan tests timed out at 5s with six read-only scouts running too (not only
+  builders) - take the baseline before or after the scouts, never during.
