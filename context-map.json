@@ -1517,7 +1517,7 @@
         },
         {
           "name": "Event Bus & Stream Monitoring",
-          "description": "Live event-bus topology visualization, swimlanes, event list panel with filters/bulk-retry, and an event detail drawer fed by an SSE stream.",
+          "description": "Live event-bus topology visualization, swimlanes, event list panel with filters, cause-clustered dead-letter triage and undoable retry/discard verdicts, and an event detail drawer fed by an SSE stream.",
           "businessFeature": "Event Bus & Stream Monitoring",
           "category": "ui",
           "filePaths": [
@@ -1549,10 +1549,12 @@
             "src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx",
             "src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx",
             "src/components/dashboard/events-list-panel/EventsListColumns.tsx",
+            "src/components/dashboard/events-list-panel/EventsTriageToasts.tsx",
             "src/components/dashboard/events-list-panel/eventPanelTypes.ts",
             "src/hooks/useDialogFocusTrap.ts",
             "src/hooks/useEventStream.ts",
             "src/hooks/useEventTopology.ts",
+            "src/lib/deadLetterTriage.ts",
             "src/lib/eventStatusFsm.ts",
             "src/lib/eventWireStatus.ts",
             "src/stores/eventStore.ts"
@@ -2300,7 +2302,7 @@
     "Observability & Event Monitoring › Leaderboard & Rankings [ui] — 7 files",
     "Observability & Event Monitoring › Director Coaching [ui] — 11 files",
     "Observability & Event Monitoring › Observability Charts & SLA [ui] — 55 files",
-    "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 33 files",
+    "Observability & Event Monitoring › Event Bus & Stream Monitoring [ui] — 37 files",
     "Observability & Event Monitoring › Dashboard Home Overview [ui] — 23 files",
     "Platform Foundation: Shell, UI & Motion › Mobile App Shell & Views [ui] — 52 files",
     "Platform Foundation: Shell, UI & Motion › Animation & Motion System [lib] — 24 files",
