@@ -1684,6 +1684,8 @@ export const zh: LocaleTranslations = {
         showTranslation: "\u9605\u8bfb\u65e7\u7248\u8bd1\u6587",
         showCurrent: "\u663e\u793a\u6700\u65b0\u82f1\u6587\u7248",
       },
+      searchInSection: "\u6240\u5728\u7ae0\u8282\uff1a{title}",
+      searchHitMarked: "\u5df2\u5728\u672c\u9875\u9ad8\u4eae\u663e\u793a\u641c\u7d22\u5339\u914d\u9879",
     },
     featurePages: {
       orchestration: {

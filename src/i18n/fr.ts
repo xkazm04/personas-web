@@ -1684,6 +1684,8 @@ export const fr: LocaleTranslations = {
         showTranslation: "Lire l'ancienne traduction",
         showCurrent: "Afficher la version anglaise actuelle",
       },
+      searchInSection: "Dans la section : {title}",
+      searchHitMarked: "R\u00e9sultat de recherche surlign\u00e9 sur cette page",
     },
     featurePages: {
       orchestration: {

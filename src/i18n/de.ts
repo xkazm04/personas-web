@@ -1684,6 +1684,8 @@ export const de: LocaleTranslations = {
         showTranslation: "\u00c4ltere \u00dcbersetzung lesen",
         showCurrent: "Aktuelle englische Version anzeigen",
       },
+      searchInSection: "Im Abschnitt: {title}",
+      searchHitMarked: "Suchtreffer auf dieser Seite hervorgehoben",
     },
     featurePages: {
       orchestration: {

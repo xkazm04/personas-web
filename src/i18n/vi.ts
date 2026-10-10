@@ -1684,6 +1684,8 @@ export const vi: LocaleTranslations = {
         showTranslation: "\u0110\u1ecdc b\u1ea3n d\u1ecbch c\u0169",
         showCurrent: "Hi\u1ec7n phi\u00ean b\u1ea3n ti\u1ebfng Anh hi\u1ec7n t\u1ea1i",
       },
+      searchInSection: "Trong m\u1ee5c: {title}",
+      searchHitMarked: "K\u1ebft qu\u1ea3 t\u00ecm ki\u1ebfm \u0111\u01b0\u1ee3c \u0111\u00e1nh d\u1ea5u tr\u00ean trang n\u00e0y",
     },
     featurePages: {
       orchestration: {

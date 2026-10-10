@@ -1684,6 +1684,8 @@ export const cs: LocaleTranslations = {
         showTranslation: "\u010c\u00edst star\u0161\u00ed p\u0159eklad",
         showCurrent: "Zobrazit aktu\u00e1ln\u00ed anglickou verzi",
       },
+      searchInSection: "V sekci: {title}",
+      searchHitMarked: "Shoda s hled\u00e1n\u00edm je na t\u00e9to str\u00e1nce zv\u00fdrazn\u011bna",
     },
     featurePages: {
       orchestration: {

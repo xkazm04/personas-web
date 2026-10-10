@@ -1684,6 +1684,8 @@ export const ko: LocaleTranslations = {
         showTranslation: "\uc774\uc804 \ubc88\uc5ed \uc77d\uae30",
         showCurrent: "\ucd5c\uc2e0 \uc601\uc5b4\ud310 \ubcf4\uae30",
       },
+      searchInSection: "\uc139\uc158: {title}",
+      searchHitMarked: "\uac80\uc0c9\uacfc \uc77c\uce58\ud558\ub294 \ubd80\ubd84\uc774 \uc774 \ud398\uc774\uc9c0\uc5d0 \uac15\uc870 \ud45c\uc2dc\ub418\uc5c8\uc2b5\ub2c8\ub2e4",
     },
     featurePages: {
       orchestration: {

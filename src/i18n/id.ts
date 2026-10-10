@@ -1684,6 +1684,8 @@ export const id: LocaleTranslations = {
         showTranslation: "Baca terjemahan lama",
         showCurrent: "Tampilkan versi bahasa Inggris terbaru",
       },
+      searchInSection: "Di bagian: {title}",
+      searchHitMarked: "Hasil pencarian disorot di halaman ini",
     },
     featurePages: {
       orchestration: {

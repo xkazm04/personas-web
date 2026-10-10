@@ -1684,6 +1684,8 @@ export const ja: LocaleTranslations = {
         showTranslation: "\u4ee5\u524d\u306e\u7ffb\u8a33\u3092\u8aad\u3080",
         showCurrent: "\u6700\u65b0\u306e\u82f1\u8a9e\u7248\u3092\u8868\u793a",
       },
+      searchInSection: "\u30bb\u30af\u30b7\u30e7\u30f3: {title}",
+      searchHitMarked: "\u691c\u7d22\u306b\u4e00\u81f4\u3057\u305f\u7b87\u6240\u3092\u3053\u306e\u30da\u30fc\u30b8\u3067\u5f37\u8abf\u8868\u793a\u3057\u307e\u3057\u305f",
     },
     featurePages: {
       orchestration: {

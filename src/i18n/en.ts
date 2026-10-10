@@ -1494,6 +1494,10 @@
       showTranslation: string;
       showCurrent: string;
     };
+    /** Search popover, under a body hit. {title} = the section heading the hit sits under. */
+    searchInSection: string;
+    /** Screen-reader announcement on arriving from a search hit whose words are now highlighted. */
+    searchHitMarked: string;
   };
   featurePages: {
     orchestration: { headline: string; description: string; cta: string };
@@ -3513,6 +3517,8 @@ export const en: CoreTranslations = {
       showTranslation: "Read the older translation",
       showCurrent: "Show the current English version",
     },
+    searchInSection: "In section: {title}",
+    searchHitMarked: "Search match highlighted on this page",
   },
   featurePages: {
     orchestration: {
