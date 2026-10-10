@@ -1864,5 +1864,10 @@ export const zh: LocaleTranslations = {
       essentialOnly: "\u4ec5\u5fc5\u8981",
       acceptAll: "\u5168\u90e8\u63a5\u53d7",
       close: "\u5173\u95ed\u5e76\u4ec5\u4f7f\u7528\u5fc5\u8981\u9879"
+    },
+    localeOffer: {
+      prompt: "\u8981\u4ee5\u7b80\u4f53\u4e2d\u6587\u67e5\u770b\u672c\u7f51\u7ad9\u5417\uff1f",
+      accept: "\u5207\u6362\u5230\u7b80\u4f53\u4e2d\u6587",
+      dismiss: "\u4e0d\u7528\u4e86\uff0c\u8c22\u8c22"
     }
   };

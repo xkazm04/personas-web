@@ -1864,5 +1864,10 @@ export const cs: LocaleTranslations = {
       essentialOnly: "Jen nezbytn\u00e9",
       acceptAll: "P\u0159ijmout v\u0161e",
       close: "Zav\u0159\u00edt a ponechat jen nezbytn\u00e9"
+    },
+    localeOffer: {
+      prompt: "Zobrazit tento web v \u010de\u0161tin\u011b?",
+      accept: "P\u0159epnout do \u010de\u0161tiny",
+      dismiss: "Ne, d\u011bkuji"
     }
   };

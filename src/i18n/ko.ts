@@ -1864,5 +1864,10 @@ export const ko: LocaleTranslations = {
       essentialOnly: "\ud544\uc218\ub9cc",
       acceptAll: "\ubaa8\ub450 \uc218\ub77d",
       close: "\ub2eb\uace0 \ud544\uc218\ub9cc \uc0ac\uc6a9"
+    },
+    localeOffer: {
+      prompt: "\uc774 \uc0ac\uc774\ud2b8\ub97c \ud55c\uad6d\uc5b4\ub85c \ubcf4\uc2dc\uaca0\uc5b4\uc694?",
+      accept: "\ud55c\uad6d\uc5b4\ub85c \uc804\ud658",
+      dismiss: "\uad1c\ucc2e\uc2b5\ub2c8\ub2e4"
     }
   };

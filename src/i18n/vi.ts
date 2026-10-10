@@ -1864,5 +1864,10 @@ export const vi: LocaleTranslations = {
       essentialOnly: "Ch\u1ec9 thi\u1ebft y\u1ebfu",
       acceptAll: "Ch\u1ea5p nh\u1eadn t\u1ea5t c\u1ea3",
       close: "\u0110\u00f3ng v\u00e0 ch\u1ec9 d\u00f9ng thi\u1ebft y\u1ebfu"
+    },
+    localeOffer: {
+      prompt: "Xem trang web n\u00e0y b\u1eb1ng ti\u1ebfng Vi\u1ec7t?",
+      accept: "Chuy\u1ec3n sang ti\u1ebfng Vi\u1ec7t",
+      dismiss: "Kh\u00f4ng, c\u1ea3m \u01a1n"
     }
   };

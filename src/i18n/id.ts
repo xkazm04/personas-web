@@ -1864,5 +1864,10 @@ export const id: LocaleTranslations = {
       essentialOnly: "Hanya yang Penting",
       acceptAll: "Terima Semua",
       close: "Tutup dan gunakan yang penting saja"
+    },
+    localeOffer: {
+      prompt: "Lihat situs ini dalam Bahasa Indonesia?",
+      accept: "Beralih ke Bahasa Indonesia",
+      dismiss: "Tidak, terima kasih"
     }
   };

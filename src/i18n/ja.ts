@@ -1864,5 +1864,10 @@ export const ja: LocaleTranslations = {
       essentialOnly: "\u5fc5\u9808\u306e\u307f",
       acceptAll: "\u3059\u3079\u3066\u8a31\u53ef",
       close: "\u9589\u3058\u3066\u5fc5\u9808\u306e\u307f\u3092\u4f7f\u7528"
+    },
+    localeOffer: {
+      prompt: "\u3053\u306e\u30b5\u30a4\u30c8\u3092\u65e5\u672c\u8a9e\u3067\u8868\u793a\u3057\u307e\u3059\u304b\uff1f",
+      accept: "\u65e5\u672c\u8a9e\u306b\u5207\u308a\u66ff\u3048\u308b",
+      dismiss: "\u3044\u3044\u3048\u3001\u7d50\u69cb\u3067\u3059"
     }
   };

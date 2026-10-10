@@ -1920,6 +1920,12 @@
       brain: string;
     };
   };
+  /** Browser-language offer (LocaleOffer). Rendered from the TARGET locale, in its own language. */
+  localeOffer: {
+    prompt: string;
+    accept: string;
+    dismiss: string;
+  };
 }
 
 /**
@@ -3678,5 +3684,10 @@ export const en: CoreTranslations = {
       devTools: 'Parallel agent fleet, projects, triage',
       brain: 'Your vault, agent-ready',
     },
+  },
+  localeOffer: {
+    prompt: 'View this site in English?',
+    accept: 'Switch to English',
+    dismiss: 'No thanks',
   },
 };

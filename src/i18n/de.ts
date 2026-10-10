@@ -1864,5 +1864,10 @@ export const de: LocaleTranslations = {
       essentialOnly: "Nur notwendige",
       acceptAll: "Alle akzeptieren",
       close: "Schlie\u00dfen und nur notwendige verwenden"
+    },
+    localeOffer: {
+      prompt: "Diese Website auf Deutsch ansehen?",
+      accept: "Auf Deutsch wechseln",
+      dismiss: "Nein, danke"
     }
   };
