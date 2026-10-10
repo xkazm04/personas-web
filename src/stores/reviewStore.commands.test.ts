@@ -35,6 +35,7 @@ function ev(id: string, over: { severity?: string; minutesOld?: number; deviceId
     processedAt: null,
     useCaseId: null,
     createdAt: new Date(Date.now() - (over.minutesOld ?? 1) * 60_000).toISOString(),
+    retryCount: 0,
   };
 }
 

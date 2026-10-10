@@ -266,6 +266,7 @@ describe("mockCommandPlane: the demo's simulated desktop", () => {
       processedAt: null,
       useCaseId: null,
       createdAt: "2026-10-07T08:00:00.000Z",
+      retryCount: 0,
     });
     const plane = (events: Ev[]) => {
       const update = vi.fn(async (id: string, body: { status: Ev["status"]; metadata?: string }) => ({ ...events.find((e) => e.id === id)!, status: body.status }));

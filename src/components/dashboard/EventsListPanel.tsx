@@ -34,7 +34,6 @@ export default function EventsListPanel() {
   const discardEvent = useEventStore((s) => s.discardEvent);
   const discardEvents = useEventStore((s) => s.discardEvents);
   const discardingIds = useEventStore((s) => s.discardingIds);
-  const retryCounts = useEventStore((s) => s.retryCounts);
   const personas = usePersonaStore((s) => s.personas);
   const [filter, setFilter] = useState("all");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -110,8 +109,8 @@ export default function EventsListPanel() {
   }, [filter, query, eventTypeFilter, sourceTypeFilter]);
 
   const columns = useMemo(
-    () => buildEventColumns(t, personaMap, chainMap, activeChain, setActiveChain, replayingIds, retryCounts, handleReplay, selectedIds, toggleSelectEvent, discardingIds, handleDiscard),
-    [t, personaMap, chainMap, activeChain, replayingIds, retryCounts, handleReplay, selectedIds, toggleSelectEvent, discardingIds, handleDiscard],
+    () => buildEventColumns(t, personaMap, chainMap, activeChain, setActiveChain, replayingIds, handleReplay, selectedIds, toggleSelectEvent, discardingIds, handleDiscard),
+    [t, personaMap, chainMap, activeChain, replayingIds, handleReplay, selectedIds, toggleSelectEvent, discardingIds, handleDiscard],
   );
   const rowClassName = useCallback(
     (event: PersonaEvent) => [activeChain?.has(event.id) ? "bg-brand-cyan/[0.04]" : "", activeChain !== null && !activeChain.has(event.id) ? "opacity-30" : ""].filter(Boolean).join(" "),

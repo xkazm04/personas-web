@@ -39,6 +39,8 @@ import {
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
+import { statusAfterFailedAttempt } from "./eventStatusFsm";
+import { AUTO_RETRY_LIMIT } from "./eventWireStatus";
 import type { SyncedNote } from "./notes/notesModel";
 import type {
   ChatMessage,
@@ -107,6 +109,23 @@ function mergeReviewMetadata(payload: string | null, metadata?: string): string 
  */
 let publishedEventSeq = 0;
 
+/**
+ * The demo has no dispatcher, so the mock plays the desktop's auto-retry
+ * sweep on every read: a `failed` row spends one more attempt and, once
+ * `AUTO_RETRY_LIMIT` is spent, escalates to `dead_letter` - the desktop's
+ * `increment_retry_or_dead_letter` (../personas
+ * db/src/repos/communication/events.rs:1309-1350). Without it a `failed` row,
+ * which offers no operator verb, would sit in the lane forever.
+ */
+function sweepFailedEvents(): void {
+  MOCK_EVENTS.forEach((ev, i) => {
+    if (ev.status !== "failed") return;
+    const attempts = (ev.retryCount ?? 0) + 1;
+    const status = statusAfterFailedAttempt(attempts, AUTO_RETRY_LIMIT);
+    MOCK_EVENTS[i] = { ...ev, status, retryCount: attempts };
+  });
+}
+
 export const mockApi: ApiClient = {
   listPersonas: async (): Promise<Persona[]> => {
     await delay();
@@ -173,6 +192,7 @@ export const mockApi: ApiClient = {
     offset?: number;
   }): Promise<PersonaEvent[]> => {
     await delay();
+    sweepFailedEvents();
     let result = [...MOCK_EVENTS];
     if (opts?.eventType) {
       result = result.filter((e) => e.eventType === opts.eventType);
@@ -205,12 +225,16 @@ export const mockApi: ApiClient = {
       processedAt: null,
       useCaseId: null,
       createdAt: now,
+      retryCount: 0,
     };
     MOCK_EVENTS.unshift(event);
     return event;
   },
 
-  updateEvent: async (id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent> => {
+  updateEvent: async (
+    id: string,
+    body: { status: EventStatus; metadata?: string; retryCount?: number },
+  ): Promise<PersonaEvent> => {
     await delay();
     const idx = MOCK_EVENTS.findIndex((e) => e.id === id);
     if (idx === -1) throw new ApiError(404, "Event not found");
@@ -221,7 +245,10 @@ export const mockApi: ApiClient = {
     const updated: PersonaEvent = {
       ...ev,
       status: body.status,
-      processedAt: new Date().toISOString(),
+      // A re-queue clears processed_at, as the desktop's RETRY_DLQ_SQL does,
+      // and carries its count on the row (no browser keeps it any more).
+      processedAt: body.status === "pending" ? null : new Date().toISOString(),
+      retryCount: body.retryCount ?? ev.retryCount,
       payload: mergeReviewMetadata(ev.payload, body.metadata),
       // A drained dead letter stops showing its old failure once processed.
       errorMessage: body.status === "processed" ? null : ev.errorMessage,

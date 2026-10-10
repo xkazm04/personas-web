@@ -7,65 +7,51 @@ import {
   IllegalEventTransitionError,
   isEventDiscardable,
   isEventRetryable,
-  statusAfterFailedAttempt,
 } from "@/lib/eventStatusFsm";
+import { MAX_MANUAL_RETRIES } from "@/lib/eventWireStatus";
 import { mutate } from "swr";
 import { dashboardKeys } from "@/lib/dashboard-queries";
 
 const REPLAY_BATCH_SIZE = 10;
 const MAX_EVENTS_BUFFER = 1_000;
-// Hard cap on per-event replays. Beyond this, an event is "replay locked" — the
-// underlying handler is almost certainly broken and re-publishing just floods
-// the bus with events that re-enter the DLQ.
-export const MAX_REPLAY_RETRIES = 3;
+// The manual retry budget is the desktop's (`MAX_MANUAL_RETRIES`,
+// events.rs:1086) and it is counted on the ROW (`retryCount`, the desktop's
+// `retry_count`), so it is the same in every browser and survives a reload.
+// It used to be a 3-try budget kept in one browser's own storage.
+export { MAX_MANUAL_RETRIES };
 // Trip the outer batch loop after this many consecutive failures, so a sustained
 // outage during "Replay All" can't pump hundreds of doomed events at the bus.
 const CIRCUIT_BREAKER_THRESHOLD = 5;
 
-const RETRY_COUNTS_KEY = "event-replay-retry-counts";
-
 export class ReplayLockedError extends Error {
   constructor(eventId: string) {
-    super(`Event ${eventId} has reached the maximum replay limit (${MAX_REPLAY_RETRIES})`);
+    super(`Event ${eventId} has reached the maximum replay limit (${MAX_MANUAL_RETRIES})`);
     this.name = "ReplayLockedError";
   }
 }
 
-function loadRetryCounts(): Record<string, number> {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = localStorage.getItem(RETRY_COUNTS_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw) as unknown;
-    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-      const result: Record<string, number> = {};
-      for (const [k, v] of Object.entries(parsed as Record<string, unknown>)) {
-        if (typeof v === "number" && Number.isFinite(v) && v > 0) result[k] = v;
-      }
-      return result;
-    }
-    return {};
-  } catch {
-    return {};
-  }
-}
-
-function saveRetryCounts(counts: Record<string, number>): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(RETRY_COUNTS_KEY, JSON.stringify(counts));
-  } catch {
-    // quota or serialization issue — degrade gracefully
-  }
-}
-
-export function isReplayLocked(retryCounts: Record<string, number>, eventId: string): boolean {
-  return (retryCounts[eventId] ?? 0) >= MAX_REPLAY_RETRIES;
+/**
+ * Has this row spent its manual retry budget? A null count (a plane that does
+ * not report it) is unknown, not spent: the backend's own cap decides.
+ */
+export function isReplayLocked(event: Pick<PersonaEvent, "retryCount">): boolean {
+  return event.retryCount !== null && event.retryCount >= MAX_MANUAL_RETRIES;
 }
 
 export type ConnectionStatus = "connected" | "reconnecting" | "polling";
 
 type EventSetter = (partial: (state: EventState) => Partial<EventState>) => void;
+
+/** Overwrite fields of one buffered row (no FSM check: callers own that). */
+function patchEvent(set: EventSetter, eventId: string, patch: Partial<PersonaEvent>): void {
+  set((s) => {
+    const i = s.events.findIndex((e) => e.id === eventId);
+    if (i === -1) return {};
+    const events = [...s.events];
+    events[i] = { ...events[i], ...patch };
+    return { events };
+  });
+}
 
 function clearReplaying(set: EventSetter, eventId: string): void {
   set((s) => {
@@ -89,13 +75,19 @@ interface EventState {
   // Replay / DLQ
   replayingIds: Set<string>;
   discardingIds: Set<string>;
-  retryCounts: Record<string, number>;
   /**
    * The only writer of `event.status`. Rejects any move the FSM in
    * `eventStatusFsm.ts` does not allow, so an illegal transition throws at the
    * call site instead of quietly corrupting the dead letter lane.
    */
   transitionEvent: (eventId: string, next: EventStatus) => PersonaEvent | null;
+  /**
+   * Re-queue a dead-lettered row: one `updateEvent(id, { status: "pending",
+   * retryCount: n + 1 })`, the desktop's `retry_dead_letter`. No new event is
+   * published. Rejects with `ReplayLockedError` (no api call) once the row
+   * has spent `MAX_MANUAL_RETRIES`, and with `IllegalEventTransitionError` for
+   * any row that is not in `dead_letter`.
+   */
   replayEvent: (event: PersonaEvent) => Promise<void>;
   replayEvents: (events: PersonaEvent[]) => Promise<{ succeeded: number; failed: number; aborted: boolean; skipped: number }>;
   discardEvent: (event: PersonaEvent) => Promise<void>;
@@ -135,9 +127,16 @@ export const useEventStore = create<EventState>((set, get) => ({
         // and the response — most painfully during reconnect, when the
         // SSE-arrived events were the *only* signal of what happened
         // while disconnected.
+        //
+        // A row with a write in flight (retry / discard) keeps its local,
+        // optimistic version until the write settles: a poll that read the
+        // table before the write must not revert it mid-flight.
+        const inFlight = (id: string) => s.replayingIds.has(id) || s.discardingIds.has(id);
+        const local = new Map(s.events.map((e) => [e.id, e]));
+        const incoming = fetched.map((e) => (inFlight(e.id) ? (local.get(e.id) ?? e) : e));
         const fetchedIds = new Set(fetched.map((e) => e.id));
         const preserved = s.events.filter((e) => !fetchedIds.has(e.id));
-        const merged = [...fetched, ...preserved]
+        const merged = [...incoming, ...preserved]
           .sort((a, b) => {
             const ta = new Date(a.createdAt).getTime();
             const tb = new Date(b.createdAt).getTime();
@@ -180,7 +179,6 @@ export const useEventStore = create<EventState>((set, get) => ({
   // Replay / DLQ
   replayingIds: new Set(),
   discardingIds: new Set(),
-  retryCounts: loadRetryCounts(),
   transitionEvent: (eventId, next) => {
     const index = get().events.findIndex((e) => e.id === eventId);
     if (index === -1) return null;
@@ -205,61 +203,30 @@ export const useEventStore = create<EventState>((set, get) => ({
     return updated;
   },
   replayEvent: async (event) => {
-    const currentEvent = get().events.find((e) => e.id === event.id) ?? event;
-    // A retry is a transition, not a counter bump: only a row that is actually
-    // sitting in the failed / dead-letter lane can be retried.
-    if (!isEventRetryable(currentEvent.status)) {
-      throw new IllegalEventTransitionError(currentEvent.status, "processing");
+    const current = get().events.find((e) => e.id === event.id) ?? event;
+    // A retry is a transition, not a counter bump: only a dead-lettered row
+    // can be retried (a `failed` row belongs to the auto-retry engine).
+    if (!isEventRetryable(current.status)) {
+      throw new IllegalEventTransitionError(current.status, "pending");
     }
-    if (isReplayLocked(get().retryCounts, event.id)) {
-      // Budget spent. Park it in the dead letter so the row has a destination
-      // rather than a permanently climbing retry badge.
-      if (currentEvent.status === "failed") get().transitionEvent(event.id, "dead_letter");
-      throw new ReplayLockedError(event.id);
-    }
-    // Count the attempt up front, not the success. The previous shape only
-    // incremented retryCounts inside the success branch, so a permanently
-    // broken handler (always-throwing downstream) never tripped
-    // MAX_REPLAY_RETRIES — Retry / Retry All could pump poison messages at
-    // the bus indefinitely. Counting attempts means after MAX_REPLAY_RETRIES
-    // calls the event becomes replay-locked regardless of outcome, which is
-    // the actual semantics of "retry budget".
-    const attempts = (get().retryCounts[event.id] ?? 0) + 1;
-    set((s) => {
-      const nextRetryCounts = { ...s.retryCounts, [event.id]: attempts };
-      saveRetryCounts(nextRetryCounts);
-      return {
-        replayingIds: new Set(s.replayingIds).add(event.id),
-        retryCounts: nextRetryCounts,
-      };
-    });
-    get().transitionEvent(event.id, "processing");
+    if (isReplayLocked(current)) throw new ReplayLockedError(event.id);
+    const retryCount = (current.retryCount ?? 0) + 1;
+    set((s) => ({ replayingIds: new Set(s.replayingIds).add(event.id) }));
+    get().transitionEvent(event.id, "pending");
+    patchEvent(set, event.id, { retryCount, processedAt: null });
     try {
-      const newEvent = await api.publishEvent({
-        eventType: event.eventType,
-        sourceType: event.sourceType,
-        sourceId: event.sourceId ?? undefined,
-        targetPersonaId: event.targetPersonaId ?? undefined,
-        payload: event.payload ?? undefined,
+      await api.updateEvent(event.id, { status: "pending", retryCount });
+    } catch {
+      // The write never landed, so the row never moved: roll the optimistic
+      // re-queue back (not a transition - pending -> dead_letter is not one).
+      patchEvent(set, event.id, {
+        status: current.status,
+        retryCount: current.retryCount,
+        processedAt: current.processedAt,
       });
-      get().appendEvent(newEvent);
-      // The verb that resolves the row. `api.updateEvent` existed with zero
-      // call sites before this — the original event was never written back.
-      await api.updateEvent(event.id, { status: "processed" });
-      get().transitionEvent(event.id, "processed");
-      clearReplaying(set, event.id);
-    } catch (err) {
-      const landing = statusAfterFailedAttempt(attempts, MAX_REPLAY_RETRIES);
-      try {
-        await api.updateEvent(event.id, { status: landing });
-      } catch {
-        // The local transition is still the truth the operator sees.
-      }
-      get().transitionEvent(event.id, landing);
-      clearReplaying(set, event.id);
-      if (err instanceof ReplayLockedError) throw err;
-      if (err instanceof IllegalEventTransitionError) throw err;
       throw new Error("Replay failed");
+    } finally {
+      clearReplaying(set, event.id);
     }
   },
   replayEvents: async (events) => {
@@ -269,21 +236,13 @@ export const useEventStore = create<EventState>((set, get) => ({
     let aborted = false;
     let consecutiveFailures = 0;
 
-    // Pre-filter out already-locked events so we don't churn batches calling
-    // them just to throw ReplayLockedError. Lockout is reported as `skipped`,
-    // and a locked row is moved into the dead letter here too, so bulk retry
-    // resolves exactly the same states as the per-row verb.
+    // Pre-filter out locked and non-retryable rows so we don't churn batches
+    // calling them just to throw. Both are reported as `skipped`.
     const eligible: PersonaEvent[] = [];
     for (const e of events) {
-      if (isReplayLocked(get().retryCounts, e.id)) {
-        const current = get().events.find((x) => x.id === e.id) ?? e;
-        if (current.status === "failed") get().transitionEvent(e.id, "dead_letter");
-        skipped++;
-      } else if (!isEventRetryable((get().events.find((x) => x.id === e.id) ?? e).status)) {
-        skipped++;
-      } else {
-        eligible.push(e);
-      }
+      const current = get().events.find((x) => x.id === e.id) ?? e;
+      if (isReplayLocked(current) || !isEventRetryable(current.status)) skipped++;
+      else eligible.push(e);
     }
 
     outer: for (let i = 0; i < eligible.length; i += REPLAY_BATCH_SIZE) {
@@ -386,7 +345,6 @@ export const useEventStore = create<EventState>((set, get) => ({
   },
 
   reset: () => {
-    saveRetryCounts({});
     set({
       events: [],
       eventIds: new Set(),
@@ -394,7 +352,6 @@ export const useEventStore = create<EventState>((set, get) => ({
       listNotServed: false,
       replayingIds: new Set(),
       discardingIds: new Set(),
-      retryCounts: {},
       subscriptions: [],
       subscriptionsLoading: false,
       subscriptionsNotServed: false,

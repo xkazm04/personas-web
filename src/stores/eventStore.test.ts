@@ -15,7 +15,7 @@ vi.mock("@/lib/api", () => ({
 
 vi.mock("swr", () => ({ mutate: vi.fn() }));
 
-const { useEventStore, MAX_REPLAY_RETRIES, ReplayLockedError } = await import("./eventStore");
+const { useEventStore, MAX_MANUAL_RETRIES, ReplayLockedError } = await import("./eventStore");
 const { IllegalEventTransitionError } = await import("@/lib/eventStatusFsm");
 
 let seq = 0;
@@ -35,6 +35,7 @@ function event(overrides: Partial<PersonaEvent> = {}): PersonaEvent {
     processedAt: null,
     useCaseId: null,
     createdAt: new Date(0).toISOString(),
+    retryCount: 0,
     ...overrides,
   };
 }
@@ -57,7 +58,7 @@ beforeEach(() => {
 
 describe("transitionEvent", () => {
   it("writes the new status onto the event in the buffer", () => {
-    const e = event({ status: "failed" });
+    const e = event({ status: "pending" });
     seed([e]);
     useEventStore.getState().transitionEvent(e.id, "processing");
     expect(statusOf(e.id)).toBe("processing");
@@ -78,7 +79,7 @@ describe("transitionEvent", () => {
   });
 
   it("clears the error message when an event finally succeeds", async () => {
-    const e = event({ status: "failed" });
+    const e = event({ status: "pending" });
     seed([e]);
     useEventStore.getState().transitionEvent(e.id, "processing");
     useEventStore.getState().transitionEvent(e.id, "processed");
@@ -87,48 +88,42 @@ describe("transitionEvent", () => {
 });
 
 describe("replayEvent — the dead letter drains", () => {
-  it("moves the ORIGINAL event to processed on a successful retry", async () => {
+  it("re-queues the ORIGINAL row to pending and counts the retry on it", async () => {
     const e = event({ status: "dead_letter" });
     seed([e]);
     await useEventStore.getState().replayEvent(e);
-    expect(statusOf(e.id)).toBe("processed");
-    expect(updateEvent).toHaveBeenCalledWith(e.id, { status: "processed" });
+    expect(statusOf(e.id)).toBe("pending");
+    expect(updateEvent).toHaveBeenCalledWith(e.id, { status: "pending", retryCount: 1 });
+    expect(publishEvent).not.toHaveBeenCalled();
   });
 
-  it("publishes the replayed event onto the bus and appends it", async () => {
-    const e = event({ status: "failed" });
-    seed([e]);
-    await useEventStore.getState().replayEvent(e);
-    expect(publishEvent).toHaveBeenCalledTimes(1);
-    expect(useEventStore.getState().events).toHaveLength(2);
-  });
-
-  it("lands a failed attempt back in `failed` while retry budget remains", async () => {
-    publishEvent.mockRejectedValue(new Error("bus down"));
-    const e = event({ status: "failed" });
+  it("rolls the row back when the write fails, leaving the count unspent", async () => {
+    updateEvent.mockRejectedValue(new Error("bus down"));
+    const e = event({ status: "dead_letter", retryCount: 2 });
     seed([e]);
     await expect(useEventStore.getState().replayEvent(e)).rejects.toThrow("Replay failed");
-    expect(statusOf(e.id)).toBe("failed");
-    expect(useEventStore.getState().retryCounts[e.id]).toBe(1);
+    expect(useEventStore.getState().events[0]).toEqual(e);
   });
 
-  it("dead-letters the attempt that exhausts the retry budget", async () => {
-    publishEvent.mockRejectedValue(new Error("bus down"));
+  it("refuses a failed row: the auto-retry engine owns it", async () => {
     const e = event({ status: "failed" });
     seed([e]);
-    for (let i = 0; i < MAX_REPLAY_RETRIES; i++) {
-      await expect(useEventStore.getState().replayEvent(e)).rejects.toThrow();
-    }
-    expect(statusOf(e.id)).toBe("dead_letter");
-    expect(useEventStore.getState().retryCounts[e.id]).toBe(MAX_REPLAY_RETRIES);
+    await expect(useEventStore.getState().replayEvent(e)).rejects.toThrow(IllegalEventTransitionError);
+    expect(updateEvent).not.toHaveBeenCalled();
   });
 
-  it("parks a replay-locked event in the dead letter instead of only throwing", async () => {
-    const e = event({ status: "failed" });
+  it("locks a row that spent the desktop's manual budget", async () => {
+    const e = event({ status: "dead_letter", retryCount: MAX_MANUAL_RETRIES });
     seed([e]);
-    useEventStore.setState({ retryCounts: { [e.id]: MAX_REPLAY_RETRIES } });
     await expect(useEventStore.getState().replayEvent(e)).rejects.toThrow(ReplayLockedError);
     expect(statusOf(e.id)).toBe("dead_letter");
+  });
+
+  it("leaves an unknown count (null) to the backend's own cap", async () => {
+    const e = event({ status: "dead_letter", retryCount: null });
+    seed([e]);
+    await useEventStore.getState().replayEvent(e);
+    expect(updateEvent).toHaveBeenCalledWith(e.id, { status: "pending", retryCount: 1 });
   });
 
   it("rejects retrying an event that is not in a retryable state", async () => {
@@ -137,7 +132,7 @@ describe("replayEvent — the dead letter drains", () => {
     await expect(useEventStore.getState().replayEvent(e)).rejects.toThrow(
       IllegalEventTransitionError,
     );
-    expect(publishEvent).not.toHaveBeenCalled();
+    expect(updateEvent).not.toHaveBeenCalled();
   });
 
   it("clears the replaying flag on both outcomes", async () => {
@@ -146,8 +141,8 @@ describe("replayEvent — the dead letter drains", () => {
     await useEventStore.getState().replayEvent(ok);
     expect(useEventStore.getState().replayingIds.size).toBe(0);
 
-    publishEvent.mockRejectedValue(new Error("bus down"));
-    const bad = event({ status: "failed" });
+    updateEvent.mockRejectedValue(new Error("bus down"));
+    const bad = event({ status: "dead_letter" });
     seed([bad]);
     await expect(useEventStore.getState().replayEvent(bad)).rejects.toThrow();
     expect(useEventStore.getState().replayingIds.size).toBe(0);
@@ -155,31 +150,31 @@ describe("replayEvent — the dead letter drains", () => {
 });
 
 describe("replayEvents — bulk goes through the same path", () => {
-  it("drains every selected dead-letter row", async () => {
+  it("re-queues every selected dead-letter row", async () => {
     const events = [event(), event(), event()];
     seed(events);
     const result = await useEventStore.getState().replayEvents(events);
     expect(result).toMatchObject({ succeeded: 3, failed: 0, skipped: 0, aborted: false });
-    for (const e of events) expect(statusOf(e.id)).toBe("processed");
+    for (const e of events) expect(statusOf(e.id)).toBe("pending");
   });
 
-  it("skips locked rows and parks them in the dead letter", async () => {
-    const locked = event({ status: "failed" });
-    const fresh = event({ status: "failed" });
+  it("skips locked rows and leaves them in the dead letter", async () => {
+    const locked = event({ retryCount: MAX_MANUAL_RETRIES });
+    const fresh = event();
     seed([locked, fresh]);
-    useEventStore.setState({ retryCounts: { [locked.id]: MAX_REPLAY_RETRIES } });
     const result = await useEventStore.getState().replayEvents([locked, fresh]);
     expect(result.skipped).toBe(1);
     expect(result.succeeded).toBe(1);
     expect(statusOf(locked.id)).toBe("dead_letter");
-    expect(statusOf(fresh.id)).toBe("processed");
+    expect(statusOf(fresh.id)).toBe("pending");
   });
 
   it("skips rows that are not in a retryable state at all", async () => {
     const done = event({ status: "processed" });
-    seed([done]);
-    const result = await useEventStore.getState().replayEvents([done]);
-    expect(result).toMatchObject({ succeeded: 0, failed: 0, skipped: 1 });
+    const failing = event({ status: "failed" });
+    seed([done, failing]);
+    const result = await useEventStore.getState().replayEvents([done, failing]);
+    expect(result).toMatchObject({ succeeded: 0, failed: 0, skipped: 2 });
   });
 });
 
@@ -207,9 +202,9 @@ describe("discard — the operator's verdict", () => {
     const done = event({ status: "processed" });
     seed([a, b, done]);
     const result = await useEventStore.getState().discardEvents([a, b, done]);
-    expect(result).toMatchObject({ succeeded: 2, failed: 0, skipped: 1 });
+    expect(result).toMatchObject({ succeeded: 1, failed: 0, skipped: 2 });
     expect(statusOf(a.id)).toBe("discarded");
-    expect(statusOf(b.id)).toBe("discarded");
+    expect(statusOf(b.id)).toBe("failed");
     expect(statusOf(done.id)).toBe("processed");
   });
 
@@ -234,11 +229,10 @@ describe("behaviours the FSM must not regress", () => {
 
   it("reset() still clears the replay slice", () => {
     seed([event()]);
-    useEventStore.setState({ retryCounts: { x: 2 }, discardingIds: new Set(["x"]) });
+    useEventStore.setState({ replayingIds: new Set(["y"]), discardingIds: new Set(["x"]) });
     useEventStore.getState().reset();
     const s = useEventStore.getState();
     expect(s.events).toHaveLength(0);
-    expect(s.retryCounts).toEqual({});
     expect(s.replayingIds.size).toBe(0);
     expect(s.discardingIds.size).toBe(0);
   });

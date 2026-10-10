@@ -31,6 +31,7 @@ function ev(id: string, severity: string, minutesOld: number, status: PersonaEve
     processedAt: null,
     useCaseId: null,
     createdAt: new Date(Date.now() - minutesOld * 60_000).toISOString(),
+    retryCount: 0,
   };
 }
 

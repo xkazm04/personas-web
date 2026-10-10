@@ -42,6 +42,11 @@ const statusConfig: Record<
     bgColor: "bg-rose-500/10",
     borderColor: "border-rose-500/40",
   },
+  skipped: {
+    color: "text-slate-400",
+    bgColor: "bg-slate-500/10",
+    borderColor: "border-slate-500/20",
+  },
   discarded: {
     color: "text-slate-400",
     bgColor: "bg-slate-500/10",

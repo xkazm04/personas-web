@@ -469,6 +469,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(2),
     useCaseId: null,
     createdAt: ago(3),
+    retryCount: 0,
   },
   {
     id: id("ev", 2),
@@ -483,6 +484,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(14),
     useCaseId: null,
     createdAt: ago(15),
+    retryCount: 0,
   },
   {
     id: id("ev", 3),
@@ -497,6 +499,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(119),
     useCaseId: null,
     createdAt: ago(120),
+    retryCount: 0,
   },
   {
     id: id("ev", 4),
@@ -511,6 +514,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: null,
     useCaseId: null,
     createdAt: ago(14),
+    retryCount: 0,
   },
   {
     id: id("ev", 5),
@@ -525,6 +529,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: null,
     useCaseId: null,
     createdAt: ago(1440),
+    retryCount: 0,
   },
   {
     id: id("ev", 6),
@@ -539,6 +544,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(118),
     useCaseId: null,
     createdAt: ago(119),
+    retryCount: 0,
   },
   {
     id: id("ev", 7),
@@ -553,6 +559,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: null,
     useCaseId: null,
     createdAt: ago(1),
+    retryCount: 0,
   },
   {
     id: id("ev", 8),
@@ -562,11 +569,14 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     sourceId: "acme/backend",
     targetPersonaId: id("p", 1),
     payload: JSON.stringify({ object_kind: "merge_request", project: { path_with_namespace: "acme/backend" }, object_attributes: { iid: 78, title: "refactor: migrate to connection pooling", state: "opened" } }, null, 2),
-    status: "dead_letter",
+    // The desktop's typed non-delivery: no subscriber matched, so the event is
+    // `skipped` (terminal), not a failure waiting in the dead letter.
+    status: "skipped",
     errorMessage: "No subscription matched for event type gitlab_merge_request with source acme/backend",
     processedAt: ago(60),
     useCaseId: null,
     createdAt: ago(60),
+    retryCount: 0,
   },
   // --- Dead letter lane -----------------------------------------------------
   // The dead letter is a destination, not a void: these are the rows an
@@ -586,6 +596,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(38),
     useCaseId: null,
     createdAt: ago(41),
+    retryCount: 3,
   },
   {
     id: id("ev", 10),
@@ -600,6 +611,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(96),
     useCaseId: null,
     createdAt: ago(105),
+    retryCount: 3,
   },
   {
     id: id("ev", 11),
@@ -614,6 +626,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(6),
     useCaseId: null,
     createdAt: ago(7),
+    retryCount: 1,
   },
   {
     id: id("ev", 12),
@@ -628,6 +641,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(220),
     useCaseId: null,
     createdAt: ago(221),
+    retryCount: 0,
   },
   {
     id: id("ev", 13),
@@ -642,6 +656,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(310),
     useCaseId: null,
     createdAt: ago(310),
+    retryCount: 0,
   },
   {
     id: id("ev", 14),
@@ -656,6 +671,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(11),
     useCaseId: null,
     createdAt: ago(12),
+    retryCount: 0,
   },
   {
     id: id("ev", 15),
@@ -670,6 +686,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: ago(480),
     useCaseId: null,
     createdAt: ago(482),
+    retryCount: 4,
   },
   // Review-queue seeds, so the SLA order has something to show: with ev4/ev5
   // the pending queue is 2 overdue, 2 due soon, 1 on track. ev16 is the review
@@ -690,6 +707,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: null,
     useCaseId: null,
     createdAt: ago(180),
+    retryCount: 0,
   },
   {
     id: id("ev", 17),
@@ -704,6 +722,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: null,
     useCaseId: null,
     createdAt: ago(85),
+    retryCount: 0,
   },
   {
     id: id("ev", 18),
@@ -718,6 +737,7 @@ export const MOCK_EVENTS: PersonaEvent[] = [
     processedAt: null,
     useCaseId: null,
     createdAt: ago(20),
+    retryCount: 0,
   },
 ];
 
@@ -728,9 +748,9 @@ export const MOCK_EVENTS: PersonaEvent[] = [
 export const MOCK_SUBSCRIPTIONS: Record<string, PersonaEventSubscription[]> = {
   [id("p", 1)]: [
     { id: id("sub", 1), personaId: id("p", 1), eventType: "webhook_received", sourceFilter: "github", enabled: true, useCaseId: null, createdAt: ago(7200), updatedAt: ago(7200) },
-    // Created AFTER the gitlab merge request (ev-8, 60 min ago) dead-lettered
-    // with "No subscription matched": the operator's fix, so a retry of that
-    // event would now deliver. Older than the event, it would contradict it.
+    // Created AFTER the gitlab merge request (ev-8, 60 min ago) was skipped
+    // with "No subscription matched": the operator's fix, so the next merge
+    // request delivers. Older than the event, it would contradict it.
     { id: id("sub", 2), personaId: id("p", 1), eventType: "gitlab_merge_request", sourceFilter: null, enabled: true, useCaseId: null, createdAt: ago(30), updatedAt: ago(30) },
   ],
   [id("p", 2)]: [

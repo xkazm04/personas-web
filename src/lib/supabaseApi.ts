@@ -16,7 +16,7 @@ import { ApiError, type ApiClient, type CommandAck } from "./api";
 import { isDeskOnlyReview, reviewReportId } from "./commands/deskOnlyReview";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { halvesTrend } from "./observabilitySeries";
-import { EVENT_STATUS_TRANSITIONS } from "./eventStatusFsm";
+import { fromWireEventStatus } from "./eventWireStatus";
 import { executionDetailFromRow, mapExecution, mapPersona, type ExecutionRow, type PersonaRow } from "./desktopRows";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
 import { SYNCED_NOTE_COLUMNS, mapNoteRow, type SyncedNoteRow } from "./notes/notesModel";
@@ -111,14 +111,13 @@ async function rows<T>(
   return data ?? [];
 }
 
-// Derived from the state machine rather than hand-listed: when the union grew
-// (pending/processing/processed/failed/dead_letter/discarded), a literal set
-// silently downgraded every new status to "pending" on the way in from the
-// sync mirror. Keying off the transition table means it cannot drift again.
-const EVENT_STATUSES: ReadonlySet<string> = new Set(Object.keys(EVENT_STATUS_TRANSITIONS));
-
+// The sync mirror ships the DESKTOP's status string verbatim, so it is read
+// through the wire adapter. Keying off the web's own table (as this did) sent
+// `delivered`, `completed` and `skipped` to "pending": every delivered event
+// rendered as pending in Supabase mode.
 function mapEventStatus(s: string): EventStatus {
-  if (EVENT_STATUSES.has(s)) return s as EventStatus;
+  const status = fromWireEventStatus(s);
+  if (status) return status;
   console.warn(`[supabaseApi] unknown event status "${s}"; treating as "pending".`);
   return "pending";
 }
@@ -157,6 +156,8 @@ function mapEvent(r: EventRow): PersonaEvent {
     processedAt: r.processed_at,
     useCaseId: null,
     createdAt: r.created_at,
+    // EVENT_COLS does not sync retry_count: unknown, never 0.
+    retryCount: null,
   };
 }
 
@@ -214,6 +215,7 @@ function reviewToEvent(r: ManualReviewRow): PersonaEvent {
     processedAt: r.resolved_at,
     useCaseId: null,
     createdAt: r.created_at,
+    retryCount: null,
   };
 }
 

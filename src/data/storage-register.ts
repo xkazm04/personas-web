@@ -21,7 +21,6 @@
  *   personas-tour-seen ................. src/components/tour/TourLauncher.tsx
  *   personas-legal-last-seen-<policy> .. src/data/policy-changelog.ts
  *   personas-dashboard-last-visit ...... src/app/dashboard/home/home-page/useLastVisit.ts
- *   event-replay-retry-counts .......... src/stores/eventStore.ts
  *   checklist-<hash> ................... src/components/guide/blocks/Checklist.tsx
  *   personas-voter-id / -comment-author  src/components/sections/feature-voting/data.ts
  *   personas-controller (IndexedDB) .... src/lib/commands/signer.ts (DB_NAME; store "keys", one
@@ -84,7 +83,7 @@ export const STORAGE_REGISTER: StorageEntry[] = [
   // Functional
   { names: ["personas-tour-seen"], mechanism: "localStorage", category: "functional", lifetime: "untilCleared", purpose: "tourSeen" },
   { names: ["personas-legal-last-seen-*"], mechanism: "localStorage", category: "functional", lifetime: "untilCleared", purpose: "policySeen" },
-  { names: ["personas-dashboard-last-visit", "event-replay-retry-counts"], mechanism: "localStorage", category: "functional", lifetime: "untilCleared", purpose: "dashboardActivity" },
+  { names: ["personas-dashboard-last-visit"], mechanism: "localStorage", category: "functional", lifetime: "untilCleared", purpose: "dashboardActivity" },
   { names: ["checklist-*"], mechanism: "localStorage", category: "functional", lifetime: "untilCleared", purpose: "checklist" },
   { names: ["personas-voter-id", "personas-comment-author"], mechanism: "localStorage", category: "functional", lifetime: "untilCleared", purpose: "voting" },
 ];

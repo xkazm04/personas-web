@@ -16,6 +16,7 @@ const ALL: EventStatus[] = [
   "pending",
   "processing",
   "processed",
+  "skipped",
   "failed",
   "dead_letter",
   "discarded",
@@ -32,17 +33,18 @@ describe("event status FSM — the transition table", () => {
     }
   });
 
-  it("allows exactly the transitions the dead-letter design calls for", () => {
+  it("allows exactly the desktop's transitions, projected onto the web vocabulary", () => {
     const legal: Array<[EventStatus, EventStatus]> = [
       ["pending", "processing"],
+      ["pending", "processed"],
+      ["pending", "skipped"],
+      ["pending", "failed"],
       ["processing", "processed"],
-      ["processing", "pending"],
+      ["processing", "skipped"],
       ["processing", "failed"],
-      ["processing", "dead_letter"],
-      ["failed", "processing"],
+      ["failed", "pending"],
       ["failed", "dead_letter"],
-      ["failed", "discarded"],
-      ["dead_letter", "processing"],
+      ["dead_letter", "pending"],
       ["dead_letter", "discarded"],
     ];
     for (const [from, to] of legal) {
@@ -70,7 +72,7 @@ describe("event status FSM — the transition table", () => {
 
 describe("assertEventTransition", () => {
   it("passes a legal move through silently", () => {
-    expect(() => assertEventTransition("dead_letter", "processing")).not.toThrow();
+    expect(() => assertEventTransition("dead_letter", "pending")).not.toThrow();
   });
 
   it("rejects resurrecting a discarded event", () => {
@@ -106,12 +108,10 @@ describe("assertEventTransition", () => {
 });
 
 describe("operator verbs", () => {
-  it("offers retry and discard exactly on the resolvable lane", () => {
-    expect(isEventRetryable("failed")).toBe(true);
+  it("offers retry and discard exactly on the dead letter", () => {
     expect(isEventRetryable("dead_letter")).toBe(true);
-    expect(isEventDiscardable("failed")).toBe(true);
     expect(isEventDiscardable("dead_letter")).toBe(true);
-    for (const status of ["pending", "processing", "processed", "discarded"] as EventStatus[]) {
+    for (const status of ["pending", "processing", "processed", "skipped", "failed", "discarded"] as EventStatus[]) {
       expect(isEventRetryable(status)).toBe(false);
       expect(isEventDiscardable(status)).toBe(false);
     }
@@ -133,9 +133,10 @@ describe("statusAfterFailedAttempt — the retry budget has a destination", () =
     expect(statusAfterFailedAttempt(1, 0)).toBe("dead_letter");
   });
 
-  it("always lands somewhere the FSM can reach from `processing`", () => {
+  it("always stays in `failed` or lands where the FSM can reach from it", () => {
     for (const attempts of [1, 2, 3, 4, 99]) {
-      expect(canEventTransition("processing", statusAfterFailedAttempt(attempts, 3))).toBe(true);
+      const landing = statusAfterFailedAttempt(attempts, 3);
+      expect(landing === "failed" || canEventTransition("failed", landing)).toBe(true);
     }
   });
 });

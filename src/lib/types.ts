@@ -70,6 +70,14 @@ export interface PersonaEvent {
   processedAt: string | null;
   useCaseId: string | null;
   createdAt: string;
+  /**
+   * Delivery retries spent on this row (desktop `persona_events.retry_count`:
+   * auto retries and manual DLQ retries share it). Null when the plane does
+   * not report it: the cloud sync mirror does not ship the column
+   * (../personas src-tauri/src/cloud/sync/rows.rs EVENT_COLS), and unknown is
+   * not zero.
+   */
+  retryCount: number | null;
 }
 
 export interface PersonaEventSubscription {
@@ -196,11 +204,16 @@ export type PersonaExecutionStatus =
  * Event delivery states. `processing`, `dead_letter` and `discarded` complete
  * the delivery FSM in `src/lib/eventStatusFsm.ts` — without them a failed
  * event had no state to move to, so the dead letter lane could never drain.
+ * The set is the desktop's `PersonaEventStatus` read through
+ * `src/lib/eventWireStatus.ts`: its `delivered` / `completed` both show as
+ * `processed`, and `skipped` is its typed non-delivery (no matching
+ * subscriber), a terminal state rather than a failure.
  */
 export type EventStatus =
   | "pending"
   | "processing"
   | "processed"
+  | "skipped"
   | "failed"
   | "dead_letter"
   | "discarded";

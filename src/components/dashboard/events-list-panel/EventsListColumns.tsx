@@ -1,4 +1,4 @@
-import { AlertCircle, Ban, Check, CheckCircle2, Clock, Inbox, Link2, Loader2, Radio, RotateCcw, Trash2 } from "lucide-react";
+import { AlertCircle, Ban, Check, CheckCircle2, Clock, Inbox, Link2, Loader2, Radio, RotateCcw, SkipForward, Trash2 } from "lucide-react";
 import DataTable, { type Column } from "@/components/dashboard/DataTable";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
@@ -13,6 +13,7 @@ const statusIcons: Record<string, React.ElementType> = {
   processing: Loader2,
   processed: CheckCircle2,
   completed: CheckCircle2,
+  skipped: SkipForward,
   failed: AlertCircle,
   dead_letter: Inbox,
   discarded: Ban,
@@ -23,6 +24,7 @@ const statusTones: Record<string, string> = {
   processing: "text-cyan-400",
   failed: "text-red-400",
   dead_letter: "text-rose-400",
+  skipped: "text-muted-dark",
   discarded: "text-muted-dark",
 };
 
@@ -33,7 +35,6 @@ export function buildEventColumns(
   activeChain: Set<string> | null,
   setActiveChain: (chain: Set<string> | null) => void,
   replayingIds: Set<string>,
-  retryCounts: Record<string, number>,
   onReplay: (event: PersonaEvent) => void,
   selectedIds: Set<string>,
   onSelect: (id: string) => void,
@@ -71,7 +72,7 @@ export function buildEventColumns(
       key: "retries",
       header: <ColumnName>{labels.eventsPage.columnRetries}</ColumnName>,
       className: "w-10 flex-shrink-0",
-      render: (event) => <RetryCount count={retryCounts[event.id]} label={labels.eventsPage.retriedCount} />,
+      render: (event) => <RetryCount count={event.retryCount} label={labels.eventsPage.retriedCount} />,
     },
     { key: "time", header: labels.eventsPage.time, className: "w-16 flex-shrink-0 text-right", render: (event) => <span className="text-sm text-muted-dark">{relativeTime(event.createdAt)}</span> },
     {
@@ -133,7 +134,8 @@ function EventTypeCell({ event, labels, chainMap, activeChain, setActiveChain }:
   );
 }
 
-function RetryCount({ count, label }: { count?: number; label: string }) {
+/** The row's own retry count (desktop `retry_count`); null on a plane that does not report it. */
+function RetryCount({ count, label }: { count: number | null; label: string }) {
   if (!count) return null;
   return <span className="flex items-center gap-0.5 text-sm font-mono text-amber-400/90" title={label.replace("{count}", String(count))}><RotateCcw className="h-2.5 w-2.5" />{count}</span>;
 }

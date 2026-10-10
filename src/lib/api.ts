@@ -159,7 +159,8 @@ export interface ApiClient {
   resumePersona(id: string): Promise<CommandAck>;
   listEvents(opts?: { eventType?: string; status?: string; limit?: number; offset?: number }): Promise<PersonaEvent[]>;
   publishEvent(input: CreateEventInput): Promise<PersonaEvent>;
-  updateEvent(id: string, body: { status: EventStatus; metadata?: string }): Promise<PersonaEvent>;
+  /** `retryCount` rides along on a dead-letter re-queue (`dead_letter -> pending`). */
+  updateEvent(id: string, body: { status: EventStatus; metadata?: string; retryCount?: number }): Promise<PersonaEvent>;
   /**
    * Record a manual review's verdict. The orchestrator writes it at once (the
    * updated event); the command planes send a `review_decide` (PLAN M20,
@@ -277,7 +278,7 @@ const realApi: ApiClient = {
 
       updateEvent: (
         id: string,
-        body: { status: EventStatus; metadata?: string },
+        body: { status: EventStatus; metadata?: string; retryCount?: number },
       ) =>
         orchestratorFetch<PersonaEvent>(`/api/events/${id}`, {
           method: "PUT",
