@@ -1301,6 +1301,8 @@
             "src/components/dashboard/fleet-monitor/board/useBoardNav.ts",
             "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts",
             "src/components/dashboard/fleet-monitor/board/useCommands.ts",
+            "src/components/dashboard/fleet-monitor/board/verbs.test.ts",
+            "src/components/dashboard/fleet-monitor/board/verbs.ts",
             "src/components/dashboard/fleet-monitor/fleet-data.ts",
             "src/components/dashboard/fleet-monitor/fleet.json",
             "src/components/dashboard/fleet-monitor/night/Backdrop.tsx",
