@@ -98,6 +98,8 @@ test.describe("/m phone landing", () => {
     await open(page);
     await page.locator("[data-role=m-cta]").click();
     await expect(page.locator("#s6")).toHaveClass(/\bon\b/);
+    // The route comes from DOWNLOAD_PLAN: without NEXT_PUBLIC_DOWNLOAD_URL Windows is on the waitlist.
+    test.skip((await page.locator("#s6 form.send").getAttribute("data-route")) !== "share", "no installer is live in this build");
     await page.locator("[data-role=m-cta]").click();
     await expect.poll(() => page.evaluate(() => (window as unknown as { __shared?: ShareData }).__shared?.url ?? "")).toMatch(/\/#download-section$/);
     await expect(page.locator("[data-role=m-cta]")).toHaveAttribute("data-mode", "sent");
@@ -137,6 +139,23 @@ test.describe("/m phone landing", () => {
     expect(ics).toContain("BEGIN:VEVENT");
     expect(ics).toContain("END:VEVENT");
     expect(ics).toMatch(/URL:[^\r\n]*#download-section/);
+  });
+
+  test("Windows joins its waitlist while no installer is live", async ({ page }) => {
+    const posts: unknown[] = [];
+    await page.route("**/api/waitlist", async (route) => {
+      if (route.request().method() === "POST") posts.push(route.request().postDataJSON());
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ message: "Added to waitlist", count: 1 }) });
+    });
+    await open(page);
+    await toPoster(page, 5);
+    test.skip((await page.locator("#s6 form.send").getAttribute("data-route")) !== "waitlist", "a Windows installer is live in this build");
+    await expect(page.locator("#hm-msg")).not.toContainText("about 12 MB");
+    await page.getByPlaceholder("you@example.com").fill("visitor@example.com");
+    await page.locator("[data-role=m-cta]").click();
+    await expect.poll(() => posts.length).toBe(1);
+    expect(posts[0]).toEqual({ email: "visitor@example.com", platform: "windows" });
+    await expect(page.locator("[data-role=m-cta]")).toContainText("Windows waitlist");
   });
 
   test("macOS joins the waitlist through POST /api/waitlist", async ({ page }) => {

@@ -20,18 +20,20 @@ const STEP_HEX = "56,25 42,49.2 14,49.2 0,25 14,0.8 42,0.8";
 /** What the status line under the form says. */
 function message(c: Props["c"], h: Handoff, names: Props["names"]): { text: string; cls: string } {
   if (h.error) return { text: h.error, cls: "msg err" };
-  if (h.mode === "sent") {
+  const v = h.view;
+  if (v.dock === "sent" && v.sentKind) {
     const name = names[h.platform];
-    const text = { shared: c.toastShared, copied: c.toastCopied, joined: fill(c.joined, { platform: name }), already: fill(c.alreadyJoined, { platform: name }) }[h.sentKind];
+    const text = { shared: c.toastShared, copied: c.toastCopied, joined: fill(c.joined, { platform: name }), already: fill(c.alreadyJoined, { platform: name }) }[v.sentKind];
     return { text, cls: "msg ok" };
   }
-  return { text: { win: c.hintWin, mac: c.hintMac, lin: c.hintLin }[h.platform], cls: "msg" };
+  return { text: v.hint ? c[v.hint] : "", cls: "msg" };
 }
 
 /**
  * Poster 6: take it to your computer. A phone beams the link to a computer; the form under it picks
- * the computer, and the dock button does the real thing (share or copy the link, or join the
- * macOS / Linux waitlist). Copy link and a calendar reminder work for everyone.
+ * the computer, and the dock button does the real thing (share or copy the link where an installer
+ * is live, otherwise join that platform's waitlist; the route comes from DOWNLOAD_PLAN). Copy link
+ * and a calendar reminder work for everyone.
  */
 export default function HandoffPoster({ c, h, names, tag, on }: Props) {
   const msg = message(c, h, names);
@@ -80,6 +82,7 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
       </div>
       <form
         className="send"
+        data-route={h.view.showEmail ? "waitlist" : "share"}
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
@@ -93,7 +96,7 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
             </button>
           ))}
         </div>
-        {h.platform !== "win" && (
+        {h.view.showEmail && (
           <label className="field">
             <span className="sr">{c.emailLabel}</span>
             <input
@@ -107,14 +110,14 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
               placeholder={c.emailPlaceholder}
               aria-describedby="hm-msg"
               aria-invalid={h.error ? true : undefined}
-              disabled={h.mode === "busy"}
+              disabled={h.view.dock === "busy"}
               value={h.email}
               onChange={(e) => h.setEmail(e.target.value)}
               required
             />
           </label>
         )}
-        {h.manual ? (
+        {h.view.manual ? (
           <label className="manual">
             <span>{c.manual}</span>
             <input className="manual-url" readOnly value={h.url} aria-label={c.manualLabel} onFocus={(e) => e.currentTarget.select()} />

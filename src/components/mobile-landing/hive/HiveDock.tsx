@@ -15,28 +15,30 @@ interface Props {
 
 /**
  * The always-visible dock button. Before the last poster it jumps there ("Get it on your
- * computer"); on it, it shares or copies the link (Windows) or joins the waitlist (macOS, Linux).
+ * computer"); on it, it does what the shared machine's view says: share or copy the link where an
+ * installer is live (DOWNLOAD_PLAN), join that platform's waitlist everywhere else.
  */
 export default function HiveDock({ c, h, atEnd, onGo }: Props) {
-  let mode = "go";
+  let mode: string = "go";
   let label = c.go;
   let sub = "";
   let glyph = "gl-down";
   if (atEnd) {
-    const win = h.platform === "win";
-    if (h.mode === "busy") {
-      mode = "busy";
-      label = win ? c.send : c.joining;
+    const v = h.view;
+    const join = fill(c.join, { platform: h.platformName });
+    mode = v.dock;
+    if (v.dock === "busy") {
+      label = v.showEmail ? c.joining : c.send;
       glyph = "gl-replay";
-    } else if (h.mode === "sent") {
-      mode = "sent";
-      label = { shared: c.shared, copied: c.copied, joined: fill(c.joined, { platform: h.platformName }), already: fill(c.alreadyJoined, { platform: h.platformName }) }[h.sentKind];
-      sub = win ? c.sentSub : "";
+    } else if (v.dock === "sent") {
+      label = { shared: c.shared, copied: c.copied, joined: fill(c.joined, { platform: h.platformName }), already: fill(c.alreadyJoined, { platform: h.platformName }) }[v.sentKind ?? "shared"];
+      sub = v.showEmail ? "" : c.sentSub;
       glyph = "gl-check";
     } else {
+      // "send" and "join" share the idle look (data-mode="send"); only the words differ.
       mode = "send";
-      label = win ? c.send : fill(c.join, { platform: h.platformName });
-      sub = win ? c.sendSub : c.joinSub;
+      label = v.dock === "send" ? c.send : join;
+      sub = v.dock === "send" ? c.sendSub : c.joinSub;
       glyph = "gl-share";
     }
   }

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SITE_URL } from "@/lib/seo";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import { legacyCopyToClipboard } from "@/components/waitlist-modal/waitlistUtils";
 import {
   browserShareCapabilities,
@@ -12,6 +13,8 @@ import {
   type ShareCapabilities,
   type ShareOutcome,
 } from "../shared/handoff";
+import { BUILD_ROUTES, initialHandoff, reduce, view, type HandoffEvent, type HandoffPlatform, type HandoffState } from "../shared/handoffMachine";
+import { submitWaitlist } from "../shared/submitWaitlist";
 import { REMINDER_HOUR, REMINDER_MINUTES } from "./data";
 import { fill, type ClockCopy } from "./copy";
 
@@ -27,13 +30,47 @@ function clipboardOnly(): ShareCapabilities {
   };
 }
 
+/** The m2 waitlist email field (Waitlist renders it with this id). */
+export const WAITLIST_FIELD_ID = "m2-mail";
+
+const reportWaitlist = (err: unknown) => captureExceptionScrubbed(err, { tags: { component: "MobileLanding2Waitlist" } });
+
 /**
  * The phone -> computer handoff: share the download link to yourself, copy it, or save a
- * calendar reminder for the next 9:00. All real, all local: nothing is uploaded. When neither
- * share nor copy works, `manual` asks the page to show the link for copying by hand.
+ * calendar reminder for the next 9:00 (all local: nothing is uploaded), or join a platform's
+ * waitlist. Which platform gets which comes from the shared machine (shared/handoffMachine),
+ * routed by DOWNLOAD_PLAN; it also refuses a second submit while one is in flight and drops a
+ * result whose platform the visitor has already left. When neither share nor copy works,
+ * `manual` asks the page to show the link for copying by hand.
  */
 export function useHandoff(c: ClockCopy, toast: (msg: string) => void) {
   const [manual, setManual] = useState(false);
+  const [state, setState] = useState<HandoffState>(() => initialHandoff());
+  const [email, setEmailState] = useState("");
+  const stateRef = useRef(state);
+  const flightRef = useRef<AbortController | null>(null);
+  useEffect(() => () => flightRef.current?.abort(), []);
+
+  const dispatch = (event: HandoffEvent) => {
+    const [next, effect] = reduce(stateRef.current, event);
+    if (next !== stateRef.current) {
+      stateRef.current = next;
+      setState(next);
+    }
+    return effect;
+  };
+
+  const submit = async () => {
+    const effect = dispatch({ type: "submit", email });
+    if (effect?.kind === "focus") document.getElementById(WAITLIST_FIELD_ID)?.focus();
+    if (effect?.kind !== "post") return;
+    const controller = new AbortController();
+    flightRef.current = controller;
+    const r = await submitWaitlist({ email: effect.email, platform: effect.platform }, { signal: controller.signal, report: reportWaitlist });
+    if (flightRef.current === controller) flightRef.current = null;
+    if (r.kind === "joined" || r.kind === "duplicate" || r.kind === "aborted") dispatch({ type: "result", token: effect.token, outcome: r.kind });
+    else dispatch({ type: "result", token: effect.token, outcome: "error", code: r.kind === "error" ? r.code : "invalid" });
+  };
   const url = handoffUrl(SITE_URL);
   const payload = { url, title: c.share.title, text: c.share.text };
 
@@ -46,6 +83,20 @@ export function useHandoff(c: ClockCopy, toast: (msg: string) => void) {
   return {
     url,
     manual,
+    state,
+    view: view(state),
+    routes: BUILD_ROUTES,
+    email,
+    setEmail: (v: string) => {
+      setEmailState(v);
+      dispatch({ type: "edit" });
+    },
+    setPlatform: (p: HandoffPlatform) => {
+      flightRef.current?.abort();
+      flightRef.current = null;
+      dispatch({ type: "platform", platform: p });
+    },
+    submit: () => void submit(),
     share: async () => report(await shareOrCopy(payload, { ...browserShareCapabilities(), ...clipboardOnly() })),
     copy: async () => report(await shareOrCopy(payload, clipboardOnly())),
     remind: () => {

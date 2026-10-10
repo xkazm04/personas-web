@@ -23,6 +23,11 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
+/** The Windows route from DOWNLOAD_PLAN: "share" when its installer is live, "waitlist" otherwise. */
+async function windowsRoute(page: Page) {
+  return page.locator('[data-role="plats"]').getAttribute("data-route");
+}
+
 async function open(page: Page) {
   await page.goto("/m2");
   await page.waitForSelector(`${SCROLLER}`);
@@ -177,6 +182,7 @@ test.describe("/m2 Around the Clock", () => {
       Object.defineProperty(navigator, "share", { configurable: true, value: async (d: unknown) => void w.__shared.push(d) });
     });
     await open(page);
+    test.skip((await windowsRoute(page)) !== "share", "no installer is live in this build");
     await page.getByRole("button", { name: "Share", exact: true }).click();
     await expect.poll(() => page.evaluate(() => (window as unknown as { __shared: { url: string }[] }).__shared)).toHaveLength(1);
     const shared = await page.evaluate(() => (window as unknown as { __shared: { url: string }[] }).__shared[0]);
@@ -190,6 +196,7 @@ test.describe("/m2 Around the Clock", () => {
       Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async (t: string) => void w.__copied.push(t) } });
     });
     await open(page);
+    test.skip((await windowsRoute(page)) !== "share", "no installer is live in this build");
     await page.getByRole("button", { name: "Copy link" }).click();
     await expect.poll(() => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied)).toEqual([expect.stringMatching(/#download-section$/)]);
     await expect(page.getByRole("status").filter({ hasText: "Link copied" })).toBeVisible();
@@ -213,6 +220,25 @@ test.describe("/m2 Around the Clock", () => {
     expect(text).toContain("BEGIN:VEVENT");
     expect(text).toContain("SUMMARY:Install Personas on my computer");
     expect(text).toMatch(/DTSTART:\d{8}T\d{6}Z/);
+  });
+
+  test("Enter while a join is in flight posts once", async ({ page }) => {
+    const bodies: unknown[] = [];
+    await page.route("**/api/waitlist", async (route) => {
+      if (route.request().method() === "POST") {
+        bodies.push(route.request().postDataJSON());
+        await new Promise((r) => setTimeout(r, 800));
+        await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ message: "ok", count: 3 }) });
+      } else await route.fallback();
+    });
+    await open(page);
+    await page.locator("button", { hasText: "macOS" }).filter({ hasText: "Waitlist" }).click();
+    const field = page.getByPlaceholder("you@example.com");
+    await field.fill("someone@example.com");
+    await field.press("Enter");
+    await field.press("Enter");
+    await expect(page.getByText("You're on the macOS waitlist.")).toBeVisible();
+    expect(bodies).toEqual([{ email: "someone@example.com", platform: "macos" }]);
   });
 
   for (const [name, platform] of [

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { CalendarPlus } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import PrimaryCTA from "@/components/PrimaryCTA";
@@ -9,11 +8,11 @@ import { CTA_FACES } from "./data";
 import { CTA_HOUR, hhmm } from "./geometry";
 import { Waitlist } from "./Waitlist";
 import type { ClockCopy } from "./copy";
+import type { HandoffPlatform } from "../shared/handoffMachine";
 import type { useHandoff } from "./useHandoff";
 import s from "./clock.module.css";
 
-type Platform = "windows" | "macos" | "linux";
-const PLATFORMS: Platform[] = ["windows", "macos", "linux"];
+const PLATFORMS: HandoffPlatform[] = ["windows", "macos", "linux"];
 
 function MiniFace({ h, m }: { h: number; m: number }) {
   const f = miniFace(h, m);
@@ -38,11 +37,13 @@ interface CtaProps {
 /**
  * Chapter 6, 23:00: tomorrow, 9:00, at your computer. A phone cannot install Personas, so the
  * call to action carries the intent over: a calendar reminder, the share sheet or the clipboard
- * (Windows), or the waitlist (macOS, Linux). There is no email service, so nothing offers to
- * email a link.
+ * (a platform whose installer is live), or that platform's waitlist (every other one). The route
+ * comes from the shared hand-off machine, i.e. from DOWNLOAD_PLAN, never a platform literal.
+ * There is no email service, so nothing offers to email a link.
  */
 export function Cta({ c, handoff }: CtaProps) {
-  const [plat, setPlat] = useState<Platform>("windows");
+  const plat = handoff.state.platform;
+  const routes = handoff.routes;
   return (
     <section className={s.flow} data-k="cta" id="get-it" aria-labelledby="m2-cta-h">
       <div className={s.clockbig} aria-hidden="true">
@@ -74,16 +75,16 @@ export function Cta({ c, handoff }: CtaProps) {
       </div>
       <p className={s.fine}>{c.cta.remindFine}</p>
 
-      <div className={s.plats} data-role="plats" role="group" aria-label={c.cta.platsAria}>
+      <div className={s.plats} data-role="plats" data-route={handoff.state.route} role="group" aria-label={c.cta.platsAria}>
         {PLATFORMS.map((p) => (
-          <button key={p} type="button" className={s.plat} aria-pressed={plat === p} onClick={() => setPlat(p)}>
+          <button key={p} type="button" className={s.plat} aria-pressed={plat === p} onClick={() => handoff.setPlatform(p)}>
             <b>{c.cta.plats[p].name}</b>
-            <small>{c.cta.plats[p].note}</small>
+            <small>{routes[p] === "share" ? c.cta.plats[p].note : c.cta.platWaitlist}</small>
           </button>
         ))}
       </div>
 
-      {plat === "windows" ? (
+      {handoff.state.route === "share" ? (
         <div className={s.mail}>
           <p className={s.mailTitle}>{c.cta.sendTitle}</p>
           <p className={s.mailNote}>{c.cta.sendNote}</p>
@@ -104,7 +105,7 @@ export function Cta({ c, handoff }: CtaProps) {
           </div>
         </div>
       ) : (
-        <Waitlist c={c} platform={plat} platformName={c.cta.plats[plat].name} />
+        <Waitlist c={c} handoff={handoff} platformName={c.cta.plats[plat].name} />
       )}
 
       {handoff.manual && (
