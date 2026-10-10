@@ -16,9 +16,10 @@ glowing hex cells.
 4. **Free.** A run travels from Personas ($0, MIT) through Claude Code to Anthropic; the only payment line runs from
    your own Claude Pro or Max plan.
 5. **Questions.** Four question tiles; each opens the full answer (from the site FAQ) in a layer with previous / next.
-6. **Get it.** "Take it to your computer." A phone beams the link to a computer. Pick the computer: Windows sends the
-   link through the share sheet (or copies it); macOS and Linux join the waitlist. Anyone can copy the link or download
-   a calendar reminder (`.ics`). If neither share nor clipboard is allowed, the link shows for copying by hand.
+6. **Get it.** "Take it to your computer." A phone beams the link to a computer. Pick the computer: a platform whose
+   installer is live (today only Windows, and only when `NEXT_PUBLIC_DOWNLOAD_URL` is set) sends the link through the
+   share sheet (or copies it); every other platform joins its waitlist. Anyone can copy the link or download a
+   calendar reminder (`.ics`). If neither share nor clipboard is allowed, the link shows for copying by hand.
 
 The dock button is on screen at every stop: before the last poster it jumps there ("Get it on your computer"); on it,
 it does the hand-off. A hex-pip rail and the top-bar chapter name show where you are. The page follows the site theme
@@ -46,11 +47,22 @@ still redirect to their desktop pages.
   (hero team lit, bill fully drawn). Markup never depends on the motion preference.
 - **Hero beat.** `useHeroBeat` drives the ~150 hive cells through the DOM (React renders them once and never touches
   their classes again), as the winner did; the event index is React state.
-- **Hand-off.** `useHandoff` uses the shared helpers in `src/components/mobile-landing/shared/handoff.ts`:
-  `shareOrCopy` + `browserShareCapabilities()` send `handoffUrl(SITE_URL)` (`/#download-section`); `buildReminderIcs` +
-  `nextLocalTime(now, 9)` build the reminder (Dates created in the click handler); macOS / Linux `POST /api/waitlist`
-  with `{ email, platform: "macos" | "linux" }`, errors mapped by `waitlistErrorMessage`. There is no email service, so
-  nothing offers to email the installer.
+- **Hand-off machine (shared with `/m2`).** `src/components/mobile-landing/shared/handoffMachine.ts` is the one
+  authority: `handoffRoutes(downloadPlan)` maps each platform to `share` (installer live) or `waitlist` from the
+  release authority (`DOWNLOAD_PLAN`, `src/lib/release.ts`), never from a platform literal; `reduce(state, event)`
+  runs IDLE -> BUSY(token) -> SENT | IDLE(+error | +manual), refuses a submit while BUSY (so Enter cannot post twice)
+  and drops any result whose token is not the BUSY one (a platform switch mid-flight cannot land a stale "joined");
+  `view(state)` derives the dock mode, the hint key and whether the email field shows. `shared/submitWaitlist.ts` is
+  the phones' one `POST /api/waitlist` client: body exactly `{ email, platform }`, injected fetch / timeout / abort
+  signal / reporter, codes normalized (`rate_limited`, `store_unavailable`, `timeout`, ...). Both are pure and
+  unit-tested (`*.test.ts`).
+- **Hand-off (this page).** `useHandoff` runs the machine's effects: `shareOrCopy` + `browserShareCapabilities()` send
+  `handoffUrl(SITE_URL)` (`/#download-section`, from `shared/handoff.ts`); a waitlist submit posts through
+  `submitWaitlist` (failures to `captureExceptionScrubbed`). The beam lands no sooner than the packet's 1.15 s flight
+  on a timer that a platform change or unmount clears, and the machine's token check drops it anyway.
+  `buildReminderIcs` + `nextLocalTime(now, 9)` build the reminder (Dates created in the click handler). `HiveDock` and
+  `HandoffPoster` render `view()`; the form carries `data-route`. There is no email service, so nothing offers to
+  email the installer.
 
 ## Key files
 | File | Role |
@@ -68,7 +80,9 @@ still redirect to their desktop pages.
 | `src/components/mobile-landing/hive/HandoffPoster.tsx`, `useHandoff.ts`, `HiveDock.tsx` | Poster 6, the hand-off, the dock button |
 | `src/components/mobile-landing/hive/HiveSheet.tsx` | Bottom sheet (drag down, Escape, scrim, focus trap and return) |
 | `src/components/mobile-landing/hive/data.ts`, `toolIcons.ts`, `Glyphs.tsx` | Geometry and order, tool marks, the glyph sprite |
-| `src/components/mobile-landing/shared/handoff.ts` | Phone-to-computer helpers shared with `/m2` |
+| `src/components/mobile-landing/shared/handoff.ts` | Phone-to-computer helpers shared with `/m2` (link, share/copy, `.ics`) |
+| `src/components/mobile-landing/shared/handoffMachine.ts` | The hand-off machine: routes from `DOWNLOAD_PLAN`, `reduce`, `view` (`handoffMachine.test.ts`) |
+| `src/components/mobile-landing/shared/submitWaitlist.ts` | The phones' `POST /api/waitlist` client (`submitWaitlist.test.ts`) |
 | `next.config.ts` | `redirects()`: the four temporary `/m/*` view redirects |
 | `e2e/mobile/m-landing.spec.ts` | Phone spec for `/m` (see below) |
 | `src/components/primitives/BottomSheet.tsx` | Kept bottom-sheet primitive from the old `/m` (unused; `/m` ports the winner's own sheet) |
@@ -77,13 +91,16 @@ still redirect to their desktop pages.
 - **Copy.** `mobileLandingCopy` in `src/i18n/pending/mobileLanding.ts`, an English-only pending namespace (decision M4;
   kept off the shared en.ts bundle, M22). Tool names and jobs come from the translated `useCasesSection`, the answers from `faqSection.questions`,
   platform names from `downloadSection`, waitlist errors from `waitlist`.
-- **State** is local React state: active poster, open sheet, reel / Athena / bill state, the hand-off (platform, mode,
-  beam). Nothing persists; visitors are anonymous.
+- **State** is local React state: active poster, open sheet, reel / Athena / bill state; the hand-off is one
+  `HandoffState` from the shared machine (the beam is derived from its phase). Nothing persists; visitors are anonymous.
 - **Art.** Athena's still and idle loop are `public/athena/athena_baseline_640.webp` and `athena_idle_loop.mp4`; the
   brand mark is `public/icons/icon-192.png`. Everything else is inline SVG/CSS, tagged "Stylized illustration".
 
 ## Integration points
-- **Waitlist API** (`src/app/api/waitlist/route.ts`) for macOS / Linux, the same route the waitlist modal uses.
+- **Waitlist API** (`src/app/api/waitlist/route.ts`) for every platform on the `waitlist` route, the same route the
+  waitlist modal uses (which still has its own client; moving it onto `submitWaitlist` is a follow-up).
+- **Release authority** (`src/lib/release.ts`): `DOWNLOAD_PLAN` decides each platform's route at build time; when
+  macOS or Linux gets an installer, both phone pages follow without an edit.
 - **Theme.** The root layout's pre-paint script and theme store set `html[data-theme]`; `/m` only reads it.
 - **robots.** `src/app/robots.ts` still disallows `/m/` (the sub-paths); `/m` itself carries `noindex`.
 - **Auth.** `AuthProvider` initialises auth for paths starting with `/m` (`src/components/AuthProvider.tsx:12`), but it
@@ -93,7 +110,8 @@ still redirect to their desktop pages.
 ## Verification
 `PLAYWRIGHT_PORT=<free port> npx playwright test --project=mobile` runs `e2e/mobile/**` on the iPhone 13 profile.
 `m-landing.spec.ts` asserts: the headline is in the server HTML with `noindex` and canonical `/`; no sideways scroll at
-390 and 360px and the dock CTA on screen and uncovered at all six stops; share reaches `navigator.share`, Copy link
+390 and 360px and the dock CTA on screen and uncovered at all six stops; share reaches `navigator.share` (skipped
+when the build has no live installer: `form[data-route]`), Windows joins its waitlist when it has none, Copy link
 reaches the clipboard and a blocked clipboard shows the manual link; the reminder downloads an `.ics` with a VEVENT;
 macOS posts `{ email, platform: "macos" }` to the (stubbed) waitlist; the `light` theme applies; reduced motion leaves
 no running animation. `baseline.spec.ts` still covers the `/m/reviews` redirect.
@@ -119,7 +137,8 @@ scrolling turns it: the 09:00 setup ("Say it once. It works all day."), one pers
 Athena as the moon through the night, an all-day $0, a rotary FAQ at 21:00, and "Tomorrow, 9:00, at your computer"
 at 23:00. Tapping a bead, job, moment, step or node opens it as its own scene (Back, Escape or a swipe down closes
 it). The call to action is always on screen. It saves a real `.ics` reminder for the next 9:00, sends the download
-link through the share sheet or the clipboard (Windows), or joins the macOS / Linux waitlist. There is no email
+link through the share sheet or the clipboard (a platform whose installer is live), or joins that platform's
+waitlist (every other one; Windows too while `NEXT_PUBLIC_DOWNLOAD_URL` is unset). There is no email
 service, so nothing offers to email a link. Nothing redirects phones here, and the page is `noindex`.
 
 **How it works.**
@@ -140,11 +159,15 @@ service, so nothing offers to email a link. Nothing redirects phones here, and t
   open. Athena's idle loop (`/athena/athena_idle_loop.mp4`) loads only when she first rises and pauses otherwise.
   The arrival (`data-arriving`: the dial rises, the clock counts 05:00 to 09:00) is server-rendered as CSS so it plays
   before hydration; any touch, wheel, key or scroll ends it.
-- **The CTA** uses `src/components/mobile-landing/shared/handoff.ts` (`useHandoff.ts`): `shareOrCopy` with the
-  browser's capabilities (plus the textarea copy fallback from `waitlistUtils`), `buildReminderIcs` + `nextLocalTime`
-  for a 15-minute event at the next 9:00 (Dates made in the click), and a manual-copy fallback when share and copy
-  both fail. `Waitlist.tsx` posts `{ email, platform }` to `/api/waitlist` and maps errors through
-  `waitlistErrorMessage` with the translated `t.waitlist` labels.
+- **The CTA** runs on the same hand-off machine as `/m` (`shared/handoffMachine.ts`, see the `/m` section):
+  `useHandoff.ts` owns the selected platform, its route (`Cta` shows share / copy on `share`, the waitlist form on
+  `waitlist`; the plats group carries `data-route` and a not-live Windows button reads "Waitlist"), and the waitlist
+  submission through `shared/submitWaitlist.ts` (one in flight; Enter cannot re-post; a platform switch aborts it and
+  its late result is dropped; failures go to `captureExceptionScrubbed`). `Waitlist.tsx` is presentational and maps
+  error codes to the translated `t.waitlist` labels. Share and copy use `shareOrCopy` with the browser's
+  capabilities (plus the textarea copy fallback from `waitlistUtils`); `buildReminderIcs` + `nextLocalTime` make a
+  15-minute event at the next 9:00 (Dates made in the click), with a manual-copy fallback when share and copy both
+  fail.
 
 **Owner adjustments over the contest entry.** Geist Sans / Geist Mono instead of the entry's serif display and system
 faces (the accent lines take `GradientText`); every colour through the site tokens, so all 11 themes repaint it (the
@@ -166,7 +189,7 @@ hub at 390px); the header chip steps out of the way in the FAQ and CTA; the stag
 | `src/components/mobile-landing/clock/art.ts`, `data.ts`, `tool-paths.ts` | Dial geometry, the stylized day's times, tool marks |
 | `src/components/mobile-landing/clock/{Sky,Dial,DialFace,DialFixed,StageHud,Lens}.tsx` | The art |
 | `src/components/mobile-landing/clock/{HeroChapter,ToolsChapter,NightChapters,Faq,Cta,Waitlist,Chrome,CardLayer,cards}.tsx` | Chapters, chrome and scenes |
-| `src/components/mobile-landing/clock/useHandoff.ts` | Share / copy / reminder |
+| `src/components/mobile-landing/clock/useHandoff.ts` | Share / copy / reminder; the hand-off machine and waitlist submit |
 | `src/components/mobile-landing/clock/clock.module.css` | The entry's stylesheet, ported (tokens, Geist, data-attribute state) |
 | `e2e/mobile/m2-landing.spec.ts` | Phone spec: SSR headline, no sideways scroll at 390/360, CTA at every stop, every CTA action, the story's taps, light theme, reduced motion |
 
@@ -176,6 +199,9 @@ hub at 390px); the header chip steps out of the way in the FAQ and CTA; the stag
 - The day, its times and its runs are a stylized illustration (tagged "Stylized day"); Athena's portrait and loop are
   the only real product images.
 - Waitlist analytics (`trackWaitlistSubmit`) are not wired: `WaitlistEntryPoint` has no `/m2` member yet.
+- While no installer is live, Windows has no share / copy buttons on `/m2` (the link is still printed under the form);
+  the e2e share / copy specs skip in such a build. Other `/m2` copy (e.g. the hero's "A free installer for Windows,
+  about 12 MB") is not plan-aware yet.
 
 ## Related docs
 - [/m revival plan](../../concepts/mobile-revival/PLAN.md)
