@@ -268,6 +268,7 @@
             "src/components/feature-sections/design-blueprint/shared/ToolMark.tsx",
             "src/components/feature-sections/design-blueprint/shared/copy.ts",
             "src/components/feature-sections/design-blueprint/shared/dims.ts",
+            "src/components/feature-sections/design-blueprint/shared/machine.ts",
             "src/components/feature-sections/design-blueprint/shared/timeline.ts",
             "src/components/feature-sections/design-blueprint/shared/useBuildClock.ts",
             "src/components/feature-sections/memory-rings/Disc.tsx",
