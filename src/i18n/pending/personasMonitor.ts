@@ -461,6 +461,34 @@ export interface PersonasMonitorCopy {
       again: string;
       backToBoard: string;
       offline: string;
+      byQuestion: string;
+      oneByOne: string;
+      groupAsks: string;
+      groupFailed: string;
+      groupDrafts: string;
+      groupNote: string;
+      approveAll: string;
+      sendBackAll: string;
+      publishAll: string;
+      reviseAll: string;
+      retryAll: string;
+      retrySkipped: string;
+      retrySkippedOne: string;
+      criticalNote: string;
+      walk: string;
+      include: string;
+      open: string;
+      newSince: string;
+      addNew: string;
+      batchToasts: {
+        approve: string;
+        sendback: string;
+        publish: string;
+        revise: string;
+        retry: string;
+      };
+      batchUndone: string;
+      batchSplit: string;
     };
     answer: {
       label: string;
@@ -574,6 +602,9 @@ export interface PersonasMonitorCopy {
         send: string;
         skip: string;
         console: string;
+        byQuestion: string;
+        member: string;
+        walk: string;
       };
     };
   };
@@ -1100,6 +1131,34 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       again: 'Go through the {n} left',
       backToBoard: 'Back to the board',
       offline: '{host} is offline. You can look, but decisions wait until it is back.',
+      byQuestion: 'By question',
+      oneByOne: 'One at a time',
+      groupAsks: '{n} agents ask: {title}',
+      groupFailed: '{n} runs failed: {task}',
+      groupDrafts: '{n} drafts are ready to publish',
+      groupNote: 'One decision covers everyone ticked. Untick an agent to leave it for later, or open its console.',
+      approveAll: 'Approve all {n}',
+      sendBackAll: 'Send back all {n}',
+      publishAll: 'Publish all {n}',
+      reviseAll: 'Send all {n} back to revise',
+      retryAll: 'Retry {n} runs',
+      retrySkipped: '{n} agents are paused, so their runs are not retried. Resume them in their consoles first.',
+      retrySkippedOne: '1 agent is paused, so its run is not retried. Resume it in its console first.',
+      criticalNote: 'Critical items are never approved in bulk. Go through them one at a time, or untick them to approve the rest.',
+      walk: 'One at a time',
+      include: 'Include {callsign} in this decision',
+      open: 'Open',
+      newSince: '{n} came in after you grouped. They get groups of their own: nothing joins a decision you have already read.',
+      addNew: 'Group them',
+      batchToasts: {
+        approve: 'Approved {n}: “{title}”',
+        sendback: 'Sent back {n}: “{title}”',
+        publish: '{n} drafts approved',
+        revise: '{n} drafts sent back to revise',
+        retry: 'Retrying {n} runs on {host}',
+      },
+      batchUndone: 'Undone, all {n}. Nothing was sent to {host}.',
+      batchSplit: 'Undid {n}. {m} had already left for {host}.',
     },
     answer: {
       label: 'Your answer to {callsign}',
@@ -1213,6 +1272,9 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         send: 'Send the answer',
         skip: 'Skip to the next decision',
         console: 'Open the agent\'s console',
+        byQuestion: 'Switch between one at a time and by question',
+        member: 'Include or leave out an agent, by question',
+        walk: 'Go through a group one at a time',
       },
     },
   },
