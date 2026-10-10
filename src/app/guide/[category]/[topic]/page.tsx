@@ -1,27 +1,12 @@
 import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
-import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
+import { headingsOf, parseGuide, stepsOf } from "@/components/guide/guide-markdown/parseGuide";
 import { getRelatedTopics, isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
 import TopicView from "./TopicView";
 
 /* ── Helpers for structured data ────────────────────────────────────── */
-
-/** Extract steps from :::steps blocks for HowTo JSON-LD. */
-function extractSteps(content: string): { title: string; body: string }[] {
-  const stepsBlocks = content.match(/:::steps\n([\s\S]*?):::/g);
-  if (!stepsBlocks) return [];
-  const steps: { title: string; body: string }[] = [];
-  for (const block of stepsBlocks) {
-    const inner = block.replace(/^:::steps\n/, "").replace(/\n:::$/, "");
-    for (const line of inner.split("\n")) {
-      const m = line.match(/^\d+\.\s+\*\*(.+?)\*\*\s*(?:[—–-]\s*)?(.*)$/);
-      if (m) steps.push({ title: m[1], body: m[2] });
-    }
-  }
-  return steps;
-}
 
 /** Build HowTo JSON-LD if the topic contains steps. */
 function buildHowToJsonLd(
@@ -113,9 +98,11 @@ export default async function TopicPage({ params }: { params: Promise<{ category
   const prevTopic = currentIndex > 0 ? categoryTopics[currentIndex - 1] : null;
   const nextTopic = currentIndex < categoryTopics.length - 1 ? categoryTopics[currentIndex + 1] : null;
   const related = getRelatedTopics(topicId);
-  const steps = extractSteps(content);
-  const howToJsonLd = buildHowToJsonLd(topic, categoryId, topicId, steps);
-  const initialHeadings = extractHeadings(content);
+  // One parse feeds both: the HowTo steps are exactly what StepWizard renders,
+  // and the TOC ids are exactly the rendered anchors.
+  const { doc } = parseGuide(content);
+  const howToJsonLd = buildHowToJsonLd(topic, categoryId, topicId, stepsOf(doc));
+  const initialHeadings = headingsOf(doc);
 
   const articleJsonLd = {
     "@context": "https://schema.org",

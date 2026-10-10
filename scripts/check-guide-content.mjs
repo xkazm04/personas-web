@@ -12,10 +12,11 @@
  * ships full SEO tags, the sidebar advertises a dead link, and search
  * indexes the orphan. See src/app/guide/[category]/[topic]/page.tsx.
  *
- * Also lints every topic body (English and all locales) for unknown or
- * malformed `:::` directives, which the renderer would otherwise drop, and for
- * `#` lines that are not headings the renderer takes (`#####`, `#tag`, an
- * indented `# x`), which render as plain text.
+ * Also parses every topic body (English and all locales) with the renderer's
+ * own grammar (parseGuide) and fails on its diagnostics: unknown or malformed
+ * `:::` directives, a known block with no valid items (empty-block) or with an
+ * item line its grammar cannot use (ignored-line), and `#` lines that are not
+ * headings the renderer takes (`#####`, `#tag`, an indented `# x`).
  *
  * Exits non-zero on any mismatch. Designed to run zero-dep in CI.
  */
@@ -103,10 +104,10 @@ for (const [cat, keys] of contentByCategory) {
   }
 }
 
-// ── Directives: every `:::name` block must be one the renderer knows and be
-// well-formed. The renderer drops what it cannot parse without a trace, so
-// a typo here otherwise ships as a silently missing block. The scan itself is
-// the renderer's own module (src/components/guide/guide-markdown/directiveLint.ts),
+// ── Directives: every `:::name` block must be one the renderer knows, be
+// well-formed, and carry items its grammar can use. The renderer drops what it
+// cannot parse, so a typo here otherwise ships as a silently missing block. The
+// diagnostics are the renderer's own grammar's (src/components/guide/guide-markdown/parseGuide.ts),
 // loaded with Node's built-in type stripping (Node >= 22.18), as are the
 // content modules, so what is checked is the exact string the page renders.
 const NOISY_WARNINGS = new Set(["MODULE_TYPELESS_PACKAGE_JSON", "ExperimentalWarning"]);
@@ -126,7 +127,7 @@ async function importTs(rel) {
   }
 }
 
-const { lintDirectives } = await importTs("src/components/guide/guide-markdown/directiveLint.ts");
+const { parseGuide } = await importTs("src/components/guide/guide-markdown/parseGuide.ts");
 
 const contentFiles = [
   ...categories.map((cat) => `src/data/guide/content/${cat}.ts`),
@@ -148,7 +149,7 @@ for (const rel of contentFiles) {
   const { content } = await importTs(rel);
   for (const [topicId, markdown] of Object.entries(content ?? {})) {
     directiveTopics++;
-    for (const issue of lintDirectives(String(markdown).split("\n"))) {
+    for (const issue of parseGuide(String(markdown)).diagnostics) {
       errors.push(`${rel} "${topicId}" line ${issue.line}: ${issue.message} — ${issue.text.trim()}`);
     }
   }
@@ -162,5 +163,5 @@ if (errors.length > 0) {
 
 console.log(
   `Guide content invariant OK — ${categories.length} categories, ${topics.length} topics, all linked; ` +
-    `${directiveTopics} topic bodies across ${contentFiles.length} content modules have well-formed, known directives and headings.`,
+    `${directiveTopics} topic bodies across ${contentFiles.length} content modules have well-formed, known directives with usable items, and well-formed headings.`,
 );

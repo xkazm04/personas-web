@@ -13,47 +13,52 @@ fallback is SSR-safe and renders without JS.
 
 ## How it works
 - **Entry.** `GuideMarkdown` (`src/components/guide/GuideMarkdown.tsx:10`) wraps the
-  output in `.prose-custom` and calls `parseBlocks(content.split("\n"), { copyAnchorLabel })`.
-  Input is a string of lines; output is a `ReactNode[]`.
-- **Block loop.** `parseBlocks` (`src/components/guide/guide-markdown/parseBlocks.tsx:24`)
-  walks the line array with a manual cursor, dispatching on the first line of each
-  block: ` ``` ` fences → `CodeFence`; `#`..`####` → `HeadingAnchor`; `---` → `<hr>`;
-  `> ` → blockquote; `-`/`*` → nested `<ul>`; `1.` → `<ol>`; `:::name` → custom block;
-  `|…|` → `MarkdownTable`; otherwise a paragraph. Each emitted node is re-keyed via
-  `React.cloneElement` (`parseBlocks.tsx:29`).
-- **Custom blocks.** A `:::name` opener collects lines until the closing `:::`
-  (`parseBlocks.tsx:127`) and hands the body to `parseCustomBlock`
-  (`parseCustomBlock.tsx:20`), a dispatch table: `steps`, `keys`, `compare`,
-  `diagram`, `feature`, `checklist`, `usecases`, `code-compare`, `tabs`, `cli`,
-  `callout-stack`, `cards`, and the four single callouts `tip`/`warning`/`info`/`success`.
-  Each parser sub-function turns its mini-DSL (e.g. `**Title** — body`, `Combo — desc`,
-  `[available] Title | desc | image`) into typed props and returns the component, or
-  `null` if it parsed nothing (the block is then dropped; in development a console
-  warning names it).
-- **Directive lint.** `directiveLint.ts` mirrors the renderer's `:::` scan and reports
-  unknown names, malformed openers (`::: tip`, `:::tip Title`), stray `:::` closers,
-  unclosed blocks, and an opener used as a closer (no nesting). `parseBlocks` logs each
-  issue in development; `npm run check:guide-content` runs it over every topic body
-  (English and all locale content modules, loaded with Node's built-in type stripping,
-  Node >= 22.18) and fails on any. `KNOWN_DIRECTIVES` is pinned to the
-  `parseCustomBlock` dispatch by `directiveLint.test.ts`. A malformed `:::` line is
-  skipped in production; it used to stall the parse loop (render hang). The same scan
-  flags a top-level `#` line that is not a heading the renderer takes (`#####`, `#tag`,
-  an indented `# x`; only `#`-`####` at column 0 plus a space count). Those also hung
-  the loop; they now render as plain paragraph text, because the paragraph collector
-  always takes the line no block branch claimed.
+  output in `.prose-custom` and calls `parseBlocks(content.split("
+"), { copyAnchorLabel })`,
+  which is `renderGuideDoc(parseGuide(lines).doc)` plus development warnings for each
+  diagnostic (`parseBlocks.tsx`).
+- **One grammar.** `parseGuide` (`src/components/guide/guide-markdown/parseGuide.ts`) is
+  the dialect's single authority: lines in, `{ doc: GuideNode[], diagnostics }` out. It
+  walks the lines with a manual cursor and dispatches on the first line of each block:
+  ` ``` ` fences -> `code`; `#`..`####` -> `heading` (with its anchor `id`); `---` -> `hr`;
+  `> ` -> `blockquote`; `-`/`*` -> `ul`; `1.` -> `ol`; `:::name` -> a directive node;
+  `|...|` -> `table` (a `|---|` separator row is dropped); otherwise `paragraph`. Every
+  node carries its 1-based source `line`, so sections can be derived by slicing the flat
+  `doc` at its heading nodes. The tree is plain data (JSON round-trips), with no React.
+- **Directives.** `GRAMMAR` in `parseGuide.ts` holds one item grammar per directive:
+  `steps`, `keys`, `compare`, `diagram`, `feature`, `checklist`, `usecases`,
+  `code-compare`, `tabs`, `cli`, `callout-stack`, `cards`, and the four single callouts
+  `tip`/`warning`/`info`/`success`. `KNOWN_DIRECTIVES` is derived from it. Each grammar
+  turns its mini-DSL (e.g. `**Title** - body`, `Combo - desc`,
+  `[available] Title | desc | image`) into a typed node. `code-compare` picks its side
+  from structure (the `---` separator, or a second heading, starts the after panel), never
+  from English words in the heading. Adding a block is one `GRAMMAR` row plus one case in
+  `renderGuideDoc.tsx`, a total `switch` over node types (TypeScript fails on a missing case).
+- **Diagnostics.** `parseGuide` reports unknown names, malformed openers (`::: tip`,
+  `:::tip Title`), stray `:::` closers, unclosed blocks, an opener used as a closer (no
+  nesting), a top-level `#` line that is not a heading (`#####`, `#tag`, an indented
+  `# x`; it renders as paragraph text), and two payload kinds: `empty-block` (a known
+  directive with no usable item; no node is emitted) and `ignored-line` (an item line its
+  grammar cannot use). A nested or unclosed block gets no payload diagnostic on top.
+  `npm run check:guide-content` imports `parseGuide.ts` with Node's built-in type
+  stripping (Node >= 22.18) and fails on any diagnostic in any English or locale body;
+  `lintDirectives` (`directiveLint.ts`) is the same list for TS callers. Keep
+  `parseGuide.ts` dependency-free and erasable-syntax: type stripping cannot resolve
+  extensionless relative imports, which is why the heading-id assigner and
+  `slugifyHeading` live in it (`headingId.ts` and `slugify.ts` re-export them).
 - **Inline.** `parseInline` (`parseInline.tsx:12`) is a single global regex over
   images, links, `***bi***`, `**b**`, `*i*`, `` `code` ``, and `==highlight==`,
   recursing into the captured text. Bare text runs through `typography()`
   (`parseInline.tsx:3`) for smart dashes/quotes-ish substitutions (`---`→em-dash,
   `(c)`→©, etc.).
 - **Headings & TOC.** Content headings are shifted **down one level** at render time
-  (`#`→`<h2>`) because the topic title is the page's single `<h1>` (`parseBlocks.tsx:61`).
-  `extractHeadings` (`extractHeadings.ts:10`) is a separate, lighter pass run by
-  `TopicView` to build the TOC: it skips code fences and custom-block interiors, but
-  for `:::tabs` it harvests `### tab` labels onto the parent heading as `tabLabels`
-  chips. Both passes share `slugifyHeading` (`slugify.ts:1`) and the same
-  collision-suffixing logic (`-2`, `-3`…) so anchor IDs match the TOC.
+  (`#`->`<h2>`) because the topic title is the page's single `<h1>` (`renderGuideDoc.tsx`).
+  The TOC is a projection of the same tree: `headingsOf(doc)` (wrapped by
+  `extractHeadings`) lists every heading node and attaches `:::tabs` labels to the heading
+  above them as `tabLabels` chips. Heading ids are assigned once, in `parseGuide`, so TOC
+  links and copy-link anchors always match. `page.tsx` parses once on the server and passes
+  `headingsOf(doc)` to `TopicView`, and builds the HowTo JSON-LD from `stepsOf(doc)`, the
+  same steps (continuation lines included) `StepWizard` renders.
 - **Code highlighting.** `CodeFence` (`CodeFence.tsx:95`) lazy-loads a Shiki core
   highlighter (single shared promise, `CodeFence.tsx:35`) with a fixed lang allowlist
   and `github-dark-default` theme, then crossfades the highlighted HTML over the plain
@@ -64,14 +69,13 @@ fallback is SSR-safe and renders without JS.
 | File | Role |
 | --- | --- |
 | `src/components/guide/GuideMarkdown.tsx` | Public entry; injects the i18n copy-anchor label and renders `parseBlocks`. |
-| `src/components/guide/guide-markdown/parseBlocks.tsx` | Core block tokenizer/dispatcher (headings, lists, quotes, tables, fences, custom blocks, paragraphs). |
-| `src/components/guide/guide-markdown/parseCustomBlock.tsx` | `:::name` dispatch table + per-block mini-DSL parsers → block components. |
-| `src/components/guide/guide-markdown/directiveLint.ts` | `KNOWN_DIRECTIVES` + `lintDirectives`: the `:::` scan shared by the dev warnings and `scripts/check-guide-content.mjs`. |
+| `src/components/guide/guide-markdown/parseGuide.ts` | The grammar: `parseGuide` -> typed tree + diagnostics; `GRAMMAR`, `KNOWN_DIRECTIVES`, heading ids, `headingsOf`/`stepsOf` projections. Node-loadable. |
+| `src/components/guide/guide-markdown/renderGuideDoc.tsx` | Total switch from tree nodes to block components. |
+| `src/components/guide/guide-markdown/parseBlocks.tsx` | `renderGuideDoc(parseGuide(lines).doc)` plus dev warnings. |
+| `src/components/guide/guide-markdown/directiveLint.ts` | `lintDirectives` = `parseGuide(lines).diagnostics`, for TS callers. |
+| `src/components/guide/guide-markdown/extractHeadings.ts` | `headingsOf(parseGuide(content).doc)`; `GuideHeading` type. |
+| `src/components/guide/guide-markdown/headingId.ts`, `slugify.ts` | Re-exports of the id assigner and slugifier from `parseGuide.ts`. |
 | `src/components/guide/guide-markdown/parseInline.tsx` | Inline regex pass (emphasis/links/images/code/highlight) + `typography()` smart-punctuation. |
-| `src/components/guide/guide-markdown/parseCalloutStack.tsx` | Parses `:::callout-stack` (`[tip] …` lines) into `CalloutStack`. |
-| `src/components/guide/guide-markdown/parseCards.tsx` | Parses `:::cards` (`[status] title \| desc \| image`) into `CardsBlock`. |
-| `src/components/guide/guide-markdown/extractHeadings.ts` | TOC-only heading pass; same slug/dedupe rules, captures `:::tabs` labels. |
-| `src/components/guide/guide-markdown/slugify.ts` | Strips markdown, NFKD-normalizes, lowercases → URL slug for anchors. |
 | `src/components/guide/guide-markdown/HeadingAnchor.tsx` | Renders `<h2..h4 id>` with a hover/focus `#` copy-link affordance. |
 | `src/components/guide/guide-markdown/expandLineRanges.ts` | Expands `1,3-5` highlight specs to a number array. |
 | `src/components/guide/GuideBlocks.tsx` | Re-export shim; consumers import block components from here. |
@@ -90,8 +94,8 @@ fallback is SSR-safe and renders without JS.
   (`src/app/guide/[category]/[topic]/TopicView.tsx:165`) which also runs
   `extractHeadings` for the TOC (`TopicView.tsx:66`). **Stores:** none in the renderer
   (Zustand is upstream; `extractHeadings` re-runs only when the localized body differs
-  from the server-extracted headings). **API routes:** none. **Types:** `GuideHeading`
-  (`extractHeadings.ts:3`), `CardItem` (`blocks/CardsBlock.tsx:5`); block prop shapes are
+  from the server-extracted headings). **API routes:** none. **Types:** `GuideNode`,
+  `GuideDiagnostic`, `GuideHeading` (`parseGuide.ts`), `CardItem` (`blocks/CardsBlock.tsx:5`); block prop shapes are
   local interfaces per component.
 - **Client persistence:** `Checklist` writes per-list progress to `localStorage` under
   a stable content hash (`blocks/Checklist.tsx:11`), hydrated post-mount to avoid SSR
@@ -111,22 +115,17 @@ fallback is SSR-safe and renders without JS.
   `@/lib/brand-theme` (`CompareBlock` color rotation).
 
 ## Conventions & gotchas
-- **Parser is line-based and unforgiving.** Blocks are recognized only at a line's
-  start (after `trimStart`); there is no lookahead/AST. A custom block whose body fails
-  its mini-DSL returns `null` and **vanishes from the page** (a dev-only console warning, no
-  build check — `check:guide-content` only catches unknown/malformed directives and
-  malformed headings) — e.g.
-  `:::steps` items must match `1. **Title** — body` exactly, `:::keys` lines need a
-  dash separator, `:::cards` rows need a `[status]` prefix and a title. Authoring typos
-  silently drop content.
-- **No fenced-code guard inside `parseBlocks` custom/table/quote scans.** `extractHeadings`
-  tracks `inCodeFence`, but `parseBlocks` only special-cases the opening ` ``` ` of a
-  fence; a `#`/`|`/`:::` *inside* prose is fine, but unbalanced fences or `:::` markers
+- **Parser is line-based.** Blocks are recognized only at a line's start (after
+  `trimStart`). A custom block whose body has no usable item emits no node, and
+  `check:guide-content` fails on it (`empty-block`), as on an item line its grammar
+  cannot use (`ignored-line`). A line that does not start a new `:::steps` item is a
+  continuation of the step above it (e.g. `5. text **Bold**` folds into step 4).
+- **No fenced-code guard inside directive bodies.** Only a top-level ` ``` ` fence hides
+  `:::` and `#` lines; inside a directive the first line starting with `:::` closes it; a `#`/`|`/`:::` *inside* prose is fine, but unbalanced fences or `:::` markers
   could mis-slice. `:::` opener regex is strict (`^:::([\w-]+)$`) — no inline content or
   attributes on the opener line.
-- **Heading-level shift mismatch.** `parseBlocks` renders content headings as `<h2>`–`<h4>`
-  (depth+1, capped, `parseBlocks.tsx:61`), but `extractHeadings` records the *raw* depth
-  `1..4` (`extractHeadings.ts:55`). The TOC's `depth` is therefore one less than the DOM
+- **Heading-level shift mismatch.** `renderGuideDoc` renders content headings as `<h2>`–`<h4>`
+  (depth+1, capped), but the tree and `headingsOf` record the *raw* depth `1..4`. The TOC's `depth` is therefore one less than the DOM
   heading level — fine because both use the same `id`, but don't assume `depth===tagLevel`.
 - **a11y — heading copy anchor:** `HeadingAnchor` (`HeadingAnchor.tsx:24`) is an `<a href="#id">`
   with `onClick` doing both navigation and clipboard write; the copied-state feedback is a

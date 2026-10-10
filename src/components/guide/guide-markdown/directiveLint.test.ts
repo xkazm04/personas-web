@@ -1,15 +1,14 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import type { ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 
 import { KNOWN_DIRECTIVES, lintDirectives } from "./directiveLint";
 import { parseBlocks } from "./parseBlocks";
+import { parseGuide } from "./parseGuide";
 
 // The guide renderer used to drop unknown or malformed `:::` directives without
 // a trace, and a malformed opener (`::: tip`, `:::tip Title`) or a stray `:::`
-// closer never advanced the parse loop at all. lintDirectives mirrors the
-// renderer's directive scan so `npm run check:guide-content` can fail on what
+// closer never advanced the parse loop at all. lintDirectives is the
+// grammar's own diagnostics (parseGuide), so `npm run check:guide-content` can fail on what
 // the page would silently lose.
 const kinds = (md: string) => lintDirectives(md.split("\n")).map((i) => [i.line, i.kind]);
 
@@ -49,12 +48,21 @@ describe("lintDirectives", () => {
     expect(kinds(["```md", ":::whatever", ":::", "```"].join("\n"))).toEqual([]);
   });
 
-  it("lists exactly the directive names parseCustomBlock renders", () => {
-    const src = readFileSync(path.join(__dirname, "parseCustomBlock.tsx"), "utf8");
-    const dispatched = [...src.matchAll(/blockType === "([\w-]+)"/g)].map((m) => m[1]);
-    const callouts = src.match(/\[((?:\s*"[\w-]+",?)+)\]\.includes\(blockType\)/)?.[1] ?? "";
-    const calloutNames = [...callouts.matchAll(/"([\w-]+)"/g)].map((m) => m[1]);
-    expect([...KNOWN_DIRECTIVES].sort()).toEqual([...dispatched, ...calloutNames].sort());
+  it("pins the closed vocabulary, and every known directive parses into a rendered block", () => {
+    expect([...KNOWN_DIRECTIVES].sort()).toEqual([
+      "callout-stack", "cards", "checklist", "cli", "code-compare", "compare", "diagram", "feature",
+      "info", "keys", "steps", "success", "tabs", "tip", "usecases", "warning",
+    ]);
+    const sample: Record<string, string> = {
+      steps: "1. **Go** - now", keys: "Ctrl+K - search", "callout-stack": "[tip] x", cards: "[available] T | d",
+      tabs: "### Tab\nx", diagram: "[A] -> [B]",
+    };
+    for (const name of KNOWN_DIRECTIVES) {
+      const { doc, diagnostics } = parseGuide(`:::${name}\n${sample[name] ?? "body"}\n:::`);
+      expect(diagnostics, name).toEqual([]);
+      expect(doc, name).toHaveLength(1);
+      expect(parseBlocks([`:::${name}`, ...(sample[name] ?? "body").split("\n"), ":::"]), name).toHaveLength(1);
+    }
   });
 });
 

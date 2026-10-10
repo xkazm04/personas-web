@@ -1,67 +1,8 @@
-import { createHeadingIdAssigner } from "./headingId";
+import { headingsOf, parseGuide } from "./parseGuide";
 
-export interface GuideHeading {
-  id: string;
-  text: string;
-  depth: 1 | 2 | 3 | 4;
-  tabLabels?: string[];
-}
+export type { GuideHeading } from "./parseGuide";
 
-export function extractHeadings(content: string): GuideHeading[] {
-  const lines = content.split("\n");
-  const headings: GuideHeading[] = [];
-  const assignHeadingId = createHeadingIdAssigner();
-  let inCodeFence = false;
-  let blockType: string | null = null;
-
-  const attachTab = (label: string) => {
-    if (headings.length === 0) return;
-    const last = headings[headings.length - 1];
-    if (!last.tabLabels) last.tabLabels = [];
-    last.tabLabels.push(label);
-  };
-
-  for (const line of lines) {
-    const trimmed = line.trimStart();
-    if (trimmed.startsWith("```")) {
-      inCodeFence = !inCodeFence;
-      continue;
-    }
-    if (inCodeFence) continue;
-    const openMatch = trimmed.match(/^:::(\w[\w-]*)$/);
-    if (openMatch && blockType === null) {
-      blockType = openMatch[1];
-      continue;
-    }
-    if (trimmed === ":::" && blockType !== null) {
-      blockType = null;
-      continue;
-    }
-    if (blockType !== null) {
-      // Inside any custom block. For :::tabs, capture tab-label headings so
-      // the TOC can surface them as informational chips on the parent
-      // heading. Other block types (steps/keys/callouts/etc.) intentionally
-      // produce no TOC entries.
-      if (blockType === "tabs") {
-        const tabMatch = line.match(/^###?\s+(.+)$/);
-        if (tabMatch) attachTab(tabMatch[1].trim());
-      }
-      continue;
-    }
-
-    const match = line.match(/^(#{1,4})\s+(.+)$/);
-    if (!match) continue;
-    const depth = match[1].length as 1 | 2 | 3 | 4;
-    const rawText = match[2];
-    const id = assignHeadingId(rawText);
-    const stripped = rawText
-      .replace(/\*\*\*(.+?)\*\*\*/g, "$1")
-      .replace(/\*\*(.+?)\*\*/g, "$1")
-      .replace(/\*(.+?)\*/g, "$1")
-      .replace(/`([^`]+)`/g, "$1")
-      .replace(/\[([^\]]*)\]\([^)]+\)/g, "$1");
-    headings.push({ id, text: stripped, depth });
-  }
-
-  return headings;
+/** The TOC: a projection of the same tree the renderer draws, so ids always match. */
+export function extractHeadings(content: string) {
+  return headingsOf(parseGuide(content).doc);
 }
