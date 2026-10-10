@@ -113,6 +113,10 @@ export interface MobileLanding2Copy {
     need: string;
     /** The Windows button note while no installer is live (DOWNLOAD_PLAN). */
     platWaitlist: string;
+    /** Opens the secondary "email me when it is ready" waitlist panel. */
+    optIn: string;
+    /** Closes that panel again. */
+    optInClose: string;
   };
   share: { title: string; text: string };
   toast: { copied: string; shared: string; reminder: string; reminderFailed: string };
@@ -381,7 +385,7 @@ export const mobileLanding2Copy: MobileLanding2Copy = {
       linux: { name: 'Linux', note: 'Waitlist' },
     },
     sendTitle: 'Send the link to your computer',
-    sendNote: 'Share it to yourself, or copy it, and open it on your PC to download the installer.',
+    sendNote: 'Share it to yourself, or copy it, and open it on your computer. It shows the installer for that computer, or its waitlist.',
     copy: 'Copy link',
     share: 'Share',
     manual: 'Copy this link by hand and open it on your computer:',
@@ -395,6 +399,8 @@ export const mobileLanding2Copy: MobileLanding2Copy = {
     already: 'That address is already on the {platform} waitlist.',
     need: 'Requires Claude Code and your own Claude Pro or Max plan.',
     platWaitlist: 'Waitlist',
+    optIn: "Or get an email when it's ready",
+    optInClose: 'Just send the link',
   },
   share: {
     title: 'Personas',

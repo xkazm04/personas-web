@@ -121,6 +121,12 @@ export interface MobileLandingCopy {
     shareText: string;
     /** The Windows hint while no installer is live (DOWNLOAD_PLAN): it is on the waitlist too. */
     hintWaitlist: string;
+    /** The one-link hint under the dock: the same for every computer (it picks its own installer). */
+    hintSend: string;
+    /** Opens the secondary "email me when it is ready" waitlist panel. */
+    optIn: string;
+    /** Closes that panel again. */
+    optInClose: string;
   };
 }
 
@@ -244,5 +250,8 @@ export const mobileLandingCopy: MobileLandingCopy = {
     shareTitle: 'Personas',
     shareText: 'A free desktop app for designing AI agents in plain words. Open this on your computer.',
     hintWaitlist: 'The Windows installer is not out yet. Leave your email and we will tell you when it is ready.',
+    hintSend: 'Open the link on your computer. It shows the installer for that computer, or its waitlist.',
+    optIn: "Or get an email when it's ready",
+    optInClose: 'Just send the link',
   },
 };
