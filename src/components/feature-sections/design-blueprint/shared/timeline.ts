@@ -1,4 +1,5 @@
 import { ASKED, type DimKey } from "./dims";
+import type { Answers } from "./machine";
 
 export type StepKind = "type" | "read" | "engage" | "ask" | "resolve" | "finale";
 
@@ -50,4 +51,53 @@ export function dimPhase(steps: Step[], at: number, dim: DimKey): DimPhase {
 /** The step index of the first step of a kind (global steps carry no dim). */
 export function stepOf(steps: Step[], kind: StepKind): number {
   return steps.findIndex((s) => s.kind === kind);
+}
+
+/** The build clock's state (driven by `useBuildClock`). */
+export interface ClockState {
+  /** Step index: -1 before arming, steps.length once finished. */
+  at: number;
+  /** Bumped by every replay of the finale (the test run re-keys on it). */
+  run: number;
+  /** Bumped only by a full Replay (the typed sentence re-keys on it). */
+  build: number;
+  answers: Answers;
+  /** The visitor asked for motion (Replay), so it plays under reduced motion too. */
+  userPlayed: boolean;
+  /** The finished sheet was re-answered since the last Replay. */
+  revised: boolean;
+}
+
+export type ClockAction =
+  | { type: "ARM" }
+  | { type: "TICK" }
+  | { type: "ANSWER"; dim: DimKey; i: number; advance: boolean }
+  | { type: "REVISE"; dim: DimKey; i: number }
+  | { type: "REPLAY" };
+
+export const INITIAL_CLOCK: ClockState = { at: -1, run: 0, build: 0, answers: {}, userPlayed: false, revised: false };
+
+/**
+ * The clock's reducer over a timeline. REVISE is the stamped sheet being
+ * re-answered: it applies only once the build has finished, and replays the
+ * finale alone (not the whole build), so the visitor sees the changed machine
+ * run within seconds.
+ */
+export function clockReducer(steps: Step[]) {
+  const finale = stepOf(steps, "finale");
+  return function reduce(s: ClockState, a: ClockAction): ClockState {
+    switch (a.type) {
+      case "ARM":
+        return s.at === -1 ? { ...s, at: 0 } : s;
+      case "TICK":
+        return { ...s, at: s.at + 1 };
+      case "ANSWER":
+        return { ...s, answers: { ...s.answers, [a.dim]: a.i }, at: a.advance ? s.at + 1 : s.at };
+      case "REVISE":
+        if (s.at !== steps.length) return s;
+        return { ...s, answers: { ...s.answers, [a.dim]: a.i }, at: finale, run: s.run + 1, revised: true };
+      case "REPLAY":
+        return { at: 0, run: s.run + 1, build: s.build + 1, answers: {}, userPlayed: true, revised: false };
+    }
+  };
 }

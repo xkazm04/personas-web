@@ -1,4 +1,5 @@
 import type { DimKey } from "./shared/dims";
+import { runScript, type Machine, type Stop, type TokenKind } from "./shared/machine";
 import { makeTimeline } from "./shared/timeline";
 
 /**
@@ -50,7 +51,74 @@ export const CALLOUTS: Record<Exclude<DimKey, "tasks">, Callout> = {
 
 export const TITLE_BLOCK = { x: 735, y: 368, w: 255, h: 56 };
 
-/** The test run's route: schedule -> agent -> gate -> messages -> event mast. */
+/** Where a test-run token waits for the review gate. */
+export const GATE_X = GATE.a - 14;
+
+/** Each named stop of the test run on the sheet, and when (0..1 of a token's run) it is reached. */
+export const STOP_AT: Record<Stop, { x: number; y: number; t: number }> = {
+  origin: { x: CLOCK.cx + CLOCK.r, y: PIPE_Y, t: 0 },
+  webhook: { x: CLOCK.cx + CLOCK.r, y: PIPE_Y, t: 0 },
+  core: { x: CORE.x + CORE.w / 2, y: PIPE_Y, t: 0.22 },
+  "gate-hold": { x: GATE_X, y: PIPE_Y, t: 0.4 },
+  "gate-open": { x: GATE_X, y: PIPE_Y, t: 0.55 },
+  messages: { x: BUBBLE.x + BUBBLE.w / 2, y: PIPE_Y, t: 0.72 },
+  mast: { x: MAST.x, y: PIPE_Y, t: 0.9 },
+};
+
+/** One token's keyframes over the whole finale (`t` is 0..1 of RUN_MS). */
+export interface Track {
+  kind: TokenKind;
+  stops: (Stop | "wait" | "rise")[];
+  x: number[];
+  y: number[];
+  t: number[];
+  opacity: number[];
+}
+
+/** When each token starts and how much of the run it takes (two tokens share the finale). */
+const LANES: Record<number, { start: number; span: number }[]> = {
+  1: [{ start: 0, span: 1 }],
+  2: [
+    { start: 0, span: 0.8 },
+    { start: 0.2, span: 0.8 },
+  ],
+};
+
+/** The test run's keyframes for a machine: each token's stops mapped onto the sheet, then up the mast. */
+export function runPoints(m: Machine): Track[] {
+  const tokens = runScript(m);
+  return tokens.map((tok, i) => {
+    const { start, span } = LANES[tokens.length][i];
+    const tr: Track = { kind: tok.kind, stops: [], x: [], y: [], t: [], opacity: [] };
+    const push = (stop: Track["stops"][number], x: number, y: number, t: number, o: number) => {
+      tr.stops.push(stop);
+      tr.x.push(x);
+      tr.y.push(y);
+      tr.t.push(t);
+      tr.opacity.push(o);
+    };
+    const first = STOP_AT[tok.stops[0]];
+    if (start > 0) push("wait", first.x, first.y, 0, 0);
+    tok.stops.forEach((s, k) => {
+      const p = STOP_AT[s];
+      push(s, p.x, p.y, start + p.t * span, k === 0 ? 0 : 1);
+    });
+    push("rise", MAST.x, MAST.top + 6, start + span, 0);
+    return tr;
+  });
+}
+
+/** When (0..1 of RUN_MS) the gate holds a token and lets it go, or null when nothing waits. */
+export function gateWindow(tracks: Track[]): { hold: number; open: number } | null {
+  for (const tr of tracks) {
+    const h = tr.stops.indexOf("gate-hold");
+    const o = tr.stops.indexOf("gate-open");
+    if (h >= 0 && o >= 0) return { hold: tr.t[h], open: tr.t[o] };
+  }
+  return null;
+}
+
+/** The fixed route the current TestRun still reads (replaced by runPoints in the next commit). */
 export const RUN_X = [CLOCK.cx + CLOCK.r, CORE.x + CORE.w / 2, GATE.a - 14, GATE.b + 30, BUBBLE.x + BUBBLE.w / 2, MAST.x, MAST.x];
 export const RUN_Y = [PIPE_Y, PIPE_Y, PIPE_Y, PIPE_Y, PIPE_Y, PIPE_Y, MAST.top + 6];
 export const RUN_T = [0, 0.22, 0.4, 0.55, 0.72, 0.9, 1];
