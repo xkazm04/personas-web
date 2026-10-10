@@ -743,10 +743,9 @@
             "src/components/guide/guide-markdown/extractHeadings.ts",
             "src/components/guide/guide-markdown/headingId.ts",
             "src/components/guide/guide-markdown/parseBlocks.tsx",
-            "src/components/guide/guide-markdown/parseCalloutStack.tsx",
-            "src/components/guide/guide-markdown/parseCards.tsx",
-            "src/components/guide/guide-markdown/parseCustomBlock.tsx",
+            "src/components/guide/guide-markdown/parseGuide.ts",
             "src/components/guide/guide-markdown/parseInline.tsx",
+            "src/components/guide/guide-markdown/renderGuideDoc.tsx",
             "src/components/guide/guide-markdown/slugify.ts"
           ],
           "target": null,
