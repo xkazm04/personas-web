@@ -747,7 +747,8 @@
             "src/components/guide/guide-markdown/parseGuide.ts",
             "src/components/guide/guide-markdown/parseInline.tsx",
             "src/components/guide/guide-markdown/renderGuideDoc.tsx",
-            "src/components/guide/guide-markdown/slugify.ts"
+            "src/components/guide/guide-markdown/slugify.ts",
+            "src/components/guide/guide-markdown/useArrivalMark.ts"
           ],
           "target": null,
           "apiRoutes": []
