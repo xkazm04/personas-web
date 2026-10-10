@@ -10,6 +10,7 @@ import {
   handoffUrl,
   nextLocalTime,
   shareOrCopy,
+  waitlistPlatforms,
   type ShareCapabilities,
   type ShareOutcome,
 } from "../shared/handoff";
@@ -33,19 +34,23 @@ function clipboardOnly(): ShareCapabilities {
 /** The m2 waitlist email field (Waitlist renders it with this id). */
 export const WAITLIST_FIELD_ID = "m2-mail";
 
+/** The opt-in waitlist's platforms: those without a live installer (DOWNLOAD_PLAN). */
+const WAITLIST: HandoffPlatform[] = waitlistPlatforms();
+
 const reportWaitlist = (err: unknown) => captureExceptionScrubbed(err, { tags: { component: "MobileLanding2Waitlist" } });
 
 /**
  * The phone -> computer handoff: share the download link to yourself, copy it, or save a
- * calendar reminder for the next 9:00 (all local: nothing is uploaded), or join a platform's
- * waitlist. Which platform gets which comes from the shared machine (shared/handoffMachine),
- * routed by DOWNLOAD_PLAN; it also refuses a second submit while one is in flight and drops a
- * result whose platform the visitor has already left. When neither share nor copy works,
+ * calendar reminder for the next 9:00 (all local: nothing is uploaded). The link is the same for
+ * everyone and marked as a phone hand-off (`from=m2`): the computer that opens it picks its own
+ * installer or waitlist. A platform's waitlist is the explicit secondary path; the shared machine
+ * (shared/handoffMachine) runs it over the platforms without an installer (DOWNLOAD_PLAN), refuses
+ * a second submit while one is in flight and drops a result whose platform the visitor has left. When neither share nor copy works,
  * `manual` asks the page to show the link for copying by hand.
  */
 export function useHandoff(c: ClockCopy, toast: (msg: string) => void) {
   const [manual, setManual] = useState(false);
-  const [state, setState] = useState<HandoffState>(() => initialHandoff());
+  const [state, setState] = useState<HandoffState>(() => initialHandoff(BUILD_ROUTES, WAITLIST[0] ?? "windows"));
   const [email, setEmailState] = useState("");
   const stateRef = useRef(state);
   const flightRef = useRef<AbortController | null>(null);
@@ -71,7 +76,7 @@ export function useHandoff(c: ClockCopy, toast: (msg: string) => void) {
     if (r.kind === "joined" || r.kind === "duplicate" || r.kind === "aborted") dispatch({ type: "result", token: effect.token, outcome: r.kind });
     else dispatch({ type: "result", token: effect.token, outcome: "error", code: r.kind === "error" ? r.code : "invalid" });
   };
-  const url = handoffUrl(SITE_URL);
+  const url = handoffUrl(SITE_URL, "m2");
   const payload = { url, title: c.share.title, text: c.share.text };
 
   function report(out: ShareOutcome) {
@@ -85,7 +90,7 @@ export function useHandoff(c: ClockCopy, toast: (msg: string) => void) {
     manual,
     state,
     view: view(state),
-    routes: BUILD_ROUTES,
+    waitlist: WAITLIST,
     email,
     setEmail: (v: string) => {
       setEmailState(v);

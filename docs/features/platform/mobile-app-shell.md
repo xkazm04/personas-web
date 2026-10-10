@@ -16,10 +16,12 @@ glowing hex cells.
 4. **Free.** A run travels from Personas ($0, MIT) through Claude Code to Anthropic; the only payment line runs from
    your own Claude Pro or Max plan.
 5. **Questions.** Four question tiles; each opens the full answer (from the site FAQ) in a layer with previous / next.
-6. **Get it.** "Take it to your computer." A phone beams the link to a computer. Pick the computer: a platform whose
-   installer is live (today only Windows, and only when `NEXT_PUBLIC_DOWNLOAD_URL` is set) sends the link through the
-   share sheet (or copies it); every other platform joins its waitlist. Anyone can copy the link or download a
-   calendar reminder (`.ics`). If neither share nor clipboard is allowed, the link shows for copying by hand.
+6. **Get it.** "Take it to your computer." A phone beams the link to a computer. A phone cannot know which computer
+   its visitor owns, so the dock sends the same link to everyone, through the share sheet (or copies it); the computer
+   that opens it shows its own installer or its own waitlist (see "Phone hand-off arrival" below). Anyone can copy the
+   link or download a calendar reminder (`.ics`). "Or get an email when it's ready" is the explicit secondary path: it
+   opens the platforms with no live installer and an email field, and the dock then joins that platform's waitlist.
+   If neither share nor clipboard is allowed, the link shows for copying by hand.
 
 The dock button is on screen at every stop: before the last poster it jumps there ("Get it on your computer"); on it,
 it does the hand-off. A hex-pip rail and the top-bar chapter name show where you are. The page follows the site theme
@@ -56,13 +58,25 @@ still redirect to their desktop pages.
   the phones' one `POST /api/waitlist` client: body exactly `{ email, platform }`, injected fetch / timeout / abort
   signal / reporter, codes normalized (`rate_limited`, `store_unavailable`, `timeout`, ...). Both are pure and
   unit-tested (`*.test.ts`).
-- **Hand-off (this page).** `useHandoff` runs the machine's effects: `shareOrCopy` + `browserShareCapabilities()` send
-  `handoffUrl(SITE_URL)` (`/#download-section`, from `shared/handoff.ts`); a waitlist submit posts through
-  `submitWaitlist` (failures to `captureExceptionScrubbed`). The beam lands no sooner than the packet's 1.15 s flight
-  on a timer that a platform change or unmount clears, and the machine's token check drops it anyway.
-  `buildReminderIcs` + `nextLocalTime(now, 9)` build the reminder (Dates created in the click handler). `HiveDock` and
-  `HandoffPoster` render `view()`; the form carries `data-route`. There is no email service, so nothing offers to
-  email the installer.
+- **Hand-off (this page).** `useHandoff` runs the machine in two lanes: `send` with `SHARE_ROUTES` (every platform
+  "share": the one link) and `join` with `BUILD_ROUTES` over `waitlistPlatforms()` (the opt-in panel's platforms, no
+  live installer). `phoneSendAction({ platform, optIn })` (`shared/handoff.ts`, unit-tested) picks the dock's lane:
+  the link for everyone, the waitlist only after the visitor opened the panel. `shareOrCopy` +
+  `browserShareCapabilities()` send `handoffUrl(SITE_URL, "m")` (`/?via=phone&from=m#download-section`); a waitlist
+  submit posts through `submitWaitlist` (failures to `captureExceptionScrubbed`). The beam follows the active lane and
+  lands no sooner than the packet's 1.15 s flight on a per-lane timer that a platform change or unmount clears, and the
+  machine's token check drops it anyway. `buildReminderIcs` + `nextLocalTime(now, 9)` build the reminder (Dates
+  created in the click handler). `HiveDock` and `HandoffPoster` render the active lane's `view()`; the form carries
+  `data-route` (`share`, or `waitlist` once opted in), the panel toggle `data-role="m-optin"`. There is no email
+  service, so nothing offers to email the installer.
+- **Phone hand-off arrival (computer side).** `src/lib/handoff-arrival.ts` (pure, unit-tested): `handoffQuery(source)`
+  is the two fixed tokens `?via=phone&from=m|m2`, placed before the hash so `useHashArrival` (hash only) still lands on
+  the download section; `parseHandoffArrival(search)` reads them (allow-listed `from`, anything else null);
+  `arrivalPlan(arrival, DOWNLOAD_PLAN, detectPlatformKey())` says download or this platform's waitlist. `DownloadCTA`
+  (client-only, `ssr: false`) reads it once in a lazy `useState` initializer, shows `downloadSection.fromPhone` above
+  the primary CTA, puts focus on that CTA and, on a computer whose platform has no installer, offers its waitlist
+  instead of "Download for Windows". Organic visitors: null, nothing changes. No analytics, no storage.
+  `handoffUrl` without a source (the dashboard's `ReachabilityNotice`) stays a bare `/#download-section`.
 
 ## Key files
 | File | Role |
@@ -92,7 +106,7 @@ still redirect to their desktop pages.
   kept off the shared en.ts bundle, M22). Tool names and jobs come from the translated `useCasesSection`, the answers from `faqSection.questions`,
   platform names from `downloadSection`, waitlist errors from `waitlist`.
 - **State** is local React state: active poster, open sheet, reel / Athena / bill state; the hand-off is one
-  `HandoffState` from the shared machine (the beam is derived from its phase). Nothing persists; visitors are anonymous.
+  `HandoffState` per lane from the shared machine (the beam is derived from the active lane's phase). Nothing persists; visitors are anonymous.
 - **Art.** Athena's still and idle loop are `public/athena/athena_baseline_640.webp` and `athena_idle_loop.mp4`; the
   brand mark is `public/icons/icon-192.png`. Everything else is inline SVG/CSS, tagged "Stylized illustration".
 
@@ -137,8 +151,9 @@ scrolling turns it: the 09:00 setup ("Say it once. It works all day."), one pers
 Athena as the moon through the night, an all-day $0, a rotary FAQ at 21:00, and "Tomorrow, 9:00, at your computer"
 at 23:00. Tapping a bead, job, moment, step or node opens it as its own scene (Back, Escape or a swipe down closes
 it). The call to action is always on screen. It saves a real `.ics` reminder for the next 9:00, sends the download
-link through the share sheet or the clipboard (a platform whose installer is live), or joins that platform's
-waitlist (every other one; Windows too while `NEXT_PUBLIC_DOWNLOAD_URL` is unset). There is no email
+link to everyone through the share sheet or the clipboard (the computer that opens it picks its own installer or
+waitlist), or, behind "Or get an email when it's ready", joins the waitlist of a platform with no live installer
+(Windows too while `NEXT_PUBLIC_DOWNLOAD_URL` is unset). There is no email
 service, so nothing offers to email a link. Nothing redirects phones here, and the page is `noindex`.
 
 **How it works.**
@@ -159,9 +174,12 @@ service, so nothing offers to email a link. Nothing redirects phones here, and t
   open. Athena's idle loop (`/athena/athena_idle_loop.mp4`) loads only when she first rises and pauses otherwise.
   The arrival (`data-arriving`: the dial rises, the clock counts 05:00 to 09:00) is server-rendered as CSS so it plays
   before hydration; any touch, wheel, key or scroll ends it.
-- **The CTA** runs on the same hand-off machine as `/m` (`shared/handoffMachine.ts`, see the `/m` section):
-  `useHandoff.ts` owns the selected platform, its route (`Cta` shows share / copy on `share`, the waitlist form on
-  `waitlist`; the plats group carries `data-route` and a not-live Windows button reads "Waitlist"), and the waitlist
+- **The CTA** leads with the same thing for everyone: the reminder, then share / copy of
+  `handoffUrl(SITE_URL, "m2")` (`/?via=phone&from=m2#download-section`; the computer picks its own installer or
+  waitlist). "Or get an email when it's ready" (`data-role="optin"`, a plain `useState(false)` toggle, so server and
+  first client render agree) opens the waitlist on the same hand-off machine as `/m` (`shared/handoffMachine.ts`, see
+  the `/m` section): `useHandoff.ts` owns the selected platform (one of `waitlistPlatforms()`, the platforms with no
+  live installer; the plats group carries `data-route`), and the waitlist
   submission through `shared/submitWaitlist.ts` (one in flight; Enter cannot re-post; a platform switch aborts it and
   its late result is dropped; failures go to `captureExceptionScrubbed`). `Waitlist.tsx` is presentational and maps
   error codes to the translated `t.waitlist` labels. Share and copy use `shareOrCopy` with the browser's
@@ -199,9 +217,10 @@ hub at 390px); the header chip steps out of the way in the FAQ and CTA; the stag
 - The day, its times and its runs are a stylized illustration (tagged "Stylized day"); Athena's portrait and loop are
   the only real product images.
 - Waitlist analytics (`trackWaitlistSubmit`) are not wired: `WaitlistEntryPoint` has no `/m2` member yet.
-- While no installer is live, Windows has no share / copy buttons on `/m2` (the link is still printed under the form);
-  the e2e share / copy specs skip in such a build. Other `/m2` copy (e.g. the hero's "A free installer for Windows,
-  about 12 MB") is not plan-aware yet.
+- Share / copy are offered to everyone (the arriving computer resolves installer vs waitlist). Other `/m2` copy (the
+  hero's "A free installer for Windows, about 12 MB", the plats' "Installer, about 12 MB" note and the `.ics`
+  description) is not plan-aware yet; the plats note only renders for a live platform, which the opt-in panel never
+  lists.
 
 ## Related docs
 - [/m revival plan](../../concepts/mobile-revival/PLAN.md)

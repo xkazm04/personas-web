@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Download } from "lucide-react";
@@ -16,6 +16,7 @@ import { pickWaitlistPlatform } from "@/lib/landing-address";
 import { DOWNLOAD_PLAN, RELEASE_DATE_ENV, RELEASE_TITLE, SITE_VERSION, latestRelease, releasePulseDate } from "@/lib/release";
 import { RELEASES } from "@/data/changelog";
 import { detectPlatformKey } from "@/components/waitlist-modal/waitlistUtils";
+import { arrivalPlan, parseHandoffArrival } from "@/lib/handoff-arrival";
 
 import { DownloadStepGrid } from "./download-cta/DownloadStepGrid";
 import { DownloadTrustSignals } from "./download-cta/DownloadTrustSignals";
@@ -52,8 +53,20 @@ export default function DownloadCTA() {
     setWaitlistOpen(true);
   };
   const isFresh = useFreshRelease(PULSE_DATE);
+  // A phone hand-off (`?via=phone&from=m|m2`, src/lib/handoff-arrival.ts), read once. This section
+  // is client-only (LazyDownloadCTA, ssr: false), so the lazy read cannot disagree with a server
+  // render. Organic visitors get null: no line, no focus, the CTA unchanged.
+  const [arrival] = useState(() =>
+    typeof window === "undefined" ? null : arrivalPlan(parseHandoffArrival(window.location.search), DOWNLOAD_PLAN, detectPlatformKey()),
+  );
+  const ctaRow = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (arrival) ctaRow.current?.querySelector<HTMLElement>("a, button")?.focus({ preventScroll: true });
+  }, [arrival]);
+  // This computer's own answer: a phone arrival on a platform without an installer gets its waitlist.
+  const offerDownload = DOWNLOAD_PRIMARY && arrival?.action !== "waitlist" ? DOWNLOAD_PRIMARY : null;
   const downloadSteps = [
-    DOWNLOAD_PRIMARY ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
+    offerDownload ? t.downloadSection.downloadInstaller : t.downloadSection.joinWaitlist,
     t.downloadSection.connectCli,
     t.downloadSection.launchAgent,
   ];
@@ -96,10 +109,11 @@ export default function DownloadCTA() {
         <DownloadStepGrid steps={downloadSteps} stepLabel={t.common.step} />
 
         <motion.div variants={fadeUp} className="mt-10">
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {DOWNLOAD_PRIMARY ? (
+          {arrival && <p className="mb-4 text-base font-medium text-brand-cyan">{t.downloadSection.fromPhone}</p>}
+          <div ref={ctaRow} className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            {offerDownload ? (
               <PrimaryCTA
-                href={DOWNLOAD_PRIMARY.href}
+                href={offerDownload.href}
                 onClick={() => trackDownloadClick(DOWNLOAD_PLAN, "download-cta", detectPlatformKey())}
                 icon={Download}
                 label={t.downloadSection.downloadFor.replace("{platform}", t.downloadSection.windows)}

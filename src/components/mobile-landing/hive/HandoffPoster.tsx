@@ -13,7 +13,6 @@ interface Props {
   on: boolean;
 }
 
-const PLATFORMS: Platform[] = ["win", "mac", "lin"];
 const STEP_GLYPHS = ["gl-down", "gl-plug", "gl-go"];
 const STEP_HEX = "56,25 42,49.2 14,49.2 0,25 14,0.8 42,0.8";
 
@@ -26,14 +25,16 @@ function message(c: Props["c"], h: Handoff, names: Props["names"]): { text: stri
     const text = { shared: c.toastShared, copied: c.toastCopied, joined: fill(c.joined, { platform: name }), already: fill(c.alreadyJoined, { platform: name }) }[v.sentKind];
     return { text, cls: "msg ok" };
   }
-  return { text: v.hint ? c[v.hint] : "", cls: "msg" };
+  // The one link's hint is the same for every computer: that computer picks its own installer.
+  return { text: !v.hint ? "" : h.lane === "send" ? c.hintSend : c[v.hint], cls: "msg" };
 }
 
 /**
- * Poster 6: take it to your computer. A phone beams the link to a computer; the form under it picks
- * the computer, and the dock button does the real thing (share or copy the link where an installer
- * is live, otherwise join that platform's waitlist; the route comes from DOWNLOAD_PLAN). Copy link
- * and a calendar reminder work for everyone.
+ * Poster 6: take it to your computer. A phone beams the link to a computer: the dock button sends
+ * the one link to everyone (the computer that opens it picks its own installer or waitlist). Copy
+ * link and a calendar reminder sit under it. The waitlist is an explicit, secondary opt-in: "Or get
+ * an email when it's ready" opens the platforms without an installer (DOWNLOAD_PLAN) and an email
+ * field, and the dock then joins the picked platform's waitlist.
  */
 export default function HandoffPoster({ c, h, names, tag, on }: Props) {
   const msg = message(c, h, names);
@@ -41,7 +42,7 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
     const d = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
     if (!d) return;
     e.preventDefault();
-    const nx = PLATFORMS[(i + d + PLATFORMS.length) % PLATFORMS.length];
+    const nx = h.waitlist[(i + d + h.waitlist.length) % h.waitlist.length];
     h.setPlatform(nx);
     (e.currentTarget.parentElement?.querySelector(`[data-p="${nx}"]`) as HTMLElement | null)?.focus();
   };
@@ -82,21 +83,24 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
       </div>
       <form
         className="send"
-        data-route={h.view.showEmail ? "waitlist" : "share"}
+        data-route={h.lane === "join" ? "waitlist" : "share"}
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
-          h.send();
+          if (h.optIn) h.join();
+          else h.send();
         }}
       >
-        <div className="plat" role="radiogroup" aria-label={c.platformsLabel} data-role="m-plat">
-          {PLATFORMS.map((p, i) => (
-            <button key={p} type="button" role="radio" aria-checked={h.platform === p} tabIndex={h.platform === p ? 0 : -1} data-p={p} onClick={() => h.setPlatform(p)} onKeyDown={(e) => onRadioKey(e, i)}>
-              <span>{names[p]}</span>
-            </button>
-          ))}
-        </div>
-        {h.view.showEmail && (
+        {h.optIn && (
+          <div className="plat" role="radiogroup" aria-label={c.platformsLabel} data-role="m-plat" style={{ gridTemplateColumns: `repeat(${h.waitlist.length}, 1fr)` }}>
+            {h.waitlist.map((p, i) => (
+              <button key={p} type="button" role="radio" aria-checked={h.platform === p} tabIndex={h.platform === p ? 0 : -1} data-p={p} onClick={() => h.setPlatform(p)} onKeyDown={(e) => onRadioKey(e, i)}>
+                <span>{names[p]}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        {h.optIn && (
           <label className="field">
             <span className="sr">{c.emailLabel}</span>
             <input
@@ -117,7 +121,7 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
             />
           </label>
         )}
-        {h.view.manual ? (
+        {h.manual ? (
           <label className="manual">
             <span>{c.manual}</span>
             <input className="manual-url" readOnly value={h.url} aria-label={c.manualLabel} onFocus={(e) => e.currentTarget.select()} />
@@ -137,6 +141,11 @@ export default function HandoffPoster({ c, h, names, tag, on }: Props) {
             <span>{c.reminder}</span>
           </button>
         </div>
+        {h.waitlist.length > 0 && (
+          <button className="ghost" type="button" data-role="m-optin" aria-expanded={h.optIn} onClick={h.toggleOptIn}>
+            <span>{h.optIn ? c.optInClose : c.optIn}</span>
+          </button>
+        )}
       </form>
       <ol className="steps">
         {c.steps.map((s, i) => (

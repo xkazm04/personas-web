@@ -23,11 +23,6 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-/** The Windows route from DOWNLOAD_PLAN: "share" when its installer is live, "waitlist" otherwise. */
-async function windowsRoute(page: Page) {
-  return page.locator('[data-role="plats"]').getAttribute("data-route");
-}
-
 async function open(page: Page) {
   await page.goto("/m2");
   await page.waitForSelector(`${SCROLLER}`);
@@ -182,11 +177,10 @@ test.describe("/m2 Around the Clock", () => {
       Object.defineProperty(navigator, "share", { configurable: true, value: async (d: unknown) => void w.__shared.push(d) });
     });
     await open(page);
-    test.skip((await windowsRoute(page)) !== "share", "no installer is live in this build");
     await page.getByRole("button", { name: "Share", exact: true }).click();
     await expect.poll(() => page.evaluate(() => (window as unknown as { __shared: { url: string }[] }).__shared)).toHaveLength(1);
     const shared = await page.evaluate(() => (window as unknown as { __shared: { url: string }[] }).__shared[0]);
-    expect(shared.url).toMatch(/\/#download-section$/);
+    expect(shared.url).toMatch(/\/\?via=phone&from=m2#download-section$/);
   });
 
   test("copy puts the link on the clipboard; with no clipboard the link is shown for manual copy", async ({ page }) => {
@@ -196,9 +190,8 @@ test.describe("/m2 Around the Clock", () => {
       Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async (t: string) => void w.__copied.push(t) } });
     });
     await open(page);
-    test.skip((await windowsRoute(page)) !== "share", "no installer is live in this build");
     await page.getByRole("button", { name: "Copy link" }).click();
-    await expect.poll(() => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied)).toEqual([expect.stringMatching(/#download-section$/)]);
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied)).toEqual([expect.stringMatching(/\?via=phone&from=m2#download-section$/)]);
     await expect(page.getByRole("status").filter({ hasText: "Link copied" })).toBeVisible();
 
     // Clipboard refused and the textarea fallback refused too: the manual-copy fallback shows.
@@ -232,6 +225,7 @@ test.describe("/m2 Around the Clock", () => {
       } else await route.fallback();
     });
     await open(page);
+    await page.locator('[data-role="optin"]').click();
     await page.locator("button", { hasText: "macOS" }).filter({ hasText: "Waitlist" }).click();
     const field = page.getByPlaceholder("you@example.com");
     await field.fill("someone@example.com");
@@ -254,6 +248,7 @@ test.describe("/m2 Around the Clock", () => {
         } else await route.fallback();
       });
       await open(page);
+      await page.locator('[data-role="optin"]').click();
       await page.locator("button", { hasText: name }).filter({ hasText: "Waitlist" }).click();
       await page.getByPlaceholder("you@example.com").fill("someone@example.com");
       await page.getByRole("button", { name: "Join waitlist" }).click();

@@ -98,10 +98,10 @@ test.describe("/m phone landing", () => {
     await open(page);
     await page.locator("[data-role=m-cta]").click();
     await expect(page.locator("#s6")).toHaveClass(/\bon\b/);
-    // The route comes from DOWNLOAD_PLAN: without NEXT_PUBLIC_DOWNLOAD_URL Windows is on the waitlist.
-    test.skip((await page.locator("#s6 form.send").getAttribute("data-route")) !== "share", "no installer is live in this build");
+    // One link for every visitor: the phone cannot know the computer, the computer picks its installer.
+    await expect(page.locator("#s6 form.send")).toHaveAttribute("data-route", "share");
     await page.locator("[data-role=m-cta]").click();
-    await expect.poll(() => page.evaluate(() => (window as unknown as { __shared?: ShareData }).__shared?.url ?? "")).toMatch(/\/#download-section$/);
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __shared?: ShareData }).__shared?.url ?? "")).toMatch(/\/\?via=phone&from=m#download-section$/);
     await expect(page.locator("[data-role=m-cta]")).toHaveAttribute("data-mode", "sent");
   });
 
@@ -123,10 +123,10 @@ test.describe("/m phone landing", () => {
     await open(page);
     await toPoster(page, 5);
     await page.getByRole("button", { name: "Copy link" }).click();
-    await expect.poll(() => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied[0] ?? "")).toMatch(/\/#download-section$/);
+    await expect.poll(() => page.evaluate(() => (window as unknown as { __copied: string[] }).__copied[0] ?? "")).toMatch(/\/\?via=phone&from=m#download-section$/);
     await page.evaluate(() => ((window as unknown as { __blockCopy: boolean }).__blockCopy = true));
     await page.getByRole("button", { name: "Copy link" }).click();
-    await expect(page.locator(".manual-url")).toHaveValue(/\/#download-section$/);
+    await expect(page.locator(".manual-url")).toHaveValue(/\/\?via=phone&from=m#download-section$/);
   });
 
   test("Add a reminder downloads an .ics with a VEVENT", async ({ page }) => {
@@ -149,7 +149,9 @@ test.describe("/m phone landing", () => {
     });
     await open(page);
     await toPoster(page, 5);
-    test.skip((await page.locator("#s6 form.send").getAttribute("data-route")) !== "waitlist", "a Windows installer is live in this build");
+    await page.locator("[data-role=m-optin]").click();
+    test.skip((await page.getByRole("radio", { name: "Windows" }).count()) === 0, "a Windows installer is live in this build");
+    await expect(page.locator("#s6 form.send")).toHaveAttribute("data-route", "waitlist");
     await expect(page.locator("#hm-msg")).not.toContainText("about 12 MB");
     await page.getByPlaceholder("you@example.com").fill("visitor@example.com");
     await page.locator("[data-role=m-cta]").click();
@@ -166,6 +168,7 @@ test.describe("/m phone landing", () => {
     });
     await open(page);
     await toPoster(page, 5);
+    await page.locator("[data-role=m-optin]").click();
     await page.getByRole("radio", { name: "macOS" }).click();
     await page.getByPlaceholder("you@example.com").fill("visitor@example.com");
     await page.locator("[data-role=m-cta]").click();
