@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { searchGuide } from "@/lib/guide-search";
+import { searchGuide, searchResultHref } from "@/lib/guide-search";
 import type { SearchResult } from "@/lib/guide-search";
+import { armArrivalMark } from "@/components/guide/guide-markdown/useArrivalMark";
 
 /**
  * Search state + keyboard/navigation logic for the guide combobox.
@@ -100,9 +101,12 @@ export function useGuideSearch() {
     (result: SearchResult) => {
       setIsOpen(false);
       setQuery("");
-      router.push(`/guide/${result.category.id}/${result.topic.id}`);
+      // A body hit lands on its section (`#anchor`) and hands the query to the
+      // topic page, which marks the matched words there (useArrivalMark).
+      if (result.anchor) armArrivalMark(result.topic.id, result.anchor, query);
+      router.push(searchResultHref(result));
     },
-    [router],
+    [router, query],
   );
 
   const onKeyDown = useCallback(

@@ -461,3 +461,62 @@ export function headingsOf(doc: readonly GuideNode[]): GuideHeading[] {
 export function stepsOf(doc: readonly GuideNode[]): GuideStep[] {
   return doc.flatMap((node) => (node.type === "steps" ? node.steps : []));
 }
+
+/** One heading's stretch of the document, as plain searchable text. */
+export interface GuideSection {
+  /** The heading's rendered id; `null` for the preamble before the first heading. */
+  id: string | null;
+  /** The heading's TOC text (`""` for the preamble). */
+  text: string;
+  /** Source depth 1-4; 0 for the preamble. */
+  depth: 0 | 1 | 2 | 3 | 4;
+  tabLabels?: string[];
+  /** Inline-stripped text of every node up to the next heading (code blocks excluded). */
+  body: string;
+}
+
+/** The words a node shows the reader, with inline markup still in place. Code is not prose. */
+function nodeWords(node: GuideNode): string[] {
+  switch (node.type) {
+    case "heading": case "hr": case "code": return [];
+    case "paragraph": case "blockquote": case "callout": return [node.text];
+    case "ul": return node.items.map((item) => item.content);
+    case "ol": case "checklist": return node.items;
+    case "cli": return node.lines;
+    case "table": return [...node.headers, ...node.rows.flat()];
+    case "steps": return node.steps.flatMap((s) => [s.title, s.body]);
+    case "keys": return node.shortcuts.flatMap((s) => [s.combo, s.description]);
+    case "feature": return [node.title, node.body];
+    case "compare": return node.items.flatMap((c) => [c.title, c.body]);
+    case "diagram": return node.nodes.map((n) => n.label);
+    case "usecases": return node.items.flatMap((u) => [u.title, u.scenario, u.outcome]);
+    case "code-compare": return [node.beforeLabel ?? "", node.before, node.afterLabel ?? "", node.after];
+    case "tabs": return node.tabs.flatMap((t) => [t.label, ...t.paragraphs]);
+    case "callout-stack": return node.items.map((c) => c.text);
+    case "cards": return node.items.flatMap((c) => [c.title, c.description]);
+  }
+}
+
+// Images and any inline `:::name` token (prose that mentions a directive) are not words a reader sees.
+const plain = (words: string[]) =>
+  stripInline(words.join(" ").replace(/!\[[^\]]*\]\([^)]*\)/g, " ").replace(/:::[\w-]*/g, " ")).replace(/\s+/g, " ").trim();
+
+/**
+ * The document sliced at its heading nodes: an optional preamble (`id: null`),
+ * then one section per heading carrying exactly that heading's TOC fields. A
+ * directive belongs to the section it sits in, so `:::tabs` labels never start
+ * one. Search indexes these, so every anchor it hands out is a rendered id.
+ */
+export function sectionsOf(doc: readonly GuideNode[]): GuideSection[] {
+  const headings = headingsOf(doc);
+  const out: { head: GuideHeading | null; words: string[] }[] = [{ head: null, words: [] }];
+  for (const node of doc) {
+    if (node.type === "heading") out.push({ head: headings[out.length - 1], words: [] });
+    else out[out.length - 1].words.push(...nodeWords(node));
+  }
+  return out.flatMap(({ head, words }): GuideSection[] => {
+    const body = plain(words);
+    if (!head) return body ? [{ id: null, text: "", depth: 0, body }] : [];
+    return [{ ...head, body }];
+  });
+}

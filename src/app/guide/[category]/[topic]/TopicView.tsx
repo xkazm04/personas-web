@@ -14,6 +14,7 @@ import ReadingProgress from "@/components/guide/ReadingProgress";
 import { CHROME_PAD_TOPIC, CHROME_TOC_STICKY } from "@/components/guide/guide-chrome";
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
 import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
+import { useArrivalMark } from "@/components/guide/guide-markdown/useArrivalMark";
 import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import TranslationNotice from "@/components/guide/TranslationNotice";
 import { resolveTopicUnit } from "@/data/guide/getLocalized";
@@ -36,7 +37,10 @@ interface TopicViewProps {
 export default function TopicView({ category, topic, content, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
   const { t } = useTranslation();
   const contentH1Ref = useRef<HTMLHeadingElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   const didMountRef = useRef(false);
+  // A search body hit lands on its #section; mark the matched words there.
+  const hitMarked = useArrivalMark(bodyRef, topic.id);
   // Locale-aware swap. The server renders the English content (no locale
   // signal in the URL or cookie today), and once the i18nStore hydrates on
   // the client we re-resolve through resolveTopicUnit, which serves ONE whole
@@ -97,7 +101,8 @@ export default function TopicView({ category, topic, content, initialHeadings, p
       didMountRef.current = true;
       return;
     }
-    contentH1Ref.current?.focus();
+    // A #section arrival (search hit, shared link) keeps its landing scroll.
+    contentH1Ref.current?.focus({ preventScroll: window.location.hash.length > 1 });
   }, [topic.id]);
 
   return (
@@ -176,9 +181,12 @@ export default function TopicView({ category, topic, content, initialHeadings, p
               onToggle={() => setPrefer(localized.unit === "canonical" ? "translation" : "canonical")}
             />
           )}
-          <div className="mt-8">
+          <div ref={bodyRef} className="mt-8">
             <GuideMarkdown content={localized.body} />
           </div>
+          <p className="sr-only" aria-live="polite">
+            {hitMarked ? t.guide.searchHitMarked : ""}
+          </p>
         </article>
 
         {/* Related topics */}

@@ -8,19 +8,26 @@ export interface SearchResult {
   category: GuideCategory;
   score: number;
   matchType: "exact-title" | "exact-tag" | "fuzzy-title" | "fuzzy-tag" | "description" | "body";
-  /** For "body" matches: a short cleaned excerpt of the article text around the hit. */
+  /** For "body" matches: a short cleaned excerpt of the hit's section around the hit. */
   excerpt?: string;
+  /** For "body" matches: the id of the heading the hit sits under (absent before the first heading). */
+  anchor?: string;
+  /** For "body" matches: that heading's text, shown as "in section ...". */
+  sectionTitle?: string;
 }
 
 /**
- * A distilled, searchable record of one topic's article body. Built from the
- * Markdown content modules (see buildBodyIndex) with directive/markup syntax
- * stripped, so the runtime index is far smaller than the raw ~136KB of bodies
- * and safe to substring-scan. `text` keeps original casing for excerpts;
- * `haystack` is its lowercased twin for matching.
+ * A distilled, searchable record of one SECTION of a topic's article body: the
+ * plain text between two headings, sliced from the guide grammar's own tree
+ * (see buildBodyIndex in guide-body-index.ts), so `anchor` is always an id the
+ * page renders. Entries keep document order within a topic. `text` keeps
+ * original casing for excerpts; `haystack` is the lowercased heading + text.
  */
 export interface BodyIndexEntry {
   topicId: string;
+  /** Heading id; absent for the preamble before the first heading. */
+  anchor?: string;
+  sectionTitle?: string;
   text: string;
   haystack: string;
 }
@@ -143,56 +150,19 @@ export function searchGuide(query: string, limit = 15): SearchResult[] {
 // The title/tag/description ladder above never sees article prose, so a query
 // for a phrase that lives only in a body returns nothing. These helpers build
 // a distilled full-text index from the Markdown content modules and scan it as
-// a strictly-below-description tier (score 1). They are pure (no content import
-// here) so the heavy GUIDE_CONTENT map is only pulled in by the lazily-imported
-// wrapper in guide-body-index.ts — keeping the initial search bundle unchanged.
+// a strictly-below-description tier (score 1). They are pure (no content or
+// parser import here) so the heavy GUIDE_CONTENT map and the guide grammar are
+// only pulled in by the lazily-imported guide-body-index.ts, which builds the
+// index — keeping the initial search bundle unchanged.
 
-/**
- * Strip Markdown + custom-directive syntax from a body so the indexed text and
- * excerpts read as plain prose. Mirrors the syntax the guide renderer parses
- * (see parseBlocks.tsx): fenced code, `:::directive` fences, headings, list and
- * blockquote markers, tables, emphasis, inline code, and links.
- */
-export function stripGuideMarkup(md: string): string {
-  return (
-    md
-      // Fenced code blocks — drop the code entirely (not prose).
-      .replace(/```[\s\S]*?```/g, " ")
-      // Directive open/close fences (:::steps, :::tip, the bare closing :::, and
-      // the :::compare "---" column separator).
-      .replace(/^\s*:::[\w-]*.*$/gm, " ")
-      .replace(/^\s*---+\s*$/gm, " ")
-      // Any stray inline directive token (defensive — real bodies keep these
-      // on their own line, but never let ":::" leak into an excerpt).
-      .replace(/:::[\w-]*/g, " ")
-      // Table pipes and heading/list/blockquote line markers.
-      .replace(/^\s{0,3}#{1,6}\s+/gm, "")
-      .replace(/^\s*>\s?/gm, "")
-      .replace(/^\s*[-*+]\s+/gm, "")
-      .replace(/^\s*\d+\.\s+/gm, "")
-      .replace(/\|/g, " ")
-      // Inline: links → text, images dropped, emphasis + inline code unwrapped.
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-      .replace(/\*\*\*([^*]+)\*\*\*/g, "$1")
-      .replace(/\*\*([^*]+)\*\*/g, "$1")
-      .replace(/\*([^*]+)\*/g, "$1")
-      .replace(/`([^`]+)`/g, "$1")
-      // Collapse whitespace runs (newlines included) into single spaces.
-      .replace(/\s+/g, " ")
-      .trim()
-  );
-}
-
-/** Build the distilled body index from a topicId → Markdown content map. */
-export function buildBodyIndex(content: Record<string, string>): BodyIndexEntry[] {
-  const index: BodyIndexEntry[] = [];
-  for (const topicId of Object.keys(content)) {
-    const text = stripGuideMarkup(content[topicId]);
-    if (!text) continue;
-    index.push({ topicId, text, haystack: text.toLowerCase() });
-  }
-  return index;
+/** Where a result lands: the topic, plus `#anchor` for a body hit inside a section. */
+export function searchResultHref(result: {
+  category: { id: string };
+  topic: { id: string };
+  anchor?: string;
+}): string {
+  const path = `/guide/${result.category.id}/${result.topic.id}`;
+  return result.anchor ? `${path}#${result.anchor}` : path;
 }
 
 /**
@@ -225,8 +195,9 @@ export function extractExcerpt(text: string, query: string, radius = 60): string
 
 /**
  * Scan the body index for `query`, skipping topics already matched by a higher
- * tier (`excludeIds`) and hidden topics. Returns SearchResult rows at score 1
- * (strictly below the description tier) carrying a matching-text excerpt.
+ * tier (`excludeIds`) and hidden topics. Returns one SearchResult per topic at
+ * score 1 (strictly below the description tier) for its FIRST matching section,
+ * carrying that section's anchor, title and a matching-text excerpt.
  */
 export function searchBodyIndex(
   index: BodyIndexEntry[],
@@ -242,6 +213,7 @@ export function searchBodyIndex(
   for (const entry of index) {
     if (excluded.has(entry.topicId)) continue;
     if (!entry.haystack.includes(q)) continue;
+    excluded.add(entry.topicId);
     const topic = GUIDE_TOPICS.find((t) => t.id === entry.topicId);
     if (!topic || !isTopicVisible(topic)) continue;
     const category = GUIDE_CATEGORIES.find((c) => c.id === topic.categoryId);
@@ -251,7 +223,13 @@ export function searchBodyIndex(
       category,
       score: 1,
       matchType: "body",
-      excerpt: extractExcerpt(entry.text, query),
+      // A hit in the heading itself excerpts from the heading on, so the
+      // excerpt always shows the matched words.
+      excerpt: extractExcerpt(
+        entry.text.toLowerCase().includes(q) || !entry.sectionTitle ? entry.text : `${entry.sectionTitle}. ${entry.text}`,
+        query,
+      ),
+      ...(entry.anchor ? { anchor: entry.anchor, sectionTitle: entry.sectionTitle } : {}),
     });
   }
 

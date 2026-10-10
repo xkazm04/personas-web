@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
 
+import { useTranslation } from "@/i18n/useTranslation";
 import { highlightMatch } from "@/lib/highlight-match";
 import { TRANSITION_FAST } from "@/lib/animations";
 import type { SearchResult } from "@/lib/guide-search";
@@ -40,6 +41,7 @@ export function SearchResultsPopover({
   noResultsLabel: string;
 }) {
   const reduced = useReducedMotion() ?? false;
+  const { t } = useTranslation();
   return (
     <motion.div
       id="search-listbox"
@@ -103,6 +105,11 @@ export function SearchResultsPopover({
                       {result.excerpt && (
                         <span className="mt-0.5 block truncate text-sm text-muted-dark">
                           {highlightMatch(result.excerpt, query, result.matchType, group.category.color)}
+                        </span>
+                      )}
+                      {result.sectionTitle && (
+                        <span className="mt-0.5 block truncate text-xs text-muted-dark">
+                          {t.guide.searchInSection.replace("{title}", result.sectionTitle)}
                         </span>
                       )}
                     </span>

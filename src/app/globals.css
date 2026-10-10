@@ -88,6 +88,15 @@ html {
   color: var(--foreground);
 }
 
+/* A guide search hit, marked on arrival by useArrivalMark (CSS Custom Highlight API). */
+::highlight(guide-hit) {
+  background-color: color-mix(in srgb, var(--brand-cyan) 32%, transparent);
+  color: var(--foreground);
+}
+@media (forced-colors: active) {
+  ::highlight(guide-hit) { background-color: Mark; color: MarkText; }
+}
+
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }

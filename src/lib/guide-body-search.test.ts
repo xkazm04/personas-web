@@ -1,11 +1,6 @@
 import { describe, it, expect } from "vitest";
-import {
-  stripGuideMarkup,
-  buildBodyIndex,
-  extractExcerpt,
-  searchBodyIndex,
-  searchGuide,
-} from "@/lib/guide-search";
+import { extractExcerpt, searchBodyIndex, searchGuide } from "@/lib/guide-search";
+import { buildBodyIndex } from "@/lib/guide-body-index";
 import { GUIDE_CONTENT } from "@/data/guide/content";
 
 /**
@@ -15,8 +10,10 @@ import { GUIDE_CONTENT } from "@/data/guide/content";
  * pipeline plus its rank position relative to the existing ladder.
  */
 
-describe("stripGuideMarkup", () => {
-  it("removes directive fences, headings, emphasis, inline code, and links", () => {
+describe("buildBodyIndex text (sliced from the guide grammar's tree)", () => {
+  const textOf = (md: string) => buildBodyIndex({ t: md }).map((e) => `${e.sectionTitle ?? ""} ${e.text}`).join(" ");
+
+  it("removes directive fences, heading markers, emphasis, inline code, and links", () => {
     const md = [
       "## The Decision Hub",
       "",
@@ -27,7 +24,7 @@ describe("stripGuideMarkup", () => {
       "- a list item",
       "1. an ordered item",
     ].join("\n");
-    const out = stripGuideMarkup(md);
+    const out = textOf(md);
     expect(out).not.toContain(":::");
     expect(out).not.toContain("##");
     expect(out).not.toContain("**");
@@ -43,7 +40,7 @@ describe("stripGuideMarkup", () => {
 
   it("drops fenced code block contents entirely", () => {
     const md = "Intro paragraph.\n\n```ts\nconst secret = 42;\n```\n\nOutro paragraph.";
-    const out = stripGuideMarkup(md);
+    const out = textOf(md);
     expect(out).toContain("Intro paragraph.");
     expect(out).toContain("Outro paragraph.");
     expect(out).not.toContain("secret");
@@ -75,11 +72,12 @@ describe("buildBodyIndex + searchBodyIndex", () => {
     "topic-b": "## Beta\n\nCompletely unrelated prose about spreadsheets and invoices.",
   };
 
-  it("builds one lowercased-haystack entry per non-empty topic", () => {
+  it("builds one lowercased-haystack entry per section (heading + text)", () => {
     const index = buildBodyIndex(content);
     expect(index.map((e) => e.topicId).sort()).toEqual(["topic-a", "topic-b"]);
     const a = index.find((e) => e.topicId === "topic-a")!;
-    expect(a.haystack).toBe(a.text.toLowerCase());
+    expect(a.anchor).toBe("alpha");
+    expect(a.haystack).toBe(`${a.sectionTitle}\n${a.text}`.toLowerCase());
     expect(a.haystack).not.toContain(":::");
   });
 
