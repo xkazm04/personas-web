@@ -20,6 +20,12 @@
  *   no response — including one already in flight when the window opened — can
  *   repaint a pending verdict. `countPending(overlay(...))` is the only
  *   pending-count formula.
+ *
+ * The machine is generic over its verdict (`V`, default the review queue's
+ * `Verdict`), so another surface can reuse it with its own verbs: the Events
+ * dead letter arms `"retry" | "discard"` (eventStore.ts) and paints its rows
+ * with `overlayWith`. Only types were widened; the review queue's behaviour is
+ * unchanged and review-ledger.test.ts is its guard.
  */
 import { RESOLVED_BY_REVIEWER } from "./review-display";
 import type { ManualReviewItem } from "./types";
@@ -28,10 +34,10 @@ export type Verdict = "approved" | "rejected";
 
 export const COMMIT_WINDOW_MS = 5000;
 
-export interface LedgerBatch {
+export interface LedgerBatch<V extends string = Verdict> {
   batchId: number;
   ids: readonly string[];
-  verdict: Verdict;
+  verdict: V;
   /** Reviewer notes per id, carried to the write. */
   notes: Readonly<Record<string, string>>;
   armedAt: number;
@@ -39,38 +45,38 @@ export interface LedgerBatch {
   deadline: number;
 }
 
-export interface LedgerState {
-  window: LedgerBatch | null;
-  inFlight: readonly LedgerBatch[];
+export interface LedgerState<V extends string = Verdict> {
+  window: LedgerBatch<V> | null;
+  inFlight: readonly LedgerBatch<V>[];
   nextBatchId: number;
 }
 
 export const IDLE_LEDGER: LedgerState = { window: null, inFlight: [], nextBatchId: 1 };
 
-export type LedgerEvent =
-  | { type: "arm"; ids: readonly string[]; verdict: Verdict; notes?: Readonly<Record<string, string>>; now: number }
+export type LedgerEvent<V extends string = Verdict> =
+  | { type: "arm"; ids: readonly string[]; verdict: V; notes?: Readonly<Record<string, string>>; now: number }
   | { type: "undo"; batchId: number }
   | { type: "expire"; batchId: number }
   /** Teardown (unmount, pagehide, sign-out): commit the open window now. */
   | { type: "flush" }
   | { type: "settled"; batchId: number; failedIds: readonly string[] };
 
-export type LedgerEffect =
-  | { type: "commit"; batch: LedgerBatch }
+export type LedgerEffect<V extends string = Verdict> =
+  | { type: "commit"; batch: LedgerBatch<V> }
   | { type: "schedule"; batchId: number; deadline: number }
   | { type: "cancelTimer"; batchId: number };
 
 export type RefusalReason = "overlap" | "empty";
 
-export interface Transition {
-  state: LedgerState;
-  effects: LedgerEffect[];
+export interface Transition<V extends string = Verdict> {
+  state: LedgerState<V>;
+  effects: LedgerEffect<V>[];
   refused?: { reason: RefusalReason };
   /** Present on a `settled` that matched an in-flight batch. */
-  settled?: { batch: LedgerBatch; okIds: string[]; failedIds: string[] };
+  settled?: { batch: LedgerBatch<V>; okIds: string[]; failedIds: string[] };
 }
 
-function commitWindow(state: LedgerState): Transition {
+function commitWindow<V extends string>(state: LedgerState<V>): Transition<V> {
   const w = state.window;
   if (!w) return { state, effects: [] };
   return {
@@ -79,7 +85,7 @@ function commitWindow(state: LedgerState): Transition {
   };
 }
 
-export function transition(state: LedgerState, event: LedgerEvent): Transition {
+export function transition<V extends string = Verdict>(state: LedgerState<V>, event: LedgerEvent<V>): Transition<V> {
   switch (event.type) {
     case "arm": {
       const ids = [...new Set(event.ids)];
@@ -92,7 +98,7 @@ export function transition(state: LedgerState, event: LedgerEvent): Transition {
         const note = event.notes?.[id];
         if (note) notes[id] = note;
       }
-      const batch: LedgerBatch = {
+      const batch: LedgerBatch<V> = {
         batchId: state.nextBatchId,
         ids,
         verdict: event.verdict,
@@ -131,7 +137,7 @@ export function transition(state: LedgerState, event: LedgerEvent): Transition {
 }
 
 /** Every id the ledger currently holds a verdict for (open window + in flight). */
-export function pendingIds(state: LedgerState): string[] {
+export function pendingIds<V extends string>(state: LedgerState<V>): string[] {
   const batches = state.window ? [...state.inFlight, state.window] : state.inFlight;
   return batches.flatMap((b) => b.ids);
 }
@@ -148,13 +154,22 @@ function applyBatch(row: ManualReviewItem, batch: LedgerBatch): ManualReviewItem
 
 /** Server rows with every ledger verdict painted over them. */
 export function overlay(rows: readonly ManualReviewItem[], state: LedgerState): ManualReviewItem[] {
-  const byId = new Map<string, LedgerBatch>();
+  return overlayWith(rows, state, applyBatch);
+}
+
+/** `overlay` for any row type: `apply` paints one batch's verdict onto a row. */
+export function overlayWith<R extends { id: string }, V extends string>(
+  rows: readonly R[],
+  state: LedgerState<V>,
+  apply: (row: R, batch: LedgerBatch<V>) => R,
+): R[] {
+  const byId = new Map<string, LedgerBatch<V>>();
   for (const b of state.inFlight) for (const id of b.ids) byId.set(id, b);
   if (state.window) for (const id of state.window.ids) byId.set(id, state.window);
   if (byId.size === 0) return [...rows];
   return rows.map((r) => {
     const b = byId.get(r.id);
-    return b ? applyBatch(r, b) : r;
+    return b ? apply(r, b) : r;
   });
 }
 
