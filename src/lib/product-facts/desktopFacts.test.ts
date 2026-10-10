@@ -6,6 +6,7 @@ import { describe, it, expect } from "vitest";
 import { parseMemoryCategories, parseCellKeys, diffFacts } from "../../../scripts/sync-desktop-facts.mjs";
 import snapshot from "./desktop-facts.json";
 import { MEMORY_CATEGORIES, CELL_KEYS } from "./index";
+import { DIMS } from "@/components/feature-sections/design-blueprint/shared/dims";
 
 // ── Fixtures: verbatim excerpts of the desktop sources (../personas) ─────────
 // CRLF on purpose for one of them: a Windows checkout with autocrlf hands the
@@ -101,5 +102,9 @@ describe("desktop facts: the typed module and the showcase follow the snapshot",
   it("index.ts literals equal the generated snapshot", () => {
     expect([...MEMORY_CATEGORIES]).toEqual(snapshot.memoryCategories);
     expect([...CELL_KEYS]).toEqual(snapshot.cellKeys);
+  });
+
+  it("DIMS cells are the desktop's ALL_CELL_KEYS, in its order", () => {
+    expect(DIMS.map((d) => d.cell)).toEqual(snapshot.cellKeys);
   });
 });

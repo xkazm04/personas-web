@@ -7,8 +7,9 @@ import type { CategoryKey } from "./shared/categories";
  * viewBox 1200 x 620. One ring per run around the disc centre, run 1 inside.
  * A ring's roughness is its wobble; it shrinks run by run, and it is smoothed
  * further wherever an earlier run left a memory (the agent recalls it there).
- * A mistake (a warning or a learning) is a sharp stumble on the ring it was
- * made on; facts, decisions and insights are noted without one.
+ * A mistake leaves a `learned` or a `constraint` memory and is a sharp stumble
+ * on the ring it was made on; facts, preferences, instructions and context are
+ * noted without one.
  */
 
 export const W = 1200;
@@ -27,18 +28,18 @@ export interface Seed {
 }
 
 export const SEEDS: Seed[] = [
-  { k: "warning", ring: 0, at: 0.9 },
-  { k: "learning", ring: 0, at: 3.7 },
+  { k: "constraint", ring: 0, at: 0.9 },
+  { k: "learned", ring: 0, at: 3.7 },
   { k: "fact", ring: 1, at: 2.25 },
-  { k: "decision", ring: 1, at: 5.05 },
-  { k: "warning", ring: 2, at: 4.4 },
-  { k: "insight", ring: 2, at: 1.55 },
-  { k: "learning", ring: 3, at: 5.75 },
-  { k: "fact", ring: 4, at: 0.25 },
-  { k: "insight", ring: 6, at: 3.0 },
+  { k: "instruction", ring: 1, at: 5.05 },
+  { k: "constraint", ring: 2, at: 4.4 },
+  { k: "context", ring: 2, at: 1.55 },
+  { k: "learned", ring: 3, at: 5.75 },
+  { k: "preference", ring: 4, at: 0.25 },
+  { k: "context", ring: 6, at: 3.0 },
 ];
 
-export const isStumble = (s: Seed) => s.k === "warning" || s.k === "learning";
+export const isStumble = (s: Seed) => s.k === "learned" || s.k === "constraint";
 
 const TAU = Math.PI * 2;
 /** Shortest signed angle from b to a. */

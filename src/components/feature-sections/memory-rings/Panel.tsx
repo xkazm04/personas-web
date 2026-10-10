@@ -5,7 +5,7 @@ import { CATEGORY_KEYS, CategoryGlyph, catColor, catTint, type CategoryKey } fro
 import { H, W } from "./rings";
 import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
 
-/* V3's right column: the five kinds of memory as buttons. Picking one marks
+/* V3's right column: the desktop's six kinds of memory as buttons. Picking one marks
  * its seeds on the rings and shows a real example of that kind. */
 
 const { place, fs } = frame(W, H);
