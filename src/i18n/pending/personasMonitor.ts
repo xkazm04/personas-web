@@ -334,6 +334,18 @@ export interface PersonasMonitorCopy {
         confirmStop: string;
         keep: string;
       };
+      refusals: {
+        offline: string;
+        pending: string;
+        paused: string;
+        alreadyPaused: string;
+        alreadyOn: string;
+        busy: string;
+        waitsForYou: string;
+        notRunning: string;
+        notFailed: string;
+        gone: string;
+      };
     };
     console: {
       tabs: {
@@ -525,6 +537,7 @@ export interface PersonasMonitorCopy {
         acked: string;
         done: string;
         undone: string;
+        refused: string;
       };
       fleetTarget: string;
       alertsOn: string;
@@ -960,6 +973,18 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         confirmStop: 'Pause {n} and stop {m} runs',
         keep: 'Keep running',
       },
+      refusals: {
+        offline: '{host} was offline',
+        pending: 'Another command to this agent was still on its way',
+        paused: 'The agent is paused. Resume it first.',
+        alreadyPaused: 'The agent was already paused',
+        alreadyOn: 'The agent was already on',
+        busy: 'A run was already in progress',
+        waitsForYou: 'The agent is waiting for you',
+        notRunning: 'The run had already finished',
+        notFailed: 'The run was no longer failed',
+        gone: 'Already handled elsewhere',
+      },
     },
     console: {
       tabs: {
@@ -1151,6 +1176,7 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
         acked: 'Received',
         done: 'Done',
         undone: 'Undone, never sent',
+        refused: 'Refused',
       },
       fleetTarget: 'every agent',
       alertsOn: 'Alerts on',
