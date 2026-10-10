@@ -1549,6 +1549,7 @@
             "src/hooks/useEventStream.ts",
             "src/hooks/useEventTopology.ts",
             "src/lib/eventStatusFsm.ts",
+            "src/lib/eventWireStatus.ts",
             "src/stores/eventStore.ts"
           ],
           "target": null,
