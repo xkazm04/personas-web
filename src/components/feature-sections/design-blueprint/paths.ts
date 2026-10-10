@@ -61,6 +61,22 @@ export const PART_PATHS: Record<DimKey, string[]> = {
   ],
 };
 
+/**
+ * Alternative glyphs a part is swapped for when the visitor's answer changes
+ * the machine (shared/machine.ts): a webhook hook in the clock's place, and a
+ * straight pipe through the gate when no review is needed.
+ */
+export const ALT_PATHS: Partial<Record<DimKey, string[]>> = {
+  triggers: [
+    // the hook: shank down from an eye, curling up into a barb
+    `M${CLOCK.cx + 8} ${CLOCK.cy - 22} V${CLOCK.cy + 6} a18 18 0 1 1 -36 0 V${CLOCK.cy - 4}`,
+    `${circle(CLOCK.cx + 8, CLOCK.cy - 29, 7)} M${CLOCK.cx - 28} ${CLOCK.cy - 4} l-6 9 M${CLOCK.cx - 28} ${CLOCK.cy - 4} l6 9`,
+    `M${CLOCK.cx + 22} ${CLOCK.cy - 34} l8 -8 M${CLOCK.cx + 28} ${CLOCK.cy - 22} h11`,
+    PART_PATHS.triggers[3],
+  ],
+  review: [`M${CORE.x + CORE.w} ${PIPE_Y} H${GATE.b}`],
+};
+
 /** A soft fill under a resolved part's main outline (closed shapes only). */
 export const PART_FILL: Partial<Record<DimKey, string>> = {
   triggers: circle(CLOCK.cx, CLOCK.cy, CLOCK.r),

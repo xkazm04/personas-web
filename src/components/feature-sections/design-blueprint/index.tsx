@@ -4,10 +4,12 @@ import { useRef, type CSSProperties } from "react";
 import { motion } from "framer-motion";
 import SectionWrapper from "@/components/SectionWrapper";
 import { useStillMotion } from "@/hooks/useStillMotion";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { useDesignCopy, valueOf } from "./shared/copy";
 import DesignIntro from "./shared/DesignIntro";
 import { DIM_BY_KEY, DIMS, type DimKey } from "./shared/dims";
 import ReplayButton from "./shared/ReplayButton";
+import { machineFor } from "./shared/machine";
 import ToolMark from "./shared/ToolMark";
 import { dimPhase, stepOf, type DimPhase } from "./shared/timeline";
 import { useBuildClock } from "./shared/useBuildClock";
@@ -27,7 +29,9 @@ const FINALE = stepOf(STEPS, "finale");
  * sheet; Personas draws the agent it describes as the machine it will run as
  * (schedule, agent, apps, memory, review gate, messages, events, error loop),
  * inking each part as it decides it and annotating the decision. Finished,
- * one email test-runs the machine and the sheet is stamped ready.
+ * the machine the answers built is test-run and the sheet is stamped ready.
+ * Once stamped, either question can be re-answered: the parts re-ink to the
+ * new machine and only the finale replays (shared/machine.ts).
  */
 export default function DesignBlueprint() {
   const copy = useDesignCopy();
@@ -41,6 +45,19 @@ export default function DesignBlueprint() {
   const tasks = byKey.tasks;
   const appsInk = phases.apps !== "pending";
   const running = moving && at === FINALE;
+  const machine = machineFor(clock.answers);
+  const rv = copy.lab.revise;
+  const reviseFor = (d: (typeof copy.dims)[number]) =>
+    d.question && (d.key === "triggers" || d.key === "review")
+      ? {
+          short: rv.short[d.key],
+          options: d.question.options,
+          picked: clock.answers[d.key] ?? d.question.picked,
+          offered: clock.stamped,
+          groupLabel: fillTemplate(rv.change, { label: d.label }),
+          onPick: (i: number) => clock.revise(d.key, i),
+        }
+      : undefined;
 
   return (
     <SectionWrapper fit="fill" id="design">
@@ -62,11 +79,11 @@ export default function DesignBlueprint() {
         >
           <svg className="absolute inset-0 h-full w-full" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={copy.lab.artLabel}>
             <SheetGrid />
-            <Parts phases={phases} moving={moving} pulse={moving && clock.ticking} />
-            {done && <TestRun running={running} run={run} />}
+            <Parts phases={phases} machine={machine} notNeeded={rv.notNeeded} moving={moving} pulse={moving && clock.ticking} />
+            <TestRun machine={machine} shown={done} running={running} run={run} labels={rv} />
           </svg>
 
-          <Band copy={copy} run={run} typing={at >= TYPE} read={at >= READ} asking={asking} moving={moving} onAnswer={clock.answer} />
+          <Band copy={copy} run={clock.build} typing={at >= TYPE} read={at >= READ} asking={asking} moving={moving} onAnswer={clock.answer} />
           <div className="absolute" style={{ right: u(20), top: u(28) }}>
             <ReplayButton label={copy.lab.replay} onClick={clock.replay} />
           </div>
@@ -96,7 +113,7 @@ export default function DesignBlueprint() {
           {copy.dims
             .filter((d) => d.key !== "tasks")
             .map((d) => (
-              <Callout key={d.key} d={d} box={CALLOUTS[d.key as Exclude<DimKey, "tasks">]} phase={phases[d.key]} value={valueOf(d, clock.answers)} source={copy.lab.sources[d.source]} moving={moving} />
+              <Callout key={d.key} d={d} box={CALLOUTS[d.key as Exclude<DimKey, "tasks">]} phase={phases[d.key]} value={valueOf(d, clock.answers)} source={copy.lab.sources[d.source]} moving={moving} revise={reviseFor(d)} />
             ))}
 
           <motion.span
@@ -107,8 +124,11 @@ export default function DesignBlueprint() {
             transition={{ duration: moving ? 0.4 : 0 }}
           >
             <span className="h-2 w-2 rounded-full bg-brand-cyan" aria-hidden="true" />
-            {copy.lab.v2.testRun}
+            {machine.gate === "urgent-only" ? rv.testRunTwo : copy.lab.v2.testRun}
           </motion.span>
+          <p className="sr-only" aria-live="polite">
+            {clock.revised ? fillTemplate(rv.rebuilt, { triggers: valueOf(byKey.triggers, clock.answers), review: valueOf(byKey.review, clock.answers) }) : ""}
+          </p>
           <TitleBlock copy={copy} done={at > FINALE} moving={moving} />
         </div>
       </div>

@@ -118,10 +118,6 @@ export function gateWindow(tracks: Track[]): { hold: number; open: number } | nu
   return null;
 }
 
-/** The fixed route the current TestRun still reads (replaced by runPoints in the next commit). */
-export const RUN_X = [CLOCK.cx + CLOCK.r, CORE.x + CORE.w / 2, GATE.a - 14, GATE.b + 30, BUBBLE.x + BUBBLE.w / 2, MAST.x, MAST.x];
-export const RUN_Y = [PIPE_Y, PIPE_Y, PIPE_Y, PIPE_Y, PIPE_Y, PIPE_Y, MAST.top + 6];
-export const RUN_T = [0, 0.22, 0.4, 0.55, 0.72, 0.9, 1];
 export const RUN_MS = 4200;
 
 export const TYPE_MS = 2600;

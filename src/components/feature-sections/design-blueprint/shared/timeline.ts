@@ -71,7 +71,7 @@ export interface ClockState {
 export type ClockAction =
   | { type: "ARM" }
   | { type: "TICK" }
-  | { type: "ANSWER"; dim: DimKey; i: number; advance: boolean }
+  | { type: "ANSWER"; dim: DimKey; i: number; advance: boolean; revised?: boolean }
   | { type: "REVISE"; dim: DimKey; i: number }
   | { type: "REPLAY" };
 
@@ -92,7 +92,7 @@ export function clockReducer(steps: Step[]) {
       case "TICK":
         return { ...s, at: s.at + 1 };
       case "ANSWER":
-        return { ...s, answers: { ...s.answers, [a.dim]: a.i }, at: a.advance ? s.at + 1 : s.at };
+        return { ...s, answers: { ...s.answers, [a.dim]: a.i }, at: a.advance ? s.at + 1 : s.at, revised: s.revised || !!a.revised };
       case "REVISE":
         if (s.at !== steps.length) return s;
         return { ...s, answers: { ...s.answers, [a.dim]: a.i }, at: finale, run: s.run + 1, revised: true };

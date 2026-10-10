@@ -1,37 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useReducer, useState, type RefObject } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState, type RefObject } from "react";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import type { DimKey } from "./dims";
-import type { Step } from "./timeline";
+import { clockReducer, INITIAL_CLOCK, type Step } from "./timeline";
 
-type Answers = Partial<Record<DimKey, number>>;
-interface State {
-  at: number;
-  run: number;
-  answers: Answers;
-  userPlayed: boolean;
-}
-type Action =
-  | { type: "ARM" }
-  | { type: "TICK" }
-  | { type: "ANSWER"; dim: DimKey; i: number; advance: boolean }
-  | { type: "REPLAY" };
-
-function reduce(s: State, a: Action): State {
-  switch (a.type) {
-    case "ARM":
-      return s.at === -1 ? { ...s, at: 0 } : s;
-    case "TICK":
-      return { ...s, at: s.at + 1 };
-    case "ANSWER":
-      return { ...s, answers: { ...s.answers, [a.dim]: a.i }, at: a.advance ? s.at + 1 : s.at };
-    case "REPLAY":
-      return { at: 0, run: s.run + 1, answers: {}, userPlayed: true };
-  }
-}
-
-const INITIAL: State = { at: -1, run: 0, answers: {}, userPlayed: false };
 const REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
 const ARM_RATIO = 0.35;
 
@@ -40,10 +13,12 @@ const ARM_RATIO = 0.35;
  * steps through the timeline - only while the art is on screen and the tab is
  * foregrounded. A question step waits for the visitor's answer (or takes the
  * suggested one when its beat runs out). Reduced motion rests on the finished
- * agent; Replay is the visitor asking for the motion, so it plays.
+ * agent; Replay is the visitor asking for the motion, so it plays. Once
+ * stamped, `revise` re-answers a question and replays only the finale.
  */
 export function useBuildClock(rootRef: RefObject<HTMLElement | null>, steps: Step[], still: boolean) {
-  const [s, dispatch] = useReducer(reduce, INITIAL);
+  const reduce = useMemo(() => clockReducer(steps), [steps]);
+  const [s, dispatch] = useReducer(reduce, INITIAL_CLOCK);
   const [inView, setInView] = useState(false);
   const hidden = usePageVisibility();
 
@@ -79,6 +54,19 @@ export function useBuildClock(rootRef: RefObject<HTMLElement | null>, steps: Ste
     },
     [steps, at],
   );
+  /**
+   * Re-answer a question on the stamped sheet. With motion it replays the
+   * finale only; under reduced motion, or while the tab is hidden (a re-run the
+   * visitor starts must not start unseen), the parts re-ink in place and the
+   * finale shows its end pose.
+   */
+  const revise = useCallback(
+    (dim: DimKey, i: number) => {
+      if (moving && !document.hidden) dispatch({ type: "REVISE", dim, i });
+      else dispatch({ type: "ANSWER", dim, i, advance: false, revised: true });
+    },
+    [moving],
+  );
   const replay = useCallback(() => dispatch({ type: "REPLAY" }), []);
 
   return {
@@ -89,9 +77,14 @@ export function useBuildClock(rootRef: RefObject<HTMLElement | null>, steps: Ste
     moving,
     /** The clock is advancing (on screen, tab foregrounded). */
     ticking,
+    /** The sheet is finished and stamped: revision is offered. */
+    stamped: at >= steps.length,
     run: s.run,
+    build: s.build,
+    revised: s.revised,
     answers: s.answers,
     answer,
+    revise,
     replay,
   };
 }
