@@ -681,7 +681,8 @@ export const ja: LocaleTranslations = {
         rejected: "\u5374\u4e0b",
         processing: "\u51e6\u7406\u4e2d",
         dead_letter: "\u914d\u4fe1\u4e0d\u80fd",
-        discarded: "\u7834\u68c4\u6e08\u307f"
+        discarded: "\u7834\u68c4\u6e08\u307f",
+        skipped: "\u30b9\u30ad\u30c3\u30d7\u6e08\u307f"
       },
       testFlow: "\u30c6\u30b9\u30c8\u30d5\u30ed\u30fc",
       eventTypes: "\u30a4\u30d9\u30f3\u30c8\u30bf\u30a4\u30d7",

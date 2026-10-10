@@ -681,7 +681,8 @@ export const id: LocaleTranslations = {
         rejected: "Ditolak",
         processing: "Diproses",
         dead_letter: "Tidak terkirim",
-        discarded: "Dibuang"
+        discarded: "Dibuang",
+        skipped: "Dilewati"
       },
       testFlow: "Uji Alur",
       eventTypes: "Jenis Event",

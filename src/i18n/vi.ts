@@ -681,7 +681,8 @@ export const vi: LocaleTranslations = {
         rejected: "\u0110\u00e3 t\u1eeb ch\u1ed1i",
         processing: "\u0110ang x\u1eed l\u00fd",
         dead_letter: "Kh\u00f4ng g\u1eedi \u0111\u01b0\u1ee3c",
-        discarded: "\u0110\u00e3 lo\u1ea1i b\u1ecf"
+        discarded: "\u0110\u00e3 lo\u1ea1i b\u1ecf",
+        skipped: "\u0110\u00e3 b\u1ecf qua"
       },
       testFlow: "Ki\u1ec3m th\u1eed lu\u1ed3ng",
       eventTypes: "Lo\u1ea1i s\u1ef1 ki\u1ec7n",

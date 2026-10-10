@@ -681,7 +681,8 @@ export const de: LocaleTranslations = {
         rejected: "Abgelehnt",
         processing: "In Bearbeitung",
         dead_letter: "Unzustellbar",
-        discarded: "Verworfen"
+        discarded: "Verworfen",
+        skipped: "\u00dcbersprungen"
       },
       testFlow: "Testablauf",
       eventTypes: "Event-Typen",

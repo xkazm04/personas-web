@@ -424,6 +424,7 @@
       processing: string;
       dead_letter: string;
       discarded: string;
+      skipped: string;
     };
     testFlow: string;
     eventTypes: string;
@@ -2508,6 +2509,7 @@ export const en: CoreTranslations = {
       processing: "Processing",
       dead_letter: "Dead letter",
       discarded: "Discarded",
+      skipped: "Skipped",
     },
     testFlow: "Test Flow",
     eventTypes: "Event Types",

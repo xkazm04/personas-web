@@ -681,7 +681,8 @@ export const zh: LocaleTranslations = {
         rejected: "\u5df2\u62d2\u7edd",
         processing: "\u5904\u7406\u4e2d",
         dead_letter: "\u65e0\u6cd5\u6295\u9012",
-        discarded: "\u5df2\u4e22\u5f03"
+        discarded: "\u5df2\u4e22\u5f03",
+        skipped: "\u5df2\u8df3\u8fc7"
       },
       testFlow: "\u6d4b\u8bd5\u6d41\u7a0b",
       eventTypes: "\u4e8b\u4ef6\u7c7b\u578b",

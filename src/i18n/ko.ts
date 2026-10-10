@@ -681,7 +681,8 @@ export const ko: LocaleTranslations = {
         rejected: "\uac70\ubd80\ub428",
         processing: "\ucc98\ub9ac \uc911",
         dead_letter: "\uc804\ub2ec \ubd88\uac00",
-        discarded: "\ud3d0\uae30\ub428"
+        discarded: "\ud3d0\uae30\ub428",
+        skipped: "\uac74\ub108\ub700"
       },
       testFlow: "\ud14c\uc2a4\ud2b8 \ud750\ub984",
       eventTypes: "\uc774\ubca4\ud2b8 \uc720\ud615",

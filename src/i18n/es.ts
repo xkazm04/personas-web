@@ -681,7 +681,8 @@ export const es: LocaleTranslations = {
         rejected: "Rechazado",
         processing: "Procesando",
         dead_letter: "No entregado",
-        discarded: "Descartado"
+        discarded: "Descartado",
+        skipped: "Omitido"
       },
       testFlow: "Probar flujo",
       eventTypes: "Tipos de eventos",

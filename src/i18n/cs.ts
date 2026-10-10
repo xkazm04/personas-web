@@ -681,7 +681,8 @@ export const cs: LocaleTranslations = {
         rejected: "Zam\u00edtnuto",
         processing: "Zpracov\u00e1v\u00e1 se",
         dead_letter: "Nedoru\u010diteln\u00e9",
-        discarded: "Zahozeno"
+        discarded: "Zahozeno",
+        skipped: "P\u0159esko\u010deno"
       },
       testFlow: "Testovac\u00ed tok",
       eventTypes: "Typy ud\u00e1lost\u00ed",
