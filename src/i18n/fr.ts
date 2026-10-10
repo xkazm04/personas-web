@@ -392,7 +392,8 @@ export const fr: LocaleTranslations = {
       noSignupLine: "Sans inscription, sans carte bancaire. Fonctionne sur votre machine.",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "Envoy\u00e9 depuis votre t\u00e9l\u00e9phone. Voici la prochaine \u00e9tape pour cette machine."
     },
     dashboard: {
       title: "Tableau de bord",

@@ -392,7 +392,8 @@ export const vi: LocaleTranslations = {
       noSignupLine: "Kh\u00f4ng c\u1ea7n \u0111\u0103ng k\u00fd, kh\u00f4ng c\u1ea7n th\u1ebb t\u00edn d\u1ee5ng. Ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "\u0110\u00e3 g\u1eedi t\u1eeb \u0111i\u1ec7n tho\u1ea1i c\u1ee7a b\u1ea1n. \u0110\u00e2y l\u00e0 b\u01b0\u1edbc ti\u1ebfp theo cho m\u00e1y t\u00ednh n\u00e0y."
     },
     dashboard: {
       title: "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n",

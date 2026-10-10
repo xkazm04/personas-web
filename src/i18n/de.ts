@@ -392,7 +392,8 @@ export const de: LocaleTranslations = {
       noSignupLine: "Keine Registrierung, keine Kreditkarte. L\u00e4uft auf Ihrem Rechner.",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "Von Ihrem Handy gesendet. Hier ist der n\u00e4chste Schritt f\u00fcr diesen Rechner."
     },
     dashboard: {
       title: "Dashboard",

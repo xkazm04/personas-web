@@ -392,7 +392,8 @@ export const cs: LocaleTranslations = {
       noSignupLine: "\u017d\u00e1dn\u00e1 registrace, \u017e\u00e1dn\u00e1 platebn\u00ed karta. B\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di.",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "Odesl\u00e1no z va\u0161eho telefonu. Tady je dal\u0161\u00ed krok pro tento po\u010d\u00edta\u010d."
     },
     dashboard: {
       title: "N\u00e1st\u011bnka",

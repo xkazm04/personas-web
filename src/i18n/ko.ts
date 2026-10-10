@@ -392,7 +392,8 @@ export const ko: LocaleTranslations = {
       noSignupLine: "\uac00\uc785 \ubd88\ud544\uc694, \uc2e0\uc6a9\uce74\ub4dc \ubd88\ud544\uc694. \ub0b4 \ucef4\ud4e8\ud130\uc5d0\uc11c \uc2e4\ud589\ub429\ub2c8\ub2e4.",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "\ud734\ub300\ud3f0\uc5d0\uc11c \ubcf4\ub0b8 \ub9c1\ud06c\uc785\ub2c8\ub2e4. \uc774 \ucef4\ud4e8\ud130\uc5d0\uc11c \uc9c4\ud589\ud560 \ub2e4\uc74c \ub2e8\uacc4\uc785\ub2c8\ub2e4."
     },
     dashboard: {
       title: "\ub300\uc2dc\ubcf4\ub4dc",

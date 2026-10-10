@@ -165,6 +165,8 @@
     windows: string;
     macos: string;
     linux: string;
+    /** Above the primary CTA when the visitor arrived from a phone hand-off link (?via=phone). */
+    fromPhone: string;
   };
   dashboard: {
     title: string;
@@ -2258,6 +2260,7 @@ export const en: CoreTranslations = {
     windows: 'Windows',
     macos: 'macOS',
     linux: 'Linux',
+    fromPhone: "Sent from your phone. Here's the next step for this computer.",
   },
   dashboard: {
     title: 'Dashboard',

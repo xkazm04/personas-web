@@ -392,7 +392,8 @@ export const id: LocaleTranslations = {
       noSignupLine: "Tanpa pendaftaran, tanpa kartu kredit. Berjalan di mesin Anda.",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "Dikirim dari ponsel Anda. Ini langkah berikutnya untuk komputer ini."
     },
     dashboard: {
       title: "Dasbor",

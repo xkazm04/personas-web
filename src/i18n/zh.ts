@@ -392,7 +392,8 @@ export const zh: LocaleTranslations = {
       noSignupLine: "\u65e0\u9700\u6ce8\u518c\uff0c\u65e0\u9700\u4fe1\u7528\u5361\u3002\u5728\u60a8\u81ea\u5df1\u7684\u7535\u8111\u4e0a\u8fd0\u884c\u3002",
       windows: "Windows",
       macos: "macOS",
-      linux: "Linux"
+      linux: "Linux",
+      fromPhone: "\u4ece\u60a8\u7684\u624b\u673a\u53d1\u9001\u3002\u8fd9\u662f\u8fd9\u53f0\u7535\u8111\u7684\u4e0b\u4e00\u6b65\u3002"
     },
     dashboard: {
       title: "\u63a7\u5236\u53f0",
