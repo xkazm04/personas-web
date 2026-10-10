@@ -14,7 +14,7 @@ type Row = [keys: string[], label: keyof BoardCopy["keys"]["items"]];
 const GROUPS: [keyof BoardCopy["keys"]["groups"], Row[]][] = [
   ["move", [[["⌘K", "Ctrl K"], "palette"], [["/"], "find"], [["N"], "next"], [["J", "K"], "step"], [["Esc"], "back"], [["?"], "keys"]]],
   ["act", [[["T"], "triage"], [["L"], "layout"], [["E"], "activity"]]],
-  ["triage", [[["A"], "approve"], [["B"], "sendBack"], [["R"], "retry"], [["P"], "pause"], [["1–4"], "quick"], [["Enter"], "send"], [["S", "→"], "skip"], [["C"], "console"]]],
+  ["triage", [[["A"], "approve"], [["B"], "sendBack"], [["R"], "retry"], [["P"], "pause"], [["1–4"], "quick"], [["Enter"], "send"], [["S", "→"], "skip"], [["C"], "console"], [["G"], "byQuestion"], [["Space"], "member"], [["W"], "walk"]]],
 ];
 
 const kbd = "min-w-6 rounded border border-glass-hover px-1.5 py-0.5 text-center font-mono text-xs text-foreground";
