@@ -1110,6 +1110,25 @@
       reconnecting: string;
       polling: string;
     };
+    triage: {
+      causes: string;
+      selectCause: string;
+      noReason: string;
+      armedRetry: string;
+      armedDiscard: string;
+      refusedOverlap: string;
+      outcomeRetry: string;
+      outcomeDiscard: string;
+      reselect: string;
+      retryLocked: string;
+      reasons: {
+        not_found: string;
+        retry_exhausted: string;
+        wrong_status: string;
+        write_failed: string;
+        aborted: string;
+      };
+    };
   };
   settingsPage: {
     title: string;
@@ -3199,6 +3218,25 @@ export const en: CoreTranslations = {
       connected: 'Real-time: connected',
       reconnecting: 'Reconnecting to event stream…',
       polling: 'Polling for updates (delayed)',
+    },
+    triage: {
+      causes: 'Causes',
+      selectCause: 'Select {count} with this cause: {cause}',
+      noReason: 'No reason recorded',
+      armedRetry: '{count} queued for retry',
+      armedDiscard: '{count} marked for discard',
+      refusedOverlap: 'Already pending. Undo it or wait for it to finish.',
+      outcomeRetry: '{ok} retried, {failed} failed',
+      outcomeDiscard: '{ok} discarded, {failed} failed',
+      reselect: 'Select the {count}',
+      retryLocked: 'Retry budget spent ({max} of {max})',
+      reasons: {
+        not_found: 'no longer listed',
+        retry_exhausted: 'retry budget spent',
+        wrong_status: 'not in the dead letter',
+        write_failed: 'write failed',
+        aborted: 'not attempted',
+      },
     },
   },
   settingsPage: {

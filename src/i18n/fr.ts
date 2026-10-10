@@ -1358,6 +1358,25 @@ export const fr: LocaleTranslations = {
         connected: "Temps r\u00e9el : connect\u00e9",
         reconnecting: "Reconnexion au flux d'\u00e9v\u00e9nements\u2026",
         polling: "Interrogation pour les mises \u00e0 jour (diff\u00e9r\u00e9)"
+      },
+      triage: {
+        causes: "Causes",
+        selectCause: "S\u00e9lectionner {count} avec cette cause : {cause}",
+        noReason: "Aucun motif enregistr\u00e9",
+        armedRetry: "{count} en file pour une nouvelle tentative",
+        armedDiscard: "{count} marqu\u00e9s \u00e0 \u00e9carter",
+        refusedOverlap: "D\u00e9j\u00e0 en attente. Annulez-la ou attendez qu\u2019elle se termine.",
+        outcomeRetry: "{ok} relanc\u00e9s, {failed} en \u00e9chec",
+        outcomeDiscard: "{ok} \u00e9cart\u00e9s, {failed} en \u00e9chec",
+        reselect: "S\u00e9lectionner les {count}",
+        retryLocked: "Tentatives \u00e9puis\u00e9es ({max} sur {max})",
+        reasons: {
+          not_found: "ne figure plus dans la liste",
+          retry_exhausted: "tentatives \u00e9puis\u00e9es",
+          wrong_status: "plus dans les lettres mortes",
+          write_failed: "\u00e9chec de l\u2019\u00e9criture",
+          aborted: "non tent\u00e9"
+        }
       }
     },
     settingsPage: {

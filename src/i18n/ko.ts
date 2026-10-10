@@ -1358,6 +1358,25 @@ export const ko: LocaleTranslations = {
         connected: "\uc2e4\uc2dc\uac04: \uc5f0\uacb0\ub428",
         reconnecting: "\uc774\ubca4\ud2b8 \uc2a4\ud2b8\ub9bc\uc5d0 \uc7ac\uc5f0\uacb0 \uc911\u2026",
         polling: "\uc5c5\ub370\uc774\ud2b8 \ud3f4\ub9c1 \uc911 (\uc9c0\uc5f0\ub428)"
+      },
+      triage: {
+        causes: "\uc6d0\uc778",
+        selectCause: "\uc774 \uc6d0\uc778\uc758 {count}\uac1c \uc120\ud0dd: {cause}",
+        noReason: "\uae30\ub85d\ub41c \uc0ac\uc720 \uc5c6\uc74c",
+        armedRetry: "{count}\uac1c \uc7ac\uc2dc\ub3c4 \ub300\uae30 \uc911",
+        armedDiscard: "{count}\uac1c \ud3d0\uae30 \uc608\uc815",
+        refusedOverlap: "\uc774\ubbf8 \ub300\uae30 \uc911\uc785\ub2c8\ub2e4. \uc2e4\ud589\uc744 \ucde8\uc18c\ud558\uac70\ub098 \uc644\ub8cc\ub420 \ub54c\uae4c\uc9c0 \uae30\ub2e4\ub9ac\uc138\uc694.",
+        outcomeRetry: "{ok}\uac1c \uc7ac\uc2dc\ub3c4, {failed}\uac1c \uc2e4\ud328",
+        outcomeDiscard: "{ok}\uac1c \ud3d0\uae30, {failed}\uac1c \uc2e4\ud328",
+        reselect: "\ud574\ub2f9 {count}\uac1c \uc120\ud0dd",
+        retryLocked: "\uc7ac\uc2dc\ub3c4 \ud55c\ub3c4 \uc18c\uc9c4 ({max}/{max})",
+        reasons: {
+          not_found: "\ub354 \uc774\uc0c1 \ubaa9\ub85d\uc5d0 \uc5c6\uc74c",
+          retry_exhausted: "\uc7ac\uc2dc\ub3c4 \ud55c\ub3c4 \uc18c\uc9c4",
+          wrong_status: "\ub370\ub4dc \ub808\ud130\uc5d0 \uc5c6\uc74c",
+          write_failed: "\uc4f0\uae30 \uc2e4\ud328",
+          aborted: "\uc2dc\ub3c4\ud558\uc9c0 \uc54a\uc74c"
+        }
       }
     },
     settingsPage: {

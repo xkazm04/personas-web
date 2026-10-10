@@ -1358,6 +1358,25 @@ export const de: LocaleTranslations = {
         connected: "Echtzeit: verbunden",
         reconnecting: "Verbindung zum Event-Stream wird wiederhergestellt\u2026",
         polling: "Aktualisierungen werden abgefragt (verz\u00f6gert)"
+      },
+      triage: {
+        causes: "Ursachen",
+        selectCause: "{count} mit dieser Ursache ausw\u00e4hlen: {cause}",
+        noReason: "Kein Grund erfasst",
+        armedRetry: "{count} zur Wiederholung vorgemerkt",
+        armedDiscard: "{count} zum Verwerfen vorgemerkt",
+        refusedOverlap: "Bereits ausstehend. R\u00fcckg\u00e4ngig machen oder den Abschluss abwarten.",
+        outcomeRetry: "{ok} wiederholt, {failed} fehlgeschlagen",
+        outcomeDiscard: "{ok} verworfen, {failed} fehlgeschlagen",
+        reselect: "Diese {count} ausw\u00e4hlen",
+        retryLocked: "Wiederholungen aufgebraucht ({max} von {max})",
+        reasons: {
+          not_found: "nicht mehr gelistet",
+          retry_exhausted: "Wiederholungen aufgebraucht",
+          wrong_status: "nicht mehr unzustellbar",
+          write_failed: "Schreiben fehlgeschlagen",
+          aborted: "nicht versucht"
+        }
       }
     },
     settingsPage: {

@@ -1358,6 +1358,25 @@ export const id: LocaleTranslations = {
         connected: "Real-time: terhubung",
         reconnecting: "Menghubungkan ulang ke aliran event\u2026",
         polling: "Polling pembaruan (tertunda)"
+      },
+      triage: {
+        causes: "Penyebab",
+        selectCause: "Pilih {count} dengan penyebab ini: {cause}",
+        noReason: "Tidak ada alasan tercatat",
+        armedRetry: "{count} diantrekan untuk dicoba lagi",
+        armedDiscard: "{count} ditandai untuk dibuang",
+        refusedOverlap: "Sudah tertunda. Batalkan atau tunggu hingga selesai.",
+        outcomeRetry: "{ok} dicoba lagi, {failed} gagal",
+        outcomeDiscard: "{ok} dibuang, {failed} gagal",
+        reselect: "Pilih {count} tersebut",
+        retryLocked: "Jatah coba ulang habis ({max} dari {max})",
+        reasons: {
+          not_found: "tidak lagi terdaftar",
+          retry_exhausted: "jatah coba ulang habis",
+          wrong_status: "tidak lagi di tak terkirim",
+          write_failed: "penulisan gagal",
+          aborted: "tidak dicoba"
+        }
       }
     },
     settingsPage: {

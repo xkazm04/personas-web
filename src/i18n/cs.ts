@@ -1358,6 +1358,25 @@ export const cs: LocaleTranslations = {
         connected: "Realtime: p\u0159ipojeno",
         reconnecting: "Op\u011btovn\u00e9 p\u0159ipojov\u00e1n\u00ed ke streamu ud\u00e1lost\u00ed\u2026",
         polling: "Zji\u0161\u0165ov\u00e1n\u00ed aktualizac\u00ed (se zpo\u017ed\u011bn\u00edm)"
+      },
+      triage: {
+        causes: "P\u0159\u00ed\u010diny",
+        selectCause: "Vybrat {count} s touto p\u0159\u00ed\u010dinou: {cause}",
+        noReason: "D\u016fvod nebyl zaznamen\u00e1n",
+        armedRetry: "Ke zopakov\u00e1n\u00ed za\u0159azeno: {count}",
+        armedDiscard: "K zahozen\u00ed ozna\u010deno: {count}",
+        refusedOverlap: "U\u017e \u010dek\u00e1 na proveden\u00ed. Vra\u0165te to zp\u011bt, nebo po\u010dkejte na dokon\u010den\u00ed.",
+        outcomeRetry: "Zopakov\u00e1no: {ok}, selhalo: {failed}",
+        outcomeDiscard: "Zahozeno: {ok}, selhalo: {failed}",
+        reselect: "Vybrat t\u011bchto {count}",
+        retryLocked: "Limit opakov\u00e1n\u00ed vy\u010derp\u00e1n ({max} z {max})",
+        reasons: {
+          not_found: "u\u017e nen\u00ed v seznamu",
+          retry_exhausted: "limit opakov\u00e1n\u00ed vy\u010derp\u00e1n",
+          wrong_status: "u\u017e nen\u00ed mezi nedoru\u010diteln\u00fdmi",
+          write_failed: "z\u00e1pis selhal",
+          aborted: "nezkou\u0161eno"
+        }
       }
     },
     settingsPage: {

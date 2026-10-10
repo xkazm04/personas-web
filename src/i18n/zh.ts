@@ -1358,6 +1358,25 @@ export const zh: LocaleTranslations = {
         connected: "\u5b9e\u65f6\uff1a\u5df2\u8fde\u63a5",
         reconnecting: "\u6b63\u5728\u91cd\u65b0\u8fde\u63a5\u4e8b\u4ef6\u6d41\u2026",
         polling: "\u6b63\u5728\u8f6e\u8be2\u66f4\u65b0\uff08\u6709\u5ef6\u8fdf\uff09"
+      },
+      triage: {
+        causes: "\u539f\u56e0",
+        selectCause: "\u9009\u62e9\u6b64\u539f\u56e0\u7684 {count} \u9879\uff1a{cause}",
+        noReason: "\u672a\u8bb0\u5f55\u539f\u56e0",
+        armedRetry: "{count} \u9879\u5df2\u6392\u961f\u91cd\u8bd5",
+        armedDiscard: "{count} \u9879\u5df2\u6807\u8bb0\u4e3a\u4e22\u5f03",
+        refusedOverlap: "\u5df2\u5728\u7b49\u5f85\u4e2d\u3002\u8bf7\u64a4\u9500\u6216\u7b49\u5f85\u5176\u5b8c\u6210\u3002",
+        outcomeRetry: "\u5df2\u91cd\u8bd5 {ok} \u9879\uff0c{failed} \u9879\u5931\u8d25",
+        outcomeDiscard: "\u5df2\u4e22\u5f03 {ok} \u9879\uff0c{failed} \u9879\u5931\u8d25",
+        reselect: "\u9009\u62e9\u8fd9 {count} \u9879",
+        retryLocked: "\u91cd\u8bd5\u6b21\u6570\u5df2\u7528\u5b8c\uff08{max}/{max}\uff09",
+        reasons: {
+          not_found: "\u5df2\u4e0d\u5728\u5217\u8868\u4e2d",
+          retry_exhausted: "\u91cd\u8bd5\u6b21\u6570\u5df2\u7528\u5b8c",
+          wrong_status: "\u4e0d\u5728\u6b7b\u4fe1\u4e2d",
+          write_failed: "\u5199\u5165\u5931\u8d25",
+          aborted: "\u672a\u5c1d\u8bd5"
+        }
       }
     },
     settingsPage: {

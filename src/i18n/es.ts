@@ -1358,6 +1358,25 @@ export const es: LocaleTranslations = {
         connected: "Tiempo real: conectado",
         reconnecting: "Reconectando al flujo de eventos\u2026",
         polling: "Consultando actualizaciones (con retraso)"
+      },
+      triage: {
+        causes: "Causas",
+        selectCause: "Seleccionar {count} con esta causa: {cause}",
+        noReason: "Sin motivo registrado",
+        armedRetry: "{count} en cola para reintentar",
+        armedDiscard: "{count} marcados para descartar",
+        refusedOverlap: "Ya est\u00e1 pendiente. Deshazlo o espera a que termine.",
+        outcomeRetry: "{ok} reintentados, {failed} fallidos",
+        outcomeDiscard: "{ok} descartados, {failed} fallidos",
+        reselect: "Seleccionar los {count}",
+        retryLocked: "Reintentos agotados ({max} de {max})",
+        reasons: {
+          not_found: "ya no aparece en la lista",
+          retry_exhausted: "reintentos agotados",
+          wrong_status: "ya no est\u00e1 en no entregados",
+          write_failed: "fall\u00f3 la escritura",
+          aborted: "no se intent\u00f3"
+        }
       }
     },
     settingsPage: {

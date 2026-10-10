@@ -1358,6 +1358,25 @@ export const vi: LocaleTranslations = {
         connected: "Th\u1eddi gian th\u1ef1c: \u0111\u00e3 k\u1ebft n\u1ed1i",
         reconnecting: "\u0110ang k\u1ebft n\u1ed1i l\u1ea1i lu\u1ed3ng s\u1ef1 ki\u1ec7n\u2026",
         polling: "\u0110ang th\u0103m d\u00f2 c\u1eadp nh\u1eadt (b\u1ecb tr\u1ec5)"
+      },
+      triage: {
+        causes: "Nguy\u00ean nh\u00e2n",
+        selectCause: "Ch\u1ecdn {count} m\u1ee5c c\u00f3 nguy\u00ean nh\u00e2n n\u00e0y: {cause}",
+        noReason: "Kh\u00f4ng ghi nh\u1eadn l\u00fd do",
+        armedRetry: "{count} m\u1ee5c \u0111\u00e3 x\u1ebfp h\u00e0ng \u0111\u1ec3 th\u1eed l\u1ea1i",
+        armedDiscard: "{count} m\u1ee5c \u0111\u01b0\u1ee3c \u0111\u00e1nh d\u1ea5u \u0111\u1ec3 lo\u1ea1i b\u1ecf",
+        refusedOverlap: "\u0110ang ch\u1edd x\u1eed l\u00fd. H\u00e3y ho\u00e0n t\u00e1c ho\u1eb7c \u0111\u1ee3i ho\u00e0n t\u1ea5t.",
+        outcomeRetry: "\u0110\u00e3 th\u1eed l\u1ea1i {ok}, th\u1ea5t b\u1ea1i {failed}",
+        outcomeDiscard: "\u0110\u00e3 lo\u1ea1i b\u1ecf {ok}, th\u1ea5t b\u1ea1i {failed}",
+        reselect: "Ch\u1ecdn {count} m\u1ee5c n\u00e0y",
+        retryLocked: "\u0110\u00e3 h\u1ebft l\u01b0\u1ee3t th\u1eed l\u1ea1i ({max}/{max})",
+        reasons: {
+          not_found: "kh\u00f4ng c\u00f2n trong danh s\u00e1ch",
+          retry_exhausted: "\u0111\u00e3 h\u1ebft l\u01b0\u1ee3t th\u1eed l\u1ea1i",
+          wrong_status: "kh\u00f4ng c\u00f2n trong m\u1ee5c kh\u00f4ng g\u1eedi \u0111\u01b0\u1ee3c",
+          write_failed: "ghi th\u1ea5t b\u1ea1i",
+          aborted: "ch\u01b0a th\u1eed"
+        }
       }
     },
     settingsPage: {
