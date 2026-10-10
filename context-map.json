@@ -2050,6 +2050,9 @@
           "category": "lib",
           "filePaths": [
             "src/components/LanguageSwitcher.tsx",
+            "src/components/LocaleOffer.tsx",
+            "src/components/LocaleOfferMount.tsx",
+            "src/i18n/localeRelease.ts",
             "src/i18n/ar.ts",
             "src/i18n/bn.ts",
             "src/i18n/cs.ts",
