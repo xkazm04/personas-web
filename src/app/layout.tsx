@@ -13,6 +13,7 @@ import {
 import SkipLink from "@/components/SkipLink";
 import ThemeInit from "@/components/ThemeInit";
 import CookieConsent from "@/components/CookieConsent";
+import LocaleOfferMount from "@/components/LocaleOfferMount";
 import PageTransition from "@/components/PageTransition";
 import { DevInspector } from "./_dev-inspector/DevInspector";
 import "./globals.css";
@@ -117,6 +118,7 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
         </QualityProvider>
         <CookieConsent />
+        <LocaleOfferMount />
         {process.env.NODE_ENV === "development" && <DevInspector />}
       </body>
     </html>

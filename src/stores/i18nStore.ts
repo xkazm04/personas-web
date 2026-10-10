@@ -1,49 +1,29 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type Language =
-  | "en" | "zh" | "ar" | "hi" | "ru" | "id" | "es"
-  | "fr" | "bn" | "ja" | "vi" | "de" | "ko" | "cs";
+import {
+  LANGUAGES,
+  LOCALE_PREVIEW,
+  RELEASE,
+  isLanguage,
+  isReachable,
+  normalizePersisted,
+  type Language,
+} from "@/i18n/localeRelease";
 
-export interface LanguageMeta {
-  id: Language;
-  /** Endonym — the language's own name, shown in its own script (not translated). */
-  label: string;
-  /** Right-to-left script. */
-  rtl?: boolean;
-}
-
-export const LANGUAGES: LanguageMeta[] = [
-  { id: "en", label: "English" },
-  { id: "de", label: "Deutsch" },
-  { id: "es", label: "Español" },
-  { id: "fr", label: "Français" },
-  { id: "cs", label: "Čeština" },
-  { id: "ru", label: "Русский" },
-  { id: "vi", label: "Tiếng Việt" },
-  { id: "id", label: "Bahasa Indonesia" },
-  { id: "zh", label: "中文" },
-  { id: "ja", label: "日本語" },
-  { id: "ko", label: "한국어" },
-  { id: "hi", label: "हिन्दी" },
-  { id: "bn", label: "বাংলা" },
-  { id: "ar", label: "العربية", rtl: true },
-];
+// The registry and the release predicate live in src/i18n/localeRelease.ts
+// (pure, no store import); re-exported so existing readers keep their import.
+export { LANGUAGES, type Language, type LanguageMeta } from "@/i18n/localeRelease";
 
 /**
- * Dev/QA gate. Runtime language switching is OFF by default: the non-en UI
- * bundles are incomplete and partly corrupt (double-encoded), so the switcher
- * must never reach production users. Enable per environment with
- * `NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER=true` (e.g. preview deploys) to QA locales
- * as translations are repaired. When unset, the app stays English-only exactly
- * as before — `setLanguage` no-ops and any persisted locale is forced back to en.
+ * Preview override (NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER=true): every locale is
+ * reachable. Production reachability is the per-locale release list
+ * (LOCALE_RELEASE in src/i18n/localeRelease.ts), which ships empty.
  */
-export const LANGUAGE_SWITCHER_ENABLED =
-  process.env.NEXT_PUBLIC_SHOW_LANGUAGE_SWITCHER === "true";
+export const LANGUAGE_SWITCHER_ENABLED = LOCALE_PREVIEW;
 
 export const LANGUAGE_STORAGE_KEY = "personas-language";
 
-const VALID = new Set<Language>(LANGUAGES.map((l) => l.id));
 const RTL = new Set<Language>(LANGUAGES.filter((l) => l.rtl).map((l) => l.id));
 
 /**
@@ -92,31 +72,36 @@ function applyLangToDOM(lang: Language) {
 
 interface I18nState {
   language: Language;
+  /** Locales whose browser-language offer the visitor dismissed: never offered again. */
+  declined: Language[];
   setLanguage: (lang: Language) => void;
+  declineOffer: (lang: Language) => void;
 }
 
 export const useI18nStore = create<I18nState>()(
   persist(
     (set) => ({
       language: "en",
+      declined: [],
       setLanguage: (language) => {
-        // Hard gate: a no-op unless switching is explicitly enabled, so the
-        // app stays English-only in production regardless of any caller.
-        if (!LANGUAGE_SWITCHER_ENABLED || !VALID.has(language)) return;
+        // One validation door: a no-op for any locale that is not released
+        // (or previewed), whoever the caller is.
+        if (!isReachable(language, RELEASE)) return;
         applyLangToDOM(language);
         set({ language });
       },
+      declineOffer: (lang) =>
+        set((s) => (s.declined.includes(lang) ? s : { declined: [...s.declined, lang] })),
     }),
     {
       name: LANGUAGE_STORAGE_KEY,
-      partialize: (s) => ({ language: s.language }),
+      partialize: (s) => ({ language: s.language, declined: s.declined }),
       onRehydrateStorage: () => (state) => {
         if (!state) return;
-        // Force English when the switcher is disabled (prod) or the persisted
-        // value is unknown — a stale non-en value must never leak to users.
-        if (!LANGUAGE_SWITCHER_ENABLED || !VALID.has(state.language)) {
-          state.language = "en";
-        }
+        // A persisted locale that is unknown or no longer released reads as
+        // English: withdrawing a locale scrubs every visitor stored on it.
+        state.language = normalizePersisted(state.language, RELEASE);
+        state.declined = Array.isArray(state.declined) ? state.declined.filter(isLanguage) : [];
         applyLangToDOM(state.language);
       },
     },
