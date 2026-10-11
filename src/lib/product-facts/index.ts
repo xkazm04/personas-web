@@ -27,3 +27,18 @@ export const CELL_KEYS = [
   "events",
 ] as const;
 export type CellKey = (typeof CELL_KEYS)[number];
+
+/** desktop: src/lib/bindings/TriggerKind.ts `TriggerKind` (ts-rs; the closed trigger vocabulary). */
+export const TRIGGER_KINDS = [
+  "manual",
+  "schedule",
+  "polling",
+  "webhook",
+  "chain",
+  "event_listener",
+  "file_watcher",
+  "clipboard",
+  "app_focus",
+  "composite",
+] as const;
+export type TriggerKind = (typeof TRIGGER_KINDS)[number];

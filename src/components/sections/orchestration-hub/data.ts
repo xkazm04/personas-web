@@ -11,6 +11,7 @@ import {
   RefreshCcw,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import type { TriggerKind } from "@/lib/product-facts";
 import type { BrandKey } from "@/lib/brand-theme";
 import type { OrchestrationSectionCopy } from "@/i18n/pending/orchestrationSection";
 
@@ -25,7 +26,7 @@ import type { OrchestrationSectionCopy } from "@/i18n/pending/orchestrationSecti
  */
 
 type OrchestrationCopy = OrchestrationSectionCopy;
-export type TriggerId = keyof OrchestrationCopy["triggers"];
+export type TriggerId = TriggerKind;
 
 export interface DocRef {
   labelKey: keyof OrchestrationCopy["docs"];
@@ -40,71 +41,69 @@ export interface TriggerDef {
   doc?: DocRef;
 }
 
-export const TRIGGERS: TriggerDef[] = [
-  {
-    id: "schedule",
+/**
+ * Keyed by the desktop's `TriggerKind`, so the record is total: a kind the app
+ * adds fails `tsc` here until it has an icon and a brand, and a kind it drops
+ * is an excess-property error rather than a phantom feature. Insertion order is
+ * the hub's display order.
+ */
+const TRIGGER_NODES: Record<TriggerKind, Omit<TriggerDef, "id">> = {
+  schedule: {
     icon: Clock,
     brand: "cyan",
     doc: { labelKey: "scheduleGuide", href: "/guide/triggers/schedule-triggers" },
   },
-  {
-    id: "polling",
+  polling: {
     icon: RefreshCcw,
     brand: "emerald",
     doc: { labelKey: "howTriggersWork", href: "/guide/triggers/how-triggers-work" },
   },
-  {
-    id: "webhook",
+  webhook: {
     icon: Webhook,
     brand: "purple",
     exampleCode: "POST /github/pr.opened",
     doc: { labelKey: "webhookGuide", href: "/guide/triggers/webhook-triggers" },
   },
-  {
-    id: "file_watcher",
+  file_watcher: {
     icon: FolderOpen,
     brand: "amber",
     exampleCode: "~/inbox/*.pdf",
     doc: { labelKey: "fileWatcherGuide", href: "/guide/triggers/file-watcher-triggers" },
   },
-  {
-    id: "clipboard",
+  clipboard: {
     icon: Clipboard,
     brand: "rose",
     doc: { labelKey: "clipboardMonitor", href: "/guide/triggers/clipboard-monitor" },
   },
-  {
-    id: "app_focus",
+  app_focus: {
     icon: Focus,
     brand: "purple",
     doc: { labelKey: "howTriggersWork", href: "/guide/triggers/how-triggers-work" },
   },
-  {
-    id: "event_listener",
+  event_listener: {
     icon: Radio,
     brand: "emerald",
     exampleCode: "digest.ready",
     doc: { labelKey: "eventBased", href: "/guide/triggers/event-based-triggers" },
   },
-  {
-    id: "chain",
+  chain: {
     icon: Link,
     brand: "purple",
     doc: { labelKey: "chainGuide", href: "/guide/triggers/chain-triggers" },
   },
-  {
-    id: "composite",
+  composite: {
     icon: Layers,
     brand: "blue",
     doc: { labelKey: "combining", href: "/guide/triggers/combining-multiple-triggers" },
   },
-  {
-    id: "manual",
+  manual: {
     icon: MousePointerClick,
     brand: "cyan",
     doc: { labelKey: "howTriggersWork", href: "/guide/triggers/how-triggers-work" },
   },
-];
+};
+
+export const TRIGGERS: TriggerDef[] = (Object.keys(TRIGGER_NODES) as TriggerKind[]).map((id) => ({ id, ...TRIGGER_NODES[id] }));
 
 /** A trigger's translated words, with a code-shaped firing condition kept verbatim. */
 export function triggerWords(copy: OrchestrationCopy, trigger: TriggerDef) {

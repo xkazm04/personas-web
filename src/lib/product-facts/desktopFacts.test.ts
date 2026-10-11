@@ -3,9 +3,9 @@ import { describe, it, expect } from "vitest";
 // The parsers and the drift diff live in the zero-dependency node script that
 // writes the snapshot, so the script and this spec read the desktop the same way
 // (the scripts/i18n/guide-source.mjs precedent).
-import { parseMemoryCategories, parseCellKeys, diffFacts } from "../../../scripts/sync-desktop-facts.mjs";
+import { parseMemoryCategories, parseCellKeys, parseTriggerKinds, diffFacts } from "../../../scripts/sync-desktop-facts.mjs";
 import snapshot from "./desktop-facts.json";
-import { MEMORY_CATEGORIES, CELL_KEYS } from "./index";
+import { MEMORY_CATEGORIES, CELL_KEYS, TRIGGER_KINDS } from "./index";
 import { DIMS } from "@/components/feature-sections/design-blueprint/shared/dims";
 
 // ── Fixtures: verbatim excerpts of the desktop sources (../personas) ─────────
@@ -69,14 +69,20 @@ describe("desktop facts: parsers over the desktop's own sources", () => {
     ]);
   });
 
+  it("parseTriggerKinds reads the ts-rs TriggerKind union", () => {
+    const ts = 'export type TriggerKind = "manual" | "schedule" | "event_listener";';
+    expect(parseTriggerKinds(ts)).toEqual(["manual", "schedule", "event_listener"]);
+  });
+
   it("a source the parser cannot read throws instead of yielding an empty list", () => {
     expect(() => parseMemoryCategories("pub const OTHER: &[&str] = &[];")).toThrow();
     expect(() => parseCellKeys("export const SOMETHING_ELSE = [] as const;")).toThrow();
+    expect(() => parseTriggerKinds("export type Other = string;")).toThrow();
   });
 });
 
 describe("desktop facts: drift diff", () => {
-  const snap = { memoryCategories: snapshot.memoryCategories, cellKeys: snapshot.cellKeys };
+  const snap = { memoryCategories: snapshot.memoryCategories, cellKeys: snapshot.cellKeys, triggerKinds: snapshot.triggerKinds };
 
   it("an extra live category is drift", () => {
     const live = { ...snap, memoryCategories: [...snap.memoryCategories, "goal"] };
@@ -84,7 +90,7 @@ describe("desktop facts: drift diff", () => {
   });
 
   it("an identical live read is clean", () => {
-    expect(diffFacts(snap, { memoryCategories: [...snap.memoryCategories], cellKeys: [...snap.cellKeys] })).toMatchObject({ ok: true });
+    expect(diffFacts(snap, { memoryCategories: [...snap.memoryCategories], cellKeys: [...snap.cellKeys], triggerKinds: [...snap.triggerKinds] })).toMatchObject({ ok: true });
   });
 
   it("a reorder of the cell keys is drift (order is part of the fact)", () => {
@@ -102,6 +108,12 @@ describe("desktop facts: the typed module and the showcase follow the snapshot",
   it("index.ts literals equal the generated snapshot", () => {
     expect([...MEMORY_CATEGORIES]).toEqual(snapshot.memoryCategories);
     expect([...CELL_KEYS]).toEqual(snapshot.cellKeys);
+    expect([...TRIGGER_KINDS]).toEqual(snapshot.triggerKinds);
+  });
+
+  it("a trigger kind dropped from the desktop is drift", () => {
+    const snap = { triggerKinds: snapshot.triggerKinds };
+    expect(diffFacts(snap, { triggerKinds: snap.triggerKinds.filter((k) => k !== "clipboard") })).toMatchObject({ ok: false, removed: ["clipboard"] });
   });
 
   it("DIMS cells are the desktop's ALL_CELL_KEYS, in its order", () => {

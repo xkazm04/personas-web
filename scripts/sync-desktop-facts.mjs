@@ -15,6 +15,7 @@
  * Sources (paths inside the desktop checkout):
  *   memoryCategories  src-tauri/core/src/validation/memory.rs  MEMORY_CATEGORIES
  *   cellKeys          src/lib/constants/dimensionMapping.ts     ALL_CELL_KEYS
+ *   triggerKinds      src/lib/bindings/TriggerKind.ts           TriggerKind (ts-rs union)
  *
  * The desktop checkout resolves as in scripts/check-guide-coverage.mjs:
  * PERSONAS_DESKTOP_REPO when set (authoritative, no fallback), else ../personas
@@ -36,6 +37,7 @@ export const SNAPSHOT_PATH = path.join(REPO_ROOT, "src", "lib", "product-facts",
 export const SOURCES = {
   memoryCategories: "src-tauri/core/src/validation/memory.rs",
   cellKeys: "src/lib/constants/dimensionMapping.ts",
+  triggerKinds: "src/lib/bindings/TriggerKind.ts",
 };
 
 const quoted = (body) => [...body.matchAll(/"([^"\\]*)"/g)].map((m) => m[1]);
@@ -53,6 +55,14 @@ export function parseCellKeys(text) {
   const m = /export\s+const\s+ALL_CELL_KEYS\s*=\s*\[([\s\S]*?)\]\s*as\s+const/.exec(text);
   const list = m ? quoted(m[1]) : [];
   if (!list.length) throw new Error("ALL_CELL_KEYS not found (or empty) in the desktop's dimensionMapping.ts");
+  return list;
+}
+
+/** The ts-rs union `export type TriggerKind = "a" | "b" | ...;` of the generated binding. */
+export function parseTriggerKinds(text) {
+  const m = /export\s+type\s+TriggerKind\s*=\s*((?:"[^"]*"\s*\|?\s*)+);/.exec(text);
+  const list = m ? quoted(m[1]) : [];
+  if (!list.length) throw new Error("TriggerKind union not found (or empty) in the desktop's TriggerKind.ts");
   return list;
 }
 
@@ -95,6 +105,7 @@ export function readLive(desktop) {
   return {
     memoryCategories: parseMemoryCategories(read(SOURCES.memoryCategories)),
     cellKeys: parseCellKeys(read(SOURCES.cellKeys)),
+    triggerKinds: parseTriggerKinds(read(SOURCES.triggerKinds)),
   };
 }
 

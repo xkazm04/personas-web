@@ -2,7 +2,8 @@
   "$generated": "by scripts/sync-desktop-facts.mjs from the personas desktop repo - do not hand-edit; run npm run sync:desktop-facts",
   "sources": {
     "memoryCategories": "src-tauri/core/src/validation/memory.rs",
-    "cellKeys": "src/lib/constants/dimensionMapping.ts"
+    "cellKeys": "src/lib/constants/dimensionMapping.ts",
+    "triggerKinds": "src/lib/bindings/TriggerKind.ts"
   },
   "memoryCategories": [
     "fact",
@@ -21,5 +22,17 @@
     "error-handling",
     "messages",
     "events"
+  ],
+  "triggerKinds": [
+    "manual",
+    "schedule",
+    "polling",
+    "webhook",
+    "chain",
+    "event_listener",
+    "file_watcher",
+    "clipboard",
+    "app_focus",
+    "composite"
   ]
 }
