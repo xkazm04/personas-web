@@ -5,9 +5,6 @@ export const SITE_URL =
 
 export const SITE_NAME = "Personas";
 
-export const SITE_DESCRIPTION =
-  "Build and orchestrate multi-agent AI pipelines on your own machine. Multi-provider AI, AES-256 encrypted credential vault, self-healing execution, and 40+ integrations. No code required.";
-
 export const SITE_LOCALE = "en_US";
 
 export const TWITTER_HANDLE = "@PersonasAI";

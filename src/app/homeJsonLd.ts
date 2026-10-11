@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/seo";
+import { CONNECTOR_FEATURE_LINE, SOFTWARE_DESCRIPTION } from "@/lib/public-claims";
 import { en } from "@/i18n/en";
 
 export const organizationJsonLd = {
@@ -17,8 +18,7 @@ export const softwareJsonLd = {
   name: "Personas",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Windows, Linux",
-  description:
-    "Build and orchestrate multi-agent AI pipelines locally or in the cloud. Multi-provider AI, AES-256 encrypted credential vault, self-healing execution, and 40+ integrations - no code required.",
+  description: SOFTWARE_DESCRIPTION,
   offers: {
     "@type": "Offer",
     price: "0",
@@ -30,7 +30,7 @@ export const softwareJsonLd = {
     "Multi-provider AI: Claude and Ollama",
     "Self-healing execution with automatic recovery",
     "Evolutionary prompt optimization (Genome system)",
-    "40+ built-in integrations (Slack, GitHub, Jira, Notion, etc.)",
+    CONNECTOR_FEATURE_LINE,
     "6 trigger types: schedule, webhook, clipboard, file watcher, chain, event",
     "Real-time event bus and observability dashboard",
     "Local-first architecture: agents run on your machine",

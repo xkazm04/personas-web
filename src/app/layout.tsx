@@ -6,10 +6,10 @@ import { QualityProvider } from "@/contexts/QualityContext";
 import {
   SITE_URL,
   SITE_NAME,
-  SITE_DESCRIPTION,
   SITE_LOCALE,
   TWITTER_HANDLE,
 } from "@/lib/seo";
+import { SITE_DESCRIPTION } from "@/lib/public-claims";
 import SkipLink from "@/components/SkipLink";
 import ThemeInit from "@/components/ThemeInit";
 import CookieConsent from "@/components/CookieConsent";
