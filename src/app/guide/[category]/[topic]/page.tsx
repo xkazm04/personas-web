@@ -1,9 +1,12 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { headingsOf, parseGuide, stepsOf } from "@/components/guide/guide-markdown/parseGuide";
 import { getRelatedTopics, isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
+import { resolveTopicUnit } from "@/data/guide/getLocalized";
+import { GUIDE_LOCALE_COOKIE, guideLocaleFromCookie } from "@/i18n/guideLocale";
 import TopicView from "./TopicView";
 
 /* ── Helpers for structured data ────────────────────────────────────── */
@@ -98,17 +101,30 @@ export default async function TopicPage({ params }: { params: Promise<{ category
   const prevTopic = currentIndex > 0 ? categoryTopics[currentIndex - 1] : null;
   const nextTopic = currentIndex < categoryTopics.length - 1 ? categoryTopics[currentIndex + 1] : null;
   const related = getRelatedTopics(topicId);
+  // The reader's locale comes from the cookie the i18nStore mirrors (reading
+  // it keeps this route dynamic, which it already is). It is normalized through
+  // the release predicate, so production, which releases no locale, resolves
+  // English here. resolveTopicUnit serves ONE whole unit (translated, or the
+  // current English with the older translation as the alternate), so the SSR
+  // body, TOC and JSON-LD below are all the same unit.
+  const language = guideLocaleFromCookie((await cookies()).get(GUIDE_LOCALE_COOKIE)?.value);
+  const unit = await resolveTopicUnit(language, topicId, {
+    title: topic.title,
+    description: topic.description,
+    body: content,
+  });
   // One parse feeds both: the HowTo steps are exactly what StepWizard renders,
   // and the TOC ids are exactly the rendered anchors.
-  const { doc } = parseGuide(content);
-  const howToJsonLd = buildHowToJsonLd(topic, categoryId, topicId, stepsOf(doc));
+  const { doc } = parseGuide(unit.body);
+  const howToJsonLd = buildHowToJsonLd(unit, categoryId, topicId, stepsOf(doc));
   const initialHeadings = headingsOf(doc);
 
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: topic.title,
-    description: topic.description,
+    headline: unit.title,
+    description: unit.description,
+    inLanguage: unit.unit === "translated" ? language : "en",
     author: { "@type": "Organization", name: "Personas" },
     publisher: { "@type": "Organization", name: "Personas", url: SITE_URL },
     mainEntityOfPage: `${SITE_URL}/guide/${categoryId}/${topicId}`,
@@ -121,7 +137,7 @@ export default async function TopicPage({ params }: { params: Promise<{ category
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Guide", item: `${SITE_URL}/guide` },
       { "@type": "ListItem", position: 2, name: category.name, item: `${SITE_URL}/guide/${categoryId}` },
-      { "@type": "ListItem", position: 3, name: topic.title, item: `${SITE_URL}/guide/${categoryId}/${topicId}` },
+      { "@type": "ListItem", position: 3, name: unit.title, item: `${SITE_URL}/guide/${categoryId}/${topicId}` },
     ],
   };
 
@@ -145,6 +161,8 @@ export default async function TopicPage({ params }: { params: Promise<{ category
         category={category}
         topic={topic}
         content={content}
+        initialUnit={unit}
+        initialLanguage={language}
         initialHeadings={initialHeadings}
         prevTopic={prevTopic}
         nextTopic={nextTopic}

@@ -15,6 +15,9 @@
  *   sb-<project>-auth-token ............ supabase-js default session storage (src/lib/supabase.ts)
  *   personas-theme ..................... src/stores/themeStore.ts (zustand persist)
  *   personas-language .................. src/stores/i18nStore.ts (zustand persist)
+ *   personas-guide-language (cookie) ... src/stores/i18nStore.ts (mirrorLocaleCookie) - written only
+ *                                        when a non-English locale is reachable (preview / released);
+ *                                        read by the /guide topic page to render the translation in SSR
  *   personas-tour-volume ............... src/hooks/useTourVolume.ts
  *   dashboard prefs .................... src/stores/{dashboardFilterStore,incidentsFilterStore,settingsStore,
  *                                        reviewStore,reviewVoiceStore}.ts, src/app/dashboard/knowledge/page.tsx
@@ -63,6 +66,7 @@ export const STORAGE_REGISTER: StorageEntry[] = [
   // Preferences
   { names: ["personas-theme"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "theme" },
   { names: ["personas-language"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "language" },
+  { names: ["personas-guide-language"], mechanism: "cookie", category: "preferences", lifetime: "oneYear", purpose: "language" },
   { names: ["personas-tour-volume"], mechanism: "localStorage", category: "preferences", lifetime: "untilCleared", purpose: "tourVolume" },
   {
     names: [

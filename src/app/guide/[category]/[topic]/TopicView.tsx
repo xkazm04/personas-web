@@ -21,6 +21,7 @@ import { resolveTopicUnit } from "@/data/guide/getLocalized";
 import type { TopicUnitPreference, TopicUnitResolution } from "@/data/guide/getLocalized";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useI18nStore } from "@/stores/i18nStore";
+import type { Language } from "@/stores/i18nStore";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
 import type { RelatedTopic } from "@/lib/guide-utils";
 
@@ -28,29 +29,37 @@ interface TopicViewProps {
   category: GuideCategory;
   topic: GuideTopic;
   content: string;
+  /** The unit the server rendered for the cookie locale (English when none). */
+  initialUnit: TopicUnitResolution;
+  /** The locale `initialUnit` was resolved for. */
+  initialLanguage: Language;
   initialHeadings: GuideHeading[];
   prevTopic: GuideTopic | null;
   nextTopic: GuideTopic | null;
   related: RelatedTopic[];
 }
 
-export default function TopicView({ category, topic, content, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
+export default function TopicView({ category, topic, content, initialUnit, initialLanguage, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
   const { t } = useTranslation();
   const contentH1Ref = useRef<HTMLHeadingElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   const didMountRef = useRef(false);
   // A search body hit lands on its #section; mark the matched words there.
   const hitMarked = useArrivalMark(bodyRef, topic.id);
-  // Locale-aware swap. The server renders the English content (no locale
-  // signal in the URL or cookie today), and once the i18nStore hydrates on
-  // the client we re-resolve through resolveTopicUnit, which serves ONE whole
-  // unit: the current translation, or - when the translation predates the
-  // current English - the whole English page with the older translation one
-  // tap away (`prefer`). The switcher is gated (LANGUAGE_SWITCHER_ENABLED), so
-  // in production this stays on the English path.
+  // Locale-aware unit. The server resolves the unit for the locale cookie the
+  // i18nStore mirrors (page.tsx) and passes it as `initialUnit`, so the first
+  // paint is already in the reader's language. Client re-resolution through
+  // resolveTopicUnit only covers a locale change after load and the `prefer`
+  // toggle, which picks between the two whole units of a stale topic. The
+  // switcher and the cookie are gated (LANGUAGE_SWITCHER_ENABLED / the release
+  // list), so in production this stays on the English path.
   const language = useI18nStore((s) => s.language);
   const [prefer, setPrefer] = useState<TopicUnitPreference | undefined>(undefined);
-  const [localized, setLocalized] = useState<TopicUnitResolution>(() => englishUnit(topic, content));
+  // The server unit is only valid for the locale it was resolved for; a store
+  // that disagrees (no localStorage yet, or a changed locale) starts from English.
+  const startingUnit = (lang: Language) =>
+    lang === initialLanguage ? initialUnit : englishUnit(topic, content);
+  const [localized, setLocalized] = useState<TopicUnitResolution>(() => startingUnit(language));
 
   // Reset to the English content (and the reader's default preference) whenever
   // the locale or topic changes. Done in render via the prev-state pattern (not
@@ -61,7 +70,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   if (resetKey !== prevResetKey) {
     setPrevResetKey(resetKey);
     setPrefer(undefined);
-    setLocalized(englishUnit(topic, content));
+    setLocalized(startingUnit(language));
   }
 
   // Skip the client parse on the initial render — page.tsx already extracted
@@ -69,8 +78,8 @@ export default function TopicView({ category, topic, content, initialHeadings, p
   // only re-parses when localized.body diverges (locale switch — currently
   // dormant; see comment above on the i18nStore).
   const headings = useMemo(
-    () => (localized.body === content ? initialHeadings : extractHeadings(localized.body)),
-    [localized.body, content, initialHeadings],
+    () => (localized.body === initialUnit.body ? initialHeadings : extractHeadings(localized.body)),
+    [localized.body, initialUnit.body, initialHeadings],
   );
 
   // Estimated reading time from the body word count (~200 wpm). Guide topics
@@ -82,6 +91,8 @@ export default function TopicView({ category, topic, content, initialHeadings, p
 
   useEffect(() => {
     if (language === "en") return;
+    // The server already resolved this exact unit (default preference).
+    if (language === initialLanguage && prefer === undefined) return;
     let cancelled = false;
     const english = { title: topic.title, description: topic.description, body: content };
     resolveTopicUnit(language, topic.id, english, { prefer }).then((next) => {
@@ -90,7 +101,7 @@ export default function TopicView({ category, topic, content, initialHeadings, p
     return () => {
       cancelled = true;
     };
-  }, [language, topic.id, topic.title, topic.description, content, prefer]);
+  }, [language, initialLanguage, topic.id, topic.title, topic.description, content, prefer]);
 
   // On client-side topic change (prev/next nav or search), move focus to the
   // topic <h1> so screen-reader/keyboard users land on the new content and hear

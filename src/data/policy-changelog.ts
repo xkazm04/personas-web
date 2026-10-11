@@ -29,9 +29,10 @@ export const POLICY_META: Record<PolicyId, PolicyMeta> = {
     ],
   },
   cookies: {
-    latestUpdateIso: "2026-10-06",
+    latestUpdateIso: "2026-10-12",
     formattedUpdate: "October 2026",
     changes: [
+      "Listed a language cookie for the guide. Once a non-English language is available and you pick it, the site remembers the choice in a cookie scoped to the guide so the translated page can be served directly; choosing English removes it.",
       "Listed the signing key a phone keeps in its browser database (IndexedDB) after you pair it with the desktop app. It signs the phone's commands so your computer can check where they came from, and it is deleted when you unpair the phone.",
       "Removed the prefer-full cookie. It belonged to a mobile view that has been retired, so the site now sets no cookies of its own.",
       "Corrected the claim that the site uses two cookies. The sign-in session and theme live in local storage, not cookies.",

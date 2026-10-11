@@ -10,6 +10,7 @@ import {
   normalizePersisted,
   type Language,
 } from "@/i18n/localeRelease";
+import { GUIDE_LOCALE_COOKIE, guideLocaleCookieString } from "@/i18n/guideLocale";
 
 // The registry and the release predicate live in src/i18n/localeRelease.ts
 // (pure, no store import); re-exported so existing readers keep their import.
@@ -70,6 +71,18 @@ function applyLangToDOM(lang: Language) {
   else el.removeAttribute("dir");
 }
 
+/**
+ * Mirror the locale into the cookie the /guide server render reads. Written
+ * only for a non-English locale (reachable only in preview or after a release),
+ * and an English reader's cookie is cleared only if one exists, so the
+ * production English path never touches document.cookie.
+ */
+function mirrorLocaleCookie(lang: Language) {
+  if (typeof document === "undefined") return;
+  if (lang === "en" && !document.cookie.includes(`${GUIDE_LOCALE_COOKIE}=`)) return;
+  document.cookie = guideLocaleCookieString(lang);
+}
+
 interface I18nState {
   language: Language;
   /** Locales whose browser-language offer the visitor dismissed: never offered again. */
@@ -88,6 +101,7 @@ export const useI18nStore = create<I18nState>()(
         // (or previewed), whoever the caller is.
         if (!isReachable(language, RELEASE)) return;
         applyLangToDOM(language);
+        mirrorLocaleCookie(language);
         set({ language });
       },
       declineOffer: (lang) =>
@@ -103,6 +117,7 @@ export const useI18nStore = create<I18nState>()(
         state.language = normalizePersisted(state.language, RELEASE);
         state.declined = Array.isArray(state.declined) ? state.declined.filter(isLanguage) : [];
         applyLangToDOM(state.language);
+        mirrorLocaleCookie(state.language);
       },
     },
   ),
