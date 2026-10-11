@@ -4,7 +4,9 @@ import type { DownloadPlan } from "@/lib/release";
 
 // ── Consent-gated analytics (respects cookie consent state) ─────────────────
 
-type QueuedEvent = { name: string; attributes?: Record<string, string> };
+type QueuedEvent =
+  | { kind: "count"; name: string; attributes?: Record<string, string> }
+  | { kind: "distribution"; name: string; value: number; unit: string; attributes?: Record<string, string> };
 
 const MAX_QUEUE_SIZE = 50;
 const queue: QueuedEvent[] = [];
@@ -26,22 +28,38 @@ function safeCount(name: string, attributes?: Record<string, string>) {
   }
 }
 
-function trackEvent(name: string, attributes?: Record<string, string>) {
+function safeDistribution(name: string, value: number, unit: string, attributes?: Record<string, string>) {
+  try {
+    Sentry.metrics.distribution(name, value, { unit, attributes });
+  } catch {
+    // Same contract as safeCount: a missing metrics API must not reach the caller.
+  }
+}
+
+function dispatch(ev: QueuedEvent) {
+  if (ev.kind === "count") safeCount(ev.name, ev.attributes);
+  else safeDistribution(ev.name, ev.value, ev.unit, ev.attributes);
+}
+
+function enqueueOrSend(ev: QueuedEvent) {
   if (hasAnalyticsConsent()) {
-    safeCount(name, attributes);
+    dispatch(ev);
   } else {
     if (queue.length >= MAX_QUEUE_SIZE) {
       queue.shift();
     }
-    queue.push({ name, attributes });
+    queue.push(ev);
   }
+}
+
+function trackEvent(name: string, attributes?: Record<string, string>) {
+  enqueueOrSend({ kind: "count", name, attributes });
 }
 
 export function flushAnalyticsQueue() {
   if (!hasAnalyticsConsent()) return;
   while (queue.length > 0) {
-    const ev = queue.shift()!;
-    safeCount(ev.name, ev.attributes);
+    dispatch(queue.shift()!);
   }
 }
 
@@ -49,6 +67,24 @@ export function flushAnalyticsQueue() {
 
 export function trackPageView(page: string) {
   trackEvent("page_view", { page });
+}
+
+export type WebVitalName = "LCP" | "INP" | "CLS";
+
+/**
+ * A real-user vital as a Sentry distribution, tagged by normalized route. Goes
+ * through the same consent queue as every other event, so a visitor who has not
+ * opted in is never measured. PII: metric name + route only.
+ */
+export function trackWebVital(name: WebVitalName, value: number, route: string) {
+  if (!Number.isFinite(value)) return;
+  enqueueOrSend({
+    kind: "distribution",
+    name: `web_vital.${name.toLowerCase()}`,
+    value,
+    unit: name === "CLS" ? "none" : "millisecond",
+    attributes: { route },
+  });
 }
 
 /** Which "Download" CTA was clicked. Every download CTA reports itself, so the

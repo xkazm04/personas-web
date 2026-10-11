@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import PageViewTracker from "@/components/PageViewTracker";
+import WebVitalsReporter from "@/components/WebVitalsReporter";
 import { QualityProvider } from "@/contexts/QualityContext";
 import {
   SITE_URL,
@@ -115,6 +116,7 @@ export default function RootLayout({
         <ThemeInit />
         <QualityProvider>
           <PageViewTracker />
+          <WebVitalsReporter />
           <PageTransition>{children}</PageTransition>
         </QualityProvider>
         <CookieConsent />
