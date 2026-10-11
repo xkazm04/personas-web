@@ -25,35 +25,38 @@ Bộ nhớ hoạt động tốt nhất khi các agent có các tác vụ nhất 
   "memory-categories": `
 ## Danh Mục Bộ Nhớ
 
-Các bộ nhớ được tổ chức thành năm danh mục, mỗi danh mục phục vụ một mục đích khác nhau. Cấu trúc này giúp agent của bạn nhớ lại đúng loại kiến thức vào đúng thời điểm — giống như các chương trong một cuốn sách tham khảo.
+Bộ nhớ được tổ chức thành sáu danh mục, mỗi danh mục phục vụ một mục đích khác nhau. Cấu trúc này giúp agent của bạn nhớ lại đúng loại kiến thức vào đúng lúc — như các chương trong một cuốn sách tham khảo.
 
 Việc hiểu các danh mục này giúp bạn xem lại và quản lý kiến thức của agent hiệu quả hơn. Mỗi danh mục cho bạn biết không chỉ *cái gì* agent biết, mà *loại kiến thức* nào.
 
-### Năm Danh Mục
+### Sáu Danh Mục
 
 :::compare
 **Fact**
-Thông tin cụ thể được học từ các tác vụ. Ví dụ: "Khách hàng thích ngôn ngữ trang trọng." Các mảnh kiến thức đơn giản mà agent của bạn nhặt được.
+Kiến thức khách quan về thế giới hoặc lĩnh vực của agent. Ví dụ: "Năm tài chính của khách hàng kết thúc vào tháng 3."
 ---
-**Decision**
-Các lựa chọn được thực hiện và lý do đằng sau chúng. Ví dụ: "Đã chọn vận chuyển Express vì đơn hàng khẩn cấp." Ghi lại tại sao, không chỉ cái gì.
+**Preference**
+Sở thích của người dùng hoặc các bên liên quan định hướng hành vi của agent. Ví dụ: "Khách hàng thích ngôn ngữ trang trọng."
 ---
-**Insight**
-Các mẫu được phát hiện qua nhiều lần chạy. Ví dụ: "Vé hỗ trợ tăng đột biến vào mỗi sáng thứ Hai." Trở nên thông minh hơn theo thời gian.
+**Instruction**
+Quy tắc hoặc chỉ thị rõ ràng mà agent phải tuân theo. Ví dụ: "Luôn cc quản lý tài khoản trong email hợp đồng."
 ---
-**Learning**
-Các bài học từ sai lầm hoặc thành công. Ví dụ: "Dòng tiêu đề ngắn hơn có tỷ lệ mở cao hơn." Cải thiện liên tục trong hành động.
+**Context**
+Thông tin nền giúp agent suy luận. Ví dụ: "Workspace này hỗ trợ một nhóm lập hóa đơn gồm năm người."
 ---
-**Warning**
-Các cạm bẫy cần lưu ý. Ví dụ: "Không bao giờ gửi hóa đơn trước khi hợp đồng được ký." Ngăn agent của bạn lặp lại các sai lầm trong quá khứ.
+**Learned**
+Hiểu biết agent rút ra từ các lần chạy trước. Ví dụ: "Tiêu đề ngắn hơn có tỷ lệ mở cao hơn."
+---
+**Constraint**
+Giới hạn cứng như giới hạn tốc độ, quy tắc tuân thủ hoặc thời hạn. Ví dụ: "Không bao giờ gửi hóa đơn trước khi hợp đồng được ký."
 :::
 
 ### Cách Hoạt Động
 
-Khi một agent tạo ra một bộ nhớ, nó tự động phân loại dựa trên nội dung. Sự kiện là các mảnh thông tin đơn giản. Quyết định ghi lại các lựa chọn với lý do. Insights capture các mẫu. Learnings đến từ việc phản ánh về kết quả. Cảnh báo đánh dấu những điều cần tránh.
+Khi agent tạo một bộ nhớ, nó tự động phân loại dựa trên nội dung. Fact là kiến thức khách quan. Preference ghi lại điều mọi người ưa thích. Instruction là quy tắc rõ ràng. Context cung cấp bối cảnh. Learned đến từ việc suy ngẫm về các lần chạy trước. Constraint đánh dấu các giới hạn cứng.
 
 :::tip
-Đặc biệt chú ý đến danh mục Warnings trong các lần xem xét của bạn. Các bộ nhớ này giúp agent của bạn tránh lặp lại các sai lầm trong quá khứ — chúng thường là có giá trị nhất.
+Hãy đặc biệt chú ý đến các danh mục Instruction và Constraint khi xem xét. Những bộ nhớ này xác định các quy tắc agent của bạn phải tuân theo — chúng thường là giá trị nhất.
 :::
   `,
 
@@ -93,7 +96,7 @@ Việc tìm kiếm giúp bạn hiểu những gì các agent của bạn biết,
 ### Điểm Chính
 
 - **Tìm kiếm văn bản đầy đủ** — tìm các bộ nhớ theo bất kỳ từ khóa hoặc cụm từ nào chúng chứa
-- **Lọc theo danh mục** — thu hẹp kết quả thành sự kiện, quyết định, hiểu biết, bài học hoặc cảnh báo
+- **Lọc theo danh mục** — thu hẹp kết quả thành sự kiện, sở thích, chỉ thị, bối cảnh, điều đã học hoặc ràng buộc
 - **Lọc theo tầm quan trọng** — chỉ hiển thị các bộ nhớ ưu tiên cao hoặc ưu tiên thấp
 - **Tìm kiếm chéo agent** — tìm kiếm trên tất cả các agent của bạn cùng lúc hoặc tập trung vào một
 
@@ -115,7 +118,7 @@ Tìm kiếm chủ đề trước khi tạo một bộ nhớ thủ công. Agent c
 
 :::steps
 1. **Mở phần Memories** — nhấp \`Memories\` trong thanh bên và sau đó \`Add Memory\`
-2. **Chọn danh mục** — chọn sự kiện, quyết định, hiểu biết, bài học hoặc cảnh báo
+2. **Chọn danh mục** — chọn sự kiện, sở thích, chỉ thị, bối cảnh, điều đã học hoặc ràng buộc
 3. **Viết nội dung bộ nhớ** — mô tả kiến thức bằng ngôn ngữ đơn giản
 4. **Đặt mức độ tầm quan trọng** — gán một điểm từ 1 (thường xuyên) đến 5 (quan trọng)
 5. **Gán cho một agent** — chọn một agent cụ thể hoặc làm cho bộ nhớ có sẵn cho tất cả các agent

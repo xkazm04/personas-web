@@ -25,35 +25,38 @@ Memory funktioniert am besten, wenn Agenten konsistente, fokussierte Aufgaben ha
   "memory-categories": `
 ## Memory-Kategorien
 
-Memories sind in fünf Kategorien organisiert, jede mit einem anderen Zweck. Diese Struktur hilft deinem Agenten, die richtige Art von Wissen zur richtigen Zeit abzurufen — wie Kapitel in einem Nachschlagewerk.
+Memories sind in sechs Kategorien organisiert, jede mit einem anderen Zweck. Diese Struktur hilft deinem Agenten, die richtige Art von Wissen zur richtigen Zeit abzurufen — wie Kapitel in einem Nachschlagewerk.
 
 Diese Kategorien zu verstehen hilft dir, das Wissen deines Agenten effektiver zu überprüfen und zu verwalten. Jede Kategorie sagt dir nicht nur *was* der Agent weiß, sondern *welche Art* von Wissen es ist.
 
-### Die fünf Kategorien
+### Die sechs Kategorien
 
 :::compare
 **Fact**
-Konkrete Information, die aus Aufgaben gelernt wurde. Beispiel: "Der Kunde bevorzugt formelle Sprache." Geradlinige Wissensteile, die dein Agent aufnimmt.
+Objektives Wissen über die Welt oder die Domäne deines Agenten. Beispiel: "Das Geschäftsjahr des Kunden endet im März."
 ---
-**Decision**
-Getroffene Entscheidungen und die Begründung dahinter. Beispiel: "Express-Versand gewählt, weil die Bestellung dringend war." Hält das Warum fest, nicht nur das Was.
+**Preference**
+Präferenzen von Nutzern oder Stakeholdern, die das Verhalten des Agenten leiten. Beispiel: "Der Kunde bevorzugt formelle Sprache."
 ---
-**Insight**
-Über mehrere Läufe entdeckte Muster. Beispiel: "Support-Tickets steigen jeden Montagmorgen sprunghaft an." Wird mit der Zeit klüger.
+**Instruction**
+Ausdrückliche Regeln oder Vorgaben, die der Agent befolgen muss. Beispiel: "Setze bei Vertrags-E-Mails immer den Account Manager in Kopie."
 ---
-**Learning**
-Lektionen aus Fehlern oder Erfolgen. Beispiel: "Kürzere Betreffzeilen haben höhere Öffnungsraten." Kontinuierliche Verbesserung in Aktion.
+**Context**
+Hintergrundinformationen, die dem Agenten beim Schlussfolgern helfen. Beispiel: "Dieser Workspace unterstützt ein fünfköpfiges Rechnungsteam."
 ---
-**Warning**
-Fallstricke, auf die du achten musst. Beispiel: "Versende nie Rechnungen vor der Unterzeichnung des Vertrags." Verhindert, dass dein Agent vergangene Fehler wiederholt.
+**Learned**
+Erkenntnisse, die der Agent aus früheren Läufen gewonnen hat. Beispiel: "Kürzere Betreffzeilen haben höhere Öffnungsraten."
+---
+**Constraint**
+Harte Grenzen wie Ratenlimits, Compliance-Regeln oder Fristen. Beispiel: "Versende nie Rechnungen vor der Unterzeichnung des Vertrags."
 :::
 
 ### So funktioniert es
 
-Wenn ein Agent eine Memory erstellt, kategorisiert er sie automatisch basierend auf dem Inhalt. Fakten sind geradlinige Informationsteile. Entscheidungen halten Wahlen mit Begründung fest. Insights erfassen Muster. Learnings kommen aus dem Reflektieren über Ergebnisse. Warnungen kennzeichnen Dinge zum Vermeiden.
+Wenn ein Agent eine Memory erstellt, kategorisiert er sie automatisch basierend auf dem Inhalt. Fakten sind objektives Wissen. Präferenzen halten fest, was Menschen bevorzugen. Anweisungen sind ausdrückliche Regeln. Kontext liefert Hintergrund. Gelernte Memories entstehen aus dem Reflektieren über frühere Läufe. Constraints markieren harte Grenzen.
 
 :::tip
-Achte während deiner Reviews besonders auf die Warnungen-Kategorie. Diese Memories helfen deinem Agenten, vergangene Fehler nicht zu wiederholen — sie sind oft die wertvollsten.
+Achte während deiner Reviews besonders auf die Kategorien Instruction und Constraint. Diese Memories legen die Regeln fest, die dein Agent befolgen muss — sie sind oft die wertvollsten.
 :::
   `,
 
@@ -93,7 +96,7 @@ Suchen hilft dir zu verstehen, was deine Agenten wissen, zu verifizieren, dass s
 ### Wichtige Punkte
 
 - **Volltextsuche** — finde Memories nach jedem Stichwort oder jeder Phrase, die sie enthalten
-- **Nach Kategorie filtern** — schränke Ergebnisse auf Fakten, Entscheidungen, Insights, Learnings oder Warnungen ein
+- **Nach Kategorie filtern** — schränke Ergebnisse auf Fakten, Präferenzen, Anweisungen, Kontext, Gelerntes oder Constraints ein
 - **Nach Wichtigkeit filtern** — zeige nur Memories mit hoher oder niedriger Priorität
 - **Agentenübergreifende Suche** — suche über alle deine Agenten gleichzeitig oder konzentriere dich auf einen
 
@@ -115,7 +118,7 @@ Das ist besonders nützlich für firmenspezifische Informationen, persönliche P
 
 :::steps
 1. **Öffne den Memories-Bereich** — klicke \`Memories\` in der Seitenleiste und dann \`Add Memory\`
-2. **Wähle die Kategorie** — wähle Fact, Decision, Insight, Learning oder Warning
+2. **Wähle die Kategorie** — wähle Fact, Preference, Instruction, Context, Learned oder Constraint
 3. **Schreibe den Memory-Inhalt** — beschreibe das Wissen in klarer Sprache
 4. **Setze die Wichtigkeitsstufe** — vergib einen Wert von 1 (Routine) bis 5 (Kritisch)
 5. **Weise einem Agenten zu** — wähle einen bestimmten Agenten oder mache die Memory für alle Agenten verfügbar

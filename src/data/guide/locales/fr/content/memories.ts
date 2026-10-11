@@ -25,35 +25,38 @@ La mémoire fonctionne mieux quand les agents ont des tâches cohérentes et cib
   "memory-categories": `
 ## Catégories de mémoire
 
-Les mémoires sont organisées en cinq catégories, chacune servant un objectif différent. Cette structure aide votre agent à rappeler le bon type de connaissance au bon moment — comme des chapitres dans un livre de référence.
+Les mémoires sont organisées en six catégories, chacune ayant un objectif différent. Cette structure aide votre agent à rappeler le bon type de connaissance au bon moment — comme les chapitres d'un ouvrage de référence.
 
 Comprendre ces catégories vous aide à examiner et gérer les connaissances de votre agent plus efficacement. Chaque catégorie vous dit non seulement *ce que* l'agent sait, mais *quel type* de connaissance c'est.
 
-### Les cinq catégories
+### Les six catégories
 
 :::compare
-**Fait**
-Information concrète apprise des tâches. Exemple : "Le client préfère un langage formel." Pièces simples de connaissances que votre agent ramasse.
+**Fact**
+Connaissance objective sur le monde ou le domaine de votre agent. Exemple : « L'exercice fiscal du client se termine en mars. »
 ---
-**Décision**
-Choix faits et le raisonnement derrière. Exemple : "Choisi l'expédition Express parce que la commande était urgente." Enregistre le pourquoi, pas seulement le quoi.
+**Preference**
+Préférences de l'utilisateur ou des parties prenantes qui guident le comportement de l'agent. Exemple : « Le client préfère un langage formel. »
 ---
-**Insight**
-Modèles découverts à travers plusieurs exécutions. Exemple : "Les tickets de support augmentent chaque lundi matin." Devient plus intelligent avec le temps.
+**Instruction**
+Règles ou directives explicites que l'agent doit suivre. Exemple : « Mettez toujours le gestionnaire de compte en copie des e-mails de contrat. »
 ---
-**Apprentissage**
-Leçons d'erreurs ou de succès. Exemple : "Les lignes d'objet plus courtes obtiennent des taux d'ouverture plus élevés." Amélioration continue en action.
+**Context**
+Informations de contexte qui aident l'agent à raisonner. Exemple : « Cet espace de travail soutient une équipe de facturation de cinq personnes. »
 ---
-**Avertissement**
-Pièges à surveiller. Exemple : "Ne jamais envoyer de factures avant que le contrat ne soit signé." Empêche votre agent de répéter les erreurs passées.
+**Learned**
+Enseignements que l'agent a tirés des exécutions passées. Exemple : « Les objets plus courts obtiennent de meilleurs taux d'ouverture. »
+---
+**Constraint**
+Limites strictes comme les limites de débit, les règles de conformité ou les échéances. Exemple : « N'envoyez jamais de factures avant la signature du contrat. »
 :::
 
 ### Comment ça marche
 
-Quand un agent crée une mémoire, il la catégorise automatiquement en fonction du contenu. Les faits sont des pièces simples d'information. Les décisions enregistrent les choix avec le raisonnement. Les insights capturent les modèles. Les apprentissages viennent de la réflexion sur les résultats. Les avertissements signalent des choses à éviter.
+Quand un agent crée une mémoire, il la catégorise automatiquement selon son contenu. Les faits sont des connaissances objectives. Les préférences consignent ce que les gens préfèrent. Les instructions sont des règles explicites. Le contexte apporte l'arrière-plan. Les mémoires apprises viennent d'une réflexion sur les exécutions passées. Les contraintes marquent des limites strictes.
 
 :::tip
-Portez une attention particulière à la catégorie Avertissements pendant vos revues. Ces mémoires aident votre agent à éviter de répéter les erreurs passées — elles sont souvent les plus précieuses.
+Portez une attention particulière aux catégories Instruction et Constraint lors de vos revues. Ces mémoires définissent les règles que votre agent doit suivre — ce sont souvent les plus précieuses.
 :::
   `,
 
@@ -93,7 +96,7 @@ La recherche vous aide à comprendre ce que vos agents savent, à vérifier qu'i
 ### Points clés
 
 - **Recherche en texte intégral** — trouvez des mémoires par tout mot-clé ou phrase qu'elles contiennent
-- **Filtrer par catégorie** — affinez les résultats aux faits, décisions, insights, apprentissages ou avertissements
+- **Filtrer par catégorie** — affinez les résultats aux faits, préférences, instructions, contexte, apprentissages ou contraintes
 - **Filtrer par importance** — affichez uniquement les mémoires à haute ou faible priorité
 - **Recherche inter-agents** — recherchez à travers tous vos agents à la fois ou concentrez-vous sur un
 
@@ -115,7 +118,7 @@ C'est particulièrement utile pour les informations spécifiques à l'entreprise
 
 :::steps
 1. **Ouvrez la section Mémoires** — cliquez sur \`Mémoires\` dans la barre latérale puis sur \`Ajouter une mémoire\`
-2. **Choisissez la catégorie** — sélectionnez fait, décision, insight, apprentissage ou avertissement
+2. **Choisissez la catégorie** — sélectionnez fait, préférence, instruction, contexte, appris ou contrainte
 3. **Rédigez le contenu de la mémoire** — décrivez la connaissance en langage clair
 4. **Définissez le niveau d'importance** — attribuez un score de 1 (routine) à 5 (critique)
 5. **Attribuez à un agent** — choisissez un agent spécifique ou rendez la mémoire disponible pour tous les agents

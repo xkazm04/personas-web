@@ -25,35 +25,38 @@ Memory works best when agents have consistent, focused tasks. An agent that alwa
   "memory-categories": `
 ## Memory Categories
 
-Memories are organized into five categories, each serving a different purpose. This structure helps your agent recall the right kind of knowledge at the right time — like chapters in a reference book.
+Memories are organized into six categories, each serving a different purpose. This structure helps your agent recall the right kind of knowledge at the right time — like chapters in a reference book.
 
 Understanding these categories helps you review and manage your agent's knowledge more effectively. Each category tells you not just *what* the agent knows, but *what kind* of knowledge it is.
 
-### The Five Categories
+### The Six Categories
 
 :::compare
 **Fact**
-Concrete information learned from tasks. Example: "The client prefers formal language." Straightforward pieces of knowledge your agent picks up.
+Objective knowledge about the world or your agent's domain. Example: "The client's fiscal year ends in March."
 ---
-**Decision**
-Choices made and the reasoning behind them. Example: "Chose Express shipping because the order was urgent." Records the why, not just the what.
+**Preference**
+User or stakeholder preferences that guide how the agent behaves. Example: "The client prefers formal language."
 ---
-**Insight**
-Patterns discovered over multiple runs. Example: "Support tickets spike every Monday morning." Gets smarter over time.
+**Instruction**
+Explicit rules or directives the agent must follow. Example: "Always copy the account manager on contract emails."
 ---
-**Learning**
-Lessons from mistakes or successes. Example: "Shorter subject lines get higher open rates." Continuous improvement in action.
+**Context**
+Background information that helps the agent reason. Example: "This workspace supports a five-person invoicing team."
 ---
-**Warning**
-Pitfalls to watch out for. Example: "Never send invoices before contract is signed." Prevents your agent from repeating past mistakes.
+**Learned**
+Insights the agent derived from past executions. Example: "Shorter subject lines get higher open rates."
+---
+**Constraint**
+Hard limits such as rate limits, compliance rules, or deadlines. Example: "Never send invoices before the contract is signed."
 :::
 
 ### How It Works
 
-When an agent creates a memory, it automatically categorizes it based on the content. Facts are straightforward pieces of information. Decisions record choices with reasoning. Insights capture patterns. Learnings come from reflecting on outcomes. Warnings flag things to avoid.
+When an agent creates a memory, it automatically categorizes it based on the content. Facts are objective knowledge. Preferences capture what people like. Instructions are explicit rules. Context supplies background. Learned memories come from reflecting on past runs. Constraints mark hard limits.
 
 :::tip
-Pay special attention to the Warnings category during your reviews. These memories help your agent avoid repeating past mistakes — they're often the most valuable.
+Pay special attention to Instructions and Constraints during your reviews. These memories define the rules your agent must follow — they're often the most valuable.
 :::
   `,
 
@@ -93,7 +96,7 @@ Searching helps you understand what your agents know, verify they've learned cor
 ### Key Points
 
 - **Full-text search** — find memories by any keyword or phrase they contain
-- **Filter by category** — narrow results to facts, decisions, insights, learnings, or warnings
+- **Filter by category** — narrow results to facts, preferences, instructions, context, learned insights, or constraints
 - **Filter by importance** — show only high-priority or low-priority memories
 - **Cross-agent search** — search across all your agents at once or focus on one
 
@@ -115,7 +118,7 @@ This is especially useful for company-specific information, personal preferences
 
 :::steps
 1. **Open the Memories section** — click \`Memories\` in the sidebar and then \`Add Memory\`
-2. **Choose the category** — select fact, decision, insight, learning, or warning
+2. **Choose the category** — select fact, preference, instruction, context, learned, or constraint
 3. **Write the memory content** — describe the knowledge in plain language
 4. **Set the importance level** — assign a score from 1 (routine) to 5 (critical)
 5. **Assign to an agent** — pick a specific agent or make the memory available to all agents

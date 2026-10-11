@@ -25,35 +25,38 @@ Paměť funguje nejlépe, když mají agenti konzistentní, soustředěné úkol
   "memory-categories": `
 ## Kategorie paměti
 
-Paměti jsou organizovány do pěti kategorií, každá slouží jinému účelu. Tato struktura pomáhá tvému agentovi vybavit si správný druh znalostí ve správný čas — jako kapitoly v referenční knize.
+Paměti jsou organizovány do šesti kategorií, každá slouží jinému účelu. Tato struktura pomáhá tvému agentovi vybavit si správný druh znalostí ve správný čas — jako kapitoly v referenční knize.
 
 Pochopení těchto kategorií ti pomáhá efektivněji přezkoumávat a spravovat znalosti tvého agenta. Každá kategorie ti říká nejen *co* agent ví, ale *jaký druh* znalosti to je.
 
-### Pět kategorií
+### Šest kategorií
 
 :::compare
 **Fact**
-Konkrétní informace získaná z úkolů. Příklad: „Klient preferuje formální jazyk." Přímé kousky znalostí, které tvůj agent sbírá.
+Objektivní znalosti o světě nebo o doméně tvého agenta. Příklad: „Fiskální rok klienta končí v březnu."
 ---
-**Decision**
-Učiněné volby a uvažování za nimi. Příklad: „Zvolil Express dopravu, protože byla objednávka urgentní." Zaznamenává proč, ne jen co.
+**Preference**
+Preference uživatele nebo zainteresovaných stran, které určují chování agenta. Příklad: „Klient preferuje formální jazyk."
 ---
-**Insight**
-Vzory objevené přes více běhů. Příklad: „Tikety podpory špičkují každé pondělí ráno." Je chytřejší v čase.
+**Instruction**
+Výslovná pravidla nebo pokyny, které musí agent dodržovat. Příklad: „U e-mailů o smlouvách vždy dávej do kopie account managera."
 ---
-**Learning**
-Poučení z chyb nebo úspěchů. Příklad: „Kratší předměty mají vyšší míru otevření." Kontinuální zlepšení v akci.
+**Context**
+Podkladové informace, které agentovi pomáhají uvažovat. Příklad: „Tento workspace slouží pětičlennému fakturačnímu týmu."
 ---
-**Warning**
-Úskalí, na která dávat pozor. Příklad: „Nikdy neposílej faktury před podepsáním smlouvy." Brání tvému agentovi v opakování minulých chyb.
+**Learned**
+Poznatky, které agent odvodil z minulých běhů. Příklad: „Kratší předměty mají vyšší míru otevření."
+---
+**Constraint**
+Pevné limity, například limity četnosti, pravidla shody nebo termíny. Příklad: „Nikdy neposílej faktury před podepsáním smlouvy."
 :::
 
 ### Jak to funguje
 
-Když agent vytvoří paměť, automaticky ji kategorizuje na základě obsahu. Fakta jsou přímé kousky informací. Rozhodnutí zaznamenávají volby s uvažováním. Postřehy zachycují vzory. Poučení přicházejí z reflexe výsledků. Varování označují věci, kterých se vyhnout.
+Když agent vytvoří paměť, automaticky ji kategorizuje na základě obsahu. Fakta jsou objektivní znalosti. Preference zachycují, co lidé preferují. Instrukce jsou výslovná pravidla. Kontext dodává pozadí. Naučené paměti vznikají reflexí nad minulými běhy. Omezení vyznačují pevné limity.
 
 :::tip
-Věnuj zvláštní pozornost kategorii Warnings během svých kontrol. Tyto paměti pomáhají tvému agentovi vyhnout se opakování minulých chyb — často jsou nejcennější.
+Věnuj během kontrol zvláštní pozornost kategoriím Instruction a Constraint. Tyto paměti určují pravidla, která musí tvůj agent dodržovat — často jsou nejcennější.
 :::
   `,
 
@@ -93,7 +96,7 @@ Vyhledávání ti pomáhá pochopit, co tví agenti vědí, ověřit, že se nau
 ### Klíčové body
 
 - **Full-text vyhledávání** — najdi paměti podle libovolného klíčového slova nebo fráze, kterou obsahují
-- **Filtruj podle kategorie** — zúžit výsledky na fakta, rozhodnutí, postřehy, poučení nebo varování
+- **Filtruj podle kategorie** — zúžit výsledky na fakta, preference, instrukce, kontext, naučené poznatky nebo omezení
 - **Filtruj podle důležitosti** — ukázat jen vysoko-prioritní nebo nízko-prioritní paměti
 - **Cross-agent vyhledávání** — hledej napříč všemi tvými agenty najednou nebo se soustřeď na jednoho
 
@@ -115,7 +118,7 @@ To je obzvlášť užitečné pro firemní informace, osobní preference nebo kr
 
 :::steps
 1. **Otevři sekci Memories** — klikni \`Memories\` v postranním panelu a pak \`Add Memory\`
-2. **Vyber kategorii** — vyber fakto, rozhodnutí, postřeh, poučení nebo varování
+2. **Vyber kategorii** — vyber fakt, preferenci, instrukci, kontext, naučený poznatek nebo omezení
 3. **Napiš obsah paměti** — popiš znalost v prostém jazyce
 4. **Nastav úroveň důležitosti** — přiřaď skóre od 1 (rutinní) do 5 (kritické)
 5. **Přiřaď k agentovi** — vyber konkrétního agenta nebo udělej paměť dostupnou všem agentům

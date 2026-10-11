@@ -25,35 +25,38 @@ Memori bekerja paling baik ketika agen memiliki tugas yang konsisten dan fokus. 
   "memory-categories": `
 ## Kategori Memori
 
-Memori diorganisasikan ke dalam lima kategori, masing-masing memiliki tujuan berbeda. Struktur ini membantu agen Anda mengingat jenis pengetahuan yang tepat pada waktu yang tepat — seperti bab dalam buku referensi.
+Memori diorganisasi ke dalam enam kategori, masing-masing melayani tujuan berbeda. Struktur ini membantu agen Anda mengingat jenis pengetahuan yang tepat pada waktu yang tepat — seperti bab dalam buku referensi.
 
 Memahami kategori ini membantu Anda meninjau dan mengelola pengetahuan agen Anda secara lebih efektif. Setiap kategori memberi tahu Anda tidak hanya *apa* yang diketahui agen, tetapi *jenis apa* pengetahuan itu.
 
-### Lima Kategori
+### Enam Kategori
 
 :::compare
 **Fact**
-Informasi konkret yang dipelajari dari tugas. Contoh: "Klien lebih menyukai bahasa formal." Bagian pengetahuan yang langsung yang diambil agen Anda.
+Pengetahuan objektif tentang dunia atau domain agen Anda. Contoh: "Tahun fiskal klien berakhir pada bulan Maret."
 ---
-**Decision**
-Pilihan yang dibuat dan alasan di baliknya. Contoh: "Memilih pengiriman Express karena pesanan mendesak." Mencatat alasannya, bukan hanya apanya.
+**Preference**
+Preferensi pengguna atau pemangku kepentingan yang memandu perilaku agen. Contoh: "Klien lebih suka bahasa formal."
 ---
-**Insight**
-Pola yang ditemukan selama beberapa run. Contoh: "Tiket dukungan melonjak setiap Senin pagi." Menjadi lebih pintar dari waktu ke waktu.
+**Instruction**
+Aturan atau arahan eksplisit yang harus diikuti agen. Contoh: "Selalu cc manajer akun pada email kontrak."
 ---
-**Learning**
-Pelajaran dari kesalahan atau keberhasilan. Contoh: "Baris subjek yang lebih pendek mendapatkan tingkat pembukaan yang lebih tinggi." Peningkatan berkelanjutan dalam tindakan.
+**Context**
+Informasi latar belakang yang membantu agen bernalar. Contoh: "Workspace ini mendukung tim penagihan beranggotakan lima orang."
 ---
-**Warning**
-Jebakan yang harus diwaspadai. Contoh: "Jangan pernah mengirim faktur sebelum kontrak ditandatangani." Mencegah agen Anda mengulangi kesalahan masa lalu.
+**Learned**
+Wawasan yang diperoleh agen dari eksekusi sebelumnya. Contoh: "Baris subjek yang lebih pendek mendapat tingkat buka lebih tinggi."
+---
+**Constraint**
+Batas keras seperti batas laju, aturan kepatuhan, atau tenggat waktu. Contoh: "Jangan pernah mengirim faktur sebelum kontrak ditandatangani."
 :::
 
 ### Cara Kerjanya
 
-Ketika agen membuat memori, ia secara otomatis mengkategorikannya berdasarkan konten. Fakta adalah potongan informasi yang langsung. Keputusan mencatat pilihan dengan alasan. Insight menangkap pola. Learning berasal dari merefleksikan hasil. Warning menandai hal-hal yang harus dihindari.
+Saat agen membuat memori, ia mengategorikannya secara otomatis berdasarkan isinya. Fact adalah pengetahuan objektif. Preference menangkap apa yang disukai orang. Instruction adalah aturan eksplisit. Context memberi latar belakang. Memori Learned berasal dari merefleksikan eksekusi sebelumnya. Constraint menandai batas keras.
 
 :::tip
-Berikan perhatian khusus pada kategori Warning selama tinjauan Anda. Memori ini membantu agen Anda menghindari pengulangan kesalahan masa lalu — mereka sering yang paling berharga.
+Beri perhatian khusus pada kategori Instruction dan Constraint saat meninjau. Memori ini menentukan aturan yang harus diikuti agen Anda — sering kali yang paling berharga.
 :::
   `,
 
@@ -93,7 +96,7 @@ Pencarian membantu Anda memahami apa yang diketahui agen Anda, memverifikasi mer
 ### Poin Kunci
 
 - **Pencarian teks lengkap** — temukan memori berdasarkan kata kunci atau frasa apa pun yang dikandungnya
-- **Saring berdasarkan kategori** — persempit hasil ke fact, decision, insight, learning, atau warning
+- **Saring berdasarkan kategori** — persempit hasil ke fact, preference, instruction, context, learned, atau constraint
 - **Saring berdasarkan kepentingan** — tampilkan hanya memori prioritas tinggi atau prioritas rendah
 - **Pencarian lintas-agen** — cari di semua agen Anda sekaligus atau fokus pada satu
 
@@ -115,7 +118,7 @@ Ini sangat berguna untuk informasi spesifik perusahaan, preferensi pribadi, atau
 
 :::steps
 1. **Buka bagian Memories** — klik \`Memories\` di sidebar dan kemudian \`Add Memory\`
-2. **Pilih kategori** — pilih fact, decision, insight, learning, atau warning
+2. **Pilih kategori** — pilih fact, preference, instruction, context, learned, atau constraint
 3. **Tulis konten memori** — jelaskan pengetahuan dalam bahasa biasa
 4. **Atur tingkat kepentingan** — tetapkan skor dari 1 (rutin) hingga 5 (kritis)
 5. **Tetapkan ke agen** — pilih agen tertentu atau buat memori tersedia untuk semua agen

@@ -25,35 +25,38 @@ La memoria funciona mejor cuando los agentes tienen tareas consistentes y enfoca
   "memory-categories": `
 ## Categorías de memoria
 
-Las memorias se organizan en cinco categorías, cada una con un propósito distinto. Esta estructura ayuda a tu agente a recordar el tipo de conocimiento correcto en el momento adecuado, como capítulos en un libro de referencia.
+Las memorias se organizan en seis categorías, cada una con un propósito distinto. Esta estructura ayuda a tu agente a recordar el tipo de conocimiento correcto en el momento adecuado, como capítulos en un libro de referencia.
 
 Entender estas categorías te ayuda a revisar y gestionar el conocimiento de tu agente de forma más efectiva. Cada categoría te dice no solo *qué* sabe el agente, sino *qué tipo* de conocimiento es.
 
-### Las cinco categorías
+### Las seis categorías
 
 :::compare
 **Fact**
-Información concreta aprendida de tareas. Ejemplo: "El cliente prefiere lenguaje formal". Trozos sencillos de conocimiento que tu agente recoge.
+Conocimiento objetivo sobre el mundo o el dominio de tu agente. Ejemplo: "El año fiscal del cliente termina en marzo".
 ---
-**Decision**
-Elecciones tomadas y el razonamiento detrás. Ejemplo: "Elegí envío Express porque el pedido era urgente". Registra el porqué, no solo el qué.
+**Preference**
+Preferencias del usuario o de las partes interesadas que guían el comportamiento del agente. Ejemplo: "El cliente prefiere lenguaje formal".
 ---
-**Insight**
-Patrones descubiertos a lo largo de varias ejecuciones. Ejemplo: "Los tickets de soporte aumentan cada lunes por la mañana". Se vuelve más inteligente con el tiempo.
+**Instruction**
+Reglas o directrices explícitas que el agente debe seguir. Ejemplo: "Copia siempre al gestor de cuenta en los correos de contratos".
 ---
-**Learning**
-Lecciones de errores o éxitos. Ejemplo: "Líneas de asunto más cortas obtienen mayores tasas de apertura". Mejora continua en acción.
+**Context**
+Información de fondo que ayuda al agente a razonar. Ejemplo: "Este espacio de trabajo da soporte a un equipo de facturación de cinco personas".
 ---
-**Warning**
-Trampas a las que prestar atención. Ejemplo: "Nunca enviar facturas antes de que el contrato esté firmado". Evita que tu agente repita errores pasados.
+**Learned**
+Conclusiones que el agente dedujo de ejecuciones pasadas. Ejemplo: "Líneas de asunto más cortas obtienen mayores tasas de apertura".
+---
+**Constraint**
+Límites estrictos como límites de frecuencia, reglas de cumplimiento o plazos. Ejemplo: "Nunca enviar facturas antes de que el contrato esté firmado".
 :::
 
 ### Cómo funciona
 
-Cuando un agente crea una memoria, la categoriza automáticamente según el contenido. Los hechos son trozos sencillos de información. Las decisiones registran elecciones con razonamiento. Los insights capturan patrones. Los aprendizajes vienen de reflexionar sobre los resultados. Las advertencias marcan cosas a evitar.
+Cuando un agente crea una memoria, la categoriza automáticamente según el contenido. Los hechos son conocimiento objetivo. Las preferencias recogen lo que prefieren las personas. Las instrucciones son reglas explícitas. El contexto aporta información de fondo. Las memorias aprendidas vienen de reflexionar sobre ejecuciones pasadas. Las restricciones marcan límites estrictos.
 
 :::tip
-Presta especial atención a la categoría Warnings durante tus revisiones. Estas memorias ayudan a tu agente a evitar repetir errores pasados: a menudo son las más valiosas.
+Presta especial atención a las categorías Instruction y Constraint durante tus revisiones. Estas memorias definen las reglas que tu agente debe seguir: a menudo son las más valiosas.
 :::
   `,
 
@@ -93,7 +96,7 @@ Buscar te ayuda a entender lo que tus agentes saben, verificar que han aprendido
 ### Puntos clave
 
 - **Búsqueda de texto completo** — encuentra memorias por cualquier palabra o frase que contengan
-- **Filtrar por categoría** — acota los resultados a hechos, decisiones, insights, aprendizajes o advertencias
+- **Filtrar por categoría** — acota los resultados a hechos, preferencias, instrucciones, contexto, aprendizajes o restricciones
 - **Filtrar por importancia** — muestra solo memorias de alta prioridad o baja prioridad
 - **Búsqueda entre agentes** — busca en todos tus agentes a la vez o céntrate en uno
 
@@ -115,7 +118,7 @@ Esto es especialmente útil para información específica de la empresa, prefere
 
 :::steps
 1. **Abre la sección Memories** — haz clic en \`Memories\` en la barra lateral y luego en \`Add Memory\`
-2. **Elige la categoría** — selecciona fact, decision, insight, learning o warning
+2. **Elige la categoría** — selecciona fact, preference, instruction, context, learned o constraint
 3. **Escribe el contenido de la memoria** — describe el conocimiento en lenguaje claro
 4. **Fija el nivel de importancia** — asigna una puntuación del 1 (rutinaria) al 5 (crítica)
 5. **Asigna a un agente** — elige un agente específico o haz que la memoria esté disponible para todos los agentes
