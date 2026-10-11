@@ -584,6 +584,8 @@ export interface LeaderboardPersona {
   composite: number; // derived average, also exposed
   trend: LeaderboardTrend;
   delta: number; // +/- vs last period
+  /** 1-based rank per weekly window, oldest first; real plane only. */
+  rankHistory?: (number | null)[];
 }
 
 function computeComposite(m: LeaderboardPersona["metrics"]): number {

@@ -16,6 +16,7 @@ import { ApiError, type ApiClient, type CommandAck } from "./api";
 import { isDeskOnlyReview, reviewReportId } from "./commands/deskOnlyReview";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { halvesTrend } from "./observabilitySeries";
+import { BASELINE_DAYS, HISTORY_WINDOWS, WINDOW_DAYS, addDays, standings, type SnapshotRow } from "./standings";
 import { fromWireEventStatus } from "./eventWireStatus";
 import { executionDetailFromRow, mapExecution, mapPersona, type ExecutionRow, type PersonaRow } from "./desktopRows";
 import { DEVICE_FRESH_MS } from "./sync/reachability";
@@ -793,6 +794,36 @@ export const getSyncedLeaderboard = async (): Promise<LeaderboardPersona[]> => {
     getSupabase().from("synced_leaderboard").select("*"),
   );
   if (r.length === 0) return [];
+
+  // Preferred path: windowed, self-relative standings from the daily snapshots
+  // (real delta + rank history). Falls through to the all-time scoring below
+  // when the desktop has not synced any snapshots yet.
+  const today = new Date().toISOString().slice(0, 10);
+  const since = addDays(today, -(WINDOW_DAYS * HISTORY_WINDOWS + BASELINE_DAYS));
+  const snaps = await rows<SnapshotRow>(
+    getSupabase()
+      .from("synced_metrics_snapshots")
+      .select("persona_id,snapshot_date,total_executions,successful_executions,total_cost_usd,avg_duration_ms")
+      .gte("snapshot_date", since),
+  );
+  if (snaps.length > 0) {
+    const byId = new Map(r.map((p) => [p.persona_id, p]));
+    return standings(snaps, today)
+      .filter((s) => byId.has(s.id))
+      .map<LeaderboardPersona>((s) => {
+        const p = byId.get(s.id)!;
+        return {
+          id: s.id,
+          name: p.persona_name ?? s.id,
+          color: p.persona_color ?? FALLBACK_PERSONA_COLOR,
+          metrics: s.metrics,
+          composite: s.composite,
+          trend: s.trend,
+          delta: s.delta,
+          rankHistory: s.rankHistory,
+        };
+      });
+  }
 
   // Normalization baselines across the cohort: cost-per-exec and duration are
   // scored relative to the cohort max (so the worst performer anchors 0-ish and
