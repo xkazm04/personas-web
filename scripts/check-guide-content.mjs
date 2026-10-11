@@ -18,6 +18,8 @@
  * item line its grammar cannot use (ignored-line), and `#` lines that are not
  * headings the renderer takes (`#####`, `#tag`, an indented `# x`).
  *
+ * Also checks per-topic block-sequence parity with English (ratcheting baseline).
+ *
  * Exits non-zero on any mismatch. Designed to run zero-dep in CI.
  */
 import fs from "node:fs";
@@ -144,13 +146,59 @@ const contentFiles = [
     }),
 ].filter((rel) => fs.existsSync(path.join(REPO_ROOT, rel)));
 
+// ── Directive-sequence parity: a locale body must carry the same sequence of
+// block nodes as its English source (a missing `:::cards` is a vanished block,
+// not a translation choice). Divergence that already existed when the gate
+// landed is frozen in scripts/guide-directive-parity-baseline.json; the gate
+// fails on a NEW divergence and on a baselined one that now matches (stale
+// entry), so the list can only shrink.
+const BLOCK_TYPES = new Set([
+  "callout", "steps", "keys", "compare", "diagram", "feature", "checklist",
+  "usecases", "code-compare", "tabs", "cli", "callout-stack", "cards",
+]);
+const blockSequence = (md) =>
+  parseGuide(String(md)).doc.filter((n) => BLOCK_TYPES.has(n.type)).map((n) => n.type).join(",");
+const BASELINE_REL = "scripts/guide-directive-parity-baseline.json";
+const updateBaseline = process.argv.includes("--update-parity-baseline");
+const parityBaseline = new Set(
+  fs.existsSync(path.join(REPO_ROOT, BASELINE_REL)) ? JSON.parse(read(BASELINE_REL)) : [],
+);
+const englishSequences = new Map();
+const parityDiverged = new Set();
+let parityChecked = 0;
+
 let directiveTopics = 0;
 for (const rel of contentFiles) {
   const { content } = await importTs(rel);
+  const localeMatch = rel.match(/^src\/data\/guide\/locales\/([^/]+)\/content\//);
   for (const [topicId, markdown] of Object.entries(content ?? {})) {
+    if (!localeMatch) englishSequences.set(topicId, blockSequence(markdown));
+    else {
+      const en = englishSequences.get(topicId);
+      if (en !== undefined) {
+        parityChecked++;
+        if (blockSequence(markdown) !== en) parityDiverged.add(`${localeMatch[1]}/${topicId}`);
+      }
+    }
     directiveTopics++;
     for (const issue of parseGuide(String(markdown)).diagnostics) {
       errors.push(`${rel} "${topicId}" line ${issue.line}: ${issue.message} — ${issue.text.trim()}`);
+    }
+  }
+}
+
+if (updateBaseline) {
+  fs.writeFileSync(path.join(REPO_ROOT, BASELINE_REL), JSON.stringify([...parityDiverged].sort(), null, 2) + "\n");
+  console.log(`Wrote ${parityDiverged.size} entries to ${BASELINE_REL}`);
+} else {
+  for (const key of parityDiverged) {
+    if (!parityBaseline.has(key)) {
+      errors.push(`Locale "${key}" has a different block sequence than English (a block was added, dropped or reordered) — fix the translation, or re-baseline with --update-parity-baseline only if the English change is intended`);
+    }
+  }
+  for (const key of parityBaseline) {
+    if (!parityDiverged.has(key)) {
+      errors.push(`Stale entry "${key}" in ${BASELINE_REL} — it now matches English; remove it (run --update-parity-baseline)`);
     }
   }
 }
