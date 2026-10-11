@@ -31,6 +31,14 @@
  *   node scripts/check-guide-coverage.mjs --fail-under 50  # gate: locale coverage %
  *   node scripts/check-guide-coverage.mjs --fail-stale-over 20   # opt-in, default off
  *   node scripts/check-guide-coverage.mjs --fail-drift-over 10   # opt-in, default off
+ *   node scripts/check-guide-coverage.mjs --fail-unresolved-over 0   # opt-in, default off
+ *
+ * Claim-anchored check (nav claims): every TOPIC_MODULE_MAP breadcrumb label
+ * is resolved against the desktop's own registries (navigation/registry.ts,
+ * sidebarData.ts, locales/en.json). Unlike directory-level drift this names
+ * the false sentence ("topic X: 'Team Canvas' exists nowhere on the
+ * desktop"). Same contract: no desktop checkout means
+ * `navClaims.unresolved: null`, never [].
  */
 
 import fs from "node:fs";
@@ -118,6 +126,7 @@ function numericFlag(name) {
 const failUnder = numericFlag("--fail-under");
 const failStaleOver = numericFlag("--fail-stale-over");
 const failDriftOver = numericFlag("--fail-drift-over");
+const failUnresolvedOver = numericFlag("--fail-unresolved-over");
 
 // ── Load topics via dynamic import (handles TS → JS via tsx if present) ─
 async function loadTopics() {
@@ -135,6 +144,70 @@ async function loadTopics() {
   const arrayLiteral = match[1];
   const topics = Function(`"use strict"; return (${arrayLiteral});`)();
   return topics;
+}
+
+// ── Nav claims ────────────────────────────────────────────────────────
+// Resolve each TOPIC_MODULE_MAP breadcrumb label against the desktop's own
+// label registries. The label pool is deliberately generous (every string in
+// the desktop's English catalog plus the sidebar/registry literals), so a
+// reported miss means the label exists NOWHERE on the desktop: high
+// precision, lower recall (a label that exists but in an unrelated place
+// still resolves).
+const DESKTOP_NAV_SOURCES = {
+  registry: "src/lib/navigation/registry.ts",
+  sidebar: "src/features/shared/chrome/sidebar/sidebarData.ts",
+  catalog: "src/i18n/locales/en.json",
+};
+
+function resolveNavClaims(topicIds) {
+  const none = (reason) => ({ available: false, unavailableReason: reason, checked: 0, unresolved: null });
+  if (!DESKTOP.path) return none(DESKTOP.reason);
+  const read = (rel) => {
+    const p = path.join(DESKTOP.path, rel);
+    return fs.existsSync(p) ? fs.readFileSync(p, "utf8") : null;
+  };
+  const sources = {
+    registry: read(DESKTOP_NAV_SOURCES.registry),
+    sidebar: read(DESKTOP_NAV_SOURCES.sidebar),
+    catalog: read(DESKTOP_NAV_SOURCES.catalog),
+  };
+  const missingSources = Object.entries(sources).filter(([, v]) => v === null).map(([k]) => k);
+  if (missingSources.length) {
+    return none(
+      `desktop label source(s) not found: ${missingSources.join(", ")} - the desktop moved them; update DESKTOP_NAV_SOURCES`,
+    );
+  }
+  const pool = new Set();
+  const LABEL_RE = /label:\s*(['"`])((?:\\.|(?!\1).)*)\1/g;
+  for (const m of (sources.registry + sources.sidebar).matchAll(LABEL_RE)) {
+    pool.add(m[2].replace(/\\(['"`])/g, "$1"));
+  }
+  try {
+    const walk = (o) => {
+      for (const v of Object.values(o)) {
+        if (typeof v === "string") pool.add(v);
+        else if (v && typeof v === "object") walk(v);
+      }
+    };
+    walk(JSON.parse(sources.catalog));
+  } catch (e) {
+    return none(`could not parse ${DESKTOP_NAV_SOURCES.catalog}: ${e.message}`);
+  }
+  if (pool.size < 100) return none(`label pool has only ${pool.size} entries - extraction is broken, not the guide`);
+
+  const mapSrc = fs.readFileSync(path.join(REPO_ROOT, "src/data/guide/desktop-modules.ts"), "utf8");
+  const start = mapSrc.indexOf("export const TOPIC_MODULE_MAP");
+  if (start === -1) return none("TOPIC_MODULE_MAP export not found in desktop-modules.ts");
+  const ENTRY_RE = /"([\w-]+)":\s*\{\s*moduleId:\s*"[^"]+",\s*path:\s*\[([^\]]*)\]/g;
+  const refs = [...mapSrc.slice(start).matchAll(ENTRY_RE)];
+  if (refs.length === 0) return none("no TOPIC_MODULE_MAP entries parsed - the file shape changed");
+  const unresolved = [];
+  for (const [, id, rawPath] of refs) {
+    if (!topicIds.has(id)) continue;
+    const missing = [...rawPath.matchAll(/"([^"]*)"/g)].map((x) => x[1]).filter((l) => !pool.has(l));
+    if (missing.length) unresolved.push({ id, missing });
+  }
+  return { available: true, unavailableReason: null, checked: refs.length, unresolved };
 }
 
 // ── Report dimensions ─────────────────────────────────────────────────
@@ -303,6 +376,7 @@ const topics = await loadTopics();
 const classified = topics.map(classifyTopic);
 const drift = computeDrift(topics);
 const driftSkips = summarizeSkips(drift.skips);
+const navClaims = resolveNavClaims(new Set(topics.map((t) => t.id)));
 // "Measured" means at least one topic was actually answered. Finding the repo
 // is not the same as getting an answer out of it: if every query failed, the
 // result set is as empty of meaning as if the repo had been missing.
@@ -359,6 +433,13 @@ const enforcement = {
     measured: driftMeasured ? drift.topics.length : null,
     measurementComplete: driftComplete,
   },
+  unresolvedNavClaims: {
+    flag: "--fail-unresolved-over",
+    unit: "topics",
+    enforced: failUnresolvedOver !== null,
+    threshold: failUnresolvedOver,
+    measured: navClaims.available ? navClaims.unresolved.length : null,
+  },
 };
 
 // ── Output ────────────────────────────────────────────────────────────
@@ -396,6 +477,14 @@ if (asJson) {
           // silently reading a blackout as a clean bill of health.
           driftedTopicCount: driftMeasured ? drift.topics.length : null,
           driftedTopics: driftMeasured ? drift.topics : null,
+        },
+        // unresolved: null -> never asked; [] -> asked, every label resolved.
+        navClaims: {
+          available: navClaims.available,
+          unavailableReason: navClaims.unavailableReason,
+          claimsChecked: navClaims.checked,
+          unresolvedTopicCount: navClaims.available ? navClaims.unresolved.length : null,
+          unresolved: navClaims.unresolved,
         },
         staleContent: staleContent.map((c) => ({ id: c.id, reviewedDays: c.reviewedDays })),
         topicsMissingShots: withRecipe.flatMap((c) =>
@@ -497,6 +586,20 @@ if (asJson) {
   }
 
   console.log();
+  if (!navClaims.available) {
+    console.log(`Nav claims:  NOT MEASURED  ${gateTag(enforcement.unresolvedNavClaims)}`);
+    console.log(`  reason: ${navClaims.unavailableReason}`);
+  } else {
+    console.log(
+      `Nav claims (breadcrumb labels vs desktop registries):  ${navClaims.unresolved.length}/${navClaims.checked} topics cite a label found nowhere on the desktop  ${gateTag(enforcement.unresolvedNavClaims)}`,
+    );
+    for (const u of navClaims.unresolved.slice(0, 20)) {
+      console.log(`  - ${u.id}: ${u.missing.map((m) => `"${m}"`).join(", ")}`);
+    }
+    if (navClaims.unresolved.length > 20) console.log(`  ...and ${navClaims.unresolved.length - 20} more (use --json)`);
+  }
+
+  console.log();
   console.log("Signals:");
   for (const [name, e] of Object.entries(enforcement)) {
     console.log(
@@ -536,6 +639,14 @@ if (failDriftOver !== null) {
     if (drift.topics.length > failDriftOver) {
       failures.push(`drifted topics ${drift.topics.length} > allowed ${failDriftOver}`);
     }
+  }
+}
+
+if (failUnresolvedOver !== null) {
+  if (!navClaims.available) {
+    failures.push(`nav-claim gate requested but not measured - ${navClaims.unavailableReason}`);
+  } else if (navClaims.unresolved.length > failUnresolvedOver) {
+    failures.push(`unresolved nav claims in ${navClaims.unresolved.length} topics > allowed ${failUnresolvedOver}`);
   }
 }
 
