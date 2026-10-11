@@ -43,6 +43,11 @@ jobs:
       - run: npm run test:unit
       - run: npm run check:i18n-coverage
       - run: npm run check:i18n-encoding
+      # Per-key hash pins (docs/i18n/ui-ledger.json): fails on an English value changed
+      # without its translations (stale), on retranslations not recorded, and on any rise
+      # in the stale/pending/identical ratchet. Fix with `npm run i18n:ledger`.
+      - run: npm run check:i18n-ledger
+      - run: node --test "scripts/i18n/*.test.mjs"
       # Gate: a topic listed in GUIDE_TOPICS but absent from its category's
       # content module 404s while still shipping SEO tags. Bidirectional, so a
       # partial parse fails loudly in both directions rather than passing thin.
