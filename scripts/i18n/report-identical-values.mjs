@@ -27,9 +27,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import vm from "node:vm";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
 import {
   CLASSES,
   IDENTIFIER_MIN_LENGTH,
@@ -37,39 +35,15 @@ import {
   collectLeaves,
   identicalInEveryLocale,
 } from "./identical-values-lib.mjs";
+import { loadLocale as loadLocaleFrom } from "./load-locale.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const i18nDir = path.join(repoRoot, "src", "i18n");
 const contractPath = path.join(repoRoot, "docs", "i18n", "copy-contract.json");
 const sourceLocale = "en";
 
-// Same loading as check-i18n-coverage.mjs: transpile the TS module, run it sandboxed.
-function loadLocale(locale) {
-  const filename = path.join(i18nDir, `${locale}.ts`);
-  const source = fs.readFileSync(filename, "utf8");
-  const compiled = ts.transpileModule(source, {
-    compilerOptions: {
-      module: ts.ModuleKind.CommonJS,
-      target: ts.ScriptTarget.ES2020,
-      esModuleInterop: true,
-    },
-    fileName: filename,
-  }).outputText;
-  const sandbox = {
-    exports: {},
-    module: { exports: {} },
-    require: (specifier) => {
-      throw new Error(`Unexpected runtime import "${specifier}" while loading ${locale}`);
-    },
-  };
-  sandbox.exports = sandbox.module.exports;
-  vm.runInNewContext(compiled, sandbox, { filename });
-  const translations = sandbox.module.exports[locale] ?? sandbox.exports[locale];
-  if (!translations || typeof translations !== "object") {
-    throw new Error(`Could not load exported locale "${locale}" from ${filename}`);
-  }
-  return translations;
-}
+// Same loading as check-i18n-coverage.mjs (shared in ./load-locale.mjs).
+const loadLocale = (locale) => loadLocaleFrom(i18nDir, locale);
 
 function loadAcceptedTerms() {
   if (!fs.existsSync(contractPath)) return { terms: new Set(), note: "no copy contract found" };
