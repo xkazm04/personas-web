@@ -1523,7 +1523,14 @@ export const cs: LocaleTranslations = {
       simulatedLabel: "Simulovan\u00fd p\u0159\u00edklad \u00b7 nic se nespou\u0161t\u00ed",
       connecting: "P\u0159ipojov\u00e1n\u00ed k {label}\u2026",
       working: "Pracuji na: {task}",
-      done: "Hotovo: {task}"
+      done: "Hotovo: {task}",
+      needHeading: "Co budete pot\u0159ebovat",
+      setupHeading: "Nastaven\u00ed",
+      secretField: "Tajn\u00e9",
+      optionalField: "Voliteln\u00e9",
+      docsLink: "Ofici\u00e1ln\u00ed dokumentace",
+      outboundOnly: "Pouze odchoz\u00ed: Personas m\u016f\u017ee do {label} odes\u00edlat, ale nem\u016f\u017ee z n\u011bj \u010d\u00edst.",
+      englishNote: "Podrobnosti nastaven\u00ed poch\u00e1zej\u00ed z desktopov\u00e9 aplikace a zobrazuj\u00ed se anglicky."
     },
     roadmapSection: {
       inProgress: "Prob\u00edh\u00e1",

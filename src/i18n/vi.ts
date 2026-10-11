@@ -1523,7 +1523,14 @@ export const vi: LocaleTranslations = {
       simulatedLabel: "V\u00ed d\u1ee5 m\u00f4 ph\u1ecfng \u00b7 kh\u00f4ng c\u00f3 g\u00ec th\u1ef1c s\u1ef1 ch\u1ea1y",
       connecting: "\u0110ang k\u1ebft n\u1ed1i t\u1edbi {label}\u2026",
       working: "\u0110ang th\u1ef1c hi\u1ec7n: {task}",
-      done: "Xong: {task}"
+      done: "Xong: {task}",
+      needHeading: "B\u1ea1n s\u1ebd c\u1ea7n",
+      setupHeading: "C\u00e1ch thi\u1ebft l\u1eadp",
+      secretField: "B\u00ed m\u1eadt",
+      optionalField: "T\u00f9y ch\u1ecdn",
+      docsLink: "T\u00e0i li\u1ec7u ch\u00ednh th\u1ee9c",
+      outboundOnly: "Ch\u1ec9 g\u1eedi \u0111i: Personas c\u00f3 th\u1ec3 g\u1eedi t\u1edbi {label} nh\u01b0ng kh\u00f4ng th\u1ec3 \u0111\u1ecdc t\u1eeb \u0111\u00f3.",
+      englishNote: "Chi ti\u1ebft thi\u1ebft l\u1eadp l\u1ea5y t\u1eeb \u1ee9ng d\u1ee5ng m\u00e1y t\u00ednh v\u00e0 hi\u1ec3n th\u1ecb b\u1eb1ng ti\u1ebfng Anh."
     },
     roadmapSection: {
       inProgress: "\u0110ang th\u1ef1c hi\u1ec7n",

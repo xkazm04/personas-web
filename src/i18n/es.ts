@@ -1523,7 +1523,14 @@ export const es: LocaleTranslations = {
       simulatedLabel: "Ejemplo simulado \u00b7 no se ejecuta nada",
       connecting: "Conectando con {label}\u2026",
       working: "Trabajando en: {task}",
-      done: "Hecho: {task}"
+      done: "Hecho: {task}",
+      needHeading: "Lo que necesitar\u00e1s",
+      setupHeading: "Config\u00faralo",
+      secretField: "Secreto",
+      optionalField: "Opcional",
+      docsLink: "Documentaci\u00f3n oficial",
+      outboundOnly: "Solo saliente: Personas puede enviar a {label}, pero no leer de \u00e9l.",
+      englishNote: "Los detalles de configuraci\u00f3n provienen de la aplicaci\u00f3n de escritorio y se muestran en ingl\u00e9s."
     },
     roadmapSection: {
       inProgress: "En Progreso",

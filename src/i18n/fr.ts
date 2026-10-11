@@ -1523,7 +1523,14 @@ export const fr: LocaleTranslations = {
       simulatedLabel: "Exemple simul\u00e9 \u00b7 rien n\u2019est ex\u00e9cut\u00e9",
       connecting: "Connexion \u00e0 {label}\u2026",
       working: "En cours : {task}",
-      done: "Termin\u00e9 : {task}"
+      done: "Termin\u00e9 : {task}",
+      needHeading: "Ce dont vous aurez besoin",
+      setupHeading: "Configuration",
+      secretField: "Secret",
+      optionalField: "Facultatif",
+      docsLink: "Documentation officielle",
+      outboundOnly: "Sortant uniquement : Personas peut envoyer vers {label} mais ne peut pas y lire.",
+      englishNote: "Les d\u00e9tails de configuration proviennent de l\u2019application de bureau et sont affich\u00e9s en anglais."
     },
     roadmapSection: {
       inProgress: "En cours",

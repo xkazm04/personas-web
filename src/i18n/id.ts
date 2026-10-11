@@ -1523,7 +1523,14 @@ export const id: LocaleTranslations = {
       simulatedLabel: "Contoh simulasi \u00b7 tidak ada yang dijalankan",
       connecting: "Menghubungkan ke {label}\u2026",
       working: "Mengerjakan: {task}",
-      done: "Selesai: {task}"
+      done: "Selesai: {task}",
+      needHeading: "Yang Anda butuhkan",
+      setupHeading: "Cara menyiapkan",
+      secretField: "Rahasia",
+      optionalField: "Opsional",
+      docsLink: "Dokumentasi resmi",
+      outboundOnly: "Hanya keluar: Personas dapat mengirim ke {label} tetapi tidak dapat membaca darinya.",
+      englishNote: "Detail penyiapan berasal dari aplikasi desktop dan ditampilkan dalam bahasa Inggris."
     },
     roadmapSection: {
       inProgress: "Sedang Berjalan",

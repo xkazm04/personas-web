@@ -46,7 +46,8 @@
     "prepare": "node scripts/install-git-hooks.mjs",
     "sync:desktop-facts": "node scripts/sync-desktop-facts.mjs",
     "compile:changelog": "node scripts/compile-changelog.mjs",
-    "check:changelog": "node scripts/compile-changelog.mjs --check"
+    "check:changelog": "node scripts/compile-changelog.mjs --check",
+    "sync:connector-setup": "node scripts/sync-connector-setup.mjs"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.69.0",

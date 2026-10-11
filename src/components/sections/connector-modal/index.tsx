@@ -8,6 +8,7 @@ import { lockBodyScroll, unlockBodyScroll } from "@/lib/bodyScrollLock";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import ConnectorModalHeader from "./components/ConnectorModalHeader";
 import UseCaseList from "./components/UseCaseList";
+import SetupDetails from "./components/SetupDetails";
 import TryItToggle from "./components/TryItToggle";
 import SetupCTA from "./components/SetupCTA";
 
@@ -95,6 +96,7 @@ export default function ConnectorModal({
             <ConnectorModalHeader connector={connector} />
             <div className="mx-8 h-px bg-white/[0.06]" />
             <UseCaseList connector={connector} />
+            <SetupDetails connector={connector} />
             <div className="mx-8 h-px bg-white/[0.06]" />
             <TryItToggle
               connector={connector}

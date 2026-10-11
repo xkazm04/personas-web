@@ -1342,6 +1342,13 @@
     connecting: string;
     working: string;
     done: string;
+    needHeading: string;
+    setupHeading: string;
+    secretField: string;
+    optionalField: string;
+    docsLink: string;
+    outboundOnly: string;
+    englishNote: string;
   };
   roadmapSection: {
     inProgress: string;
@@ -3391,6 +3398,13 @@ export const en: CoreTranslations = {
     connecting: 'Connecting to {label}…',
     working: 'Working on: {task}',
     done: 'Done: {task}',
+    needHeading: "What you'll need",
+    setupHeading: 'Set it up',
+    secretField: 'Secret',
+    optionalField: 'Optional',
+    docsLink: 'Official docs',
+    outboundOnly: 'Outbound only: Personas can send to {label} but cannot read from it.',
+    englishNote: 'Setup details come from the desktop app and are shown in English.',
   },
   roadmapSection: {
     inProgress: 'In Progress',

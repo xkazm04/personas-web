@@ -1,0 +1,2466 @@
+{
+ "airtable": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at airtable.com/create/tokens"
+   },
+   {
+    "label": "Base ID",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional: restrict to a specific base"
+   }
+  ],
+  "guide": [
+   "Go to airtable.com/create/tokens",
+   "Click 'Create new token'",
+   "Name your token and select the scopes and bases you need",
+   "Click 'Create token' and copy the pat... value"
+  ],
+  "docsUrl": "https://airtable.com/create/tokens"
+ },
+ "alpha_vantage": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Claim your free API key at alphavantage.co/support/#api-key"
+   }
+  ],
+  "guide": [
+   "Go to alphavantage.co/support/#api-key",
+   "Enter your email and a description",
+   "Click 'Get Free API Key'",
+   "Copy the API key and paste it here"
+  ],
+  "docsUrl": "https://www.alphavantage.co/documentation/"
+ },
+ "anthropic-admin": {
+  "fields": [
+   {
+    "label": "Admin API Key",
+    "kind": "secret",
+    "help": "Anthropic Console -> Settings -> Organization -> Admin keys. Grants usage/cost read access for the org."
+   }
+  ]
+ },
+ "apify": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "Found in Apify Console → Settings → Integrations → API tokens"
+   }
+  ],
+  "guide": [
+   "Sign up or log in at apify.com",
+   "Go to Settings → Integrations → API tokens",
+   "Create a new token or copy your existing one",
+   "Paste the token here"
+  ],
+  "docsUrl": "https://docs.apify.com/api/v2"
+ },
+ "arcade": {
+  "fields": [
+   {
+    "label": "Arcade API key",
+    "kind": "secret",
+    "help": "From your Arcade dashboard -> Settings -> API keys"
+   },
+   {
+    "label": "Gateway URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Override the default Arcade MCP gateway URL. Leave blank unless you use a self-hosted Arcade instance."
+   },
+   {
+    "label": "Organization",
+    "kind": "text",
+    "optional": true,
+    "help": "Optional Arcade organization slug."
+   }
+  ],
+  "guide": [
+   "Sign up at arcade.dev and create an organization.",
+   "Go to Settings -> API keys and generate a new key.",
+   "Paste the key here. The default gateway URL (https://api.arcade.dev/v1/mcp) is correct for hosted Arcade.",
+   "Open the Arcade dashboard and configure which tools your organization exposes.",
+   "Attach this credential to a persona -- tool discovery will return every tool your Arcade org exposes.",
+   "Note: Arcade uses just-in-time OAuth for per-tool authorization. The underlying support in personas is scaffolded but not fully wired yet -- tools requiring fresh OAuth will currently fail until JIT auth runner integration ships. Tools that have already been authorized out-of-band work today."
+  ],
+  "docsUrl": "https://docs.arcade.dev/"
+ },
+ "arxiv": {
+  "guide": [
+   "No authentication required. arXiv API is free and open."
+  ],
+  "docsUrl": "https://info.arxiv.org/help/api/index.html"
+ },
+ "asana": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "From Asana -> My Settings -> Apps -> Manage Developer Apps -> Personal Access Tokens"
+   }
+  ],
+  "guide": [
+   "Open Asana and click your profile photo (top right)",
+   "Go to My Settings -> Apps -> Manage Developer Apps",
+   "Under Personal Access Tokens, click 'Create new token'",
+   "Give it a description and click 'Create token'",
+   "Copy the token (format: 1/12345:abcdef...) and paste it here"
+  ],
+  "docsUrl": "https://developers.asana.com/docs/personal-access-token"
+ },
+ "attio": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "Go to Attio -> Settings -> Developers -> API Access -> Generate a new token"
+   }
+  ],
+  "guide": [
+   "Log in to Attio.",
+   "Go to Settings -> Developers -> API Access.",
+   "Click 'Generate a new token'.",
+   "Select the required scopes (read/write for records, lists, objects).",
+   "Copy the token and paste it here."
+  ],
+  "docsUrl": "https://developers.attio.com/reference"
+ },
+ "aws_cloud": {
+  "fields": [
+   {
+    "label": "Access Key ID",
+    "kind": "secret",
+    "help": "From AWS IAM -> Users -> Security credentials -> Access keys"
+   },
+   {
+    "label": "Secret Access Key",
+    "kind": "secret",
+    "help": "From the same IAM access key creation page"
+   },
+   {
+    "label": "Region",
+    "kind": "text",
+    "help": "Default AWS region for API calls"
+   },
+   {
+    "label": "Account ID",
+    "kind": "text",
+    "optional": true,
+    "help": "12-digit AWS account ID. Found in the top-right menu of the AWS Console."
+   }
+  ],
+  "guide": [
+   "Log in to the AWS Console.",
+   "Go to IAM -> Users -> select your user (or create one).",
+   "Under Security credentials, click 'Create access key'.",
+   "Choose 'Application running outside AWS'.",
+   "Copy the Access Key ID and Secret Access Key.",
+   "Your Account ID is in the top-right menu of the AWS Console.",
+   "Grant the IAM user permissions needed for your use case (e.g., ce:GetCostAndUsage for billing)."
+  ],
+  "docsUrl": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html"
+ },
+ "aws_s3": {
+  "fields": [
+   {
+    "label": "Access Key ID",
+    "kind": "secret",
+    "help": "From AWS IAM -> Users -> Security credentials -> Access keys"
+   },
+   {
+    "label": "Secret Access Key",
+    "kind": "secret",
+    "help": "From the same IAM access key creation page"
+   },
+   {
+    "label": "Region",
+    "kind": "text",
+    "help": "AWS region for your S3 bucket"
+   }
+  ],
+  "guide": [
+   "Log in to the AWS Console.",
+   "Go to IAM -> Users -> select your user.",
+   "Under Security credentials, click 'Create access key'.",
+   "Choose 'Application running outside AWS'.",
+   "Copy the Access Key ID and Secret Access Key.",
+   "Paste both values and your preferred region here."
+  ],
+  "docsUrl": "https://docs.aws.amazon.com/AmazonS3/latest/API/Welcome.html"
+ },
+ "azure_cloud": {
+  "fields": [
+   {
+    "label": "Application (Client) ID",
+    "kind": "text",
+    "help": "From Azure Portal -> App registrations -> your app -> Overview"
+   },
+   {
+    "label": "Client Secret",
+    "kind": "secret",
+    "help": "From Azure Portal -> App registrations -> your app -> Certificates & secrets"
+   },
+   {
+    "label": "Directory (Tenant) ID",
+    "kind": "text",
+    "help": "From Azure Portal -> Azure Active Directory -> Overview"
+   },
+   {
+    "label": "Subscription ID",
+    "kind": "text",
+    "help": "From Azure Portal -> Subscriptions -> select your subscription"
+   }
+  ],
+  "guide": [
+   "Go to Azure Portal (portal.azure.com).",
+   "Navigate to Azure Active Directory -> App registrations -> New registration.",
+   "Give the app a name and register it.",
+   "Copy the Application (client) ID and Directory (tenant) ID from the Overview page.",
+   "Go to Certificates & secrets -> New client secret -> copy the secret value.",
+   "Go to Subscriptions -> select your subscription -> copy the Subscription ID.",
+   "Assign the app a role on the subscription (e.g., Cost Management Reader for billing)."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app"
+ },
+ "azure_devops_org": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at dev.azure.com/{org}/_usersSettings/tokens. Must include 'User Profile (read)' scope (so the picker can list your orgs) plus the work scopes your agents need (Code, Work Items, Build, etc.). Use the plain 'Azure DevOps' connector for narrow PATs that don't include identity scope."
+   }
+  ],
+  "guide": [
+   "Go to dev.azure.com and sign in",
+   "Click User Settings (gear icon) -> Personal Access Tokens",
+   "Click 'New Token'",
+   "IMPORTANT — under Scopes, check BOTH 'User Profile (read)' AND your work scopes (Code, Work Items, Build, etc.). Without User Profile (read), this connector cannot enumerate your organizations.",
+   "Copy the generated token and paste it here",
+   "After saving, the scope picker lists your organizations — pick one. Projects under that org are then listed for further scoping.",
+   "If your PAT is project-narrow (no identity scope), use the plain 'Azure DevOps' connector instead — it asks for the organization name as a field and works with any PAT scope."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/rest/api/azure/devops/"
+ },
+ "azure_devops": {
+  "fields": [
+   {
+    "label": "Organization",
+    "kind": "text",
+    "help": "Your Azure DevOps organization name (from dev.azure.com/{organization})"
+   },
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at dev.azure.com/{org}/_usersSettings/tokens with required scopes"
+   }
+  ],
+  "guide": [
+   "Go to dev.azure.com and sign in",
+   "Click User Settings (gear icon) -> Personal Access Tokens",
+   "Click 'New Token', set the scopes you need (e.g. Code, Work Items, Build)",
+   "Copy the generated token",
+   "Enter your organization name and paste the token",
+   "Use this connector for narrow, single-org PATs (typical for ticketing/CI agents). If your PAT has 'User Profile (read)' and you want to scope by organization at adoption time, use the 'Azure DevOps (org-aware)' connector instead."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/rest/api/azure/devops/"
+ },
+ "backblaze_b2": {
+  "fields": [
+   {
+    "label": "Application Key ID",
+    "kind": "secret",
+    "help": "From Backblaze -> App Keys -> Add a New Application Key"
+   },
+   {
+    "label": "Application Key",
+    "kind": "secret",
+    "help": "Shown once when creating the key -- copy immediately"
+   }
+  ],
+  "guide": [
+   "Log in to Backblaze.",
+   "Go to App Keys.",
+   "Click 'Add a New Application Key'.",
+   "Name it and select bucket permissions.",
+   "Copy the Application Key ID and Application Key (shown only once).",
+   "Paste both values here."
+  ],
+  "docsUrl": "https://www.backblaze.com/docs/cloud-storage"
+ },
+ "betterstack": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "From Better Stack Dashboard -> Settings -> API tokens"
+   }
+  ],
+  "guide": [
+   "Go to uptime.betterstack.com and sign in to your account",
+   "Navigate to Settings -> API tokens",
+   "Click 'Create API token' and give it a descriptive name",
+   "Copy the generated token value"
+  ],
+  "docsUrl": "https://betterstack.com/docs/uptime/api/getting-started-with-uptime-api/"
+ },
+ "bright_data": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "From Bright Data Dashboard -> Account Settings -> API Tokens. The same token powers SERP API, Web Unlocker, Web Scraper API, Scraping Browser, and Proxies."
+   }
+  ],
+  "guide": [
+   "Sign up at brightdata.com and verify your account",
+   "Open the Dashboard -> Account Settings -> API Tokens",
+   "Create a new token with the access scopes you need",
+   "Paste the token here",
+   "Key REST endpoints your agents will call via http_request:",
+   "- POST https://api.brightdata.com/serp/req -- structured search results (Google, Bing, Yandex)",
+   "- POST https://api.brightdata.com/request -- Web Unlocker, bypass bot detection on any URL",
+   "- POST https://api.brightdata.com/datasets/v3/trigger?dataset_id=... -- 660+ pre-built scrapers (LinkedIn, Amazon, Instagram, etc.)",
+   "- WebSocket wss://brd.superproxy.io:9222 -- Scraping Browser (managed headless)",
+   "For zero-config agent tools, install the official Bright Data MCP server:",
+   "Add an mcp_gateway credential",
+   "Add a member with command: npx @brightdata/mcp",
+   "Set the API_TOKEN env var to your Bright Data token",
+   "Optional: set PRO_MODE=true to unlock all 60+ tools (LinkedIn, e-commerce, finance, browser automation)",
+   "Your persona will then see search_engine, scrape_as_markdown, and discover tools in its toolset automatically."
+  ],
+  "docsUrl": "https://docs.brightdata.com"
+ },
+ "buffer": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "From Buffer -> Settings -> Apps -> Access Token"
+   }
+  ],
+  "guide": [
+   "Go to buffer.com and sign in to your account",
+   "Navigate to account.buffer.com/access-tokens",
+   "Click 'Create Access Token'",
+   "Copy the generated access token value"
+  ],
+  "docsUrl": "https://buffer.com/developers/api"
+ },
+ "cal_com": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Generate at cal.com/settings/developer/api-keys"
+   }
+  ],
+  "guide": [
+   "Go to cal.com and sign in to your account",
+   "Navigate to Settings -> Developer -> API Keys",
+   "Click 'Create new API key'",
+   "Copy the generated key (starts with cal_live_)"
+  ],
+  "docsUrl": "https://cal.com/docs/api-reference/v2/introduction"
+ },
+ "calendly": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at calendly.com/integrations/api_webhooks"
+   }
+  ],
+  "guide": [
+   "Go to calendly.com and sign in to your account",
+   "Navigate to Integrations -> API & Webhooks",
+   "Click 'Generate New Token' under Personal Access Tokens",
+   "Copy the generated token value"
+  ],
+  "docsUrl": "https://developer.calendly.com/api-docs/"
+ },
+ "canva": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "Generate at canva.com/developers -> Your Apps -> Generate Token"
+   }
+  ],
+  "guide": [
+   "Go to canva.com/developers and sign in.",
+   "Create a new integration or select an existing one.",
+   "Generate an access token with the required scopes.",
+   "Copy the token and paste it here."
+  ],
+  "docsUrl": "https://www.canva.dev/docs/connect/"
+ },
+ "circleci": {
+  "fields": [
+   {
+    "label": "Personal API Token",
+    "kind": "secret",
+    "help": "From CircleCI -> User Settings -> Personal API Tokens"
+   }
+  ],
+  "guide": [
+   "Go to CircleCI -> User Settings -> Personal API Tokens",
+   "Click 'Create New Token'",
+   "Name your token and click 'Add API Token'",
+   "Copy the CCIPAT_... value and paste it here"
+  ],
+  "docsUrl": "https://circleci.com/docs/managing-api-tokens/"
+ },
+ "clickup": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From ClickUp Settings -> Apps -> API Token"
+   }
+  ],
+  "guide": [
+   "Go to app.clickup.com and sign in",
+   "Click your avatar -> Settings -> Apps",
+   "Under 'API Token', click 'Generate' or copy existing token",
+   "Paste the pk_... token value here"
+  ],
+  "docsUrl": "https://clickup.com/api/developer-portal/authentication"
+ },
+ "clockify": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Found in Clockify -> Profile Settings -> API"
+   }
+  ],
+  "guide": [
+   "Log in to Clockify at app.clockify.me",
+   "Click your profile avatar (top right) -> Profile settings",
+   "Scroll to the API section at the bottom",
+   "Click 'Generate' to create a new API key",
+   "Copy the key and paste it here"
+  ],
+  "docsUrl": "https://docs.clockify.me/"
+ },
+ "cloudflare_r2": {
+  "fields": [
+   {
+    "label": "Account ID",
+    "kind": "secret",
+    "help": "From Cloudflare dashboard -> Overview -> Account ID (right sidebar)"
+   },
+   {
+    "label": "R2 Access Key ID",
+    "kind": "secret",
+    "help": "From Cloudflare -> R2 -> Manage R2 API Tokens"
+   },
+   {
+    "label": "R2 Secret Access Key",
+    "kind": "secret",
+    "help": "From the same R2 API Token creation page"
+   }
+  ],
+  "guide": [
+   "Log in to the Cloudflare dashboard.",
+   "Go to R2 -> Manage R2 API Tokens.",
+   "Create a new API token with Object Read & Write permissions.",
+   "Copy the Access Key ID, Secret Access Key, and your Account ID.",
+   "Paste all values here."
+  ],
+  "docsUrl": "https://developers.cloudflare.com/r2/api/"
+ },
+ "cloudflare": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "From Cloudflare Dashboard -> My Profile -> API Tokens -> Create Token"
+   }
+  ],
+  "guide": [
+   "Go to dash.cloudflare.com/profile/api-tokens",
+   "Click 'Create Token'",
+   "Choose a template or create a custom token with needed permissions",
+   "Click 'Continue to summary' then 'Create Token'",
+   "Copy the token value and paste it here"
+  ],
+  "docsUrl": "https://dash.cloudflare.com/profile/api-tokens"
+ },
+ "confluence": {
+  "fields": [
+   {
+    "label": "Atlassian Domain",
+    "kind": "secret",
+    "help": "Your Confluence Cloud domain (without https://)"
+   },
+   {
+    "label": "Account Email",
+    "kind": "secret",
+    "help": "The email address for your Atlassian account"
+   },
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "From id.atlassian.com/manage-profile/security/api-tokens"
+   }
+  ],
+  "guide": [
+   "Go to id.atlassian.com/manage-profile/security/api-tokens",
+   "Click 'Create API token' and give it a label",
+   "Copy the generated token",
+   "Enter your Atlassian email, the API token, and your domain (e.g. your-company.atlassian.net)"
+  ],
+  "docsUrl": "https://id.atlassian.com/manage-profile/security/api-tokens"
+ },
+ "convex": {
+  "fields": [
+   {
+    "label": "Deployment URL",
+    "kind": "secret",
+    "help": "From Convex Dashboard -> Settings -> URL"
+   },
+   {
+    "label": "Deploy Key",
+    "kind": "secret",
+    "help": "From Convex Dashboard -> Settings -> Deploy Key"
+   }
+  ],
+  "guide": [
+   "Open your Convex Dashboard at dashboard.convex.dev",
+   "Select your project and go to Settings",
+   "Copy the Deployment URL (e.g. https://your-app-123.convex.cloud)",
+   "Generate or copy the Deploy Key (starts with prod:...)",
+   "Paste both values here",
+   "Note: Table listing requires the Professional plan. On the free Starter plan, use the Console to call your query functions directly."
+  ],
+  "docsUrl": "https://docs.convex.dev/http-api/"
+ },
+ "crisp": {
+  "fields": [
+   {
+    "label": "Token ID",
+    "kind": "secret",
+    "help": "From Crisp -> Settings -> API Tokens -> Token Identifier"
+   },
+   {
+    "label": "Token Key",
+    "kind": "secret",
+    "help": "From Crisp -> Settings -> API Tokens -> Token Key"
+   }
+  ],
+  "guide": [
+   "Log in to Crisp.",
+   "Go to Settings -> API Tokens (or visit app.crisp.chat/settings/token/).",
+   "Create a new token pair.",
+   "Copy the Token Identifier and Token Key.",
+   "Paste both values here."
+  ],
+  "docsUrl": "https://docs.crisp.chat/references/rest-api/v1/"
+ },
+ "deepgram": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Create in Deepgram Console → API Keys → Create new API Key"
+   }
+  ],
+  "guide": [
+   "Sign up at deepgram.com (free tier includes $200 in credits)",
+   "Go to Console → API Keys",
+   "Create a new API Key with Member permissions (or higher)",
+   "Paste the key here",
+   "Note: Deepgram uses `Authorization: Token <key>` header, not `Bearer`."
+  ],
+  "docsUrl": "https://developers.deepgram.com/reference"
+ },
+ "desktop_browser": {
+  "fields": [
+   {
+    "label": "Browser Path",
+    "kind": "secret",
+    "optional": true,
+    "help": "Auto-detected. Path to Chrome, Edge, or Lightpanda binary."
+   },
+   {
+    "label": "DevTools Port",
+    "kind": "secret",
+    "optional": true,
+    "help": "Chrome DevTools Protocol port (default: 9222)"
+   }
+  ]
+ },
+ "desktop_docker": {
+  "fields": [
+   {
+    "label": "Binary Path",
+    "kind": "secret",
+    "optional": true,
+    "help": "Path to Docker binary. Auto-detected if left blank."
+   }
+  ],
+  "guide": [
+   "Ensure Docker Desktop or Docker Engine is installed",
+   "The 'docker' command should be available in your PATH",
+   "Click Detect to scan for Docker",
+   "Approve the requested capabilities"
+  ],
+  "docsUrl": "https://docs.docker.com/reference/cli/docker/"
+ },
+ "desktop_obsidian": {
+  "fields": [
+   {
+    "label": "Vault Path",
+    "kind": "secret",
+    "optional": true,
+    "help": "Path to your Obsidian vault. Auto-detected if left blank."
+   },
+   {
+    "label": "Local REST API Port",
+    "kind": "secret",
+    "optional": true,
+    "help": "Port for the Obsidian Local REST API plugin (optional)"
+   },
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "optional": true,
+    "help": "API key for the Local REST API plugin (optional)"
+   }
+  ],
+  "guide": [
+   "Ensure Obsidian is installed on your system",
+   "Optionally install the Local REST API plugin for richer access",
+   "Click Detect to scan for Obsidian vaults",
+   "Approve the requested capabilities"
+  ],
+  "docsUrl": "https://obsidian.md/"
+ },
+ "digitalocean": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at cloud.digitalocean.com/account/api/tokens"
+   }
+  ],
+  "guide": [
+   "Go to cloud.digitalocean.com/account/api/tokens",
+   "Click 'Generate New Token'",
+   "Give it a name, pick scopes (read/write)",
+   "Copy the dop_v1_... value and paste here"
+  ],
+  "docsUrl": "https://docs.digitalocean.com/reference/api/"
+ },
+ "discord_webhook": {
+  "fields": [
+   {
+    "label": "Channel Webhook URL",
+    "kind": "secret",
+    "help": "From the target Discord channel: Edit Channel -> Integrations -> Webhooks -> New Webhook -> Copy Webhook URL."
+   }
+  ],
+  "guide": [
+   "In Discord, open the channel that should receive notifications.",
+   "Click the gear next to the channel name -> Integrations -> Webhooks.",
+   "Click 'New Webhook', set a name and avatar, then 'Copy Webhook URL'.",
+   "Paste the URL here."
+  ],
+  "docsUrl": "https://support.discord.com/hc/en-us/articles/228383668",
+  "outboundOnly": true
+ },
+ "discord": {
+  "fields": [
+   {
+    "label": "Bot Token",
+    "kind": "secret",
+    "help": "From Discord Developer Portal -> Bot -> Token"
+   }
+  ],
+  "guide": [
+   "Go to discord.com/developers/applications",
+   "Click 'New Application' or select an existing one",
+   "Go to the 'Bot' section in the sidebar",
+   "Click 'Reset Token' (or 'Add Bot' first if needed)",
+   "Copy the bot token and paste it here"
+  ],
+  "docsUrl": "https://discord.com/developers/applications"
+ },
+ "dropbox": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "From Dropbox App Console -> Generate Access Token (or use OAuth flow)"
+   }
+  ],
+  "guide": [
+   "Go to dropbox.com/developers/apps",
+   "Click 'Create app' or select an existing app",
+   "Under the 'Settings' tab, find 'Generated access token'",
+   "Click 'Generate' and copy the sl.u... token",
+   "Paste the access token here"
+  ],
+  "docsUrl": "https://www.dropbox.com/developers/apps"
+ },
+ "duckdb": {
+  "fields": [
+   {
+    "label": "Database Path",
+    "kind": "secret",
+    "help": "File path to the DuckDB database (or :memory: for in-memory)"
+   },
+   {
+    "label": "MotherDuck Token",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional: MotherDuck service token for cloud-hosted DuckDB"
+   }
+  ],
+  "guide": [
+   "Provide the file path to your .duckdb database file",
+   "Use :memory: for an in-memory database",
+   "For MotherDuck cloud: provide your service token from app.motherduck.com",
+   "DuckDB can also query Parquet/CSV files directly via SQL"
+  ],
+  "docsUrl": "https://duckdb.org/docs/connect/overview"
+ },
+ "elevenlabs": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Generate at elevenlabs.io → Profile → API Keys"
+   }
+  ],
+  "guide": [
+   "Go to elevenlabs.io and sign in",
+   "Click your profile icon → Profile + API key",
+   "Click the eye icon or 'Create API Key'",
+   "Copy the generated API key"
+  ],
+  "docsUrl": "https://elevenlabs.io/docs/api-reference"
+ },
+ "figma": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "From Figma -> Settings -> Personal Access Tokens -> Generate"
+   }
+  ],
+  "guide": [
+   "Open Figma and go to Settings (click your avatar)",
+   "Scroll to 'Personal Access Tokens'",
+   "Click 'Generate new token' and name it",
+   "Copy the figd_... token and paste it here"
+  ],
+  "docsUrl": "https://www.figma.com/developers/api"
+ },
+ "firecrawl": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Firecrawl -> Dashboard -> API Keys. Required for all scrape, crawl, and extract endpoints."
+   },
+   {
+    "label": "API Base URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Defaults to the Firecrawl cloud endpoint. Override for self-hosted deployments."
+   }
+  ],
+  "guide": [
+   "Sign up at firecrawl.dev and note your free credit allowance",
+   "Go to Dashboard -> API Keys and create a new key (format: fc-...)",
+   "Paste the key here",
+   "Key endpoints your agents will use:",
+   "- POST /v1/scrape -- single-page extraction to markdown or structured data",
+   "- POST /v1/crawl -- multi-page crawl with depth and path filters",
+   "- POST /v1/extract -- schema-driven structured extraction across pages"
+  ],
+  "docsUrl": "https://docs.firecrawl.dev/introduction"
+ },
+ "fly_io": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "Generate via `flyctl tokens create org` or at fly.io/dashboard -> Account -> Access Tokens"
+   }
+  ],
+  "guide": [
+   "Install flyctl and run `flyctl auth login`",
+   "Create a token: `flyctl tokens create org`",
+   "Copy the fo1_... value and paste here"
+  ],
+  "docsUrl": "https://fly.io/docs/reference/"
+ },
+ "formbricks": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Go to Formbricks -> Settings -> API Keys -> Add API Key"
+   },
+   {
+    "label": "Instance URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Your Formbricks instance URL (defaults to formbricks.com cloud)"
+   }
+  ],
+  "guide": [
+   "Log in to Formbricks (app.formbricks.com or self-hosted).",
+   "Go to Settings -> API Keys.",
+   "Click 'Add API Key' and copy the key.",
+   "Paste the key here. If self-hosted, also enter your instance URL."
+  ],
+  "docsUrl": "https://formbricks.com/docs/api/overview"
+ },
+ "gcp_cloud": {
+  "fields": [
+   {
+    "label": "Service Account Key (JSON)",
+    "kind": "secret",
+    "help": "Full JSON key file content from GCP Console -> IAM -> Service Accounts -> Keys"
+   },
+   {
+    "label": "Project ID",
+    "kind": "text",
+    "help": "GCP project ID (not project name). Found in the project selector or dashboard."
+   }
+  ],
+  "guide": [
+   "Go to the GCP Console (console.cloud.google.com).",
+   "Navigate to IAM & Admin -> Service Accounts.",
+   "Click 'Create Service Account' and give it a descriptive name.",
+   "Grant it the roles needed for your use case (e.g., Billing Viewer for cost monitoring).",
+   "Go to the Keys tab and click 'Add Key' -> 'Create new key' -> JSON.",
+   "Copy the entire JSON content and paste it here.",
+   "Note your Project ID from the project selector at the top of the console.",
+   "Alternative: if you have the Google Cloud SDK installed and authenticated (`gcloud auth login`), switch to the 'gcloud CLI' tab to import your active session — no key file needed."
+  ],
+  "docsUrl": "https://cloud.google.com/iam/docs/service-account-overview"
+ },
+ "gemini_vision": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Google AI Studio (aistudio.google.com) -> Get API Key"
+   },
+   {
+    "label": "Model",
+    "kind": "secret",
+    "optional": true,
+    "help": "Gemini 3 Flash Preview is the latest. 2.5 Flash has generous free tier (1,500 req/day). Pro is most accurate."
+   }
+  ],
+  "guide": [
+   "Go to aistudio.google.com",
+   "Click 'Get API Key' in the top-right",
+   "Create a new API key (or use existing)",
+   "Copy the key and paste it here",
+   "Free tier: 1,500 requests/day for Flash, 50 requests/day for Pro."
+  ],
+  "docsUrl": "https://ai.google.dev/gemini-api/docs"
+ },
+ "generic_webhook": {
+  "fields": [
+   {
+    "label": "Webhook URL",
+    "kind": "secret",
+    "help": "Any HTTPS endpoint that accepts POST with a JSON body. Personas sends `{ text, event }` where `event` is the full PersonaEvent payload."
+   }
+  ],
+  "guide": [
+   "Decide which endpoint should receive Personas events.",
+   "Paste the full HTTPS URL here. Internal/private IPs are blocked by the SSRF guard.",
+   "(Optional) Use the template editor on the subscription to shape the `text` field per event type."
+  ],
+  "docsUrl": "https://docs.personas.app/docs/notifications",
+  "outboundOnly": true
+ },
+ "github_actions": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at github.com/settings/tokens -- needs 'repo' and 'workflow' scopes"
+   },
+   {
+    "label": "Default Repository",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional: default repository for workflow dispatches"
+   }
+  ],
+  "docsUrl": "https://github.com/settings/tokens"
+ },
+ "github": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at github.com/settings/tokens with required scopes"
+   }
+  ],
+  "guide": [
+   "Go to github.com/settings/tokens?type=beta for fine-grained tokens",
+   "Click 'Generate new token', set expiration and repository access",
+   "Select required permissions: Contents (read), Issues (read/write), Pull requests (read/write)",
+   "Click 'Generate token' and copy the github_pat_... value"
+  ],
+  "docsUrl": "https://github.com/settings/tokens"
+ },
+ "gitlab": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Generate at GitLab > Settings > Access Tokens with api scope"
+   }
+  ],
+  "guide": [
+   "Go to GitLab > User Settings > Access Tokens",
+   "Click 'Add new token', set a name and expiration",
+   "Select the 'api' scope for full API access",
+   "Click 'Create personal access token' and copy the glpat-... value"
+  ],
+  "docsUrl": "https://docs.gitlab.com/ee/api/rest/"
+ },
+ "gmail": {
+  "guide": [
+   "Open Google Cloud Console (https://console.cloud.google.com).",
+   "Create/select a project and enable the Gmail API.",
+   "Configure OAuth consent screen and add authorized test users.",
+   "In Personas, click Authorize with Google.",
+   "Complete consent in your browser.",
+   "Return to Personas; token metadata is saved automatically."
+  ],
+  "docsUrl": "https://developers.google.com/workspace/gmail/api/reference/rest"
+ },
+ "google_ads": {
+  "fields": [
+   {
+    "label": "Developer Token",
+    "kind": "secret",
+    "help": "Find at ads.google.com → Tools & Settings → API Center"
+   }
+  ],
+  "guide": [
+   "Open Google Cloud Console (https://console.cloud.google.com).",
+   "Create/select a project and enable the Google Ads API.",
+   "Apply for a developer token at ads.google.com → Tools & Settings → API Center.",
+   "Configure OAuth consent screen and add authorized test users.",
+   "In Personas, paste your developer token, then click Authorize with Google.",
+   "Complete consent in your browser.",
+   "Return to Personas; token metadata is saved automatically."
+  ],
+  "docsUrl": "https://developers.google.com/google-ads/api/rest/overview"
+ },
+ "google_calendar": {
+  "guide": [
+   "Open Google Cloud Console (https://console.cloud.google.com).",
+   "Create/select a project and enable the Google Calendar API.",
+   "Configure OAuth consent screen and add authorized test users.",
+   "In Personas, click Authorize with Google.",
+   "Complete consent in your browser.",
+   "Return to Personas; token metadata is saved automatically."
+  ],
+  "docsUrl": "https://developers.google.com/calendar/api/v3/reference"
+ },
+ "google_drive": {
+  "fields": [
+   {
+    "label": "Default Folder ID (optional)",
+    "kind": "text",
+    "optional": true,
+    "help": "Drive folder ID where personas will save generated artifacts by default. Leave blank to let each persona specify its own. Find the ID in the folder URL: drive.google.com/drive/folders/<ID>."
+   }
+  ],
+  "guide": [
+   "Open console.cloud.google.com — create or pick a project.",
+   "Enable the Google Drive API.",
+   "Configure the OAuth consent screen (external or internal, matching your Workspace policy).",
+   "Create an OAuth 2.0 Client ID of type 'Desktop app'.",
+   "(Optional) In Personas, paste your target folder ID — the folder you want artifacts written to.",
+   "Click Authorize with Google; grant the drive.file scope (scoped access to files the app creates).",
+   "Tokens are refreshed automatically."
+  ],
+  "docsUrl": "https://developers.google.com/drive/api/guides/about-sdk"
+ },
+ "google_gemini": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Google AI Studio (aistudio.google.com) -> Get API Key"
+   },
+   {
+    "label": "Model",
+    "kind": "choice",
+    "optional": true,
+    "help": "Gemini 3 Flash Preview is the latest. 2.5 Flash has a generous free tier (1,500 req/day). 2.5 Pro is the most accurate. 1.5 Pro kept for long-context workloads."
+   }
+  ],
+  "guide": [
+   "Go to aistudio.google.com",
+   "Click 'Get API Key' in the top-right",
+   "Create a new API key (or use an existing one)",
+   "Copy the key and paste it here",
+   "Free tier: 1,500 requests/day on Gemini 2.5 Flash. Pro models are paid beyond a small daily allowance."
+  ],
+  "docsUrl": "https://ai.google.dev/gemini-api/docs"
+ },
+ "google_sheets": {
+  "guide": [
+   "Open Google Cloud Console (https://console.cloud.google.com).",
+   "Create/select a project and enable the Google Sheets API.",
+   "Configure OAuth consent screen and add authorized test users.",
+   "In Personas, click Authorize with Google.",
+   "Complete consent in your browser.",
+   "Return to Personas; token metadata is saved automatically."
+  ],
+  "docsUrl": "https://developers.google.com/workspace/sheets/api/reference/rest"
+ },
+ "granola": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Create in Granola: Settings -> Connectors -> API keys -> Create new key. Requires a Business or Enterprise plan; Enterprise admins must enable API access for members."
+   }
+  ],
+  "guide": [
+   "Open Granola and go to Settings -> Connectors -> API keys",
+   "Click 'Create new key'",
+   "Choose the access scope (Personal notes or Public notes)",
+   "Click 'Generate API Key' and copy the grn_... value",
+   "Paste it here (Business/Enterprise plan required; Enterprise admins must enable API access first)"
+  ],
+  "docsUrl": "https://docs.granola.ai/introduction"
+ },
+ "harvest": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "Create at id.getharvest.com/developers"
+   },
+   {
+    "label": "Account ID",
+    "kind": "secret",
+    "help": "Shown next to your token at id.getharvest.com/developers"
+   }
+  ],
+  "guide": [
+   "Go to id.getharvest.com/developers",
+   "Click 'Create new personal access token'",
+   "Give it a name and click 'Create personal access token'",
+   "Copy the token AND note the Account ID shown next to it",
+   "Paste both values here"
+  ],
+  "docsUrl": "https://help.getharvest.com/api-v2/"
+ },
+ "helicone": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Helicone -> Settings -> API Keys. The sk-helicone-... value. Sent as a Bearer token."
+   }
+  ],
+  "guide": [
+   "Sign in at helicone.ai",
+   "Go to Settings -> API Keys",
+   "Click 'Generate New Key' and copy the sk-helicone-... value",
+   "Paste it here"
+  ],
+  "docsUrl": "https://docs.helicone.ai/rest/request/post-v1requestquery"
+ },
+ "higgsfield": {
+  "fields": [
+   {
+    "label": "Key ID",
+    "kind": "text",
+    "help": "From cloud.higgsfield.ai/api-keys -- the left half of your KEY_ID:KEY_SECRET pair."
+   },
+   {
+    "label": "Key Secret",
+    "kind": "secret",
+    "help": "From cloud.higgsfield.ai/api-keys -- the right half of the pair. Treat like a password."
+   }
+  ],
+  "guide": [
+   "Path A -- REST API (recommended for personas templates):",
+   "Sign up at cloud.higgsfield.ai and pick a plan (free tier available).",
+   "Go to cloud.higgsfield.ai/api-keys and click 'Create API key'.",
+   "Copy both halves -- KEY_ID and KEY_SECRET (combined format: KEY_ID:KEY_SECRET).",
+   "Paste KEY_ID into the first field and KEY_SECRET into the second.",
+   "Path B -- Hosted MCP server (OAuth via your Higgsfield account):",
+   "Sign up at higgsfield.ai.",
+   "Add a custom MCP connector in your agent client with URL https://mcp.higgsfield.ai/mcp.",
+   "Click Connect and sign in with your Higgsfield account.",
+   "The MCP server brokers requests against the same generation engine and bills the same credit pool as the REST API. Vendor-side OAuth is outside the standard PROVIDER_REGISTRY flow today; use the REST path for fully wired personas templates."
+  ],
+  "docsUrl": "https://github.com/higgsfield-ai/higgsfield-js"
+ },
+ "hubspot": {
+  "fields": [
+   {
+    "label": "Private App Access Token",
+    "kind": "secret",
+    "help": "From HubSpot -> Settings -> Integrations -> Private Apps -> Create"
+   }
+  ],
+  "guide": [
+   "Go to HubSpot -> Settings -> Integrations -> Private Apps",
+   "Click 'Create a private app'",
+   "Name it and select the scopes you need",
+   "Click 'Create app' then copy the pat-... access token"
+  ],
+  "docsUrl": "https://developers.hubspot.com/docs/api/private-apps"
+ },
+ "huggingface": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "Create at huggingface.co → Settings → Access Tokens (a read token is enough)"
+   }
+  ],
+  "docsUrl": "https://huggingface.co/docs/hub/security-tokens"
+ },
+ "humbalytics": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Humbalytics -> Settings -> API Keys. Used for read-only analytics queries and experiment control."
+   },
+   {
+    "label": "Property ID",
+    "kind": "text",
+    "help": "The property identifier for the site you are tracking. Find it in Humbalytics -> Property Settings."
+   },
+   {
+    "label": "API Base URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Defaults to the Humbalytics cloud endpoint. Override only for self-hosted or staging deployments."
+   }
+  ],
+  "guide": [
+   "Sign up at humbalytics.com and add your site as a property",
+   "Install the Humbalytics JavaScript snippet on your site (required for experiments + heatmaps)",
+   "Go to Settings -> API Keys and create a new key with read + experiments scopes",
+   "Copy the API key (hb_...) and your property ID (prop_...)",
+   "Paste them here",
+   "Note: dynamic content rewriting for A/B experiments requires the JS snippet to be active on the target pages -- the API alone does not modify the site."
+  ],
+  "docsUrl": "https://humbalytics.com/docs/api"
+ },
+ "jira": {
+  "fields": [
+   {
+    "label": "Atlassian Domain",
+    "kind": "secret",
+    "help": "Your Jira Cloud domain (without https://)"
+   },
+   {
+    "label": "Account Email",
+    "kind": "secret",
+    "help": "The email address for your Atlassian account"
+   },
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "From id.atlassian.com/manage-profile/security/api-tokens"
+   }
+  ],
+  "guide": [
+   "Go to id.atlassian.com/manage-profile/security/api-tokens",
+   "Click 'Create API token' and give it a label",
+   "Copy the generated token",
+   "Enter your Atlassian email, the API token, and your Jira domain (e.g. your-company.atlassian.net)"
+  ],
+  "docsUrl": "https://id.atlassian.com/manage-profile/security/api-tokens"
+ },
+ "kalshi": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "optional": true,
+    "help": "From Kalshi Settings → API Keys. Optional — public market data is accessible without auth."
+   }
+  ],
+  "guide": [
+   "Create an account at kalshi.com",
+   "Go to Settings → API Keys",
+   "Generate a new API key",
+   "Paste the key here (optional — public market data works without auth)"
+  ],
+  "docsUrl": "https://docs.kalshi.com"
+ },
+ "knock": {
+  "fields": [
+   {
+    "label": "Secret API Key",
+    "kind": "secret",
+    "help": "From Knock dashboard -> Developers -> API Keys -> Secret key"
+   }
+  ],
+  "guide": [
+   "Sign up at dashboard.knock.app.",
+   "Go to Developers -> API Keys.",
+   "Copy the secret API key (starts with sk_).",
+   "Paste it here."
+  ],
+  "docsUrl": "https://docs.knock.app/reference"
+ },
+ "kubernetes": {
+  "fields": [
+   {
+    "label": "API Server URL",
+    "kind": "secret",
+    "help": "Kubernetes API server URL (find with: kubectl cluster-info)"
+   },
+   {
+    "label": "Bearer Token",
+    "kind": "secret",
+    "help": "Service account token (find with: kubectl create token <sa-name>)"
+   }
+  ],
+  "guide": [
+   "Run: kubectl cluster-info (to get the API server URL)",
+   "Create a service account: kubectl create serviceaccount personas-sa",
+   "Bind a role: kubectl create clusterrolebinding personas-binding --clusterrole=view --serviceaccount=default:personas-sa",
+   "Generate a token: kubectl create token personas-sa",
+   "Paste the API server URL and token"
+  ],
+  "docsUrl": "https://kubernetes.io/docs/reference/kubernetes-api/"
+ },
+ "langfuse": {
+  "fields": [
+   {
+    "label": "Public Key",
+    "kind": "text",
+    "help": "From Langfuse -> Settings -> API Keys. The pk-lf-... value."
+   },
+   {
+    "label": "Secret Key",
+    "kind": "secret",
+    "help": "From Langfuse -> Settings -> API Keys, paired with the public key. The sk-lf-... value."
+   },
+   {
+    "label": "Host",
+    "kind": "url",
+    "optional": true,
+    "help": "Defaults to EU cloud (cloud.langfuse.com). Use https://us.cloud.langfuse.com for US, or your self-hosted URL."
+   }
+  ],
+  "guide": [
+   "Open Langfuse (cloud.langfuse.com or your self-hosted instance) and select your project",
+   "Go to Settings -> API Keys",
+   "Click 'Create new API keys'",
+   "Copy the Public Key (pk-lf-...) and Secret Key (sk-lf-...)",
+   "Paste both here, and set Host if you use US cloud or self-hosting"
+  ],
+  "docsUrl": "https://langfuse.com/docs/api"
+ },
+ "langsmith": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From LangSmith -> Settings -> API Keys. The lsv2_... value. Sent as the x-api-key header."
+   },
+   {
+    "label": "API URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Defaults to US (api.smith.langchain.com). Use https://eu.api.smith.langchain.com for the EU region, or your self-hosted URL."
+   }
+  ],
+  "guide": [
+   "Sign in at smith.langchain.com",
+   "Click your profile -> Settings -> API Keys",
+   "Click 'Create API Key' (Personal Access Token) and copy the lsv2_... value",
+   "Paste it here; set API URL if you use the EU region or self-hosting"
+  ],
+  "docsUrl": "https://docs.smith.langchain.com/reference/api"
+ },
+ "lemonsqueezy": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Go to app.lemonsqueezy.com -> Settings -> API -> Create API Key"
+   }
+  ],
+  "guide": [
+   "Log in to app.lemonsqueezy.com.",
+   "Go to Settings -> API.",
+   "Click 'Create API Key'.",
+   "Copy the key and paste it here."
+  ],
+  "docsUrl": "https://docs.lemonsqueezy.com/api"
+ },
+ "leonardo_ai": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Generate at app.leonardo.ai/api-access"
+   }
+  ],
+  "guide": [
+   "Go to app.leonardo.ai and sign in",
+   "Click API Access in the left sidebar",
+   "Click 'Create New Key' and name it",
+   "Copy the generated API key"
+  ],
+  "docsUrl": "https://docs.leonardo.ai/docs/getting-started"
+ },
+ "linear": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Linear -> Settings -> API -> Personal API keys"
+   }
+  ],
+  "guide": [
+   "Go to linear.app/settings/api and sign in",
+   "Under 'Personal API keys', click 'Create key'",
+   "Give it a descriptive label",
+   "Copy the lin_api_... key value"
+  ],
+  "docsUrl": "https://linear.app/settings/api"
+ },
+ "linkedin_ads": {
+  "fields": [
+   {
+    "label": "Ad Account URN",
+    "kind": "text",
+    "help": "Your sponsored account URN. Find at Campaign Manager → Account Asset → the numeric ID after /accounts/, wrap as urn:li:sponsoredAccount:<ID>."
+   },
+   {
+    "label": "Client ID",
+    "kind": "text",
+    "help": "LinkedIn OAuth 2.0 Client ID from your Developer App."
+   },
+   {
+    "label": "Client Secret",
+    "kind": "secret",
+    "help": "LinkedIn OAuth 2.0 Client Secret. Keep private — used to exchange auth codes for access tokens."
+   }
+  ],
+  "guide": [
+   "Go to linkedin.com/developers → Create App — associate it with a LinkedIn Company Page.",
+   "In the Products tab, request 'Advertising API' access (requires LinkedIn approval; 2-5 business days).",
+   "Once approved, copy Client ID and Client Secret from the Auth tab.",
+   "In Campaign Manager, copy your account numeric ID and format as urn:li:sponsoredAccount:<ID>.",
+   "In Personas, paste Client ID, Client Secret, and Ad Account URN.",
+   "Click Authorize with LinkedIn — grant r_ads, r_ads_reporting, rw_ads scopes.",
+   "Refresh tokens expire after 365 days; re-auth when prompted."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads-reporting/ads-reporting"
+ },
+ "linkedin": {
+  "fields": [
+   {
+    "label": "Client ID",
+    "kind": "secret",
+    "help": "From LinkedIn Developer Portal -> My Apps -> Auth tab"
+   },
+   {
+    "label": "Client Secret",
+    "kind": "secret",
+    "help": "From LinkedIn Developer Portal -> My Apps -> Auth tab"
+   }
+  ],
+  "guide": [
+   "Go to linkedin.com/developers and create a new app",
+   "Under Products, request access to 'Sign In with LinkedIn using OpenID Connect' and 'Share on LinkedIn'",
+   "Go to Auth tab and copy Client ID and Client Secret",
+   "Add http://127.0.0.1 as an Authorized Redirect URL (the port is assigned dynamically)",
+   "Paste Client ID and Client Secret here, then click Authorize with LinkedIn"
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow"
+ },
+ "personas_messages": {
+  "guide": [
+   "Local messaging works out of the box. No configuration needed — agents publish messages to the in-app inbox."
+  ]
+ },
+ "mcp_gateway": {
+  "fields": [
+   {
+    "label": "Gateway label",
+    "kind": "text",
+    "help": "A short label to identify this bundle (e.g. 'Research tools', 'Customer support stack'). Members are managed via the gateway settings panel."
+   }
+  ],
+  "guide": [
+   "Create this gateway credential with a descriptive label.",
+   "Open the gateway's settings panel to add member MCP credentials.",
+   "Attach the gateway to any persona -- the persona will see every enabled member's tools combined into one list, with tool names prefixed by the member's display name."
+  ],
+  "docsUrl": "https://modelcontextprotocol.io/"
+ },
+ "meta_ads": {
+  "fields": [
+   {
+    "label": "Ad Account ID",
+    "kind": "text",
+    "help": "Your Meta Ads account ID, including the 'act_' prefix. Find it in Ads Manager → top-left account selector."
+   },
+   {
+    "label": "App ID",
+    "kind": "text",
+    "help": "Meta App ID from developers.facebook.com → your app → Settings → Basic."
+   },
+   {
+    "label": "App Secret",
+    "kind": "secret",
+    "help": "Meta App Secret. Keep this private — it authenticates your app to the Graph API."
+   }
+  ],
+  "guide": [
+   "Go to developers.facebook.com → My Apps → Create App (type: Business).",
+   "Add the 'Marketing API' product.",
+   "In Settings → Basic, copy App ID and App Secret.",
+   "In Ads Manager, copy your Ad Account ID (format act_XXXXXXXXX).",
+   "In Personas, paste App ID, App Secret, and Ad Account ID.",
+   "Click Authorize with Meta — grant ads_read + ads_management + business_management scopes.",
+   "Tokens are stored encrypted; refresh happens automatically."
+  ],
+  "docsUrl": "https://developers.facebook.com/docs/marketing-api/overview"
+ },
+ "metabase": {
+  "fields": [
+   {
+    "label": "Metabase Base URL",
+    "kind": "url",
+    "help": "Your Metabase instance root URL. For self-hosted: https://metabase.example.com. For Metabase Cloud: https://your-tenant.metabaseapp.com. Do NOT include /api at the end."
+   },
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Admin Settings -> Authentication -> API Keys -> Create API Key. Requires Pro/Enterprise or self-hosted instance."
+   }
+  ],
+  "guide": [
+   "Sign in to Metabase as an admin",
+   "Go to Admin Settings -> Authentication -> API Keys",
+   "Click 'Create API Key', name it, and choose the group whose permissions it should inherit",
+   "Copy the mb_... key (shown only once)",
+   "Paste your base URL (e.g. https://metabase.example.com) and the API key here",
+   "Note: API keys require Metabase Pro, Enterprise, or a self-hosted instance."
+  ],
+  "docsUrl": "https://www.metabase.com/docs/latest/api"
+ },
+ "microsoft_calendar": {
+  "guide": [
+   "Go to the Azure Portal -> Microsoft Entra ID -> App registrations.",
+   "Click 'New registration', name your app, and set redirect URI to http://localhost.",
+   "Under 'Certificates & secrets', create a new client secret and copy it.",
+   "Under 'API permissions', add Microsoft Graph delegated permissions: User.Read, Calendars.Read, Calendars.ReadWrite.",
+   "Copy the Application (client) ID from the Overview page.",
+   "In Personas, click Authorize with Microsoft.",
+   "Complete consent in your browser and return to Personas."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/graph/api/resources/calendar"
+ },
+ "microsoft_excel": {
+  "guide": [
+   "Go to the Azure Portal -> Microsoft Entra ID -> App registrations.",
+   "Click 'New registration', name your app, and set redirect URI to http://localhost.",
+   "Under 'Certificates & secrets', create a new client secret and copy it.",
+   "Under 'API permissions', add Microsoft Graph delegated permissions: User.Read, Files.Read, Files.ReadWrite.",
+   "Copy the Application (client) ID from the Overview page.",
+   "In Personas, click Authorize with Microsoft.",
+   "Complete consent in your browser and return to Personas."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/graph/api/resources/excel"
+ },
+ "microsoft_outlook": {
+  "guide": [
+   "Go to the Azure Portal -> Microsoft Entra ID -> App registrations.",
+   "Click 'New registration', name your app, and set redirect URI to http://localhost.",
+   "Under 'Certificates & secrets', create a new client secret and copy it.",
+   "Under 'API permissions', add Microsoft Graph delegated permissions: User.Read, Mail.Read, Mail.Send, Calendars.Read, Contacts.Read.",
+   "Copy the Application (client) ID from the Overview page.",
+   "In Personas, click Authorize with Microsoft.",
+   "Complete consent in your browser and return to Personas."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview"
+ },
+ "microsoft_teams": {
+  "guide": [
+   "Go to the Azure Portal -> Microsoft Entra ID -> App registrations.",
+   "Click 'New registration', name your app, and set redirect URI to http://localhost.",
+   "Under 'Certificates & secrets', create a new client secret and copy it.",
+   "Under 'API permissions', add Microsoft Graph delegated permissions: User.Read, Chat.ReadWrite, ChannelMessage.Send, Team.ReadBasic.All, Channel.ReadBasic.All.",
+   "Copy the Application (client) ID from the Overview page.",
+   "In Personas, click Authorize with Microsoft.",
+   "Complete consent in your browser and return to Personas."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview"
+ },
+ "mixpanel": {
+  "fields": [
+   {
+    "label": "Service Account Username",
+    "kind": "secret",
+    "help": "From Mixpanel -> Organization Settings -> Service Accounts"
+   },
+   {
+    "label": "Service Account Secret",
+    "kind": "secret",
+    "help": "The secret paired with the service account username"
+   },
+   {
+    "label": "Project ID",
+    "kind": "secret",
+    "help": "From Mixpanel -> Project Settings -> Project ID"
+   },
+   {
+    "label": "Project Token",
+    "kind": "secret",
+    "optional": true,
+    "help": "From Mixpanel -> Project Settings -> Access Keys -> Project Token"
+   }
+  ],
+  "guide": [
+   "Go to Mixpanel -> Organization Settings -> Service Accounts",
+   "Click 'Add Service Account' and note the username and secret",
+   "Go to Project Settings to find your Project ID",
+   "Enter the service account username, secret, and project ID here"
+  ],
+  "docsUrl": "https://developer.mixpanel.com/reference/project-secret"
+ },
+ "monday": {
+  "fields": [
+   {
+    "label": "API v2 Token",
+    "kind": "secret",
+    "help": "From monday.com -> Avatar -> Developers -> My Access Tokens"
+   }
+  ],
+  "guide": [
+   "Go to monday.com and sign in to your account",
+   "Click your avatar -> Administration -> API",
+   "Copy your personal API token (or generate a new one)",
+   "Paste the token value here"
+  ],
+  "docsUrl": "https://developer.monday.com/api-reference/docs/authentication"
+ },
+ "mongodb": {
+  "fields": [
+   {
+    "label": "Connection String",
+    "kind": "secret",
+    "help": "MongoDB connection URI from Atlas or your self-hosted instance"
+   },
+   {
+    "label": "Database Name",
+    "kind": "secret",
+    "optional": true,
+    "help": "Default database to connect to (can also be in connection string)"
+   }
+  ],
+  "guide": [
+   "For Atlas: go to cloud.mongodb.com -> Database -> Connect -> Drivers",
+   "Copy the connection string (mongodb+srv://...)",
+   "Replace <password> with your database user password",
+   "Optionally specify the default database name",
+   "For self-hosted: use mongodb://user:pass@host:27017/dbname"
+  ],
+  "docsUrl": "https://www.mongodb.com/docs/manual/reference/connection-string/"
+ },
+ "n8n": {
+  "fields": [
+   {
+    "label": "Instance URL",
+    "kind": "url",
+    "help": "Your n8n instance URL (cloud or self-hosted)"
+   },
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Generate at Settings -> API -> Create API Key"
+   }
+  ],
+  "docsUrl": "https://docs.n8n.io/api/"
+ },
+ "neon": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Neon Console -> Account Settings -> API Keys -> Generate"
+   },
+   {
+    "label": "Connection String",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional: PostgreSQL connection string for direct database access"
+   }
+  ],
+  "guide": [
+   "Go to console.neon.tech and sign in",
+   "Navigate to Account settings -> API Keys",
+   "Click 'Create new API Key' and name it",
+   "Copy the generated API key value"
+  ],
+  "docsUrl": "https://neon.tech/docs/manage/api-keys"
+ },
+ "netlify": {
+  "fields": [
+   {
+    "label": "Personal Access Token",
+    "kind": "secret",
+    "help": "From Netlify -> User Settings -> Applications -> Personal Access Tokens"
+   }
+  ],
+  "guide": [
+   "Go to app.netlify.com/user/applications#personal-access-tokens",
+   "Click 'New access token'",
+   "Enter a description and click 'Generate token'",
+   "Copy the token and paste it here"
+  ],
+  "docsUrl": "https://app.netlify.com/user/applications#personal-access-tokens"
+ },
+ "news_api": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From newsapi.org → Get API Key (free tier: 100 requests/day)"
+   }
+  ],
+  "guide": [
+   "Go to newsapi.org and sign up",
+   "Copy your API key from the dashboard",
+   "Paste it here"
+  ],
+  "docsUrl": "https://newsapi.org/docs"
+ },
+ "notion": {
+  "fields": [
+   {
+    "label": "Integration Token",
+    "kind": "secret",
+    "help": "Create an internal integration at notion.so/my-integrations"
+   }
+  ],
+  "guide": [
+   "Go to notion.so/my-integrations",
+   "Click 'New integration' and name it",
+   "Select the workspace and set capabilities",
+   "Click 'Submit' then copy the ntn_... internal integration token",
+   "Share relevant Notion pages with the integration"
+  ],
+  "docsUrl": "https://www.notion.so/my-integrations"
+ },
+ "novu": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Novu dashboard -> Settings -> API Keys"
+   }
+  ],
+  "guide": [
+   "Sign up at web.novu.co.",
+   "Go to Settings -> API Keys.",
+   "Copy the API key for your environment.",
+   "Paste it here."
+  ],
+  "docsUrl": "https://docs.novu.co/api-reference/overview"
+ },
+ "ntfy": {
+  "fields": [
+   {
+    "label": "Server URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Your ntfy server URL (defaults to ntfy.sh public server)"
+   },
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional -- only needed for access-controlled topics"
+   }
+  ],
+  "guide": [
+   "Go to ntfy.sh (or your self-hosted instance).",
+   "Optionally create an account for access-controlled topics.",
+   "Generate an access token under Account -> Access Tokens.",
+   "Paste the token and server URL here."
+  ],
+  "docsUrl": "https://docs.ntfy.sh/"
+ },
+ "obsidian": {
+  "fields": [
+   {
+    "label": "Server URL",
+    "kind": "url",
+    "optional": true,
+    "help": "URL of your Obsidian Local REST API server (defaults to https://127.0.0.1:27124)"
+   },
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Find in Obsidian Settings > Local REST API > API Key"
+   }
+  ],
+  "guide": [
+   "Install the Local REST API plugin from Obsidian Community Plugins",
+   "Enable the plugin in Obsidian Settings",
+   "Copy the API Key from Settings > Local REST API",
+   "Paste the API Key here",
+   "Optionally set a custom server URL (default: https://127.0.0.1:27124)"
+  ],
+  "docsUrl": "https://coddingtonbear.github.io/obsidian-local-rest-api/"
+ },
+ "onedrive": {
+  "guide": [
+   "Go to the Azure Portal -> Microsoft Entra ID -> App registrations.",
+   "Click 'New registration', name your app, and set redirect URI to http://localhost.",
+   "Under 'Certificates & secrets', create a new client secret and copy it.",
+   "Under 'API permissions', add Microsoft Graph delegated permissions: User.Read, Files.Read, Files.ReadWrite.",
+   "Copy the Application (client) ID from the Overview page.",
+   "In Personas, click Authorize with Microsoft.",
+   "Complete consent in your browser and return to Personas."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/graph/api/resources/onedrive"
+ },
+ "penpot": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "Generate at your Penpot instance -> Profile -> Access Tokens"
+   },
+   {
+    "label": "Instance URL",
+    "kind": "url",
+    "optional": true,
+    "help": "Your Penpot instance URL (defaults to penpot.app cloud)"
+   }
+  ],
+  "guide": [
+   "Log in to your Penpot instance (design.penpot.app or self-hosted).",
+   "Go to Profile -> Access Tokens.",
+   "Create a new token and copy it.",
+   "Paste the token here. If self-hosted, also enter your instance URL."
+  ],
+  "docsUrl": "https://penpot.app/developers"
+ },
+ "pipedrive": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "Go to Pipedrive -> Settings -> Personal preferences -> API -> Your personal API token"
+   },
+   {
+    "label": "Company Domain",
+    "kind": "secret",
+    "help": "Your Pipedrive subdomain (e.g., 'yourcompany' from yourcompany.pipedrive.com)"
+   }
+  ],
+  "guide": [
+   "Log in to Pipedrive.",
+   "Go to Settings -> Personal preferences -> API.",
+   "Copy your personal API token.",
+   "Note your company domain (from the URL: yourcompany.pipedrive.com).",
+   "Paste both values here."
+  ],
+  "docsUrl": "https://developers.pipedrive.com/docs/api/v1"
+ },
+ "planetscale": {
+  "fields": [
+   {
+    "label": "Service Token ID",
+    "kind": "secret",
+    "help": "From PlanetScale -> Organization -> Settings -> Service Tokens"
+   },
+   {
+    "label": "Service Token",
+    "kind": "secret",
+    "help": "The service token secret paired with the token ID"
+   }
+  ],
+  "guide": [
+   "Go to PlanetScale -> Organization -> Settings -> Service Tokens",
+   "Click 'New service token'",
+   "Grant database access permissions for the token",
+   "Copy both the Service Token ID and the Service Token secret",
+   "Paste both values here"
+  ],
+  "docsUrl": "https://planetscale.com/docs/concepts/service-tokens"
+ },
+ "postgres": {
+  "fields": [
+   {
+    "label": "Connection String",
+    "kind": "secret",
+    "help": "Full PostgreSQL connection URI including credentials"
+   },
+   {
+    "label": "Host",
+    "kind": "text",
+    "optional": true,
+    "help": "Alternative: provide host/port/db separately instead of connection string"
+   },
+   {
+    "label": "Port",
+    "kind": "text",
+    "optional": true,
+    "help": "PostgreSQL port (default 5432)"
+   },
+   {
+    "label": "Database",
+    "kind": "text",
+    "optional": true,
+    "help": "Database name"
+   },
+   {
+    "label": "Username",
+    "kind": "secret",
+    "optional": true,
+    "help": "Database user"
+   },
+   {
+    "label": "Password",
+    "kind": "secret",
+    "optional": true,
+    "help": "Database password"
+   },
+   {
+    "label": "SSL Mode",
+    "kind": "secret",
+    "optional": true,
+    "help": "SSL mode: disable, allow, prefer, require, verify-ca, verify-full"
+   }
+  ],
+  "guide": [
+   "Obtain your PostgreSQL connection details from your hosting provider or local setup",
+   "Either provide the full connection string (postgresql://user:pass@host:5432/db)",
+   "Or fill in host, port, database, username, and password separately",
+   "Set SSL mode if connecting to a remote server"
+  ],
+  "docsUrl": "https://www.postgresql.org/docs/current/libpq-connect.html"
+ },
+ "posthog": {
+  "fields": [
+   {
+    "label": "Personal API Key",
+    "kind": "secret",
+    "help": "From PostHog -> Settings -> Personal API Keys"
+   },
+   {
+    "label": "Project API Key",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional: project token for event ingestion"
+   },
+   {
+    "label": "Host",
+    "kind": "url",
+    "optional": true,
+    "help": "Defaults to us.posthog.com. Use eu.posthog.com for EU cloud."
+   }
+  ],
+  "guide": [
+   "Log in to PostHog and go to Settings -> Personal API Keys",
+   "Click 'Create personal API key' and name it",
+   "Copy the phx_... key",
+   "Optionally note your Project ID from Project Settings",
+   "Paste the API key (and project ID if needed) here"
+  ],
+  "docsUrl": "https://posthog.com/docs/api"
+ },
+ "pubmed": {
+  "fields": [
+   {
+    "label": "NCBI API Key",
+    "kind": "secret",
+    "optional": true,
+    "help": "Register at ncbi.nlm.nih.gov/account/ to get an API key. Without a key: 3 req/sec."
+   }
+  ],
+  "guide": [
+   "Visit ncbi.nlm.nih.gov/account/ and sign in or register",
+   "Go to Settings > API Key Management",
+   "Click 'Create an API Key'",
+   "Copy the key (optional but recommended for higher rate limits)"
+  ],
+  "docsUrl": "https://www.ncbi.nlm.nih.gov/books/NBK25501/"
+ },
+ "railway": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "Create an account-level token at railway.app/account/tokens"
+   }
+  ],
+  "guide": [
+   "Go to railway.app/account/tokens",
+   "Click 'Create Token' and give it a name",
+   "Copy the token and paste here"
+  ],
+  "docsUrl": "https://docs.railway.com/reference/public-api"
+ },
+ "ramp": {
+  "fields": [
+   {
+    "label": "Client ID",
+    "kind": "secret",
+    "help": "From Ramp Developer Portal -> Apps -> your app -> Credentials"
+   },
+   {
+    "label": "Client Secret",
+    "kind": "secret",
+    "help": "From Ramp Developer Portal -> Apps -> your app -> Credentials"
+   }
+  ],
+  "guide": [
+   "Go to app.ramp.com/developers and create a new app",
+   "Copy the Client ID and Client Secret from the Credentials tab",
+   "Add http://127.0.0.1 as an authorized redirect URL",
+   "Paste Client ID and Client Secret here, then click Authorize with Ramp",
+   "Note: Ramp API URLs and scopes may evolve. Verify against https://docs.ramp.com/developer-api/v1 before production use."
+  ],
+  "docsUrl": "https://docs.ramp.com/developer-api/v1"
+ },
+ "redash": {
+  "fields": [
+   {
+    "label": "Redash Base URL",
+    "kind": "url",
+    "help": "Your Redash instance root URL. For Redash Cloud: https://app.redash.io/{workspace-slug}. For self-hosted: https://redash.example.com. Do NOT include /api at the end."
+   },
+   {
+    "label": "User API Key",
+    "kind": "secret",
+    "help": "From your Redash user profile page (top-right avatar -> Edit Profile -> API Key). Prefer per-query API keys for production."
+   }
+  ],
+  "guide": [
+   "Open your Redash instance (cloud or self-hosted)",
+   "Click your avatar (top-right) -> Edit Profile",
+   "Copy the User API Key shown in the profile",
+   "Paste the full base URL (e.g. https://app.redash.io/your-slug or https://redash.example.com) and the API key here",
+   "Tip: For production agents, prefer per-query API keys (found on each query page) over user keys."
+  ],
+  "docsUrl": "https://redash.io/help/user-guide/integrations-and-api/api"
+ },
+ "reddit": {
+  "fields": [
+   {
+    "label": "Client ID",
+    "kind": "secret",
+    "help": "From reddit.com/prefs/apps -> your app -> the string under 'web app' or 'installed app'"
+   },
+   {
+    "label": "Client Secret",
+    "kind": "secret",
+    "help": "From reddit.com/prefs/apps -> your app -> 'secret' (leave blank for installed-app type)"
+   }
+  ],
+  "guide": [
+   "Go to reddit.com/prefs/apps and click 'create app' (or 'create another app')",
+   "Choose 'web app' as the type",
+   "Set the redirect URI to http://127.0.0.1 (the port is assigned dynamically)",
+   "Give it a name and description, then click 'create app'",
+   "Copy the Client ID (the string under your app name, beneath 'web app')",
+   "Copy the Client Secret (labelled 'secret')",
+   "Paste both here, then click Authorize with Reddit",
+   "Note: Reddit's API requires a unique User-Agent header — personas sets one automatically."
+  ],
+  "docsUrl": "https://www.reddit.com/dev/api"
+ },
+ "redis": {
+  "fields": [
+   {
+    "label": "Connection URL",
+    "kind": "secret",
+    "help": "Redis connection URL (redis:// or rediss:// for TLS)"
+   },
+   {
+    "label": "Host",
+    "kind": "text",
+    "optional": true,
+    "help": "Alternative: provide host/port/password separately"
+   },
+   {
+    "label": "Port",
+    "kind": "text",
+    "optional": true,
+    "help": "Redis port (default 6379)"
+   },
+   {
+    "label": "Password",
+    "kind": "secret",
+    "optional": true,
+    "help": "Redis AUTH password"
+   }
+  ],
+  "guide": [
+   "For Redis Cloud: go to app.redislabs.com -> Database -> Connect",
+   "Copy the connection URL (redis://default:pass@host:port)",
+   "Or provide host, port, and password separately",
+   "Use rediss:// prefix for TLS connections"
+  ],
+  "docsUrl": "https://redis.io/docs/latest/develop/connect/"
+ },
+ "resend": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From Resend Dashboard -> API Keys -> Create API Key"
+   }
+  ],
+  "guide": [
+   "Go to resend.com/api-keys and sign in",
+   "Click 'Create API Key'",
+   "Give it a name and select the appropriate domain/permissions",
+   "Copy the re_... API key value"
+  ],
+  "docsUrl": "https://resend.com/docs/api-reference/introduction"
+ },
+ "semantic_scholar": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "optional": true,
+    "help": "Request at semanticscholar.org/product/api. Free tier works without a key (100 req/5min)."
+   }
+  ],
+  "guide": [
+   "Visit semanticscholar.org/product/api",
+   "Request an API key (optional - free tier works without one)",
+   "API key raises rate limit from 100 req/5min to 1 req/sec sustained"
+  ],
+  "docsUrl": "https://api.semanticscholar.org/"
+ },
+ "sendgrid": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From SendGrid -> Settings -> API Keys -> Create API Key"
+   }
+  ],
+  "guide": [
+   "Go to SendGrid -> Settings -> API Keys",
+   "Click 'Create API Key'",
+   "Name it and choose 'Full Access' or 'Restricted Access' with needed permissions",
+   "Click 'Create & View' and copy the SG... key",
+   "Paste it here (the key is only shown once)"
+  ],
+  "docsUrl": "https://docs.sendgrid.com/ui/account-and-settings/api-keys"
+ },
+ "sentry": {
+  "fields": [
+   {
+    "label": "Auth Token",
+    "kind": "secret",
+    "help": "Generate at sentry.io/settings/auth-tokens/"
+   },
+   {
+    "label": "Organization Slug",
+    "kind": "secret",
+    "help": "Your Sentry organization slug from the URL"
+   }
+  ],
+  "guide": [
+   "Go to sentry.io/settings/auth-tokens/",
+   "Click 'Create New Token'",
+   "Select the required scopes and click 'Create Token'",
+   "Copy the sntrys_... token and your organization slug from the URL",
+   "Paste both values here"
+  ],
+  "docsUrl": "https://docs.sentry.io/api/guides/create-auth-token/"
+ },
+ "sharepoint": {
+  "guide": [
+   "Go to the Azure Portal -> Microsoft Entra ID -> App registrations.",
+   "Click 'New registration', name your app, and set redirect URI to http://localhost.",
+   "Under 'Certificates & secrets', create a new client secret and copy it.",
+   "Under 'API permissions', add Microsoft Graph delegated permissions: User.Read, Sites.Read.All, Sites.ReadWrite.All, Files.Read, Files.ReadWrite.",
+   "Copy the Application (client) ID from the Overview page.",
+   "In Personas, click Authorize with Microsoft.",
+   "Complete consent in your browser and return to Personas."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/graph/api/resources/sharepoint"
+ },
+ "slack_webhook": {
+  "fields": [
+   {
+    "label": "Incoming Webhook URL",
+    "kind": "secret",
+    "help": "From the Slack app's Incoming Webhooks page. The URL itself is the secret — anyone who has it can post to the configured channel."
+   }
+  ],
+  "guide": [
+   "Open api.slack.com/apps and pick (or create) the app you want to post from.",
+   "Enable 'Incoming Webhooks' in the sidebar.",
+   "Click 'Add New Webhook to Workspace', authorize, and pick the target channel.",
+   "Copy the https://hooks.slack.com/... URL and paste it here."
+  ],
+  "docsUrl": "https://api.slack.com/messaging/webhooks",
+  "outboundOnly": true
+ },
+ "slack": {
+  "fields": [
+   {
+    "label": "Bot User OAuth Token",
+    "kind": "secret",
+    "help": "From Slack App -> OAuth & Permissions -> Bot User OAuth Token. For inbound (a persona that replies in a channel) add the channels:history, groups:history and chat:write scopes."
+   },
+   {
+    "label": "User OAuth Token (optional)",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional. Only needed for Real-Time Search of private channels / DMs and for the Slack MCP server. From OAuth & Permissions -> User OAuth Token (xoxp-...) with the search:read.* scopes."
+   }
+  ],
+  "guide": [
+   "Go to api.slack.com/apps and create a new app (or select existing)",
+   "Go to 'OAuth & Permissions' in the sidebar",
+   "Add the bot token scopes your integration needs. For a persona that reads and replies in a channel: chat:write, channels:history, groups:history, channels:read",
+   "Click 'Install to Workspace' and authorize",
+   "Copy the xoxb-... Bot User OAuth Token and paste it into Bot User OAuth Token",
+   "(Optional, for Real-Time Search of private channels/DMs and the Slack MCP server) Add the search:read.public / search:read.private user scopes, reinstall, and paste the xoxp-... User OAuth Token into User OAuth Token"
+  ],
+  "docsUrl": "https://api.slack.com/authentication/token-types"
+ },
+ "stripe": {
+  "fields": [
+   {
+    "label": "Secret Key",
+    "kind": "secret",
+    "help": "Find at dashboard.stripe.com/apikeys. Use restricted keys where possible."
+   }
+  ],
+  "guide": [
+   "Go to dashboard.stripe.com/apikeys",
+   "Copy the Secret Key (sk_live_... or sk_test_...)",
+   "For production, prefer a restricted key with the minimum scopes your flows need"
+  ],
+  "docsUrl": "https://stripe.com/docs/api"
+ },
+ "supabase": {
+  "fields": [
+   {
+    "label": "Project URL",
+    "kind": "secret",
+    "help": "From Supabase Dashboard -> Settings -> API"
+   },
+   {
+    "label": "Anon / Public Key",
+    "kind": "secret",
+    "help": "The anon key for client-side access"
+   },
+   {
+    "label": "Service Role Key",
+    "kind": "secret",
+    "optional": true,
+    "help": "For server-side admin access (bypasses RLS)"
+   },
+   {
+    "label": "Pooler Connection String",
+    "kind": "secret",
+    "optional": true,
+    "help": "Supavisor pooler URL for direct database access"
+   }
+  ],
+  "guide": [
+   "Go to your Supabase project dashboard -> Settings -> API",
+   "Copy the Project URL",
+   "Copy the anon/public key (and optionally the service_role key for admin access)",
+   "Paste the project URL and key(s) here"
+  ],
+  "docsUrl": "https://supabase.com/dashboard/project/_/settings/api"
+ },
+ "tally": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "Go to tally.so -> Settings -> Integrations -> API -> Generate access token"
+   }
+  ],
+  "guide": [
+   "Log in to tally.so.",
+   "Go to Settings -> Integrations -> API.",
+   "Generate a new access token.",
+   "Copy the token and paste it here."
+  ],
+  "docsUrl": "https://tally.so/help/developer-resources"
+ },
+ "teams_webhook": {
+  "fields": [
+   {
+    "label": "Incoming Webhook URL",
+    "kind": "secret",
+    "help": "From the target channel: ... menu -> Connectors -> Incoming Webhook -> Configure. Teams emits a MessageCard payload by default."
+   }
+  ],
+  "guide": [
+   "In Teams, go to the channel that should receive notifications.",
+   "Click the ... menu next to the channel name -> Connectors.",
+   "Find 'Incoming Webhook' and click Configure.",
+   "Name the connector, optionally upload an icon, then 'Create'.",
+   "Copy the generated URL and paste it here."
+  ],
+  "docsUrl": "https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook",
+  "outboundOnly": true
+ },
+ "telegram": {
+  "fields": [
+   {
+    "label": "Bot Token",
+    "kind": "secret",
+    "help": "From @BotFather on Telegram -> /newbot or /token"
+   }
+  ],
+  "guide": [
+   "Open Telegram and search for @BotFather",
+   "Send /newbot and follow the prompts to name your bot",
+   "BotFather will give you a token like 123456:ABC-DEF...",
+   "Copy the bot token and paste it here"
+  ],
+  "docsUrl": "https://core.telegram.org/bots/api"
+ },
+ "toggl": {
+  "fields": [
+   {
+    "label": "API Token",
+    "kind": "secret",
+    "help": "From Toggl Track -> Profile -> Profile settings -> API Token"
+   }
+  ],
+  "guide": [
+   "Log in to Toggl Track at track.toggl.com",
+   "Click your profile avatar (bottom left) -> Profile settings",
+   "Scroll to the 'API Token' section",
+   "Click 'Click to reveal' and copy the token",
+   "Paste it here. Auth is HTTP Basic with username=<token> and password='api_token'."
+  ],
+  "docsUrl": "https://engineering.toggl.com/docs/"
+ },
+ "tracklight": {
+  "fields": [
+   {
+    "label": "Server URL",
+    "kind": "url",
+    "help": "Where your self-hosted LightTrack API is reachable. Defaults to http://localhost:8787 (override with LIGHTTRACK_BIND). Use your Cloud Run / server URL for a hosted deployment."
+   },
+   {
+    "label": "Project API Key",
+    "kind": "secret",
+    "help": "A per-project ingest/query key (lt_<prefix>_<secret>). Create one with `lt keys create` or the admin key. Sent as an Authorization: Bearer header."
+   }
+  ],
+  "guide": [
+   "Run the LightTrack API (docker run -p 8787:8787 ghcr.io/xkazm04/tracklight, or cargo build --release && lighttrack-api)",
+   "Confirm it is up: curl localhost:8787/health -> ok",
+   "Create a project API key (lt keys create, or the /onboard flow) — it looks like lt_<prefix>_<secret>",
+   "Paste your server URL and the API key here"
+  ],
+  "docsUrl": "https://github.com/xkazm04/tracklight"
+ },
+ "twilio_segment": {
+  "fields": [
+   {
+    "label": "Write Key",
+    "kind": "secret",
+    "help": "From Segment -> Sources -> your source -> Settings -> API Keys"
+   },
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "optional": true,
+    "help": "Optional: for Config API access (workspace-level)"
+   }
+  ],
+  "guide": [
+   "Go to app.segment.com and sign in",
+   "Navigate to Connections -> Sources -> select your source",
+   "Go to Settings -> API Keys -> Write Key",
+   "Copy the Write Key value"
+  ],
+  "docsUrl": "https://segment.com/docs/connections/sources/catalog/"
+ },
+ "twilio_sms": {
+  "fields": [
+   {
+    "label": "Account SID",
+    "kind": "secret",
+    "help": "From Twilio Console -> Account -> Account SID"
+   },
+   {
+    "label": "Auth Token",
+    "kind": "secret",
+    "help": "From Twilio Console -> Account -> Auth Token"
+   }
+  ],
+  "guide": [
+   "Log in to the Twilio Console at console.twilio.com",
+   "Your Account SID (AC...) and Auth Token are on the dashboard",
+   "Click the eye icon to reveal the Auth Token",
+   "Copy both values and paste them here"
+  ],
+  "docsUrl": "https://www.twilio.com/docs/usage/api"
+ },
+ "twin": {
+  "fields": [
+   {
+    "label": "Twin Profile",
+    "kind": "choice",
+    "help": "Which Twin profile this binding points to. Create or edit profiles in the Twin plugin under Profiles."
+   }
+  ]
+ },
+ "upstash": {
+  "fields": [
+   {
+    "label": "REST URL",
+    "kind": "secret",
+    "help": "From Upstash Console -> Database -> Details -> REST API -> URL"
+   },
+   {
+    "label": "REST Token",
+    "kind": "secret",
+    "help": "From Upstash Console -> Database -> Details -> REST API -> Token"
+   }
+  ],
+  "guide": [
+   "Log in to console.upstash.com",
+   "Select your Redis database (or create one)",
+   "Go to Details -> REST API section",
+   "Copy the REST URL and REST Token",
+   "Paste both values here"
+  ],
+  "docsUrl": "https://upstash.com/docs/redis/features/restapi"
+ },
+ "personas_vector_db": {
+  "guide": [
+   "Knowledge bases are stored locally. Drop files or paste text to build your knowledge base. Embedding is done on-device using a lightweight AI model (~23MB download on first use)."
+  ]
+ },
+ "vercel": {
+  "fields": [
+   {
+    "label": "Access Token",
+    "kind": "secret",
+    "help": "From Vercel -> Settings -> Tokens -> Create"
+   }
+  ],
+  "guide": [
+   "Go to vercel.com/account/tokens",
+   "Click 'Create' to generate a new token",
+   "Name it and select the scope (full account or specific team)",
+   "Click 'Create Token' and copy the value",
+   "Paste the token here"
+  ],
+  "docsUrl": "https://vercel.com/account/tokens"
+ },
+ "woocommerce": {
+  "fields": [
+   {
+    "label": "Store URL",
+    "kind": "url",
+    "help": "Your WooCommerce store URL (must have HTTPS enabled)"
+   },
+   {
+    "label": "Consumer Key",
+    "kind": "secret",
+    "help": "From WooCommerce -> Settings -> Advanced -> REST API -> Add Key"
+   },
+   {
+    "label": "Consumer Secret",
+    "kind": "secret",
+    "help": "From the same REST API key page"
+   }
+  ],
+  "guide": [
+   "In your WordPress admin, go to WooCommerce -> Settings -> Advanced -> REST API.",
+   "Click 'Add Key'.",
+   "Enter a description, select a user, and set permissions to Read/Write.",
+   "Click 'Generate API key'.",
+   "Copy the Consumer Key and Consumer Secret.",
+   "Paste both values and your store URL here."
+  ],
+  "docsUrl": "https://woocommerce.github.io/woocommerce-rest-api-docs/"
+ },
+ "x_twitter": {
+  "fields": [
+   {
+    "label": "Bearer Token",
+    "kind": "secret",
+    "help": "App-only Bearer Token from X Developer Portal → your project → Keys and tokens"
+   }
+  ],
+  "guide": [
+   "Go to developer.x.com and sign up for a developer account",
+   "Create a Project + App",
+   "Generate a Bearer Token in Keys and tokens",
+   "Paste the Bearer Token here",
+   "Note: Most read endpoints require the Basic tier ($200/mo) or higher. The Free tier is limited to posting tweets and the user lookup endpoints."
+  ],
+  "docsUrl": "https://docs.x.com/x-api"
+ },
+ "youtube_data": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "Create in Google Cloud Console → APIs & Services → Credentials → Create credentials → API key (enable YouTube Data API v3 first)"
+   }
+  ],
+  "guide": [
+   "Go to Google Cloud Console (console.cloud.google.com)",
+   "Create a project or pick an existing one",
+   "Navigate to APIs & Services → Library",
+   "Search for 'YouTube Data API v3' and click Enable",
+   "Go to APIs & Services → Credentials → Create credentials → API key",
+   "Copy the API key and paste it here",
+   "Free quota: 10,000 units/day (each search costs 100 units, a video lookup costs 1 unit)."
+  ],
+  "docsUrl": "https://developers.google.com/youtube/v3/docs"
+ },
+ "zapier": {
+  "fields": [
+   {
+    "label": "API Key",
+    "kind": "secret",
+    "help": "From zapier.com/app/developer -> API Key"
+   }
+  ],
+  "docsUrl": "https://platform.zapier.com/reference/introduction"
+ }
+}

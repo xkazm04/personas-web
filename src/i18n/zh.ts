@@ -1523,7 +1523,14 @@ export const zh: LocaleTranslations = {
       simulatedLabel: "\u6a21\u62df\u793a\u4f8b \u00b7 \u4e0d\u4f1a\u5b9e\u9645\u8fd0\u884c",
       connecting: "\u6b63\u5728\u8fde\u63a5 {label}\u2026",
       working: "\u6b63\u5728\u5904\u7406\uff1a{task}",
-      done: "\u5b8c\u6210\uff1a{task}"
+      done: "\u5b8c\u6210\uff1a{task}",
+      needHeading: "\u4f60\u9700\u8981\u51c6\u5907",
+      setupHeading: "\u8bbe\u7f6e\u6b65\u9aa4",
+      secretField: "\u673a\u5bc6",
+      optionalField: "\u53ef\u9009",
+      docsLink: "\u5b98\u65b9\u6587\u6863",
+      outboundOnly: "\u4ec5\u51fa\u7ad9\uff1aPersonas \u53ef\u4ee5\u5411 {label} \u53d1\u9001\u5185\u5bb9\uff0c\u4f46\u65e0\u6cd5\u4ece\u4e2d\u8bfb\u53d6\u3002",
+      englishNote: "\u8bbe\u7f6e\u8be6\u60c5\u6765\u81ea\u684c\u9762\u5e94\u7528\uff0c\u4ee5\u82f1\u6587\u663e\u793a\u3002"
     },
     roadmapSection: {
       inProgress: "\u8fdb\u884c\u4e2d",

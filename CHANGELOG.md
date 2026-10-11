@@ -9,6 +9,9 @@ Versioning: [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Connector modal shows the desktop app's real setup data: credential fields, numbered
+  setup steps, docs link and an outbound-only boundary (`npm run sync:connector-setup`).
+
 - OSS-release foundation: `README.md` (product overview, quickstart, env table,
   commands, conventions, repo layout), `LICENSE` (MIT), `.env.example`
   covering all 14 public + server env vars, `package.json` description /

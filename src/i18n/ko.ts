@@ -1523,7 +1523,14 @@ export const ko: LocaleTranslations = {
       simulatedLabel: "\uc2dc\ubbac\ub808\uc774\uc158 \uc608\uc2dc \u00b7 \uc2e4\uc81c\ub85c \uc2e4\ud589\ub418\uc9c0 \uc54a\uc74c",
       connecting: "{label}\uc5d0 \uc5f0\uacb0\ud558\ub294 \uc911\u2026",
       working: "\uc791\uc5c5 \uc911: {task}",
-      done: "\uc644\ub8cc: {task}"
+      done: "\uc644\ub8cc: {task}",
+      needHeading: "\ud544\uc694\ud55c \uac83",
+      setupHeading: "\uc124\uc815 \ubc29\ubc95",
+      secretField: "\ube44\ubc00 \uac12",
+      optionalField: "\uc120\ud0dd \uc0ac\ud56d",
+      docsLink: "\uacf5\uc2dd \ubb38\uc11c",
+      outboundOnly: "\ubc1c\uc2e0 \uc804\uc6a9: Personas\ub294 {label}(\uc73c)\ub85c \ubcf4\ub0bc \uc218 \uc788\uc9c0\ub9cc \uc77d\uc5b4 \uc62c \uc218\ub294 \uc5c6\uc2b5\ub2c8\ub2e4.",
+      englishNote: "\uc124\uc815 \uc138\ubd80 \uc815\ubcf4\ub294 \ub370\uc2a4\ud06c\ud1b1 \uc571\uc5d0\uc11c \uac00\uc838\uc624\uba70 \uc601\uc5b4\ub85c \ud45c\uc2dc\ub429\ub2c8\ub2e4."
     },
     roadmapSection: {
       inProgress: "\uc9c4\ud589 \uc911",
