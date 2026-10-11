@@ -1,7 +1,8 @@
 import { apiFetch } from "@/lib/api-fetch";
+import type { FeatureId } from "@/lib/feature-ids";
 import type { AccentToken, Comment, Feature } from "./local-types";
 
-export const featureIllustrations: Record<string, string> = {
+export const featureIllustrations: Record<FeatureId, string> = {
   macos: "/gen/vote/vote-macos.png",
   dashboard: "/gen/vote/vote-dashboard.png",
   enterprise: "/gen/vote/vote-enterprise.png",
@@ -12,7 +13,7 @@ export const featureIllustrations: Record<string, string> = {
  * of the real API vote count before display. Edit here to change initial
  * display numbers. Display copy (title + description) lives in i18n under
  * `featureVoting.features[id]` — keyed by `id`, which also links to the
- * server-side `ALLOWED_FEATURES` allowlist.
+ * server-side `FEATURE_IDS` registry (`@/lib/feature-ids`).
  *
  * PROVENANCE: nothing measured produced these three numbers, and every surface
  * that renders `seed + apiCount` is therefore showing a commitment, not a

@@ -1,5 +1,6 @@
 /** Feature ids whose display copy lives in i18n (`featureVoting.features`). */
-export type FeatureId = "macos" | "dashboard" | "enterprise";
+import type { FeatureId } from "@/lib/feature-ids";
+export type { FeatureId };
 
 export type Feature = {
   id: FeatureId;

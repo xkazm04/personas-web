@@ -7,11 +7,11 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { hasSupabaseEnv } from "@/lib/server/env";
+import { ALLOWED_FEATURES } from "@/lib/feature-ids";
 import { updateJsonFile, readJsonFile } from "@/lib/server/json-file-store";
 import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { rateLimitGuard } from "@/lib/server/rate-limit";
 
-const ALLOWED_FEATURES = new Set(["macos", "dashboard", "enterprise"]);
 // Aligned to the UI's 280-char comment cap (CommentInput's `maxLength={280}`),
 // plus a small tolerance margin so legitimate edge cases (IME composition,
 // paste normalization differences between client and server) aren't rejected.

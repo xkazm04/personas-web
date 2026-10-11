@@ -16,12 +16,12 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { isValidVoterId } from "@/lib/validation";
+import { ALLOWED_FEATURES } from "@/lib/feature-ids";
 import { hasSupabaseEnv } from "@/lib/server/env";
 import { readJsonFile, updateJsonFile } from "@/lib/server/json-file-store";
 import { getClientIp, parseJsonBody } from "@/lib/server/request";
 import { rateLimitGuard } from "@/lib/server/rate-limit";
 
-const ALLOWED_FEATURES = new Set(["macos", "dashboard", "enterprise"]);
 
 // Allowed Ko-fi boost tiers. MUST stay in sync with BOOST_TIERS in
 // src/components/sections/feature-voting/data.ts. The server pins to this
