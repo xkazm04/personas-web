@@ -17,13 +17,20 @@ describe("submitWaitlist: the one POST /api/waitlist client for the phone landin
 
   it("posts exactly {email, platform} with the email trimmed", async () => {
     const stub = vi.fn(async (..._args: unknown[]) => json(200, { count: 1 }));
-    expect(await submitWaitlist({ email: " visitor@example.com ", platform: "macos" }, { fetch: stub })).toEqual({ kind: "joined" });
+    expect(await submitWaitlist({ email: " visitor@example.com ", platform: "macos" }, { fetch: stub })).toEqual({ kind: "joined", count: 1 });
     expect(stub).toHaveBeenCalledTimes(1);
     const [url, init] = stub.mock.calls[0] as [string, RequestInit];
     expect(url).toBe("/api/waitlist");
     expect(init.method).toBe("POST");
     expect(JSON.parse(init.body as string)).toEqual({ email: "visitor@example.com", platform: "macos" });
     expect(Object.keys(JSON.parse(init.body as string))).toEqual(["email", "platform"]);
+  });
+
+  it("adds earlyBeta to the body only when the caller passes it", async () => {
+    const stub = vi.fn(async (..._args: unknown[]) => json(200, {}));
+    await submitWaitlist({ email: "visitor@example.com", platform: "macos", earlyBeta: true }, { fetch: stub });
+    const [, init] = stub.mock.calls[0] as [string, RequestInit];
+    expect(JSON.parse(init.body as string)).toEqual({ email: "visitor@example.com", platform: "macos", earlyBeta: true });
   });
 
   it("maps a 429 with no code to rate_limited", async () => {

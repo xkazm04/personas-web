@@ -10,10 +10,11 @@ import { trackWaitlistOpen, trackWaitlistResult, trackWaitlistSubmit, type Waitl
 import { WaitlistForm } from "./waitlist-modal/WaitlistForm";
 import { WaitlistHeader } from "./waitlist-modal/WaitlistHeader";
 import { WaitlistSuccessPanel } from "./waitlist-modal/WaitlistSuccessPanel";
+import { submitWaitlist, waitlistErrorText } from "./mobile-landing/shared/submitWaitlist";
 import { loadWaitlistCounts, primeWaitlistCount } from "./waitlist-modal/waitlistCounts";
 import { markCopied, resetModalState, useWaitlistFocusAndKeys } from "./waitlist-modal/waitlistModalShell";
 import { waitlistErrorLabels, waitlistFormLabels, waitlistHeaderLabels, waitlistPanelLabels } from "./waitlist-modal/waitlistLabels";
-import { EMAIL_RE, FETCH_TIMEOUT_MS, legacyCopyToClipboard, waitlistErrorMessage, type PlatformKey, type ShareState, type WaitlistStatus } from "./waitlist-modal/waitlistUtils";
+import { EMAIL_RE, legacyCopyToClipboard, type PlatformKey, type ShareState, type WaitlistStatus } from "./waitlist-modal/waitlistUtils";
 
 interface WaitlistModalProps {
   platformKey: PlatformKey;
@@ -96,60 +97,27 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     submitAbortRef.current?.abort();
     const controller = new AbortController();
     submitAbortRef.current = controller;
-    // Distinguish a timeout-abort (user needs feedback + retry) from a
-    // close/re-submit abort (silence is correct).
-    let timedOut = false;
-    const timeout = setTimeout(() => {
-      timedOut = true;
-      controller.abort();
-    }, FETCH_TIMEOUT_MS);
-
-    try {
-      const res = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, platform: platformKey, earlyBeta }),
-        signal: controller.signal,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        // The route's `error` prose is English-only and describes server
-        // internals, so it is never rendered — the stable `code` (status as
-        // fallback) picks a translated sentence instead. The Sentry title stays
-        // machine-readable and carries no email.
-        const code = typeof data.code === "string" ? data.code : "none";
-        captureExceptionScrubbed(new Error(`waitlist POST failed (status=${res.status}, code=${code})`), { tags: { component: "WaitlistModal" } });
-        setStatus("error");
-        setErrorMsg(waitlistErrorMessage(res.status, data.code, waitlistErrorLabels(t)));
-        return;
-      }
-      setSubmittedEmail(email.trim());
-      trackWaitlistResult(platformKey, entryPoint, data.duplicate ? "duplicate" : "success");
-      if (data.duplicate) setStatus("duplicate");
-      else {
-        setStatus("success");
-        // Prefer the authoritative post-insert count the route returns; the
-        // optimistic +1 is only a fallback for responses that omit it.
-        const serverCount = typeof data.count === "number" ? data.count : null;
-        if (serverCount !== null) primeWaitlistCount(platformKey, serverCount);
-        setWaitlistCount((prev) => (serverCount ?? (prev !== null ? prev + 1 : 1)));
-      }
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") {
-        // Timeout: the form would otherwise sit on "Joining…" forever with no
-        // recovery. Surface an error + retry. A close/re-submit abort stays silent.
-        if (timedOut) {
-          setStatus("error");
-          setErrorMsg(t.waitlist.errorTimeout);
-        }
-        return;
-      }
-      captureExceptionScrubbed(err, { tags: { component: "WaitlistModal" } });
+    const result = await submitWaitlist(
+      { email, platform: platformKey, earlyBeta },
+      { signal: controller.signal, report: (err) => captureExceptionScrubbed(err, { tags: { component: "WaitlistModal" } }) },
+    );
+    // A close/re-submit abort stays silent.
+    if (result.kind === "aborted") return;
+    if (result.kind === "invalid" || result.kind === "error") {
       setStatus("error");
-      // Transport/parse failures carry no server code — always the generic line.
-      setErrorMsg(t.waitlist.errorGeneric);
-    } finally {
-      clearTimeout(timeout);
+      setErrorMsg(waitlistErrorText(result.kind === "invalid" ? "invalid" : result.code, { ...waitlistErrorLabels(t), errorTimeout: t.waitlist.errorTimeout }));
+      return;
+    }
+    setSubmittedEmail(email.trim());
+    trackWaitlistResult(platformKey, entryPoint, result.kind === "duplicate" ? "duplicate" : "success");
+    if (result.kind === "duplicate") setStatus("duplicate");
+    else {
+      setStatus("success");
+      // Prefer the authoritative post-insert count the route returns; the
+      // optimistic +1 is only a fallback for responses that omit it.
+      const serverCount = result.count ?? null;
+      if (serverCount !== null) primeWaitlistCount(platformKey, serverCount);
+      setWaitlistCount((prev) => (serverCount ?? (prev !== null ? prev + 1 : 1)));
     }
   };
 
