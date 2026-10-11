@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { refusalOf, type SimAction, type SimState } from "./sim";
 import type { Refusal } from "./verbs";
 
@@ -109,7 +109,10 @@ export function inFlightFor(cmds: readonly Command[], agentId: string): Command 
 export function useCommands(dispatch: (a: SimAction) => void, sim: Pick<SimState, "agents">) {
   const [cmds, setCmds] = useState<Command[]>([]);
   const simRef = useRef(sim);
-  useEffect(() => {
+  // Layout, not passive: a passive effect can flush after a timer that fires
+  // between commit and paint, settling a landing command against a stale sim
+  // (marking done what the reducer then refuses).
+  useLayoutEffect(() => {
     simRef.current = sim;
   }, [sim]);
   const batchSeq = useRef(0);
