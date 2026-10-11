@@ -38,7 +38,7 @@ export type PhaseCardData = {
  * HAND-AUTHORED (correct on the day it was written — a commitment, not a
  * measurement):
  * - Phase 9's "40+ service integrations" is a deliberate floor, not a count.
- *   The real figure is `connectors.length` (125 today), but `@/data/connectors`
+ *   The real figure is `connectors.length` (134 today), but `@/data/connectors`
  *   is a ~1600-line catalog and this module is imported by CLIENT components
  *   (`RoadmapProgress`, `command-center-geometry`), so importing it here would
  *   ship the whole catalog in the first chunk a visitor parses. The derived
@@ -62,7 +62,7 @@ export const phaseCardData: PhaseCardData[] = [
   { phase: 6,  name: "Internationalization",icon: Globe,            scope: `Support for ${LANGUAGES.length} languages worldwide`, accent: "text-brand-emerald", bg: "bg-brand-emerald/10", completed: true },
   { phase: 7,  name: "Auth & Security",     icon: Shield,           scope: "Bank-grade encryption for all your credentials", accent: "text-brand-emerald", bg: "bg-brand-emerald/10", completed: true },
   { phase: 8,  name: "Agent Templates",     icon: Bot,              scope: "Pre-built agents you can start using immediately", accent: "text-brand-emerald", bg: "bg-brand-emerald/10", completed: true },
-  // HAND-AUTHORED FLOOR (not a count): the catalog ships 125 connectors, but
+  // HAND-AUTHORED FLOOR (not a count): the catalog ships 134 connectors, but
   // deriving it here would drag @/data/connectors into the client bundle.
   // Derived figure lives in AREA_COUNTS.connectors (server-side).
   { phase: 9,  name: "Tool Integrations",   icon: Code,             scope: "40+ service integrations built in",          accent: "text-brand-emerald", bg: "bg-brand-emerald/10", completed: true },

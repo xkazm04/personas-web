@@ -41,7 +41,7 @@ export const TOOLS = {
 export type ToolKey = keyof typeof TOOLS;
 
 /** The size of the whole catalog: `connectors.length`, pinned by the test. */
-export const CONNECTOR_COUNT = 125;
+export const CONNECTOR_COUNT = 134;
 
 /** The reach plate under the cartridges: a recognisable cross-section, one or two per category. */
 export const REACH_TOOLS: ToolKey[] = [

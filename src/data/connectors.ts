@@ -44,8 +44,8 @@ export const categories: ConnectorCategory[] = [
   { key: "automation", label: "Automation", accent: "amber" },
 ];
 
-// Generated from personas/scripts/connectors/builtin/*.json on 
-// 2026-05-17 by scripts/generate-connectors.mjs.
+// Generated from personas/scripts/connectors/builtin/*.json by
+// scripts/generate-connectors.mjs (drift check: node scripts/generate-connectors.mjs --check).
 // Hand-written useCases for the marquee connectors are preserved;
 // the rest carry category-typed placeholder useCases.
 
@@ -519,6 +519,19 @@ export const connectors: Connector[] = [
       { title: "Test Migrations Safely", description: "Run pending migrations on a temporary branch to verify they work before touching production.", command: "personas run \"Test pending migrations on a temporary branch\"" },],
   },
   {
+    name: "operations_database",
+    label: "Operational Data",
+    color: "#0EA5E9",
+    category: "database",
+    summary: "Read-only views over the operational store -- executions, messages, human reviews, incidents, goals, and KPIs. Available on first launch; lets agents answer ad-hoc operational questions without an external service. Curated, parameterized, row-capped queries only -- no mutation.",
+    monogram: "OD",
+    authType: "Built-in",
+    useCases: [
+      { title: "Run Saved Queries", description: "Execute SQL or queries against Operational Data and return readable results.", command: "personas run \"Run last week's revenue query on Operational Data\"" },
+      { title: "Audit Schema or Indexes", description: "Find missing indexes, orphan tables, or unused columns in Operational Data.", command: "personas run \"Audit Operational Data schema for issues\"" },
+    ],
+  },
+  {
     name: "planetscale",
     label: "PlanetScale",
     color: "#000000",
@@ -908,6 +921,20 @@ export const connectors: Connector[] = [
       { title: "Generate Reports", description: "Summarize work logged or scheduled in Google Sheets.", command: "personas run \"Build a weekly report from Google Sheets\"" },],
   },
   {
+    name: "granola",
+    label: "Granola",
+    color: "#C49A6C",
+    category: "productivity",
+    summary: "Granola AI meeting notes -- read AI-generated meeting summaries and transcripts so agents can act on what happened in meetings.",
+    monogram: "GR",
+    authType: "API Key",
+    icon: "granola",
+    useCases: [
+      { title: "Capture & Organize", description: "Pull notes, events, or tasks from Granola into the right place automatically.", command: "personas run \"Pull this week's Granola entries\"" },
+      { title: "Generate Reports", description: "Summarize work logged or scheduled in Granola.", command: "personas run \"Build a weekly report from Granola\"" },
+    ],
+  },
+  {
     name: "harvest",
     label: "Harvest",
     color: "#FA5D00",
@@ -1121,6 +1148,62 @@ export const connectors: Connector[] = [
       { title: "Auto-Update Status Page", description: "Automatically update your public status page when monitors detect an outage.", command: "personas run \"Sync monitor status to the public status page\"" },],
   },
   {
+    name: "helicone",
+    label: "Helicone",
+    color: "#F1A208",
+    category: "monitoring",
+    summary: "Helicone LLM observability — one-line proxy for logging, cost tracking, caching, and analytics across OpenAI, Anthropic, and more.",
+    monogram: "HE",
+    authType: "API Key",
+    icon: "helicone",
+    useCases: [
+      { title: "Catch Spikes Early", description: "Watch Helicone for error or latency anomalies and alert the right team.", command: "personas run \"Alert on Helicone error spike\"" },
+      { title: "Compile Incident Reports", description: "Compile timelines and dashboards from Helicone into a shareable post-mortem.", command: "personas run \"Build post-mortem from Helicone incident\"" },
+    ],
+  },
+  {
+    name: "langfuse",
+    label: "Langfuse",
+    color: "#0A60FF",
+    category: "monitoring",
+    summary: "Langfuse open-source LLM engineering platform — tracing, evals, prompt management, and cost/latency analytics for LLM apps.",
+    monogram: "LA",
+    authType: "Key Pair",
+    icon: "langfuse",
+    useCases: [
+      { title: "Catch Spikes Early", description: "Watch Langfuse for error or latency anomalies and alert the right team.", command: "personas run \"Alert on Langfuse error spike\"" },
+      { title: "Compile Incident Reports", description: "Compile timelines and dashboards from Langfuse into a shareable post-mortem.", command: "personas run \"Build post-mortem from Langfuse incident\"" },
+    ],
+  },
+  {
+    name: "langsmith",
+    label: "LangSmith",
+    color: "#1C3C3C",
+    category: "monitoring",
+    summary: "LangSmith (by LangChain) LLM tracing, evaluation, and monitoring — inspect runs, datasets, and prompts for LLM and agent apps.",
+    monogram: "LA",
+    authType: "API Key",
+    icon: "langsmith",
+    useCases: [
+      { title: "Catch Spikes Early", description: "Watch LangSmith for error or latency anomalies and alert the right team.", command: "personas run \"Alert on LangSmith error spike\"" },
+      { title: "Compile Incident Reports", description: "Compile timelines and dashboards from LangSmith into a shareable post-mortem.", command: "personas run \"Build post-mortem from LangSmith incident\"" },
+    ],
+  },
+  {
+    name: "tracklight",
+    label: "LightTrack",
+    color: "#0EA5E9",
+    category: "monitoring",
+    summary: "LightTrack self-hosted LLM observability + scoring — track calls, cost, and profit across OpenAI/Anthropic/Gemini, with LLM-as-judge benchmarks and per-project limits.",
+    monogram: "LI",
+    authType: "API Key",
+    icon: "tracklight",
+    useCases: [
+      { title: "Catch Spikes Early", description: "Watch LightTrack for error or latency anomalies and alert the right team.", command: "personas run \"Alert on LightTrack error spike\"" },
+      { title: "Compile Incident Reports", description: "Compile timelines and dashboards from LightTrack into a shareable post-mortem.", command: "personas run \"Build post-mortem from LightTrack incident\"" },
+    ],
+  },
+  {
     name: "sentry",
     label: "Sentry",
     color: "#362D59",
@@ -1313,6 +1396,19 @@ export const connectors: Connector[] = [
 
   // ── AI ──────────────────────────────────────────────────────────
   {
+    name: "anthropic-admin",
+    label: "Anthropic Admin",
+    color: "#D4A27F",
+    category: "ai",
+    summary: "Anthropic organization admin API — usage and cost reporting per API key (LLM spend KPIs).",
+    monogram: "AA",
+    authType: "api_key",
+    useCases: [
+      { title: "Generate Content", description: "Use Anthropic Admin to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Anthropic Admin\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Anthropic Admin as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Anthropic Admin\"" },
+    ],
+  },
+  {
     name: "deepgram",
     label: "Deepgram",
     color: "#13EF93",
@@ -1373,6 +1469,20 @@ export const connectors: Connector[] = [
       { title: "Plug Into a Workflow", description: "Route inputs through Higgsfield as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Higgsfield\"" },],
   },
   {
+    name: "huggingface",
+    label: "Hugging Face",
+    color: "#FFD21E",
+    category: "ai",
+    summary: "Hugging Face Hub access token — used for gated model downloads (e.g. the Pocket TTS voice-cloning weights) and Hub API calls.",
+    monogram: "HF",
+    authType: "API key",
+    icon: "huggingface",
+    useCases: [
+      { title: "Generate Content", description: "Use Hugging Face to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Hugging Face\"" },
+      { title: "Plug Into a Workflow", description: "Route inputs through Hugging Face as one step of a larger agent flow.", command: "personas run \"Pipe transcript through Hugging Face\"" },
+    ],
+  },
+  {
     name: "leonardo_ai",
     label: "Leonardo AI",
     color: "#6C3AEF",
@@ -1389,7 +1499,7 @@ export const connectors: Connector[] = [
     label: "Twin",
     color: "#A78BFA",
     category: "ai",
-    summary: "Speak as the user. Provides identity, per-channel tone, memory recall, and interaction tracking to any persona. The active twin is resolved automatically — no per-persona attach step needed.",
+    summary: "Speak as a Twin. Bind a persona to a specific Twin profile from the Twin plugin — provides identity, per-channel tone, memory recall, and interaction tracking. Create multiple bindings to switch a persona between Twins; the binding's name is yours to choose.",
     monogram: "TW",
     authType: "Twin",
     useCases: [{ title: "Generate Content", description: "Use Twin to produce text, audio, images, or video from a prompt.", command: "personas run \"Generate intro VO via Twin\"" },
@@ -1568,6 +1678,19 @@ export const connectors: Connector[] = [
     icon: "arcade",
     useCases: [{ title: "Orchestrate Cross-Tool Flows", description: "Trigger Arcade jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Arcade workflow on review approved\"" },
       { title: "Listen for External Events", description: "React to events arriving from Arcade as agent triggers.", command: "personas run \"Subscribe to Arcade new-event webhook\"" },],
+  },
+  {
+    name: "browser",
+    label: "Browser",
+    color: "#0EA5E9",
+    category: "automation",
+    summary: "Drive web apps that have no API. Binding this connector hands the persona's run the Personas browser bridge as an MCP server, scoped to its own session: it may read and navigate inside the operator's Browser > Whitelist, and every write (click, type, select, submit, a page's own tool) goes to the operator's approval on the orb with a screenshot. Credentials are never seen by the model - browser_login is executed by Personas with the vault credential the operator bound to the origin. An origin that is not on the Whitelist is refused by name; the persona may ask for it once with browser_request_site.",
+    monogram: "BR",
+    authType: "Whitelist",
+    useCases: [
+      { title: "Orchestrate Cross-Tool Flows", description: "Trigger Browser jobs from agent decisions, and bring results back.", command: "personas run \"Trigger Browser workflow on review approved\"" },
+      { title: "Listen for External Events", description: "React to events arriving from Browser as agent triggers.", command: "personas run \"Subscribe to Browser new-event webhook\"" },
+    ],
   },
   {
     name: "desktop_browser",
