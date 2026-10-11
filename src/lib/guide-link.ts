@@ -51,3 +51,13 @@ export interface GuideTopicRef {
 export function guideHref(ref: GuideTopicRef): string {
   return `/guide/${ref.category}/${ref.topic}`;
 }
+
+/**
+ * Guide URL for a topic opened from a desktop screen. `from` is the
+ * `module` or `module/screen` value published in /guide/modules/v1.json
+ * (see src/lib/guide-modules-feed.ts), so the guide can tell which screen
+ * the reader came from.
+ */
+export function guideHrefFrom(ref: GuideTopicRef, from: string): string {
+  return `${guideHref(ref)}?from=${encodeURIComponent(from)}`;
+}
