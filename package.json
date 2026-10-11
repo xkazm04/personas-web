@@ -38,7 +38,9 @@
     "db:migrate": "node scripts/run-voting-migration.mjs",
     "db:migrate:sync": "node scripts/run-sync-migration.mjs",
     "prepare": "node scripts/install-git-hooks.mjs",
-    "sync:desktop-facts": "node scripts/sync-desktop-facts.mjs"
+    "sync:desktop-facts": "node scripts/sync-desktop-facts.mjs",
+    "compile:changelog": "node scripts/compile-changelog.mjs",
+    "check:changelog": "node scripts/compile-changelog.mjs --check"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.69.0",
