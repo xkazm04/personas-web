@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import type { ReactElement } from "react";
 import { extractHeadings } from "./extractHeadings";
 import { parseBlocks } from "./parseBlocks";
+import { slugifyHeading } from "./parseGuide";
 
 // The TOC (extractHeadings) and the renderer (parseBlocks) must assign identical
 // anchor ids, or TOC / copy-link anchors scroll nowhere. This pins them together
@@ -31,7 +32,7 @@ describe("guide heading ids stay in lockstep between TOC and renderer", () => {
       "# not a heading (in fence)",
       "```",
       "",
-      "## 日本語", // CJK, slugifies empty -> fallback
+      "## 🎉", // second emoji-only -> fallback
       "",
       ":::note",
       "## heading inside custom block (skipped)",
@@ -48,5 +49,16 @@ describe("guide heading ids stay in lockstep between TOC and renderer", () => {
     expect(tocIds).toContain("setup");
     expect(tocIds).toContain("setup-2");
     expect(tocIds.filter((id) => id.startsWith("section-")).length).toBe(2);
+  });
+
+  it("keeps non-Latin letters so localized headings get deep-linkable ids", () => {
+    expect(slugifyHeading("日本語 ガイド")).toBe("日本語-ガイド");
+    expect(slugifyHeading("Начало работы")).toBe("начало-работы");
+    expect(slugifyHeading("시작하기")).toBe("시작하기");
+    expect(slugifyHeading("शुरू करें")).toBe("शुरू-करें");
+    expect(slugifyHeading("مرحبا بك")).toBe("مرحبا-بك");
+    // Latin ids are unchanged
+    expect(slugifyHeading("Café **Setup**")).toBe("cafe-setup");
+    expect(slugifyHeading("🚀")).toBe("");
   });
 });

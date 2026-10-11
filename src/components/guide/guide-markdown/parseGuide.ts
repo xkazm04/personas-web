@@ -80,10 +80,16 @@ export function slugifyHeading(text: string): string {
     .replace(/\[([^\]]*)\]\([^)]+\)/g, "$1")
     .normalize("NFKD")
     .replace(/[̀-ͯ]/g, "");
-  return stripped.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  // Keep letters/marks/digits of any script (marks: Devanagari/Thai vowel signs are \p{M}); NFC
+  // recomposes Hangul that NFKD split. Latin ids are unchanged (diacritics already stripped above).
+  return stripped
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{M}\p{N}]+/gu, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
-/** Dedups (`-2`, `-3`) and falls back to `section-N` for unslugifiable headings. */
+/** Dedups (`-2`, `-3`) and falls back to `section-N` for headings with no letters or digits (emoji-only). */
 export function createHeadingIdAssigner(): (rawText: string) => string {
   const usedSlugs = new Map<string, number>();
   let fallback = 0;
