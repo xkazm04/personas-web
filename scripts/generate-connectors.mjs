@@ -262,6 +262,13 @@ const SKIP = new Set([
   "google_workspace_oauth_template", // OAuth scaffold, not a real connector
 ]);
 
+// Web-only label overrides. The desktop catalog labels both Obsidian
+// connectors "Obsidian"; the site disambiguates them (commit 92b5c23), so a
+// regeneration must not reset the label.
+const LABEL_OVERRIDES = {
+  desktop_obsidian: "Obsidian (Desktop Bridge)",
+};
+
 // ── 9. Build the final connector list ────────────────────────────────
 // Sort: first by category (in the WEB_CATEGORIES order), then label A→Z.
 const categoryOrder = Object.fromEntries(
@@ -269,8 +276,10 @@ const categoryOrder = Object.fromEntries(
 );
 
 const built = raw
-  .map(({ data }) => {
+  .map(({ data: rawData }) => {
+    let data = rawData;
     if (SKIP.has(data.name)) return null;
+    data = { ...data, label: LABEL_OVERRIDES[data.name] ?? data.label };
     const appCategory = data.category || "productivity";
     const webCategory = CATEGORY_MAP[appCategory] || "productivity";
     const auth = data.metadata?.auth_type_label || data.metadata?.auth_type || "API key";
