@@ -101,6 +101,15 @@ const nextConfig: NextConfig = {
   //   public phone landing and is not redirected. Next passes the query string through.
   // - Retired dashboard views: Personas replaced the Agents grid and the fleet
   //   Playground (2026-10-05).
+  // Raw-markdown guide topics: /guide/<category>/<topic>.md is served by the
+  // route handler at /guide-md/<category>/<topic> (see src/app/guide-md).
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/guide/:category/:topic.md", destination: "/guide-md/:category/:topic" }],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   async redirects() {
     return [
       { source: "/m/overview", destination: "/dashboard/home", permanent: false },
