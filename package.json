@@ -20,6 +20,7 @@
     "build": "next build",
     "analyze": "next experimental-analyze",
     "check:bundle": "node scripts/check-bundle-budget.mjs",
+    "check:field": "node scripts/check-field-budget.mjs",
     "start": "next start",
     "lint": "eslint --max-warnings 9",
     "typecheck": "tsc --noEmit",

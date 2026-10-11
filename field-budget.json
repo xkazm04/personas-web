@@ -1,0 +1,8 @@
+{
+  "$comment": "Field (real-user) ceilings at p75, per route. Report-only until a route has measured data: add a route under `routes` as { \"LCP\": ms, \"INP\": ms, \"CLS\": score } once the nightly snapshot has n >= minSamples for it. `warnOnly` flips to false when the ratchet should fail the build.",
+  "generatedAt": "2026-10-12",
+  "warnOnly": true,
+  "minSamples": 50,
+  "defaults": { "LCP": 2500, "INP": 200, "CLS": 0.1 },
+  "routes": {}
+}
