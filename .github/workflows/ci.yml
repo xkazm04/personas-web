@@ -54,6 +54,10 @@ jobs:
       # reading a measurement that was never taken. Read the numbers in the log;
       # enforce thresholds only from a machine that has the desktop repo.
       - run: npm run check:guide-coverage
+      # Desktop-facts snapshot drift (memory categories, cell keys). --check skips
+      # cleanly (exit 0) when no ../personas checkout exists, as on runners, so this
+      # only fails from a machine that has the desktop repo and a real drift.
+      - run: npm run sync:desktop-facts -- --check
       #
       # NOT WIRED HERE, PERMANENTLY: `npm run check:guide-translations`.
       # The stored per-topic source hashes in src/data/guide/locales/*/_meta.json
