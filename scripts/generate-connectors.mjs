@@ -1,29 +1,50 @@
 #!/usr/bin/env node
-// One-shot regeneration of src/data/connectors.ts from the app's builtin
-// connector JSON catalog. Idempotent — preserves existing hand-written
-// useCases for connectors whose name appears in the current data file,
-// and synthesizes 1-2 category-typed placeholder useCases for the rest.
+// Regenerates src/data/connectors.ts from the desktop app's builtin
+// connector JSON catalog. Deterministic and idempotent - preserves existing
+// hand-written useCases for connectors whose name appears in the current data
+// file, and synthesizes 1-2 category-typed placeholder useCases for the rest.
 //
-// Run with:  node scripts/generate-connectors.mjs > src/data/connectors.ts
+// Usage:
+//   node scripts/generate-connectors.mjs --write   # regenerate src/data/connectors.ts
+//   node scripts/generate-connectors.mjs --check   # drift gate (no writes)
+//   node scripts/generate-connectors.mjs           # print to stdout
 //
-// Source of truth: ../personas/scripts/connectors/builtin/*.json
-// Existing data:   src/data/connectors.ts (parsed at top of script)
+// --check contract (same as emit-guide-status / check-guide-coverage):
+//   exit 0  the file matches the desktop catalog
+//   exit 1  stale: names the connectors added/removed, or says the text differs
+//   exit 3  the desktop catalog is unavailable - never a silent pass
+//
+// Source of truth: <desktop repo>/scripts/connectors/builtin/*.json, where the
+// desktop repo is PERSONAS_DESKTOP_REPO when set (authoritative, no fallback),
+// else the sibling checkout ../personas.
+// Existing data:   src/data/connectors.ts (working tree)
 
-import { readFileSync, readdirSync } from "fs";
-import { execSync } from "child_process";
+import { readFileSync, readdirSync, writeFileSync, existsSync } from "fs";
 import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+import { dirname, join, resolve } from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = join(__dirname, "..");
-const APP_CONNECTORS_DIR = "C:/Users/kazda/kiro/personas/scripts/connectors/builtin";
+const DATA_FILE = join(REPO, "src/data/connectors.ts");
+const ARGS = new Set(process.argv.slice(2));
+const CHECK = ARGS.has("--check");
+const WRITE = ARGS.has("--write");
 
-// Source the existing data from git HEAD (or whatever ref CONNECTORS_BASE
-// points to) instead of the working tree, because the script's typical
-// invocation is `node ... > src/data/connectors.ts` and bash truncates
-// the output file before node opens it — wiping out the useCases we
-// wanted to preserve.
-const BASE_REF = process.env.CONNECTORS_BASE || "HEAD";
+function resolveDesktopRepo() {
+  const override = process.env.PERSONAS_DESKTOP_REPO;
+  const root = override ? resolve(override) : resolve(REPO, "..", "personas");
+  const dir = join(root, "scripts/connectors/builtin");
+  if (!existsSync(dir)) {
+    return { root, dir: null, reason: `${override ? "PERSONAS_DESKTOP_REPO" : "sibling ../personas"} has no scripts/connectors/builtin (${dir})` };
+  }
+  return { root, dir };
+}
+const desktop = resolveDesktopRepo();
+if (!desktop.dir) {
+  process.stderr.write(`connectors: desktop catalog unavailable - ${desktop.reason}\n`);
+  process.exit(3);
+}
+const APP_CONNECTORS_DIR = desktop.dir;
 
 // ── 1. Read all connector JSONs from the app ──────────────────────────
 const files = readdirSync(APP_CONNECTORS_DIR).filter((f) => f.endsWith(".json"));
@@ -35,27 +56,18 @@ const raw = files.map((f) => {
 // ── 2. Extract existing hand-written useCases ─────────────────────────
 // Crude but adequate: parse the existing connectors.ts and pull out the
 // useCases array for each `name: "..."` entry. Anything we can't parse
-// will fall through to placeholder generation.
-let existingSource = "";
-try {
-  existingSource = execSync(`git show ${BASE_REF}:src/data/connectors.ts`, {
-    cwd: REPO,
-    encoding: "utf-8",
-  });
-} catch {
-  // No git history or file at that ref — proceed with all placeholders.
-  process.stderr.write(`# No prior connectors.ts at ${BASE_REF}; using placeholders for all.\n`);
-}
+// will fall through to placeholder generation. Read (LF-normalized, since a
+// Windows checkout is CRLF) before any write, so the output never truncates
+// its own input.
+const existingSource = existsSync(DATA_FILE) ? readFileSync(DATA_FILE, "utf-8").replace(/\r\n/g, "\n") : "";
 const existingUseCases = {};
 {
-  // Match each connector object literal — anchored on `name:` and ending
+  // Match each connector object literal - anchored on `name:` and ending
   // at the closing `},` of the outer object.
-  const connectorBlockRe = /name:\s*"([^"]+)",[\s\S]*?useCases:\s*\[([\s\S]*?)\],?\s*\}/g;
+  const connectorBlockRe = /name:\s*"([^"]+)",[\s\S]*?useCases:\s*(\[[\s\S]*?\]),?\s*\}/g;
   let m;
   while ((m = connectorBlockRe.exec(existingSource)) !== null) {
-    const name = m[1];
-    const useCasesBody = m[2];
-    existingUseCases[name] = useCasesBody.trim();
+    existingUseCases[m[1]] = m[2]; // verbatim "[...]" text, so re-emitting is byte-stable
   }
 }
 
@@ -144,7 +156,7 @@ function makeMonogram(label) {
 // internal logo PNG) return null and fall through to the monogram. We
 // also try to copy the file from the app's public/icons/connectors/ and
 // only emit a slug if the SVG actually exists there.
-const PERSONAS_ICONS_DIR = "C:/Users/kazda/kiro/personas/public/icons/connectors";
+const PERSONAS_ICONS_DIR = join(desktop.root, "public/icons/connectors");
 // Connectors whose app icon_url is an external simpleicons CDN URL —
 // the SVGs were fetched and committed to public/tools/<slug>.svg.
 const CDN_SLUGS = {
@@ -284,7 +296,8 @@ const built = raw
     const webCategory = CATEGORY_MAP[appCategory] || "productivity";
     const auth = data.metadata?.auth_type_label || data.metadata?.auth_type || "API key";
     const summary = data.metadata?.summary || `Integrate ${data.label}.`;
-    const monogram = makeMonogram(data.label);
+    // Monogram and sort order key off the desktop label, not the web-only override.
+    const monogram = makeMonogram(rawData.label);
     const icon = iconSlugFromUrl(data.name, data.icon_url);
     return {
       name: data.name,
@@ -293,6 +306,7 @@ const built = raw
       category: webCategory,
       summary,
       monogram,
+      sortLabel: rawData.label,
       authType: auth,
       icon,
       useCasesRaw: existingUseCases[data.name],
@@ -304,7 +318,7 @@ const built = raw
     const ca = categoryOrder[a.category] ?? 999;
     const cb = categoryOrder[b.category] ?? 999;
     if (ca !== cb) return ca - cb;
-    return a.label.localeCompare(b.label);
+    return a.sortLabel.localeCompare(b.sortLabel);
   });
 
 // ── 10. Emit the TypeScript file ─────────────────────────────────────
@@ -340,8 +354,8 @@ for (const c of WEB_CATEGORIES) {
 }
 lines.push(`];`);
 lines.push(``);
-lines.push(`// Generated from personas/scripts/connectors/builtin/*.json on `);
-lines.push(`// ${new Date().toISOString().slice(0, 10)} by scripts/generate-connectors.mjs.`);
+lines.push(`// Generated from personas/scripts/connectors/builtin/*.json by`);
+lines.push(`// scripts/generate-connectors.mjs (drift check: node scripts/generate-connectors.mjs --check).`);
 lines.push(`// Hand-written useCases for the marquee connectors are preserved;`);
 lines.push(`// the rest carry category-typed placeholder useCases.`);
 lines.push(``);
@@ -365,7 +379,7 @@ for (const c of built) {
   lines.push(`    authType: ${JSON.stringify(c.authType)},`);
   if (c.icon) lines.push(`    icon: "${c.icon}",`);
   if (c.useCasesRaw) {
-    lines.push(`    useCases: [${c.useCasesRaw}],`);
+    lines.push(`    useCases: ${c.useCasesRaw},`);
   } else {
     lines.push(`    useCases: [`);
     for (const uc of c.useCasesPlaceholder) {
@@ -378,7 +392,28 @@ for (const c of built) {
 lines.push(`];`);
 lines.push(``);
 
-process.stdout.write(lines.join("\n"));
+const output = lines.join("\n");
+
+if (CHECK) {
+  const nameRe = /^ {4}name:\s*"([^"]+)",/gm;
+  const have = new Set([...existingSource.matchAll(nameRe)].map((m) => m[1]));
+  const want = new Set(built.map((c) => c.name));
+  const missing = [...want].filter((n) => !have.has(n));
+  const extra = [...have].filter((n) => !want.has(n));
+  if (missing.length || extra.length || output !== existingSource) {
+    process.stderr.write(`connectors: src/data/connectors.ts is stale vs desktop (${have.size} on web, ${want.size} on desktop)\n`);
+    if (missing.length) process.stderr.write(`  missing on web (+${missing.length}): ${missing.join(", ")}\n`);
+    if (extra.length) process.stderr.write(`  only on web (-${extra.length}): ${extra.join(", ")}\n`);
+    if (!missing.length && !extra.length) process.stderr.write("  same connector set, generated text differs\n");
+    process.stderr.write("  fix: node scripts/generate-connectors.mjs --write\n");
+    process.exit(1);
+  }
+  process.stdout.write(`connectors: in sync with desktop (${built.length} connectors)\n`);
+  process.exit(0);
+}
+
+if (WRITE) writeFileSync(DATA_FILE, output, "utf-8");
+else process.stdout.write(output);
 
 // ── debug summary on stderr ──────────────────────────────────────────
 const byCategory = {};

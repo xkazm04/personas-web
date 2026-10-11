@@ -28,6 +28,7 @@
     "test:unit:watch": "vitest",
     "test:unit:cov": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "check:connectors": "node scripts/generate-connectors.mjs --check",
     "check:guide-content": "node scripts/check-guide-content.mjs",
     "check:guide-coverage": "node scripts/check-guide-coverage.mjs",
     "check:guide-translations": "node scripts/i18n/check-guide-translations.mjs",
