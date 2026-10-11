@@ -19,7 +19,7 @@ export const vi: Pick<Translations, "athenaPage"> = {
         persona: "M\u1ed9t nh\u00e0 chi\u1ebfn l\u01b0\u1ee3c, kh\u00f4ng ph\u1ea3i tr\u1ee3 l\u00fd vui v\u1ebb \u2014 th\u1eb3ng th\u1eafn, c\u00f3 ch\u00ednh ki\u1ebfn, \u1ea5m \u00e1p m\u00e0 kh\u00f4ng di\u1ec5n. \u201cT\u1ed1c \u0111\u1ed9 kh\u00f4ng ph\u1ea3i vi\u1ec7c c\u1ee7a b\u1ea1n. Ch\u1ea5t l\u01b0\u1ee3ng m\u1edbi l\u00e0.\u201d",
         ctaPrimary: "Xem c\u00f4 \u1ea5y l\u00e0m vi\u1ec7c",
         ctaSecondary: "T\u1ea3i Personas",
-        statWhisper: "Ch\u1ea1y ho\u00e0n to\u00e0n tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n \u00b7 b\u1ea1n quy\u1ebft \u0111\u1ecbnh c\u00f4 \u1ea5y \u0111i xa t\u1edbi \u0111\u00e2u",
+        statWhisper: "Tr\u00ed nh\u1edb c\u1ee7a c\u00f4 \u1ea5y \u1edf l\u1ea1i tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n \u00b7 b\u1ea1n quy\u1ebft \u0111\u1ecbnh c\u00f4 \u1ea5y \u0111i xa t\u1edbi \u0111\u00e2u",
         avatarAlt: "Athena, ng\u01b0\u1eddi \u0111\u1ed3ng h\u00e0nh c\u1ee7a Personas",
         orbAria: "Athena \u2014 nh\u1ea5n Enter l\u00e0 c\u00f4 \u1ea5y \u0111\u00e1p l\u1eddi",
         acknowledgeLine: "T\u00f4i \u0111ang nghe.",

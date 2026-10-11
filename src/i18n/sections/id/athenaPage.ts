@@ -19,7 +19,7 @@ export const id: Pick<Translations, "athenaPage"> = {
         persona: "Seorang perancang strategi, bukan asisten yang selalu ceria \u2014 lugas, punya pendapat, hangat tanpa berpura-pura. \u201cKecepatan bukan tugasmu. Kualitas yang jadi tugasmu.\u201d",
         ctaPrimary: "Lihat cara kerjanya",
         ctaSecondary: "Unduh Personas",
-        statWhisper: "Berjalan sepenuhnya di mesin kamu \u00b7 kamu yang menentukan sejauh mana dia melangkah",
+        statWhisper: "Ingatannya tetap di mesin kamu \u00b7 kamu yang menentukan sejauh mana dia melangkah",
         avatarAlt: "Athena, pendamping Personas",
         orbAria: "Athena \u2014 tekan Enter dan dia akan menyahut",
         acknowledgeLine: "Aku mendengarkan.",

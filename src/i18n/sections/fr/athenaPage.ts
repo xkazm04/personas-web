@@ -19,7 +19,7 @@ export const fr: Pick<Translations, "athenaPage"> = {
         persona: "Une strat\u00e8ge, pas une assistante enjou\u00e9e \u2014 directe, avec un avis, chaleureuse sans en faire trop. \u00ab\u00a0La vitesse n'est pas ton m\u00e9tier. La qualit\u00e9, si.\u00a0\u00bb",
         ctaPrimary: "La voir travailler",
         ctaSecondary: "T\u00e9l\u00e9charger Personas",
-        statWhisper: "Tourne enti\u00e8rement sur ta machine \u00b7 tu d\u00e9cides jusqu'o\u00f9 elle va",
+        statWhisper: "Sa m\u00e9moire reste sur ta machine \u00b7 tu d\u00e9cides jusqu'o\u00f9 elle va",
         avatarAlt: "Athena, la compagne de Personas",
         orbAria: "Athena \u2014 appuie sur Entr\u00e9e, elle r\u00e9pond",
         acknowledgeLine: "Je t'\u00e9coute.",

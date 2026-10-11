@@ -19,7 +19,7 @@ export const en: Pick<Translations, "athenaPage"> = {
       persona: 'A strategist, not a cheerful assistant \u2014 direct, opinionated, warm without performing. \u201CSpeed is not your job. Quality is.\u201D',
       ctaPrimary: 'See her work',
       ctaSecondary: 'Download Personas',
-      statWhisper: 'Runs entirely on your machine \u00B7 you decide how far she goes',
+      statWhisper: 'Her memory stays on your machine \u00B7 you decide how far she goes',
       avatarAlt: 'Athena, the Personas companion',
       orbAria: 'Athena \u2014 press Enter and she acknowledges you',
       acknowledgeLine: 'I\'m listening.',
