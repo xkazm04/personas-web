@@ -72,7 +72,7 @@ export default function BlogArticle({
               {post.description}
             </p>
 
-            <BlogArticleContent content={post.content} />
+            <BlogArticleContent content={post.content} copyAnchorLabel={t.guide.copyAnchor} />
 
             <BlogArticleByline
               author={post.author}
