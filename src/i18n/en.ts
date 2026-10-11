@@ -522,6 +522,11 @@
     title: string;
     subtitle: string;
     totalCount: string;
+    timeline: {
+      label: string;
+      dayOf: string;
+      showAll: string;
+    };
     filters: {
       all: string;
       throttle: string;
@@ -2636,6 +2641,11 @@ export const en: CoreTranslations = {
     title: 'Memories',
     subtitle: 'Learned patterns your agents apply automatically',
     totalCount: '{n} memories',
+    timeline: {
+      label: 'Learning time-lapse',
+      dayOf: 'Day {day} of {total}',
+      showAll: 'Show all',
+    },
     filters: {
       all: 'All',
       throttle: 'Throttle',

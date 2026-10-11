@@ -778,6 +778,11 @@ export const fr: LocaleTranslations = {
       title: "M\u00e9moires",
       subtitle: "Mod\u00e8les appris que vos agents appliquent automatiquement",
       totalCount: "{n} m\u00e9moires",
+      timeline: {
+        label: "Chronologie de l'apprentissage",
+        dayOf: "Jour {day} sur {total}",
+        showAll: "Tout afficher",
+      },
       filters: {
         all: "Toutes",
         throttle: "Limitation",

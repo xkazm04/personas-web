@@ -778,6 +778,11 @@ export const ko: LocaleTranslations = {
       title: "\uba54\ubaa8\ub9ac",
       subtitle: "\uc5d0\uc774\uc804\ud2b8\uac00 \uc790\ub3d9\uc73c\ub85c \uc801\uc6a9\ud558\ub294 \ud559\uc2b5\ub41c \ud328\ud134",
       totalCount: "\uba54\ubaa8\ub9ac {n}\uac1c",
+      timeline: {
+        label: "\ud559\uc2b5 \ud0c0\uc784\ub7a9\uc2a4",
+        dayOf: "{total}\uc77c \uc911 {day}\uc77c\uc9f8",
+        showAll: "\ubaa8\ub450 \ubcf4\uae30",
+      },
       filters: {
         all: "\uc804\uccb4",
         throttle: "\uc2a4\ub85c\ud2c0",

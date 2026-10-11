@@ -10,8 +10,11 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { type MemoryItem } from "@/lib/mock-dashboard-data";
 
 import { MemoriesToolbar } from "./memories-view/MemoriesToolbar";
+import { MemoriesTimeline } from "./memories-view/MemoriesTimeline";
 import { MemoryCard } from "./memories-view/MemoryCard";
 import { TYPES, type FilterKey } from "./memories-view/memoryViewConfig";
+
+const DAY_MS = 86_400_000;
 
 /**
  * Memories tab. T1: the filter toolbar (cascade 0). T2: the count line and
@@ -37,14 +40,37 @@ export default function MemoriesView({
     () => new Set<string>(),
   );
   const [modalOpen, setModalOpen] = useState(false);
+  // Replay position; null = everything learned (the default, so nothing is
+  // hidden until the operator scrubs).
+  const [replayDay, setReplayDay] = useState<number | null>(null);
 
-  const visibleMemories = useMemo(
-    () =>
-      memories.map((memory) =>
+  // Day 1 is the earliest acceptedAt in the data (not the wall clock), so the
+  // replay is stable across visits.
+  const timeline = useMemo(() => {
+    const stamps = memories
+      .map((memory) => Date.parse(memory.acceptedAt))
+      .filter((ms) => Number.isFinite(ms));
+    if (stamps.length === 0) return null;
+    const start = Math.min(...stamps);
+    const totalDays = Math.floor((Math.max(...stamps) - start) / DAY_MS) + 1;
+    return totalDays > 1 ? { start, totalDays } : null;
+  }, [memories]);
+  const day = timeline ? Math.min(replayDay ?? timeline.totalDays, timeline.totalDays) : 0;
+
+  const visibleMemories = useMemo(() => {
+    const learnedBy =
+      timeline && day < timeline.totalDays
+        ? timeline.start + day * DAY_MS
+        : Infinity;
+    return memories
+      .filter((memory) => {
+        const ms = Date.parse(memory.acceptedAt);
+        return !Number.isFinite(ms) || ms < learnedBy;
+      })
+      .map((memory) =>
         resolvedIds.has(memory.id) ? { ...memory, hasConflict: false } : memory,
-      ),
-    [resolvedIds, memories],
-  );
+      );
+  }, [resolvedIds, memories, timeline, day]);
 
   const filtered = useMemo(
     () =>
@@ -78,15 +104,15 @@ export default function MemoriesView({
       {
         key: "all",
         label: t.memoriesPage.filters.all,
-        count: pending ? undefined : memories.length,
+        count: pending ? undefined : visibleMemories.length,
       },
       ...TYPES.map((type) => ({
         key: type,
         label: t.memoriesPage.filters[type],
-        count: pending ? undefined : memories.filter((memory) => memory.type === type).length,
+        count: pending ? undefined : visibleMemories.filter((memory) => memory.type === type).length,
       })),
     ],
-    [t, memories, pending],
+    [t, visibleMemories, pending],
   );
 
   const conflictCountLabel = t.memoriesPage.conflicts.count.replace(
@@ -100,6 +126,14 @@ export default function MemoriesView({
 
   return (
     <div>
+      {timeline && !pending ? (
+        <MemoriesTimeline
+          day={day}
+          totalDays={timeline.totalDays}
+          onChange={setReplayDay}
+        />
+      ) : null}
+
       <MemoriesToolbar
         filter={filter}
         filterOptions={filterOptions}

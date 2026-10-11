@@ -778,6 +778,11 @@ export const ja: LocaleTranslations = {
       title: "\u010d\u00a8\u0098\u0107\u2020\u00b6",
       subtitle: "\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u304c\u81ea\u52d5\u7684\u306b\u9069\u7528\u3059\u308b\u5b66\u7fd2\u6e08\u307f\u30d1\u30bf\u30fc\u30f3",
       totalCount: "{n}\u4ef6\u306e\u30e1\u30e2\u30ea",
+      timeline: {
+        label: "\u5b66\u7fd2\u30bf\u30a4\u30e0\u30e9\u30d7\u30b9",
+        dayOf: "{total}\u65e5\u4e2d{day}\u65e5\u76ee",
+        showAll: "\u3059\u3079\u3066\u8868\u793a",
+      },
       filters: {
         all: "\u3059\u3079\u3066",
         throttle: "\u30b9\u30ed\u30c3\u30c8\u30eb",

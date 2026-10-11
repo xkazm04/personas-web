@@ -778,6 +778,11 @@ export const de: LocaleTranslations = {
       title: "Erinnerungen",
       subtitle: "Gelernte Muster, die Ihre Agenten automatisch anwenden",
       totalCount: "{n} Memories",
+      timeline: {
+        label: "Lern-Zeitraffer",
+        dayOf: "Tag {day} von {total}",
+        showAll: "Alle anzeigen",
+      },
       filters: {
         all: "Alle",
         throttle: "Drosselung",

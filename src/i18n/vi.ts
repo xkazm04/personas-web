@@ -778,6 +778,11 @@ export const vi: LocaleTranslations = {
       title: "B\u1ed9 nh\u1edb",
       subtitle: "C\u00e1c m\u1eabu \u0111\u00e3 h\u1ecdc m\u00e0 agent c\u1ee7a b\u1ea1n t\u1ef1 \u0111\u1ed9ng \u00e1p d\u1ee5ng",
       totalCount: "{n} b\u1ed9 nh\u1edb",
+      timeline: {
+        label: "D\u00f2ng th\u1eddi gian h\u1ecdc t\u1eadp",
+        dayOf: "Ng\u00e0y {day}/{total}",
+        showAll: "Hi\u1ec7n t\u1ea5t c\u1ea3",
+      },
       filters: {
         all: "T\u1ea5t c\u1ea3",
         throttle: "Gi\u1edbi h\u1ea1n t\u1ed1c \u0111\u1ed9",

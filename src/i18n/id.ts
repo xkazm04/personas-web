@@ -778,6 +778,11 @@ export const id: LocaleTranslations = {
       title: "Memori",
       subtitle: "Pola yang dipelajari dan diterapkan otomatis oleh agen Anda",
       totalCount: "{n} memori",
+      timeline: {
+        label: "Lini masa pembelajaran",
+        dayOf: "Hari ke-{day} dari {total}",
+        showAll: "Tampilkan semua",
+      },
       filters: {
         all: "Semua",
         throttle: "Throttle",

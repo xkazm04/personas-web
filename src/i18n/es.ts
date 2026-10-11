@@ -778,6 +778,11 @@ export const es: LocaleTranslations = {
       title: "Memorias",
       subtitle: "Patrones aprendidos que tus agentes aplican autom\u00e1ticamente",
       totalCount: "{n} memorias",
+      timeline: {
+        label: "Cronolog\u00eda del aprendizaje",
+        dayOf: "D\u00eda {day} de {total}",
+        showAll: "Mostrar todo",
+      },
       filters: {
         all: "Todas",
         throttle: "Limitaci\u00f3n",

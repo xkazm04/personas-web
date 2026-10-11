@@ -778,6 +778,11 @@ export const cs: LocaleTranslations = {
       title: "Pam\u011bti",
       subtitle: "Nau\u010den\u00e9 vzory, kter\u00e9 va\u0161i agenti automaticky uplat\u0148uj\u00ed",
       totalCount: "{n} pam\u011bt\u00ed",
+      timeline: {
+        label: "\u010casosb\u011br u\u010den\u00ed",
+        dayOf: "Den {day} z {total}",
+        showAll: "Zobrazit v\u0161e",
+      },
       filters: {
         all: "V\u0161e",
         throttle: "Omezen\u00ed",

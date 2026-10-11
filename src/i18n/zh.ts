@@ -778,6 +778,11 @@ export const zh: LocaleTranslations = {
       title: "\u8bb0\u5fc6",
       subtitle: "\u4f60\u7684\u667a\u80fd\u4f53\u81ea\u52a8\u5e94\u7528\u7684\u5df2\u5b66\u6a21\u5f0f",
       totalCount: "{n} \u6761\u8bb0\u5fc6",
+      timeline: {
+        label: "\u5b66\u4e60\u65f6\u95f4\u8f74",
+        dayOf: "\u7b2c {day} \u5929 / \u5171 {total} \u5929",
+        showAll: "\u663e\u793a\u5168\u90e8",
+      },
       filters: {
         all: "\u5168\u90e8",
         throttle: "\u9650\u6d41",
