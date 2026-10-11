@@ -174,7 +174,7 @@ export const mobileLanding2Copy: MobileLanding2Copy = {
       {
         name: 'Install Personas',
         body: [
-          'A free installer for Windows, about 12 MB. macOS and Linux are on a waitlist.',
+          'Personas is free, and Windows comes first. macOS and Linux are on a waitlist.',
           'No account and no license key. Personas needs Claude Code on your own Claude Pro or Max plan.',
         ],
       },
