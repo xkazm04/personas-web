@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { Rocket } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { BOOST_TIERS, KOFI_USERNAME } from "../data";
@@ -22,7 +23,7 @@ export default function FeatureBoostButton({
   onBoost: (featureId: string, weight: number) => void;
   rgba: (a: number) => string;
 }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const { t } = useTranslation();
   const b = t.featureVoting.boost;
   return (

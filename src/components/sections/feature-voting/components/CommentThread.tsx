@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { CornerDownRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Comment } from "../local-types";
@@ -19,7 +20,7 @@ export default function CommentThread({
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   accentRgba: (a: number) => string;
 }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const { t } = useTranslation();
   const vt = t.featureVoting;
   const [replyingTo, setReplyingTo] = useState<string | null>(null);

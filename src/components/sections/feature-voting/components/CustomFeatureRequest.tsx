@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import {
   AlertCircle,
   Check,
@@ -19,7 +20,7 @@ import { KOFI_USERNAME } from "../data";
 const MAX_LENGTH = 1000;
 
 export default function CustomFeatureRequest() {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const { t } = useTranslation();
   const r = t.featureVoting.request;
   const [value, setValue] = useState("");

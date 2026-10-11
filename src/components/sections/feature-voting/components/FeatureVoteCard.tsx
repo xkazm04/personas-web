@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureVote } from "@/lib/analytics";
@@ -34,7 +35,7 @@ export default function FeatureVoteCard({
   onBoost: (featureId: string, tier: number) => void;
   showBoostUI: boolean;
 }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const { t } = useTranslation();
   const vt = t.featureVoting;
   const copy = vt.features[feature.id];

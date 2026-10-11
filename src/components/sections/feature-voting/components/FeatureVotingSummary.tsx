@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { fadeUp } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { LoadState } from "../local-types";
@@ -20,7 +21,7 @@ export function FeatureVotingSummary({
   totalBoosts: number;
   loadState: LoadState;
 }) {
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useStillMotion();
   const { t } = useTranslation();
   const s = t.featureVoting.summary;
 
