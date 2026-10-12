@@ -8,6 +8,17 @@ repo:
   name: personas-web
   purpose: "The public web companion to personas: marketing site, product guide, roadmap, demo dashboard"
 
+# Agent guidance. `canonical` is the one file that holds the rules and wins any conflict;
+# every `pointers` entry is a directory-scoped file Claude Code loads in that folder, which
+# names the canonical file and the docs that govern the folder and restates no rule.
+# src/lib/guidanceCanonical.test.ts fails when the canonical file is missing, when a
+# CLAUDE.md or AGENTS.md under src/ is not listed here, or when a pointer starts carrying rules.
+guidance:
+  canonical: .claude/CLAUDE.md
+  pointers:
+    - src/app/api/CLAUDE.md
+    - src/lib/server/CLAUDE.md
+
 # The organization's AI registry - knowledge bundles this repo consumes and the skill
 # marketplace it installs from. Unknown fields MUST be ignored by a reader.
 registry:

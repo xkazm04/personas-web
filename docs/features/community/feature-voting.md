@@ -24,7 +24,8 @@ Each feature renders a `FeatureVoteCard` (`components/FeatureVoteCard.tsx:14`). 
 ## Key files
 | File | Role |
 | --- | --- |
-| `src/components/sections/feature-voting/index.tsx` | Orchestrator: load-on-mount, optimistic vote/boost/comment handlers, Sentry rollback |
+| `src/components/sections/feature-voting/index.tsx` | Section shell: sorts features by live votes and renders header, grid, request form and summary |
+| `src/components/sections/feature-voting/useFeatureVotingState.ts` | Load-on-mount, optimistic vote/boost/comment handlers, Sentry rollback |
 | `src/components/sections/feature-voting/data.ts` | Feature seed data, accent tokens, voterId/author minting, all `apiFetch` API helpers, `formatTimeAgo` |
 | `src/components/sections/feature-voting/local-types.ts` | `Feature`, `Comment`, `AccentToken`, `LoadState` types |
 | `src/components/sections/feature-voting/components/FeatureVotingGrid.tsx` | Renders the card grid (1 column, 2 from `sm`, 3 from `lg`; an odd last card spans both columns of the 2-column row so none sits alone), or `SkeletonCard` placeholders in the same grid while `loadState === "loading"`; self-drives its `whileInView` reveal |

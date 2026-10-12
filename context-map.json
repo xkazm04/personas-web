@@ -958,7 +958,8 @@
             "src/components/sections/feature-voting/components/FeatureVotingSummary.tsx",
             "src/components/sections/feature-voting/data.ts",
             "src/components/sections/feature-voting/index.tsx",
-            "src/components/sections/feature-voting/local-types.ts"
+            "src/components/sections/feature-voting/local-types.ts",
+            "src/components/sections/feature-voting/useFeatureVotingState.ts"
           ],
           "target": null,
           "apiRoutes": [

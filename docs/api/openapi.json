@@ -1,0 +1,280 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "personas-web API routes",
+    "version": "0.1.0",
+    "description": "Request and response shapes of every handler under src/app/api. The gate, secret and abuse control of each route are in docs/threat-model.md (## Routes); this file is the shape an agent needs before writing a caller. src/lib/apiSchemaCoverage.test.ts fails when a route, a method or an allowlist here drifts from the handler."
+  },
+  "servers": [{ "url": "/" }],
+  "tags": [
+    { "name": "orchestrator", "description": "Session-gated relays to the external orchestrator (NEXT_PUBLIC_ORCHESTRATOR_URL)." },
+    { "name": "community", "description": "Anonymous roadmap voting, boosts, comments and requests. Supabase when configured, a local JSON file otherwise." },
+    { "name": "site", "description": "Public reads and redirects." }
+  ],
+  "paths": {
+    "/api/orchestrator/{path}": {
+      "parameters": [
+        { "name": "path", "in": "path", "required": true, "description": "Catch-all upstream path, relayed to the orchestrator host. Traversal or an origin change is refused as bad_path.", "schema": { "type": "string" } },
+        { "$ref": "#/components/parameters/UserToken" }
+      ],
+      "get": { "tags": ["orchestrator"], "summary": "Relay a GET to the orchestrator", "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
+      "post": { "tags": ["orchestrator"], "summary": "Relay a POST to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
+      "put": { "tags": ["orchestrator"], "summary": "Relay a PUT to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
+      "delete": { "tags": ["orchestrator"], "summary": "Relay a DELETE to the orchestrator", "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
+      "patch": { "tags": ["orchestrator"], "summary": "Relay a PATCH to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } }
+    },
+    "/api/events/stream": {
+      "get": {
+        "tags": ["orchestrator"],
+        "summary": "Server-sent event bus stream",
+        "parameters": [{ "$ref": "#/components/parameters/UserToken" }],
+        "responses": {
+          "200": { "description": "Event stream relayed from the orchestrator.", "content": { "text/event-stream": { "schema": { "type": "string" } } } },
+          "401": { "$ref": "#/components/responses/Unauthenticated" },
+          "499": { "description": "Client closed the connection before the upstream answered." },
+          "501": { "$ref": "#/components/responses/NotOnDesktop" },
+          "502": { "description": "Upstream unreachable." },
+          "503": { "$ref": "#/components/responses/Unavailable" }
+        }
+      }
+    },
+    "/api/executions/{id}/stream": {
+      "get": {
+        "tags": ["orchestrator"],
+        "summary": "Server-sent stream of one execution's output",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "description": "Execution id, percent-encoded before relay. Empty, '.' and '..' are refused as bad_path.", "schema": { "type": "string", "minLength": 1 } },
+          { "$ref": "#/components/parameters/UserToken" }
+        ],
+        "responses": {
+          "200": { "description": "Execution output relayed from the orchestrator.", "content": { "text/event-stream": { "schema": { "type": "string" } } } },
+          "400": { "$ref": "#/components/responses/BadPath" },
+          "401": { "$ref": "#/components/responses/Unauthenticated" },
+          "499": { "description": "Client closed the connection before the upstream answered." },
+          "501": { "$ref": "#/components/responses/NotOnDesktop" },
+          "502": { "description": "Upstream unreachable." },
+          "503": { "$ref": "#/components/responses/Unavailable" }
+        }
+      }
+    },
+    "/api/votes": {
+      "get": {
+        "tags": ["community"],
+        "summary": "Vote counts, the caller's votes and shipped features",
+        "parameters": [{ "name": "voterId", "in": "query", "required": false, "description": "Marks which features this voter has voted for. Never returns email.", "schema": { "type": "string" } }],
+        "responses": {
+          "200": {
+            "description": "Counts per feature id.",
+            "content": { "application/json": { "schema": {
+              "type": "object",
+              "required": ["counts", "userVotes", "shipped"],
+              "properties": {
+                "counts": { "type": "object", "additionalProperties": { "type": "integer" } },
+                "userVotes": { "type": "array", "items": { "$ref": "#/components/schemas/FeatureId" } },
+                "shipped": { "type": "array", "items": { "type": "object", "properties": { "feature_id": { "type": "string" }, "changelog": { "type": "string" }, "link": { "type": "string" }, "shipped_at": { "type": "string" } } } }
+              }
+            } } }
+          },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["community"],
+        "summary": "Toggle the caller's vote for a feature",
+        "requestBody": { "required": true, "description": "At most 10 KiB.", "content": { "application/json": { "schema": {
+          "type": "object",
+          "required": ["featureId", "voterId"],
+          "properties": { "featureId": { "$ref": "#/components/schemas/FeatureId" }, "voterId": { "$ref": "#/components/schemas/VoterId" } }
+        } } } },
+        "responses": {
+          "200": { "description": "Vote added or removed.", "content": { "application/json": { "schema": { "type": "object", "required": ["action"], "properties": { "action": { "enum": ["added", "removed"] } } } } } },
+          "400": { "$ref": "#/components/responses/Invalid" },
+          "413": { "$ref": "#/components/responses/TooLarge" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/feature-boosts": {
+      "get": {
+        "tags": ["community"],
+        "summary": "Boost totals per feature",
+        "responses": {
+          "200": { "description": "Summed boost weight per feature id.", "content": { "application/json": { "schema": { "type": "object", "required": ["totals"], "properties": { "totals": { "type": "object", "additionalProperties": { "type": "integer" } } } } } } },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["community"],
+        "summary": "Record a Ko-fi boost",
+        "requestBody": { "required": true, "description": "At most 4 KiB. weight must equal tierValue.", "content": { "application/json": { "schema": {
+          "type": "object",
+          "required": ["featureId", "voterId", "tierValue", "weight"],
+          "properties": {
+            "featureId": { "$ref": "#/components/schemas/FeatureId" },
+            "voterId": { "$ref": "#/components/schemas/VoterId" },
+            "tierValue": { "$ref": "#/components/schemas/BoostTier" },
+            "weight": { "$ref": "#/components/schemas/BoostTier" }
+          }
+        } } } },
+        "responses": {
+          "200": { "description": "Boost recorded; body carries the updated totals." },
+          "400": { "$ref": "#/components/responses/Invalid" },
+          "413": { "$ref": "#/components/responses/TooLarge" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/feature-comments": {
+      "get": {
+        "tags": ["community"],
+        "summary": "Every comment across features, oldest first",
+        "responses": {
+          "200": { "description": "All comments.", "content": { "application/json": { "schema": { "type": "object", "required": ["comments"], "properties": { "comments": { "type": "array", "items": { "$ref": "#/components/schemas/Comment" } } } } } } },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      },
+      "post": {
+        "tags": ["community"],
+        "summary": "Add a comment or a one-level reply",
+        "requestBody": { "required": true, "description": "At most 8 KiB. A reply's parent must be a top-level comment.", "content": { "application/json": { "schema": {
+          "type": "object",
+          "required": ["featureId", "text", "author"],
+          "properties": {
+            "featureId": { "$ref": "#/components/schemas/FeatureId" },
+            "text": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Trimmed before the length check." },
+            "author": { "type": "string", "minLength": 1, "maxLength": 64, "description": "Trimmed before the length check." },
+            "parentId": { "type": ["string", "null"], "format": "uuid" }
+          }
+        } } } },
+        "responses": {
+          "200": { "description": "Comment saved." },
+          "400": { "$ref": "#/components/responses/Invalid" },
+          "413": { "$ref": "#/components/responses/TooLarge" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/feature-requests": {
+      "post": {
+        "tags": ["community"],
+        "summary": "Save a free-text feature request",
+        "requestBody": { "required": true, "description": "At most 4 KiB.", "content": { "application/json": { "schema": {
+          "type": "object",
+          "required": ["text"],
+          "properties": { "text": { "type": "string", "minLength": 1, "maxLength": 1000, "description": "Trimmed before the length check." } }
+        } } } },
+        "responses": {
+          "200": { "description": "Saved.", "content": { "application/json": { "schema": { "type": "object", "required": ["saved"], "properties": { "saved": { "const": true } } } } } },
+          "400": { "$ref": "#/components/responses/Invalid" },
+          "413": { "$ref": "#/components/responses/TooLarge" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "500": { "$ref": "#/components/responses/ServerError" }
+        }
+      }
+    },
+    "/api/waitlist": {
+      "get": {
+        "tags": ["community"],
+        "summary": "Signup counts per platform",
+        "responses": {
+          "200": { "description": "One count per platform.", "content": { "application/json": { "schema": { "type": "object", "required": ["counts"], "properties": { "counts": { "type": "object", "additionalProperties": { "type": "integer" } } } } } } },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "503": { "$ref": "#/components/responses/CodedError" }
+        }
+      },
+      "post": {
+        "tags": ["community"],
+        "summary": "Join the waitlist",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": {
+          "type": "object",
+          "required": ["email", "platform"],
+          "properties": {
+            "email": { "type": "string", "format": "email", "description": "Trimmed and lower-cased before validation." },
+            "platform": { "$ref": "#/components/schemas/WaitlistPlatform" },
+            "earlyBeta": { "type": "boolean" }
+          }
+        } } } },
+        "responses": {
+          "200": { "description": "Added, or already present (duplicate: true).", "content": { "application/json": { "schema": { "type": "object", "required": ["message"], "properties": { "message": { "type": "string" }, "count": { "type": "integer" }, "duplicate": { "const": true } } } } } },
+          "400": { "$ref": "#/components/responses/CodedError" },
+          "413": { "$ref": "#/components/responses/TooLarge" },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "503": { "$ref": "#/components/responses/CodedError" }
+        }
+      }
+    },
+    "/api/roadmap": {
+      "get": {
+        "tags": ["site"],
+        "summary": "Roadmap items, read-only",
+        "responses": {
+          "200": { "description": "Items from Supabase, or an empty list with source none when it is not configured.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoadmapResponse" } } } },
+          "502": { "description": "Supabase answered with an error; body is an empty list with source error.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoadmapResponse" } } } }
+        }
+      }
+    },
+    "/api/download": {
+      "get": {
+        "tags": ["site"],
+        "summary": "Redirect to the latest release artifact",
+        "description": "The target is validated once at module load (src/lib/release.ts) and never taken from the request.",
+        "responses": {
+          "307": { "description": "Redirect to the release URL, or to /#download when none is configured." }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "UserToken": { "name": "X-User-Token", "in": "header", "required": true, "description": "Supabase access token, verified against /auth/v1/user before the team key is attached.", "schema": { "type": "string" } }
+    },
+    "requestBodies": {
+      "JsonRelay": { "required": false, "description": "Relayed as-is to the orchestrator.", "content": { "application/json": { "schema": {} } } }
+    },
+    "schemas": {
+      "FeatureId": { "description": "FEATURE_IDS in src/lib/feature-ids.ts.", "enum": ["macos", "dashboard", "enterprise"] },
+      "VoterId": { "description": "Anonymous client-generated id (isValidVoterId in src/lib/validation.ts).", "type": "string", "pattern": "^[A-Za-z0-9_-]{16,64}$" },
+      "BoostTier": { "description": "ALLOWED_TIERS in src/app/api/feature-boosts/route.ts.", "enum": [5, 15, 25] },
+      "WaitlistPlatform": { "description": "VALID_PLATFORMS in src/app/api/waitlist/route.ts.", "enum": ["macos", "windows", "linux"] },
+      "Comment": {
+        "type": "object",
+        "required": ["id", "featureId", "parentId", "author", "text", "timestamp"],
+        "properties": {
+          "id": { "type": "string" },
+          "featureId": { "type": "string" },
+          "parentId": { "type": ["string", "null"] },
+          "author": { "type": "string" },
+          "text": { "type": "string" },
+          "timestamp": { "type": "integer", "description": "Epoch milliseconds." }
+        }
+      },
+      "RoadmapResponse": {
+        "type": "object",
+        "required": ["items", "source"],
+        "properties": {
+          "items": { "type": "array", "description": "RoadmapItem rows (src/components/sections/roadmap/types.ts): id, name, description, status, priority, sort_order.", "items": { "type": "object" } },
+          "source": { "enum": ["supabase", "none", "error"] }
+        }
+      },
+      "Error": { "type": "object", "required": ["error"], "properties": { "error": { "type": "string" } } },
+      "CodedError": { "type": "object", "required": ["error", "code"], "properties": { "error": { "type": "string" }, "code": { "type": "string", "description": "ApiErrorCode in src/lib/server/request.ts; never reworded." } } }
+    },
+    "responses": {
+      "Invalid": { "description": "A field failed validation.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "CodedError": { "description": "Refusal with a stable machine code.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CodedError" } } } },
+      "TooLarge": { "description": "Body over the route's byte limit.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "RateLimited": { "description": "Per-IP in-memory rate limit hit." },
+      "ServerError": { "description": "Store read or write failed.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "BadPath": { "description": "Path refused before relay (bad_path).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "Unauthenticated": { "description": "X-User-Token missing or not a live session (unauthenticated).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "NotOnDesktop": { "description": "ORCHESTRATOR_TARGET=desktop serves no such endpoint (not_on_desktop).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "Unavailable": { "description": "Orchestrator not configured or auth backend unreachable (orchestrator_not_configured, auth_unavailable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "RelayOk": { "description": "Upstream JSON answer, served with nosniff and a sandbox CSP." },
+      "ClientClosed": { "description": "Client closed the connection before the upstream answered." },
+      "UpstreamUnreachable": { "description": "Upstream unreachable (upstream_unreachable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+    }
+  }
+}

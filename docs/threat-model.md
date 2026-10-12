@@ -45,6 +45,9 @@ without a harness in that spec fails until one is added.
 ## Routes
 
 The `Route` column is the path under `src/app/api/` and is what the coverage test matches.
+Each row's request and response shape (methods, body fields, allowlists, status codes) is the
+`/api/<route>` entry in `docs/api/openapi.json`; `src/lib/apiSchemaCoverage.test.ts` fails when
+a route, a verb or an allowlist there drifts from the handler.
 
 | Route | Methods | Caller gate | Secret / privilege used | Abuse control | Governing record |
 |---|---|---|---|---|---|
@@ -123,3 +126,5 @@ Before adding a `route.ts` under `src/app/api/`, answer these and add its row ab
    never raw `Sentry.captureException`. `no-raw-sentry-capture.test.ts` enforces this.
 7. **Did it settle a judgement call?** Write a record in `docs/decisions/` and link it
    from the row.
+8. **What does a caller send?** Add the route's path to `docs/api/openapi.json`, one
+   operation per exported verb, with the body fields and allowlists the handler checks.

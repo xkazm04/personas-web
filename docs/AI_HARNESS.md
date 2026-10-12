@@ -36,6 +36,16 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
     `src/lib/scopedGuidance.test.ts` fails when a path or section they cite disappears
   - `docs/conventions-enforcement.md`: for each numbered convention in `.claude/CLAUDE.md`,
     the lint rule, spec or gate that catches a break, and what is left to the agent
+  - `.ai/manifest.yaml` `guidance:`: declares `.claude/CLAUDE.md` the canonical guidance
+    file and lists every scoped pointer. `src/lib/guidanceCanonical.test.ts` fails when the
+    canonical file is missing, when a CLAUDE.md or AGENTS.md under `src/` is not declared, or
+    when a pointer stops naming the canonical file or starts stating rules of its own
+  - `docs/api/openapi.json`: request and response shapes of every API route, kept joined to
+    the handlers by `src/lib/apiSchemaCoverage.test.ts`
+- Proof that the gates reject: `src/lib/aiChangeGateMutants.test.ts` applies targeted
+  mutations to `scripts/check-ai-change.mjs` (a flipped comparison, a dropped branch, an
+  emptied pattern), imports each mutant and runs a suite of known-bad commits against it.
+  Every mutant must be killed; the kill ratio is a ratchet at 1 and may not go down
 
 ## Gates
 
@@ -76,7 +86,12 @@ runner has, which is why they stay out of CI.
 - **Registry-owned** (everything in `.ai/manifest.yaml` `skills:`): links into
   `../ai-registry`. Golden examples for these belong with the skill in the registry, so
   every consuming repo inherits them. That is a registry follow-up and is not done here.
-- Open gap: no skill has golden tests yet. The first step is to split `icon-gen`'s pure
+- `icon-gen`'s golden output is the icon set it exported into this repo:
+  `src/lib/iconSetGolden.test.ts` holds `src/app/favicon.ico`, `src/app/icon.png`,
+  `src/app/apple-icon.png` and the PWA icons to the sizes, formats and alpha rules in its
+  `SKILL.md` "Targets", and to what `src/app/manifest.ts` declares.
+- Open gap: `native-copy` has no golden output (its checker lives in the registry), and
+  `icon-gen`'s tools themselves are untested. The next step is to split `icon-gen`'s pure
   helpers (`parseArgs`, `hexToRgb`, `buildIco`, the tile SVGs) out of
   `tools/icon-pipeline.mjs`, which imports `sharp` and runs its CLI on import, and pin them
   with a unit test. Unattended lanes cannot write under `.claude/`, so this needs a person

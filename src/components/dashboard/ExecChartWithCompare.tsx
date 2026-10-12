@@ -31,6 +31,8 @@ const annotationStyles: Record<ChartAnnotation["type"], { stroke: string; emoji:
   milestone: { stroke: SERIES.emerald, emoji: "\u{1F3AF}" },
 };
 
+const CHART_MARGIN = { top: 8, right: 8, left: -20, bottom: 0 };
+
 interface ExecPoint {
   date: string;
   Successes: number;
@@ -103,44 +105,37 @@ export default memo(function ExecChartWithCompare({
     }));
   }, [data, showPrevious, compareMap]);
 
+  // Grid, axes, tooltip, annotations and the stacked bars are identical in both
+  // shapes; only the chart type and the previous-period line differ. Recharts
+  // reads its children by type, so they stay direct elements (an array), not a
+  // wrapper component.
+  const series = [
+    <CartesianGrid key="grid" strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />,
+    <XAxis key="x" dataKey="date" tick={AXIS_TICK} axisLine={false} tickLine={false} />,
+    <YAxis key="y" tick={AXIS_TICK} axisLine={false} tickLine={false} allowDecimals={false} />,
+    <Tooltip key="tooltip" content={<ExecCompareTooltipContent compare={showPrevious} />} cursor={CHART_CURSOR_FILL} />,
+    ...annotations.map((a) => {
+      const style = annotationStyles[a.type];
+      return (
+        <ReferenceLine
+          key={`${a.type}-${a.date}`}
+          x={a.date}
+          stroke={style.stroke}
+          strokeDasharray="4 4"
+          strokeOpacity={0.5}
+          label={{ value: `${style.emoji} ${a.label}`, position: "top", fill: style.stroke, fontSize: 10 }}
+        />
+      );
+    }),
+    <Bar key="successes" dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} {...anim} />,
+    <Bar key="failures" dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} {...anim} />,
+  ];
+
   if (!showPrevious) {
     return (
       <ResponsiveContainer width="100%" height={240}>
-        <BarChart data={data} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
-          <XAxis
-            dataKey="date"
-            tick={AXIS_TICK}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            tick={AXIS_TICK}
-            axisLine={false}
-            tickLine={false}
-            allowDecimals={false}
-          />
-          <Tooltip content={<ExecCompareTooltipContent compare={false} />} cursor={CHART_CURSOR_FILL} />
-          {annotations.map((a) => {
-            const style = annotationStyles[a.type];
-            return (
-              <ReferenceLine
-                key={`${a.type}-${a.date}`}
-                x={a.date}
-                stroke={style.stroke}
-                strokeDasharray="4 4"
-                strokeOpacity={0.5}
-                label={{
-                  value: `${style.emoji} ${a.label}`,
-                  position: "top",
-                  fill: style.stroke,
-                  fontSize: 10,
-                }}
-              />
-            );
-          })}
-          <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} {...anim} />
-          <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} {...anim} />
+        <BarChart data={data} margin={CHART_MARGIN}>
+          {series}
         </BarChart>
       </ResponsiveContainer>
     );
@@ -148,41 +143,8 @@ export default memo(function ExecChartWithCompare({
 
   return (
     <ResponsiveContainer width="100%" height={240}>
-      <ComposedChart data={mergedData} margin={{ top: 8, right: 8, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke={GRID_STROKE} vertical={false} />
-        <XAxis
-          dataKey="date"
-          tick={AXIS_TICK}
-          axisLine={false}
-          tickLine={false}
-        />
-        <YAxis
-          tick={AXIS_TICK}
-          axisLine={false}
-          tickLine={false}
-          allowDecimals={false}
-        />
-        <Tooltip content={<ExecCompareTooltipContent compare={true} />} cursor={CHART_CURSOR_FILL} />
-        {annotations.map((a) => {
-          const style = annotationStyles[a.type];
-          return (
-            <ReferenceLine
-              key={`${a.type}-${a.date}`}
-              x={a.date}
-              stroke={style.stroke}
-              strokeDasharray="4 4"
-              strokeOpacity={0.5}
-              label={{
-                value: `${style.emoji} ${a.label}`,
-                position: "top",
-                fill: style.stroke,
-                fontSize: 10,
-              }}
-            />
-          );
-        })}
-        <Bar dataKey="Successes" stackId="exec" fill={SERIES.emerald} radius={[0, 0, 0, 0]} {...anim} />
-        <Bar dataKey="Failures" stackId="exec" fill={SERIES.rose} radius={[4, 4, 0, 0]} {...anim} />
+      <ComposedChart data={mergedData} margin={CHART_MARGIN}>
+        {series}
         <Line
           type="monotone"
           dataKey="PreviousTotal"
