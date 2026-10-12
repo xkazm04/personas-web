@@ -72,6 +72,7 @@ function mapSyncedPattern(
     avgDurationMs: k.avgDurationMs,
     description,
     lastSeen: k.updatedAt,
+    lastExecutionId: k.lastExecutionId,
   };
 }
 
@@ -94,6 +95,7 @@ function mapSyncedMemory(m: SyncedMemory, personaName: string): MemoryItem {
     lastUsed: undefined,
     // Conflict detection is a desktop-only concept; never flag synced memories.
     hasConflict: false,
+    sourceExecutionId: m.sourceExecutionId,
   };
 }
 

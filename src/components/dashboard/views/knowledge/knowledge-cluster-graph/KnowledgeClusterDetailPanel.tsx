@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Clock, X } from "lucide-react";
+import { KnowledgeEvidenceChip } from "../KnowledgeEvidenceChip";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { formatCost, formatDuration, relativeTime } from "@/lib/format";
@@ -57,6 +58,11 @@ export function KnowledgeClusterDetailPanel({
         <Clock className="h-2.5 w-2.5" />
         {t.knowledgePage.lastSeen} {relativeTime(pattern.lastSeen)}
       </div>
+      {pattern.lastExecutionId && (
+        <div className="mt-2">
+          <KnowledgeEvidenceChip executionId={pattern.lastExecutionId} />
+        </div>
+      )}
     </motion.div>
   );
 }

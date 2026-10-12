@@ -221,11 +221,14 @@ export interface KnowledgePattern {
   avgDurationMs: number;
   description: string;
   lastSeen: string;
+  /** Execution that most recently taught this pattern (synced `last_execution_id`). */
+  lastExecutionId?: string | null;
 }
 
 export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   {
     id: "kp_1",
+    lastExecutionId: "e-0001-mock",
     personaName: INCIDENT.name,
     knowledgeType: "tool_sequence",
     patternKey: "web_search → summarize → email",
@@ -239,6 +242,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_2",
+    lastExecutionId: "e-0002-mock",
     personaName: PR_REVIEW.name,
     knowledgeType: "failure_pattern",
     patternKey: "large_diff_timeout",
@@ -252,6 +256,7 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   },
   {
     id: "kp_3",
+    lastExecutionId: "e-0003-mock",
     personaName: FEEDBACK.name,
     knowledgeType: "cost_quality",
     patternKey: "haiku_vs_sonnet_csv",
@@ -453,6 +458,8 @@ export interface MemoryItem {
   lastUsed?: string; // ISO
   hasConflict: boolean;
   conflictReason?: string;
+  /** Execution this memory was promoted from (synced `source_execution_id`). */
+  sourceExecutionId?: string | null;
 }
 
 const CONFLICT_REASONS = [

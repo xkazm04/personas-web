@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { BarChart3, CheckCircle2, Clock, DollarSign, X, XCircle, Zap } from "lucide-react";
+import { KnowledgeEvidenceChip } from "../KnowledgeEvidenceChip";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { KnowledgePattern } from "@/lib/mock-dashboard-data";
 import { KNOWLEDGE_TYPE_CONFIG } from "./knowledgeDenseConfig";
@@ -48,6 +49,7 @@ export function KnowledgePatternDetailPanel({
         </div>
         <div className="flex items-start gap-3 max-w-sm shrink-0">
           <p className="text-sm leading-relaxed text-foreground/60 line-clamp-2">{pattern.description}</p>
+          <KnowledgeEvidenceChip executionId={pattern.lastExecutionId} />
           <button
             onClick={onClose}
             aria-label={t.common.close}

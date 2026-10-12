@@ -4,6 +4,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { relativeTime } from "@/lib/format";
 import type { MemoryItem } from "@/lib/mock-dashboard-data";
 
+import { KnowledgeEvidenceChip } from "../KnowledgeEvidenceChip";
 import { ScoreDots } from "./ScoreDots";
 import { statusConfig, typeConfig } from "./memoryViewConfig";
 
@@ -62,6 +63,7 @@ export function MemoryCard({ item }: { item: MemoryItem }) {
                 <span>{relativeTime(item.lastUsed)}</span>
               </>
             )}
+            <KnowledgeEvidenceChip executionId={item.sourceExecutionId} />
           </div>
         </div>
       </div>
