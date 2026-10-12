@@ -1,0 +1,718 @@
+{
+  "desktopCommit": "3797ab21735cc3280a302daea412b52ef87544b2",
+  "templates": [
+    {
+      "id": "ai-contract-reviewer",
+      "name": "AI Contract Reviewer",
+      "description": "Analyzes contract documents using AI to extract key terms, financial obligations, risk factors, and red flags, creates structured review reports in knowledge base, alerts on high-risk clauses, and sends deadline reminders for renewals and obligations.",
+      "category": "legal",
+      "published": false,
+      "connectors": [],
+      "connectorCategories": [
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "knowledge_base",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "audio-briefing-host",
+      "name": "Audio Briefing Host",
+      "description": "Turns any source document, meeting transcript, research report, or article into a 5-15 minute conversational audio briefing with two distinct hosts. A scriptwriter persona structures the content as a back-and-forth conversation, a TTS connector synthesizes the voices, and ffmpeg stitches the segments into a single MP3. Learns from user feedback which conversation styles and pacing work best.",
+      "category": "content",
+      "published": false,
+      "connectors": [],
+      "connectorCategories": [],
+      "unresolvedConnectors": [
+        "desktop",
+        "voice_generation"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "autonomous-art-director",
+      "name": "Autonomous Art Director",
+      "description": "Periodically conceives and generates unique art concepts using a connected image-AI provider, saves them to the in-app 2D gallery, and presents each piece for human curation. Learns from approvals and rejections to refine its creative direction over time.",
+      "category": "content",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "storage"
+      ],
+      "unresolvedConnectors": [
+        "image_generation",
+        "storage"
+      ],
+      "useCaseCount": 1
+    },
+    {
+      "id": "autonomous-cro-experiment-runner",
+      "name": "Autonomous CRO Experiment Runner",
+      "description": "Closed-loop conversion rate optimization agent that pulls landing page analytics, identifies underperforming sections, generates A/B headline and copy variants, deploys experiments via your analytics/experimentation tool, tracks statistical lift, and promotes winners. Every variant goes through human review before deployment. Learns from accepted/rejected variants over time.",
+      "category": "marketing",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "analytics"
+      ],
+      "unresolvedConnectors": [
+        "analytics"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "autonomous-issue-resolver",
+      "name": "Autonomous Issue Resolver",
+      "description": "Keeps the engineering support backlog healthy by actively resolving stale Jira issues. Reads every comment thread, classifies issue state, gauges reporter sentiment, matches symptoms against knowledge base docs and a local solutions knowledge base, posts confidence-scored resolutions, escalates angry or high-priority reporters to engineering management, and grows the knowledge base with every confirmed fix.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "jira"
+      ],
+      "connectorCategories": [
+        "messaging",
+        "project_management"
+      ],
+      "unresolvedConnectors": [
+        "knowledge_base",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "budget-spending-monitor",
+      "name": "Budget Spending Monitor",
+      "description": "Cloud cost control for AWS, Azure, or GCP. Delivers an always-on weekly report of per-service usage and cost (with week-over-week deltas), plus a daily threshold tracker that stays silent under budget and messages you only when projected or month-to-date spend is set to breach your threshold.",
+      "category": "finance",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "cloud"
+      ],
+      "unresolvedConnectors": [
+        "cloud"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "content-cascade",
+      "name": "Content Cascade",
+      "description": "Repurposes a published long-form artifact (YouTube video, blog post, podcast transcript) into platform-tuned text variants in your voice — LinkedIn long-form, X/Twitter thread, blog summary, and short-form video ideas. Per-platform voice docs learn from your edits; nothing publishes without explicit approval.",
+      "category": "marketing",
+      "published": true,
+      "connectors": [
+        "buffer",
+        "linkedin",
+        "notion",
+        "x_twitter",
+        "youtube_data"
+      ],
+      "connectorCategories": [
+        "productivity",
+        "social"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 3
+    },
+    {
+      "id": "content-performance-reporter",
+      "name": "Content Performance Reporter",
+      "description": "Analyzes page views, session duration, and bounce rate metrics from a local database to generate weekly trend reports with week-over-week comparisons, content rankings, and anomaly detection. Delivers structured insights via in-app messaging and progressively learns baseline patterns through agent memory.",
+      "category": "content",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "database"
+      ],
+      "unresolvedConnectors": [
+        "database"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "contract-lifecycle-use-case",
+      "name": "Contract Lifecycle Use Case",
+      "description": "Tracks legal platform envelope events (sent, viewed, signed, declined), updates spreadsheet contract tracker, posts messaging notifications on status changes, sends reminder emails for unsigned documents, and flags contracts approaching renewal.",
+      "category": "legal",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "legal",
+        "messaging",
+        "spreadsheet"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "conversational-database-analyst",
+      "name": "Conversational Database Analyst",
+      "description": "Natural-language-to-SQL bridge — ask business questions in plain English, get accurate read-only SQL answers with schema introspection, conversation memory, safety validation, and audit logging. Delivered through chat; backed by the user's database credential.",
+      "category": "research",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "database",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "database",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "daily-standup-compiler",
+      "name": "Daily Personal Briefer",
+      "description": "Personal business OS that starts each day informed, accountable, and focused. Morning briefing consolidates niche news, goal progress, pending work, and a prioritized action plan into one message. On-demand decision support builds weighted matrices with kill criteria. Weekly Sunday retrospective reviews goals and triages the week's captured ideas.",
+      "category": "productivity",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [],
+      "unresolvedConnectors": [],
+      "useCaseCount": 3
+    },
+    {
+      "id": "database-performance-monitor",
+      "name": "Database Performance Monitor",
+      "description": "Continuous database performance monitor that builds adaptive statistical baselines during a silent learning period, then detects anomalies via direction- and correlation-aware thresholds. Severity-tiered alerts: warning context, critical escalation with root cause hypothesis and remediation options.",
+      "category": "research",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "database",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "database",
+        "messaging"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "demo-recorder",
+      "name": "Demo Recorder",
+      "description": "Creates short demo recordings and step-by-step visual guides from running web applications by analyzing the codebase to understand features, autonomously navigating the app in a browser, and capturing annotated screenshots or video walkthroughs. Uses a tiered recording system (CDP screenshots -> Windows Game Bar -> Playwright) requiring zero mandatory installs.",
+      "category": "content",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 1
+    },
+    {
+      "id": "dev-clone",
+      "name": "Dev Clone",
+      "description": "Autonomous senior-developer clone that scans the codebase for backlog candidates, holds each for human accept/reject, implements accepted items as focused PRs, reacts to review comments via GitHub webhook, and bundles merged work into human-approved releases. Learns architecture patterns and review preferences from every triage and every comment.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "codebase",
+        "github"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 4
+    },
+    {
+      "id": "devops-guardian",
+      "name": "DevOps Guardian",
+      "description": "Unified DevOps monitoring agent that scans application errors, infrastructure metrics, database health, and deployment status from connected monitoring tools, correlates cross-domain signals (deploy-induced regressions, resource bottlenecks), triages incidents for human review, and learns from triage decisions to improve alert quality over time.",
+      "category": "devops",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "cloud",
+        "database",
+        "monitoring"
+      ],
+      "unresolvedConnectors": [
+        "cloud",
+        "database",
+        "monitoring"
+      ],
+      "useCaseCount": 4
+    },
+    {
+      "id": "digital-clone",
+      "name": "Digital Clone",
+      "description": "Multi-channel communication proxy across email, messaging, and messaging. Reads inbound messages, drafts replies that match your per-recipient style, routes drafts for human approval, and graduates to auto-send after 20 consecutive unedited approvals per contact. Logs everything to a local SQLite database.",
+      "category": "productivity",
+      "published": true,
+      "connectors": [
+        "personas_database"
+      ],
+      "connectorCategories": [
+        "database",
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "email-morning-digest",
+      "name": "Email Morning Digest",
+      "description": "Fetches overnight email, scores by adaptive sender importance, summarises the top messages into a daily digest.",
+      "category": "productivity",
+      "published": false,
+      "connectors": [],
+      "connectorCategories": [
+        "email"
+      ],
+      "unresolvedConnectors": [
+        "email"
+      ],
+      "useCaseCount": 1
+    },
+    {
+      "id": "feature-video-creator",
+      "name": "Feature Video Creator",
+      "description": "Automates production of short feature announcement videos by generating scripts, voiceover audio via TTS API, and composing final videos via a cloud video API. Uses a 2-stage human review cycle (script approval, then final video approval) with Memory-driven learning to improve script style, visual choices, and narration tone over time.",
+      "category": "content",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [],
+      "unresolvedConnectors": [
+        "video_generation",
+        "voice_generation"
+      ],
+      "useCaseCount": 1
+    },
+    {
+      "id": "financial-stocks-signaller",
+      "name": "Financial Stocks Signaller",
+      "description": "Weekly investment research: technical signals on a watchlist, congressional trading disclosures, and under-covered sector gems. Delivers one combined Monday briefing; every recommendation is human-reviewed and reviewed decisions persist as simulated trades.",
+      "category": "finance",
+      "published": true,
+      "connectors": [
+        "alpha_vantage"
+      ],
+      "connectorCategories": [
+        "finance"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 3
+    },
+    {
+      "id": "idea-harvester",
+      "name": "Idea Harvester",
+      "description": "Autonomous idea harvester that mines the web — trending repos, Hacker News, communities, competitor changelogs — grounded in your codebase's domain, plus optional team chat / knowledge-base sources, for concrete feature ideas. Holds each for triage and grounds accepted ideas in codebase feasibility. Works without any messaging connector.",
+      "category": "productivity",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "knowledge_base",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "incident-logger",
+      "name": "Incident Logger",
+      "description": "Single source of truth for every operational incident — intake with severity classification, lifecycle tracking with escalation timers and update cadences, auto-closure for stale low-severity items, and human-approved post-incident reviews with cross-incident pattern detection.",
+      "category": "devops",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "monitoring"
+      ],
+      "unresolvedConnectors": [
+        "monitoring"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "knowledge-base-health-auditor",
+      "name": "Knowledge Base Health Auditor",
+      "description": "Treats your workspace knowledge surface like source code with a periodic test suite. Lints persona memories, vector knowledge bases, and an optional Obsidian vault for staleness, broken wikilinks, contradictions, and orphan pages — every finding routes through manual review so the human owns the prune decision.",
+      "category": "research",
+      "published": false,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 2
+    },
+    {
+      "id": "lead-capture-pipeline",
+      "name": "Lead Capture Pipeline",
+      "description": "Real-time form tool intake pipeline. Scores submissions with contextual judgment, enriches records in a CRM database with deduplication, sends tier-appropriate personalized welcome emails, and fires rich Hot / On Fire lead alerts to the sales team.",
+      "category": "sales",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "crm",
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "crm",
+        "email",
+        "forms",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "lean-codebase-sentinel",
+      "name": "Lean Codebase Sentinel",
+      "description": "Fast, deterministic codebase sweep that runs a static-analysis CLI (Fallow / Knip / jscpd / your tool of choice) in a registered codebase, parses the JSON report, and pushes prioritized refactoring ideas to the Dev Tools backlog. Designed as the lightweight sibling to Codebase Health Scanner — runs daily or per-commit, costs zero LLM tokens, and produces file:line:fix evidence ready for human triage or autonomous follow-up.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [
+        "desktop_terminal"
+      ],
+      "useCaseCount": 1
+    },
+    {
+      "id": "newsletter-curator",
+      "name": "Newsletter Curator",
+      "description": "Scans web sources and RSS feeds, curates the most relevant articles using editorial intelligence, assembles themed newsletter issues with original commentary, and delivers polished HTML emails to subscribers via SMTP. Learns from editorial feedback to progressively refine source selection, topic weighting, and writing tone.",
+      "category": "content",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "email"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "web_scraping"
+      ],
+      "useCaseCount": 1
+    },
+    {
+      "id": "product-scout",
+      "name": "Product Scout",
+      "description": "Autonomous scout that finds real implementation opportunities (new integrations, API/version updates, tooling) for your codebase's stack via web research — GitHub releases, changelogs, the web — and optionally your newsletter inbox. Produces a deduplicated triage queue, not noise. Works fully autonomously without an email connector.",
+      "category": "research",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development",
+        "email"
+      ],
+      "unresolvedConnectors": [
+        "email"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "product-strategist",
+      "name": "Product Strategist",
+      "description": "The team's business seat. Owns WHAT gets built next: triages and ranks the dev backlog for real-world value (revenue, retention, user momentum), rejects low-value work with durable reasons, and keeps the next-up queue balanced across business, UX, and technical health — so an autonomous dev team ships what matters, not just what's interesting to refactor.",
+      "category": "project-management",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 0
+    },
+    {
+      "id": "qa-guardian",
+      "name": "QA Guardian",
+      "description": "Autonomous QA engineer that works proactively from your codebase — not from pull requests. On a schedule it incrementally raises test coverage (scan → write missing tests → validate with run_tests) and hunts for likely defects, filing findings for human triage. Tracks coverage + reported-bug progress in memory so every run advances instead of repeating.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "codebase",
+        "github"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 3
+    },
+    {
+      "id": "real-time-database-watcher",
+      "name": "Real-Time Database Watcher",
+      "description": "Subscribes to Supabase database webhooks for specific table changes (new users, order updates, flag changes). Posts enriched notifications to the messaging channel, triggers welcome email sequences for new signups, and logs anomalous data patterns.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "supabase"
+      ],
+      "connectorCategories": [
+        "database",
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "reddit-trend-digest",
+      "name": "Social Trend Digest",
+      "description": "Polls one or more social feeds (subreddits, social platform lists, social platform groups, social platform channels) on a schedule, fetches top posts over a chosen time window, clusters them into themes with sentiment labels, and posts a markdown digest to your messaging channel. Tracks already-seen posts so each digest only surfaces what's new.",
+      "category": "marketing",
+      "published": false,
+      "connectors": [],
+      "connectorCategories": [
+        "messaging",
+        "social"
+      ],
+      "unresolvedConnectors": [
+        "messaging",
+        "social"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "release-manager",
+      "name": "Release Manager",
+      "description": "Automates release discipline. When a change merges, it applies semantic-versioning rules to the commits, bumps the version file, prepends a categorized changelog entry, drafts release notes, and tags the release. Records every version decision in memory so versioning is reasoned and auditable — not just incremented.",
+      "category": "devops",
+      "published": true,
+      "connectors": [
+        "codebase",
+        "github"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 1
+    },
+    {
+      "id": "research-knowledge-curator",
+      "name": "Research Knowledge Curator",
+      "description": "Transforms web URLs into structured knowledge base pages with AI summarization, multi-dimensional taxonomy tagging, and automatic cross-referencing. Manual URL submission or scheduled RSS feed scanning; handles paywalls gracefully; maintains a controlled taxonomy across runs.",
+      "category": "research",
+      "published": false,
+      "connectors": [],
+      "connectorCategories": [],
+      "unresolvedConnectors": [
+        "knowledge_base"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "revenue-intelligence-copilot",
+      "name": "Revenue Intelligence Copilot",
+      "description": "Bridges Stripe payment behavior with CRM customer context to score churn risk and expansion readiness. Alerts on threshold crossings via the messaging channel, drafts retention and upgrade outreach via email, and calibrates its own scoring against actual outcomes every month.",
+      "category": "finance",
+      "published": true,
+      "connectors": [
+        "stripe"
+      ],
+      "connectorCategories": [
+        "crm",
+        "email",
+        "finance",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "crm",
+        "email",
+        "messaging"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "router",
+      "name": "Router",
+      "description": "Universal webhook receiver that replaces Zapier for simple automations. Accepts any webhook payload, classifies the event using signature matching + payload analysis + reasoning, and fan-outs to the messaging channel, email, knowledge base, and spreadsheet based on configurable routing rules.",
+      "category": "productivity",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "knowledge_base",
+        "messaging",
+        "spreadsheet"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "security-sentinel",
+      "name": "Security Sentinel",
+      "description": "On-demand security auditor for your codebase. Runs three scans — dependency vulnerabilities, exposed secrets, and risky patterns (auth bypasses, PII handling, injection) — then files severity-ranked findings with concrete remediation. Tracks reported findings in memory so re-scans dedupe known issues and show what's fixed versus still open.",
+      "category": "security",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 1
+    },
+    {
+      "id": "skill-librarian",
+      "name": "Skill Librarian",
+      "description": "Maintains a project's `.claude/skills/` catalog as a living artifact. Audits existing skills against recent codebase changes, proposes targeted edits or retirements via human review, and — on approval — files a GitHub or GitLab issue describing the change so a developer can apply it through their normal review workflow. Tracks per-skill usage strength via `Skill-Ref: <slug>` commit markers so weak or stale skills surface for curation over time.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "codebase",
+        "github",
+        "gitlab"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 2
+    },
+    {
+      "id": "solution-architect",
+      "name": "Solution Architect",
+      "description": "Senior solution architect for your codebase. Evaluates proposed changes and ideas against the existing architecture, then publishes a concise ADR (context / decision / consequences) plus a story-pointed task breakdown a delivery agent can pick up. Tracks decisions in memory so each review extends the architectural record instead of restating it.",
+      "category": "development",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [],
+      "useCaseCount": 2
+    },
+    {
+      "id": "support-escalation-engine",
+      "name": "Support Escalation Engine",
+      "description": "Monitors support platform for tickets breaching response-time SLAs, escalates urgent issues to the messaging channel with full context, logs escalation patterns in knowledge base, and emails the support lead with a daily escalation summary.",
+      "category": "support",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [
+        "email",
+        "messaging"
+      ],
+      "unresolvedConnectors": [
+        "email",
+        "knowledge_base",
+        "messaging",
+        "support"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "survey-insights-analyzer",
+      "name": "Survey Insights Analyzer",
+      "description": "Processes new survey responses from a local database on a cadence, applies sentiment classification and theme clustering, tracks trends across periods, flags anomalies, and delivers structured insight reports with actionable recommendations.",
+      "category": "productivity",
+      "published": true,
+      "connectors": [
+        "personas_database"
+      ],
+      "connectorCategories": [
+        "database"
+      ],
+      "unresolvedConnectors": [
+        "knowledge_base"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "technical-decision-tracker",
+      "name": "Technical Decision Tracker",
+      "description": "Architecture Decision Record (ADR) specialist that captures engineering decisions with full context, structured alternatives analysis, stakeholder sign-off, and linked code references in a knowledge base databases — then runs periodic review cycles so decisions don't rot into mysterious legacy.",
+      "category": "project_management",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [],
+      "unresolvedConnectors": [
+        "knowledge_base",
+        "source_control"
+      ],
+      "useCaseCount": 3
+    },
+    {
+      "id": "visual-brand-asset-factory",
+      "name": "Visual Brand Asset Factory",
+      "description": "Generates on-brand visual assets grounded in a structured design.md brief produced once at persona build time. The brief captures empathy, sensory aesthetic language, a four-role color hierarchy, typography, and a physical-metaphor layout direction — stored in the persona's design_files envelope so every generation reads from the same design DNA. Generates via an AI image connector, evaluates with a multimodal AI connector, and presents for human review.",
+      "category": "marketing",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "development"
+      ],
+      "unresolvedConnectors": [
+        "image_generation",
+        "vision"
+      ],
+      "useCaseCount": 2
+    },
+    {
+      "id": "web-marketing",
+      "name": "Web Marketing",
+      "description": "Weekly cross-channel marketing intelligence. Pulls paid campaign performance and organic SEO metrics, detects keyword cannibalization between paid and organic, and proposes specific optimizations that persist through human review into a learning memory of what works.",
+      "category": "marketing",
+      "published": true,
+      "connectors": [
+        "codebase"
+      ],
+      "connectorCategories": [
+        "analytics",
+        "development"
+      ],
+      "unresolvedConnectors": [
+        "advertising",
+        "analytics"
+      ],
+      "useCaseCount": 4
+    },
+    {
+      "id": "website-conversion-audit",
+      "name": "Website Conversion Audit",
+      "description": "On-demand website analysis agent specialized in auditing local service business websites (HVAC, plumbing, landscaping, roofing) for conversion optimization gaps. Scrapes and analyzes the target URL, scores gaps across 8 categories, and produces a prioritized recommendations report. Learns which gap types matter most via Memory.",
+      "category": "marketing",
+      "published": true,
+      "connectors": [],
+      "connectorCategories": [],
+      "unresolvedConnectors": [],
+      "useCaseCount": 2
+    }
+  ]
+}

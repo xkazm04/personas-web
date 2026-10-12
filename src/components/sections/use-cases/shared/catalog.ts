@@ -88,6 +88,20 @@ export const CASES: LabCase[] = [
   { need: "pay", candidates: ["lemonsqueezy", "ramp", "stripe", "woocommerce"], chosen: "stripe" },
 ];
 
+/**
+ * The `src/data/connectors.ts` categories each need draws its tools from.
+ * `catalog.test.ts` holds every one to the use-case corpus: a need is only
+ * shown while a published desktop template works in that category.
+ */
+export const NEED_CATEGORY: Record<NeedKey, readonly string[]> = {
+  reach: ["messaging", "email"],
+  notes: ["productivity"],
+  book: ["productivity"],
+  track: ["project_management"],
+  code: ["development"],
+  pay: ["finance"],
+};
+
 /** Tools in the field that no case ever considers. */
 export const BYSTANDERS: ToolKey[] = [
   "hubspot", "attio", "pipedrive", "google_drive", "dropbox", "onedrive", "figma", "canva", "sentry",
