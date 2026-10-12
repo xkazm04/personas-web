@@ -16,6 +16,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeFileAtomic } from "./atomic-write.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
@@ -76,7 +77,7 @@ function main() {
     console.log(same ? "connector-setup: in sync" : "connector-setup: DRIFT - run npm run sync:connector-setup");
     process.exit(same ? 0 : 1);
   }
-  fs.writeFileSync(OUT_PATH, text);
+  writeFileAtomic(OUT_PATH, text);
   console.log(`connector-setup: wrote ${path.relative(REPO_ROOT, OUT_PATH)}`);
 }
 

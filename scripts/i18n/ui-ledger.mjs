@@ -20,6 +20,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
+import { writeFileAtomic } from "../atomic-write.mjs";
 import { collectLeaves } from "./identical-values-lib.mjs";
 import { listLocales, loadLocale, loadPendingNamespaces } from "./load-locale.mjs";
 import {
@@ -116,7 +117,7 @@ if (flag("--update")) {
       : current,
   };
   fs.mkdirSync(path.dirname(ledgerPath), { recursive: true });
-  fs.writeFileSync(ledgerPath, serialize(next));
+  writeFileAtomic(ledgerPath, serialize(next));
   console.log(`ui-ledger: wrote ${path.relative(repoRoot, ledgerPath)} (${enLeaves.size} keys)`);
   if (before) console.log(`  before: ${JSON.stringify(before.totals)}`);
   console.log(`  after:  ${JSON.stringify(after.totals)}`);
