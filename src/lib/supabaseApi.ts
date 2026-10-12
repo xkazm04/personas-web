@@ -16,6 +16,7 @@ import { ApiError, type ApiClient, type CommandAck } from "./api";
 import { isDeskOnlyReview, reviewReportId } from "./commands/deskOnlyReview";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { halvesTrend } from "./observabilitySeries";
+import { breachEpisodes, sli, type SliPoint } from "./sloEngine";
 import { BASELINE_DAYS, HISTORY_WINDOWS, WINDOW_DAYS, addDays, standings, type SnapshotRow } from "./standings";
 import { fromWireEventStatus } from "./eventWireStatus";
 import { executionDetailFromRow, mapExecution, mapPersona, type ExecutionRow, type PersonaRow } from "./desktopRows";
@@ -886,6 +887,7 @@ export const getSyncedLeaderboard = async (): Promise<LeaderboardPersona[]> => {
 // App-defined default objectives (no desktop SLA config exists).
 const SLA_SUCCESS_RATE_TARGET = 95; // percent
 const SLA_LATENCY_TARGET_MS = 30_000; // avg duration ceiling
+const SLA_EPISODE_WINDOW_DAYS = 30; // snapshot history scanned for breach episodes
 
 interface SlaAggRow {
   persona_id: string;
@@ -912,6 +914,51 @@ export const getSyncedSla = async (): Promise<{
   const targets: SLATarget[] = [];
   const breaches: SLABreach[] = [];
 
+  // Daily snapshots give breaches a real start, end and duration. Personas
+  // without snapshots keep the all-time fallback below (start = now, 0 min).
+  const today = new Date().toISOString().slice(0, 10);
+  const snaps = await rows<SnapshotRow>(
+    getSupabase()
+      .from("synced_metrics_snapshots")
+      .select("persona_id,snapshot_date,total_executions,successful_executions,total_cost_usd,avg_duration_ms")
+      .gte("snapshot_date", addDays(today, -SLA_EPISODE_WINDOW_DAYS)),
+  );
+  const slisByPersona = new Map<string, SliPoint[]>();
+  for (const sn of snaps) {
+    const list = slisByPersona.get(sn.persona_id) ?? [];
+    list.push({
+      date: sn.snapshot_date.slice(0, 10),
+      total: Number(sn.total_executions) || 0,
+      good: Number(sn.successful_executions) || 0,
+      durationMs: Number(sn.avg_duration_ms) || 0,
+    });
+    slisByPersona.set(sn.persona_id, list);
+  }
+  const episodeBreaches = (
+    personaId: string,
+    name: string,
+    metric: "successRate" | "latency",
+    target: number,
+    severityOf: (worst: number) => SLABreach["severity"],
+    summaryOf: (worst: number) => string,
+  ): SLABreach[] | null => {
+    const points = slisByPersona.get(personaId);
+    if (!points || points.length === 0) return null;
+    return breachEpisodes(sli(points, metric), {
+      target,
+      direction: metric === "successRate" ? "higher" : "lower",
+    }).map((e) => ({
+      id: `br_${metric === "successRate" ? "success" : "latency"}_${personaId}_${e.start}`,
+      persona: name,
+      metric,
+      startedAt: `${e.start}T00:00:00.000Z`,
+      resolvedAt: e.ongoing ? null : `${addDays(e.end, 1)}T00:00:00.000Z`,
+      durationMinutes: e.durationMinutes,
+      severity: severityOf(e.worst),
+      summary: summaryOf(e.worst),
+    }));
+  };
+
   for (const p of r) {
     const total = p.total_executions || 0;
     if (total === 0) continue;
@@ -936,7 +983,16 @@ export const getSyncedSla = async (): Promise<{
       direction: "higher",
       activeBreach: successBreach,
     });
-    if (successBreach) {
+    const successEpisodes = episodeBreaches(
+      p.persona_id,
+      name,
+      "successRate",
+      SLA_SUCCESS_RATE_TARGET,
+      (w) => (w < 80 ? "critical" : "major"),
+      (w) => `Success rate fell to ${w.toFixed(1)}% against the ${SLA_SUCCESS_RATE_TARGET}% objective.`,
+    );
+    if (successEpisodes) breaches.push(...successEpisodes);
+    else if (successBreach) {
       breaches.push({
         id: `br_success_${p.persona_id}`,
         persona: name,
@@ -965,7 +1021,16 @@ export const getSyncedSla = async (): Promise<{
       direction: "lower",
       activeBreach: latencyBreach,
     });
-    if (latencyBreach) {
+    const latencyEpisodes = episodeBreaches(
+      p.persona_id,
+      name,
+      "latency",
+      SLA_LATENCY_TARGET_MS,
+      (w) => (w > SLA_LATENCY_TARGET_MS * 2 ? "critical" : "major"),
+      (w) => `Average duration peaked at ${(w / 1000).toFixed(1)}s against the ${(SLA_LATENCY_TARGET_MS / 1000).toFixed(0)}s objective.`,
+    );
+    if (latencyEpisodes) breaches.push(...latencyEpisodes);
+    else if (latencyBreach) {
       breaches.push({
         id: `br_latency_${p.persona_id}`,
         persona: name,
