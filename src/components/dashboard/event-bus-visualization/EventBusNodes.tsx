@@ -1,5 +1,5 @@
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
-import { SWARM_PERSONAS, SWARM_SOURCES, type SwarmNode } from "@/lib/mock-dashboard-data";
+import { SWARM_PERSONAS, type SwarmNode } from "@/lib/mock-dashboard-data";
 import type { Point } from "./eventBusGeometry";
 
 // SVG <g> is focusable with tabIndex; give it button semantics + keyboard
@@ -15,10 +15,10 @@ const nodeKeyActivate =
 const NODE_INTERACTIVE_CLASS =
   "cursor-pointer focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand-cyan";
 
-export function EventBusSourceNodes({ sourcePositions, onNodeClick }: { sourcePositions: Point[]; onNodeClick?: (node: SwarmNode) => void }) {
+export function EventBusSourceNodes({ sources, sourcePositions, onNodeClick }: { sources: readonly SwarmNode[]; sourcePositions: Point[]; onNodeClick?: (node: SwarmNode) => void }) {
   return (
     <>
-      {SWARM_SOURCES.map((source, index) => {
+      {sources.map((source, index) => {
         const pos = sourcePositions[index];
         const r = 10 + source.volume * 6;
         return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import GradientText from "@/components/GradientText";
@@ -10,6 +10,10 @@ import EventSwimlane from "@/components/dashboard/EventSwimlane";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import SubscriptionsPanel from "@/components/dashboard/SubscriptionsPanel";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useEventStream } from "@/hooks/useEventStream";
+import { api } from "@/lib/api";
+import { ApiError } from "@/lib/api-error";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import type { SwarmNode } from "@/lib/mock-dashboard-data";
 import { useEventStore } from "@/stores/eventStore";
 
@@ -25,7 +29,29 @@ export default function EventsPage() {
   const subscriptionsRead = useEventStore((state) => state.subscriptionsRead);
   const [pageTab, setPageTab] = useState<PageTab>("events");
   const [selectedNode, setSelectedNode] = useState<SwarmNode | null>(null);
-  const [burstTrigger, setBurstTrigger] = useState(0);
+  const fetchEvents = useEventStore((state) => state.fetchEvents);
+  const appendEvent = useEventStore((state) => state.appendEvent);
+
+  // The page owns the log: one fetch and one live stream for every tab, so the
+  // Visualization and Swimlane tabs keep receiving events (the stream used to
+  // be mounted inside the list panel and stopped when you left that tab).
+  useEffect(() => {
+    void fetchEvents();
+  }, [fetchEvents]);
+  useEventStream();
+
+  // Test Flow publishes a REAL event onto the bus; the particle layer draws it
+  // because it arrives in the log, like any other.
+  const publishTestFlow = () => {
+    api
+      .publishEvent({ eventType: "test.flow", sourceType: "manual", sourceId: "test-flow" })
+      .then(appendEvent)
+      .catch((error: unknown) => {
+        // Read-only (cloud-sync) planes refuse writes with 501: expected, not an error.
+        if (error instanceof ApiError && error.status === 501) return;
+        captureExceptionScrubbed(error, { tags: { area: "events.testFlow" } });
+      });
+  };
 
   return (
     <div className="relative">
@@ -78,12 +104,11 @@ export default function EventsPage() {
         ) : pageTab === "visualization" ? (
           <EventsVisualizationView
             selectedNode={selectedNode}
-            burstTrigger={burstTrigger}
             labels={{
               testFlow: t.dashboardUi.testFlow,
               eventTypes: t.dashboardUi.eventTypes,
             }}
-            onBurst={() => setBurstTrigger((value) => value + 1)}
+            onBurst={publishTestFlow}
             onSelectNode={setSelectedNode}
           />
         ) : (

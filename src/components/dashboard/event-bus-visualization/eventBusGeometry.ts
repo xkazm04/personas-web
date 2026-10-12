@@ -19,6 +19,10 @@ export interface Particle {
   cp: Point;
   burst: number;
   done: boolean;
+  /** Where the outbound leg ends (the persona the event is addressed to). */
+  personaPos?: Point;
+  /** A dead letter stops at the hub and bursts red: it is never delivered. */
+  deadLetter?: boolean;
 }
 
 export interface BurstRing {

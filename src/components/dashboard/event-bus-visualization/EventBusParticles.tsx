@@ -15,6 +15,8 @@ export function EventBusParticles({
   return (
     <>
       {particles.map((particle) => {
+        // A negative t is a staggered particle still waiting for its turn.
+        if (particle.t < 0) return null;
         const pos = quadBezier(particle.sourcePos, particle.cp, particle.targetPos, Math.min(particle.t, 1));
         return (
           <g key={particle.id} filter="url(#particleGlow)">

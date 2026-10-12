@@ -41,13 +41,11 @@ const EVENT_TYPE_COLORS: Record<string, string> = {
 
 export function EventsVisualizationView({
   selectedNode,
-  burstTrigger,
   labels,
   onBurst,
   onSelectNode,
 }: {
   selectedNode: SwarmNode | null;
-  burstTrigger: number;
   labels: { testFlow: string; eventTypes: string };
   onBurst: () => void;
   onSelectNode: (node: SwarmNode | null) => void;
@@ -104,7 +102,6 @@ export function EventsVisualizationView({
           <EventBusVisualization
             className="relative z-10"
             onNodeClick={onSelectNode}
-            triggerBurst={burstTrigger}
           />
         </Deferred>
       </div>

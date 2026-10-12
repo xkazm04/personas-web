@@ -1,31 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Activity, Radio, Wifi, Zap } from "lucide-react";
 import useAnimatedNumber from "@/hooks/useAnimatedNumber";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useNow } from "@/hooks/useNow";
+import { throughput } from "@/lib/busProjection";
+import { useAuthStore } from "@/stores/authStore";
 import { useEventStore } from "@/stores/eventStore";
 
-// ── Simulated live counters ───────────────────────────────────────────
+// ── Measured counters ─────────────────────────────────────────────────
 
-function useSimulatedMetrics() {
-  const [eventsPerSec, setEventsPerSec] = useState(24);
-  const [totalEvents, setTotalEvents] = useState(148_302);
-  const [activeConnections, setActiveConnections] = useState(11);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setEventsPerSec((v) => Math.max(5, v + Math.floor(Math.random() * 7 - 3)));
-      setTotalEvents((v) => v + Math.floor(Math.random() * 12 + 1));
-      setActiveConnections((v) =>
-        Math.max(6, Math.min(18, v + (Math.random() > 0.5 ? 1 : -1))),
-      );
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return { eventsPerSec, totalEvents, activeConnections };
+// Read from the same event log as the ring and the list, so a number on this
+// strip is a count of events the page can show.
+function useMeasuredMetrics() {
+  const events = useEventStore((s) => s.events);
+  const now = useNow(5_000);
+  return useMemo(() => throughput(events, now), [events, now]);
 }
 
 // ── Stat item ─────────────────────────────────────────────────────────
@@ -65,10 +57,10 @@ function StatItem({
 
 export default function EventBusStats({ className = "" }: { className?: string }) {
   const { t } = useTranslation();
-  const { eventsPerSec, totalEvents, activeConnections } = useSimulatedMetrics();
-  // The counters are simulated fixtures, but the connection dot must reflect the
-  // REAL stream status so it can't show green "Connected" while the header's
-  // ConnectionStatusIndicator says reconnecting/polling.
+  const { perMinute, total, sources } = useMeasuredMetrics();
+  const isDemo = useAuthStore((s) => s.isDemo);
+  // The connection dot reflects the REAL stream status so it can't show green
+  // "Connected" while the header's ConnectionStatusIndicator says reconnecting/polling.
   const connectionStatus = useEventStore((s) => s.connectionStatus);
   const connected = connectionStatus === "connected";
 
@@ -79,16 +71,19 @@ export default function EventBusStats({ className = "" }: { className?: string }
       transition={{ duration: 0.3 }}
       className={`flex flex-wrap items-center gap-1 rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm ${className}`}
     >
-      {/* The throughput counters are illustrative, not synced telemetry. */}
-      <span className="ml-2 rounded-full border border-glass px-2 py-0.5 text-xs font-medium uppercase tracking-wider text-muted-dark">
-        {t.common.demo}
-      </span>
+      {/* The counters are measured, but in demo mode the log itself is a fixture. */}
+      {isDemo && (
+        <span className="ml-2 rounded-full border border-glass px-2 py-0.5 text-xs font-medium uppercase tracking-wider text-muted-dark">
+          {t.common.demo}
+        </span>
+      )}
 
       <StatItem
         icon={Zap}
         label={t.eventsPage.events}
-        value={eventsPerSec}
-        pulse
+        value={perMinute}
+        suffix="/min"
+        pulse={perMinute > 0}
       />
 
       <div className="h-4 w-px bg-white/[0.06] hidden sm:block" />
@@ -96,7 +91,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
       <StatItem
         icon={Activity}
         label={t.dashboardUi.totalLabel}
-        value={totalEvents}
+        value={total}
       />
 
       <div className="h-4 w-px bg-white/[0.06] hidden sm:block" />
@@ -104,7 +99,7 @@ export default function EventBusStats({ className = "" }: { className?: string }
       <StatItem
         icon={Radio}
         label={t.dashboardUi.connections}
-        value={activeConnections}
+        value={sources}
       />
 
       <div className="h-4 w-px bg-white/[0.06] hidden sm:block" />

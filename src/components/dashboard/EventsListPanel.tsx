@@ -9,7 +9,6 @@ import { fadeUp } from "@/lib/animations";
 import type { PersonaEvent } from "@/lib/types";
 import { isEventDiscardable, isEventRetryable } from "@/lib/eventStatusFsm";
 import { clusterByFailure } from "@/lib/deadLetterTriage";
-import { useEventStream } from "@/hooks/useEventStream";
 import { useEventTopology } from "@/hooks/useEventTopology";
 import { useTranslation } from "@/i18n/useTranslation";
 import { overlayEventVerdicts, useEventStore } from "@/stores/eventStore";
@@ -33,7 +32,6 @@ export default function EventsListPanel() {
   const events = useMemo(() => overlayEventVerdicts(storeEvents, ledger), [storeEvents, ledger]);
   const eventsLoading = useEventStore((s) => s.eventsLoading);
   const listNotServed = useEventStore((s) => s.listNotServed);
-  const fetchEvents = useEventStore((s) => s.fetchEvents);
   const decide = useEventStore((s) => s.decide);
   const replayingIds = useEventStore((s) => s.replayingIds);
   const discardingIds = useEventStore((s) => s.discardingIds);
@@ -47,12 +45,9 @@ export default function EventsListPanel() {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_EVENTS);
   const [activeChain, setActiveChain] = useState<Set<string> | null>(null);
 
-  useEffect(() => {
-    void fetchEvents();
-  }, [fetchEvents]);
-  // Leaving the tab commits an open verdict window rather than dropping it.
+  // The page owns the fetch and the live stream (they must outlive this tab);
+  // leaving the tab commits an open verdict window rather than dropping it.
   useEffect(() => () => useEventStore.getState().flushDecisions(), []);
-  useEventStream();
 
   const personaMap = useMemo(() => new Map(personas.map((persona) => [persona.id, persona])), [personas]);
   const uniqueSourceTypes = useMemo(() => [...new Set(events.map((event) => event.sourceType))].sort(), [events]);
