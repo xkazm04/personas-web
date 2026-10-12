@@ -36,6 +36,8 @@ of the files above that govern the folder and states no rule of its own.
 - [api/openapi.json](api/openapi.json): request and response shapes of every API route.
 - [testing/e2e-smoke-tier.md](testing/e2e-smoke-tier.md): the Playwright smoke tier
   run on every PR.
+- [testing/flaky-e2e.md](testing/flaky-e2e.md): the flaky-test register, with an owner and a 14-day
+  deadline per entry.
 - [i18n/style-en.md](i18n/style-en.md) and [i18n/glossary.md](i18n/glossary.md):
   English copy style and translation glossary.
 - [translation-handoff.md](translation-handoff.md): handing copy to translators.

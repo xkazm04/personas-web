@@ -1,0 +1,4 @@
+{
+  "$comment": "Flaky Playwright tests, one entry per test. See docs/testing/flaky-e2e.md for when to add, renew or remove an entry. src/lib/flakyRegister.test.ts fails test:unit on an entry with no owner, a spec that does not exist, a window over 14 days, or an expiry in the past.",
+  "entries": []
+}
