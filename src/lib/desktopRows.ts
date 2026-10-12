@@ -5,6 +5,7 @@
  * backends (`supabaseApi`, `desktopApi`) map through here.
  */
 import type { ExecutionDetail, Persona, PersonaExecution, PersonaExecutionStatus } from "./types";
+import { parseCoreProfile } from "./persona-spec";
 
 const EXECUTION_STATUSES: ReadonlySet<string> = new Set([
   "queued",
@@ -44,6 +45,7 @@ export interface PersonaRow {
   max_turns: number | null;
   design_context: string | null;
   device_id: string | null;
+  core_profile?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -67,6 +69,7 @@ export function mapPersona(r: PersonaRow): Persona {
     designContext: r.design_context,
     groupId: null,
     deviceId: r.device_id ?? null,
+    core: parseCoreProfile(r.core_profile),
     createdAt: r.created_at,
     updatedAt: r.updated_at,
   };

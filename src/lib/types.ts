@@ -8,6 +8,8 @@
 // the orchestrator's. Map at the backend adapter; do not assume parity.
 // ---------------------------------------------------------------------------
 
+import type { PersonaCoreProfile } from "./persona-spec";
+
 export interface Persona {
   id: string;
   projectId: string;
@@ -30,6 +32,11 @@ export interface Persona {
    * remote command for it is sent. Only the sync mirror knows it.
    */
   deviceId?: string | null;
+  /**
+   * The desktop's living Core (`synced_personas.core_profile`), parsed by
+   * `parseCoreProfile`. Null/absent when the persona has none.
+   */
+  core?: PersonaCoreProfile | null;
   createdAt: string;
   updatedAt: string;
 }
