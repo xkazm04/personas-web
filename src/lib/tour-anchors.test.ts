@@ -185,6 +185,16 @@ function resolve(attr: string, value: string): { ok: boolean; how: string } {
       return { ok: true, how: `data-driven via ${carrier} → ${prop}: "${value}" in ${source.rel}` };
     }
   }
+  // Record-keyed data: `{ [id]: ... }` built with `Object.keys(...).map((id) => ({ id, ... }))`
+  // (orchestration-hub TRIGGER_NODES) has the value as an object KEY, not an `id: "x"` literal.
+  // Only an `id` binding can come from a key, and the key must open an object literal.
+  if (props.has("id")) {
+    const recordKey = new RegExp(`^\\s*${escape(value)}\\s*:\\s*\\{`, "m");
+    const source = SOURCES.find((s) => recordKey.test(s.text));
+    if (source) {
+      return { ok: true, how: `data-driven via ${[...carriers][0]} → record key "${value}" in ${source.rel}` };
+    }
+  }
   return {
     ok: false,
     how:
