@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import { useInView } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useRunClock, scriptEnd, type RunScript } from "@/lib/run-script";
 import { localizeExamples } from "@/components/sections/playground-split/data";
 import type { NodeStatus, PlaygroundPhase } from "@/components/sections/playground-split/types";
 import { playgroundSectionCopy } from "@/i18n/pending/playgroundSection";
@@ -13,17 +14,29 @@ import { landingSectionsCopy } from "@/i18n/pending/landingSections";
  * The live section's simulation (sections/playground-split/
  * use-playground-simulation.ts), re-expressed as one step counter so a
  * variant can stage it: the same six beats in the same order, the same
- * active -> done rhythm (DONE_RATIO), the same rules - it refuses to start
- * while the tab is hidden, aborts to idle if the tab hides mid-run, cannot be
+ * active -> done rhythm (DONE_RATIO), the same rules - it cannot be
  * re-entered while running, and plays the first prompt once when the panel is
  * half on screen (never under reduced motion). `pace` stretches the live
- * timings so a staged beat has room to read.
+ * timings so a staged beat has room to read. The beats are data driven by the
+ * shared virtual clock in lib/run-script; unlike the live section, a hidden
+ * tab pauses the run instead of aborting it.
  */
 export const BEATS = ["parse", "select", "tools", "execute", "verify", "result"] as const;
 export type BeatId = (typeof BEATS)[number];
 
 const STEP_DELAYS = [500, 700, 900, 800, 600, 500];
 const DONE_RATIO = 0.7;
+
+/** Beat i turns active after the cumulative delays through i and settles DONE_RATIO of its delay later. */
+function buildScript(delays: number[]): RunScript {
+  let at = 0;
+  return {
+    beats: delays.map((d, i) => {
+      at += d;
+      return { id: BEATS[i], start: at, duration: d * DONE_RATIO };
+    }),
+  };
+}
 
 export function useMindRun(panelRef: RefObject<HTMLElement | null>, pace = 1) {
   const reduced = useStillMotion();
@@ -33,65 +46,37 @@ export function useMindRun(panelRef: RefObject<HTMLElement | null>, pace = 1) {
   const examples = useMemo(() => localizeExamples(copy), [copy]);
 
   const [activeExample, setActiveExample] = useState<number | null>(null);
-  const [step, setStep] = useState(-1);
-  const [stepDone, setStepDone] = useState(false);
-  const [phase, setPhase] = useState<PlaygroundPhase>("idle");
   const [startedAt, setStartedAt] = useState<number | null>(null);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const delays = useMemo(() => STEP_DELAYS.map((d) => Math.round(d * pace)), [pace]);
-  const totalMs = delays.reduce((s, d) => s + d, 0) + delays[delays.length - 1] * DONE_RATIO;
+  const script = useMemo(() => buildScript(delays), [delays]);
+  const totalMs = scriptEnd(script);
+
+  // One virtual clock: a hidden tab pauses the run where it stands and the
+  // visitor returns to it, rather than the run aborting to idle.
+  const clock = useRunClock(script, { paused: isHidden });
+  const { frame } = clock;
+  const phase: PlaygroundPhase =
+    clock.status === "idle" ? "idle" : frame.finished ? "done" : "running";
   const isRunning = phase === "running";
+  const step = clock.status === "idle" ? -1 : frame.index;
+  const stepDone = clock.status !== "idle" && frame.settled;
 
-  const clearAll = useCallback(() => {
-    timers.current.forEach(clearTimeout);
-    timers.current = [];
-  }, []);
-  useEffect(() => clearAll, [clearAll]);
-
-  const toIdle = useCallback(() => {
+  const reset = useCallback(() => {
+    clock.reset();
     setActiveExample(null);
-    setStep(-1);
-    setStepDone(false);
-    setPhase("idle");
     setStartedAt(null);
-  }, []);
-
-  // A hidden tab aborts the run (the timers are scheduled up front and would
-  // otherwise finish unseen); the visitor re-triggers on return.
-  useEffect(() => {
-    if (!(isHidden && isRunning)) return;
-    clearAll();
-    const id = setTimeout(toIdle, 0);
-    return () => clearTimeout(id);
-  }, [isHidden, isRunning, clearAll, toIdle]);
+  }, [clock.reset]); // eslint-disable-line react-hooks/exhaustive-deps -- reset is stable
 
   const start = useCallback(
     (idx: number) => {
       if (isRunning || idx < 0 || idx >= examples.length) return;
-      if (typeof document !== "undefined" && document.hidden) return;
-      clearAll();
       setActiveExample(idx);
-      setStep(-1);
-      setStepDone(false);
-      setPhase("running");
       setStartedAt(Date.now());
-      let at = 0;
-      delays.forEach((d, i) => {
-        at += d;
-        timers.current.push(setTimeout(() => { setStep(i); setStepDone(false); }, at));
-        timers.current.push(
-          setTimeout(() => {
-            setStepDone(true);
-            if (i === delays.length - 1) setPhase("done");
-          }, at + d * DONE_RATIO),
-        );
-      });
+      clock.start();
     },
-    [isRunning, examples.length, clearAll, delays],
+    [isRunning, examples.length, clock.start], // eslint-disable-line react-hooks/exhaustive-deps -- start is stable
   );
-
-  const reset = useCallback(() => { clearAll(); toIdle(); }, [clearAll, toIdle]);
 
   // First prompt plays once when `panelRef` (the diagram) is half on screen.
   const inView = useInView(panelRef, { once: true, amount: 0.5 });
