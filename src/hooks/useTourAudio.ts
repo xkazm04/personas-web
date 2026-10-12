@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import type { TourStep } from "@/lib/tour-script";
 
 /** Quiet beat between a step's clip ending and the next step starting. */
@@ -57,6 +57,11 @@ interface UseTourAudioArgs {
   volume: number;
   /** Advance to the next step — called on a step clip's `ended` event. */
   next: () => void;
+  /**
+   * Optional ref this hook keeps pointed at the live narration element (null
+   * between clips), so the caller can read its `currentTime` as the step clock.
+   */
+  clockRef?: RefObject<HTMLAudioElement | null>;
 }
 
 /**
@@ -80,8 +85,10 @@ export function useTourAudio({
   steps,
   volume,
   next,
+  clockRef,
 }: UseTourAudioArgs): AnalyserNode | null {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const ownAudioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = clockRef ?? ownAudioRef;
   const ctxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   // Latest volume, read when creating each clip so a newly-created audio
@@ -194,7 +201,7 @@ export function useTourAudio({
       if (advanceId) window.clearTimeout(advanceId);
       if (audioRef.current === audio) audioRef.current = null;
     };
-  }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps]);
+  }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps, audioRef]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -209,14 +216,14 @@ export function useTourAudio({
       return () => window.clearTimeout(id);
     }
     audio.play().catch(() => {});
-  }, [active, playing, atBridge, atIntro, stepIndex, steps]);
+  }, [active, playing, atBridge, atIntro, stepIndex, steps, audioRef]);
 
   // Apply slider changes to the live audio element in real time, and keep the
   // ref in sync so the next clip created starts at this level.
   useEffect(() => {
     volumeRef.current = volume;
     if (audioRef.current) audioRef.current.volume = volume;
-  }, [volume]);
+  }, [volume, audioRef]);
 
   // Close the Web Audio context on unmount. The per-clip cleanup only
   // disconnects the source node — without this, the lazily-created AudioContext

@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -17,6 +18,7 @@ import { useTourScroll } from "@/hooks/useTourScroll";
 import { useTourVolume } from "@/hooks/useTourVolume";
 import { useTourNavigation } from "@/hooks/useTourNavigation";
 import { useTourSpotlightSequence } from "@/hooks/useTourSpotlightSequence";
+import { useTourCueClock } from "@/hooks/useTourCueClock";
 import { useTourKeyboard } from "@/hooks/useTourKeyboard";
 
 /** Translated copy for the end-of-tour bridge prompt. */
@@ -151,6 +153,9 @@ export function TourProvider({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(id);
   }, [active, playing, atBridge, atIntro, stepIndex, next, steps]);
 
+  // Live narration element: its currentTime is the step clock the cues run on.
+  const narrationRef = useRef<HTMLAudioElement | null>(null);
+
   // Narration audio + AnalyserNode for the Athena companion's reactivity.
   const audioAnalyser = useTourAudio({
     active,
@@ -162,22 +167,24 @@ export function TourProvider({ children }: { children: ReactNode }) {
     steps,
     volume,
     next,
+    clockRef: narrationRef,
   });
 
-  // Timed in-step manipulations: fire each action's `run` on its own timer
-  // relative to step entry; all pending timers cleared on step change / exit.
-  useEffect(() => {
-    if (!active || atIntro || steps.length === 0) return;
-    const actions = steps[stepIndex].actions;
-    if (!actions || actions.length === 0) return;
-    const ids = actions.map((a) => window.setTimeout(a.run, a.atMs));
-    return () => ids.forEach((id) => window.clearTimeout(id));
-  }, [active, atIntro, stepIndex, steps]);
+  // Timed in-step manipulations: each action's `run` fires when the step's
+  // narration clock (audio currentTime, or a virtual clock on silent steps)
+  // passes its `atMs`. The clock freezes while paused, so a pause stops the
+  // diagram too; it is re-armed from zero on step change / exit.
+  const stepActions = steps[stepIndex]?.actions;
+  const actionCues = useMemo(
+    () => stepActions?.map((a) => ({ atMs: a.atMs, fire: a.run })),
+    [stepActions],
+  );
+  useTourCueClock(active && !atIntro && steps.length > 0, playing, stepIndex, narrationRef, actionCues);
 
   // Navigate cross-page steps, resolve the live spotlight target (which follows
   // in-step sweeps), and scroll it into view (all paused during the intro).
   useTourNavigation(active, stepIndex, steps);
-  const activeSpotlight = useTourSpotlightSequence(active, atIntro, stepIndex, steps);
+  const activeSpotlight = useTourSpotlightSequence(active, atIntro, playing, stepIndex, steps, narrationRef);
   useTourScroll(active && !atIntro, activeSpotlight, steps[stepIndex]?.scrollTarget ?? null, prefersReducedMotion);
 
   useTourKeyboard(active, { exit, next, prev });

@@ -38,12 +38,12 @@ export type TourNarrationKey =
  * A timed side effect fired while a step is on screen — used to drive a
  * diagram's animation in sync with the narration (start the Gmail example,
  * highlight each trigger in turn, open each platform card, …). Scheduled
- * relative to the moment the step becomes active and cancelled on step
+ * on the step's narration clock (`tour-cue-clock.ts`; frozen while paused), re-armed on step
  * change / exit. Keep `run` resilient: the target may not be mounted yet, so
  * guard DOM lookups (see `clickTarget` below).
  */
 export interface TourAction {
-  /** ms after the step becomes active to fire `run`. */
+  /** ms of narration-clock time into the step at which to fire `run`. */
   atMs: number;
   /** Side effect — typically a click that drives the focused diagram. */
   run: () => void;
@@ -52,7 +52,7 @@ export interface TourAction {
 /**
  * A timed change of the spotlight target *within* a single step — used when one
  * continuous narration clip walks across several regions of one page (the
- * dashboard home sweep). Scheduled relative to step entry; the spotlight tweens
+ * dashboard home sweep). Fired on the step narration clock; the spotlight tweens
  * to each `target` as its `atMs` elapses.
  */
 export interface TourSpotlightCue {
