@@ -358,6 +358,18 @@ export const de: LocaleTranslations = {
       stillQuestions: "Noch Fragen?",
       joinDiscord: "Discord beitreten",
       discordSubtitle: "Treten Sie unserer Discord-Community f\u00fcr Hilfe und Diskussion bei.",
+
+      shieldLabels: {
+
+        piiStripped: "PII entfernt",
+
+        noReplays: "Keine Replays",
+
+        localOnly: "Nur lokal",
+
+        yourData: "Ihre Daten",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

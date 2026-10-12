@@ -358,6 +358,18 @@ export const hi: LocaleTranslations = {
       stillQuestions: "\u0905\u092d\u0940 \u092d\u0940 \u092a\u094d\u0930\u0936\u094d\u0928 \u0939\u0948\u0902?",
       joinDiscord: "Discord \u092e\u0947\u0902 \u0936\u093e\u092e\u093f\u0932 \u0939\u094b\u0902",
       discordSubtitle: "\u092e\u0926\u0926 \u0914\u0930 \u091a\u0930\u094d\u091a\u093e \u0915\u0947 \u0932\u093f\u090f \u0939\u092e\u093e\u0930\u0947 Discord \u0938\u092e\u0941\u0926\u093e\u092f \u092e\u0947\u0902 \u0936\u093e\u092e\u093f\u0932 \u0939\u094b\u0902\u0964",
+
+      shieldLabels: {
+
+        piiStripped: "PII \u0939\u091f\u093e\u0908 \u0917\u0908",
+
+        noReplays: "\u0915\u094b\u0908 \u0930\u0940\u092a\u094d\u0932\u0947 \u0928\u0939\u0940\u0902",
+
+        localOnly: "\u0915\u0947\u0935\u0932 \u0932\u094b\u0915\u0932",
+
+        yourData: "\u0906\u092a\u0915\u093e \u0921\u0947\u091f\u093e",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

@@ -358,6 +358,18 @@ export const id: LocaleTranslations = {
       stillQuestions: "Masih punya pertanyaan?",
       joinDiscord: "Gabung Discord",
       discordSubtitle: "Bergabunglah dengan komunitas Discord kami untuk bantuan dan diskusi.",
+
+      shieldLabels: {
+
+        piiStripped: "PII dihapus",
+
+        noReplays: "Tanpa replay",
+
+        localOnly: "Hanya lokal",
+
+        yourData: "Data Anda",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

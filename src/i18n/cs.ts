@@ -358,6 +358,18 @@ export const cs: LocaleTranslations = {
       stillQuestions: "St\u00e1le m\u00e1te ot\u00e1zky?",
       joinDiscord: "P\u0159ipojte se na Discord",
       discordSubtitle: "P\u0159ipojte se k na\u0161\u00ed komunit\u011b na Discordu pro pomoc a diskuzi.",
+
+      shieldLabels: {
+
+        piiStripped: "Bez osobn\u00edch \u00fadaj\u016f",
+
+        noReplays: "Bez z\u00e1znam\u016f relac\u00ed",
+
+        localOnly: "Pouze lok\u00e1ln\u011b",
+
+        yourData: "Va\u0161e data",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

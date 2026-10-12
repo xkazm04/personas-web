@@ -358,6 +358,18 @@ export const vi: LocaleTranslations = {
       stillQuestions: "V\u1eabn c\u00f2n c\u00e2u h\u1ecfi?",
       joinDiscord: "Tham gia Discord",
       discordSubtitle: "Tham gia c\u1ed9ng \u0111\u1ed3ng Discord c\u1ee7a ch\u00fang t\u00f4i \u0111\u1ec3 \u0111\u01b0\u1ee3c tr\u1ee3 gi\u00fap v\u00e0 th\u1ea3o lu\u1eadn.",
+
+      shieldLabels: {
+
+        piiStripped: "\u0110\u00e3 x\u00f3a PII",
+
+        noReplays: "Kh\u00f4ng ghi l\u1ea1i phi\u00ean",
+
+        localOnly: "Ch\u1ec9 c\u1ee5c b\u1ed9",
+
+        yourData: "D\u1eef li\u1ec7u c\u1ee7a b\u1ea1n",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

@@ -147,6 +147,7 @@
     stillQuestions: string;
     joinDiscord: string;
     discordSubtitle: string;
+    shieldLabels: { piiStripped: string; noReplays: string; localOnly: string; yourData: string };
     questions: { q: string; a: string }[];
   };
   downloadSection: {
@@ -2253,6 +2254,12 @@ export const en: CoreTranslations = {
     stillQuestions: 'Still have questions?',
     joinDiscord: 'Join Discord',
     discordSubtitle: 'Join our Discord community for help and discussion.',
+    shieldLabels: {
+      piiStripped: 'PII stripped',
+      noReplays: 'No replays',
+      localOnly: 'Local only',
+      yourData: 'Your data',
+    },
     questions: [
       {
         q: 'What is Claude Code and why do I need it?',

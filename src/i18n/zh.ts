@@ -358,6 +358,18 @@ export const zh: LocaleTranslations = {
       stillQuestions: "\u8fd8\u6709\u95ee\u9898\uff1f",
       joinDiscord: "\u52a0\u5165 Discord",
       discordSubtitle: "\u52a0\u5165\u6211\u4eec\u7684 Discord \u793e\u533a\u83b7\u53d6\u5e2e\u52a9\u548c\u8ba8\u8bba\u3002",
+
+      shieldLabels: {
+
+        piiStripped: "\u5df2\u79fb\u9664\u4e2a\u4eba\u4fe1\u606f",
+
+        noReplays: "\u65e0\u4f1a\u8bdd\u56de\u653e",
+
+        localOnly: "\u4ec5\u9650\u672c\u5730",
+
+        yourData: "\u4f60\u7684\u6570\u636e",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

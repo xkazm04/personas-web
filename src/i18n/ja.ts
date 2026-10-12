@@ -358,6 +358,18 @@ export const ja: LocaleTranslations = {
       stillQuestions: "\u307e\u3060\u8cea\u554f\u304c\u3042\u308a\u307e\u3059\u304b\uff1f",
       joinDiscord: "Discord\u306b\u53c2\u52a0",
       discordSubtitle: "\u30b5\u30dd\u30fc\u30c8\u3084\u30c7\u30a3\u30b9\u30ab\u30c3\u30b7\u30e7\u30f3\u306e\u305f\u3081\u306bDiscord\u30b3\u30df\u30e5\u30cb\u30c6\u30a3\u306b\u53c2\u52a0\u3057\u3066\u304f\u3060\u3055\u3044\u3002",
+
+      shieldLabels: {
+
+        piiStripped: "PII\u9664\u53bb\u6e08\u307f",
+
+        noReplays: "\u30ea\u30d7\u30ec\u30a4\u306a\u3057",
+
+        localOnly: "\u30ed\u30fc\u30ab\u30eb\u306e\u307f",
+
+        yourData: "\u3042\u306a\u305f\u306e\u30c7\u30fc\u30bf",
+
+      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",
