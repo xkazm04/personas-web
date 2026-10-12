@@ -65,7 +65,11 @@ this table honest. It fails `test:unit` when a gate is missing from this table, 
 names a script that does not exist, or when the "Runs in" column disagrees with
 `.github/workflows/ci.yml` or `scripts/install-git-hooks.mjs`. That test also fails when any
 `npm run <name>` in `.claude/CLAUDE.md`, this file, `SECURITY.md`, `README.md`, CI or the
-hook names a script `package.json` does not define.
+hook names a script `package.json` does not define. `src/lib/guidanceCommandForms.test.ts`
+covers the forms that regex cannot see: every line of the `.claude/CLAUDE.md` Commands block
+must be `npm run <existing script>` (and the block must list typecheck, lint and test:unit),
+every `node scripts/<file>` cited in the guidance files must exist, and every script file a
+`package.json` script runs must exist (registry links under `.claude/` excepted).
 
 | Gate | Runs in | What it holds |
 |---|---|---|
@@ -119,6 +123,16 @@ runner has, which is why they stay out of CI.
   `tools/icon-pipeline.mjs`, which imports `sharp` and runs its CLI on import, and pin them
   with a unit test. Unattended lanes cannot write under `.claude/`, so this needs a person
   or an attended session.
+- Skills that read text the team did not write: `research` (videos, articles), `native-copy`
+  (copy sources) and `scan-sweep` (scan output). A source can carry instructions, so
+  `src/lib/skillInjectionFixture.test.ts` holds a hostile source and the commit an agent
+  would make by obeying it, and checks that `scripts/check-ai-change.mjs` refuses each
+  effect: `.claude/` writes, a committed env file, a new API route and SQL file, an invented
+  doc anchor, a dropped trailer (warned, failed under strict provenance). Three gaps are
+  `it.todo` there: an injected `AI-Gate-Override:` line waives the path and scope checks,
+  a `route.js`/`route.tsx` or upper-case `.SQL` add is not matched, and hostile wording in
+  copy is content no path rule can see. Closing the first two is an edit to the gate script
+  (re-run its mutant spec); the third needs review of the copy itself.
 
 ## What a fresh clone gets
 
@@ -141,6 +155,18 @@ Open owner decision: whether the registry becomes a pinned git submodule or an i
 package, so that a clone or CI runner gets the same contract at a recorded version. Until
 then, the gap above is expected. The options and a recommendation are in
 [`decisions/2026-10-13-registry-skill-revision-unpinned.md`](decisions/2026-10-13-registry-skill-revision-unpinned.md).
+
+## Boundaries
+
+The demo dashboard stays off live data through one switch: `api` in `src/lib/api.ts`
+answers from `mockApi` while the auth store's `isDemo` is set. The Supabase mirror reads
+in `src/lib/supabaseApi.ts` sit outside it, so each dashboard hook that calls one checks
+`isDemo` itself. `src/lib/dashboardDataBoundary.test.ts` fails `test:unit` when a file
+under `src/components/dashboard/` or `src/app/dashboard/` imports the transport behind
+`api` (`src/lib/desktopApi.ts`, `src/lib/orchestrator-config.ts`) or server-side code,
+fetches the orchestrator proxy routes directly, calls the mirror without an `isDemo`
+check, or reads the orchestrator URL outside its allowlist (which may only shrink).
+The service_role boundary is held by `src/lib/serviceRoleServerOnly.test.ts`.
 
 ## Harness deny list
 
