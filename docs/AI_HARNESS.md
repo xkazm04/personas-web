@@ -37,6 +37,10 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
     Claude Code loads when it works in those folders. Each names the threat-model sections
     and the `.claude/CLAUDE.md` convention that govern the folder and restates no rule;
     `src/lib/scopedGuidance.test.ts` fails when a path or section they cite disappears
+  - `docs/degraded-dependencies.md`: what a visitor sees and what an operator checks when
+    Supabase or the orchestrator is missing or down. `src/lib/degradationDrill.test.ts`
+    runs the outage paths against the real route handlers and fails when a row of the
+    runbook's table no longer matches its route
   - `docs/conventions-enforcement.md`: for each numbered convention in `.claude/CLAUDE.md`,
     the lint rule, spec or gate that catches a break, and what is left to the agent
   - `.ai/manifest.yaml` `guidance:`: declares `.claude/CLAUDE.md` the canonical guidance

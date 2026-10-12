@@ -32,7 +32,8 @@ npm run dev                     # http://localhost:3000
 
 Minimum env for a dev server that renders the marketing pages: **none** —
 the app boots without any env vars, Supabase- and orchestrator-backed
-features just degrade gracefully.
+features just degrade gracefully. What each failure looks like to a visitor, and
+what to check, is in [docs/degraded-dependencies.md](docs/degraded-dependencies.md).
 
 ## Environment
 
