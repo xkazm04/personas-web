@@ -1,4 +1,4 @@
-import type { ToolUsageByPersona } from "./mockData";
+import type { ToolUsageByPersona } from "./types";
 
 /**
  * Blast radius of a failing integration check: which agents actually call its
@@ -19,6 +19,13 @@ export interface BreachRef {
   id: string;
   persona: string;
   resolvedAt: string | null;
+}
+
+/** Everything the health panel needs to compute radii (one demo fetch). */
+export interface BlastRadiusInputs {
+  usage: ToolUsageByPersona[];
+  breaches: BreachRef[];
+  totalPersonas: number;
 }
 
 export interface BlastRadius {

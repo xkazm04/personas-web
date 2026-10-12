@@ -883,6 +883,11 @@
       configured: string;
       installed: string;
     };
+    blast: {
+      impact: string;
+      sla: string;
+      unmapped: string;
+    };
   };
   messagesPage: {
     title: string;
@@ -3000,6 +3005,11 @@ export const en: CoreTranslations = {
     toast: {
       configured: 'configured (demo)',
       installed: 'enabled (demo)',
+    },
+    blast: {
+      impact: 'Takes out {agents} of {total} agents · {calls} calls per 14 days',
+      sla: 'SLAs at risk: {n}',
+      unmapped: 'Unmapped tools: {n}',
     },
   },
   messagesPage: {

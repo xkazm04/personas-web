@@ -35,6 +35,7 @@ import {
   type DirectorPortfolio,
   type DirectorVerdict,
   type HealthCheckSection,
+  MOCK_SLA_BREACHES,
   type ValueRollup,
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
@@ -449,6 +450,19 @@ export async function getSystemHealth(): Promise<{
 }> {
   await delay(300);
   return { sections: MOCK_HEALTH_CHECKS.map((s) => ({ ...s })), diskUsage: { ...MOCK_DISK_USAGE } };
+}
+
+/**
+ * Inputs for the System Health blast-radius panel: who calls which tools, the
+ * SLA breaches, and the fleet size. Demo-only standalone fetcher.
+ */
+export async function getBlastRadiusInputs() {
+  await delay(300);
+  return {
+    usage: MOCK_TOOL_USAGE_BY_PERSONA,
+    breaches: MOCK_SLA_BREACHES.map((b) => ({ id: b.id, persona: b.persona, resolvedAt: b.resolvedAt })),
+    totalPersonas: MOCK_PERSONAS.length,
+  };
 }
 
 /**

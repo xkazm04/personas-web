@@ -1142,6 +1142,11 @@ export const zh: LocaleTranslations = {
       toast: {
         configured: "\u5df2\u914d\u7f6e\uff08\u6f14\u793a\uff09",
         installed: "\u5df2\u542f\u7528\uff08\u6f14\u793a\uff09"
+      },
+      blast: {
+        impact: "\u5f71\u54cd {total} \u4e2a\u4ee3\u7406\u4e2d\u7684 {agents} \u4e2a \u00b7 14 \u5929\u5185 {calls} \u6b21\u8c03\u7528",
+        sla: "\u6709\u98ce\u9669\u7684 SLA\uff1a{n}",
+        unmapped: "\u672a\u6620\u5c04\u7684\u5de5\u5177\uff1a{n}"
       }
     },
     messagesPage: {

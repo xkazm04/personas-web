@@ -1142,6 +1142,11 @@ export const id: LocaleTranslations = {
       toast: {
         configured: "dikonfigurasi (demo)",
         installed: "diaktifkan (demo)"
+      },
+      blast: {
+        impact: "Melumpuhkan {agents} dari {total} agen \u00b7 {calls} panggilan per 14 hari",
+        sla: "SLA berisiko: {n}",
+        unmapped: "Alat tidak terpetakan: {n}"
       }
     },
     messagesPage: {

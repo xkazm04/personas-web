@@ -1142,6 +1142,11 @@ export const vi: LocaleTranslations = {
       toast: {
         configured: "\u0111\u00e3 c\u1ea5u h\u00ecnh (demo)",
         installed: "\u0111\u00e3 b\u1eadt (demo)"
+      },
+      blast: {
+        impact: "\u1ea2nh h\u01b0\u1edfng {agents}/{total} agent \u00b7 {calls} l\u1ea7n g\u1ecdi trong 14 ng\u00e0y",
+        sla: "SLA c\u00f3 nguy c\u01a1: {n}",
+        unmapped: "C\u00f4ng c\u1ee5 ch\u01b0a \u00e1nh x\u1ea1: {n}"
       }
     },
     messagesPage: {

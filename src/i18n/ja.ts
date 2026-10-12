@@ -1142,6 +1142,11 @@ export const ja: LocaleTranslations = {
       toast: {
         configured: "\u8a2d\u5b9a\u3057\u307e\u3057\u305f\uff08\u30c7\u30e2\uff09",
         installed: "\u6709\u52b9\u5316\u3057\u307e\u3057\u305f\uff08\u30c7\u30e2\uff09"
+      },
+      blast: {
+        impact: "{total} \u4ef6\u4e2d {agents} \u4ef6\u306e\u30a8\u30fc\u30b8\u30a7\u30f3\u30c8\u306b\u5f71\u97ff \u00b7 14 \u65e5\u9593\u3067 {calls} \u56de\u306e\u547c\u3073\u51fa\u3057",
+        sla: "\u30ea\u30b9\u30af\u306e\u3042\u308b SLA\uff1a{n}",
+        unmapped: "\u672a\u5272\u308a\u5f53\u3066\u306e\u30c4\u30fc\u30eb\uff1a{n}"
       }
     },
     messagesPage: {

@@ -1142,6 +1142,11 @@ export const de: LocaleTranslations = {
       toast: {
         configured: "konfiguriert (Demo)",
         installed: "aktiviert (Demo)"
+      },
+      blast: {
+        impact: "Legt {agents} von {total} Agents lahm \u00b7 {calls} Aufrufe in 14 Tagen",
+        sla: "Gef\u00e4hrdete SLAs: {n}",
+        unmapped: "Nicht zugeordnete Tools: {n}"
       }
     },
     messagesPage: {

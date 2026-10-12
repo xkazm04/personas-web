@@ -7,6 +7,8 @@ import { ARRIVE } from "@/components/dashboard/arrival/arrive";
 import RelatedIncidentLinks from "@/components/dashboard/RelatedIncidentLinks";
 import { useFocusParam, useScrollIntoViewWhen } from "@/hooks/useFocusParam";
 import { useTranslation } from "@/i18n/useTranslation";
+import { blastRadius, INTEGRATION_PREFIXES, type BlastRadiusInputs } from "@/lib/blastRadius";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { DEMO_THREADS, relatedTo } from "@/lib/incidentThreads";
 import type { HealthCheckItem, HealthCheckSection } from "@/lib/mock-dashboard-data";
 import { sectionAccent, sectionIcon, statusStyle, worstStatus } from "@/lib/healthFormat";
@@ -26,6 +28,7 @@ export function HealthSectionCard({
   settle = false,
   onAction,
   footer,
+  blastInputs,
 }: {
   section: HealthCheckSection;
   /** Cold load: chrome paints, the item list is a delayed geometry-true ghost. */
@@ -34,6 +37,8 @@ export function HealthSectionCard({
   settle?: boolean;
   onAction: (item: HealthCheckItem) => void;
   footer?: React.ReactNode;
+  /** Tool-usage inputs for the impact panel on non-ok integration rows. */
+  blastInputs?: BlastRadiusInputs;
 }) {
   const { t } = useTranslation();
   const labels = t.healthPage;
@@ -71,7 +76,13 @@ export function HealthSectionCard({
           </div>
         ) : (
           section.items.map((item) => (
-            <HealthCheckRow key={item.id} item={item} focused={focusId === item.id} onAction={onAction} />
+            <HealthCheckRow
+              key={item.id}
+              item={item}
+              focused={focusId === item.id}
+              onAction={onAction}
+              blastInputs={blastInputs}
+            />
           ))
         )}
       </div>
@@ -91,16 +102,25 @@ function HealthCheckRow({
   item,
   focused,
   onAction,
+  blastInputs,
 }: {
   item: HealthCheckItem;
   focused: boolean;
   onAction: (item: HealthCheckItem) => void;
+  blastInputs?: BlastRadiusInputs;
 }) {
   const { t } = useTranslation();
   const labels = t.healthPage;
   const ref = useRef<HTMLDivElement>(null);
   useScrollIntoViewWhen(ref, focused);
   const links = relatedTo(DEMO_THREADS, item.id);
+  // A failing or warning integration states its consequences; an ok row (or
+  // one nobody calls) has no radius, so the panel disappears once it settles.
+  const radius =
+    blastInputs && item.status !== "ok"
+      ? blastRadius(item.id, blastInputs.usage, INTEGRATION_PREFIXES, blastInputs.breaches)
+      : null;
+  const blast = labels.blast;
 
   return (
     <div ref={ref} className={`rounded-lg px-2 py-1.5 ${focused ? "ring-2 ring-brand-cyan/50" : ""}`}>
@@ -128,6 +148,34 @@ function HealthCheckRow({
           </button>
         )}
       </div>
+      {radius && radius.personas.length > 0 && blastInputs && (
+        <div className="mt-1.5 space-y-1 pl-[1.125rem] text-sm" data-testid="blast-radius">
+          <p className="text-foreground">
+            {fillTemplate(blast.impact, {
+              agents: radius.personas.length,
+              total: blastInputs.totalPersonas,
+              calls: radius.invocations,
+            })}
+          </p>
+          <ul className="flex flex-wrap gap-1.5">
+            {radius.personas.map((p) => (
+              <li
+                key={p.id}
+                className="flex items-center gap-1.5 rounded-full border border-glass-hover px-2 py-0.5 text-muted"
+              >
+                <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
+                {p.name}
+              </li>
+            ))}
+          </ul>
+          {radius.slaAtRisk.length > 0 && (
+            <p className="text-muted-dark">{fillTemplate(blast.sla, { n: radius.slaAtRisk.length })}</p>
+          )}
+          {radius.unmappedTools > 0 && (
+            <p className="text-muted-dark">{fillTemplate(blast.unmapped, { n: radius.unmappedTools })}</p>
+          )}
+        </div>
+      )}
       {links.length > 0 && (
         <div className="pl-[1.125rem]">
           <RelatedIncidentLinks links={links} />

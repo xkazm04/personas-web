@@ -10,6 +10,8 @@ import EmptyState from "@/components/dashboard/EmptyState";
 import { ARRIVE, arrive, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { useTranslation } from "@/i18n/useTranslation";
 import { HEALTH_SECTION_ORDER, type HealthCheckItem, type HealthCheckSection } from "@/lib/mock-dashboard-data";
+import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
+import { getBlastRadiusInputs } from "@/lib/mockApi";
 import { DiskUsageBar } from "./health-page/DiskUsageBar";
 import { applyHealthResolutions, resolveHealthAction, type HealthResolutions } from "./health-page/healthActions";
 import { HealthSectionCard } from "./health-page/HealthSectionCard";
@@ -26,6 +28,7 @@ export default function HealthPage() {
   const { t } = useTranslation();
   const labels = t.healthPage;
   const { sections: fetched, diskUsage, isLoading, error, retry, liveUnavailable } = useSystemHealth();
+  const { data: blastInputs } = useDemoOnlySWR("health-blast-inputs", getBlastRadiusInputs);
   const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
   const [resolutions, setResolutions] = useState<HealthResolutions>({});
   const sections = useMemo(
@@ -89,6 +92,7 @@ export default function HealthPage() {
                 pending={pending}
                 settle={coldStart && !pending}
                 onAction={handleAction}
+                blastInputs={blastInputs}
                 footer={
                   section.key === "resources" ? (
                     pending ? (

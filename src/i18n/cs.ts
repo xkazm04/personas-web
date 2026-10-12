@@ -1142,6 +1142,11 @@ export const cs: LocaleTranslations = {
       toast: {
         configured: "nakonfigurov\u00e1no (demo)",
         installed: "aktivov\u00e1no (demo)"
+      },
+      blast: {
+        impact: "Vy\u0159ad\u00ed {agents} z {total} agent\u016f \u00b7 {calls} vol\u00e1n\u00ed za 14 dn\u00ed",
+        sla: "SLA v ohro\u017een\u00ed: {n}",
+        unmapped: "Nep\u0159i\u0159azen\u00e9 n\u00e1stroje: {n}"
       }
     },
     messagesPage: {
