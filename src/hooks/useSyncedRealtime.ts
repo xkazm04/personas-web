@@ -18,6 +18,7 @@ import { useNotesStore } from "@/stores/notesStore";
 import { emitNewReview } from "@/lib/review-voice";
 import type { ReviewSeverity } from "@/lib/types";
 import { registerSyncedBindings } from "./syncedRealtimeBindings";
+import { createDemoChannel, demoSeedFromUrl } from "@/lib/demoRealtime";
 
 /**
  * Live dashboard updates (v2). When the desktop sync writer pushes into the
@@ -27,9 +28,10 @@ import { registerSyncedBindings } from "./syncedRealtimeBindings";
  * Realtime applies RLS to INSERT and UPDATE events but not to DELETE (a DELETE
  * carries only the primary key and cannot be filtered), so DELETE is not
  * subscribed (scan d4b90e7a F11); see syncedRealtimeBindings.ts. A delete that
- * arrives alone shows at the next refetch, view mount or refresh. Only active
- * in supabase data-source mode for a signed-in (non-demo) user; otherwise a
- * no-op. Polling stays in place as a backstop.
+ * arrives alone shows at the next refetch, view mount or refresh. Active in
+ * supabase data-source mode for a signed-in user; a demo session instead gets a
+ * seeded scripted channel (src/lib/demoRealtime.ts) through the same bindings;
+ * otherwise a no-op. Polling stays in place as a backstop.
  */
 
 const IS_SUPABASE = process.env.NEXT_PUBLIC_DATA_SOURCE === "supabase";
@@ -112,7 +114,9 @@ export function useSyncedRealtime(): void {
   const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
   useEffect(() => {
-    if (!IS_SUPABASE || !isAuthenticated || isDemo) return;
+    if (!isAuthenticated) return;
+    // Demo rides the same seam with a scripted channel; live needs Supabase.
+    if (!isDemo && !IS_SUPABASE) return;
 
     const timersMap = timers.current;
     const scheduleRefetch = (table: string) => {
@@ -132,10 +136,11 @@ export function useSyncedRealtime(): void {
     const announcedReviews = new Set<string>();
 
     let channel: RealtimeChannel | undefined;
+    let stopDemo: (() => void) | undefined;
     try {
-      const supabase = getSupabase();
-      channel = supabase.channel("synced-changes");
-      registerSyncedBindings(channel, {
+      const demoChannel = isDemo ? createDemoChannel({ seed: demoSeedFromUrl(window.location.search) }) : null;
+      if (!demoChannel) channel = getSupabase().channel("synced-changes");
+      registerSyncedBindings(demoChannel ?? channel!, {
         onTableChange: (table, payload) => {
           scheduleRefetch(table);
           // A new review is an event, not just a list change - surface it so
@@ -165,12 +170,16 @@ export function useSyncedRealtime(): void {
       // Reflect the real socket state in the connection indicator. Previously
       // subscribe() had no status callback, so eventStore.connectionStatus stayed
       // at its "polling" default and the dot was pure decoration in supabase mode.
-      channel.subscribe((status) => {
-        const setStatus = useEventStore.getState().setConnectionStatus;
-        if (status === "SUBSCRIBED") setStatus("connected");
-        else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setStatus("reconnecting");
-        else if (status === "CLOSED") setStatus("polling");
-      });
+      if (demoChannel) {
+        stopDemo = demoChannel.start();
+      } else {
+        channel!.subscribe((status) => {
+          const setStatus = useEventStore.getState().setConnectionStatus;
+          if (status === "SUBSCRIBED") setStatus("connected");
+          else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setStatus("reconnecting");
+          else if (status === "CLOSED") setStatus("polling");
+        });
+      }
     } catch (err) {
       captureExceptionScrubbed(err, { tags: { scope: "useSyncedRealtime" } });
       return;
@@ -179,6 +188,7 @@ export function useSyncedRealtime(): void {
     return () => {
       for (const timer of timersMap.values()) clearTimeout(timer);
       timersMap.clear();
+      stopDemo?.();
       if (channel) {
         try {
           void getSupabase().removeChannel(channel);
