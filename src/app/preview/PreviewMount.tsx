@@ -2,6 +2,9 @@
 
 import { createElement } from "react";
 import Link from "next/link";
+import StageSection from "@/components/StageSection";
+import LazyMount from "@/components/LazyMount";
+import { HOME_STAGE_BY_SLUG } from "@/lib/home-manifest";
 import { PREVIEW_REGISTRY, PREVIEW_SLUGS } from "./registry";
 
 /*
@@ -30,6 +33,7 @@ export function PreviewIndexList() {
 
 export function PreviewSectionMount({ section }: { section: string }) {
   const Section = PREVIEW_REGISTRY.get(section);
+  const stage = HOME_STAGE_BY_SLUG.get(section);
 
   if (!Section) {
     return (
@@ -65,7 +69,21 @@ export function PreviewSectionMount({ section }: { section: string }) {
       {/* createElement, not <Section />: the component is looked up from a
           module-level registry, never created during render, but the compiler
           rule cannot tell a lookup from a construction. */}
-      {createElement(Section)}
+      {stage ? (
+        // In-frame: the stage the home page declares for this slug
+        // (`lib/home-manifest.ts`), so the section is seen as production frames it.
+        <StageSection glow={stage.glow} fromColor={stage.fromColor} toColor={stage.toColor}>
+          {stage.gate ? (
+            <LazyMount stage minHeight={640}>
+              {createElement(Section)}
+            </LazyMount>
+          ) : (
+            createElement(Section)
+          )}
+        </StageSection>
+      ) : (
+        createElement(Section)
+      )}
     </>
   );
 }

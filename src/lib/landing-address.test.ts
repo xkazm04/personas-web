@@ -69,14 +69,14 @@ describe("resolveLandingAddress", () => {
   });
 
   it("guard: every LANDING_SECTIONS id resolves to a wrapper page.tsx actually emits", () => {
-    const page = read("src/app/page.tsx");
+    const page = read("src/lib/home-manifest.ts");
     const emitted = new Set([...page.matchAll(/anchorId:\s*"([^"]+)"/g)].map((m) => m[1]));
     for (const { id } of LANDING_SECTIONS) {
       const address = resolveLandingAddress(`#${id}`);
       expect(address, id).not.toBeNull();
       if (id === "hero") {
         // The hero is SSR'd into an always-present `<div id="hero">`.
-        expect(page).toMatch(/<div id="hero"/);
+        expect(read("src/app/page.tsx")).toMatch(/<div id="hero"/);
         expect(address!.wrapperSelector).toBe("#hero");
       } else {
         expect(emitted.has(id), `page.tsx emits data-scroll-anchor="${id}"`).toBe(true);
@@ -86,7 +86,7 @@ describe("resolveLandingAddress", () => {
   });
 
   it("guard: every page.tsx wrapperId that differs from its anchorId is an alias of it", () => {
-    const page = read("src/app/page.tsx");
+    const page = read("src/lib/home-manifest.ts");
     const pairs = [...page.matchAll(/wrapperId:\s*"([^"]+)",\s*anchorId:\s*"([^"]+)"/g)];
     expect(pairs.length).toBeGreaterThan(0);
     for (const [, wrapperId, anchorId] of pairs) {
@@ -97,7 +97,7 @@ describe("resolveLandingAddress", () => {
   it("get-started's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
     // Two elements with id="get-started" is invalid HTML, and getElementById /
     // a native `#get-started` jump silently pick whichever comes first.
-    const page = read("src/app/page.tsx");
+    const page = read("src/lib/home-manifest.ts");
     const wrapperEmits = [...page.matchAll(/anchorId:\s*"get-started"/g)].length;
     const sectionEmits = walk(path.join(SRC_ROOT, "components", "sections")).reduce(
       (count, file) => count + [...readFileSync(file, "utf8").matchAll(/\bid="get-started"/g)].length,
@@ -117,7 +117,7 @@ describe("resolveLandingAddress", () => {
   it("pricing's id is emitted once: the always-present wrapper holds it, the mounted section does not", () => {
     // Same bug class as get-started: page.tsx's wrapper and the Pricing
     // SectionWrapper both rendered id="pricing".
-    const page = read("src/app/page.tsx");
+    const page = read("src/lib/home-manifest.ts");
     const wrapperEmits = [...page.matchAll(/wrapperId:\s*"pricing"/g)].length;
     const sectionEmits = walk(path.join(SRC_ROOT, "components", "sections")).reduce(
       (n, file) => n + [...readFileSync(file, "utf8").matchAll(/\bid="pricing"/g)].length,

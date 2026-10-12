@@ -1,4 +1,5 @@
 import { LANDING_SECTIONS } from "./constants";
+import { HOME_WRAPPER_ALIASES } from "./home-manifest";
 
 /* ── The home page's address space ──────────────────────────────────
  *
@@ -7,7 +8,7 @@ import { LANDING_SECTIONS } from "./constants";
  * (`<LazyMount>`), so the id does not exist at first paint: the browser's
  * one-shot fragment scroll and Next's layout-router both drop a hash with no
  * DOM node, and the visitor lands at the top of the hero. Each stage therefore
- * carries an always-present wrapper (`data-scroll-anchor` in `app/page.tsx`)
+ * carries an always-present wrapper (`data-scroll-anchor`, rendered from `home-manifest.ts`)
  * that can be scrolled to before the section exists; scrolling there mounts it.
  *
  * This module is the ONE resolver for that address space. Pure — no DOM — so
@@ -31,20 +32,17 @@ export interface LandingAddress {
 }
 
 /** External wrapper ids -> the declared address they stand for. These are the
- *  `wrapperId`s in `app/page.tsx` that differ from their `anchorId`; links in
+ *  `wrapperId`s in `home-manifest.ts` that differ from their `anchorId`; links in
  *  the wild use them (`#download-section`, `#tools`), so both names resolve
- *  forever. The test fails if page.tsx grows a wrapper this table misses. */
+ *  forever. Derived, so it cannot miss one. */
 const ALIASES: Readonly<Record<string, string>> = {
-  "download-section": "download",
+  // Derived from the home manifest's `wrapperId`s; the rest are section ids.
+  ...HOME_WRAPPER_ALIASES,
   // The declared ids name the story (personas/concepts/triggers/private); the
   // sections' own ids stay resolvable because links and the guided tour use them.
-  tools: "personas",
   "use-cases": "personas",
-  playground: "concepts",
   "playground-split": "concepts",
-  pipelines: "triggers",
   "orchestration-hub": "triggers",
-  vision: "private",
   "vision-grid": "private",
 };
 
@@ -56,7 +54,7 @@ const INNER_IDS: Readonly<Record<string, string>> = {
   private: "vision-grid",
 };
 
-/** Addresses whose id the always-present wrapper owns (page.tsx `wrapperId`
+/** Addresses whose id the always-present wrapper owns (manifest `wrapperId`
  *  === `anchorId`). An id is unique per document, so the mounted section
  *  carries none and is found by the heading that labels it instead. */
 const LABELLED_INNER: Readonly<Record<string, string>> = {
