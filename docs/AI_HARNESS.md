@@ -48,7 +48,9 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
     canonical file is missing, when a CLAUDE.md or AGENTS.md under `src/` is not declared, or
     when a pointer stops naming the canonical file or starts stating rules of its own
   - `docs/api/openapi.json`: request and response shapes of every API route, kept joined to
-    the handlers by `src/lib/apiSchemaCoverage.test.ts`
+    the handlers by `src/lib/apiSchemaCoverage.test.ts` (paths, verbs, allowlists) and
+    `src/lib/apiSchemaStatuses.test.ts` (every literal `status: NNN` a handler sends is a
+    documented response on its path)
 - Proof that the gates reject: `src/lib/aiChangeGateMutants.test.ts` applies targeted
   mutations to `scripts/check-ai-change.mjs` (a flipped comparison, a dropped branch, an
   emptied pattern), imports each mutant and runs a suite of known-bad commits against it.
@@ -137,7 +139,8 @@ writing them.
 
 Open owner decision: whether the registry becomes a pinned git submodule or an installed
 package, so that a clone or CI runner gets the same contract at a recorded version. Until
-then, the gap above is expected.
+then, the gap above is expected. The options and a recommendation are in
+[`decisions/2026-10-13-registry-skill-revision-unpinned.md`](decisions/2026-10-13-registry-skill-revision-unpinned.md).
 
 ## Harness deny list
 
@@ -290,5 +293,7 @@ An AI-generated change is mergeable when all of the following hold:
    lane runner. So is a conventional type that misnames the change: a `fix:` whose
    subject opens with an additive verb ("Added", "Introduce", "New") is a `feat:`, and a
    `fix:`/`feat:` touching only docs, tests or CI is `docs:`/`test:`/`ci:` (pinned by
-   `src/lib/commitTypeAdvice.test.ts`). The other rules are pinned by `src/lib/aiChangeGate.test.ts`. To run the
+   `src/lib/commitTypeAdvice.test.ts`). The type is for reviewers scanning `git log`;
+   `compile:changelog` does not read it (it reads the `### Added/Changed/Fixed/Removed`
+   sections of `CHANGELOG.md`). The other rules are pinned by `src/lib/aiChangeGate.test.ts`. To run the
    gate locally: `node scripts/check-ai-change.mjs origin/master..HEAD`.

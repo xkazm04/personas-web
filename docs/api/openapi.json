@@ -3,7 +3,7 @@
   "info": {
     "title": "personas-web API routes",
     "version": "0.1.0",
-    "description": "Request and response shapes of every handler under src/app/api. The gate, secret and abuse control of each route are in docs/threat-model.md (## Routes); this file is the shape an agent needs before writing a caller. src/lib/apiSchemaCoverage.test.ts fails when a route, a method or an allowlist here drifts from the handler."
+    "description": "Request and response shapes of every handler under src/app/api. The gate, secret and abuse control of each route are in docs/threat-model.md (## Routes); this file is the shape an agent needs before writing a caller. src/lib/apiSchemaCoverage.test.ts fails when a route, a method or an allowlist here drifts from the handler; src/lib/apiSchemaStatuses.test.ts fails when a handler sends a literal status its path does not document."
   },
   "servers": [{ "url": "/" }],
   "tags": [
