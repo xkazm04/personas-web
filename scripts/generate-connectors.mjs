@@ -295,7 +295,9 @@ const built = raw
     const appCategory = data.category || "productivity";
     const webCategory = CATEGORY_MAP[appCategory] || "productivity";
     const auth = data.metadata?.auth_type_label || data.metadata?.auth_type || "API key";
-    const summary = data.metadata?.summary || `Integrate ${data.label}.`;
+    // The site's English copy contract bans em dashes (dash.emDash: ban) and the
+    // desktop catalog's summaries use one as a separator, so normalise it here.
+    const summary = (data.metadata?.summary || `Integrate ${data.label}.`).replace(/\s+—\s+/g, ": ");
     // Monogram and sort order key off the desktop label, not the web-only override.
     const monogram = makeMonogram(rawData.label);
     const icon = iconSlugFromUrl(data.name, data.icon_url);
