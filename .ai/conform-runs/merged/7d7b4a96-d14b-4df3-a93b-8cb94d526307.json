@@ -1,0 +1,165 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
+ "subject": "agent-memory",
+ "evaluatedAt": "2026-10-12T19:51:50.567591+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The panel displays mock suggestions held in React state, so it does not implement an agent memory pipeline.",
+   "techniques": [
+    {
+     "technique": "durable-store-failure-posture",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The component initializes mock UI suggestions; it does not parse or write a durable memory store."
+    },
+    {
+     "technique": "memory-governance",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:82 Dismissal removes a mock suggestion from local UI state; it does not approve or commit an agent belief."
+    }
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/healthFormat.ts:30 This module maps infrastructure health sections to presentation styles and reduces check severity, without implementing agent knowledge storage or recall.",
+   "techniques": [
+    {
+     "technique": "coverage-instrumentation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/healthFormat.ts:47 This reducer summarizes supplied infrastructure checks; it does not claim to measure knowledge coverage over tracked scopes."
+    }
+   ]
+  },
+  {
+   "context": "Features Overview & Pricing",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/memory-rings/rings.ts:4 The memory section computes illustrative ring geometry, while the pricing files draw a payment illustration, so neither implements an agent memory pipeline.",
+   "techniques": [
+    {
+     "technique": "episodic-capture",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/memory-rings/rings.ts:30 The complete seed array is hard-coded illustration geometry, not records captured from agent episodes."
+    },
+    {
+     "technique": "recall-injection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/memory-rings/Panel.tsx:49 Selecting a category displays authored example copy; it does not retrieve or inject memories into an agent context."
+    }
+   ]
+  },
+  {
+   "context": "Animation & Motion System",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/hooks/useAutoCycle.ts:29 These modules manage animation timing, viewport visibility, particles, and rendering quality rather than agent task knowledge.",
+   "techniques": [
+    {
+     "technique": "working-memory",
+     "verdict": "not-applicable",
+     "evidence": "src/contexts/QualityContext.tsx:44 The state stores rendering quality, not an agent task's goals, constraints, decisions, or open threads."
+    }
+   ]
+  },
+  {
+   "context": "Split & Pipeline Playground",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/playground-split/data.ts:85 The playground's memory result comes from authored example copy and its execution advances through scripted timings, so it does not capture or recall actual agent memories.",
+   "techniques": [
+    {
+     "technique": "working-memory",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:36 The apparent run stages are scheduled animation beats, not synthesized operative state for an executing agent."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-12T19:51:50.567591+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "durable-store-failure-posture",
+    "memory-governance"
+   ],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-12T19:51:50.567591+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "coverage-instrumentation"
+   ],
+   "deviations": 0,
+   "context": "System Health Panel",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-12T19:51:50.567591+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "episodic-capture",
+    "recall-injection"
+   ],
+   "deviations": 0,
+   "context": "Features Overview & Pricing",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-12T19:51:50.567591+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "working-memory"
+   ],
+   "deviations": 0,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-12T19:51:50.567591+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [
+    "working-memory"
+   ],
+   "deviations": 0,
+   "context": "Split & Pipeline Playground",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

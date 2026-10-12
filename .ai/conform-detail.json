@@ -240,6 +240,96 @@
           "evidence": "src/data/guide/locales/ holds 13 locale directories (getLocalized.ts:1-120) with no test or gate comparing parsed block structure between English and translated bodies"
         }
       ]
+    },
+    "Agent Operations Dashboard/Agents (Personas) Management/agent-memory": {
+      "context": "Agents (Personas) Management",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T19:51:50.567Z",
+      "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
+      "techniques": [
+        {
+          "technique": "durable-store-failure-posture",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The component initializes mock UI suggestions; it does not parse or write a durable memory store."
+        },
+        {
+          "technique": "memory-governance",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:82 Dismissal removes a mock suggestion from local UI state; it does not approve or commit an agent belief."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/System Health Panel/agent-memory": {
+      "context": "System Health Panel",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T19:51:50.567Z",
+      "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
+      "techniques": [
+        {
+          "technique": "coverage-instrumentation",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/healthFormat.ts:47 This reducer summarizes supplied infrastructure checks; it does not claim to measure knowledge coverage over tracked scopes."
+        }
+      ]
+    },
+    "Marketing & Landing/Features Overview & Pricing/agent-memory": {
+      "context": "Features Overview & Pricing",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T19:51:50.567Z",
+      "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
+      "techniques": [
+        {
+          "technique": "episodic-capture",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/memory-rings/rings.ts:30 The complete seed array is hard-coded illustration geometry, not records captured from agent episodes."
+        },
+        {
+          "technique": "recall-injection",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/memory-rings/Panel.tsx:49 Selecting a category displays authored example copy; it does not retrieve or inject memories into an agent context."
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/agent-memory": {
+      "context": "Animation & Motion System",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T19:51:50.567Z",
+      "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
+      "techniques": [
+        {
+          "technique": "working-memory",
+          "verdict": "not-applicable",
+          "evidence": "src/contexts/QualityContext.tsx:44 The state stores rendering quality, not an agent task's goals, constraints, decisions, or open threads."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/agent-memory": {
+      "context": "Split & Pipeline Playground",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T19:51:50.567Z",
+      "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
+      "techniques": [
+        {
+          "technique": "working-memory",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:36 The apparent run stages are scheduled animation beats, not synthesized operative state for an executing agent."
+        }
+      ]
     }
   }
 }

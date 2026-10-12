@@ -1122,7 +1122,11 @@
           "revision": 46,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/memory-rings/rings.ts:4 The memory section computes illustrative ring geometry, while the pricing files draw a payment illustration, so neither implements an agent memory pipeline.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
+          "evaluatedRevision": 47
         },
         {
           "subject": "narrative-scroll-surface",
@@ -2699,7 +2703,11 @@
           "revision": 46,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:85 The playground's memory result comes from authored example copy and its execution advances through scripted timings, so it does not capture or recall actual agent memories.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
+          "evaluatedRevision": 47
         },
         {
           "subject": "agent-instruction-files",
@@ -5559,7 +5567,11 @@
           "revision": 46,
           "changedAt": "2026-09-29",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The panel displays mock suggestions held in React state, so it does not implement an agent memory pipeline.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
+          "evaluatedRevision": 47
         },
         {
           "subject": "client-state",
@@ -6600,7 +6612,11 @@
           "revision": 46,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/healthFormat.ts:30 This module maps infrastructure health sections to presentation styles and reduces check severity, without implementing agent knowledge storage or recall.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
+          "evaluatedRevision": 47
         },
         {
           "subject": "health-checks",
@@ -6975,7 +6991,11 @@
           "revision": 46,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/hooks/useAutoCycle.ts:29 These modules manage animation timing, viewport visibility, particles, and rendering quality rather than agent task knowledge.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
+          "evaluatedRevision": 47
         }
       ],
       "governance": "governed"
