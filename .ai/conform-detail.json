@@ -466,6 +466,115 @@
         }
       ],
       "registryProposal": "The golden path excludes vendor function-calling, in-process plugins, and model-free RPC, but it does not say whether a public catalog that only names MCP is inside the subject. These files name MCP and do not speak the wire."
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/test-harness": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T22:16:07.605Z",
+      "techniques": [
+        {
+          "technique": "suite-partitioning",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:106 Module contains no test suites or test runner partition configurations."
+        }
+      ],
+      "withdrawn": {
+        "worker": "d1e716ad-27ee-420b-b417-ff6f2f40a9bb",
+        "state": "not-applicable",
+        "at": "2026-10-12T22:18:31.906765+00:00",
+        "reason": "reviewer (sonnet): Each not-applicable rests on an incidental anchor (data.ts:106 TRIGGERS, lab/data.ts:6 TABS, QualityContext.tsx:42 useState) that shows nothing about test infrastructure, and the 'zero occurrences' grep claim is contradicted: orchestration-hub and feature-sections/lab hold vitest suites (data.test.t"
+      }
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/test-harness": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T22:16:07.605Z",
+      "techniques": [
+        {
+          "technique": "suite-partitioning",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/data.ts:6 Context contains no test harness or test partition setup."
+        }
+      ],
+      "withdrawn": {
+        "worker": "d1e716ad-27ee-420b-b417-ff6f2f40a9bb",
+        "state": "not-applicable",
+        "at": "2026-10-12T22:18:31.906765+00:00",
+        "reason": "reviewer (sonnet): Each not-applicable rests on an incidental anchor (data.ts:106 TRIGGERS, lab/data.ts:6 TABS, QualityContext.tsx:42 useState) that shows nothing about test infrastructure, and the 'zero occurrences' grep claim is contradicted: orchestration-hub and feature-sections/lab hold vitest suites (data.test.t"
+      }
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/test-harness": {
+      "context": "Animation & Motion System",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T22:16:07.605Z",
+      "techniques": [
+        {
+          "technique": "suite-partitioning",
+          "verdict": "not-applicable",
+          "evidence": "src/contexts/QualityContext.tsx:42 Context provides runtime animation scheduling without test harness capabilities."
+        }
+      ],
+      "withdrawn": {
+        "worker": "d1e716ad-27ee-420b-b417-ff6f2f40a9bb",
+        "state": "not-applicable",
+        "at": "2026-10-12T22:18:31.906765+00:00",
+        "reason": "reviewer (sonnet): Each not-applicable rests on an incidental anchor (data.ts:106 TRIGGERS, lab/data.ts:6 TABS, QualityContext.tsx:42 useState) that shows nothing about test infrastructure, and the 'zero occurrences' grep claim is contradicted: orchestration-hub and feature-sections/lab hold vitest suites (data.test.t"
+      }
+    },
+    "Interactive Demos & Playground/Section Preview & Demo Harness/test-harness": {
+      "context": "Section Preview & Demo Harness",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T22:16:07.605Z",
+      "worker": "d1e716ad-27ee-420b-b417-ff6f2f40a9bb",
+      "techniques": [
+        {
+          "technique": "pin-the-call-not-the-name",
+          "verdict": "deviation",
+          "evidence": "src/app/preview/registry.test.ts:70 The test parses raw source text with regular expressions without normalizing CRLF/LF line endings and asserts absence via bare string matching on line 82."
+        },
+        {
+          "technique": "unreached-decisions-pin-nothing",
+          "verdict": "conformant",
+          "evidence": "src/app/preview/derive.ts:11 Decouples registry derivation logic from Next.js runtime dependencies so tests exercise the actual pure logic without synthetic mocks."
+        },
+        {
+          "technique": "suite-partitioning",
+          "verdict": "conformant",
+          "evidence": "src/app/preview/registry.test.ts:3 Partitions unit tests into Vitest runner files distinct from the Playwright end-to-end suite."
+        },
+        {
+          "technique": "fixture-economics",
+          "verdict": "conformant",
+          "evidence": "src/app/preview/registry.test.ts:36 Constructs lightweight in-memory tables directly in test cases to avoid loading the full UI component graph."
+        },
+        {
+          "technique": "approval-snapshots-with-guarded-update",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/registry.test.ts:64 Derives expected sets dynamically from live exports rather than maintaining static approval snapshots."
+        },
+        {
+          "technique": "live-app-harness",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/page.tsx:11 The preview route is an internal developer visual sandbox gated out of production rather than an end-to-end live app harness."
+        },
+        {
+          "technique": "recorded-interaction-fixtures",
+          "verdict": "not-applicable",
+          "evidence": "src/app/demo/page.tsx:14 The demo route configures in-memory client state for browser visitors rather than recorded network test fixtures."
+        }
+      ]
     }
   }
 }

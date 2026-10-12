@@ -1,0 +1,140 @@
+{
+  "schema": "conform-run/1",
+  "worker": "d1e716ad-27ee-420b-b417-ff6f2f40a9bb",
+  "subject": "test-harness",
+  "evaluatedAt": "2026-10-12T22:16:07.605484+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [
+    {
+      "context": "Section Preview & Demo Harness",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/app/preview/registry.test.ts:70 The preview registry unit test inspects raw source code files using regular expressions without line-ending normalization and uses bare negative string patterns vulnerable to comments, deviating from pin-the-call-not-the-name.",
+      "techniques": [
+        {
+          "technique": "pin-the-call-not-the-name",
+          "verdict": "deviation",
+          "evidence": "src/app/preview/registry.test.ts:70 The test parses raw source text with regular expressions without normalizing CRLF/LF line endings and asserts absence via bare string matching on line 82."
+        },
+        {
+          "technique": "unreached-decisions-pin-nothing",
+          "verdict": "conformant",
+          "evidence": "src/app/preview/derive.ts:11 Decouples registry derivation logic from Next.js runtime dependencies so tests exercise the actual pure logic without synthetic mocks."
+        },
+        {
+          "technique": "suite-partitioning",
+          "verdict": "conformant",
+          "evidence": "src/app/preview/registry.test.ts:3 Partitions unit tests into Vitest runner files distinct from the Playwright end-to-end suite."
+        },
+        {
+          "technique": "fixture-economics",
+          "verdict": "conformant",
+          "evidence": "src/app/preview/registry.test.ts:36 Constructs lightweight in-memory tables directly in test cases to avoid loading the full UI component graph."
+        },
+        {
+          "technique": "approval-snapshots-with-guarded-update",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/registry.test.ts:64 Derives expected sets dynamically from live exports rather than maintaining static approval snapshots."
+        },
+        {
+          "technique": "live-app-harness",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/page.tsx:11 The preview route is an internal developer visual sandbox gated out of production rather than an end-to-end live app harness."
+        },
+        {
+          "technique": "recorded-interaction-fixtures",
+          "verdict": "not-applicable",
+          "evidence": "src/app/demo/page.tsx:14 The demo route configures in-memory client state for browser visitors rather than recorded network test fixtures."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "test-harness",
+      "context": "Build Config & E2E Tests",
+      "reason": "evidence leans on TypeScript/Next.js, which is not a tracked file"
+    },
+    {
+      "subject": "test-harness",
+      "context": "Orchestration & Platform Visualizers",
+      "reason": "withdrawn after review: reviewer (sonnet): Each not-applicable rests on an incidental anchor (data.ts:106 TRIGGERS, lab/data.ts:6 TABS, QualityContext.tsx:42 useState) that shows nothing about test infrastructure, and the 'zero occurrences' grep claim is contradicted: orchestration-hub and feature-sections/lab hold vitest suites (data.test.t"
+    },
+    {
+      "subject": "test-harness",
+      "context": "Agent Lab & Plugin Ecosystem",
+      "reason": "withdrawn after review: reviewer (sonnet): Each not-applicable rests on an incidental anchor (data.ts:106 TRIGGERS, lab/data.ts:6 TABS, QualityContext.tsx:42 useState) that shows nothing about test infrastructure, and the 'zero occurrences' grep claim is contradicted: orchestration-hub and feature-sections/lab hold vitest suites (data.test.t"
+    },
+    {
+      "subject": "test-harness",
+      "context": "Animation & Motion System",
+      "reason": "withdrawn after review: reviewer (sonnet): Each not-applicable rests on an incidental anchor (data.ts:106 TRIGGERS, lab/data.ts:6 TABS, QualityContext.tsx:42 useState) that shows nothing about test infrastructure, and the 'zero occurrences' grep claim is contradicted: orchestration-hub and feature-sections/lab hold vitest suites (data.test.t"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-12T22:16:07.605484+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-harness"
+      ],
+      "techniques": [
+        "suite-partitioning"
+      ],
+      "deviations": 0,
+      "context": "Orchestration & Platform Visualizers",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-12T22:16:07.605484+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-harness"
+      ],
+      "techniques": [
+        "suite-partitioning"
+      ],
+      "deviations": 0,
+      "context": "Agent Lab & Plugin Ecosystem",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-12T22:16:07.605484+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-harness"
+      ],
+      "techniques": [
+        "suite-partitioning"
+      ],
+      "deviations": 0,
+      "context": "Animation & Motion System",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-12T22:16:07.605484+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-harness"
+      ],
+      "techniques": [
+        "approval-snapshots-with-guarded-update",
+        "fixture-economics",
+        "live-app-harness",
+        "pin-the-call-not-the-name",
+        "recorded-interaction-fixtures",
+        "suite-partitioning",
+        "unreached-decisions-pin-nothing"
+      ],
+      "deviations": 1,
+      "context": "Section Preview & Demo Harness",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}

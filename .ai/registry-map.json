@@ -2308,7 +2308,11 @@
           "revision": 24,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/preview/registry.test.ts:70 The preview registry unit test inspects raw source code files using regular expressions without line-ending normalization and uses bare negative string patterns vulnerable to comments, deviating from pin-the-call-not-the-name.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:5521806124d93882",
+          "evaluatedRevision": 26
         },
         {
           "subject": "eval-harness",
