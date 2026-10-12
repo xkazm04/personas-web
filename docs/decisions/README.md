@@ -2,6 +2,8 @@
 
 A decision record captures one technical choice that has already settled: the constraint that forced it, what was chosen, which alternatives lost and why, and what the choice now ties or blocks. It exists so a later reader does not have to reconstruct the reasoning from commit messages. Records are not edited to match later code; a reversal gets a new record.
 
+Security records are joined into one picture in [`../threat-model.md`](../threat-model.md): every API route, the secrets it may touch, and the record that governs it. A new security record should also update that page.
+
 Newest first:
 
 - [2026-10-09 ACCEPTED RISK: production script-src keeps 'unsafe-inline'; the nonce step waits for a deployment](2026-10-09-accepted-risk-unsafe-inline-script-src.md): operator answered ask `f95629a2` with "not now"; an injected inline script can use the paired phone's signing key while a tab is open; limited by the eval refusal (`411aac3f`), no raw HTML in dashboard components, and the desktop's envelope lifetime check; not live-verified.

@@ -14,9 +14,8 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
 - Tests and gates every change (human or agent) must pass:
   - unit: `vitest.config.ts`, `src/**/*.test.ts` (`npm run test:unit`)
   - end-to-end: `e2e/*.spec.ts` (`npm run test:e2e`; nightly in CI)
-  - repo invariants: `scripts/check-*.mjs` and `scripts/i18n/` (i18n coverage, encoding,
-    ledger, guide content, sync rows, bundle budget), each wired as an `npm run check:*`
-    script
+  - repo invariants: `scripts/check-*.mjs` and `scripts/i18n/`, each wired as an
+    `npm run check:*` script and listed under "Gates" below
 - Prompt & agent library:
   - `.claude/CLAUDE.md`: the binding repo law every agent session loads
   - `.ai/manifest.yaml` `skills:`: the shared registry skills this repo uses (linked
@@ -29,6 +28,92 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
     `.claude/architect/config.md`, `.claude/scan-sweep/config.md`)
   - `docs/features/INDEX.md`: one doc per submodule, with key files and known gotchas
   - `docs/decisions/`: recorded decisions and accepted risks (see its `README.md`)
+  - `docs/threat-model.md`: every API route with its caller gate, the secret it may
+    touch and its governing decision, plus a checklist for a new route
+
+## Gates
+
+Every `check:*` script in `package.json` (and the `copy:check` copy gate), and where it
+runs. Run the pre-push ones yourself before handing work back; the hook runs them too,
+but finding a failure there costs a round trip. `src/lib/guidanceScripts.test.ts` keeps
+this table honest. It fails `test:unit` when a gate is missing from this table, when a row
+names a script that does not exist, or when the "Runs in" column disagrees with
+`.github/workflows/ci.yml` or `scripts/install-git-hooks.mjs`. That test also fails when any
+`npm run <name>` in `.claude/CLAUDE.md`, this file, `SECURITY.md`, `README.md`, CI or the
+hook names a script `package.json` does not define.
+
+| Gate | Runs in | What it holds |
+|---|---|---|
+| `check:i18n-coverage` | CI, pre-push | every `en.ts` key present in all 13 locales |
+| `check:i18n-encoding` | CI, pre-push | mojibake ratchet against `scripts/i18n-encoding-baseline.json` |
+| `check:i18n-ledger` | CI | per-key hash pins in `docs/i18n/ui-ledger.json`; fix with `npm run i18n:ledger` |
+| `check:guide-content` | CI, pre-push | every listed guide topic has content (no 404 with SEO tags) |
+| `check:guide-coverage` | CI | report-only guide drift against the desktop repo |
+| `check:sync-rows` | CI | Supabase row interfaces match `scripts/setup-sync-db.sql` |
+| `check:bundle` | CI | per-route first-load JS against `bundle-budget.json` (after `npm run build`) |
+| `copy:check` | pre-push | English copy gate (native-copy, registry link; skipped loudly when unlinked) |
+| `check:guide-translations` | manual | guide translation drift; Windows only, by decision (CRLF pins) |
+| `check:connectors` | manual | `src/data/connectors.ts` matches the desktop connector catalog |
+| `check:use-case-corpus` | manual | `src/data/use-case-corpus.json` matches a fresh compile at the pinned desktop commit |
+| `check:changelog` | manual | compiled changelog is up to date |
+| `check:route-coverage` | manual | share of static app routes exercised by Playwright |
+| `check:field` | manual | real-user p75 LCP/INP/CLS against `field-budget.json` (needs a Sentry export) |
+
+The manual gates read a sibling `../personas` checkout or an exported snapshot that no
+runner has, which is why they stay out of CI.
+
+## Skills
+
+- **Project-owned** (`.claude/skills/icon-gen`, `.claude/skills/ui-variant-prototype`): real
+  directories, committed here. Their tools call external models (Leonardo, Gemini) and
+  `sharp`, which is not a dependency of this repo, so nothing exercises their output in CI.
+- **Registry-owned** (everything in `.ai/manifest.yaml` `skills:`): links into
+  `../ai-registry`. Golden examples for these belong with the skill in the registry, so
+  every consuming repo inherits them. That is a registry follow-up and is not done here.
+- Open gap: no skill has golden tests yet. The first step is to split `icon-gen`'s pure
+  helpers (`parseArgs`, `hexToRgb`, `buildIco`, the tile SVGs) out of
+  `tools/icon-pipeline.mjs`, which imports `sharp` and runs its CLI on import, and pin them
+  with a unit test. Unattended lanes cannot write under `.claude/`, so this needs a person
+  or an attended session.
+
+## What a fresh clone gets
+
+An agent session on the owner's machine loads more than one on a fresh clone or in CI:
+
+| Piece | Owner's machine | Fresh clone / CI |
+|---|---|---|
+| `.claude/CLAUDE.md`, `.claude/settings.json` | yes | yes |
+| Project-owned skills (`icon-gen`, `ui-variant-prototype`) and overlays (`.claude/<skill>/config.md`) | yes | yes |
+| Registry skills (`conform`, `architect`, `native-copy`, ... per `.ai/manifest.yaml`) | linked | **missing** (gitignored links) |
+| Registry knowledge rules (`.claude/rules/ai-registry-*.md`) | linked | **missing** (gitignored links) |
+| `copy:check` pre-push step | runs | skipped, with a warning |
+
+To get the full contract, check out `github:xkazm04/ai-registry` next to this repo
+(`../ai-registry`, per `registry.local` in `.ai/manifest.yaml`) and run
+`node ../ai-registry/scripts/link-registry.mjs`. Add `--check` to verify the links without
+writing them.
+
+Open owner decision: whether the registry becomes a pinned git submodule or an installed
+package, so that a clone or CI runner gets the same contract at a recorded version. Until
+then, the gap above is expected.
+
+## Provenance
+
+Agent and lane commits are identified today by their `Co-Authored-By` trailer and, for
+Ascent lanes, `Ascent-Resolves:` trailers. Both are claims: nothing verifies them
+cryptographically, and anyone can write them.
+
+Policy: **flag now, fail later**. Verified provenance needs a signing key that belongs to
+the lane, not to the owner:
+
+1. Generate a lane-only SSH key and register it on GitHub as a *signing* key.
+2. Have the lane commit with `gpg.format=ssh`, `user.signingkey=<lane key>` and
+   `commit.gpgsign=true`.
+3. Commit an `allowed_signers` file mapping the lane identity to that key, so
+   `git log --show-signature` (`%G?` = `G`) can tell lane commits from human ones offline.
+
+Only once lane commits are signed should an unsigned commit carrying an agent trailer
+fail a check. Nothing here is configured yet, and the steps are the owner's to take.
 
 ## Review gate for AI changes
 An AI-generated change is mergeable when all of the following hold:
@@ -40,4 +125,6 @@ An AI-generated change is mergeable when all of the following hold:
 3. It follows the conventions in `.claude/CLAUDE.md`: every user-facing string is translated
    in all 14 locales, motion is gated, and the commit message uses the
    `<pass-id>/<area>: ...` format with `Why` / `Risk` / `Verified` lines.
-4. The agent did not push. The owner reads the log and pushes (CLAUDE.md "Git policy").
+4. A new or changed API route has its row in `docs/threat-model.md` (enforced by
+   `src/lib/threatModelCoverage.test.ts`).
+5. The agent did not push. The owner reads the log and pushes (CLAUDE.md "Git policy").

@@ -23,5 +23,9 @@ What does run today:
 - `src/lib/sentry-pii.ts`: scrubs PII from every Sentry event.
 - The `service_role` key boundary (`.claude/CLAUDE.md` §6): the key may only be read inside
   modules that begin with `import "server-only"`.
+- `docs/threat-model.md`: one page joining the API routes, the `TEAM_API_KEY` and
+  `service_role` boundaries, paired-device trust and the accepted risks, with a checklist for
+  a new route. `src/lib/threatModelCoverage.test.ts` fails `test:unit` when a route under
+  `src/app/api/` has no row there.
 - `docs/decisions/`: accepted security risks, e.g.
   `2026-10-09-accepted-risk-unsafe-inline-script-src.md`.
