@@ -25,7 +25,7 @@ Memory works best when agents have consistent, focused tasks. An agent that alwa
   "memory-categories": `
 ## Memory Categories
 
-Memories are organized into six categories, each serving a different purpose. This structure helps your agent recall the right kind of knowledge at the right time — like chapters in a reference book.
+Memories are organized into six categories, each serving a different purpose. This structure helps your agent recall the right kind of knowledge at the right time, like chapters in a reference book.
 
 Understanding these categories helps you review and manage your agent's knowledge more effectively. Each category tells you not just *what* the agent knows, but *what kind* of knowledge it is.
 
@@ -56,7 +56,7 @@ Hard limits such as rate limits, compliance rules, or deadlines. Example: "Never
 When an agent creates a memory, it automatically categorizes it based on the content. Facts are objective knowledge. Preferences capture what people like. Instructions are explicit rules. Context supplies background. Learned memories come from reflecting on past runs. Constraints mark hard limits.
 
 :::tip
-Pay special attention to Instructions and Constraints during your reviews. These memories define the rules your agent must follow — they're often the most valuable.
+Pay special attention to Instructions and Constraints during your reviews. These memories define the rules your agent must follow and are often the most valuable.
 :::
   `,
 
@@ -89,39 +89,39 @@ If an agent keeps making the same mistake, check if the relevant memory exists a
   "searching-agent-memories": `
 ## Searching Agent Memories
 
-As your agents accumulate knowledge, being able to search their memories becomes essential. Type a keyword or phrase and instantly see every related memory across all your agents. It's like searching your email — fast, simple, and you can filter by category, importance, or date.
+As your agents accumulate knowledge, being able to search their memories becomes essential. Type a keyword or phrase and instantly see every related memory across all your agents. It's like searching your email: fast, simple, and you can filter by category, importance, or date.
 
 Searching helps you understand what your agents know, verify they've learned correctly, and find specific information quickly.
 
 ### Key Points
 
-- **Full-text search** — find memories by any keyword or phrase they contain
-- **Filter by category** — narrow results to facts, preferences, instructions, context, learned insights, or constraints
-- **Filter by importance** — show only high-priority or low-priority memories
-- **Cross-agent search** — search across all your agents at once or focus on one
+- **Full-text search**: find memories by any keyword or phrase they contain
+- **Filter by category**: narrow results to facts, preferences, instructions, context, learned insights, or constraints
+- **Filter by importance**: show only high-priority or low-priority memories
+- **Cross-agent search**: search across all your agents at once or focus on one
 
 ### How It Works
 
 Open the \`Memories\` section and type your search query in the search bar. Results appear instantly with the matching text highlighted. Use the filter buttons to narrow down by category, importance level, date range, or specific agent. Click any result to see the full memory with all its context.
 
 :::tip
-Search for a topic before creating a manual memory. Your agent might already know what you're about to teach it — in which case, you can simply update the existing memory.
+Search for a topic before creating a manual memory. Your agent might already know what you're about to teach it. In that case, you can simply update the existing memory.
 :::
   `,
 
   "creating-memories-manually": `
 ## Creating Memories Manually
 
-Sometimes you want your agent to know something before it learns on its own — like briefing a new employee on day one. Manual memories let you teach your agents specific facts, preferences, or rules directly, giving them a head start on knowledge they'd otherwise have to discover through experience.
+Sometimes you want your agent to know something before it learns on its own, like briefing a new employee on day one. Manual memories let you teach your agents specific facts, preferences, or rules directly, giving them a head start on knowledge they'd otherwise have to discover through experience.
 
 This is especially useful for company-specific information, personal preferences, or critical rules that should never be learned through trial and error.
 
 :::steps
-1. **Open the Memories section** — click \`Memories\` in the sidebar and then \`Add Memory\`
-2. **Choose the category** — select fact, preference, instruction, context, learned, or constraint
-3. **Write the memory content** — describe the knowledge in plain language
-4. **Set the importance level** — assign a score from 1 (routine) to 5 (critical)
-5. **Assign to an agent** — pick a specific agent or make the memory available to all agents
+1. **Open the Memories section**: click \`Memories\` in the sidebar and then \`Add Memory\`
+2. **Choose the category**: select fact, preference, instruction, context, learned, or constraint
+3. **Write the memory content**: describe the knowledge in plain language
+4. **Set the importance level**: assign a score from 1 (routine) to 5 (critical)
+5. **Assign to an agent**: pick a specific agent or make the memory available to all agents
 :::
 
 ### How It Works
