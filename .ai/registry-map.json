@@ -1856,7 +1856,11 @@
           "revision": 30,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:21 The listed lab files are one on-screen version ledger for chat, arena, and eval labels, with no tool door and no plugin or protocol client.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
+          "evaluatedRevision": 31
         },
         {
           "subject": "agent-instruction-files",
@@ -2373,7 +2377,11 @@
           "revision": 30,
           "changedAt": "2026-09-25",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/flow-composer/components/FlowCTA.tsx:11 The composer calls its own graph a website, so this context is not a tool-protocol host or server.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
+          "evaluatedRevision": 31
         },
         {
           "subject": "wizard-flows",
@@ -2457,7 +2465,11 @@
           "revision": 30,
           "changedAt": "2026-09-25",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub mirrors desktop trigger kinds for a landing visual and does not host, spawn, or dispatch a tool protocol.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
+          "evaluatedRevision": 31
         },
         {
           "subject": "prompt-assembly",
@@ -2639,7 +2651,11 @@
           "revision": 30,
           "changedAt": "2026-09-25",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:15 This section is a filmed landing demo whose prompt pane is a script of sample scenes, so it never speaks a tool protocol.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
+          "evaluatedRevision": 31
         },
         {
           "subject": "quality-gates",
@@ -4993,7 +5009,11 @@
           "revision": 30,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/connections-catalog/index.tsx:129 This page tells visitors that connections are set up in the desktop app, so the catalog does not mint tokens, spawn servers, or dispatch tools.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
+          "evaluatedRevision": 31
         },
         {
           "subject": "connector-catalog",
