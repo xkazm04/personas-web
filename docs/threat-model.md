@@ -5,6 +5,12 @@ agent can check a new route against. Each decision record still owns its own
 reasoning; this page owns the map. `src/lib/threatModelCoverage.test.ts` fails
 `test:unit` when a `route.ts` under `src/app/api/` has no row in the route table
 below, so a new route cannot ship without someone deciding where it sits.
+`src/lib/threatModelAuthGate.test.ts` holds the rows to the code. Each listed method on
+a `verifySession` row must refuse an anonymous caller and a forged token with 401, and
+fail closed with 503 when Supabase Auth is unconfigured, and the team key must never
+leave the server on any of those calls. The Methods, Caller gate and Secret cells must
+also match what each `route.ts` exports, calls and reads, and no route may read
+`TEAM_API_KEY` without `verifySession`.
 
 ## Assets
 

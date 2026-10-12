@@ -128,3 +128,21 @@ An AI-generated change is mergeable when all of the following hold:
 4. A new or changed API route has its row in `docs/threat-model.md` (enforced by
    `src/lib/threatModelCoverage.test.ts`).
 5. The agent did not push. The owner reads the log and pushes (CLAUDE.md "Git policy").
+6. The `ai-change` job in `.github/workflows/ai-change-gate.yml` is green. On every PR
+   to master it runs `scripts/check-ai-change.mjs` over the PR's commits. It only checks
+   the ones that carry an agent trailer (`Co-Authored-By: Claude`, `Ascent-Resolves:`)
+   and fails on mistakes agents make and people rarely do:
+   - **Hallucinated anchors.** A line the commit added to a `.md` file contains a
+     backticked repo path, `path:line` or relative link that is not tracked, or that
+     points past the end of the file.
+   - **Protected paths.** A committed `.env*` other than `.env.example`, or a write under
+     `.claude/`.
+   - **Scope creep.** A new API `route.ts` or a new `.sql` file. Both add the backend or
+     data-layer surface that `.ai/manifest.yaml` `scope.does_not` keeps out of this repo
+     until the owner decides otherwise.
+
+   A commit line `AI-Gate-Override: <reason>` waives the path and scope checks for that
+   commit, and the job prints the reason. Anchors are never waived. The CLAUDE.md
+   commit format is reported as advice only, because lane commits are written by the
+   lane runner. The rules are pinned by `src/lib/aiChangeGate.test.ts`. To run the
+   gate locally: `node scripts/check-ai-change.mjs origin/master..HEAD`.
