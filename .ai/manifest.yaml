@@ -55,3 +55,11 @@ scope:
     - software-engineering/engineering-assessment
   out_of_scope_subjects:
   directions_ledger: .ai/directions/ledger.jsonl
+
+# Hermetic checks the CI `checks` job (.github/workflows/ci.yml) runs on every push and PR.
+capabilities:
+  typecheck: { command: "npm run typecheck" }
+  lint: { command: "npm run lint" }
+  unit: { command: "npm run test:unit" }
+controls:
+  ciHardPass: [typecheck, lint, unit]
