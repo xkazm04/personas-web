@@ -1,6 +1,7 @@
 # AI process & harness: personas-web
 
 Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships.
+New here? Start at `docs/README.md`, which gives the reading order for every doc.
 
 ## Components
 - [x] Evals / golden tests for AI-generated output. The site calls no model at runtime;
@@ -205,6 +206,25 @@ Two commands the policy forbids are not caught by any pattern yet. They are reco
   from running it.
 
 Closing either one is an edit to `.claude/settings.json`, which belongs to the owner.
+
+### Push-default drill
+
+The never-push line in `.claude/CLAUDE.md` exists because a measurement showed that an
+unattended harness session pushes and opens a draft PR when the guidance says nothing.
+That is harness behaviour, and a harness release can change it silently.
+`src/lib/harnessPushDrill.test.ts` reads the date the Git policy paragraph cites and fails
+`test:unit` once it is older than the window below.
+
+Re-measure window: 120 days.
+
+To re-measure, and also on any harness upgrade:
+
+1. In a scratch clone with a throwaway remote, remove the Git policy line and run one
+   unattended session that ends in a commit. Record whether it pushed or opened a PR,
+   and the harness version.
+2. Put the line back and run the same session. Record whether it stopped at the commit.
+3. The owner updates the cited date in `.claude/CLAUDE.md`. If step 2 pushed, the
+   guidance no longer holds: add a deny pattern for a plain `git push` instead.
 
 ## Provenance
 

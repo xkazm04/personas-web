@@ -128,7 +128,7 @@ src/
   styles/         global.css + themes.css
 e2e/              Playwright specs
 eslint-rules/     Custom ESLint rules (no-low-text-opacity, require-animation-gating)
-docs/             Internal notes, OSS release passes, harness learnings
+docs/             Internal notes and harness docs; start at docs/README.md
 audit-reports/    Phase audits from release passes
 public/           Static assets
 ```
