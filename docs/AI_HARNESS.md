@@ -37,6 +37,10 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
     Claude Code loads when it works in those folders. Each names the threat-model sections
     and the `.claude/CLAUDE.md` convention that govern the folder and restates no rule;
     `src/lib/scopedGuidance.test.ts` fails when a path or section they cite disappears
+  - `scripts/CLAUDE.md`: the same kind of pointer for the gate and check scripts (the Gates
+    table, the mutant specs, owner review). `src/lib/scriptsPointer.test.ts` holds its paths
+    and the sections of this file it cites. `.github/` has no pointer yet: a file there is
+    gate surface that an unattended lane may not add, so that one is the owner's step
   - `docs/degraded-dependencies.md`: what a visitor sees and what an operator checks when
     Supabase or the orchestrator is missing or down. `src/lib/degradationDrill.test.ts`
     runs the outage paths against the real route handlers and fails when a row of the
@@ -54,7 +58,12 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
 - Proof that the gates reject: `src/lib/aiChangeGateMutants.test.ts` applies targeted
   mutations to `scripts/check-ai-change.mjs` (a flipped comparison, a dropped branch, an
   emptied pattern), imports each mutant and runs a suite of known-bad commits against it.
-  Every mutant must be killed; the kill ratio is a ratchet at 1 and may not go down
+  Every mutant must be killed; the kill ratio is a ratchet at 1 and may not go down.
+  `src/lib/agentReworkMutants.test.ts` does the same for the rework meter
+  (`scripts/report-agent-rework.mjs`): dropped noise filter, inverted file overlap, an
+  additive `fix:` read as a repair, a widened or shortened follow-up window, and each budget
+  comparison. A gate that judges agent commits is held to the same bar: every mutant
+  killed, and a survivor gets a new case in the suite, never a lower ratio
 
 ## Gates
 
@@ -167,6 +176,17 @@ under `src/components/dashboard/` or `src/app/dashboard/` imports the transport 
 fetches the orchestrator proxy routes directly, calls the mirror without an `isDemo`
 check, or reads the orchestrator URL outside its allowlist (which may only shrink).
 The service_role boundary is held by `src/lib/serviceRoleServerOnly.test.ts`.
+
+The layer directions are held by `src/lib/moduleBoundaries.test.ts`, which reads every
+import under `src/` and fails `test:unit`, naming the edge, when:
+
+- a module outside `src/app/` imports a route module (`src/app/` is the leaf)
+- `src/lib/` imports from `src/components/` (lib is the shared base)
+- an API route imports UI, a store, a hook, a context or the dashboard mock data
+- a shipped locale imports the English-only `src/i18n/pending/` copy
+
+Each rule carries an exact list of known exceptions (three guide/template helpers in
+`src/lib/` and one type-only roadmap import), so the list can only shrink.
 
 ## Harness deny list
 
