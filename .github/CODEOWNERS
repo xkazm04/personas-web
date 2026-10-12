@@ -1,0 +1,35 @@
+# Review routing. Agent commits are marked by their trailers; these rules make sure
+# that a PR touching a path the agent gate guards, or a server-only module, asks
+# the owner for review. GitHub only BLOCKS on it once branch protection turns on
+# "Require review from Code Owners" for master (see docs/AI_HARNESS.md "Provenance").
+#
+# Supported forms (src/lib/codeownersCoverage.test.ts holds the file to them):
+#   /dir/        a directory, anchored at the repo root
+#   /file        one file, anchored at the repo root
+#   *.ext        every file with that extension
+# Every anchored path must exist, and every path the gate protects must be owned.
+
+# Repo law, the agent contract, CI and the gate scripts
+/.claude/ @xkazm04
+/.ai/ @xkazm04
+/.github/ @xkazm04
+/scripts/ @xkazm04
+
+# Gate and build configuration
+/package.json @xkazm04
+/tsconfig.json @xkazm04
+/eslint.config.mjs @xkazm04
+/vitest.config.ts @xkazm04
+/playwright.config.ts @xkazm04
+/bundle-budget.json @xkazm04
+/field-budget.json @xkazm04
+
+# Trust boundary: server-only modules, API routes and the data layer
+/src/lib/server/ @xkazm04
+/src/lib/supabase-admin.ts @xkazm04
+/src/app/api/ @xkazm04
+*.sql @xkazm04
+
+# Recorded decisions and the threat model that governs the routes
+/docs/threat-model.md @xkazm04
+/docs/decisions/ @xkazm04

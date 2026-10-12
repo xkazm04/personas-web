@@ -154,6 +154,20 @@ the lane, not to the owner:
 Only once lane commits are signed should an unsigned commit carrying an agent trailer
 fail a check. Nothing here is configured yet, and the steps are the owner's to take.
 
+### Who reviews what
+
+The trailers say an agent wrote a commit; `.github/CODEOWNERS` says who has to read it. It
+routes the paths the agent gate guards (`.claude/`, new API routes, `.sql` files), the
+guidance files declared in `.ai/manifest.yaml`, every `import "server-only"` module, the
+gate scripts, CI and the build and gate configs to the owner. `src/lib/codeownersCoverage.test.ts`
+fails `test:unit` when a path `scripts/check-ai-change.mjs` refuses or treats as out of scope
+has no owner, when a server-only module lands outside an owned directory, or when a rule
+names a path that no longer exists.
+
+Today the file only *requests* the owner's review. To make it block loop-lane PRs on those
+paths, the owner turns on "Require review from Code Owners" in the branch protection for
+`master`. That is a GitHub setting, not a file, so no lane can set it.
+
 ### How agent commits fared
 
 The trailers say who wrote a commit; `scripts/report-agent-rework.mjs` reads them back to
