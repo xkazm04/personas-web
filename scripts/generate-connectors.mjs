@@ -19,7 +19,8 @@
 // else the sibling checkout ../personas.
 // Existing data:   src/data/connectors.ts (working tree)
 
-import { readFileSync, readdirSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, readdirSync, existsSync } from "fs";
+import { writeFileAtomic } from "./atomic-write.mjs";
 import { fileURLToPath } from "url";
 import { dirname, join, resolve } from "path";
 
@@ -414,7 +415,7 @@ if (CHECK) {
   process.exit(0);
 }
 
-if (WRITE) writeFileSync(DATA_FILE, output, "utf-8");
+if (WRITE) writeFileAtomic(DATA_FILE, output, "utf-8");
 else process.stdout.write(output);
 
 // ── debug summary on stderr ──────────────────────────────────────────

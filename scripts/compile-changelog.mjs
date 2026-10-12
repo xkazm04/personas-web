@@ -23,6 +23,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { writeFileAtomic } from "./atomic-write.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..");
@@ -156,7 +157,7 @@ function main() {
     console.error("compile-changelog: DRIFT between the desktop CHANGELOG.md and src/data/changelog.generated.ts; run `npm run compile:changelog` and commit it.");
     process.exit(1);
   }
-  fs.writeFileSync(OUT_PATH, out);
+  writeFileAtomic(OUT_PATH, out);
   const rs = parseChangelog(src);
   for (const r of rs) console.log(`  ${r.version}: ${r.total} public items, kept ${r.changes.length}`);
   console.log(`compile-changelog: wrote ${path.relative(REPO_ROOT, OUT_PATH)} from ${desktop.path}`);

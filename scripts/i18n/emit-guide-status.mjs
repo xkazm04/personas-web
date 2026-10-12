@@ -52,6 +52,7 @@ import {
   EXIT,
 } from "./guide-drift.mjs";
 import { extractBodies, normaliseEol, parseTopicsSource, topicHashInput } from "./guide-source.mjs";
+import { writeFileAtomic } from "../atomic-write.mjs";
 
 export const STATUS_MODULE = "src/data/guide/translation-status.ts";
 const CONTENT_DIR = "src/data/guide/content";
@@ -222,7 +223,7 @@ if (isMain) {
     locales: GUIDE_LOCALES,
     current: fs.existsSync(target) ? fs.readFileSync(target, "utf8") : null,
     check: process.argv.includes("--check"),
-    write: (text) => fs.writeFileSync(target, text, "utf8"),
+    write: (text) => writeFileAtomic(target, text, "utf8"),
   });
   if (r.stdout) console.log(r.stdout);
   if (r.stderr) console.error(r.stderr);
