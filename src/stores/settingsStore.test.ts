@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { MOCK_MODEL_PROVIDERS } from "@/lib/mock-dashboard-data";
 
-import { countAllowedProviders, isProviderAllowed } from "./settingsStore";
+import { countAllowedProviders, countOpenAlertsForPolicy, isProviderAllowed } from "./settingsStore";
 
 /**
  * The BYOM allow-list is edited in Settings as an override map over each
@@ -42,5 +42,22 @@ describe("provider allow-list", () => {
       MOCK_MODEL_PROVIDERS.filter((p) => p.allowed).length,
     );
     expect(countAllowedProviders(MOCK_MODEL_PROVIDERS, allOff)).toBe(0);
+  });
+});
+
+describe("alert severity policy", () => {
+  const issues = [
+    { status: "open", severity: "critical" },
+    { status: "open", severity: "low" },
+    { status: "resolved", severity: "critical" },
+  ];
+  const policy = { critical: true, high: true, medium: false, low: false };
+
+  it("counts only open issues at enabled severities", () => {
+    expect(countOpenAlertsForPolicy(issues, policy)).toBe(1);
+  });
+
+  it("switching critical off drops it from the count", () => {
+    expect(countOpenAlertsForPolicy(issues, { ...policy, critical: false })).toBe(0);
   });
 });

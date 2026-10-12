@@ -53,6 +53,20 @@ export function countAllowedProviders(
   return providers.filter((p) => isProviderAllowed(p, overrides)).length;
 }
 
+/**
+ * Open alerts the Settings severity policy lets through: only issues whose
+ * severity is switched on count. Unknown severities are kept (never hide an
+ * alert the policy cannot classify).
+ */
+export function countOpenAlertsForPolicy(
+  issues: ReadonlyArray<{ status: string; severity: string }>,
+  policy: AlertSeverity,
+): number {
+  return issues.filter(
+    (i) => i.status === "open" && (policy[i.severity as keyof AlertSeverity] ?? true),
+  ).length;
+}
+
 function persistSnapshot(): void {
   const { alertSeverity, weeklyDigest, providerOverrides } = useSettingsStore.getState();
   try {

@@ -1,27 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { api } from "@/lib/api";
 import { MOCK_HEALTH_ISSUES } from "@/lib/mock-dashboard-data";
 import { useAuthStore } from "@/stores/authStore";
-import { isNotServed, openAlertValue } from "../mission/readings";
+import { countOpenAlertsForPolicy, useSettingsStore } from "@/stores/settingsStore";
+import { isNotServed } from "../mission/readings";
+
+type AlertIssue = { status: string; severity: string };
 
 /**
  * Open-alert count. Demo → the mock health-issue fixture count (unchanged).
  * Real/supabase mode → the count of synced healing issues with status "open".
  * `null` means unknown: the first real read is in flight, or it failed (the
  * desktop plane answers 501 not_on_desktop, which is expected and not reported).
+ * Only severities switched on in Settings (`settingsStore.alertSeverity`) count.
  * Shared by the home Mission-Control cockpit (Status Ticker).
  */
 export function useOpenAlertCount(): number | null {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
 
-  const [count, setCount] = useState<number | null>(() =>
-    useMock ? MOCK_HEALTH_ISSUES.filter((issue) => issue.status === "open").length : null,
-  );
+  const policy = useSettingsStore((s) => s.alertSeverity);
+  const [issues, setIssues] = useState<AlertIssue[] | null>(() => (useMock ? MOCK_HEALTH_ISSUES : null));
 
   useEffect(() => {
     if (useMock) return;
@@ -30,7 +33,7 @@ export function useOpenAlertCount(): number | null {
       try {
         const issues = await api.getObservabilityHealthIssues();
         if (cancelled) return;
-        setCount(openAlertValue(issues, false));
+        setIssues(issues);
       } catch (err) {
         if (cancelled) return;
         if (!isNotServed(err)) captureExceptionScrubbed(err, { tags: { scope: "useOpenAlertCount" } });
@@ -41,5 +44,5 @@ export function useOpenAlertCount(): number | null {
     };
   }, [useMock]);
 
-  return count;
+  return useMemo(() => (issues === null ? null : countOpenAlertsForPolicy(issues, policy)), [issues, policy]);
 }
