@@ -117,6 +117,21 @@ the lane, not to the owner:
 Only once lane commits are signed should an unsigned commit carrying an agent trailer
 fail a check. Nothing here is configured yet, and the steps are the owner's to take.
 
+### How agent commits fared
+
+The trailers say who wrote a commit; `scripts/report-agent-rework.mjs` reads them back to
+say how it fared. Run `node scripts/report-agent-rework.mjs` (last 300 commits) or pass a
+range and `--window N`. It prints, per lane (`ascent`, `skill:<name>`, `agent-other`) and
+for `human` commits as the baseline, the share of commits that one of the next N commits
+(default 10) reworked: a repairing `fix:` or a revert touching the same file, or a second
+commit resolving the same `Ascent-Resolves:` id. An additive `fix:` ("fix: Added ...", the
+lane's habit) is not counted as a repair. `--list` prints each pairing so it can be checked.
+
+It is a meter, not a gate: it always exits 0 and has no `package.json` script. Read it as a
+comparison between lanes. A lane whose rate sits well above the human baseline is a lane
+whose work needs a closer review, or tasks of that kind should stay with a person. The
+helpers are pinned by `src/lib/agentRework.test.ts`.
+
 ## Review gate for AI changes
 An AI-generated change is mergeable when all of the following hold:
 1. The `checks` job in `.github/workflows/ci.yml` is green on the PR. It runs typecheck,

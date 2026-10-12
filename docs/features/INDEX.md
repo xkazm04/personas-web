@@ -14,6 +14,20 @@ coarser groupings in `context-map.json`). It serves two audiences at once:
 > files it lists, and obey the conventions it calls out. This complements `context-map.json`
 > (which maps files → contexts) by adding the *what / how / why* per submodule.
 
+## Keeping the map complete
+
+Two checks keep this index in step with the source tree:
+
+- `src/lib/featureDocsCoverage.test.ts` (runs in `test:unit`) fails when an INDEX link is
+  broken, a doc is not indexed, a dashboard view has no row, or a page route under `src/app`
+  is named by no doc.
+- `scripts/check-feature-index.mjs` goes one level down. Each first-level directory under
+  `src/components/sections`, `src/components/feature-sections` and
+  `src/components/dashboard/views` is a module, and it counts as indexed when a doc here
+  backticks its path or a file inside it. Run `node scripts/check-feature-index.mjs --list`
+  to see the share and the unindexed modules. It is a meter (exit 0), so when you add a
+  module, name its directory in the doc that covers it.
+
 ## How docs are organized
 
 Docs are grouped into folders that mirror the app. A context in `context-map.json` that
