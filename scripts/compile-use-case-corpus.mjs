@@ -127,7 +127,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const corpus = compile();
   const text = JSON.stringify(corpus, null, 2) + "\n";
   if (process.argv.includes("--check")) {
-    const have = existsSync(OUT) ? readFileSync(OUT, "utf8") : "";
+    const have = existsSync(OUT) ? readFileSync(OUT, "utf8").split("\r\n").join("\n") : "";
     if (have !== text) {
       console.error("src/data/use-case-corpus.json is stale. Run: node scripts/compile-use-case-corpus.mjs");
       process.exit(1);
