@@ -1,0 +1,114 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+ "subject": "quality-gates",
+ "evaluatedAt": "2026-10-12T23:10:58.577486+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Animation & Motion System",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "eslint-rules/require-animation-gating.js:67 The animation checker keys frame-loop detection on a bare callee name, allowing the same unguarded capability through member access or an alias.",
+   "techniques": [
+    {
+     "technique": "renameable-detector-keys",
+     "verdict": "deviation",
+     "evidence": "eslint-rules/require-animation-gating.js:67 A read-only callback probe produced one finding for direct unguarded requestAnimationFrame and zero for unguarded globalThis.requestAnimationFrame; the capability remains while its detector key changes."
+    },
+    {
+     "technique": "unparseable-form-is-a-finding",
+     "verdict": "deviation",
+     "evidence": "eslint-rules/require-animation-gating.js:98 An unguarded member-expression frame call never enters triggerNodes, and this branch returns without an unsupported-form finding."
+    }
+   ]
+  },
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "scripts/i18n/check-guide-translations.mjs:21 Translation freshness has a refusing checker, but searches found only a manual package command and no automatic hook or CI invocation, leaving this obligation unbacked.",
+   "techniques": [
+    {
+     "technique": "prose-rule-drift",
+     "verdict": "deviation",
+     "evidence": "scripts/i18n/check-guide-translations.mjs:21 The CLI can refuse stale translations, but package.json exposes it without --strict, the installed pre-push body does not invoke it, and CI explicitly excludes it; a remembered manual command is the technique's unbacked-checker case."
+    }
+   ]
+  },
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "scripts/check-guide-content.mjs:60 Catalogue consistency reads textual property spellings instead of exported content keys, so a computed orphan key can exist at runtime while remaining invisible to the orphan check.",
+   "techniques": [
+    {
+     "technique": "match-the-resolved-artifact",
+     "verdict": "deviation",
+     "evidence": "scripts/check-guide-content.mjs:60 A read-only in-memory probe showed ['orphan-topic']: `body` exporting orphan-topic while this exact matcher returned no keys; importing bodies later only checks grammar and does not reconcile that missed key."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "quality-gates",
+   "context": "Split & Pipeline Playground",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "quality-gates",
+   "context": "Guide Content Blocks & Markdown",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-12T23:10:58.577486+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [
+    "renameable-detector-keys",
+    "unparseable-form-is-a-finding"
+   ],
+   "deviations": 1,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-12T23:10:58.577486+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [
+    "prose-rule-drift"
+   ],
+   "deviations": 1,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-12T23:10:58.577486+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [
+    "match-the-resolved-artifact"
+   ],
+   "deviations": 1,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

@@ -3302,7 +3302,11 @@
           "revision": 52,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "scripts/i18n/check-guide-translations.mjs:21 Translation freshness has a refusing checker, but searches found only a manual package command and no automatic hook or CI invocation, leaving this obligation unbacked.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:6e635d76a310aa4b",
+          "evaluatedRevision": 53
         },
         {
           "subject": "docs-content-model",
@@ -3372,7 +3376,11 @@
           "revision": 52,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:60 Catalogue consistency reads textual property spellings instead of exported content keys, so a computed orphan key can exist at runtime while remaining invisible to the orphan check.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:6e635d76a310aa4b",
+          "evaluatedRevision": 53
         },
         {
           "subject": "companion-identity",
@@ -6983,7 +6991,11 @@
           "revision": 52,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "eslint-rules/require-animation-gating.js:67 The animation checker keys frame-loop detection on a bare callee name, allowing the same unguarded capability through member access or an alias.",
+          "evaluatedAt": "2026-10-12",
+          "evaluatedAgainst": "sha256-b2:6e635d76a310aa4b",
+          "evaluatedRevision": 53
         },
         {
           "subject": "mcp-tools",

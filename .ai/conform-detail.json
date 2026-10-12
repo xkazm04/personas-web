@@ -575,6 +575,59 @@
           "evidence": "src/app/demo/page.tsx:14 The demo route configures in-memory client state for browser visitors rather than recorded network test fixtures."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/quality-gates": {
+      "context": "Animation & Motion System",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T23:10:58.577Z",
+      "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+      "techniques": [
+        {
+          "technique": "renameable-detector-keys",
+          "verdict": "deviation",
+          "evidence": "eslint-rules/require-animation-gating.js:67 A read-only callback probe produced one finding for direct unguarded requestAnimationFrame and zero for unguarded globalThis.requestAnimationFrame; the capability remains while its detector key changes."
+        },
+        {
+          "technique": "unparseable-form-is-a-finding",
+          "verdict": "deviation",
+          "evidence": "eslint-rules/require-animation-gating.js:98 An unguarded member-expression frame call never enters triggerNodes, and this branch returns without an unsupported-form finding."
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/quality-gates": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T23:10:58.577Z",
+      "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+      "techniques": [
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "deviation",
+          "evidence": "scripts/i18n/check-guide-translations.mjs:21 The CLI can refuse stale translations, but package.json exposes it without --strict, the installed pre-push body does not invoke it, and CI explicitly excludes it; a remembered manual command is the technique's unbacked-checker case."
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Guide Data, Content & Search Index/quality-gates": {
+      "context": "Guide Data, Content & Search Index",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-12",
+      "evaluatedTs": "2026-10-12T23:10:58.577Z",
+      "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+      "techniques": [
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:60 A read-only in-memory probe showed ['orphan-topic']: `body` exporting orphan-topic while this exact matcher returned no keys; importing bodies later only checks grammar and does not reconcile that missed key."
+        }
+      ]
     }
   }
 }
