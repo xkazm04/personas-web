@@ -10,7 +10,7 @@ This is still **dormant in production**: the language switcher is gated (`LANGUA
 
 ## How it works
 - The guide topic page renders English on the server (no locale signal in URL/cookie today), passing the English `content` body into `TopicView` as a prop. The English SSR output is unchanged by the whole-unit policy.
-- On the client, `TopicView` reads `language` from `useI18nStore`. When it is not `en`, a `useEffect` calls `resolveTopicUnit(language, topic.id, englishUnit, { prefer })` and swaps the resolved unit into local state (`TopicView.tsx:79-89`). A render-time prev-state reset (`TopicView.tsx:55-61`) restores English and clears `prefer` on any locale/topic change, satisfying React 19's no-setState-in-effect rule.
+- On the client, `TopicView` reads `language` from `useI18nStore`. When it is not `en`, a `useEffect` calls `resolveTopicUnit(language, topic.id, englishUnit, { prefer })` and swaps the resolved unit into local state (`TopicView.tsx:89-101`). A render-time prev-state reset (`TopicView.tsx:65-71`) restores English and clears `prefer` on any locale/topic change, satisfying React 19's no-setState-in-effect rule.
 - `resolveTopicUnit` (`getLocalized.ts:125`) returns `{ title, description, body, unit, status, alternate }`:
   | Situation | `unit` | `status` | `alternate` |
   | --- | --- | --- | --- |

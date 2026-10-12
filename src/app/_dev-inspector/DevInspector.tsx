@@ -19,53 +19,13 @@
  * are no `data-loc` attributes and the HUD says how to enable source mapping.
  */
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 import { buildChain, dedupeChain, pickDefaultIndex, type LocEntry } from "./devLocate";
-import { HighlightBox, InspectorHud, NavHint, SourceLabel, Z } from "./devInspectorUi";
-
-async function copyText(text: string): Promise<boolean> {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch {
-    /* fall through to the legacy path */
-  }
-  try {
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position = "fixed";
-    ta.style.opacity = "0";
-    document.body.appendChild(ta);
-    ta.select();
-    const ok = document.execCommand("copy");
-    document.body.removeChild(ta);
-    return ok;
-  } catch {
-    return false;
-  }
-}
-
-// SSR-safe "am I on the client" detection without a setState-in-effect
-// mounted flag (React 19 purity rules): server snapshot is false, client
-// snapshot is true, and nothing ever notifies — so no re-render churn.
-const emptySubscribe = () => () => {};
-const useIsClient = () =>
-  useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false,
-  );
-
-function isTypingTarget(target: EventTarget | null): boolean {
-  const el = target as HTMLElement | null;
-  if (!el) return false;
-  const tag = el.tagName;
-  return tag === "INPUT" || tag === "TEXTAREA" || el.isContentEditable;
-}
+import { copyText, isTypingTarget, useIsClient } from "./devInspectorDom";
+import { Z } from "./devInspectorStyle";
+import { HighlightBox, InspectorHud, NavHint, SourceLabel } from "./devInspectorUi";
 
 type Mode = "off" | "nav" | "armed";
 

@@ -118,6 +118,24 @@ Open owner decision: whether the registry becomes a pinned git submodule or an i
 package, so that a clone or CI runner gets the same contract at a recorded version. Until
 then, the gap above is expected.
 
+## Harness deny list
+
+The git policy in `.claude/CLAUDE.md` says agents cannot bypass hooks or force-push,
+because `.claude/settings.json` `permissions.deny` blocks them. `src/lib/harnessDeny.test.ts`
+replays the forbidden commands against those patterns: `--no-verify` anywhere, and
+`--force`, `--force-with-lease` and `-f` on `git push`. It also checks that a few ordinary
+commands stay allowed and that the policy paragraph still names the settings file. If an
+edit to the settings file lifts the guard, `test:unit` goes red.
+
+Two commands the policy forbids are not caught by any pattern yet. They are recorded as
+`it.todo` in that spec:
+
+- `git push -f` with nothing after the flag. The pattern needs a character after `-f`.
+- A plain `git push`. The policy says never push, but only the guidance stops an agent
+  from running it.
+
+Closing either one is an edit to `.claude/settings.json`, which belongs to the owner.
+
 ## Provenance
 
 Agent and lane commits are identified today by their `Co-Authored-By` trailer and, for
@@ -155,7 +173,14 @@ than 10 points over the human rate (the human comparison counts only when the hu
 also has 10 commits or more). The budget flags; it does not pause. A flagged lane gets a
 closer review of its recent work, or tasks of that kind go back to a person. `--strict`
 turns any flag into exit 1, for a loop runner that wants to pause on it. Nothing wires
-that in today. The limits were chosen before anyone ran the meter against this history.
+that in today.
+
+On every PR to `master`, `.github/workflows/agent-rework.yml` runs
+`node scripts/report-agent-rework.mjs --list` over the default window (the last 300 commits
+on the PR head; a PR-only range is too short for a 10-commit follow-up window) and turns
+each `FLAG` line into a warning annotation on the PR. It annotates and stays green. It
+does not block, because the meter is a heuristic. `src/lib/agentReworkCi.test.ts` pins
+that wiring. The limits were chosen before anyone ran the meter against this history.
 Run it once, and if the human baseline or a healthy lane sits close to a limit, move that
 limit in the same commit and record the measured rates here. `budgetFlags` is pinned by
 `src/lib/agentReworkBudget.test.ts`.
