@@ -2,7 +2,7 @@
 /**
  * How agent commits fared, not just who wrote them.
  *
- *   node scripts/report-agent-rework.mjs [<range>] [--window N] [--list]
+ *   node scripts/report-agent-rework.mjs [<range>] [--window N] [--list] [--strict]
  *
  * The trailers (`Co-Authored-By: Claude`, `Ascent-Resolves:`) mark which
  * commits an agent wrote. This reads them back to answer the next question:
@@ -13,8 +13,10 @@
  * skill, other agent work) next to the same rate for human commits, which is
  * the baseline that makes the agent number mean anything.
  *
- * Default range is the last 300 non-merge commits on HEAD. Report-only: the
- * exit code is 0 unless git itself fails or the arguments are wrong. It is a
+ * Default range is the last 300 non-merge commits on HEAD. A lane over the
+ * rework budget (`REWORK_BUDGET`) gets a `FLAG` line. Flag, not gate: the exit
+ * code is 0 unless git itself fails or the arguments are wrong, and `--strict`
+ * (exit 1 on any flag) is there for a runner that wants to pause the lane. It is a
  * heuristic (a `fix:` can repair something older than the window, or touch the
  * same file for an unrelated reason), so read it as a trend between lanes, not
  * as a verdict on one commit; `--list` prints each reworked commit and the
@@ -142,6 +144,43 @@ export function reworkReport(commits, { window = 10, skills = [] } = {}) {
 }
 
 /**
+ * The rework budget. A lane is over budget when its rate passes an absolute
+ * ceiling, or the human baseline by more than a margin. The human comparison
+ * only applies when the human row is itself big enough to mean anything, and
+ * no lane is judged on fewer than `minCommits` commits: one reworked commit
+ * out of two is noise, not a trend.
+ */
+export const REWORK_BUDGET = Object.freeze({ maxRate: 0.25, overHuman: 0.1, minCommits: 10 });
+
+/**
+ * Agent lanes over the rework budget, with the reason each one tripped.
+ *
+ * @param {{ lane: string, commits: number, reworked: number, rate: number }[]} rows
+ * @param {{ maxRate?: number, overHuman?: number, minCommits?: number }} [budget]
+ * @returns {{ lane: string, rate: number, reason: string }[]}
+ */
+export function budgetFlags(rows, budget = {}) {
+  const { maxRate, overHuman, minCommits } = { ...REWORK_BUDGET, ...budget };
+  const pct = (/** @type {number} */ r) => `${(r * 100).toFixed(1)}%`;
+  const human = rows.find((r) => r.lane === "human");
+  const baseline = human && human.commits >= minCommits ? human.rate : null;
+  const out = [];
+  for (const r of rows) {
+    if (r.lane === "human" || r.commits < minCommits) continue;
+    if (r.rate > maxRate) {
+      out.push({ lane: r.lane, rate: r.rate, reason: `${pct(r.rate)} is over the ${pct(maxRate)} ceiling` });
+    } else if (baseline !== null && r.rate > baseline + overHuman) {
+      out.push({
+        lane: r.lane,
+        rate: r.rate,
+        reason: `${pct(r.rate)} is more than ${pct(overHuman)} over the human ${pct(baseline)}`,
+      });
+    }
+  }
+  return out;
+}
+
+/**
  * Skill names this repo knows: `.ai/manifest.yaml` `skills:` plus the
  * project-owned directories under `.claude/skills/`.
  *
@@ -160,7 +199,7 @@ function main() {
   const windowAt = args.indexOf("--window");
   const window = windowAt >= 0 ? Number(args[windowAt + 1]) : 10;
   if (!Number.isInteger(window) || window < 1) {
-    console.error("usage: node scripts/report-agent-rework.mjs [<range>] [--window N] [--list]");
+    console.error("usage: node scripts/report-agent-rework.mjs [<range>] [--window N] [--list] [--strict]");
     process.exit(2);
   }
   const range = args.find((a, i) => !a.startsWith("--") && (windowAt < 0 || i !== windowAt + 1));
@@ -188,6 +227,9 @@ function main() {
   if (args.includes("--list")) {
     for (const p of pairs) console.log(`  ${p.sha.slice(0, 8)} (${p.lane}) reworked by ${p.by.slice(0, 8)}`);
   }
+  const flags = budgetFlags(rows);
+  for (const f of flags) console.log(`  FLAG ${f.lane}: ${f.reason}`);
+  if (flags.length && args.includes("--strict")) process.exit(1);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

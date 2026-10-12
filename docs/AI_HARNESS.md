@@ -30,6 +30,10 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
   - `docs/decisions/`: recorded decisions and accepted risks (see its `README.md`)
   - `docs/threat-model.md`: every API route with its caller gate, the secret it may
     touch and its governing decision, plus a checklist for a new route
+  - `src/app/api/CLAUDE.md`, `src/lib/server/CLAUDE.md`: directory-scoped pointers that
+    Claude Code loads when it works in those folders. Each names the threat-model sections
+    and the `.claude/CLAUDE.md` convention that govern the folder and restates no rule;
+    `src/lib/scopedGuidance.test.ts` fails when a path or section they cite disappears
   - `docs/conventions-enforcement.md`: for each numbered convention in `.claude/CLAUDE.md`,
     the lint rule, spec or gate that catches a break, and what is left to the agent
 
@@ -127,10 +131,19 @@ for `human` commits as the baseline, the share of commits that one of the next N
 commit resolving the same `Ascent-Resolves:` id. An additive `fix:` ("fix: Added ...", the
 lane's habit) is not counted as a repair. `--list` prints each pairing so it can be checked.
 
-It is a meter, not a gate: it always exits 0 and has no `package.json` script. Read it as a
-comparison between lanes. A lane whose rate sits well above the human baseline is a lane
-whose work needs a closer review, or tasks of that kind should stay with a person. The
-helpers are pinned by `src/lib/agentRework.test.ts`.
+It is a meter, not a gate: it exits 0 and has no `package.json` script. Read it as a
+comparison between lanes. The helpers are pinned by `src/lib/agentRework.test.ts`.
+
+**Rework budget.** `REWORK_BUDGET` in the script sets the line a lane may not cross. A lane
+with at least 10 commits in range gets a `FLAG` line when its rate is over 25%, or more
+than 10 points over the human rate (the human comparison counts only when the human row
+also has 10 commits or more). The budget flags; it does not pause. A flagged lane gets a
+closer review of its recent work, or tasks of that kind go back to a person. `--strict`
+turns any flag into exit 1, for a loop runner that wants to pause on it. Nothing wires
+that in today. The limits were chosen before anyone ran the meter against this history.
+Run it once, and if the human baseline or a healthy lane sits close to a limit, move that
+limit in the same commit and record the measured rates here. `budgetFlags` is pinned by
+`src/lib/agentReworkBudget.test.ts`.
 
 ## Review gate for AI changes
 An AI-generated change is mergeable when all of the following hold:
