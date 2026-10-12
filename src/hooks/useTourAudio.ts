@@ -87,8 +87,7 @@ export function useTourAudio({
   next,
   clockRef,
 }: UseTourAudioArgs): AnalyserNode | null {
-  const ownAudioRef = useRef<HTMLAudioElement | null>(null);
-  const audioRef = clockRef ?? ownAudioRef;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const ctxRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   // Latest volume, read when creating each clip so a newly-created audio
@@ -108,6 +107,7 @@ export function useTourAudio({
     // dragging the slider doesn't tear down and re-create the audio element.
     audio.volume = volumeRef.current;
     audioRef.current = audio;
+    if (clockRef) clockRef.current = audio;
 
     // Lazy Web Audio graph (source → analyser → destination) so the companion
     // can read the voice envelope. Wrapped in try/catch: if Web Audio is
@@ -200,8 +200,9 @@ export function useTourAudio({
       if (fallbackId) window.clearTimeout(fallbackId);
       if (advanceId) window.clearTimeout(advanceId);
       if (audioRef.current === audio) audioRef.current = null;
+      if (clockRef && clockRef.current === audio) clockRef.current = null;
     };
-  }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps, audioRef]);
+  }, [active, atIntro, atBridge, introSrc, stepIndex, next, steps, clockRef]);
 
   useEffect(() => {
     const audio = audioRef.current;
