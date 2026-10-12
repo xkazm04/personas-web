@@ -3,9 +3,10 @@
 Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships.
 
 ## Components
-- [ ] Evals / golden tests for AI-generated output. Not applicable as model evals:
-      this site calls no model at runtime. AI-authored *changes* are instead held to
-      the deterministic suite listed under "Where things live".
+- [x] Evals / golden tests for AI-generated output. The site calls no model at runtime;
+      the AI output this repo owns is its skills' output, held by the contract and golden
+      specs under "Skills" below. AI-authored *changes* are held to the deterministic
+      suite listed under "Where things live".
 - [x] A versioned prompt & agent library the team reuses
 - [x] Agent runbooks for recurring tasks
 - [x] A review gate / Definition-of-Done for AI changes
@@ -13,7 +14,9 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
 ## Where things live
 - Tests and gates every change (human or agent) must pass:
   - unit: `vitest.config.ts`, `src/**/*.test.ts` (`npm run test:unit`)
-  - end-to-end: `e2e/*.spec.ts` (`npm run test:e2e`; nightly in CI)
+  - end-to-end: `e2e/*.spec.ts` (`npm run test:e2e`; full suite nightly in CI, and a
+    smoke tier on every PR by `.github/workflows/e2e-smoke.yml`, see
+    `docs/testing/e2e-smoke-tier.md`)
   - repo invariants: `scripts/check-*.mjs` and `scripts/i18n/`, each wired as an
     `npm run check:*` script and listed under "Gates" below
 - Prompt & agent library:
@@ -82,7 +85,21 @@ runner has, which is why they stay out of CI.
 
 - **Project-owned** (`.claude/skills/icon-gen`, `.claude/skills/ui-variant-prototype`): real
   directories, committed here. Their tools call external models (Leonardo, Gemini) and
-  `sharp`, which is not a dependency of this repo, so nothing exercises their output in CI.
+  `sharp`, which is not a dependency of this repo, so CI cannot run them. What CI holds
+  instead is the prompt-to-code contract, in `src/lib/skillContracts.test.ts` (part of
+  `test:unit`, next to the governance specs). It fails when:
+  - a flag, sub-command or default that `SKILL.md` documents is no longer read by the tool
+  - a tool exists that the prompt does not document, or the reverse
+  - the Leonardo model or the default Gemini model changes (pinned)
+  - the styles or the Targets sizes drift
+  - an anti-noise clause or a scoring criterion drops out of icon-gen's prompts
+  - the brand palette the prompt quotes no longer matches `src/styles/tokens.css`
+  - a shared component, animation helper or token that ui-variant-prototype tells the
+    agent to reuse is renamed away
+
+  A new project-owned skill directory without a block in that spec fails it.
+- `icon-gen` would hurt most if it silently got worse, because its output ships as the
+  site's icons. That is why it is covered twice: by its contract and by its exported output.
 - **Registry-owned** (everything in `.ai/manifest.yaml` `skills:`): links into
   `../ai-registry`. Golden examples for these belong with the skill in the registry, so
   every consuming repo inherits them. That is a registry follow-up and is not done here.
