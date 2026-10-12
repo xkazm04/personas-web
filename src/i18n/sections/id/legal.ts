@@ -1,11 +1,6 @@
 import type { Translations } from "../../en";
 
-export const id: Pick<Translations, "legalPage" | "cookiePolicy" | "privacyPolicy"> = {
-    legalPage: {
-      title: "Hukum",
-      heading: "Halaman hukum segera hadir",
-      description: "Kebijakan privasi dan ketentuan layanan kami sedang diselesaikan. Sementara itu, jika Anda memiliki pertanyaan silakan hubungi kami."
-    },
+export const id: Pick<Translations, "cookiePolicy" | "privacyPolicy"> = {
     cookiePolicy: {
       tldr: [
         "Situs ini tidak memasang cookie miliknya sendiri. Situs ini menyimpan beberapa pengaturan di penyimpanan lokal browser Anda dan, jika Anda menautkan ponsel, sebuah kunci tanda tangan di database browser ponsel tersebut. Setiap item tercantum di bawah.",

@@ -1,11 +1,6 @@
 import type { Translations } from "../../en";
 
-export const vi: Pick<Translations, "legalPage" | "cookiePolicy" | "privacyPolicy"> = {
-    legalPage: {
-      title: "Ph\u00e1p l\u00fd",
-      heading: "C\u00e1c trang ph\u00e1p l\u00fd s\u1eafp ra m\u1eaft",
-      description: "Ch\u00ednh s\u00e1ch b\u1ea3o m\u1eadt v\u00e0 \u0111i\u1ec1u kho\u1ea3n d\u1ecbch v\u1ee5 c\u1ee7a ch\u00fang t\u00f4i \u0111ang \u0111\u01b0\u1ee3c ho\u00e0n thi\u1ec7n. Trong th\u1eddi gian ch\u1edd \u0111\u1ee3i, n\u1ebfu c\u00f3 b\u1ea5t k\u1ef3 c\u00e2u h\u1ecfi n\u00e0o, vui l\u00f2ng li\u00ean h\u1ec7 v\u1edbi ch\u00fang t\u00f4i."
-    },
+export const vi: Pick<Translations, "cookiePolicy" | "privacyPolicy"> = {
     cookiePolicy: {
       tldr: [
         "Trang web n\u00e0y kh\u00f4ng \u0111\u1eb7t cookie n\u00e0o c\u1ee7a ri\u00eang m\u00ecnh. Trang l\u01b0u m\u1ed9t v\u00e0i c\u00e0i \u0111\u1eb7t trong b\u1ed9 nh\u1edb c\u1ee5c b\u1ed9 c\u1ee7a tr\u00ecnh duy\u1ec7t v\u00e0, n\u1ebfu b\u1ea1n gh\u00e9p n\u1ed1i \u0111i\u1ec7n tho\u1ea1i, m\u1ed9t kh\u00f3a k\u00fd trong c\u01a1 s\u1edf d\u1eef li\u1ec7u tr\u00ecnh duy\u1ec7t c\u1ee7a \u0111i\u1ec7n tho\u1ea1i \u0111\u00f3. M\u1ecdi m\u1ee5c \u0111\u1ec1u \u0111\u01b0\u1ee3c li\u1ec7t k\u00ea b\u00ean d\u01b0\u1edbi.",

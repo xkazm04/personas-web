@@ -2,12 +2,12 @@ import type { CatalogSection } from "../catalog";
 import { en } from "./en/legal";
 
 /**
- * The /legal policies (`t.privacyPolicy`, `t.cookiePolicy`, `t.legalPage`).
+ * The /legal policies (`t.privacyPolicy`, `t.cookiePolicy`).
  * Registered at module scope by its owner (see src/i18n/sectionOwnership.test.ts
  * for the folders allowed to read it); every other route ships without it.
  * Locale parts are copied verbatim per language under ./<lang>/legal.ts.
  */
-export const legalSection: CatalogSection<"legalPage" | "cookiePolicy" | "privacyPolicy"> = {
+export const legalSection: CatalogSection<"cookiePolicy" | "privacyPolicy"> = {
   id: "legal",
   en,
   loaders: {

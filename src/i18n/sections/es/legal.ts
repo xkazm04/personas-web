@@ -1,11 +1,6 @@
 import type { Translations } from "../../en";
 
-export const es: Pick<Translations, "legalPage" | "cookiePolicy" | "privacyPolicy"> = {
-    legalPage: {
-      title: "Legal",
-      heading: "P\u00e1ginas legales pr\u00f3ximamente",
-      description: "Nuestra pol\u00edtica de privacidad y t\u00e9rminos de servicio est\u00e1n siendo finalizados. Mientras tanto, si tienes alguna pregunta no dudes en contactarnos."
-    },
+export const es: Pick<Translations, "cookiePolicy" | "privacyPolicy"> = {
     cookiePolicy: {
       tldr: [
         "Este sitio no usa cookies propias. Guarda algunos ajustes en el almacenamiento local de tu navegador y, si vinculas un tel\u00e9fono, una clave de firma en la base de datos del navegador de ese tel\u00e9fono. Cada elemento aparece en la lista de abajo.",

@@ -14,7 +14,7 @@ import { LANGUAGES } from "@/stores/i18nStore";
  * version), one load and one merge per locale, an English server snapshot.
  */
 
-const SECTION_NAMESPACES = ["athenaPage", "privacyPolicy", "cookiePolicy", "legalPage"] as const;
+const SECTION_NAMESPACES = ["athenaPage", "privacyPolicy", "cookiePolicy"] as const;
 const NON_EN = LANGUAGES.map((l) => l.id).filter((id) => id !== "en") as NonEnLanguage[];
 
 /** A core loader map whose every locale resolves to an empty override. */

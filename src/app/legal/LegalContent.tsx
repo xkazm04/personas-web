@@ -17,7 +17,7 @@ import {
   type PolicyId,
 } from "@/data/policy-changelog";
 
-// `t.privacyPolicy` / `t.cookiePolicy` / `t.legalPage` are a catalog section:
+// `t.privacyPolicy` / `t.cookiePolicy` are a catalog section:
 // they join the catalog here, at module scope, because this module loads every
 // reader (./policies/*). Every other route ships without them.
 registerSection(legalSection);

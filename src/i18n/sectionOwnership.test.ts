@@ -31,7 +31,6 @@ const SECTION_OWNERS: Owners = {
   athenaPage: ["src/app/athena/", "src/components/athena/", "src/app/preview/"],
   privacyPolicy: ["src/app/legal/"],
   cookiePolicy: ["src/app/legal/"],
-  legalPage: ["src/app/legal/"],
 };
 
 function findSectionLeaks(files: SourceFile[], owners: Owners): Leak[] {

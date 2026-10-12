@@ -1,11 +1,6 @@
 import type { Translations } from "../../en";
 
-export const cs: Pick<Translations, "legalPage" | "cookiePolicy" | "privacyPolicy"> = {
-    legalPage: {
-      title: "Pr\u00e1vn\u00ed informace",
-      heading: "Pr\u00e1vn\u00ed str\u00e1nky ji\u017e brzy",
-      description: "Na\u0161e z\u00e1sady ochrany osobn\u00edch \u00fadaj\u016f a podm\u00ednky slu\u017eby se dokon\u010duj\u00ed. Pokud m\u00e1te mezit\u00edm jak\u00e9koli dotazy, obra\u0165te se na n\u00e1s."
-    },
+export const cs: Pick<Translations, "cookiePolicy" | "privacyPolicy"> = {
     cookiePolicy: {
       tldr: [
         "Tento web nenastavuje \u017e\u00e1dn\u00e9 vlastn\u00ed cookies. N\u011bkolik nastaven\u00ed ukl\u00e1d\u00e1 do m\u00edstn\u00edho \u00falo\u017ei\u0161t\u011b va\u0161eho prohl\u00ed\u017ee\u010de a pokud sp\u00e1rujete telefon, tak\u00e9 podpisov\u00fd kl\u00ed\u010d do datab\u00e1ze prohl\u00ed\u017ee\u010de v tomto telefonu. Ka\u017ed\u00e1 polo\u017eka je uvedena n\u00ed\u017ee.",

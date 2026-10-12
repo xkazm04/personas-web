@@ -1197,11 +1197,6 @@
       overdue: string;
     };
   };
-  legalPage: {
-    title: string;
-    heading: string;
-    description: string;
-  };
   cookiePolicy: {
     tldr: string[];
     lastUpdated: string;
@@ -1981,7 +1976,7 @@ export type LocaleTranslations = CoreTranslations;
  * (src/i18n/catalog.ts) at module scope, so only those routes ship them. The
  * `Translations` type above keeps them, so `t.athenaPage.*` type-checks as before.
  */
-export type SectionNamespace = "athenaPage" | "privacyPolicy" | "cookiePolicy" | "legalPage";
+export type SectionNamespace = "athenaPage" | "privacyPolicy" | "cookiePolicy";
 
 /** What en.ts and each top-level locale file carry: every namespace but the sections. */
 export type CoreTranslations = Omit<Translations, SectionNamespace>;
