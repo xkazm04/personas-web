@@ -44,7 +44,7 @@ This is the chrome that surrounds **every** page on the marketing site. It provi
 | `src/components/navbar/MobilePanel.tsx` | Slide-in mobile panel (`role="dialog" aria-modal`), backdrop, route links, download |
 | `src/components/navbar/useMobileMenu.ts` | Mobile menu logic — open state, Escape, focus trap, scroll lock, route auto-close, focus restore |
 | `src/components/navbar/useRoutes.ts` | The three public routes (Home/Features/Roadmap) with i18n labels |
-| `src/components/NavbarLogoGlyph.tsx` | Logo variant A — icon-forward, CSS glow crossfade (`animate-glow-crossfade`), scroll-collapse to "P" |
+| `src/components/NavbarLogoGlyph.tsx` | Header brand mark — icon-only home link (no wordmark), 56px easing to 44px on scroll, CSS glow crossfade (`animate-glow-crossfade`); source image is `LOGO_SRC` (`/imgs/logo-mark.png`, the one brand mark shared with the footer, dashboard navbar, JSON-LD and app icons) |
 | `src/components/NavbarLogoWordmark.tsx` | Logo variant B — animated SVG-style wordmark + scan line |
 | `src/components/NavbarMobileMenu.tsx` | Alternate mobile menu (auth-aware: sign-in/dashboard); not wired into `Navbar` |
 | `src/lib/landing-address.ts` | Home address resolver + pure arrival transition table (unit-tested, with the `/#x` link coverage guard) |

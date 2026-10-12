@@ -34,7 +34,7 @@ The footer closes every marketing and content page: the Personas wordmark + logo
 
 ## Integration points
 - `Footer` is imported and rendered by many page shells: `app/error.tsx`, `app/not-found.tsx`, `app/connections/page.tsx`, `app/legal/page.tsx`, `app/blog/page.tsx` + `app/blog/[slug]/*`, `app/templates/[id]/TemplateDetail.tsx`, and others. Adding it to a new page is a manual `<Footer />` placement (it is not in the root layout).
-- `FooterCopyright` depends on `@/components/ThemeSwitcher`; `FooterBrand` depends on `@/components/icons/brand-icons` and `next/image` (logo at `/imgs/logo.png`).
+- `FooterCopyright` depends on `@/components/ThemeSwitcher`; `FooterBrand` depends on `@/components/icons/brand-icons` and `next/image` (logo at `/imgs/logo-mark.png`).
 - `PrimaryCTA` consumers: `sections/HeroClient.tsx`, `sections/DownloadCTA.tsx`, `sections/pricing/index.tsx`, `sections/connections-catalog/index.tsx`, `app/guide/[category]/[topic]/TopicView.tsx`, `app/blog/page.tsx`. Icons are passed as `lucide-react` `LucideIcon`s; labels must come from `useTranslation()` at the call site.
 
 ## Conventions & gotchas

@@ -1,14 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
 import { tint } from "@/lib/brand-theme";
 
+/** The mark carries the brand alone - no wordmark beside it. */
+const LOGO_SRC = "/imgs/logo-mark.png";
+
 /**
- * Variant A: "Glyph Mark" — Icon-forward logo with animated neon pulse.
- * Large icon dominates; gradient text collapses to monogram on scroll.
+ * Header brand mark: an icon-only home link with a neon glow. Sized to be the
+ * dominant element in the top-left corner; it eases down a step once the
+ * header turns into the scrolled glass bar.
  */
 export default function NavbarLogoGlyph({ scrolled }: { scrolled?: boolean }) {
   // The pulse lives in the navbar on every page - the one piece of motion a
@@ -19,48 +22,32 @@ export default function NavbarLogoGlyph({ scrolled }: { scrolled?: boolean }) {
   // pause in globals.css both reach. Under reduced motion it holds the resting
   // shadow.
   return (
-    <Link href="/" className="group flex items-center gap-3 focus-ring">
-      {/* Animated glow ring behind the icon */}
-      <div className="relative flex h-10 w-10 items-center justify-center">
-        {/* Outer ring at rest, and the peak glow fading in and out over it */}
-        <div
-          className="absolute inset-0 rounded-xl border border-brand-cyan/30"
-          style={{ boxShadow: `0 0 8px ${tint("cyan", 15)}, inset 0 0 6px ${tint("purple", 10)}` }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-xl opacity-0 animate-glow-crossfade"
-          style={{ boxShadow: `0 0 16px ${tint("cyan", 30)}, inset 0 0 10px ${tint("purple", 20)}` }}
-        />
-        {/* Icon */}
-        <Image
-          src="/imgs/logo.png"
-          alt="Personas"
-          width={36}
-          height={36}
-          className="relative h-9 w-9 rounded-lg object-contain drop-shadow-[0_0_12px_rgba(6,182,212,0.4)]
-                     transition-transform duration-300 group-hover:scale-110"
-          priority
-        />
-      </div>
-
-      {/* Text: collapses to monogram on scroll */}
-      <div className="relative overflow-hidden">
-        <motion.span
-          className="block text-lg font-bold tracking-tight bg-gradient-to-r from-brand-cyan via-foreground to-brand-purple bg-clip-text text-transparent"
-          animate={{ opacity: scrolled ? 0.7 : 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          {scrolled ? "P" : "Personas"}
-        </motion.span>
-        {/* Underline accent */}
-        <motion.div
-          className="absolute -bottom-0.5 left-0 h-[1.5px] bg-gradient-to-r from-brand-cyan to-brand-purple"
-          initial={{ width: 0 }}
-          animate={{ width: scrolled ? 12 : "100%" }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-        />
-      </div>
+    <Link
+      href="/"
+      aria-label="Personas"
+      className={`group relative flex items-center justify-center transition-[width,height] duration-300 focus-ring rounded-2xl ${
+        scrolled ? "h-11 w-11" : "h-14 w-14"
+      }`}
+    >
+      {/* Outer ring at rest, and the peak glow fading in and out over it */}
+      <div
+        className="absolute inset-0 rounded-2xl border border-brand-cyan/30"
+        style={{ boxShadow: `0 0 10px ${tint("cyan", 15)}, inset 0 0 8px ${tint("purple", 10)}` }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 rounded-2xl opacity-0 animate-glow-crossfade"
+        style={{ boxShadow: `0 0 20px ${tint("cyan", 30)}, inset 0 0 12px ${tint("purple", 20)}` }}
+      />
+      <Image
+        src={LOGO_SRC}
+        alt=""
+        width={56}
+        height={56}
+        className="relative h-full w-full rounded-2xl object-contain p-0.5 drop-shadow-[0_0_12px_rgba(6,182,212,0.4)]
+                   transition-transform duration-300 group-hover:scale-105"
+        priority
+      />
     </Link>
   );
 }

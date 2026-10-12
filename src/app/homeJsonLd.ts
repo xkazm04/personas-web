@@ -7,7 +7,7 @@ export const organizationJsonLd = {
   "@type": "Organization",
   name: "Personas",
   url: SITE_URL,
-  logo: `${SITE_URL}/imgs/logo.png`,
+  logo: `${SITE_URL}/imgs/logo-mark.png`,
   description: "Build intelligent AI agents in natural language. Orchestrate them locally or in the cloud.",
   sameAs: [],
 };
