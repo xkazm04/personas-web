@@ -1,0 +1,33 @@
+name: Harness
+
+# Checks on the test suite and the agent tooling themselves, kept out of ci.yml so that
+# file stays the product gate. Node built-ins only: no `npm ci` needed.
+#
+# - Mutation: every mutant of scripts/i18n/ui-ledger-lib.mjs (the logic behind the
+#   check:i18n-ledger ratchet) must be killed by its tests. A survivor fails the job and
+#   names the wrong edit the tests let through. See scripts/mutation/ledger-mutants.mjs.
+# - The unit tests of scripts/check-agent-commands.mjs (advertised-command drift check).
+#
+# Action pins match ci.yml (resolved there on 2026-08-22).
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  harness:
+    name: mutation · agent-command tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: node --test scripts/check-agent-commands.test.mjs
+      - run: node scripts/mutation/mutate.mjs
