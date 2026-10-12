@@ -11,6 +11,11 @@ fail closed with 503 when Supabase Auth is unconfigured, and the team key must n
 leave the server on any of those calls. The Methods, Caller gate and Secret cells must
 also match what each `route.ts` exports, calls and reads, and no route may read
 `TEAM_API_KEY` without `verifySession`.
+`src/lib/threatModelControls.test.ts` does the same for the anonymous rows, whose only
+defence is their Controls cell. Each row naming an IP rate limit must answer 429 with
+`Retry-After` once one IP exceeds its budget, while another IP is still served. Each row
+naming an allowlist must refuse an id outside it with 400. A row that names either control
+without a harness in that spec fails until one is added.
 
 ## Assets
 

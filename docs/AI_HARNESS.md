@@ -30,6 +30,8 @@ Turns ad-hoc prompting into a repeatable, trustworthy part of how the team ships
   - `docs/decisions/`: recorded decisions and accepted risks (see its `README.md`)
   - `docs/threat-model.md`: every API route with its caller gate, the secret it may
     touch and its governing decision, plus a checklist for a new route
+  - `docs/conventions-enforcement.md`: for each numbered convention in `.claude/CLAUDE.md`,
+    the lint rule, spec or gate that catches a break, and what is left to the agent
 
 ## Gates
 
@@ -144,5 +146,8 @@ An AI-generated change is mergeable when all of the following hold:
    A commit line `AI-Gate-Override: <reason>` waives the path and scope checks for that
    commit, and the job prints the reason. Anchors are never waived. The CLAUDE.md
    commit format is reported as advice only, because lane commits are written by the
-   lane runner. The rules are pinned by `src/lib/aiChangeGate.test.ts`. To run the
+   lane runner. So is a conventional type that misnames the change: a `fix:` whose
+   subject opens with an additive verb ("Added", "Introduce", "New") is a `feat:`, and a
+   `fix:`/`feat:` touching only docs, tests or CI is `docs:`/`test:`/`ci:` (pinned by
+   `src/lib/commitTypeAdvice.test.ts`). The other rules are pinned by `src/lib/aiChangeGate.test.ts`. To run the
    gate locally: `node scripts/check-ai-change.mjs origin/master..HEAD`.

@@ -170,3 +170,8 @@ Status legend: ✅ written · ⬜ planned
 
 *Generated to mirror `context-map.json` (53 contexts / 12 groups), split per submodule.
 When a feature's files change, update its doc here alongside the code.*
+
+`src/lib/featureDocsCoverage.test.ts` keeps this map complete. It fails `test:unit` when a
+link above points at a missing doc, when a doc under a folder here has no row, when a
+dashboard view has no `/dashboard/<id>` row, or when a page route under `src/app/` is
+named by no feature doc.

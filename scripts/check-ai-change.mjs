@@ -27,6 +27,8 @@
  * Only reported, never failed on: the CLAUDE.md commit format
  * (`<pass-id>/<area>: ...` with Why / Risk / Verified lines). Lane commits are
  * written by the lane runner, not the agent, and use a conventional subject.
+ * That conventional type is reported too when it misnames the change (a
+ * `fix:` that adds a feature, a `feat:` that only touches docs).
  *
  * Exits 0 when nothing is wrong (or no agent commit is in range), 1 otherwise.
  */
@@ -87,6 +89,49 @@ export function formatAdvice(message) {
   if (!/^[\w.-]+\/[\w./-]+:\s\S/.test(subject)) out.push("subject is not `<pass-id>/<area>: <what changed>`");
   for (const key of ["Why", "Risk", "Verified"]) {
     if (!new RegExp(`^${key}:`, "m").test(message)) out.push(`no \`${key}:\` line`);
+  }
+  return out;
+}
+
+/** Leading verbs that describe something new, never a repair. */
+const ADDITIVE_VERBS = new Set([
+  "add", "added", "adds", "create", "created", "creates", "implement", "implemented",
+  "implements", "introduce", "introduced", "introduces", "new",
+]);
+
+/** The conventional type a change set calls for when every file is one kind. */
+function kindOf(file) {
+  if (file.startsWith(".github/")) return "ci";
+  if (/\.test\.[cm]?[jt]sx?$/.test(file) || file.startsWith("e2e/")) return "test";
+  if (file.endsWith(".md")) return "docs";
+  return null;
+}
+
+/**
+ * Conventional-commit type vs what the commit did, reported as advice. A
+ * `fix:` whose subject opens with "Added ..." is a feature, and a `fix:`/`feat:`
+ * that only touches docs, tests or CI is `docs:`/`test:`/`ci:`; anything that
+ * reads commit types (git log filters, release tooling) otherwise files it
+ * under the wrong heading.
+ *
+ * @param {string} message
+ * @param {{ status: string, file: string }[]} [changes] git's name-status list
+ * @returns {string[]}
+ */
+export function commitTypeAdvice(message, changes = []) {
+  const [subject = ""] = message.split(/\r?\n/);
+  const m = /^(\w+)(?:\([^)]*\))?!?:\s*(\S+)/.exec(subject);
+  if (!m) return [];
+  const type = m[1].toLowerCase();
+  const verb = m[2].toLowerCase().replace(/[^a-z]/g, "");
+  const out = [];
+  if (type === "fix" && ADDITIVE_VERBS.has(verb)) {
+    out.push(`\`fix:\` subject opens with "${m[2]}", which adds rather than repairs; use \`feat:\` (or docs/test/ci/chore)`);
+  }
+  if (type === "fix" || type === "feat") {
+    const kinds = new Set(changes.map((c) => kindOf(c.file)));
+    const [only] = kinds;
+    if (changes.length && kinds.size === 1 && only) out.push(`every file is ${only}; type it \`${only}:\`, not \`${type}:\``);
   }
   return out;
 }
@@ -202,7 +247,7 @@ function main() {
     const subject = message.split("\n")[0];
     const short = sha.slice(0, 8);
     if (override) console.log(`${short} override: ${override}`);
-    for (const a of formatAdvice(message)) console.log(`${short} advice: ${a}`);
+    for (const a of [...formatAdvice(message), ...commitTypeAdvice(message, changes)]) console.log(`${short} advice: ${a}`);
     if (problems.length) {
       failed++;
       console.error(`\n${short} ${subject}`);
