@@ -48,6 +48,10 @@ jobs:
       # in the stale/pending/identical ratchet. Fix with `npm run i18n:ledger`.
       - run: npm run check:i18n-ledger
       - run: node --test "scripts/i18n/*.test.mjs"
+      # Sync-plane drift: each hand-written Supabase row interface in supabaseApi.ts must be a
+      # column- and nullability-faithful projection of scripts/setup-sync-db.sql.
+      - run: npm run check:sync-rows
+      - run: node --test scripts/check-sync-rows.test.mjs
       # Gate: a topic listed in GUIDE_TOPICS but absent from its category's
       # content module 404s while still shipping SEO tags. Bidirectional, so a
       # partial parse fails loudly in both directions rather than passing thin.

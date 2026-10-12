@@ -28,6 +28,7 @@
     "test:unit:watch": "vitest",
     "test:unit:cov": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "check:sync-rows": "node scripts/check-sync-rows.mjs",
     "check:connectors": "node scripts/generate-connectors.mjs --check",
     "check:use-case-corpus": "node scripts/compile-use-case-corpus.mjs --check",
     "check:guide-content": "node scripts/check-guide-content.mjs",
