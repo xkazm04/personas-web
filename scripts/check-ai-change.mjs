@@ -20,6 +20,12 @@
  *      services, data layer ..."). A new API route or a new SQL file adds
  *      backend surface, which needs the owner's decision first.
  *
+ * Provenance. A trailer is text: an agent commit can leave it out. So a commit
+ * with no agent trailer is skipped only when it is signed (`%G?` = `G`); an
+ * unsigned untrailered commit runs the same checks and its problems print as
+ * warnings. `--strict-provenance` (or AI_GATE_STRICT_PROVENANCE=1) fails them
+ * instead, for once lane commits are signed (docs/AI_HARNESS.md "Provenance").
+ *
  * Escape hatch, visible in the log: a commit line `AI-Gate-Override: <reason>`
  * skips checks 2 and 3 for that commit and prints the reason. It does not
  * skip anchors, because a reference to a file that does not exist is never right.
@@ -43,6 +49,37 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 /** True when the commit message carries an agent trailer. */
 export function isAgentCommit(message) {
   return /^Co-Authored-By:\s*Claude\b/im.test(message) || /^Ascent-Resolves:/im.test(message);
+}
+
+/**
+ * Who a commit claims to be, by trailer and by signature. `sigStatus` is git's
+ * `%G?` letter: only `G` (a good signature from a trusted key) counts as
+ * verified, because a trailer is text anyone can write or leave out.
+ *
+ * @param {string} message
+ * @param {string} sigStatus
+ * @returns {"agent" | "verified" | "unverified"}
+ */
+export function classifyCommit(message, sigStatus) {
+  if (isAgentCommit(message)) return "agent";
+  return sigStatus === "G" ? "verified" : "unverified";
+}
+
+/**
+ * What the gate does with a commit of that class. An agent commit fails on a
+ * problem. A verified commit without a trailer is a person's and is skipped. An
+ * unverified commit without a trailer could be an agent commit that dropped its
+ * trailer: today its problems are printed as warnings (flag now), and with
+ * `strict` they fail like an agent's (fail later, once lane commits are signed).
+ *
+ * @param {"agent" | "verified" | "unverified"} kind
+ * @param {boolean} strict
+ * @returns {"fail" | "warn" | "skip"}
+ */
+export function gateMode(kind, strict) {
+  if (kind === "agent") return "fail";
+  if (kind === "verified") return "skip";
+  return strict ? "fail" : "warn";
 }
 
 /** The override reason, or null when the commit has none. */
@@ -199,10 +236,21 @@ export function addedMarkdownLines(diff) {
 
 const git = (...args) => execFileSync("git", args, { cwd: REPO_ROOT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 
+/** `%G?` for a commit; "N" (no signature) when git cannot say. */
+function sigStatusOf(sha) {
+  try {
+    return git("log", "-1", "--format=%G?", sha).trim() || "N";
+  } catch {
+    return "N";
+  }
+}
+
 function main() {
-  const range = process.argv[2];
+  const args = process.argv.slice(2);
+  const range = args.find((a) => !a.startsWith("--"));
+  const strict = args.includes("--strict-provenance") || process.env.AI_GATE_STRICT_PROVENANCE === "1";
   if (!range || !range.includes("..")) {
-    console.error("usage: node scripts/check-ai-change.mjs <base>..<head>");
+    console.error("usage: node scripts/check-ai-change.mjs <base>..<head> [--strict-provenance]");
     process.exit(2);
   }
   const head = range.split("..").pop() || "HEAD";
@@ -227,11 +275,16 @@ function main() {
 
   const shas = git("rev-list", "--no-merges", range).split("\n").filter(Boolean);
   let agentCommits = 0;
+  let unverified = 0;
+  let warned = 0;
   let failed = 0;
   for (const sha of shas) {
     const message = git("log", "-1", "--format=%B", sha);
-    if (!isAgentCommit(message)) continue;
-    agentCommits++;
+    const kind = classifyCommit(message, sigStatusOf(sha));
+    const mode = gateMode(kind, strict);
+    if (mode === "skip") continue;
+    if (kind === "agent") agentCommits++;
+    else unverified++;
     const changes = git("show", "--name-status", "--no-renames", "--format=", sha)
       .split("\n")
       .filter(Boolean)
@@ -247,15 +300,25 @@ function main() {
     const subject = message.split("\n")[0];
     const short = sha.slice(0, 8);
     if (override) console.log(`${short} override: ${override}`);
-    for (const a of [...formatAdvice(message), ...commitTypeAdvice(message, changes)]) console.log(`${short} advice: ${a}`);
-    if (problems.length) {
+    if (kind === "agent") {
+      for (const a of [...formatAdvice(message), ...commitTypeAdvice(message, changes)]) console.log(`${short} advice: ${a}`);
+    }
+    if (problems.length && mode === "warn") {
+      warned++;
+      console.log(`\n${short} ${subject}`);
+      console.log("  unsigned and no agent trailer; would fail with --strict-provenance:");
+      for (const p of problems) console.log(`  - ${p}`);
+    } else if (problems.length) {
       failed++;
       console.error(`\n${short} ${subject}`);
       for (const p of problems) console.error(`  - ${p}`);
     }
   }
 
-  console.log(`\n${agentCommits} agent commit(s) of ${shas.length} in ${range}; ${failed} failed.`);
+  console.log(
+    `\n${agentCommits} agent commit(s) and ${unverified} unsigned untrailered commit(s) of ${shas.length} in ${range}` +
+      `${strict ? " (strict provenance)" : ""}; ${failed} failed, ${warned} warned.`,
+  );
   process.exit(failed ? 1 : 0);
 }
 

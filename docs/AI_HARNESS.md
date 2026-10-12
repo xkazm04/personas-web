@@ -171,6 +171,24 @@ the lane, not to the owner:
 Only once lane commits are signed should an unsigned commit carrying an agent trailer
 fail a check. Nothing here is configured yet, and the steps are the owner's to take.
 
+**What the gate does with a dropped trailer.** `scripts/check-ai-change.mjs` reads each
+commit's signature status (`git log --format=%G?`) next to its trailers and sorts it with
+`classifyCommit`:
+
+| Commit | Class | Gate |
+|---|---|---|
+| Carries `Co-Authored-By: Claude` or `Ascent-Resolves:` | agent | checked; a problem fails |
+| No agent trailer, good signature (`G`) | verified | skipped |
+| No agent trailer, anything else | unverified | checked; a problem prints as a warning |
+
+Before this, an agent commit that left out its trailer was skipped without a word. Now it
+runs the same anchor, protected-path and scope checks, and the PR log names it with
+"would fail with --strict-provenance". `--strict-provenance` (or
+`AI_GATE_STRICT_PROVENANCE=1`) makes `gateMode` fail unverified commits like agent ones.
+Turn it on in `.github/workflows/ai-change-gate.yml` once lane and owner commits are
+signed. Until then it would also fail the owner's own unsigned commits to `.claude/`.
+`src/lib/aiChangeProvenance.test.ts` pins both functions.
+
 ### Who reviews what
 
 The trailers say an agent wrote a commit; `.github/CODEOWNERS` says who has to read it. It
@@ -215,6 +233,26 @@ that wiring. The limits were chosen before anyone ran the meter against this his
 Run it once, and if the human baseline or a healthy lane sits close to a limit, move that
 limit in the same commit and record the measured rates here. `budgetFlags` is pinned by
 `src/lib/agentReworkBudget.test.ts`.
+
+## One command after a change
+
+Run `node scripts/verify.mjs` after a change, rather than picking gates from a list. It
+reads the `checks` job in `.github/workflows/ci.yml` and runs its steps in the same order,
+stopping at the first failure. Then it prints a pass/fail table with each step's time.
+Everything before `npm run build` is the default tier: typecheck, lint, unit tests, the
+i18n, sync-row and guide gates. `--full` adds the build and the bundle budget, and
+`--list` prints the steps without running them. Because the list is read from CI, a
+new gate there also runs here, with no second list to keep in step.
+`src/lib/verifyScript.test.ts` pins the parse against the real workflow and checks that
+every `npm run` it calls exists in `package.json`.
+
+Owner follow-ups, which an unattended lane cannot make:
+- Add a `verify` script to `package.json` and name it in `.claude/CLAUDE.md` "Commands" as
+  the after-change command.
+- Optionally, add a Claude Code `Stop` hook in `.claude/settings.json` that runs
+  `node scripts/verify.mjs` so a session cannot end on a red tree. The default tier is
+  minutes, not seconds, so a hook on every edit would be too slow. Stop is the right
+  point.
 
 ## Review gate for AI changes
 An AI-generated change is mergeable when all of the following hold:
