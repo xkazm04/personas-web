@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { mockApi } from "./mockApi";
+import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "./mockData";
 
 // demo-data-plane/network-faithful-mocks: a mock write mutates the in-session
 // copy, so the next read (the review queue's 15s poll, the home page's fetch)
@@ -53,5 +54,16 @@ describe("mockApi.updateEvent write-through", () => {
     const before = JSON.stringify(await mockApi.listEvents());
     await expect(mockApi.updateEvent("nope", { status: "processed" })).rejects.toMatchObject({ status: 404 });
     expect(JSON.stringify(await mockApi.listEvents())).toBe(before);
+  });
+});
+
+describe("mockApi.deletePersona write-through", () => {
+  it("removes the persona and its executions, and 404s on a repeat", async () => {
+    const id = MOCK_PERSONAS[MOCK_PERSONAS.length - 1].id;
+    await mockApi.deletePersona(id);
+    expect(MOCK_PERSONAS.some((p) => p.id === id)).toBe(false);
+    expect(MOCK_EXECUTIONS.some((e) => e.personaId === id)).toBe(false);
+    await expect(mockApi.getPersona(id)).rejects.toThrow();
+    await expect(mockApi.deletePersona(id)).rejects.toThrow();
   });
 });

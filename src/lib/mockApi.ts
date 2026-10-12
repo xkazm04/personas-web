@@ -140,8 +140,19 @@ export const mockApi: ApiClient = {
     return { ...p };
   },
 
-  deletePersona: async (_id: string): Promise<{ deleted: boolean }> => {
+  // Writes through like the desktop's cascade: the persona, its executions,
+  // triggers and subscriptions go, so the next list read agrees. Events stay
+  // (they are history). An unknown id is a 404, never a silent success.
+  deletePersona: async (id: string): Promise<{ deleted: boolean }> => {
     await delay();
+    const idx = MOCK_PERSONAS.findIndex((p) => p.id === id);
+    if (idx === -1) throw new ApiError(404, "Persona not found");
+    MOCK_PERSONAS.splice(idx, 1);
+    for (let i = MOCK_EXECUTIONS.length - 1; i >= 0; i--) {
+      if (MOCK_EXECUTIONS[i].personaId === id) MOCK_EXECUTIONS.splice(i, 1);
+    }
+    delete MOCK_TRIGGERS[id];
+    delete MOCK_SUBSCRIPTIONS[id];
     return { deleted: true };
   },
 
