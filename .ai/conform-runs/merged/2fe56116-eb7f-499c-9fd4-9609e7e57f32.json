@@ -1,0 +1,366 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2fe56116-eb7f-499c-9fd4-9609e7e57f32",
+ "subject": "client-state",
+ "evaluatedAt": "2026-10-13T08:12:25.073036+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Event Bus & Stream Monitoring",
+   "subject": "client-state",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "src/stores/eventStore.ts:190 The event store cleanly realizes client state disciplines with sliced domain ownership, an explicit status FSM, latched stream connection callbacks, and no unversioned client persistence.",
+   "techniques": [
+    {
+     "technique": "async-race-guards",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:300 Merge in fetchEvents preserves local in-flight updates so arriving poll results cannot overwrite pending optimistic mutations."
+    },
+    {
+     "technique": "effect-identity-and-latched-callbacks",
+     "verdict": "conformant",
+     "evidence": "src/hooks/useEventStream.ts:31 Store action callbacks are latched into ref cells so the long-lived SSE connection effect is not restarted when store references change."
+    },
+    {
+     "technique": "identity-scoped-eviction",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:480 Event store reset commits pending operator verdicts before wiping data on sign-out."
+    },
+    {
+     "technique": "invalidation-strategy",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:460 Subscription mutation surgically invalidates the affected persona detail cache entry in SWR."
+    },
+    {
+     "technique": "observed-read-subscription",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/EventBusStats.tsx:18 Metric counters selectively subscribe only to the events array rather than the whole event store."
+    },
+    {
+     "technique": "optimistic-write-path",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:379 Event replay marks the row optimistically pending and reverts on write failure while guarding with replayingIds against poll overwrites."
+    },
+    {
+     "technique": "persistence-and-migration",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:30 Browser localStorage persistence of retry counts was removed in favor of backend row tracking, conforming to the rule that server state does not earn client persistence."
+    },
+    {
+     "technique": "rehydration-narrowing",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/eventStore.ts:275 Event store holds only in-memory streaming/cached state and does not rehydrate from client storage."
+    },
+    {
+     "technique": "singleton-lifecycle",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:479 Module-scoped event store provides an explicit reset method to clear in-memory state and flush open operator decisions."
+    },
+    {
+     "technique": "status-fsms",
+     "verdict": "conformant",
+     "evidence": "src/lib/eventStatusFsm.ts:47 Event delivery states and valid transitions are modeled as an explicit FSM projected from the desktop engine."
+    },
+    {
+     "technique": "store-slicing",
+     "verdict": "conformant",
+     "evidence": "src/stores/eventStore.ts:123 EventState defines a cohesive domain slice containing events, connection status, DLQ verdicts, and subscriptions."
+    }
+   ]
+  },
+  {
+   "context": "Server-Side Vote Persistence",
+   "subject": "client-state",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/server/json-file-store.ts:7 Searched for client-state terms [\"zustand\", \"rehydrate\", \"createStore\", \"sessionStorage\"] with zero hits across context files; json-file-store implements Node-side filesystem persistence in the .data directory within route handlers, where client-state preconditions do not apply.",
+   "techniques": [
+    {
+     "technique": "async-race-guards",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/fileLock.ts:37 File lock manages in-process Node mutex promise chains, not client-side asynchronous race conditions."
+    },
+    {
+     "technique": "effect-identity-and-latched-callbacks",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:52 Rate limit bucket cleanup is a Node.js process timer, not a React client effect session."
+    },
+    {
+     "technique": "identity-scoped-eviction",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:45 Rate limiting buckets are keyed by IP address and expire by timestamp, completely independent of client user identity."
+    },
+    {
+     "technique": "invalidation-strategy",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:60 File updates perform atomic file renames on disk without client-side cache invalidation mechanisms."
+    },
+    {
+     "technique": "observed-read-subscription",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/fileLock.ts:39 Server-side lock helper does not publish state to reactive view consumers."
+    },
+    {
+     "technique": "optimistic-write-path",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:76 File mutations are serialized synchronously inside a server write lock rather than painted optimistically on the client."
+    },
+    {
+     "technique": "persistence-and-migration",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:40 Persistence is handled via local Node.js server filesystem writes rather than browser client persistence."
+    },
+    {
+     "technique": "rehydration-narrowing",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:13 Reads from disk parse server JSON directly without client rehydration narrowing logic."
+    },
+    {
+     "technique": "singleton-lifecycle",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:40 Buckets map is a process-local memory cache on the Node.js server, not a client-side singleton."
+    },
+    {
+     "technique": "status-fsms",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:82 Rate check returns an HTTP response or admission decision for backend route handlers rather than client UI status FSMs."
+    },
+    {
+     "technique": "store-dependency-topology",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/fileLock.ts:43 Promises are chained dynamically per file key without client store dependency graphs."
+    },
+    {
+     "technique": "store-slicing",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:70 File storage helper is a general backend filesystem utility rather than a sliced client store."
+    }
+   ],
+   "absenceTerms": [
+    "zustand",
+    "rehydrate",
+    "createStore",
+    "sessionStorage"
+   ],
+   "registryProposal": "Server-Side Vote Persistence was mapped to the client-state subject due to lexical matching on 'persistence'/'store', but contains only Node-side server infrastructure (import 'server-only'). The registry matcher should exclude modules with server-only declarations from client-architecture subjects."
+  },
+  {
+   "context": "Authentication & User Session",
+   "subject": "client-state",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "src/lib/clearUserCaches.ts:36 The authentication domain centralizes identity eviction in clearUserScopedCaches, validates untrusted rehydrated sessions before adoption, and provides isolated stores with explicit transitions.",
+   "techniques": [
+    {
+     "technique": "effect-identity-and-latched-callbacks",
+     "verdict": "conformant",
+     "evidence": "src/hooks/usePolling.ts:17 Polling callback is latched into a ref cell to prevent render cycles from restarting the timer interval."
+    },
+    {
+     "technique": "identity-scoped-eviction",
+     "verdict": "conformant",
+     "evidence": "src/stores/authStore.ts:167 Auth store triggers clearUserScopedCaches whenever user id changes on auth state transition."
+    },
+    {
+     "technique": "observed-read-subscription",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/AuthGuard.tsx:17 AuthGuard subscribes to a shallow-compared projection of auth fields to avoid re-renders on unrelated changes."
+    },
+    {
+     "technique": "optimistic-write-path",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/authStore.ts:54 Authentication mutations (OAuth redirect, sign-out) resolve through authority round-trips without speculative entity updates."
+    },
+    {
+     "technique": "persistence-and-migration",
+     "verdict": "conformant",
+     "evidence": "src/stores/authStore.ts:101 Persisted session in localStorage is treated as an unconfirmed optimistic cache rather than durable authority."
+    },
+    {
+     "technique": "rehydration-narrowing",
+     "verdict": "conformant",
+     "evidence": "src/stores/authStore.ts:18 Untrusted session payload from localStorage is strictly validated for non-expired timestamp, user id, and token string before adoption."
+    },
+    {
+     "technique": "singleton-lifecycle",
+     "verdict": "conformant",
+     "evidence": "src/stores/authStore.ts:78 Auth store initialization is guarded against multiple calls and holds a module-level cleanup reference."
+    },
+    {
+     "technique": "status-fsms",
+     "verdict": "conformant",
+     "evidence": "src/stores/authStore.ts:142 Involuntary session expiration is modeled as a distinct status transition separated from deliberate user sign-out."
+    },
+    {
+     "technique": "store-dependency-topology",
+     "verdict": "conformant",
+     "evidence": "src/lib/clearUserCaches.ts:25 Topology between auth and consumer stores is decoupled by placing clearUserScopedCaches in lib/ to prevent import cycles."
+    },
+    {
+     "technique": "store-slicing",
+     "verdict": "conformant",
+     "evidence": "src/stores/authStore.ts:64 Auth state and mutations are self-contained in a domain slice with operations as the only write doors."
+    }
+   ]
+  },
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "client-state",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:18 Persona and subscription state management strictly adheres to selective subscriptions, store slicing, read-time derivations, and identity eviction without unversioned local persistence.",
+   "techniques": [
+    {
+     "technique": "async-race-guards",
+     "verdict": "conformant",
+     "evidence": "src/stores/personaStore.ts:158 Concurrent fetchPersonas calls join existing in-flight requests and forced refetches chain sequentially to avoid out-of-order writes."
+    },
+    {
+     "technique": "effect-identity-and-latched-callbacks",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:31 Mount effect identifies session by store fetch actions and stable collection length without restart loops."
+    },
+    {
+     "technique": "identity-scoped-eviction",
+     "verdict": "conformant",
+     "evidence": "src/stores/personaStore.ts:85 Persona store defines an explicit reset door designed specifically for auth identity transitions."
+    },
+    {
+     "technique": "observed-read-subscription",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:20 SubscriptionsPanel consumes state via narrow selectors rather than subscribing to whole store objects."
+    },
+    {
+     "technique": "optimistic-write-path",
+     "verdict": "conformant",
+     "evidence": "src/stores/personaStore.ts:32 The optimistic update mutation mutex and CAS rollback are documented as dormant without live callers in UI, so no active write-path races occur."
+    },
+    {
+     "technique": "persistence-and-migration",
+     "verdict": "conformant",
+     "evidence": "src/stores/personaStore.ts:145 Persona records are treated as server state fetched dynamically on demand and are never persisted to unversioned client storage."
+    },
+    {
+     "technique": "rehydration-narrowing",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/personaStore.ts:139 Persona store is entirely in-memory and does not rehydrate persisted client state."
+    },
+    {
+     "technique": "singleton-lifecycle",
+     "verdict": "conformant",
+     "evidence": "src/stores/personaStore.ts:273 Persona store provides a reset method to return module-level cache and mutation maps to initial state."
+    },
+    {
+     "technique": "status-fsms",
+     "verdict": "conformant",
+     "evidence": "src/stores/personaStore.ts:188 Fetch failure on reload preserves stale loaded data while recording failure evidence rather than flashing an empty state."
+    },
+    {
+     "technique": "store-slicing",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:65 Cross-slice data (subscriptions enriched with persona attributes) is derived in memoized selectors at read time rather than stored redundantly."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T08:12:25.073036+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-state"
+   ],
+   "techniques": [
+    "async-race-guards",
+    "effect-identity-and-latched-callbacks",
+    "identity-scoped-eviction",
+    "invalidation-strategy",
+    "observed-read-subscription",
+    "optimistic-write-path",
+    "persistence-and-migration",
+    "rehydration-narrowing",
+    "singleton-lifecycle",
+    "status-fsms",
+    "store-slicing"
+   ],
+   "deviations": 0,
+   "context": "Event Bus & Stream Monitoring",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T08:12:25.073036+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-state"
+   ],
+   "techniques": [
+    "async-race-guards",
+    "effect-identity-and-latched-callbacks",
+    "identity-scoped-eviction",
+    "invalidation-strategy",
+    "observed-read-subscription",
+    "optimistic-write-path",
+    "persistence-and-migration",
+    "rehydration-narrowing",
+    "singleton-lifecycle",
+    "status-fsms",
+    "store-dependency-topology",
+    "store-slicing"
+   ],
+   "deviations": 0,
+   "context": "Server-Side Vote Persistence",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T08:12:25.073036+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-state"
+   ],
+   "techniques": [
+    "effect-identity-and-latched-callbacks",
+    "identity-scoped-eviction",
+    "observed-read-subscription",
+    "optimistic-write-path",
+    "persistence-and-migration",
+    "rehydration-narrowing",
+    "singleton-lifecycle",
+    "status-fsms",
+    "store-dependency-topology",
+    "store-slicing"
+   ],
+   "deviations": 0,
+   "context": "Authentication & User Session",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T08:12:25.073036+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-state"
+   ],
+   "techniques": [
+    "async-race-guards",
+    "effect-identity-and-latched-callbacks",
+    "identity-scoped-eviction",
+    "observed-read-subscription",
+    "optimistic-write-path",
+    "persistence-and-migration",
+    "rehydration-narrowing",
+    "singleton-lifecycle",
+    "status-fsms",
+    "store-slicing"
+   ],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
