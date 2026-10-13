@@ -80,6 +80,13 @@ New here? Start at `docs/README.md`, which gives the reading order for every doc
   every write route goes through; `src/lib/server/requestMutants.test.ts` covers
   `src/lib/server/request.ts` (the client-IP trust ladder, the body cap at its exact
   boundary and across chunks, and the refusal shapes routes answer with). Both sit at 1.
+  The auth surface has the same floor. `src/app/api/orchestrator/userSessionMutants.test.ts`
+  covers the session verifier that gates the team key for the proxy and both SSE routes:
+  a missing config read as verified, a refusal remembered, a 429 or 5xx taken as an answer,
+  the TTL boundary, eviction, and what is sent to Auth. `src/lib/commands/pairingMutants.test.ts`
+  covers the `#pair=` secret path from the pairing-link record: the null-state scrub in
+  `src/lib/commands/pairing.ts`, what a pairing link must be, and the `pair=`, request-URL and
+  breadcrumb passes in `src/lib/sentry-pii.ts`. Both sit at 1.
   The next candidate is `src/lib/server/json-file-store.ts`
 
 ## Gates
@@ -426,6 +433,16 @@ first run with real figures should move it in the same commit that records them 
 `src/lib/laneCost.test.ts` pins the trailer parsing, the per-survivor arithmetic and the
 review line. Writing the trailers is the lane runner's job, which lives outside this
 repository; until it does, every lane reads `no cost data`.
+
+**Hard band.** `HARD_COST_BUDGET` is twice the review line on twice the evidence: over
+4,000,000 tokens per surviving change, or no survivor at all, on 20 or more costed commits.
+`node scripts/report-lane-cost.mjs --block-in <pr-range>` prints a `BLOCK` line and exits 1
+for each lane over it that also has a commit in the range, the same contract as the rework
+hard band. A lane with no cost data never blocks. An over-budget lane goes through the
+narrowing steps below. `src/lib/laneCostMutants.test.ts` applies 17 mutations to the report
+and both bands and must kill every one. The CI step that runs `--block-in` on a PR is the
+owner's, because a lane may not edit `.github/`; its YAML and the reasoning behind the
+numbers are in [the lane-spend record](decisions/2026-10-13-lane-spend-hard-band.md).
 
 ### When a lane degrades
 

@@ -2,7 +2,7 @@
 /**
  * What each agent lane's surviving work cost, not only whether it held.
  *
- *   node scripts/report-lane-cost.mjs [<range>] [--window N]
+ *   node scripts/report-lane-cost.mjs [<range>] [--window N] [--block-in <pr-range>]
  *
  * scripts/report-agent-rework.mjs answers "how often did a lane's commit need a
  * follow-up fix". That is the quality half. The scaling decision also needs the
@@ -25,6 +25,14 @@
  *
  * A lane over `COST_REVIEW` gets a `REVIEW` line. Like the rework FLAG band it
  * is advisory: the exit code is 0 unless git fails or the arguments are wrong.
+ *
+ * Hard band. A lane far past the review line (`HARD_COST_BUDGET`) is the cost
+ * twin of the rework hard band. With `--block-in <pr-range>` the report prints a
+ * `BLOCK` line and exits 1 for each lane over the hard band that also has a
+ * commit in that range, so the PR that would add to an over-spending lane stops
+ * and a PR from anyone else does not. A lane with no cost data never blocks: it
+ * is unmeasured, not over budget. The decision is
+ * docs/decisions/2026-10-13-lane-spend-hard-band.md.
  */
 
 import { execFileSync } from "node:child_process";
@@ -124,15 +132,40 @@ export function costFlags(rows, review = {}) {
   return out;
 }
 
+/**
+ * The hard band: twice the review line, judged on twice the costed commits. A
+ * lane past it spends more than two review lines on every change that lasted,
+ * which no follow-up review of single commits will bring back.
+ */
+export const HARD_COST_BUDGET = Object.freeze({ tokensPerSurvivor: 4_000_000, minCosted: 20 });
+
+/**
+ * Lanes over the hard band that also have a commit in the range under review.
+ * A lane over the band that adds nothing to the range is left to the REVIEW
+ * line: blocking it here would stop a PR it took no part in.
+ *
+ * @param {{ lane: string, costed: number, tokensPerSurvivor: number | null }[]} rows
+ * @param {string[]} rangeLanes the lane of each commit in the range under review
+ * @param {{ tokensPerSurvivor?: number, minCosted?: number }} [budget]
+ * @returns {{ lane: string, reason: string }[]}
+ */
+export function hardCostBlocks(rows, rangeLanes, budget = {}) {
+  const present = new Set(rangeLanes);
+  return costFlags(rows, { ...HARD_COST_BUDGET, ...budget }).filter((f) => present.has(f.lane));
+}
+
 function main() {
   const args = process.argv.slice(2);
   const windowAt = args.indexOf("--window");
   const window = windowAt >= 0 ? Number(args[windowAt + 1]) : 10;
-  if (!Number.isInteger(window) || window < 1) {
-    console.error("usage: node scripts/report-lane-cost.mjs [<range>] [--window N]");
+  const blockAt = args.indexOf("--block-in");
+  const blockRange = blockAt >= 0 ? args[blockAt + 1] : undefined;
+  if (!Number.isInteger(window) || window < 1 || (blockAt >= 0 && (!blockRange || blockRange.startsWith("--")))) {
+    console.error("usage: node scripts/report-lane-cost.mjs [<range>] [--window N] [--block-in <pr-range>]");
     process.exit(2);
   }
-  const range = args.find((a, i) => !a.startsWith("--") && (windowAt < 0 || i !== windowAt + 1));
+  const valueAt = new Set([windowAt, blockAt].filter((i) => i >= 0).map((i) => i + 1));
+  const range = args.find((a, i) => !a.startsWith("--") && !valueAt.has(i));
   const rangeArgs = range ? [range] : ["-n", "300", "HEAD"];
 
   const manifestPath = path.join(REPO_ROOT, ".ai", "manifest.yaml");
@@ -164,6 +197,17 @@ function main() {
     }
   }
   for (const f of costFlags(rows)) console.log(`  REVIEW ${f.lane}: ${f.reason}`);
+  if (blockRange) {
+    const rangeLog = execFileSync("git", ["log", "--no-merges", "--format=%x1e%H%x1f%B%x1f", blockRange], {
+      cwd: REPO_ROOT,
+      encoding: "utf8",
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    const rangeLanes = parseLog(rangeLog).map((c) => laneOf(c.message, skills));
+    const blocks = hardCostBlocks(rows, rangeLanes);
+    for (const b of blocks) console.log(`  BLOCK ${b.lane}: ${b.reason} (hard band), and ${blockRange} adds to it`);
+    if (blocks.length) process.exit(1);
+  }
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
