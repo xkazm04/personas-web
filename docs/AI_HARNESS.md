@@ -39,7 +39,14 @@ New here? Start at `docs/README.md`, which gives the reading order for every doc
   - `src/app/api/CLAUDE.md`, `src/lib/server/CLAUDE.md`: directory-scoped pointers that
     Claude Code loads when it works in those folders. Each names the threat-model sections
     and the `.claude/CLAUDE.md` convention that govern the folder and restates no rule;
-    `src/lib/scopedGuidance.test.ts` fails when a path or section they cite disappears
+    `src/lib/scopedGuidance.test.ts` fails when a path or section they cite disappears.
+    `src/lib/decisionGoverns.test.ts` holds every pointer's paths
+    and fails when a decision record's `**Governs:**` path sits under a pointer that does
+    not cite the record
+  - `scripts/apply-sql-migration.mjs`: the one connect-and-apply path for the Supabase
+    migrations; `db:migrate` and `db:migrate:sync` are wrappers that name a migration, and
+    a new one needs only its setup-NAME-db.sql file beside it (pinned by
+    `src/lib/sqlMigrationRunner.test.ts`)
   - `scripts/CLAUDE.md`: the same kind of pointer for the gate and check scripts (the Gates
     table, the mutant specs, owner review). `src/lib/scriptsPointer.test.ts` holds its paths
     and the sections of this file it cites. `.github/` has no pointer yet: a file there is
@@ -282,7 +289,10 @@ the two agree.
 
 Agent and lane commits are identified today by their `Co-Authored-By` trailer and, for
 Ascent lanes, `Ascent-Resolves:` trailers. Both are claims: nothing verifies them
-cryptographically, and anyone can write them.
+cryptographically, and anyone can write them. The trailer, not the conventional type,
+marks a lane commit; lane commits typed `fix:` whatever they do is a runner habit, and
+[the commit-type record](decisions/2026-10-13-lane-commit-type-from-change.md) proposes
+that the runner take the type from the change instead.
 
 Policy: **flag now, fail later**. Verified provenance needs a signing key that belongs to
 the lane, not to the owner:
@@ -358,6 +368,29 @@ that wiring. The limits were chosen before anyone ran the meter against this his
 Run it once, and if the human baseline or a healthy lane sits close to a limit, move that
 limit in the same commit and record the measured rates here. `budgetFlags` is pinned by
 `src/lib/agentReworkBudget.test.ts`.
+
+### When a lane degrades
+
+The gates reject bad commits one at a time; this is the step for a lane whose output keeps
+failing. The proposed manifest field behind it is in
+[the lane-scope record](decisions/2026-10-13-lane-scope-narrowing.md).
+
+- **Trigger.** A `FLAG` line from `node scripts/report-agent-rework.mjs` (exit 1 under
+  `--strict`), the same annotation on a PR from `.github/workflows/agent-rework.yml`, or the
+  `ai-change` job failing on two cycles of the same lane in a row.
+- **Which lane first.** The flagged lane with the highest rework rate. `ascent` is the one
+  to watch: it writes most commits, so its rate moves first and costs the most.
+- **Find the folder.** `node scripts/report-agent-rework.mjs --list` prints each reworked
+  pair. Group them by top directory; the narrowing targets that folder, not the whole lane.
+- **Narrow, in this order.** (1) Items whose expected files fall in that folder go to a
+  person. (2) If the next window still flags, the lane may touch only docs and tests.
+  (3) If it still flags, the lane is paused: the owner stops dispatching it, or the runner
+  calls the meter with `--strict` before a cycle and stops on exit 1.
+- **Record it.** `.ai/manifest.yaml` has no lane-scope field today (`scope:` is the repo's
+  product scope), so a narrowing is a dated status line in the lane-scope record until the
+  owner settles the `lanes:` block it proposes.
+- **Resume.** Widen one step at a time, after two consecutive meter runs with the lane
+  under budget.
 
 ## One command after a change
 

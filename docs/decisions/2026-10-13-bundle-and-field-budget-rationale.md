@@ -1,5 +1,7 @@
 # 2026-10-13 Why the bundle and field budget numbers sit where they do
 
+**Governs:** `bundle-budget.json`
+
 ## Context
 
 Two committed files set performance ceilings: `bundle-budget.json` (per-route first-load JS, gated in CI by `check:bundle`) and `field-budget.json` (real-user p75 Core Web Vitals, checked by hand with `check:field`). Neither file records why a number is what it is. So a reader who hits a ceiling cannot tell whether it is a target, a measurement or a guess, and raising it is a coin toss. This record sets out the rule that produces each number. `src/lib/budgetRationale.test.ts` holds the files, the scripts and this record to the same constants.

@@ -1,5 +1,7 @@
 # 2026-10-13 `.claude/CLAUDE.md` has a line budget that only goes down
 
+**Governs:** `.claude/CLAUDE.md`
+
 ## Context
 
 `.claude/CLAUDE.md` is loaded at the start of every session, in full, before any work. Each release pass and convention has added a section, and nothing has taken one out. A long file costs every session context, and rules near the end compete with everything above them. The Commands section is what a session needs first, and it should not drift down the file. Nobody had set a size limit, so each addition looked free.

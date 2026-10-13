@@ -1,5 +1,7 @@
 # ACCEPTED RISK: production `script-src` keeps `'unsafe-inline'`, and the nonce step waits until a deployment is planned
 
+**Governs:** `next.config.ts`, `src/components/dashboard/`
+
 ## Context
 
 Scan `d4b90e7a` finding F5 asked for a nonce-based `script-src`. [The SSE and no-eval record](2026-10-09-sse-session-gate-and-production-no-eval.md) removed `'unsafe-eval'` in production (`411aac3f`) and left the nonce step open as call 3. The operator answered ask `f95629a2` on the morning of 2026-10-09 with "Not now, record the risk".

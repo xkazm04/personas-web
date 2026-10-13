@@ -1,5 +1,7 @@
 # 2026-10-12 Lint warnings sit under a ceiling that only goes down; `package.json` owns the number
 
+**Governs:** `package.json`, `eslint.config.mjs`
+
 ## Context
 
 `npm run lint` runs ESLint with `--max-warnings`. The reasoning for that ceiling was kept as a long header comment in `eslint.config.mjs`, together with the history of each cleanup. Each cleanup lowered the number in `package.json` and left the comment alone, so the comment now names ceilings that no longer exist. An agent reading the config learns the wrong number. This record keeps the policy and leaves the history to `git log -- package.json`.

@@ -1,5 +1,7 @@
 # With ORCHESTRATOR_TARGET=desktop the proxy answers unserved shapes with a typed 501 and rewrites no paths
 
+**Governs:** `src/app/api/orchestrator/desktopShapes.ts`, `src/app/api/orchestrator/[...path]/route.ts`
+
 ## Context
 
 The dashboard's `api.ts` was written against the cloud orchestrator. Pointed at the desktop's management API (`:9420`), many of its call shapes have no matching route, and some have a near match under a different path or body: the dashboard sends `POST /api/execute` with the persona id in the body, while the desktop serves `POST /api/execute/{persona_id}`. A dashboard that got the desktop's bare 404 could not tell "route missing" from "persona missing".

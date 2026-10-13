@@ -1,5 +1,7 @@
 # The pairing link and the team key: four calls from scan d4b90e7a (F8, F9, F7, F13)
 
+**Governs:** `src/lib/commands/pairing.ts`, `src/lib/sentry-pii.ts`, `src/app/api/orchestrator/[...path]/route.ts`, `src/app/api/events/stream/route.ts`, `src/app/api/executions/[id]/stream/route.ts`
+
 ## Context
 
 Scan `d4b90e7a` found four holes around the `#pair=<id>.<secret>` link and the orchestrator team key. All four fixes merged on `revamp/stage-fit` without a record. This record keeps them. The origin holds a paired phone's non-extractable signing key, so a leaked pairing secret or a silently replaced pairing matters.

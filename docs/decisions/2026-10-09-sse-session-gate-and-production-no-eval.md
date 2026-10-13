@@ -1,5 +1,7 @@
 # The SSE routes need a verified session, and production script-src drops 'unsafe-eval': two calls
 
+**Governs:** `src/app/api/events/stream/route.ts`, `src/app/api/executions/[id]/stream/route.ts`, `next.config.ts`
+
 ## Context
 
 Scan `d4b90e7a` found two holes on the origin that holds a paired phone's non-extractable signing key.
