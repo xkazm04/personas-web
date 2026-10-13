@@ -1,0 +1,172 @@
+{
+ "schema": "conform-run/1",
+ "worker": "3740b924-5430-42d5-9c17-170f26b1069a",
+ "subject": "client-fetch-cache",
+ "evaluatedAt": "2026-10-13T21:25:49.750221+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Event Bus & Stream Monitoring",
+   "subject": "client-fetch-cache",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/EventSwimlane.tsx:18 The swimlane stores mount time as the fetch time of MOCK_SWIMLANE_EVENTS, a fixture built once at import, and never refetches, so the staleness chip treats that fixture as a successful fetch.",
+   "techniques": [
+    {
+     "technique": "in-flight-dedup",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useEventStream.ts:56 The visibility handler and the 10s fallback poll both call fetchEvents, which always issues listEvents with no pending-request map."
+    },
+    {
+     "technique": "parse-and-derive-caches",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventsListPanel.tsx:56 This memo is one slot tied to the current events array and dies with the panel, so there is no growing derive-cache population."
+    },
+    {
+     "technique": "plural-policy-claims",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/eventStore.ts:131 The list read takes no cache-policy arguments, so two callers cannot disagree about a TTL."
+    },
+    {
+     "technique": "portable-read-definitions",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventsListPanel.tsx:48 These surfaces do not re-declare the list read; the page is named as the single owner. No second key or fetcher shows up in the listed files."
+    },
+    {
+     "technique": "prefetch-and-defer",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useEventStream.ts:115 The stream opens from the mount effect. A search of the listed panels found no hover, intent, or idle prefetch."
+    },
+    {
+     "technique": "sibling-entry-warmth",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventDetailDrawer.tsx:39 The drawer synthesizes a sample event type from a hash of the node id. It does not borrow a list row or start a detail read."
+    },
+    {
+     "technique": "similarity-keyed-admission",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/eventStore.ts:325 Append admission is exact event-id membership. Unequal events do not share an entry."
+    },
+    {
+     "technique": "swr-design",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/EventSwimlane.tsx:18 Mount time is the only freshness number, there is no stale ceiling, and the fixture is never revalidated. The live log's failure path is separate and was not what failed this technique."
+    },
+    {
+     "technique": "warm-remount-caches",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/EventSwimlane.tsx:52 fetchedAt is re-initialized on every mount while the module fixture stays put, so a remount reports that same data as just fetched."
+    }
+   ]
+  },
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "client-fetch-cache",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/dashboard-queries.ts:31 useAgentDetail is set to keep showing the previous key's agent detail when personaId changes, so one persona's executions paint for the next persona until that read resolves.",
+   "techniques": [
+    {
+     "technique": "admission-hypothesis",
+     "verdict": "deviation",
+     "evidence": "src/lib/dashboard-queries.ts:28 The construction options set a dedupe window, keepPreviousData, and revalidateOnFocus, and name no admission bet. Every successful load is stored. No SWRConfig provider exists under src."
+    },
+    {
+     "technique": "cache-key-discipline",
+     "verdict": "conformant",
+     "evidence": "src/lib/clearUserCaches.ts:37 agent-detail's key is the persona id only. This wipe drops those array keys, and the comment above says the function runs on every identity or isDemo flip."
+    },
+    {
+     "technique": "in-flight-dedup",
+     "verdict": "deviation",
+     "evidence": "src/lib/api.ts:96 orchestratorFetch launches the network call with no pending-request map. The SWR dedupe on useAgentDetail covers only that hook."
+    },
+    {
+     "technique": "parse-and-derive-caches",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/api-fetch.ts:18 The body is parsed and returned to the caller. These files do not memoize a derivation by content identity."
+    },
+    {
+     "technique": "plural-policy-claims",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/dashboard-queries.ts:32 This is the only useSWR options object for dashboardKeys.agentDetail. A search found no second caller passing a different TTL."
+    },
+    {
+     "technique": "prefetch-and-defer",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/dashboard-queries.ts:15 The read runs when called. These files contain no intent prefetch, idle deferral, or prefetchAgentDetail."
+    },
+    {
+     "technique": "sibling-entry-warmth",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/dashboard-queries.ts:16 The detail read always starts all three requests. It does not seed a key or a placeholder from a list row."
+    },
+    {
+     "technique": "similarity-keyed-admission",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/dashboard-queries.ts:12 The key is an exact persona id. Two different ids do not share an entry."
+    },
+    {
+     "technique": "swr-design",
+     "verdict": "deviation",
+     "evidence": "src/lib/dashboard-queries.ts:30 This is the only freshness number on the cache. There is no stale ceiling and no entry cap. In swr 2.5 that interval also keeps a successful flight joinable after settle, and a failure deletes the flight immediately."
+    },
+    {
+     "technique": "warm-remount-caches",
+     "verdict": "deviation",
+     "evidence": "src/lib/dashboard-queries.ts:31 With no cached data for the new key, swr 2.5 returns the previous key's data. A persona switch therefore paints the neighbor's detail. useAgentDetail has no other reference under src, so the bleed is latent in the hook."
+    }
+   ],
+   "registryProposal": "The react swr-design application describes a hand-rolled fetcher with an explicit ttlMs fresh zone. It never says how the swr package's dedupingInterval maps onto that zone, yet in 2.5 that single option is also the post-success flight-retention window."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T21:25:49.750221+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-fetch-cache"
+   ],
+   "techniques": [
+    "in-flight-dedup",
+    "parse-and-derive-caches",
+    "plural-policy-claims",
+    "portable-read-definitions",
+    "prefetch-and-defer",
+    "sibling-entry-warmth",
+    "similarity-keyed-admission",
+    "swr-design",
+    "warm-remount-caches"
+   ],
+   "deviations": 1,
+   "context": "Event Bus & Stream Monitoring",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-13T21:25:49.750221+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-fetch-cache"
+   ],
+   "techniques": [
+    "admission-hypothesis",
+    "cache-key-discipline",
+    "in-flight-dedup",
+    "parse-and-derive-caches",
+    "plural-policy-claims",
+    "prefetch-and-defer",
+    "sibling-entry-warmth",
+    "similarity-keyed-admission",
+    "swr-design",
+    "warm-remount-caches"
+   ],
+   "deviations": 1,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

@@ -6453,7 +6453,11 @@
           "revision": 15,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/EventSwimlane.tsx:18 The swimlane stores mount time as the fetch time of MOCK_SWIMLANE_EVENTS, a fixture built once at import, and never refetches, so the staleness chip treats that fixture as a successful fetch.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:20824426732ffb6a",
+          "evaluatedRevision": 15
         },
         {
           "subject": "observability-telemetry",
@@ -8220,7 +8224,11 @@
           "revision": 15,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/dashboard-queries.ts:31 useAgentDetail is set to keep showing the previous key's agent detail when personaId changes, so one persona's executions paint for the next persona until that read resolves.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:20824426732ffb6a",
+          "evaluatedRevision": 15
         },
         {
           "subject": "demo-data-plane",
