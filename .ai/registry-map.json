@@ -2409,7 +2409,11 @@
           "revision": 5,
           "changedAt": "2026-09-25",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/playground/TerminalSim.tsx:86 Searched context files and directories for chat-transcript terms ('turn_queue', 'ready_gate', 'virtual_channel', 'metadata_strip') with zero hits; TerminalSim iterates over hardcoded sample script lines from PROMPTS in a simulated CLI container rather than managing an alternating-turn chat transcript.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:5b4e7d399a4d924e",
+          "evaluatedRevision": 5
         },
         {
           "subject": "mcp-tools",
@@ -3629,7 +3633,11 @@
           "revision": 5,
           "changedAt": "2026-09-25",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 Searched context files and directories for chat-transcript terms ('turn_queue', 'ready_gate', 'virtual_channel', 'metadata_strip') with zero hits; GuideMarkdown parses static documentation handbook strings into editorial guide blocks rather than managing a multi-author chat transcript.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:5b4e7d399a4d924e",
+          "evaluatedRevision": 5
         },
         {
           "subject": "quality-gates",
