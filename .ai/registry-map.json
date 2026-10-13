@@ -5858,13 +5858,12 @@
           "state": "deviation",
           "digest": "sha256-b2:b2b329111d190ae7",
           "revision": 12,
-          "evidence": "added by /conform: the matcher scored table at zero here although DataTable.tsx, FilterBar.tsx and buildExecutionColumns.tsx are the repo's generic table primitive and its busiest work surface. Verdict: executionStore.ts:89 takes a server-truncated window (supabaseApi.ts:336, newest 50) and page.tsx:49 runs the status filter on the client below it - the split client-server-split forbids; page.tsx:69 counts the facets over those same 50 rows and ExecutionsFilters.tsx:30 renders them as dataset totals; page.tsx:161 guards load-more on a condition INITIAL_VISIBLE_EXECUTIONS=200 (:24) makes unreachable, so row 51 has no continuation; DataTable.tsx:59 asserts the empty state with no settled bit, so \"No executions yet\" paints during the first fetch. Realized: executionStore.ts:86,90,98,105 (latest-wins on rows, error and the in-flight flag), page.tsx:66 (window resets on a filter change), ExecutionsEmptyState.tsx:42 (empty typed by cause with one-tap clearing).",
-          "evaluatedAt": "2026-09-20",
-          "evaluatedAgainst": "sha256:9ac911984c10d3d5",
-          "evaluatedRevision": 5,
+          "evidence": "src/stores/executionStore.ts:96 The executions list is fetched as a fixed 50-row window, and the page then filters and counts that array by status on the client, so the Failed chip describes the window.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:b2b329111d190ae7",
+          "evaluatedRevision": 12,
           "changedAt": "2026-09-23",
-          "revisionsBehind": 7,
-          "stale": true
+          "revisionsBehind": 7
         }
       ],
       "governance": "governed"

@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "110d790e-1f68-444e-b4ac-cf316f28d926",
+ "subject": "table",
+ "evaluatedAt": "2026-10-13T00:06:41.553473+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/stores/executionStore.ts:96 The executions list is fetched as a fixed 50-row window, and the page then filters and counts that array by status on the client, so the Failed chip describes the window.",
+   "techniques": [
+    {
+     "technique": "client-server-split",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:64 The page calls fetchExecutions() with no args, so status is applied here under the store's limit-50 request. ExecFilterOpts.status exists and is never sent."
+    },
+    {
+     "technique": "filtering",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:78 Chip counts are tallies of the loaded array and render on All/Active/Failed as bare numbers. Chips commit on click, and a filtered empty offers Show all."
+    },
+    {
+     "technique": "loading-and-empty-states",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:123 A failed fetch with an empty list makes this flag false, so the body shows ExecutionsEmptyState ('No executions yet') beside the banner, and the page passes no onRetry. The in-flight success path waits on firstFetchSettled and holds a blank min-h box, so the column header row is absent until rows exist."
+    },
+    {
+     "technique": "pagination",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:23 Load-more renders only when the filtered list is longer than this slice, and its handler only raises visibleCount. The fetch asks for 50 and never sends an offset or cursor, so the server window does not advance."
+    },
+    {
+     "technique": "performance",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:168 Rows are keyed by execution id. The body renders the fetched window in full, with no virtualization and no index keys."
+    },
+    {
+     "technique": "sorting",
+     "verdict": "deviation",
+     "evidence": "src/lib/supabaseApi.ts:289 The sync-mirror list order is created_at alone, and the page renders that sequence with the Started header as plain text. The orchestrator comparator is not in this repo."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T00:06:41.553473+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [
+    "client-server-split",
+    "filtering",
+    "loading-and-empty-states",
+    "pagination",
+    "performance",
+    "sorting"
+   ],
+   "deviations": 1,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

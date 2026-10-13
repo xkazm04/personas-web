@@ -628,6 +628,56 @@
           "evidence": "scripts/check-guide-content.mjs:60 A read-only in-memory probe showed ['orphan-topic']: `body` exporting orphan-topic while this exact matcher returned no keys; importing bodies later only checks grammar and does not reconcile that missed key."
         }
       ]
+    },
+    "Observability & Event Monitoring/Execution History & Streaming/table": {
+      "context": "Execution History & Streaming",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T00:06:41.553Z",
+      "worker": "110d790e-1f68-444e-b4ac-cf316f28d926",
+      "techniques": [
+        {
+          "technique": "client-server-split",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/index.tsx:64 The page calls fetchExecutions() with no args, so status is applied here under the store's limit-50 request. ExecFilterOpts.status exists and is never sent."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/index.tsx:78 Chip counts are tallies of the loaded array and render on All/Active/Failed as bare numbers. Chips commit on click, and a filtered empty offers Show all."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/index.tsx:123 A failed fetch with an empty list makes this flag false, so the body shows ExecutionsEmptyState ('No executions yet') beside the banner, and the page passes no onRetry. The in-flight success path waits on firstFetchSettled and holds a blank min-h box, so the column header row is absent until rows exist."
+        },
+        {
+          "technique": "pagination",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/index.tsx:23 Load-more renders only when the filtered list is longer than this slice, and its handler only raises visibleCount. The fetch asks for 50 and never sends an offset or cursor, so the server window does not advance."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/executions/index.tsx:168 Rows are keyed by execution id. The body renders the fetched window in full, with no virtualization and no index keys."
+        },
+        {
+          "technique": "sorting",
+          "verdict": "deviation",
+          "evidence": "src/lib/supabaseApi.ts:289 The sync-mirror list order is created_at alone, and the page renders that sequence with the Started header as plain text. The orchestrator comparator is not in this repo."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "added by /conform: the matcher scored table at zero here although DataTable.tsx, FilterBar.tsx and buildExecutionColumns.tsx are the repo's generic table primitive and its busiest work surface. Verdict: executionStore.ts:89 takes a server-truncated window (supabaseApi.ts:336, newest 50) and page.tsx:49 runs the status filter on the client below it - the split client-server-split forbids; page.tsx:69 counts the facets over those same 50 rows and ExecutionsFilters.tsx:30 renders them as dataset totals; page.tsx:161 guards load-more on a condition INITIAL_VISIBLE_EXECUTIONS=200 (:24) makes unreachable, so row 51 has no continuation; DataTable.tsx:59 asserts the empty state with no settled bit, so \"No executions yet\" paints during the first fetch. Realized: executionStore.ts:86,90,98,105 (latest-wins on rows, error and the in-flight flag), page.tsx:66 (window resets on a filter change), ExecutionsEmptyState.tsx:42 (empty typed by cause with one-tap clearing).",
+          "evaluatedAt": "2026-09-20",
+          "worker": null,
+          "reason": "replaced by 110d790e-1f68-444e-b4ac-cf316f28d926"
+        }
+      ]
     }
   }
 }
