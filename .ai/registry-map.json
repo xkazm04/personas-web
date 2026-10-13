@@ -3319,7 +3319,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/data/guide/locales/ar/content/getting-started.ts:5 The localized guide content instructs readers to download macOS and Linux desktop installers that do not exist in the shipped product, because translation staleness is anchored exclusively to English source text rather than checked against shipped product capabilities.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         },
         {
           "subject": "data-access",
@@ -3440,7 +3444,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/data/guide/content/credentials.ts:141 The guide content states connector counts using an unanchored 'as of this writing' phrase rather than an instrumented, dated correction, causing prose claims to drift unobserved from the shipped connector catalog.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         },
         {
           "subject": "quality-gates",

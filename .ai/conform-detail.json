@@ -2123,6 +2123,83 @@
         }
       ],
       "registryProposal": "The react swr-design application describes a hand-rolled fetcher with an explicit ttlMs fresh zone. It never says how the swr package's dedupingInterval maps onto that zone, yet in 2.5 that single option is also the post-success flight-retention window."
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/docs-sync": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T21:48:14.205Z",
+      "worker": "7aba2320-7ab0-4793-895b-e76357d61c99",
+      "techniques": [
+        {
+          "technique": "translations-drift-against-the-product",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/locales/ar/content/getting-started.ts:5 Localized content advertises unreleased platforms because translation freshness is pinned solely to English source hashes without a secondary check against shipped product capabilities."
+        },
+        {
+          "technique": "negative-claims-are-pinned",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/locales/ar/content/credentials.ts:72 Security negative boundaries instructing users never to paste credentials into prompts are unpinned in localized files, lacking substring assertions or forbidden phrasing sweeps."
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Guide Data, Content & Search Index/docs-sync": {
+      "context": "Guide Data, Content & Search Index",
+      "subject": "docs-sync",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T21:48:14.205Z",
+      "worker": "7aba2320-7ab0-4793-895b-e76357d61c99",
+      "techniques": [
+        {
+          "technique": "dated-corrections",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/content/credentials.ts:141 Prose uses an unanchored 'as of this writing' count without a date, measurement predicate, or instrument."
+        },
+        {
+          "technique": "same-change-enforcement",
+          "verdict": "deviation",
+          "evidence": ".github/workflows/ci.yml:65 CI runs drift coverage in advisory report-only mode without enforcement thresholds, and no pre-commit/PR gate inspects VCS diffs for coupled doc obligations."
+        },
+        {
+          "technique": "catch-up-markers",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/types.ts:40 Historical catch-up passes (e.g. pass T.4) were documented only in source comments rather than leaving a structured marker artifact recording commit anchor, coverage, and skipped gaps."
+        },
+        {
+          "technique": "cross-repo-drift-detection",
+          "verdict": "conformant",
+          "evidence": "src/data/guide/types.ts:61 Topics declare coarse watchedFiles and contentReviewedAt, which check-guide-coverage.mjs queries against the desktop repo history per unique pair."
+        },
+        {
+          "technique": "checked-vs-skipped-denominators",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-coverage.mjs:57 The coverage script defines distinct SKIP reason classes, reporting null rather than empty findings when the remote repository cannot be queried."
+        },
+        {
+          "technique": "source-as-data-without-the-app",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-coverage.mjs:140 The drift scanner regex-scrapes GUIDE_TOPICS directly from the TypeScript source file and evaluates the array literal without bundling the application."
+        },
+        {
+          "technique": "source-doc-mapping",
+          "verdict": "conformant",
+          "evidence": "src/data/guide/desktop-modules.test.ts:17 The test asserts complete coverage of TOPIC_MODULE_MAP over all guide topics, verifying that no topic lacks a desktop module location."
+        },
+        {
+          "technique": "coupled-surface-inventory",
+          "verdict": "conformant",
+          "evidence": "src/lib/guide-refs.test.ts:26 Tests verify that hand-authored deep-link references from marketing platform cards resolve to real production-visible guide topics."
+        },
+        {
+          "technique": "rendered-surface-coupling",
+          "verdict": "conformant",
+          "evidence": "src/data/guide/getLocalized.test.ts:178 The test recomputes inputDigest over English sources and pins, failing if translation-status.ts was not regenerated after changes."
+        }
+      ]
     }
   }
 }
