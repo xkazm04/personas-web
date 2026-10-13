@@ -1840,7 +1840,11 @@
           "revision": 41,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 Context and repository searches found no prompt assembler or model-call path in the listed Lab modules, where timers replay a fixed chat script and the other tabs display predefined experiment data.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7436fd55a7cb2500",
+          "evaluatedRevision": 43
         },
         {
           "subject": "mcp-tools",
@@ -2489,7 +2493,11 @@
           "revision": 41,
           "changedAt": "2026-09-29",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:56 Context and repository searches found only guide-image paths mentioning prompts in this visualizer, whose implementation renders trigger-selection widgets without assembling model input.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7436fd55a7cb2500",
+          "evaluatedRevision": 43
         },
         {
           "subject": "test-harness",
@@ -8215,7 +8223,11 @@
           "revision": 41,
           "changedAt": "2026-09-29",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 Context and repository searches found authentication UI names and user-cache management here, while the actual session implementation invokes Supabase OAuth rather than assembling model prompts.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7436fd55a7cb2500",
+          "evaluatedRevision": 43
         },
         {
           "subject": "mcp-tools",

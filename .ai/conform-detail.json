@@ -783,6 +783,36 @@
           "evidence": "src/lib/server/request.ts:172 Precondition does not hold: utility modules define HTTP request helpers, hooks, and date formatters rather than a translation pipeline."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Authentication & User Session/prompt-assembly": {
+      "context": "Authentication & User Session",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T02:20:45.884Z",
+      "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/prompt-assembly": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T02:20:45.884Z",
+      "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+      "techniques": []
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/prompt-assembly": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T02:20:45.884Z",
+      "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+      "techniques": []
     }
   }
 }
