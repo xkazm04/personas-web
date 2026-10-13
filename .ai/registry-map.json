@@ -6962,7 +6962,11 @@
           "revision": 26,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:148 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found no matches; this module mounts an HTML5 canvas to manage client-side particle rendering and motion pause behavior rather than an agent execution runtime.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:9036e979656a8dc5",
+          "evaluatedRevision": 27
         },
         {
           "subject": "native-shell-integration",
@@ -8299,7 +8303,11 @@
           "revision": 26,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found zero hits; this module manages browser user authentication via Supabase OAuth rather than assembling an agent runtime.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:9036e979656a8dc5",
+          "evaluatedRevision": 27
         },
         {
           "subject": "agent-cli-transport",

@@ -1357,6 +1357,56 @@
           "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:65 Cross-slice data (subscriptions enriched with persona attributes) is derived in memoized selectors at read time rather than stored redundantly."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/agent-runtime-assembly": {
+      "context": "Animation & Motion System",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T08:45:59.538Z",
+      "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+      "techniques": []
+    },
+    "Infrastructure & Telemetry/Authentication & User Session/agent-runtime-assembly": {
+      "context": "Authentication & User Session",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T08:45:59.538Z",
+      "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+      "techniques": []
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/agent-runtime-assembly": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T08:45:59.538Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+        "state": "not-applicable",
+        "at": "2026-10-13T08:46:27.311943+00:00",
+        "reason": "reviewer (sonnet): The anchor DownloadCTA.tsx:36 is a comment and constant declarations that don't show the precondition is absent, so it is incidental. It also lies in a download/waitlist section, which doesn't say anything about agent-runtime assembly."
+      }
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/agent-runtime-assembly": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T08:45:59.538Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+        "state": "not-applicable",
+        "at": "2026-10-13T08:46:27.344566+00:00",
+        "reason": "reviewer (sonnet): The anchor layout.tsx:20 is the end of a doc comment just before the component declaration, so it is incidental. The shell imports a SyncedRealtimeProvider and a TourOverlay, and I did not open those or the other context files, so I could not confirm that nothing in this context assembles a runtime."
+      }
     }
   }
 }
