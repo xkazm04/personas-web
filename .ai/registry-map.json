@@ -1856,7 +1856,11 @@
           "revision": 8,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/data.ts:13 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module provides hardcoded chat dialogue and simulated benchmark scores for an interactive marketing showcase rather than invoking a coding-agent CLI transport.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
+          "evaluatedRevision": 9
         },
         {
           "subject": "prompt-assembly",
@@ -4677,7 +4681,11 @@
           "revision": 8,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/storage.ts:52 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module implements local JSON and Supabase persistence for user feature votes and roadmap suggestions rather than headless agent CLI process execution.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
+          "evaluatedRevision": 9
         },
         {
           "subject": "standards-layered-runtime",
@@ -8375,7 +8383,11 @@
           "revision": 8,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this store manages browser client authentication and demo session state using Supabase OAuth rather than managing credentials or child processes for headless agent CLIs.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
+          "evaluatedRevision": 9
         },
         {
           "subject": "terminal-multiplexing",

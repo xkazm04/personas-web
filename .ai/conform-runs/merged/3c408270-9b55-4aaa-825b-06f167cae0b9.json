@@ -1,0 +1,151 @@
+{
+ "schema": "conform-run/1",
+ "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+ "subject": "agent-cli-transport",
+ "evaluatedAt": "2026-10-13T12:34:39.180830+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/data.ts:13 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module provides hardcoded chat dialogue and simulated benchmark scores for an interactive marketing showcase rather than invoking a coding-agent CLI transport.",
+   "techniques": [
+    {
+     "technique": "availability-probe",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:93 The tab toggles a static UI indicator based on local component phase rather than probing a local CLI binary's installation or authorization."
+    },
+    {
+     "technique": "fallback-ladder",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:57 The arena tab indexes pre-computed scores from static data rather than stepping down a fallback ladder across agent transport rungs."
+    },
+    {
+     "technique": "dated-capability-matrix",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/types.ts:4 Defines static UI tab union types for presentation rather than querying a dated capability matrix for supported CLI flags and versions."
+    }
+   ],
+   "absenceTerms": [
+    "agent-cli",
+    "readonly-scan",
+    "availabilityProbe",
+    "capabilityMatrix"
+   ]
+  },
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/votes/storage.ts:52 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module implements local JSON and Supabase persistence for user feature votes and roadmap suggestions rather than headless agent CLI process execution.",
+   "techniques": [
+    {
+     "technique": "thread-custody-across-resume",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/feature-voting/components/CommentThread.tsx:28 Filters user discussion comments by parent ID for frontend display rather than tracking child agent CLI conversation threads across process spawns."
+    },
+    {
+     "technique": "output-normalization",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/feature-comments/route.ts:55 Normalizes user-submitted comment text to enforce string length limits rather than decoding structured coding-agent CLI output envelopes."
+    },
+    {
+     "technique": "availability-probe",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/feature-boosts/route.ts:44 Checks Supabase database environment variables rather than executing a zero-token availability probe against a local CLI binary."
+    }
+   ],
+   "absenceTerms": [
+    "agent-cli",
+    "readonly-scan",
+    "availabilityProbe",
+    "capabilityMatrix"
+   ]
+  },
+  {
+   "context": "Authentication & User Session",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/authStore.ts:215 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this store manages browser client authentication and demo session state using Supabase OAuth rather than managing credentials or child processes for headless agent CLIs.",
+   "techniques": [
+    {
+     "technique": "subscription-auth-selection",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/clearUserCaches.ts:36 Wipes browser SWR and store caches upon user sign-out rather than stripping or injecting environment variables to select seat versus metered CLI billing."
+    },
+    {
+     "technique": "availability-probe",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/AuthGuard.tsx:35 Polls web application system health endpoints on an interval rather than running a zero-token local agent CLI availability check through a child process spawn door."
+    },
+    {
+     "technique": "permission-stance-enforcement",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/SignInPrompt.tsx:124 Triggers in-memory mock demo user session entry rather than configuring or enforcing permissions or sandbox stances on a spawned agent subprocess."
+    }
+   ],
+   "absenceTerms": [
+    "agent-cli",
+    "readonly-scan",
+    "availabilityProbe",
+    "capabilityMatrix"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T12:34:39.180830+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [
+    "availability-probe",
+    "dated-capability-matrix",
+    "fallback-ladder"
+   ],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T12:34:39.180830+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [
+    "availability-probe",
+    "output-normalization",
+    "thread-custody-across-resume"
+   ],
+   "deviations": 0,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T12:34:39.180830+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [
+    "availability-probe",
+    "permission-stance-enforcement",
+    "subscription-auth-selection"
+   ],
+   "deviations": 0,
+   "context": "Authentication & User Session",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
