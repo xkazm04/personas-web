@@ -20,7 +20,7 @@
 | Custom lint rules (182-200) | a pointer to `docs/conventions-enforcement.md` |
 | OSS release passes (201-215) | a pointer to `docs/opus-4.7-oss-release-passes.md`; the list of completed passes is history, not law |
 | Context Map, Feature docs, AI registry (216-260) | a pointer to `docs/AI_HARNESS.md` |
-| Convention 10, dashboard loading tiers | a pointer to `docs/features/dashboard/loading-orchestration.md` |
+| The dashboard loading-tiers convention | a pointer to `docs/features/dashboard/loading-orchestration.md` |
 
 Moving all four would bring the file to roughly 170 lines. Lower the budget in the spec once that lands.
 

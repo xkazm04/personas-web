@@ -49,8 +49,12 @@ describe(".github/workflows/sast-trust-boundary.yml", () => {
   });
 
   it("blocks: the scan fails on a finding and nothing swallows the failure", () => {
-    expect(WORKFLOW).not.toContain("continue-on-error");
-    const scans = WORKFLOW.split("\n").filter((l) => l.includes("semgrep scan"));
+    // Comments are prose: the workflow's own header says "no continue-on-error". Every other line is
+    // YAML, where the word can only be the setting that would swallow the failure.
+    const yaml = WORKFLOW.split("\n").filter((l) => !l.trimStart().startsWith("#")).join("\n");
+    expect(yaml).not.toContain("continue-on-error");
+    // The invocations only: the step is also NAMED "semgrep scan", and its name line runs nothing.
+    const scans = yaml.split("\n").filter((l) => /^\s*(?:-\s*)?run:.*semgrep scan/.test(l));
     expect(scans.length).toBe(1);
     expect(scans[0]).toContain("--config .github/semgrep-trust-boundary.yml");
     expect(scans[0]).toContain(" --error ");

@@ -46,6 +46,8 @@ of the files above that govern the folder and states no rule of its own.
   [ui-evolution-playbook.md](ui-evolution-playbook.md): visual language and how the UI
   is allowed to change.
 - [tour-journey.md](tour-journey.md): the guided product tour.
+- [COMMIT_CONVENTIONS.md](COMMIT_CONVENTIONS.md): where the commit format lives, and the
+  trailers that say who wrote a change.
 
 ## History and backlogs
 

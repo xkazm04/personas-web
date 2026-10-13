@@ -27,8 +27,22 @@ function pngHeader(buf: Buffer): { width: number; height: number; colorType: num
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20), colorType: buf.readUInt8(25) };
 }
 
-/** PNG colour types 4 (grey + alpha) and 6 (RGBA) carry an alpha channel. */
-const hasAlpha = (colorType: number) => colorType === 4 || colorType === 6;
+/** The chunk types of a PNG, in order. */
+function pngChunks(buf: Buffer): string[] {
+  const out: string[] = [];
+  for (let i = 8; i + 8 <= buf.length; i += 12 + buf.readUInt32BE(i)) out.push(buf.toString("latin1", i + 4, i + 8));
+  return out;
+}
+
+/**
+ * Whether a PNG keeps transparency. Colour types 4 (grey + alpha) and 6 (RGBA) carry an alpha channel;
+ * a palette (3), grey (0) or RGB (2) image keeps it through a `tRNS` chunk. The icon generator writes
+ * a palette PNG with `tRNS`, so checking the colour type alone called a transparent icon opaque.
+ */
+const keepsTransparency = (buf: Buffer) => {
+  const { colorType } = pngHeader(buf);
+  return colorType === 4 || colorType === 6 || pngChunks(buf).includes("tRNS");
+};
 
 describe("icon-gen golden output", () => {
   it("src/app/favicon.ico is a PNG-in-ICO with 16, 32 and 48 px entries", () => {
@@ -50,16 +64,18 @@ describe("icon-gen golden output", () => {
     expect(sizes.sort((a, b) => a - b)).toEqual([16, 32, 48]);
   });
 
-  it("src/app/icon.png is 512 px square and keeps an alpha channel", () => {
-    const png = pngHeader(read("src/app/icon.png"));
+  it("src/app/icon.png is 512 px square and keeps its transparency", () => {
+    const buf = read("src/app/icon.png");
+    const png = pngHeader(buf);
     expect([png.width, png.height]).toEqual([512, 512]);
-    expect(hasAlpha(png.colorType), `colour type ${png.colorType}`).toBe(true);
+    expect(keepsTransparency(buf), `colour type ${png.colorType}, chunks ${pngChunks(buf).join(",")}`).toBe(true);
   });
 
-  it("src/app/apple-icon.png is 180 px square and flattened (no alpha)", () => {
-    const png = pngHeader(read("src/app/apple-icon.png"));
+  it("src/app/apple-icon.png is 180 px square and flattened (no transparency)", () => {
+    const buf = read("src/app/apple-icon.png");
+    const png = pngHeader(buf);
     expect([png.width, png.height]).toEqual([180, 180]);
-    expect(hasAlpha(png.colorType), `colour type ${png.colorType}`).toBe(false);
+    expect(keepsTransparency(buf), `colour type ${png.colorType}, chunks ${pngChunks(buf).join(",")}`).toBe(false);
   });
 
   it("every icon src/app/manifest.ts declares exists at the size it declares", () => {
