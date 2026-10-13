@@ -75,6 +75,12 @@ New here? Start at `docs/README.md`, which gives the reading order for every doc
   additive `fix:` read as a repair, a widened or shortened follow-up window, and each budget
   comparison. A gate that judges agent commits is held to the same bar: every mutant
   killed, and a survivor gets a new case in the suite, never a lower ratio
+- The same ratchet on product code: each mutation spec carries its own `MIN_KILL_RATIO`,
+  so the floor is per module. `src/lib/server/rateLimitMutants.test.ts` covers the limiter
+  every write route goes through; `src/lib/server/requestMutants.test.ts` covers
+  `src/lib/server/request.ts` (the client-IP trust ladder, the body cap at its exact
+  boundary and across chunks, and the refusal shapes routes answer with). Both sit at 1.
+  The next candidate is `src/lib/server/json-file-store.ts`
 
 ## Gates
 
@@ -392,6 +398,34 @@ A lane commit that lost its trailer is not counted as a person's: `laneOf` puts 
 untrailered commit whose subject has the lane runner's shape (`isLaneShaped` in
 `scripts/check-ai-change.mjs`) under `lane-untrailered`, so it neither hides from the
 budget nor inflates the human baseline.
+
+### What a lane's work cost
+
+The rework rate says whether a lane's output holds. It does not say what each change
+that held cost, and that number is what decides how far autonomy should scale. A lane
+commit can declare its spend in two optional trailers, next to `Ascent-Resolves:`:
+
+| Trailer | Value |
+|---|---|
+| `Ascent-Tokens: <int>` | input + output tokens for the whole cycle that produced the commit |
+| `Ascent-Wall-Clock: <seconds>` | seconds from cycle start to commit (a trailing `s` is accepted) |
+
+`node scripts/report-lane-cost.mjs [<range>] [--window N]` reads them back. It takes its
+lanes, its follow-up window and its rework pairs from `scripts/report-agent-rework.mjs`,
+so the two reports agree on which commit belongs to which lane and which one survived.
+Per agent lane, it prints how many commits declared spend and the tokens and seconds per
+*surviving* change: everything the costed commits spent, reworked ones included, divided by
+the costed commits nothing reworked. A lane with no trailers prints `no cost data`, not a
+zero. Human commits are left out; they carry no spend to compare.
+
+**Review line.** `COST_REVIEW` in the script prints a `REVIEW` line for a lane with at least
+10 costed commits whose surviving change costs more than 2,000,000 tokens, or where nothing
+it paid for survived. It is advisory and exits 0, like the rework FLAG band, and it feeds
+the same narrowing steps below. The line was set before any lane wrote the trailers. The
+first run with real figures should move it in the same commit that records them here.
+`src/lib/laneCost.test.ts` pins the trailer parsing, the per-survivor arithmetic and the
+review line. Writing the trailers is the lane runner's job, which lives outside this
+repository; until it does, every lane reads `no cost data`.
 
 ### When a lane degrades
 

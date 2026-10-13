@@ -10,6 +10,16 @@ orchestrator failing (unreachable, an error status, a stream that drops mid-sess
 client abort) and checks that each answer matches what is written here. The
 configuration rows (503, 501) are drilled by the routes' own specs next to them.
 
+`e2e/degraded-dependencies.spec.ts` drills the same page against the built app over
+HTTP, the way a visitor's browser meets it: with no orchestrator URL, the stream and the
+proxy (reads and writes) answer 503 `orchestrator_not_configured`, and with no Supabase
+env, `GET /api/votes` answers 200 from the file store (see "Supabase absent entirely").
+It runs with `npm run test:e2e`, which builds and starts the app with no dependency
+configured, and each group skips itself when its dependency is configured. The 502,
+`auth_unavailable` and 501 rows need an orchestrator URL that is set but failing, which a
+server started with no configuration cannot reach, so only the in-process drill covers
+them.
+
 The marketing pages and the `/dashboard/*` demo never call either dependency, because the
 demo runs on `src/lib/mockApi.ts`. Everything below applies to the live dashboard and to
 roadmap voting only.

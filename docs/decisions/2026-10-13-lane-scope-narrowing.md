@@ -37,4 +37,5 @@ The lane runner reads the block before dispatching: `paused` dispatches nothing,
 
 - Decide the block's shape and add it to `.ai/manifest.yaml`. Until then a narrowing is recorded as a dated status line in this record.
 - Teach the lane runner to read `lanes:` and to call `node scripts/report-agent-rework.mjs --strict` before a cycle, stopping on exit 1. The runner is outside this repo.
+- Teach the lane runner to write `Ascent-Tokens:` and `Ascent-Wall-Clock:` on each lane commit, so `node scripts/report-lane-cost.mjs` can put a cost per surviving change next to the rework rate (contract in "What a lane's work cost" in `docs/AI_HARNESS.md`). A lane past its `COST_REVIEW` line enters the same narrowing order as a flagged one.
 - Decide whether `scripts/check-ai-change.mjs` should enforce `denyPaths`. That is a gate-script edit, pinned by `src/lib/aiChangeGateMutants.test.ts`.
