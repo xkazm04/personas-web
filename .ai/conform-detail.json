@@ -1669,6 +1669,120 @@
         }
       ],
       "registryProposal": "Interactive Demos & Playground/Visual Flow Composer & Playground Page was matched to chat-transcript due to spurious lexical collisions on 'composer', 'queue', and 'tool', which actually describe an SVG diagram canvas and CLI simulation; semantic disambiguation should separate visual flow composers from chat composers."
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/companion-identity": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T11:09:52.329Z",
+      "worker": "76ea847c-99bf-4583-b43b-eeae6e073f77",
+      "techniques": [
+        {
+          "technique": "constitution-self-model-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:7 Switcher prototypes visual directions rather than enforcing a companion constitution or self-model."
+        },
+        {
+          "technique": "anchored-identity-diffs",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:26 Variants are illustration components without identity diffs or change approval surfaces."
+        },
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:33 Component switches visual options and contains no capability inventory or exercise ledger."
+        },
+        {
+          "technique": "disk-truth-db-index",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:46 State syncs with URL search params rather than on-disk identity documents and derived indexes."
+        },
+        {
+          "technique": "one-mind-many-mouths",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:55 URL search param updates manage UI tabs without multi-channel memory coordination."
+        },
+        {
+          "technique": "brain-adoption-consent",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:73 Tablist UI selects design prototypes and lacks brain discovery or adoption consent gates."
+        },
+        {
+          "technique": "operator-profile-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:104 Panel renders selected illustration components without user profiling or tally synthesis."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/companion-identity": {
+      "context": "Split & Pipeline Playground",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T11:09:52.329Z",
+      "worker": "76ea847c-99bf-4583-b43b-eeae6e073f77",
+      "techniques": [
+        {
+          "technique": "constitution-self-model-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:20 Playground component manages interactive pipeline simulation without a companion constitution or self-model split."
+        },
+        {
+          "technique": "anchored-identity-diffs",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.tsx:22 Tokenization parses prompt keyword highlighting rather than anchored self-model identity diffs."
+        },
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/types.ts:11 Capabilities interface configures marketing outcome strings (messages, humanReview, events, memories) for sample cards rather than an action exercise ledger."
+        },
+        {
+          "technique": "disk-truth-db-index",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:72 Joins in-memory translated copy into prompt fixtures with no on-disk documents or rebuildable index."
+        },
+        {
+          "technique": "one-mind-many-mouths",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:28 Pipelines model task intents for discrete demo workflows without multi-channel identity or memory sharing."
+        },
+        {
+          "technique": "brain-adoption-consent",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/types.ts:41 Node status tracks UI flow node animation phases with no brain discovery or adoption consent gates."
+        },
+        {
+          "technique": "operator-profile-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:33 Simulated event emission displays sample automation outputs without operator profiling or behavioral synthesis."
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Guide Data, Content & Search Index/companion-identity": {
+      "context": "Guide Data, Content & Search Index",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T11:09:52.329Z",
+      "techniques": [
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/content/companion.ts:229 Companion action inventory in the guide is hand-maintained prose rather than re-generated from the runtime permitted-action list, allowing documented capabilities to drift from runtime reality."
+        }
+      ],
+      "registryProposal": "When 'writing documentation of what a companion is able to do' is evaluated on a separate web documentation repo rather than the runtime repo, the technique should clarify how the derivation artifact cross-publishes across repository boundaries without requiring full runtime dependencies.",
+      "withdrawn": {
+        "worker": "76ea847c-99bf-4583-b43b-eeae6e073f77",
+        "state": "deviation",
+        "at": "2026-10-13T11:10:17.591649+00:00",
+        "reason": "reviewer (sonnet): companion.ts:229 is only the intro line of the Decision Hub's list of approval-card actions; I found no permitted-action list in the repo and nothing showing the prose drifts from runtime capabilities, so the hand-maintained-and-drifting claim is unconfirmed."
+      }
     }
   }
 }

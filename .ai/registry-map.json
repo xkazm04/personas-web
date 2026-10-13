@@ -2216,7 +2216,11 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:71 Searches for \"constitution\", \"self-model\", and \"companion\" in this context returned zero matches; this module implements an illustration prototype switcher for previewing visual directions rather than a companion runtime.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         },
         {
           "subject": "retry-backoff",
@@ -2771,7 +2775,11 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:23 Searches for \"constitution\", \"self-model\", and \"companion\" in this context returned zero matches; EXAMPLE_BASES defines sample multi-agent automation pipelines for an interactive demonstration rather than a companion runtime.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         },
         {
           "subject": "agent-memory",

@@ -1,0 +1,181 @@
+{
+  "schema": "conform-run/1",
+  "worker": "76ea847c-99bf-4583-b43b-eeae6e073f77",
+  "subject": "companion-identity",
+  "evaluatedAt": "2026-10-13T11:09:52.329388+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [
+    {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:71 Searches for \"constitution\", \"self-model\", and \"companion\" in this context returned zero matches; this module implements an illustration prototype switcher for previewing visual directions rather than a companion runtime.",
+      "techniques": [
+        {
+          "technique": "constitution-self-model-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:7 Switcher prototypes visual directions rather than enforcing a companion constitution or self-model."
+        },
+        {
+          "technique": "anchored-identity-diffs",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:26 Variants are illustration components without identity diffs or change approval surfaces."
+        },
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:33 Component switches visual options and contains no capability inventory or exercise ledger."
+        },
+        {
+          "technique": "disk-truth-db-index",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:46 State syncs with URL search params rather than on-disk identity documents and derived indexes."
+        },
+        {
+          "technique": "one-mind-many-mouths",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:55 URL search param updates manage UI tabs without multi-channel memory coordination."
+        },
+        {
+          "technique": "brain-adoption-consent",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:73 Tablist UI selects design prototypes and lacks brain discovery or adoption consent gates."
+        },
+        {
+          "technique": "operator-profile-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:104 Panel renders selected illustration components without user profiling or tally synthesis."
+        }
+      ],
+      "absenceTerms": [
+        "constitution",
+        "self-model",
+        "companion"
+      ]
+    },
+    {
+      "context": "Split & Pipeline Playground",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/sections/playground-split/data.ts:23 Searches for \"constitution\", \"self-model\", and \"companion\" in this context returned zero matches; EXAMPLE_BASES defines sample multi-agent automation pipelines for an interactive demonstration rather than a companion runtime.",
+      "techniques": [
+        {
+          "technique": "constitution-self-model-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:20 Playground component manages interactive pipeline simulation without a companion constitution or self-model split."
+        },
+        {
+          "technique": "anchored-identity-diffs",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.tsx:22 Tokenization parses prompt keyword highlighting rather than anchored self-model identity diffs."
+        },
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/types.ts:11 Capabilities interface configures marketing outcome strings (messages, humanReview, events, memories) for sample cards rather than an action exercise ledger."
+        },
+        {
+          "technique": "disk-truth-db-index",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:72 Joins in-memory translated copy into prompt fixtures with no on-disk documents or rebuildable index."
+        },
+        {
+          "technique": "one-mind-many-mouths",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:28 Pipelines model task intents for discrete demo workflows without multi-channel identity or memory sharing."
+        },
+        {
+          "technique": "brain-adoption-consent",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/types.ts:41 Node status tracks UI flow node animation phases with no brain discovery or adoption consent gates."
+        },
+        {
+          "technique": "operator-profile-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:33 Simulated event emission displays sample automation outputs without operator profiling or behavioral synthesis."
+        }
+      ],
+      "absenceTerms": [
+        "constitution",
+        "self-model",
+        "companion"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "companion-identity",
+      "context": "Agent Lab & Plugin Ecosystem",
+      "reason": "absence contradicted: src/components/feature-sections/plugins/dev-tools-grid/AthenaFleetParts.tsx:8 contains 'companion' (2 hit(s) in the context's directories)"
+    },
+    {
+      "subject": "companion-identity",
+      "context": "Observability Deck & Security Vault",
+      "reason": "absence contradicted: src/components/feature-sections/plugins/dev-tools-grid/AthenaFleetParts.tsx:8 contains 'companion' (2 hit(s) in the context's directories)"
+    },
+    {
+      "subject": "companion-identity",
+      "context": "Guide Data, Content & Search Index",
+      "reason": "withdrawn after review: reviewer (sonnet): companion.ts:229 is only the intro line of the Decision Hub's list of approval-card actions; I found no permitted-action list in the repo and nothing showing the prose drifts from runtime capabilities, so the hand-maintained-and-drifting claim is unconfirmed."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-13T11:09:52.329388+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "companion-identity"
+      ],
+      "techniques": [
+        "anchored-identity-diffs",
+        "brain-adoption-consent",
+        "capability-exercise-ledger",
+        "constitution-self-model-split",
+        "disk-truth-db-index",
+        "one-mind-many-mouths",
+        "operator-profile-synthesis"
+      ],
+      "deviations": 0,
+      "context": "Self-Healing & Trigger Automation",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T11:09:52.329388+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "companion-identity"
+      ],
+      "techniques": [
+        "anchored-identity-diffs",
+        "brain-adoption-consent",
+        "capability-exercise-ledger",
+        "constitution-self-model-split",
+        "disk-truth-db-index",
+        "one-mind-many-mouths",
+        "operator-profile-synthesis"
+      ],
+      "deviations": 0,
+      "context": "Split & Pipeline Playground",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T11:09:52.329388+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "companion-identity"
+      ],
+      "techniques": [
+        "capability-exercise-ledger"
+      ],
+      "deviations": 1,
+      "context": "Guide Data, Content & Search Index",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}
