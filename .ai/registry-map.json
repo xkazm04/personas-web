@@ -820,7 +820,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/tour/TourOverlay.tsx:13 The tour is an in-page spotlight and dialog rendered by PageShell, with a window keydown listener and HTML audio clips, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent from the tour components, TourContext, and the tour hooks.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"
@@ -2597,7 +2601,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub is a page diagram whose trigger ids are a static snapshot of another repo's catalog, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent from orchestration-hub and platform-command.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
+          "evaluatedRevision": 3
         },
         {
           "subject": "narrative-scroll-surface",
@@ -7054,7 +7062,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:57 The only long-lived loop here is a document canvas that stops when the tab is hidden or nothing is in view, and a search of these files and of src for alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow found no native-shell API.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
+          "evaluatedRevision": 3
         },
         {
           "subject": "test-harness",
@@ -7344,7 +7356,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/layout.tsx:15 The chrome is a document SPA whose live updates are a Supabase channel created in a React effect and removed on cleanup, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent from the dashboard shell.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
+          "evaluatedRevision": 3
         },
         {
           "subject": "test-harness",
@@ -7530,7 +7546,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/layout.tsx:94 The shell is the Next.js document root, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent; the only webview wording is a localStorage failure comment in CookieConsent.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"

@@ -2200,6 +2200,208 @@
           "evidence": "src/data/guide/getLocalized.test.ts:178 The test recomputes inputDigest over English sources and pins, failing if translation-status.ts was not regenerated after changes."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/native-shell-integration": {
+      "context": "Animation & Motion System",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T22:21:54.353Z",
+      "worker": "887aa2f4-ed9f-4e05-bf2f-bc14decb3b4b",
+      "techniques": [
+        {
+          "technique": "permission-gate-vector",
+          "verdict": "not-applicable",
+          "evidence": "src/components/AnimationPauseObserver.tsx:9 The only gate is the browser tab's visibility, not a vector of host grants."
+        },
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/contexts/QualityContext.tsx:58 The branch is a document media query for reduced motion, not a per-host presence class."
+        },
+        {
+          "technique": "non-stealing-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/ParticleHost.tsx:39 The canvas is a fixed layer inside the page, not a native window over another application."
+        },
+        {
+          "technique": "query-transparent-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/FloatingParticles.tsx:100 The particle host is a decorative in-page node and never asks what element is under the cursor."
+        },
+        {
+          "technique": "observer-perturbation",
+          "verdict": "not-applicable",
+          "evidence": "src/contexts/SectionObserverContext.tsx:29 The observer watches this page's own sections, not a foreign application's tree."
+        },
+        {
+          "technique": "unexported-capability-ladder",
+          "verdict": "not-applicable",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:113 Visibility uses the public IntersectionObserver constructor, not an unexported host symbol."
+        },
+        {
+          "technique": "layout-resolved-input-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/ScrollMap.tsx:42 Keyboard use here is the visitor focusing in-page labels; no chord is synthesized into another application."
+        },
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:84 Frames are a requestAnimationFrame loop for on-screen particles, not a socket that must arrive while nobody is looking."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/native-shell-integration": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T22:21:54.353Z",
+      "worker": "887aa2f4-ed9f-4e05-bf2f-bc14decb3b4b",
+      "techniques": [
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:20 Desktop trigger ids are copied as catalog spellings, not classified as present or absent capabilities at runtime."
+        },
+        {
+          "technique": "non-stealing-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/platform-command/components/CommandBadge.tsx:20 The badge is an inline pill in the section, not a surface placed over another application."
+        },
+        {
+          "technique": "observer-perturbation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:50 The diagram names its own group; it does not read another application's structure."
+        },
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:21 Playback is visitor-driven diagram motion, not a connection that must deliver while the view is hidden."
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Layout, Navigation & Page Shell/native-shell-integration": {
+      "context": "Layout, Navigation & Page Shell",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T22:21:54.353Z",
+      "worker": "887aa2f4-ed9f-4e05-bf2f-bc14decb3b4b",
+      "techniques": [
+        {
+          "technique": "permission-gate-vector",
+          "verdict": "not-applicable",
+          "evidence": "src/components/CookieConsent.tsx:84 One product cookie choice written to localStorage, not two host grants with different blast radii."
+        },
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/CookieConsent.tsx:32 Webview appears only as a localStorage SecurityError case that returns a consent sentinel, not as a per-host capability class."
+        },
+        {
+          "technique": "non-stealing-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/CookieConsent.tsx:98 The banner is a fixed layer inside this page and is meant to be clicked, so the foreign-window teardown rules do not apply."
+        },
+        {
+          "technique": "observer-perturbation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/PageShell.tsx:34 The shell observes its own section ids, not another application."
+        },
+        {
+          "technique": "layout-resolved-input-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/MobilePageTOC.tsx:34 Escape is handled on this page's window; nothing is injected into a foreign application, and Escape is not layout-translated."
+        },
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/loading.tsx:9 The only stream named in the shell is the route segment streaming into the document during navigation."
+        }
+      ],
+      "registryProposal": "A localStorage comment that mentions embedded webviews is not this subject; the path's in-document-shell discriminator should say that naming a webview as a storage-failure environment does not mean the module holds a host capability."
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/native-shell-integration": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T22:21:54.353Z",
+      "worker": "887aa2f4-ed9f-4e05-bf2f-bc14decb3b4b",
+      "techniques": [
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DesktopSidebar.tsx:10 Desktop here names the shape of an in-page sidebar, not a per-host presence class."
+        },
+        {
+          "technique": "non-stealing-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/MobileBottomNav.tsx:22 The More menu is an in-page scrim stacked with z-index, not a native window over another application."
+        },
+        {
+          "technique": "layout-resolved-input-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardScopeBar.tsx:43 Escape closes this page's own menu; no key is synthesized into another application."
+        },
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useSyncedRealtime.ts:142 The layout's realtime hook owns a Supabase channel for the signed-in dashboard and removeChannel runs on effect cleanup, so the consumer is the open view and the technique's move-to-native rule is not triggered."
+        }
+      ],
+      "registryProposal": "A comment that a desktop sync writer produced the rows does not put this subscriber on the native side of the boundary; the path should say a foreign writer of the data is not by itself a native-owned stream."
+    },
+    "Marketing & Landing/Guided Product Tour/native-shell-integration": {
+      "context": "Guided Product Tour",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T22:21:54.353Z",
+      "worker": "887aa2f4-ed9f-4e05-bf2f-bc14decb3b4b",
+      "techniques": [
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:104 Narration is a document Audio element with no per-host presence class."
+        },
+        {
+          "technique": "non-stealing-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourIntroCard.tsx:30 The card is an in-page dialog that takes focus because the visitor acts on it, which is the case this technique excludes."
+        },
+        {
+          "technique": "query-transparent-overlay",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourSpotlight.tsx:86 The spotlight finds its target with a CSS selector in its own document, not a host query that would return the overlay."
+        },
+        {
+          "technique": "observer-perturbation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourSpotlight.tsx:41 The scrim covers this product's own page, which it already controls."
+        },
+        {
+          "technique": "unexported-capability-ladder",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourKeyboard.ts:18 Input is the public window listener; no unexported host entry point is resolved."
+        },
+        {
+          "technique": "layout-resolved-input-synthesis",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourKeyboard.ts:15 Arrow keys and Escape are handled on the product's own surface and carry no layout-dependent character."
+        },
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:11 The silence they handle is a stalled narration clip, and the response is a watchdog that advances the step, not a socket moved to a native process."
+        }
+      ]
     }
   }
 }
