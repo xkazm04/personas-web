@@ -2402,6 +2402,62 @@
           "evidence": "src/hooks/useTourAudio.ts:11 The silence they handle is a stalled narration clip, and the response is a watchdog that advances the step, not a socket moved to a native process."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Build Config & E2E Tests/settings": {
+      "context": "Build Config & E2E Tests",
+      "subject": "settings",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T22:40:47.515Z",
+      "worker": "ad40c896-f7af-40ae-b70b-c002f302f65b",
+      "techniques": [
+        {
+          "technique": "applied-defaults-ledger",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:84 This collection is declared in source, rather than seeded into a collection users can individually edit or delete."
+        },
+        {
+          "technique": "author-declared-include-graph",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:142 The configuration uses a programmatic wrapper; the inspected configs do not declare parent configuration documents or an include graph."
+        },
+        {
+          "technique": "config-backup-and-restore",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:7 This reads package metadata without an application save path that overwrites an operator-owned settings file."
+        },
+        {
+          "technique": "cross-source-precedence-chain",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:77 One environment source supplies this value, with a constant default; no independently supplied configuration sources are composed."
+        },
+        {
+          "technique": "in-place-document-patch",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:135 This combines source-defined build rules, rather than round-tripping a durable user settings document or reloading an observed settings object."
+        },
+        {
+          "technique": "inherited-default-override",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:130 The environment controls configuration evaluation; there is no persisted override following a continuously changing upstream preference."
+        },
+        {
+          "technique": "presence-decides-precedence",
+          "verdict": "not-applicable",
+          "evidence": "next.config.ts:78 The inspected setting has one input spelling and no deprecated alias competing during a rename grace period."
+        },
+        {
+          "technique": "read-batching",
+          "verdict": "not-applicable",
+          "evidence": "playwright.config.ts:28 The consumer uses an already evaluated in-memory configuration value; there is no per-key settings-storage round trip to batch."
+        },
+        {
+          "technique": "typed-accessors",
+          "verdict": "deviation",
+          "evidence": "playwright.config.ts:6 Number conversion accepts NaN, fractional numbers, and out-of-range ports without validation; the result is reused in baseURL and the webServer configuration."
+        }
+      ]
     }
   }
 }

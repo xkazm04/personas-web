@@ -7626,7 +7626,11 @@
           "revision": 13,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "playwright.config.ts:6 The operational port setting is converted without checking finiteness, integrality, or port range, allowing malformed configuration to reach both the test URL and server command.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:85c48ec5bdb5581f",
+          "evaluatedRevision": 13
         },
         {
           "subject": "conformance-checking",
