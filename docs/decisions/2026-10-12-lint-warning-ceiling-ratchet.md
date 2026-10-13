@@ -19,3 +19,5 @@
 ## Follow-up (needs a person)
 
 `eslint.config.mjs` is a gate config that unattended lanes may not edit. Replace its header comment with a one-line pointer to this record. `.claude/architect/config.md` also restates the number in prose. Remove it there the same way.
+
+The header also says nine of the warnings are `custom-quality/max-tsx-lines`. On 2026-10-13 none were: the four largest TSX files sat at 198 lines, one under the rule's line count of 200. They were split to give them headroom (`src/components/dashboard/views/executions/useExecutionsList.ts`, `src/components/sections/feature-voting/components/FeatureCommentsPanel.tsx`, `src/components/tour/spotlightFrame.ts`, `src/components/tour/useCountdownBlip.ts`). Before lowering the ceiling, count the warnings by rule with `npx eslint . -f json`.

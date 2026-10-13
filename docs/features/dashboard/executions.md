@@ -27,7 +27,8 @@ The dashboard nav badge next to "Executions" shows the count of active (running 
 
 | File | Role |
 | --- | --- |
-| `src/components/dashboard/views/executions/index.tsx` | Page: list load, poll gating, filter/paging state, modal selection |
+| `src/components/dashboard/views/executions/index.tsx` | Page: header, filter toolbar, table, modal selection |
+| `src/components/dashboard/views/executions/useExecutionsList.ts` | List load, poll gating, filter counts, paging state, cancel |
 | `src/components/dashboard/views/executions/executions-page/ExecutionsFilters.tsx` | Status filter pills (wraps shared `FilterBar`) + loading spinner |
 | `src/components/dashboard/views/executions/executions-page/buildExecutionColumns.tsx` | Column defs + per-status row border class + cancel button |
 | `src/components/dashboard/views/executions/executions-page/LoadMoreExecutions.tsx` | "Load more" pager under the table |

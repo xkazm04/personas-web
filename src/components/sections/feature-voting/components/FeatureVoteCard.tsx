@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
@@ -9,7 +9,7 @@ import { trackFeatureVote } from "@/lib/analytics";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { Comment, Feature } from "../local-types";
 import { localAccentTokens } from "../data";
-import CommentThread from "./CommentThread";
+import FeatureCommentsPanel from "./FeatureCommentsPanel";
 import FeatureVoteIllustration from "./FeatureVoteIllustration";
 import FeatureBoostButton from "./FeatureBoostButton";
 
@@ -162,36 +162,14 @@ export default function FeatureVoteCard({
           )}
         </div>
 
-        <AnimatePresence>
-          {showComments && (
-            <motion.div
-              initial={reduced ? false : { height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-              transition={reduced ? { duration: 0 } : { duration: 0.3, ease: "easeOut" }}
-              className="overflow-hidden"
-            >
-              <div className="px-4 pb-4">
-                <div
-                  className="comment-divider mb-3"
-                  style={{ color: rgba(0.15) }}
-                />
-                <div className="flex items-center gap-1.5 mb-2">
-                  <MessageCircle className="h-3 w-3 text-muted-dark/60" />
-                  <span className="text-base font-semibold text-muted-dark/60 font-mono tracking-wider uppercase">
-                    {vt.discussion}
-                  </span>
-                </div>
-                <CommentThread
-                  featureId={feature.id}
-                  comments={comments}
-                  onAddComment={onAddComment}
-                  accentRgba={rgba}
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <FeatureCommentsPanel
+          open={showComments}
+          featureId={feature.id}
+          comments={comments}
+          onAddComment={onAddComment}
+          heading={vt.discussion}
+          rgba={rgba}
+        />
       </div>
     </motion.div>
   );

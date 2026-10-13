@@ -37,9 +37,11 @@ Per-frame mechanics:
 | `src/hooks/useTourVolume.ts` | `localStorage`-persisted narration volume (`personas-tour-volume`, default 0.25) |
 | `src/components/tour/TourOverlay.tsx` | Mounts intro / spotlight+caption / bridge by phase |
 | `src/components/tour/TourSpotlight.tsx` | rAF cutout + tween + `data-tour-active` marker |
+| `src/components/tour/spotlightFrame.ts` | Pure cutout geometry: eased blend between rects, padding and viewport clamp |
 | `src/components/tour/TourCaptionCard.tsx` | Narration text, progress dots, controls, chapter quick-nav |
 | `src/components/tour/AthenaCompanion.tsx` | Idle video + audio-reactive canvas glow |
 | `src/components/tour/AvatarCountdown.tsx` | Pre-speech ring + 4→3→2→1 + Web Audio blips |
+| `src/components/tour/useCountdownBlip.ts` | The countdown's Web Audio tick (lazy AudioContext, closed on unmount) |
 | `src/components/tour/TourIntroCard.tsx` | Welcome pop-up (Begin / Skip) |
 | `src/components/tour/TourBridgeCard.tsx` | End-of-chapter "continue?" prompt |
 | `src/components/tour/TourVolumeControl.tsx` | Volume slider bound to context (default **0.25** — the file's own docblock claims "Default 50%", which is wrong; `useTourVolume.ts` is the authority) |

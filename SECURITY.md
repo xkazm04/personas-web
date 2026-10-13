@@ -8,10 +8,22 @@ Until one is published here, do not open a public issue for a suspected vulnerab
 Contact the repository owner privately through their GitHub profile instead.
 
 ## Automated guardrails we run
-- [ ] SAST (e.g. CodeQL/Semgrep) running on every PR. Not wired yet.
-- [ ] Dependency + secret scanning wired into CI (Dependabot/Snyk, gitleaks). Not wired yet.
+- [x] SAST on every push and PR to `master`: Semgrep (its default registry ruleset) in
+  `.github/workflows/security-scan.yml`, job `sast`. Advisory for now: findings print in the
+  job log without failing it until the first baseline is triaged; then delete its
+  `continue-on-error` to make it blocking. CodeQL is not wired: it needs an action this repo
+  does not pin yet, so adding it is an owner step.
+- [x] Secret scanning on every push and PR to `master`: detect-secrets over the changed files,
+  in `.github/workflows/security-scan.yml`, job `secrets`. Blocking: a new secret fails the job.
+- [x] Dependency updates: `.github/dependabot.yml`, weekly PRs for npm and GitHub Actions.
 - [ ] Container image scanning. Not applicable: no container images are shipped.
-- [ ] SBOM + signed, attested build artifacts (cosign/SLSA). Not wired yet.
+- [~] SBOM: a CycloneDX SBOM (`npm sbom`) is built on every push and PR in
+  `.github/workflows/security-scan.yml`, job `sbom`, and kept as the `sbom-cyclonedx` artifact.
+  Signed, attested build artifacts (cosign/SLSA) are not wired yet.
+
+The shape of `.github/workflows/security-scan.yml` and `.github/dependabot.yml` (triggers,
+read-only token scope, time budgets, exact scanner versions, a blocking secret scan, and only
+actions already pinned by SHA elsewhere) is held by `src/lib/securityWorkflow.test.ts`.
 
 ## Notes
 What does run today:
