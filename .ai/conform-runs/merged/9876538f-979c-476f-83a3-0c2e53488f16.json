@@ -1,0 +1,139 @@
+{
+  "schema": "conform-run/1",
+  "worker": "9876538f-979c-476f-83a3-0c2e53488f16",
+  "subject": "translation-pipeline-topology",
+  "evaluatedAt": "2026-10-13T01:28:21.243476+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [
+    {
+      "context": "Internationalization (14 locales)",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "deviation",
+      "evidence": "src/i18n/en.ts:1 The UI string catalog uses an object tree without per-string translation state, forcing key parity and fragment-splicing fallback over untranslated values.",
+      "techniques": [
+        {
+          "technique": "canonical-fallback-serving",
+          "verdict": "deviation",
+          "evidence": "src/i18n/catalog.ts:17 The UI catalog store deep-merges English over missing keys, creating fragment-level splicing forbidden by the standard."
+        },
+        {
+          "technique": "source-identical-value-audit",
+          "verdict": "deviation",
+          "evidence": "docs/i18n/ui-ledger.json:21 The UI ledger gate enforces a numeric ratchet threshold of 1285 identical values rather than a committed per-key allowlist."
+        },
+        {
+          "technique": "non-translatable-value-classification",
+          "verdict": "deviation",
+          "evidence": "scripts/i18n/identical-values-lib.mjs:17 The report classifies whole non-translatable values but lacks the four durable exclusion vocabulary classes on keys."
+        },
+        {
+          "technique": "language-registry-single-source",
+          "verdict": "deviation",
+          "evidence": "src/stores/i18nStore.ts:43 Font families and per-language configurations are maintained in a separate store map rather than in the language registry."
+        }
+      ]
+    },
+    {
+      "context": "Split & Pipeline Playground",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evidence": "src/components/sections/playground-split/data.ts:72 Grep searches across all playground-split files for translation pipeline topology terms confirm absence: this module is purely a UI presentation consumer that joins externally provided copy into sample prompts.",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/types.ts:4 Precondition does not hold: playground component is a client-side UI demo and does not manage translation pipelines or storage topology."
+        }
+      ]
+    },
+    {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "translation-pipeline-topology",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evidence": "src/lib/constants.ts:12 Grep searches across all 12 files in this context for translation pipeline topology terms confirm absence: src/lib/constants.ts registers only landing page UI navigation sections rather than any translation pipeline or language registry.",
+      "techniques": [
+        {
+          "technique": "canonical-and-derived-split",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/server/request.ts:172 Precondition does not hold: utility modules define HTTP request helpers, hooks, and date formatters rather than a translation pipeline."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "translation-pipeline-topology",
+      "context": "Localized Guide Content (14 locales)",
+      "reason": "withdrawn after review: reviewer (sonnet): I could not confirm that the guide translations are unreviewed or that there is no review gate, since the cited _meta.json only records translator and hash. The getLocalized.ts:8 technique describes conformant whole-unit fallback, not a deviation. The guide-source.mjs CRLF behaviour is documented in"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-13T01:28:21.243476+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-and-derived-split",
+        "canonical-fallback-serving",
+        "language-registry-single-source",
+        "prompt-context-contract",
+        "source-hash-translation-cache"
+      ],
+      "deviations": 1,
+      "context": "Localized Guide Content (14 locales)",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T01:28:21.243476+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-fallback-serving",
+        "language-registry-single-source",
+        "non-translatable-value-classification",
+        "source-identical-value-audit"
+      ],
+      "deviations": 1,
+      "context": "Internationalization (14 locales)",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T01:28:21.243476+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-and-derived-split"
+      ],
+      "deviations": 0,
+      "context": "Split & Pipeline Playground",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T01:28:21.243476+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-pipeline-topology"
+      ],
+      "techniques": [
+        "canonical-and-derived-split"
+      ],
+      "deviations": 0,
+      "context": "Shared Types, Utilities & Hooks",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}
