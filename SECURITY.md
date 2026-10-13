@@ -19,7 +19,9 @@ Contact the repository owner privately through their GitHub profile instead.
 - [ ] Container image scanning. Not applicable: no container images are shipped.
 - [~] SBOM: a CycloneDX SBOM (`npm sbom`) is built on every push and PR in
   `.github/workflows/security-scan.yml`, job `sbom`, and kept as the `sbom-cyclonedx` artifact.
-  Signed, attested build artifacts (cosign/SLSA) are not wired yet.
+  Signed, attested build artifacts (cosign/SLSA) are not wired yet. The SBOM is the only
+  released artifact; the steps that would attest it and make SAST blocking are in
+  `docs/decisions/2026-10-13-release-provenance-and-sast-triage.md`.
 
 The shape of `.github/workflows/security-scan.yml` and `.github/dependabot.yml` (triggers,
 read-only token scope, time budgets, exact scanner versions, a blocking secret scan, and only
