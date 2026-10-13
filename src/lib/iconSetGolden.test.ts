@@ -59,6 +59,10 @@ describe("icon-gen golden output", () => {
       expect(offset + length, `entry ${i} runs past the end`).toBeLessThanOrEqual(ico.length);
       const png = pngHeader(ico.subarray(offset, offset + length));
       expect([png.width, png.height], `entry ${i} pixels match its directory size`).toEqual([size, size]);
+      // `next build` (Turbopack) refuses an ICO whose PNG entries are not RGBA ("Format error decoding
+      // Ico: The PNG is not in RGBA format!"). The RGB entries of 2026-10-12's brand mark failed every
+      // production deploy until they were re-encoded; this keeps the next regeneration honest.
+      expect(png.colorType, `entry ${i} must be RGBA (colour type 6)`).toBe(6);
       sizes.push(size);
     }
     expect(sizes.sort((a, b) => a - b)).toEqual([16, 32, 48]);
