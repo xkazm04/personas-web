@@ -55,7 +55,8 @@ New here? Start at `docs/README.md`, which gives the reading order for every doc
   - `docs/api/openapi.json`: request and response shapes of every API route, kept joined to
     the handlers by `src/lib/apiSchemaCoverage.test.ts` (paths, verbs, allowlists) and
     `src/lib/apiSchemaStatuses.test.ts` (every literal `status: NNN` a handler sends is a
-    documented response on its path)
+    documented response on its path), and made readable by `src/lib/apiSchemaExamples.test.ts`
+    (every JSON request and response body carries an `example` that satisfies its own schema)
 - Proof that the gates reject: `src/lib/aiChangeGateMutants.test.ts` applies targeted
   mutations to `scripts/check-ai-change.mjs` (a flipped comparison, a dropped branch, an
   emptied pattern), imports each mutant and runs a suite of known-bad commits against it.

@@ -3,7 +3,7 @@
   "info": {
     "title": "personas-web API routes",
     "version": "0.1.0",
-    "description": "Request and response shapes of every handler under src/app/api. The gate, secret and abuse control of each route are in docs/threat-model.md (## Routes); this file is the shape an agent needs before writing a caller. src/lib/apiSchemaCoverage.test.ts fails when a route, a method or an allowlist here drifts from the handler; src/lib/apiSchemaStatuses.test.ts fails when a handler sends a literal status its path does not document."
+    "description": "Request and response shapes of every handler under src/app/api. The gate, secret and abuse control of each route are in docs/threat-model.md (## Routes); this file is the shape an agent needs before writing a caller. src/lib/apiSchemaCoverage.test.ts fails when a route, a method or an allowlist here drifts from the handler; src/lib/apiSchemaStatuses.test.ts fails when a handler sends a literal status its path does not document; src/lib/apiSchemaExamples.test.ts fails when a JSON body has no example or its example breaks its own schema."
   },
   "servers": [{ "url": "/" }],
   "tags": [
@@ -73,7 +73,8 @@
                 "userVotes": { "type": "array", "items": { "$ref": "#/components/schemas/FeatureId" } },
                 "shipped": { "type": "array", "items": { "type": "object", "properties": { "feature_id": { "type": "string" }, "changelog": { "type": "string" }, "link": { "type": "string" }, "shipped_at": { "type": "string" } } } }
               }
-            } } }
+            },
+            "example": { "counts": { "macos": 42, "dashboard": 17, "enterprise": 5 }, "userVotes": ["macos"], "shipped": [] } } }
           },
           "500": { "$ref": "#/components/responses/ServerError" }
         }
@@ -85,9 +86,9 @@
           "type": "object",
           "required": ["featureId", "voterId"],
           "properties": { "featureId": { "$ref": "#/components/schemas/FeatureId" }, "voterId": { "$ref": "#/components/schemas/VoterId" } }
-        } } } },
+        }, "example": { "featureId": "macos", "voterId": "v_3f9a2c7e1b4d8f60" } } } },
         "responses": {
-          "200": { "description": "Vote added or removed.", "content": { "application/json": { "schema": { "type": "object", "required": ["action"], "properties": { "action": { "enum": ["added", "removed"] } } } } } },
+          "200": { "description": "Vote added or removed.", "content": { "application/json": { "schema": { "type": "object", "required": ["action"], "properties": { "action": { "enum": ["added", "removed"] } } }, "example": { "action": "added" } } } },
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
@@ -100,7 +101,7 @@
         "tags": ["community"],
         "summary": "Boost totals per feature",
         "responses": {
-          "200": { "description": "Summed boost weight per feature id.", "content": { "application/json": { "schema": { "type": "object", "required": ["totals"], "properties": { "totals": { "type": "object", "additionalProperties": { "type": "integer" } } } } } } },
+          "200": { "description": "Summed boost weight per feature id.", "content": { "application/json": { "schema": { "type": "object", "required": ["totals"], "properties": { "totals": { "type": "object", "additionalProperties": { "type": "integer" } } } }, "example": { "totals": { "macos": 40, "enterprise": 15 } } } } },
           "500": { "$ref": "#/components/responses/ServerError" }
         }
       },
@@ -116,9 +117,9 @@
             "tierValue": { "$ref": "#/components/schemas/BoostTier" },
             "weight": { "$ref": "#/components/schemas/BoostTier" }
           }
-        } } } },
+        }, "example": { "featureId": "enterprise", "voterId": "v_3f9a2c7e1b4d8f60", "tierValue": 15, "weight": 15 } } } },
         "responses": {
-          "200": { "description": "Boost recorded; body carries the updated totals." },
+          "200": { "description": "Boost recorded. Read GET for the updated totals.", "content": { "application/json": { "schema": { "type": "object", "required": ["ok"], "properties": { "ok": { "const": true } } }, "example": { "ok": true } } } },
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
@@ -131,7 +132,10 @@
         "tags": ["community"],
         "summary": "Every comment across features, oldest first",
         "responses": {
-          "200": { "description": "All comments.", "content": { "application/json": { "schema": { "type": "object", "required": ["comments"], "properties": { "comments": { "type": "array", "items": { "$ref": "#/components/schemas/Comment" } } } } } } },
+          "200": { "description": "All comments.", "content": { "application/json": { "schema": { "type": "object", "required": ["comments"], "properties": { "comments": { "type": "array", "items": { "$ref": "#/components/schemas/Comment" } } } }, "example": { "comments": [
+            { "id": "0b9f1c2e-4a7d-4e1b-9c3a-5d6e7f8a9b0c", "featureId": "dashboard", "parentId": null, "author": "Ada", "text": "Would love a dark theme here.", "timestamp": 1760313600000 },
+            { "id": "6c1d2e3f-8a9b-4c0d-8e1f-2a3b4c5d6e7f", "featureId": "dashboard", "parentId": "0b9f1c2e-4a7d-4e1b-9c3a-5d6e7f8a9b0c", "author": "Lin", "text": "+1, especially for the charts.", "timestamp": 1760317200000 }
+          ] } } } },
           "500": { "$ref": "#/components/responses/ServerError" }
         }
       },
@@ -147,9 +151,9 @@
             "author": { "type": "string", "minLength": 1, "maxLength": 64, "description": "Trimmed before the length check." },
             "parentId": { "type": ["string", "null"], "format": "uuid" }
           }
-        } } } },
+        }, "example": { "featureId": "dashboard", "text": "Would love a dark theme here.", "author": "Ada", "parentId": null } } } },
         "responses": {
-          "200": { "description": "Comment saved." },
+          "200": { "description": "Comment saved; body carries the stored row.", "content": { "application/json": { "schema": { "type": "object", "required": ["comment"], "properties": { "comment": { "$ref": "#/components/schemas/Comment" } } }, "example": { "comment": { "id": "0b9f1c2e-4a7d-4e1b-9c3a-5d6e7f8a9b0c", "featureId": "dashboard", "parentId": null, "author": "Ada", "text": "Would love a dark theme here.", "timestamp": 1760313600000 } } } } },
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
@@ -165,9 +169,9 @@
           "type": "object",
           "required": ["text"],
           "properties": { "text": { "type": "string", "minLength": 1, "maxLength": 1000, "description": "Trimmed before the length check." } }
-        } } } },
+        }, "example": { "text": "Export execution logs as CSV." } } } },
         "responses": {
-          "200": { "description": "Saved.", "content": { "application/json": { "schema": { "type": "object", "required": ["saved"], "properties": { "saved": { "const": true } } } } } },
+          "200": { "description": "Saved.", "content": { "application/json": { "schema": { "type": "object", "required": ["saved"], "properties": { "saved": { "const": true } } }, "example": { "saved": true } } } },
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
@@ -180,7 +184,7 @@
         "tags": ["community"],
         "summary": "Signup counts per platform",
         "responses": {
-          "200": { "description": "One count per platform.", "content": { "application/json": { "schema": { "type": "object", "required": ["counts"], "properties": { "counts": { "type": "object", "additionalProperties": { "type": "integer" } } } } } } },
+          "200": { "description": "One count per platform.", "content": { "application/json": { "schema": { "type": "object", "required": ["counts"], "properties": { "counts": { "type": "object", "additionalProperties": { "type": "integer" } } } }, "example": { "counts": { "macos": 412, "windows": 230, "linux": 57 } } } } },
           "429": { "$ref": "#/components/responses/RateLimited" },
           "503": { "$ref": "#/components/responses/CodedError" }
         }
@@ -196,9 +200,9 @@
             "platform": { "$ref": "#/components/schemas/WaitlistPlatform" },
             "earlyBeta": { "type": "boolean" }
           }
-        } } } },
+        }, "example": { "email": "ada@example.com", "platform": "macos", "earlyBeta": true } } } },
         "responses": {
-          "200": { "description": "Added, or already present (duplicate: true).", "content": { "application/json": { "schema": { "type": "object", "required": ["message"], "properties": { "message": { "type": "string" }, "count": { "type": "integer" }, "duplicate": { "const": true } } } } } },
+          "200": { "description": "Added, or already present (duplicate: true).", "content": { "application/json": { "schema": { "type": "object", "required": ["message"], "properties": { "message": { "type": "string" }, "count": { "type": "integer" }, "duplicate": { "const": true } } }, "example": { "message": "Added to waitlist", "count": 413 } } } },
           "400": { "$ref": "#/components/responses/CodedError" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
@@ -211,8 +215,8 @@
         "tags": ["site"],
         "summary": "Roadmap items, read-only",
         "responses": {
-          "200": { "description": "Items from Supabase, or an empty list with source none when it is not configured.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoadmapResponse" } } } },
-          "502": { "description": "Supabase answered with an error; body is an empty list with source error.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoadmapResponse" } } } }
+          "200": { "description": "Items from Supabase, or an empty list with source none when it is not configured.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoadmapResponse" }, "example": { "items": [{ "id": "r1", "name": "Team workspaces", "description": "Share personas across a team.", "status": "in_progress", "priority": "now", "sort_order": 1 }], "source": "supabase" } } } },
+          "502": { "description": "Supabase answered with an error; body is an empty list with source error.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RoadmapResponse" }, "example": { "items": [], "source": "error" } } } }
         }
       }
     },
@@ -263,18 +267,18 @@
       "CodedError": { "type": "object", "required": ["error", "code"], "properties": { "error": { "type": "string" }, "code": { "type": "string", "description": "ApiErrorCode in src/lib/server/request.ts; never reworded." } } }
     },
     "responses": {
-      "Invalid": { "description": "A field failed validation.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "CodedError": { "description": "Refusal with a stable machine code.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CodedError" } } } },
-      "TooLarge": { "description": "Body over the route's byte limit.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "Invalid": { "description": "A field failed validation.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "Invalid feature ID" } } } },
+      "CodedError": { "description": "Refusal with a stable machine code.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CodedError" }, "example": { "error": "Invalid email format", "code": "invalid_email" } } } },
+      "TooLarge": { "description": "Body over the route's byte limit.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "Payload too large" } } } },
       "RateLimited": { "description": "Per-IP in-memory rate limit hit." },
-      "ServerError": { "description": "Store read or write failed.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "BadPath": { "description": "Path refused before relay (bad_path).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "Unauthenticated": { "description": "X-User-Token missing or not a live session (unauthenticated).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "NotOnDesktop": { "description": "ORCHESTRATOR_TARGET=desktop serves no such endpoint (not_on_desktop).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
-      "Unavailable": { "description": "Orchestrator not configured or auth backend unreachable (orchestrator_not_configured, auth_unavailable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "ServerError": { "description": "Store read or write failed.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "Failed to record vote" } } } },
+      "BadPath": { "description": "Path refused before relay (bad_path).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "bad_path" } } } },
+      "Unauthenticated": { "description": "X-User-Token missing or not a live session (unauthenticated).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "unauthenticated" } } } },
+      "NotOnDesktop": { "description": "ORCHESTRATOR_TARGET=desktop serves no such endpoint (not_on_desktop).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "not_on_desktop", "method": "GET", "path": "/api/events/stream" } } } },
+      "Unavailable": { "description": "Orchestrator not configured or auth backend unreachable (orchestrator_not_configured, auth_unavailable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "orchestrator_not_configured" } } } },
       "RelayOk": { "description": "Upstream JSON answer, served with nosniff and a sandbox CSP." },
       "ClientClosed": { "description": "Client closed the connection before the upstream answered." },
-      "UpstreamUnreachable": { "description": "Upstream unreachable (upstream_unreachable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+      "UpstreamUnreachable": { "description": "Upstream unreachable (upstream_unreachable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "upstream_unreachable" } } } }
     }
   }
 }
