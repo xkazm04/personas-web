@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import { evalTsModule } from "./i18n/load-locale.mjs";
+import { evalTsModule, listLocales } from "./i18n/load-locale.mjs";
 
 const repoRoot = process.cwd();
 const i18nDir = path.join(repoRoot, "src", "i18n");
@@ -37,14 +37,6 @@ function countLeaves(value) {
     return Object.values(value).reduce((sum, item) => sum + countLeaves(item), 0);
   }
   return 0;
-}
-
-function listLocaleFiles() {
-  return fs
-    .readdirSync(i18nDir)
-    .filter((filename) => /^[a-z]{2}\.ts$/.test(filename))
-    .map((filename) => path.basename(filename, ".ts"))
-    .sort((a, b) => a.localeCompare(b));
 }
 
 function describe(value) {
@@ -102,7 +94,7 @@ function compareShape(expected, actual, pathParts, issues) {
   }
 }
 
-const locales = listLocaleFiles();
+const locales = listLocales(i18nDir);
 const { translations: fullBaseline, moduleExports: baselineExports } =
   loadLocaleModule(baselineLocale);
 const targetLocales = locales.filter((locale) => locale !== baselineLocale);

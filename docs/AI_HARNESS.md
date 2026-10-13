@@ -104,6 +104,15 @@ every `node scripts/<file>` cited in the guidance files must exist, and every sc
 The manual gates read a sibling `../personas` checkout or an exported snapshot that no
 runner has, which is why they stay out of CI.
 
+The four i18n gates above (coverage, encoding, ledger, guide translations) and the
+hardcoded-string report are also modes of one entry point: `node scripts/i18n/check.mjs all`
+runs the four gates and prints one pass/fail table, `node scripts/i18n/check.mjs <mode>`
+runs one, `--list` prints them. Each mode runs its `package.json` script body, so the
+command lives in one place. They stay separate scripts because they read different
+inputs (decoded values, raw bytes, guide markdown, TSX), and they share one locale
+selector, `listLocaleFiles` in `scripts/i18n/load-locale.mjs`. `src/lib/i18nCheckDispatcher.test.ts`
+fails when an i18n check script is not a mode or the selector loses a locale.
+
 ## Skills
 
 - **Project-owned** (`.claude/skills/icon-gen`, `.claude/skills/ui-variant-prototype`): real
@@ -199,6 +208,15 @@ import under `src/` and fails `test:unit`, naming the edge, when:
 
 Each rule carries an exact list of known exceptions (three guide/template helpers in
 `src/lib/` and one type-only roadmap import), so the list can only shrink.
+
+The edges around `src/lib/server/` are held by `src/lib/serverModuleBoundaries.test.ts`,
+the same way and with empty exception lists today. It fails when:
+
+- a module imports `src/lib/server/` and is not an API route, a file in that folder, or a
+  module whose first line is `import "server-only"`
+- `src/lib/server/` imports a route, UI, a store, a hook, a context or a demo mock
+- a demo mock (`mockApi`, `mock-dashboard-data`, `mockData`, `mockAuth`) imports server
+  code, `src/lib/supabase-admin.ts` or an API route
 
 ## Harness deny list
 

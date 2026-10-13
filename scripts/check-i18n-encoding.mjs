@@ -39,14 +39,15 @@
  * every locale's part included): they were moved out of files whose baseline is
  * zero, so they are held to zero too and stay out of the baseline.
  *
- * Selection: any *.ts in src/i18n that is not a known non-locale module. This
- * is deliberately broader than a bare two-letter match so that region-coded
- * locales (pt-BR.ts, zh-Hant.ts) are covered the day they are added rather
- * than being silently skipped by a gate that still prints OK.
+ * Selection: listLocaleFiles in scripts/i18n/load-locale.mjs, the one selector
+ * every i18n check shares. It is deliberately broader than a bare two-letter
+ * match so that region-coded locales (pt-BR.ts, zh-Hant.ts) are covered the day
+ * they are added rather than being silently skipped by a gate that still prints OK.
  */
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
+import { listLocaleFiles } from "./i18n/load-locale.mjs";
 
 const I18N_DIR = path.join(process.cwd(), "src", "i18n");
 const BASELINE_PATH = path.join(process.cwd(), "scripts", "i18n-encoding-baseline.json");
@@ -65,11 +66,6 @@ const MOJIBAKE = new RegExp(`[${escapeCls(LEAD)}][${escapeCls(CONT)}]|�`, "g")
 
 const updateBaseline = process.argv.includes("--update-baseline");
 
-// Modules that live in src/i18n but are not locale message files.
-const NON_LOCALE_FILES = new Set(["useTranslation.ts", "index.ts", "types.ts"]);
-// A locale file is <lang>[-<Region|Script>].ts — e.g. en.ts, pt-BR.ts, zh-Hant.ts.
-const LOCALE_FILE = /^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*\.ts$/;
-
 if (!fs.existsSync(I18N_DIR) || !fs.statSync(I18N_DIR).isDirectory()) {
   console.error(
     `[i18n-encoding] BROKEN CHECKER: locale directory not found: ${I18N_DIR}\n` +
@@ -79,7 +75,7 @@ if (!fs.existsSync(I18N_DIR) || !fs.statSync(I18N_DIR).isDirectory()) {
 }
 
 const allTs = fs.readdirSync(I18N_DIR).filter((f) => f.endsWith(".ts"));
-const files = allTs.filter((f) => !NON_LOCALE_FILES.has(f) && LOCALE_FILE.test(f)).sort();
+const files = listLocaleFiles(I18N_DIR);
 
 // Pending-translation modules (src/i18n/pending/<namespace>.ts, PLAN M22): English
 // copy moved out of en.ts so only its routes bundle it. It ships like en.ts, so it
@@ -113,7 +109,8 @@ const mustBeClean = (f) => f === "en.ts" || f.startsWith("pending/") || f.starts
 if (files.length === 0) {
   console.error(
     `[i18n-encoding] BROKEN CHECKER: selected 0 locale files in ${I18N_DIR}.\n` +
-      `  ${allTs.length} .ts file(s) are present but none matched ${LOCALE_FILE}.\n` +
+      `  ${allTs.length} .ts file(s) are present but none matched the locale selector\n` +
+      `  (listLocaleFiles in scripts/i18n/load-locale.mjs).\n` +
       `  A mojibake gate that scans nothing and exits 0 reports "clean" when it means\n` +
       `  "blind". Fix the selector (or the filenames) — this is a FAILURE, not a pass.`,
   );

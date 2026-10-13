@@ -35,7 +35,7 @@ import {
   collectLeaves,
   identicalInEveryLocale,
 } from "./identical-values-lib.mjs";
-import { loadLocale as loadLocaleFrom } from "./load-locale.mjs";
+import { listLocales, loadLocale as loadLocaleFrom } from "./load-locale.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const i18nDir = path.join(repoRoot, "src", "i18n");
@@ -55,12 +55,7 @@ function loadAcceptedTerms() {
 const keysArg = process.argv.find((arg) => arg.startsWith("--keys="))?.slice("--keys=".length);
 const differsArg = process.argv.find((arg) => arg.startsWith("--differs="))?.slice("--differs=".length);
 
-const locales = fs
-  .readdirSync(i18nDir)
-  .filter((filename) => /^[a-z]{2}\.ts$/.test(filename))
-  .map((filename) => path.basename(filename, ".ts"))
-  .filter((locale) => locale !== sourceLocale)
-  .sort((a, b) => a.localeCompare(b));
+const locales = listLocales(i18nDir).filter((locale) => locale !== sourceLocale);
 
 const { terms: acceptedTerms, note: termsNote } = loadAcceptedTerms();
 const sourceLeaves = collectLeaves(loadLocale(sourceLocale));
