@@ -1,0 +1,32 @@
+name: AI change gate
+
+# Review gate for AI-authored commits (docs/AI_HARNESS.md "Review gate for AI
+# changes"). Runs scripts/check-ai-change.mjs over the PR's commits; only those
+# carrying a `Co-Authored-By: Claude` or `Ascent-Resolves:` trailer are checked,
+# for hallucinated doc anchors, protected paths and manifest scope creep.
+# Human-only PRs pass with "0 agent commit(s)".
+#
+# Action pins match .github/workflows/ci.yml (commit SHA, tag in the comment).
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  ai-change:
+    name: agent-authored commits
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Check agent commits in the PR
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: node scripts/check-ai-change.mjs "origin/${BASE_REF}..HEAD"

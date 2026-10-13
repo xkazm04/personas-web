@@ -107,8 +107,8 @@ fallback is SSR-safe and renders without JS.
 
 ## Data & state
 - **Source:** the topic `body` markdown string, passed from `TopicView`
-  (`src/app/guide/[category]/[topic]/TopicView.tsx:165`) which also runs
-  `extractHeadings` for the TOC (`TopicView.tsx:66`). **Stores:** none in the renderer
+  (`src/app/guide/[category]/[topic]/TopicView.tsx:159`) which also runs
+  `extractHeadings` for the TOC (`TopicView.tsx:78`). **Stores:** none in the renderer
   (Zustand is upstream; `extractHeadings` re-runs only when the localized body differs
   from the server-extracted headings). **API routes:** none. **Types:** `GuideNode`,
   `GuideDiagnostic`, `GuideHeading`, `GuideSection` (`parseGuide.ts`), `CardItem` (`blocks/CardsBlock.tsx:5`); block prop shapes are

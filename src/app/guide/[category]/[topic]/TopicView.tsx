@@ -1,13 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
-import { ChevronLeft, ChevronRight, Clock, Download } from "lucide-react";
+import { Clock } from "lucide-react";
 import GuideMarkdown from "@/components/guide/GuideMarkdown";
-import PrimaryCTA from "@/components/PrimaryCTA";
 import RelatedTopics from "@/components/guide/RelatedTopics";
-import ModuleBadge from "@/components/guide/ModuleBadge";
-import GuideSearchLauncher from "@/components/guide/GuideSearchLauncher";
 import TopicTOC from "@/components/guide/TopicTOC";
 import MobileTopicTOC from "@/components/guide/MobileTopicTOC";
 import ReadingProgress from "@/components/guide/ReadingProgress";
@@ -15,7 +11,6 @@ import { CHROME_PAD_TOPIC, CHROME_TOC_STICKY } from "@/components/guide/guide-ch
 import { extractHeadings } from "@/components/guide/guide-markdown/extractHeadings";
 import type { GuideHeading } from "@/components/guide/guide-markdown/extractHeadings";
 import { useArrivalMark } from "@/components/guide/guide-markdown/useArrivalMark";
-import { TOPIC_MODULE_MAP } from "@/data/guide/desktop-modules";
 import TranslationNotice from "@/components/guide/TranslationNotice";
 import { resolveTopicUnit } from "@/data/guide/getLocalized";
 import type { TopicUnitPreference, TopicUnitResolution } from "@/data/guide/getLocalized";
@@ -24,6 +19,8 @@ import { useI18nStore } from "@/stores/i18nStore";
 import type { Language } from "@/stores/i18nStore";
 import type { GuideCategory, GuideTopic } from "@/data/guide/types";
 import type { RelatedTopic } from "@/lib/guide-utils";
+import TopicHeader from "./TopicHeader";
+import TopicFooter from "./TopicFooter";
 
 interface TopicViewProps {
   category: GuideCategory;
@@ -128,41 +125,7 @@ export default function TopicView({ category, topic, content, initialUnit, initi
       <MobileTopicTOC headings={headings} />
       <div className="mx-auto max-w-3xl lg:max-w-[80rem] lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-12">
         <div className="min-w-0 lg:max-w-[52rem]">
-        {/* Breadcrumb + full-guide search trigger */}
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
-          <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-1.5 text-base text-muted-dark">
-            <Link href="/guide" className="transition-colors hover:text-brand-cyan">Guide</Link>
-            <span>/</span>
-            <Link href={`/guide/${category.id}`} className="transition-colors hover:text-brand-cyan">
-              {category.name}
-            </Link>
-            <span>/</span>
-            <span className="truncate text-foreground" aria-current="page">{localized.title}</span>
-          </nav>
-          <GuideSearchLauncher />
-        </div>
-
-        {/* Desktop app reference + Tags */}
-        <div className="mt-5 flex flex-wrap items-center gap-1.5">
-          {TOPIC_MODULE_MAP[topic.id] && (
-            <ModuleBadge moduleRef={TOPIC_MODULE_MAP[topic.id]} categoryColor={category.color} />
-          )}
-        </div>
-
-        {/* Tags */}
-        {topic.tags.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {topic.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full px-2.5 py-0.5 text-xs font-medium"
-                style={{ backgroundColor: `${category.color}15`, color: category.color }}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <TopicHeader category={category} topic={topic} title={localized.title} />
 
         {/* Content */}
         <article
@@ -203,65 +166,7 @@ export default function TopicView({ category, topic, content, initialUnit, initi
         {/* Related topics */}
         <RelatedTopics related={related} />
 
-        {/* Try-it CTA: prev/next + related otherwise loop guide-to-guide, never
-            out to the product. Offer a path to download / templates. */}
-        <div className="mt-12 rounded-2xl border border-glass bg-white/[0.02] p-6 text-center backdrop-blur-sm">
-          <p className="text-lg font-semibold text-foreground">Ready to try this yourself?</p>
-          <p className="mx-auto mt-2 max-w-md text-sm font-light text-muted-dark">
-            Personas runs free on your machine. No signup, no credit card.
-          </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-            <PrimaryCTA href="/#download" icon={Download} label="Download free" />
-            <Link
-              href="/templates"
-              className="inline-flex items-center gap-1.5 rounded-full border border-glass-hover bg-white/[0.02] px-5 py-2.5 text-base font-medium text-muted transition-colors hover:border-glass-strong hover:text-foreground"
-            >
-              Browse templates
-            </Link>
-          </div>
-        </div>
-
-        {/* Prev / Next navigation */}
-        <nav aria-label="Topic navigation" className="mt-16 grid grid-cols-2 gap-4">
-          {prevTopic ? (
-            <Link
-              href={`/guide/${category.id}/${prevTopic.id}`}
-              className="group flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
-            >
-              <ChevronLeft aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:-translate-x-0.5" />
-              <div className="min-w-0">
-                <div className="text-xs font-medium uppercase tracking-wider text-muted-dark">Previous</div>
-                <div className="truncate text-base font-medium text-foreground">{prevTopic.title}</div>
-              </div>
-            </Link>
-          ) : (
-            <Link
-              href={`/guide/${category.id}`}
-              className="group flex items-center gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
-            >
-              <ChevronLeft aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:-translate-x-0.5" />
-              <div className="min-w-0">
-                <div className="text-xs font-medium uppercase tracking-wider text-muted-dark">Back to</div>
-                <div className="truncate text-base font-medium text-foreground">{category.name}</div>
-              </div>
-            </Link>
-          )}
-
-          {nextTopic ? (
-            <Link
-              href={`/guide/${category.id}/${nextTopic.id}`}
-              className="group flex items-center justify-end gap-3 rounded-xl border border-glass bg-white/[0.02] px-5 py-4 text-right transition-colors hover:border-glass-strong hover:bg-white/[0.04]"
-            >
-              <div className="min-w-0">
-                <div className="text-xs font-medium uppercase tracking-wider text-muted-dark">Next</div>
-                <div className="truncate text-base font-medium text-foreground">{nextTopic.title}</div>
-              </div>
-              <ChevronRight aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-dark transition-transform group-hover:translate-x-0.5" />
-            </Link>
-          ) : (
-            <div />
-          )}
-        </nav>
+        <TopicFooter category={category} prevTopic={prevTopic} nextTopic={nextTopic} />
         </div>
         <aside className="hidden lg:block">
           <div className={`sticky ${CHROME_TOC_STICKY}`}>

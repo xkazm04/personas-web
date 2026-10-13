@@ -4,15 +4,8 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTour } from "@/contexts/TourContext";
+import { blendEdges, cutoutFrame, TWEEN_MS, type Edges } from "./spotlightFrame";
 
-/** Breathing room (px) drawn around the spotlit element. */
-const PADDING = 22;
-/** Minimum gap kept between the cutout and the viewport edge. */
-const MARGIN = 44;
-/** Extra bottom clearance so the cutout never runs under the caption card. */
-const BOTTOM_GAP = 150;
-/** Step-to-step tween duration. */
-const TWEEN_MS = 600;
 /** Anchor wait before the missed-anchor policy fires (covers lazy hydration). */
 const ANCHOR_TIMEOUT_MS = 3000;
 
@@ -32,10 +25,6 @@ function breadcrumbMissedAnchor(waitedMs: number): void {
       /* Sentry is optional — the scrim is dropped either way. */
     });
 }
-
-const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), hi);
-/** Smooth ease-in-out for the tween. */
-const ease = (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t);
 
 /**
  * Dims the page except a rounded cutout that *glides* between step targets.
@@ -126,35 +115,18 @@ export default function TourSpotlight() {
         const r = el.getBoundingClientRect();
         if (r.width > 0 || r.height > 0) {
           resolved = true;
-          let left = r.left;
-          let top = r.top;
-          let right = r.right;
-          let bottom = r.bottom;
+          let edges: Edges = r;
           // Blend from the previous rect toward the live new rect for the
           // first TWEEN_MS — after that, snap to live and just track.
           if (prevRectRef.current) {
             const t = Math.min(1, (performance.now() - tweenStartRef.current) / TWEEN_MS);
-            const e = ease(t);
-            const p = prevRectRef.current;
-            left = p.left * (1 - e) + r.left * e;
-            top = p.top * (1 - e) + r.top * e;
-            right = p.right * (1 - e) + r.right * e;
-            bottom = p.bottom * (1 - e) + r.bottom * e;
+            edges = blendEdges(prevRectRef.current, r, t);
             if (t >= 1) prevRectRef.current = null;
           }
-          const vw = window.innerWidth;
-          const vh = window.innerHeight;
-          // Narrow viewports get tighter margins so the frame doesn't crush
-          // the visible content area.
-          const m = vw < 480 ? 18 : MARGIN;
-          const bg = vw < 480 ? 180 : BOTTOM_GAP;
-          const cl = clamp(left - PADDING, m, vw - m);
-          const ct = clamp(top - PADDING, m, vh - m);
-          const cr = clamp(right + PADDING, m, vw - m);
-          const cb = clamp(bottom + PADDING, m, vh - bg);
-          cutout.style.transform = `translate(${cl}px, ${ct}px)`;
-          cutout.style.width = `${Math.max(0, cr - cl)}px`;
-          cutout.style.height = `${Math.max(0, cb - ct)}px`;
+          const frameBox = cutoutFrame(edges, window.innerWidth, window.innerHeight);
+          cutout.style.transform = `translate(${frameBox.x}px, ${frameBox.y}px)`;
+          cutout.style.width = `${frameBox.width}px`;
+          cutout.style.height = `${frameBox.height}px`;
           cutout.style.opacity = "1";
         }
       }

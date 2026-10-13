@@ -1,5 +1,7 @@
 # On the desktop data plane, pause, resume, chat send and review verdicts are explicitly unsupported and disabled before the click
 
+**Governs:** `src/lib/sync/desktopUnsupported.ts`, `src/lib/desktopApi.ts`, `src/components/dashboard/views/personas/`, `src/components/dashboard/views/reviews/`
+
 ## Context
 
 This extends `2026-10-07-desktop-data-plane-client-backend.md`, which is not edited. That record ended with a known gap: the plane's gate reports `online` from the health probe alone, so the UI could offer pause, resume, chat send and review verdicts while they answered 501, and "closing that is not part of this decision".

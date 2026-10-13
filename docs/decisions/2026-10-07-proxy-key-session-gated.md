@@ -1,5 +1,7 @@
 # The orchestrator proxy attaches the team key only for a verified Supabase session
 
+**Governs:** `src/app/api/orchestrator/[...path]/route.ts`, `src/app/api/orchestrator/userSession.ts`
+
 ## Context
 
 `/api/orchestrator/[...path]` moved `TEAM_API_KEY` out of the client bundle, but the route still attached it to every request from anyone. An anonymous `curl -X POST /api/orchestrator/personas/<id>/execute` reached the orchestrator with the team's authority: the server lent its credential to any caller. The same route is also the one place the key meets a URL built from user-supplied path segments, and it relays upstream bodies on the app's own origin. That origin holds a paired phone's non-extractable Ed25519 key, which any script running there can use to sign auto-executing commands.

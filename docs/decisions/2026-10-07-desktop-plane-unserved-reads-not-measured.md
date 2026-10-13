@@ -1,5 +1,7 @@
 # On the desktop plane, every read the desktop does not serve reads as "not served" or "not measured", never as empty, zero, failed or all-clear
 
+**Governs:** `src/app/api/orchestrator/desktopShapes.ts`, `src/lib/desktopApi.ts`
+
 ## Context
 
 This extends `2026-10-07-desktop-plane-list-read-not-served.md` (not edited), which settled the rule for list reads (`1bafec99`). Four merges carried it to every other read the plane does not serve. Facts below are checked at `dcd48e54`.

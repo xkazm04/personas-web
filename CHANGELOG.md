@@ -5,12 +5,30 @@ All notable changes to **personas-web** are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/).
 
+A release is cut by moving the shipped `[Unreleased]` entries under a dated
+`## [x.y.z] - YYYY-MM-DD` heading whose version matches `package.json`. The rule,
+and why a continuously deployed site still cuts releases, is
+`docs/decisions/2026-10-13-web-changelog-release-cut.md`.
+
 ## [Unreleased]
 
 ### Added
 
 - Connector modal shows the desktop app's real setup data: credential fields, numbered
   setup steps, docs link and an outbound-only boundary (`npm run sync:connector-setup`).
+
+### Changed
+
+- The live event feed reads each orchestrator SSE `event` message through a pinned
+  contract (`src/lib/personaEventWire.ts`) and drops off-contract messages instead of
+  casting them into the store.
+
+## [0.1.0] - 2026-04-17
+
+The open-source release pass (`audit-reports/oss-release-2026-04-17.md`). Earlier
+history predates changelog adoption; see `git log`.
+
+### Added
 
 - OSS-release foundation: `README.md` (product overview, quickstart, env table,
   commands, conventions, repo layout), `LICENSE` (MIT), `.env.example`
@@ -85,10 +103,3 @@ Versioning: [Semantic Versioning](https://semver.org/).
 - `npm run lint`: 0 errors, 0 warnings
 - `npm run build`: green (123 routes)
 - `npx playwright test`: not re-run this session (12 specs in `e2e/`)
-
----
-
-## [0.1.0]
-
-Pre-release baseline. See `git log` for history prior to changelog
-adoption.

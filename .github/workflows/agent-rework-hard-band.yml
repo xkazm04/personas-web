@@ -1,0 +1,44 @@
+name: Agent rework hard band
+
+# The blocking half of the rework budget (docs/AI_HARNESS.md "How agent commits
+# fared"). .github/workflows/agent-rework.yml annotates every lane over the
+# FLAG budget and stays green; this job fails only when a lane is over the hard
+# band (HARD_REWORK_BUDGET in scripts/report-agent-rework.mjs: 50% reworked, or
+# 30 points over the human rate, on 20+ commits) AND the PR adds commits to that
+# lane. A PR from anyone else is not stopped by a lane's record.
+#
+# The meter judges its default window (the last 300 non-merge commits on the
+# PR head, hence the full clone); --block-in names the PR's own commits.
+#
+# Action pins match .github/workflows/ci.yml (commit SHA, tag in the comment).
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  rework-hard-band:
+    name: agent rework hard band
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Block a lane far over the rework budget that this PR adds to
+        shell: bash
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set +e
+          node scripts/report-agent-rework.mjs --block-in "origin/${BASE_REF}..HEAD" > rework-hard.txt
+          status=$?
+          set -e
+          cat rework-hard.txt
+          grep '^  BLOCK ' rework-hard.txt | sed 's/^  BLOCK /::error title=Rework hard band::/' || true
+          exit "$status"

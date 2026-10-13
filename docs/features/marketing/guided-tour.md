@@ -9,7 +9,7 @@ The tour is chaptered. The homepage chapter opens with a welcome intro pop-up an
 It auto-advances (audio `ended` event, or a dwell timer for silent steps) and it is designed never to strand anyone: a narration clip that stalls mid-sentence is caught by a watchdog ceiling and the tour moves on, and a step whose spotlight anchor never appears drops the dim overlay so the page stays readable while the narration continues. The visitor can also pause, scrub via progress dots, step with arrow keys, jump between chapters, adjust narration volume (persisted), or press Escape to exit. A first-visit pulse ring on the launcher and a `?tour=1` URL param (used by the bridges) auto-start the tour; a `localStorage` "seen" flag suppresses the pulse afterward. Reduced-motion users get snaps instead of tweens and a static avatar.
 
 ## How it works
-`TourProvider` (`src/contexts/TourContext.tsx`) is the state machine. It holds `active / atIntro / atBridge / stepIndex / playing / volume` and composes six hooks. `start(steps, options)` loads a step array and flags intro/bridge; `next()` advances, or at the last step shows the bridge prompt (if `bridgeHref` set) or exits. Auto-advance has two paths: steps **with** `audioSrc` advance on the clip's `ended` event (`useTourAudio`), steps **without** advance on a `setTimeout(next, dwellMs)` dwell timer in the provider (`TourContext.tsx:150`).
+`TourProvider` (`src/contexts/TourContext.tsx`) is the state machine. It holds `active / atIntro / atBridge / stepIndex / playing / volume` and composes six hooks. `start(steps, options)` loads a step array and flags intro/bridge; `next()` advances, or at the last step shows the bridge prompt (if `bridgeHref` set) or exits. Auto-advance has two paths: steps **with** `audioSrc` advance on the clip's `ended` event (`useTourAudio`), steps **without** advance on a `setTimeout(next, dwellMs)` dwell timer in the provider (`TourContext.tsx:106`).
 
 Step scripts live in `src/lib/tour-script.ts` as four arrays (`HOME_/FEATURES_/DASHBOARD_/ROADMAP_TOUR_STEPS`) registered in `TOURS_BY_ID`. Each `TourStep` carries a `scrollTarget` (always-present section-wrapper id), a `spotlightTarget` (`[data-tour-diagram="…"]` anchor on the diagram itself), a `narration` key into `t.tour`, `dwellMs`, optional `audioSrc`, optional timed `actions` (click-based side effects that drive the diagram in sync with the voice), and optional `spotlightSequence` cues (in-step spotlight moves for one continuous clip).
 
@@ -37,9 +37,11 @@ Per-frame mechanics:
 | `src/hooks/useTourVolume.ts` | `localStorage`-persisted narration volume (`personas-tour-volume`, default 0.25) |
 | `src/components/tour/TourOverlay.tsx` | Mounts intro / spotlight+caption / bridge by phase |
 | `src/components/tour/TourSpotlight.tsx` | rAF cutout + tween + `data-tour-active` marker |
+| `src/components/tour/spotlightFrame.ts` | Pure cutout geometry: eased blend between rects, padding and viewport clamp |
 | `src/components/tour/TourCaptionCard.tsx` | Narration text, progress dots, controls, chapter quick-nav |
 | `src/components/tour/AthenaCompanion.tsx` | Idle video + audio-reactive canvas glow |
 | `src/components/tour/AvatarCountdown.tsx` | Pre-speech ring + 4→3→2→1 + Web Audio blips |
+| `src/components/tour/useCountdownBlip.ts` | The countdown's Web Audio tick (lazy AudioContext, closed on unmount) |
 | `src/components/tour/TourIntroCard.tsx` | Welcome pop-up (Begin / Skip) |
 | `src/components/tour/TourBridgeCard.tsx` | End-of-chapter "continue?" prompt |
 | `src/components/tour/TourVolumeControl.tsx` | Volume slider bound to context (default **0.25** — the file's own docblock claims "Default 50%", which is wrong; `useTourVolume.ts` is the authority) |
@@ -49,7 +51,7 @@ Per-frame mechanics:
 - **Source:** static, in-repo. Step scripts are hand-authored in `src/lib/tour-script.ts`; narration text comes from `t.tour.*` in `src/i18n/en.ts` (`tour:` block ~`en.ts:1405`/`3882`); audio clips are static assets under `public/tour/*.mp3` plus `public/athena/athena_idle_loop.mp4` + `athena_baseline.jpg`. No network/orchestrator data.
 - **Stores:** React Context only (`TourContext`) — no Zustand. `volume` persists in `localStorage` (`personas-tour-volume`); the launcher's first-visit flag is `localStorage` `personas-tour-seen`.
 - **API routes:** none.
-- **Types:** `TourStep`, `TourAction`, `TourSpotlightCue`, `TourNarrationKey`, `TourId` (`src/lib/tour-script.ts`); `TourContextValue`, `TourStartOptions`, `TourBridgeStrings` (`TourContext.tsx`); `BridgeKey` (`TourLauncher.tsx`).
+- **Types:** `TourStep`, `TourAction`, `TourSpotlightCue`, `TourNarrationKey`, `TourId` (`src/lib/tour-script.ts`); `TourContextValue`, `TourStartOptions`, `TourBridgeStrings` (`src/contexts/tourTypes.ts`; `TourContext.tsx` re-exports `TourBridgeStrings`); `BridgeKey` (`TourLauncher.tsx`).
 
 ## Integration points
 - **Mount:** `PageShell.tsx` wraps marketing pages in `TourProvider` + `TourOverlay`; `src/app/dashboard/layout.tsx` does the same so the dashboard chapter survives tab navigation.

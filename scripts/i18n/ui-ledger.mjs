@@ -21,7 +21,7 @@ import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
 import { collectLeaves } from "./identical-values-lib.mjs";
-import { loadLocale, loadPendingNamespaces } from "./load-locale.mjs";
+import { listLocales, loadLocale, loadPendingNamespaces } from "./load-locale.mjs";
 import {
   STATUSES,
   buildLedger,
@@ -43,12 +43,7 @@ const acceptedTerms = fs.existsSync(contractPath)
   ? new Set(JSON.parse(fs.readFileSync(contractPath, "utf8"))?.terms?.accept ?? [])
   : new Set();
 
-const locales = fs
-  .readdirSync(i18nDir)
-  .filter((f) => /^[a-z]{2}\.ts$/.test(f))
-  .map((f) => path.basename(f, ".ts"))
-  .filter((l) => l !== "en")
-  .sort();
+const locales = listLocales(i18nDir).filter((l) => l !== "en");
 
 const enLeaves = collectLeaves(loadLocale(i18nDir, "en"));
 const localeLeaves = Object.fromEntries(

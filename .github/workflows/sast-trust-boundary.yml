@@ -1,0 +1,37 @@
+name: sast trust boundary
+
+# BLOCKING SAST on every push and PR to master. Semgrep runs this repository's
+# own trust-boundary rules (.github/semgrep-trust-boundary.yml): the
+# service_role key outside its two server modules, a NEXT_PUBLIC_ service_role
+# name, eval()/new Function(), and child_process in an API route. Any finding
+# fails the job (--error, no continue-on-error).
+#
+# The broad registry ruleset stays advisory in security-scan.yml until its
+# baseline is triaged; this job is what stops a flagged pattern today.
+# Only an action this repo already pins by commit SHA is used, and Semgrep runs
+# through the runner image's pipx at the same exact version security-scan.yml uses.
+# The shape is pinned by src/lib/sastTrustBoundary.test.ts.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sast-trust-boundary-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    name: semgrep (trust boundary, blocking)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: semgrep scan
+        run: pipx run --spec semgrep==1.90.0 semgrep scan --config .github/semgrep-trust-boundary.yml --metrics=off --error src

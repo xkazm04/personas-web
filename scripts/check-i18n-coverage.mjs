@@ -2,41 +2,28 @@
 import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
-import vm from "node:vm";
-import ts from "typescript";
+import { evalTsModule, listLocales } from "./i18n/load-locale.mjs";
 
 const repoRoot = process.cwd();
 const i18nDir = path.join(repoRoot, "src", "i18n");
 const baselineLocale = "en";
 
+// Every locale is read three times below (pending, sections, shape), so each
+// module is transpiled and evaluated once and the result reused.
+const localeModules = new Map();
+
 function loadLocaleModule(locale) {
+  const cached = localeModules.get(locale);
+  if (cached) return cached;
   const filename = path.join(i18nDir, `${locale}.ts`);
-  const source = fs.readFileSync(filename, "utf8");
-  const compiled = ts.transpileModule(source, {
-    compilerOptions: {
-      module: ts.ModuleKind.CommonJS,
-      target: ts.ScriptTarget.ES2020,
-      esModuleInterop: true,
-    },
-    fileName: filename,
-  }).outputText;
-
-  const sandbox = {
-    exports: {},
-    module: { exports: {} },
-    require: (specifier) => {
-      throw new Error(`Unexpected runtime import "${specifier}" while checking ${locale}`);
-    },
-  };
-  sandbox.exports = sandbox.module.exports;
-  vm.runInNewContext(compiled, sandbox, { filename });
-
-  const moduleExports = sandbox.module.exports;
-  const translations = moduleExports[locale] ?? sandbox.exports[locale];
+  const moduleExports = evalTsModule(filename);
+  const translations = moduleExports[locale];
   if (!translations || typeof translations !== "object") {
     throw new Error(`Could not load exported locale "${locale}" from ${filename}`);
   }
-  return { translations, moduleExports };
+  const loaded = { translations, moduleExports };
+  localeModules.set(locale, loaded);
+  return loaded;
 }
 
 function loadLocale(locale) {
@@ -50,14 +37,6 @@ function countLeaves(value) {
     return Object.values(value).reduce((sum, item) => sum + countLeaves(item), 0);
   }
   return 0;
-}
-
-function listLocaleFiles() {
-  return fs
-    .readdirSync(i18nDir)
-    .filter((filename) => /^[a-z]{2}\.ts$/.test(filename))
-    .map((filename) => path.basename(filename, ".ts"))
-    .sort((a, b) => a.localeCompare(b));
 }
 
 function describe(value) {
@@ -115,7 +94,7 @@ function compareShape(expected, actual, pathParts, issues) {
   }
 }
 
-const locales = listLocaleFiles();
+const locales = listLocales(i18nDir);
 const { translations: fullBaseline, moduleExports: baselineExports } =
   loadLocaleModule(baselineLocale);
 const targetLocales = locales.filter((locale) => locale !== baselineLocale);
@@ -147,18 +126,7 @@ const pendingModules = fs.existsSync(pendingDir)
 const pendingModuleCopy = {};
 for (const filename of pendingModules) {
   const ns = path.basename(filename, ".ts");
-  const file = path.join(pendingDir, filename);
-  const compiled = ts.transpileModule(fs.readFileSync(file, "utf8"), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
-    fileName: file,
-  }).outputText;
-  const sandbox = { exports: {}, module: { exports: {} } };
-  sandbox.exports = sandbox.module.exports;
-  sandbox.require = (specifier) => {
-    throw new Error(`Unexpected runtime import "${specifier}" in pending module ${filename}`);
-  };
-  vm.runInNewContext(compiled, sandbox, { filename: file });
-  const copy = sandbox.module.exports[`${ns}Copy`];
+  const copy = evalTsModule(path.join(pendingDir, filename))[`${ns}Copy`];
   if (!copy || typeof copy !== "object") {
     console.error(`src/i18n/pending/${filename} must export a const named "${ns}Copy" (its filename + Copy).`);
     process.exit(1);
@@ -203,17 +171,7 @@ const sectionNames = fs.existsSync(sectionsDir)
 function loadSectionPart(locale, name) {
   const file = path.join(sectionsDir, locale, `${name}.ts`);
   if (!fs.existsSync(file)) return undefined;
-  const compiled = ts.transpileModule(fs.readFileSync(file, "utf8"), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
-    fileName: file,
-  }).outputText;
-  const sandbox = { exports: {}, module: { exports: {} } };
-  sandbox.exports = sandbox.module.exports;
-  sandbox.require = (specifier) => {
-    throw new Error(`Unexpected runtime import "${specifier}" in section part ${locale}/${name}.ts`);
-  };
-  vm.runInNewContext(compiled, sandbox, { filename: file });
-  const part = sandbox.module.exports[locale];
+  const part = evalTsModule(file)[locale];
   if (!part || typeof part !== "object") {
     console.error(`src/i18n/sections/${locale}/${name}.ts must export a const named "${locale}".`);
     process.exit(1);

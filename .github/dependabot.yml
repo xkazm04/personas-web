@@ -1,0 +1,13 @@
+# Weekly dependency update PRs, one entry per ecosystem this repo uses.
+# Pinned by src/lib/securityWorkflow.test.ts; listed in SECURITY.md.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

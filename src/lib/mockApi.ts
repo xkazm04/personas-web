@@ -1,3 +1,7 @@
+// Layer 3 of 3 in the demo mocks: behaviour only, the demo `ApiClient` and the
+// standalone async getters. Fixture data lives below it, in ./mockData (what
+// `ApiClient` serves) or ./mock-dashboard-data (dashboard-only fixtures); never
+// declare a MOCK_* constant here. Pinned by mockModuleLayers.test.ts.
 import {
   MOCK_PERSONAS,
   MOCK_EXECUTIONS,

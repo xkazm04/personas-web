@@ -1,0 +1,79 @@
+name: security scan
+
+# SAST, secret scanning and an SBOM on every push and PR to master.
+#
+#   sast     Semgrep (p/default rules). ADVISORY for now: findings print in the
+#            job log but do not fail it, because the first run's baseline has
+#            not been triaged. Make it blocking by deleting `continue-on-error`
+#            once a run comes back clean or its findings are suppressed inline.
+#   secrets  detect-secrets over the files this push or PR changed. BLOCKING:
+#            a new secret fails the job. Scanning only the diff keeps old,
+#            already-triaged history from red-lining every run.
+#   sbom     `npm sbom` (CycloneDX) from the lockfile, kept as a build artifact.
+#
+# Only actions this repo already pins by commit SHA are used (see ci.yml for how
+# the pins were resolved). Scanners run through the runner image's pipx at an
+# exact version, so no new third-party action enters the supply chain.
+# The shape is pinned by src/lib/securityWorkflow.test.ts.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sast:
+    name: semgrep (advisory)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: semgrep scan
+        continue-on-error: true
+        run: pipx run --spec semgrep==1.90.0 semgrep scan --config p/default --metrics=off --error .
+
+  secrets:
+    name: detect-secrets (changed files)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: scan changed files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if [ -z "$BASE_SHA" ] || ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            BASE_SHA="$(git rev-parse HEAD~1)"
+          fi
+          git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" HEAD \
+            | xargs -0 -r pipx run --spec detect-secrets==1.5.0 detect-secrets-hook \
+                --exclude-files '((^|/)package-lock\.json|\.(png|jpe?g|gif|webp|avif|ico|svg|mp3|mp4|webm|woff2?|ttf|pdf))$'
+
+  sbom:
+    name: sbom (cyclonedx)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm sbom --sbom-format cyclonedx > sbom.cdx.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sbom-cyclonedx
+          path: sbom.cdx.json
+          retention-days: 30

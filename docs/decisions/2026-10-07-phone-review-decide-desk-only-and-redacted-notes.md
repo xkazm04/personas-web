@@ -49,6 +49,8 @@ How each finding stands:
 - Phone notes lose anything credential-looking and are at most 500 characters. The web's notes field may still accept 2000; the stored text will be shorter.
 - A phone approval of an ordinary review still resumes a held team step and publishes `review_decision.*`. Anyone relying on a phone not being able to spend must not rely on this decision.
 - Reopen trigger for RD-7: cloud sync pointed at any project other than a test project, or carrying any real user's data.
+- **Revisit by:** 2027-01-13, for the RD-3 and RD-7 acceptances. `src/lib/acceptedRiskRevisit.test.ts` fails from this date until they are re-decided.
+- **Re-decided by:** the operator, who accepted them. Re-deciding means a new record, or a dated status line here with a new revisit date.
 - **Not live-verified.** No paired phone has sent a `desk_only` command to a running desktop; the evidence is the code and its unit tests.
 
 ## Evidence

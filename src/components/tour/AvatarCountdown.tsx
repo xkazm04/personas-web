@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { INTRO_START_DELAY_MS } from "@/hooks/useTourAudio";
 import { EASE_CURVE } from "@/lib/animations";
+import { useCountdownBlip } from "./useCountdownBlip";
 
 /**
  * Countdown that fills the Athena avatar during the pre-speech beat of the
@@ -25,51 +26,7 @@ export default function AvatarCountdown({
   const reduced = useStillMotion();
   const total = Math.max(1, Math.ceil(durationMs / 1000));
   const [count, setCount] = useState(total);
-
-  const volRef = useRef(volume);
-  useEffect(() => {
-    volRef.current = volume;
-  }, [volume]);
-  const ctxRef = useRef<AudioContext | null>(null);
-
-  const blip = useCallback((final: boolean) => {
-    const v = volRef.current;
-    if (v <= 0) return;
-    try {
-      if (!ctxRef.current) {
-        const Ctor =
-          window.AudioContext ||
-          (window as unknown as { webkitAudioContext: typeof AudioContext })
-            .webkitAudioContext;
-        ctxRef.current = new Ctor();
-      }
-      const ctx = ctxRef.current;
-      if (ctx.state === "suspended") void ctx.resume().catch(() => {});
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(final ? 1320 : 740, now);
-      const peak = Math.min(0.16, 0.12 * v + 0.02);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(peak, now + 0.012);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + (final ? 0.3 : 0.16));
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + (final ? 0.34 : 0.18));
-    } catch {
-      /* no Web Audio — countdown stays silent */
-    }
-  }, []);
-
-  useEffect(
-    () => () => {
-      ctxRef.current?.close().catch(() => {});
-      ctxRef.current = null;
-    },
-    [],
-  );
+  const blip = useCountdownBlip(volume);
 
   // 1s cadence derived from elapsed time (not setInterval) so it can't drift or
   // double-tick under StrictMode/remounts: 4 → 3 → 2 → 1 → 0 (0 = hide).
