@@ -1407,6 +1407,110 @@
         "at": "2026-10-13T08:46:27.344566+00:00",
         "reason": "reviewer (sonnet): The anchor layout.tsx:20 is the end of a doc comment just before the component declaration, so it is incidental. The shell imports a SyncedRealtimeProvider and a TourOverlay, and I did not open those or the other context files, so I could not confirm that nothing in this context assembles a runtime."
       }
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/fleet-orchestration": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:19:28.251Z",
+      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:106 Context defines a static catalog of trigger types for landing page display, with no agent session records, state transitions, or session registry."
+        },
+        {
+          "technique": "parallel-dispatch",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:28 Component renders an interactive marketing visualizer of trigger types, with no concurrency budgeting, slot scheduling, or parallel dispatch."
+        },
+        {
+          "technique": "result-harvest",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/platform-command/components/CommandBadge.tsx:8 Component renders a styling badge for marketing command sequences, with no agent run accounting, drop-point collection, or result harvesting."
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/fleet-orchestration": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:19:28.251Z",
+      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/FleetOptimizationCard.tsx:54 Component renders a mock recommendation card for dashboard display rather than managing a session registry or state transitions for live agent runs."
+        },
+        {
+          "technique": "lifecycle-signals",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/ConnectionStatusIndicator.tsx:40 Indicator tracks web client EventSource connection status rather than receiving agent runtime lifecycle signals or operating a staleness sweeper."
+        },
+        {
+          "technique": "durable-fleet-state",
+          "verdict": "not-applicable",
+          "evidence": "src/app/dashboard/layout.tsx:20 Layout acts as a frontend single-page application shell rather than an orchestrator persisting durable fleet states or reconciling surviving sessions on startup."
+        }
+      ]
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/fleet-orchestration": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:19:28.251Z",
+      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/components/PrimaryCTA.tsx:37 Component renders a call-to-action button for user conversion rather than managing agent session identities or state registries."
+        },
+        {
+          "technique": "parallel-dispatch",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:39 Component handles binary download links and waitlist signups rather than scheduling concurrency slots or dispatching agent sessions."
+        },
+        {
+          "technique": "result-harvest",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/FAQ.tsx:87 Component renders an accordion of frequently asked questions rather than harvesting or verifying execution results from agent sessions."
+        }
+      ]
+    },
+    "Marketing & Landing/Homepage & Hero/fleet-orchestration": {
+      "context": "Homepage & Hero",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:19:28.251Z",
+      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/app/page.tsx:45 Component defines the Next.js landing page root and section mounting table rather than managing an agent session registry."
+        },
+        {
+          "technique": "outbound-compute-plane",
+          "verdict": "not-applicable",
+          "evidence": "src/app/homeJsonLd.ts:15 Metadata structure defines SEO schema for a developer application rather than establishing an outbound compute channel to executor planes."
+        },
+        {
+          "technique": "substrate-reconciliation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/LazySection.tsx:40 Helper wraps Next.js dynamic component loading with placeholder skeletons rather than reconciling containers or worktrees against a registry."
+        }
+      ]
     }
   }
 }
