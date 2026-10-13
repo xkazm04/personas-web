@@ -38,6 +38,7 @@ Separately, a small standalone `apiFetch` wrapper serves the marketing-side Next
 - **503 `auth_unavailable`** when `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` are missing server-side, or Supabase Auth cannot answer (network error, 429, 5xx).
 - **400 `bad_path`** for a path that could leave the orchestrator origin: no segments, or an empty, `.` or `..` segment, or a resolved URL on a different origin.
 - Otherwise it forwards the request with `Authorization: Bearer <key>` (when a key is set) and the user's `X-User-Token`. Network failure answers 502 `upstream_unreachable`; a client abort answers 499.
+- **Event stream contract:** `src/hooks/useEventStream.ts` reads each SSE `event` message through `parseStreamEvent` (`src/lib/personaEventWire.ts`), which validates the `PersonaEvent` shape, maps wire statuses through `fromWireEventStatus`, and drops anything off-contract instead of casting it. `src/lib/personaEventWire.test.ts` pins the canonical frame and checks every `MOCK_EVENTS` row passes, so mocks and the live stream share one shape. The orchestrator owns the schema; see "Schema mismatch" in `docs/degraded-dependencies.md`.
 - **Response relay:** only JSON content types (`application/json`, `application/*+json`, or none) pass through with the upstream type. Anything else is served as `text/plain; charset=utf-8`. Every relayed answer carries `X-Content-Type-Options: nosniff` and `Content-Security-Policy: default-src 'none'; frame-ancestors 'none'; sandbox`.
 
 ## Key files

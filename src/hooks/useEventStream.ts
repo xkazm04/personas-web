@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { useEventStore } from "@/stores/eventStore";
-import type { PersonaEvent } from "@/lib/types";
+import { parseStreamEvent } from "@/lib/personaEventWire";
 
 const RECONNECT_BASE_MS = 1_000;
 const RECONNECT_MAX_MS = 30_000;
@@ -115,12 +115,10 @@ export function useEventStream() {
       es = new EventSource("/api/events/stream");
 
       es.addEventListener("event", (e: MessageEvent) => {
-        try {
-          const event: PersonaEvent = JSON.parse(e.data);
-          appendRef.current(event);
-        } catch {
-          // Ignore malformed messages
-        }
+        // Not JSON, or off the pinned contract (src/lib/personaEventWire.ts):
+        // drop it rather than cast it into the store.
+        const event = typeof e.data === "string" ? parseStreamEvent(e.data) : null;
+        if (event) appendRef.current(event);
       });
 
       es.onopen = () => {

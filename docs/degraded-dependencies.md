@@ -33,6 +33,16 @@ Two failures answer without a table row because they have no error body:
   catches the upstream read error and closes the response cleanly. The visitor keeps
   every event already received. `src/hooks/useEventStream.ts` sees the close, shows
   "reconnecting", starts polling and reconnects with backoff.
+- **Schema mismatch: the orchestrator changes the event shape.** The orchestrator repo
+  owns the `event` message schema; this repo pins its reading of it in
+  `src/lib/personaEventWire.ts`, held by `src/lib/personaEventWire.test.ts`. A message
+  that is not JSON, misses a required field (`id`, `projectId`, `eventType`, `sourceType`,
+  `createdAt`), carries an unknown `status` or mistypes a field is dropped, not cast. The
+  stream stays open and the indicator stays "connected", but no new rows appear until
+  polling brings them, and polling reads through a different path. So "connected, yet the
+  feed only moves every 10 s" means a schema change upstream: compare one `event` frame
+  from the network tab with the pinned case in the spec, then update the module and the
+  spec together.
 - **The visitor navigates away mid-request.** Both routes answer 499 with no body and
   report nothing, because a client abort is not an outage.
 
