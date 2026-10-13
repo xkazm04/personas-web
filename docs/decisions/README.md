@@ -4,6 +4,8 @@ A decision record captures one technical choice that has already settled: the co
 
 Security records are joined into one picture in [`../threat-model.md`](../threat-model.md): every API route, the secrets it may touch, and the record that governs it. A new security record should also update that page.
 
+An accepted risk expires. A record whose title starts `ACCEPTED RISK`, or any record that accepts a risk under another title, carries two lines in its consequences: `**Revisit by:** YYYY-MM-DD`, at most a year out, and `**Re-decided by:**`, naming who decides again. A reopen trigger alone depends on someone noticing that it fired; the date asks again even if nobody does. `src/lib/acceptedRiskRevisit.test.ts` fails when a record titled `ACCEPTED RISK` lacks either line, when a date is malformed or more than a year out, and from the revisit date onwards. To re-decide, write a new record or add a dated status line with a new revisit date.
+
 Newest first:
 
 - [2026-10-13 `.claude/CLAUDE.md` has a line budget that only goes down](2026-10-13-session-guidance-size-budget.md): 260 lines measured today, with `## Commands` kept in the first 40 lines, pinned by `src/lib/guidanceBudget.test.ts`; four sections are named as candidates to move into pointers, which needs a person because lanes may not edit the root file; compliance has never been measured against length.

@@ -25,6 +25,8 @@ Accepted risk, operator decision of 2026-10-07 (ask `fc9e169c`). Record it, chan
 
 - The web Executions view keeps showing execution input and output raw, including persona chat text, until a fix lands.
 - **Reopen trigger:** cloud sync pointed at any project other than a test project, or carrying any real user's data. Either one makes this a live exposure and the fix (the first alternative at minimum) must land first.
+- **Revisit by:** 2027-01-13. The reopen trigger only works if someone notices sync leave the test project; this date asks the question again even if nobody does. `src/lib/acceptedRiskRevisit.test.ts` fails from this date until the acceptance is re-decided.
+- **Re-decided by:** the operator, who accepted it (ask `fc9e169c`). Re-deciding means a new record, or a dated status line here with a new revisit date.
 - The acceptance holds only while sync targets the test project or another test project. Pointing sync elsewhere without reopening this is a breach of the decision, not an application of it.
 - When a fix lands, the web Executions view must be checked against the projected, possibly empty, text.
 - This record does not supersede the scan's other findings, which are handled separately.

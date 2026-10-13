@@ -42,6 +42,8 @@ Also:
 - The acceptance holds while nothing is deployed. Deploying without reopening this record is a breach of the decision, not an application of it.
 - Not live-verified. Points (a) to (c) come from reading the spec, `git grep` and the desktop source.
 - **Reopen trigger:** a deployment of personas-web is planned, a dashboard component starts rendering raw HTML, or a third-party script is added to the dashboard.
+- **Revisit by:** 2027-01-13. The reopen trigger only works if someone notices it fire; this date asks the question again even if nobody does. `src/lib/acceptedRiskRevisit.test.ts` fails from this date until the acceptance is re-decided.
+- **Re-decided by:** the operator, who accepted it (ask `f95629a2`). Re-deciding means a new record, or a dated status line here with a new revisit date.
 
 ## Evidence
 
