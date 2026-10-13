@@ -61,7 +61,9 @@ describe("clusterByFailure over the demo dead letter", () => {
     const byId = new Map(lane.map((e) => [e.id, e]));
     for (const id of clusters[0].ids) expect(byId.get(id)?.sourceType).toBe("pagerduty");
     expect(clusters.reduce((n, c) => n + c.ids.length, 0)).toBe(lane.length);
-  });
+    // 15 s, not the 5 s default: the first dynamic import of ./mockApi costs about 3 s on its own and timed
+    // out at 5,014 ms under load (2026-10-13), failing the declared gate on a clean tree.
+  }, 15_000);
 
   it("a row with no recorded reason forms its own cluster", () => {
     const row = (id: string, errorMessage: string | null) => ({ id, errorMessage, sourceType: "x" }) as PersonaEvent;
