@@ -34,4 +34,4 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: semgrep scan
-        run: pipx run --spec semgrep==1.90.0 semgrep scan --config .github/semgrep-trust-boundary.yml --metrics=off --error src
+        run: pipx run --spec semgrep==1.90.0 --pip-args="setuptools<81" semgrep scan --config .github/semgrep-trust-boundary.yml --metrics=off --error src
