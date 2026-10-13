@@ -530,3 +530,19 @@ An AI-generated change is mergeable when all of the following hold:
    `compile:changelog` does not read it (it reads the `### Added/Changed/Fixed/Removed`
    sections of `CHANGELOG.md`). The other rules are pinned by `src/lib/aiChangeGate.test.ts`. To run the
    gate locally: `node scripts/check-ai-change.mjs origin/master..HEAD`.
+
+### Review-quality eval
+`src/lib/reviewGateEval.test.ts` runs a seeded set of known-bad commits through the gate
+in the same order the script applies its rules (trailer, mode, override, problems), and
+checks that each one gets the outcome it should. The set covers hallucinated anchors,
+protected paths, scope creep, a lane commit that lost its trailer, and misnamed commit
+types (one is the real `fix: Added ...` subject of 0a31fe05). It also holds known-good
+controls and the classes the gate cannot see. The spec enforces one policy: a rule may
+**block** a merge only while it catches 100% of its seeded cases with no false positive on
+the controls. A rule that falls below that bar is demoted to advice, not loosened. The blind spots are written
+down as cases that must pass the gate, each naming the layer that covers it instead.
+Today these are a red unit test (the `checks` job), a weakened existing test (no automated
+layer), hardcoded English in JSX (no automated layer) and ungated motion (the
+animation-gating lint rule, rAF and canvas only). When a new rule starts to catch one of
+these, move that case into the rule's class. When agents ship a new kind of mistake, add it
+as a case first.
