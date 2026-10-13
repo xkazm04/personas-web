@@ -7,7 +7,9 @@ New here? Start at `docs/README.md`, which gives the reading order for every doc
 - [x] Evals / golden tests for AI-generated output. The site calls no model at runtime;
       the AI output this repo owns is its skills' output, held by the contract and golden
       specs under "Skills" below. AI-authored *changes* are held to the deterministic
-      suite listed under "Where things live".
+      suite listed under "Where things live". The agent-written guide translations are
+      also graded on content, not just shape, by `src/lib/guideTranslationFidelity.test.ts`
+      (see "Skills").
 - [x] A versioned prompt & agent library the team reuses
 - [x] Agent runbooks for recurring tasks
 - [x] A review gate / Definition-of-Done for AI changes
@@ -128,6 +130,14 @@ runner has, which is why they stay out of CI.
   `src/lib/iconSetGolden.test.ts` holds `src/app/favicon.ico`, `src/app/icon.png`,
   `src/app/apple-icon.png` and the PWA icons to the sizes, formats and alpha rules in its
   `SKILL.md` "Targets", and to what `src/app/manifest.ts` declares.
+- The guide translations are agent output too, written from
+  `scripts/i18n/translate-guide-subagent-prompt.md`. `check:guide-content` checks that each
+  topic exists and `check:guide-translations` checks its source pin, but neither reads the
+  translation. `src/lib/guideTranslationFidelity.test.ts` (in `test:unit`) is the quality
+  eval: it fails when a translated topic's heading outline (every heading's level, in
+  order) or its set of link and image targets differs from the English. The topics that
+  differ today are listed inline in the spec as a ratchet that may only shrink; one that
+  matches again fails the spec until it is taken off the list.
 - Open gap: `native-copy` has no golden output (its checker lives in the registry), and
   `icon-gen`'s tools themselves are untested. The next step is to split `icon-gen`'s pure
   helpers (`parseArgs`, `hexToRgb`, `buildIco`, the tile SVGs) out of

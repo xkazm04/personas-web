@@ -1,6 +1,7 @@
-// Loads a src/i18n TypeScript module the way the coverage checker does: transpile it,
-// run it sandboxed, return its export. Shared by report-identical-values.mjs and
-// ui-ledger.mjs so the two cannot disagree on what a locale "says".
+// Loads a src/i18n TypeScript module: transpile it, run it sandboxed, return its export.
+// The one loader behind check-i18n-coverage.mjs (core locales, pending modules and
+// catalog section parts), report-identical-values.mjs and ui-ledger.mjs, so no two
+// i18n checks can disagree on what a locale "says".
 //
 // The strings come out DECODED (a JS value, not file bytes), which is what any hash of
 // catalog content must be taken over: some files carry mojibake on disk.
