@@ -1882,6 +1882,129 @@
           "evidence": "src/components/dashboard/SignInPrompt.tsx:124 Triggers in-memory mock demo user session entry rather than configuring or enforcing permissions or sandbox stances on a spawned agent subprocess."
         }
       ]
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/browser-credential-boundary": {
+      "context": "Feature Voting & Comments",
+      "subject": "browser-credential-boundary",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T13:16:24.405Z",
+      "worker": "340e3867-db54-4854-8f20-599ca3c48522",
+      "techniques": [
+        {
+          "technique": "aggregate-view-not-base-table",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:36 Reads individual identifier-bearing rows from base table feature_votes to compute tallies in JS rather than querying an aggregate view."
+        },
+        {
+          "technique": "omit-the-column-not-the-value",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/storage.ts:18 The email column is colocated in the feature_votes table and filtered out in application queries rather than structurally omitted into a separate relation."
+        },
+        {
+          "technique": "default-deny-plus-defaulted-owner",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:148 Client sends an unauthenticated voterId which is inserted into voter_id rather than having the database default owner from session."
+        },
+        {
+          "technique": "broker-proxy-attaches-secret",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:88 The route accepts mutations from unauthenticated callers before spending the privileged administrative Supabase client credentials."
+        },
+        {
+          "technique": "opaque-upstream-errors",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:44 Upstream errors return a generic response but fail to log details under a minted correlation identifier."
+        },
+        {
+          "technique": "outbound-fetch-destination-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/votes/route.ts:9 Does not perform outbound HTTP fetches to dynamically supplied addresses."
+        },
+        {
+          "technique": "allowlisted-operator-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/votes/rate-limit.ts:10 No debug or live operator request stream is exposed by feature voting."
+        }
+      ]
+    },
+    "Infrastructure & Telemetry/Orchestrator API Client & Mock Data/browser-credential-boundary": {
+      "context": "Orchestrator API Client & Mock Data",
+      "subject": "browser-credential-boundary",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T13:16:24.405Z",
+      "worker": "340e3867-db54-4854-8f20-599ca3c48522",
+      "techniques": [
+        {
+          "technique": "public-vs-server-env-split",
+          "verdict": "deviation",
+          "evidence": "src/lib/orchestrator-config.ts:5 The orchestrator upstream URL is declared with NEXT_PUBLIC_, publishing the internal upstream host to client bundles."
+        },
+        {
+          "technique": "broker-proxy-attaches-secret",
+          "verdict": "conformant",
+          "evidence": "src/lib/api.ts:51 The client routes all requests through /api/orchestrator carrying only user session tokens so team credentials remain on the server."
+        },
+        {
+          "technique": "aggregate-view-not-base-table",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/api-fetch.ts:7 No database base tables or aggregate views exist in the client library context."
+        },
+        {
+          "technique": "allowlisted-operator-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/mockApi.ts:130 Mock API does not provide a live operator request stream exposing proxied credentials."
+        },
+        {
+          "technique": "default-deny-plus-defaulted-owner",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/dashboard-queries.ts:15 No database schema or row-level ownership policies exist in this context."
+        },
+        {
+          "technique": "outbound-fetch-destination-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/api.ts:79 Fetches are targeted to the fixed same-origin proxy rather than untrusted data-supplied addresses."
+        }
+      ]
+    },
+    "Roadmap, Voting & Waitlist/Public Roadmap/browser-credential-boundary": {
+      "context": "Public Roadmap",
+      "subject": "browser-credential-boundary",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T13:16:24.405Z",
+      "techniques": [
+        {
+          "technique": "opaque-upstream-errors",
+          "verdict": "deviation",
+          "evidence": "src/app/api/roadmap/route.ts:7 Returns an empty list with 200 OK when Supabase is not configured, violating failure-not-empty-success by collapsing missing configuration into empty success."
+        },
+        {
+          "technique": "public-vs-server-env-split",
+          "verdict": "deviation",
+          "evidence": "src/app/api/roadmap/route.ts:12 The server route imports getSupabase() which relies on public client environment variables instead of a server-only client."
+        },
+        {
+          "technique": "aggregate-view-not-base-table",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/roadmap/index.tsx:13 No aggregate views over identifying rows are queried."
+        },
+        {
+          "technique": "allowlisted-operator-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/roadmap/page.tsx:33 No operator stream exists in the public roadmap section."
+        }
+      ],
+      "withdrawn": {
+        "worker": "340e3867-db54-4854-8f20-599ca3c48522",
+        "state": "deviation",
+        "at": "2026-10-13T13:17:34.142318+00:00",
+        "reason": "reviewer (sonnet): src/app/api/roadmap/route.ts:7 does return an empty items array with 200 when Supabase is unconfigured, but the body carries `source: \"none\"`, which marks the state explicitly. So the 'silent' empty success is contradicted. The getSupabase() anon-client claim concerns public roadmap data and is not "
+      }
     }
   }
 }

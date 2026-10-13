@@ -1,0 +1,168 @@
+{
+  "schema": "conform-run/1",
+  "worker": "340e3867-db54-4854-8f20-599ca3c48522",
+  "subject": "browser-credential-boundary",
+  "evaluatedAt": "2026-10-13T13:16:24.405704+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [
+    {
+      "context": "Feature Voting & Comments",
+      "subject": "browser-credential-boundary",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/app/api/votes/route.ts:36 The voting route queries individual identifier-bearing rows from the base table feature_votes to compute tallies in memory rather than querying an aggregate view, and relies on column omission in application code to avoid returning the email column stored in the same table.",
+      "techniques": [
+        {
+          "technique": "aggregate-view-not-base-table",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:36 Reads individual identifier-bearing rows from base table feature_votes to compute tallies in JS rather than querying an aggregate view."
+        },
+        {
+          "technique": "omit-the-column-not-the-value",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/storage.ts:18 The email column is colocated in the feature_votes table and filtered out in application queries rather than structurally omitted into a separate relation."
+        },
+        {
+          "technique": "default-deny-plus-defaulted-owner",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:148 Client sends an unauthenticated voterId which is inserted into voter_id rather than having the database default owner from session."
+        },
+        {
+          "technique": "broker-proxy-attaches-secret",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:88 The route accepts mutations from unauthenticated callers before spending the privileged administrative Supabase client credentials."
+        },
+        {
+          "technique": "opaque-upstream-errors",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:44 Upstream errors return a generic response but fail to log details under a minted correlation identifier."
+        },
+        {
+          "technique": "outbound-fetch-destination-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/votes/route.ts:9 Does not perform outbound HTTP fetches to dynamically supplied addresses."
+        },
+        {
+          "technique": "allowlisted-operator-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/votes/rate-limit.ts:10 No debug or live operator request stream is exposed by feature voting."
+        }
+      ]
+    },
+    {
+      "context": "Orchestrator API Client & Mock Data",
+      "subject": "browser-credential-boundary",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/lib/orchestrator-config.ts:5 The upstream orchestrator service URL uses the NEXT_PUBLIC_ prefix, inlining the backend address into public client bundles despite all requests being brokered through a same-origin server route.",
+      "techniques": [
+        {
+          "technique": "public-vs-server-env-split",
+          "verdict": "deviation",
+          "evidence": "src/lib/orchestrator-config.ts:5 The orchestrator upstream URL is declared with NEXT_PUBLIC_, publishing the internal upstream host to client bundles."
+        },
+        {
+          "technique": "broker-proxy-attaches-secret",
+          "verdict": "conformant",
+          "evidence": "src/lib/api.ts:51 The client routes all requests through /api/orchestrator carrying only user session tokens so team credentials remain on the server."
+        },
+        {
+          "technique": "aggregate-view-not-base-table",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/api-fetch.ts:7 No database base tables or aggregate views exist in the client library context."
+        },
+        {
+          "technique": "allowlisted-operator-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/mockApi.ts:130 Mock API does not provide a live operator request stream exposing proxied credentials."
+        },
+        {
+          "technique": "default-deny-plus-defaulted-owner",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/dashboard-queries.ts:15 No database schema or row-level ownership policies exist in this context."
+        },
+        {
+          "technique": "outbound-fetch-destination-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/api.ts:79 Fetches are targeted to the fixed same-origin proxy rather than untrusted data-supplied addresses."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "browser-credential-boundary",
+      "context": "Error Monitoring & Analytics",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "browser-credential-boundary",
+      "context": "Shared Types, Utilities & Hooks",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "browser-credential-boundary",
+      "context": "Public Roadmap",
+      "reason": "withdrawn after review: reviewer (sonnet): src/app/api/roadmap/route.ts:7 does return an empty items array with 200 when Supabase is unconfigured, but the body carries `source: \"none\"`, which marks the state explicitly. So the 'silent' empty success is contradicted. The getSupabase() anon-client claim concerns public roadmap data and is not "
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-13T13:16:24.405704+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "browser-credential-boundary"
+      ],
+      "techniques": [
+        "aggregate-view-not-base-table",
+        "allowlisted-operator-stream",
+        "broker-proxy-attaches-secret",
+        "default-deny-plus-defaulted-owner",
+        "omit-the-column-not-the-value",
+        "opaque-upstream-errors",
+        "outbound-fetch-destination-validation"
+      ],
+      "deviations": 1,
+      "context": "Feature Voting & Comments",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T13:16:24.405704+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "browser-credential-boundary"
+      ],
+      "techniques": [
+        "aggregate-view-not-base-table",
+        "allowlisted-operator-stream",
+        "broker-proxy-attaches-secret",
+        "default-deny-plus-defaulted-owner",
+        "outbound-fetch-destination-validation",
+        "public-vs-server-env-split"
+      ],
+      "deviations": 1,
+      "context": "Orchestrator API Client & Mock Data",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T13:16:24.405704+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "browser-credential-boundary"
+      ],
+      "techniques": [
+        "aggregate-view-not-base-table",
+        "allowlisted-operator-stream",
+        "opaque-upstream-errors",
+        "public-vs-server-env-split"
+      ],
+      "deviations": 1,
+      "context": "Public Roadmap",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}
