@@ -1511,6 +1511,115 @@
           "evidence": "src/components/sections/LazySection.tsx:40 Helper wraps Next.js dynamic component loading with placeholder skeletons rather than reconciling containers or worktrees against a registry."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/narrative-scroll-surface": {
+      "context": "Animation & Motion System",
+      "subject": "narrative-scroll-surface",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:54:01.252Z",
+      "worker": "1bfbe870-93f9-4ad5-8744-41e810232949",
+      "techniques": [
+        {
+          "technique": "no-orientation-tax",
+          "verdict": "deviation",
+          "evidence": "src/components/ScrollMap.tsx:63 Inactive destination labels are unreadable at rest; the component also defaults an unmatched current section to entry zero and requests arrival without focus."
+        },
+        {
+          "technique": "reveal-without-loss",
+          "verdict": "deviation",
+          "evidence": "src/components/LazyMount.tsx:36 The initial render contains a placeholder rather than children; an IntersectionObserver later permits mounting."
+        }
+      ]
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/narrative-scroll-surface": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "narrative-scroll-surface",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:54:01.252Z",
+      "worker": "1bfbe870-93f9-4ad5-8744-41e810232949",
+      "techniques": [
+        {
+          "technique": "illustration-carries-the-claim",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/DownloadCTA.tsx:81 The decorative rotating circle SVG lacks assistive-technology hiding; pointer-events-none on its ancestor does not supply that."
+        },
+        {
+          "technique": "motion-carries-the-mechanism",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/DownloadStepGrid.tsx:62 The setup grid animates entrances and decorative glow rather than a trajectory explaining order, overlap or waiting."
+        },
+        {
+          "technique": "reveal-without-loss",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/download-cta/DownloadStepGrid.tsx:19 The hidden child variant sets content opacity to zero before intersection; useStillMotion supplies false during server rendering and hydration."
+        },
+        {
+          "technique": "scroll-bound-progression",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/download-cta/DownloadStepGrid.tsx:26 Intersection starts a timed stagger with timed child entrances, rather than making appearance a reversible function of station progress."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/narrative-scroll-surface": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "narrative-scroll-surface",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:54:01.252Z",
+      "worker": "1bfbe870-93f9-4ad5-8744-41e810232949",
+      "techniques": [
+        {
+          "technique": "motion-carries-the-mechanism",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/orchestration-hub/shared/scene-kit.ts:43 Individual vignette elements author looping timed transitions; Previous/Next select trigger types rather than scrub or step the mechanism's beats."
+        },
+        {
+          "technique": "no-orientation-tax",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/orchestration-hub/shared/useHubPlayback.ts:82 Only the selected trigger supplies the detail panel; reduced motion stops cycling, so scrolling alone cannot expose the other trigger explanations."
+        },
+        {
+          "technique": "reveal-without-loss",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/orchestration-hub/DetailPanel.tsx:43 The detail content's initial non-still rendering is invisible and blurred instead of defaulting to a resolved static presentation."
+        },
+        {
+          "technique": "sequence-as-spine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:50 Schedule, webhook, clipboard and the other trigger kinds are peer alternatives, not ordered stages whose reordering changes the mechanism."
+        }
+      ]
+    },
+    "Marketing & Landing/Features Overview & Pricing/narrative-scroll-surface": {
+      "context": "Features Overview & Pricing",
+      "subject": "narrative-scroll-surface",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T09:54:01.252Z",
+      "worker": "1bfbe870-93f9-4ad5-8744-41e810232949",
+      "techniques": [
+        {
+          "technique": "motion-carries-the-mechanism",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/pricing/index.tsx:53 The complete pricing renderer offers replay only; searches found no mechanism step controls, scrubber or first-class filmstrip despite the shared progress value."
+        },
+        {
+          "technique": "reveal-without-loss",
+          "verdict": "deviation",
+          "evidence": "src/app/features/page.tsx:79 Healing and the subsequent explanatory sections are conditionally mounted on approach, rather than present in the served document."
+        },
+        {
+          "technique": "sequence-as-spine",
+          "verdict": "not-applicable",
+          "evidence": "src/app/features/page.tsx:18 The top-level features content is a set of parallel capabilities, so imposing a process spine would invent an order."
+        }
+      ]
     }
   }
 }
