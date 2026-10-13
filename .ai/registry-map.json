@@ -1050,7 +1050,11 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/use-cases/index.tsx:26 This component renders a decorative slot-reels animation of tools dealt into a persona hand on the marketing landing page, and a grep of the use-cases directory for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", \"harness\", and \"eval\" finds no matches.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         },
         {
           "subject": "agent-instruction-files",
@@ -1710,7 +1714,11 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/feature-lazy.tsx:6 This module configures lazy code-splitting for landing feature showcases including SecurityVault and ObservabilityDeck, and a grep across the context files for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", \"harness\", and \"eval\" reveals no evaluation harness execution.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         }
       ],
       "governance": "governed"
@@ -1796,7 +1804,11 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/data.ts:33 The module projects hardcoded mock experiment scores into marketing UI tabs rather than running an agent evaluation harness, and a grep across the lab directory for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", and \"harness\" finds zero matches in production code.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         },
         {
           "subject": "test-harness",
@@ -2339,7 +2351,11 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/preview/page.tsx:19 The preview harness is a dev-only UI Storybook-lite mount tool for inspecting React landing page sections in isolation, and a grep across preview and demo routes for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", and \"eval\" yields zero matches.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         }
       ],
       "governance": "governed"
@@ -6737,7 +6753,11 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/healthFormat.ts:18 This module formats visual status icons and color tints for dashboard system health check rows, and a grep of the file for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", \"harness\", and \"eval\" reveals no evaluation harness functionality.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         }
       ],
       "governance": "governed"

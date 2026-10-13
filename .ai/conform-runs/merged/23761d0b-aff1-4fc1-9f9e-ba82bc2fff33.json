@@ -1,0 +1,364 @@
+{
+ "schema": "conform-run/1",
+ "worker": "23761d0b-aff1-4fc1-9f9e-ba82bc2fff33",
+ "subject": "eval-harness",
+ "evaluatedAt": "2026-10-13T04:25:19.195969+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/data.ts:33 The module projects hardcoded mock experiment scores into marketing UI tabs rather than running an agent evaluation harness, and a grep across the lab directory for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", and \"harness\" finds zero matches in production code.",
+   "techniques": [
+    {
+     "technique": "comparison-modes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:41 The arena tab runs a client-side timer cycling through canned mock rounds rather than executing an actual pairwise arena comparison."
+    },
+    {
+     "technique": "pairing-schedule",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:57 Rounds are drawn sequentially from a static array of mock data without a dynamic pairing schedule or comparison graph."
+    },
+    {
+     "technique": "uncontrolled-games-beside-the-win-rate",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:60 Wins are tallied from pre-baked mock round winners without mirrored order controls or uncontrolled game accounting."
+    },
+    {
+     "technique": "judge-stability",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/EvalTab.tsx:40 Baseline values are mapped directly from static dimension objects with no model judge or judge packet."
+    },
+    {
+     "technique": "metric-role-contract",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/EvalTab.tsx:43 Scores are averaged into a composite display metric without declaring an optimized primary metric versus constraint thresholds."
+    },
+    {
+     "technique": "scenario-design",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/data.ts:34 Rounds are static mock data generated from hardcoded matrices rather than versioned evaluation scenario fixtures."
+    },
+    {
+     "technique": "eval-economics",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/data.ts:42 EVAL_SAMPLE_RUNS is a static integer constant used for UI label formatting rather than an active budget ceiling or fan-out cap."
+    },
+    {
+     "technique": "selection-over-noise",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/EvolutionTab.tsx:18 The lineage is computed once from a static GENOME_NODES array for tree display rather than maximizing over repeated evaluations."
+    },
+    {
+     "technique": "candidate-write-access",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:19 The component receives version IDs via React props for UI state dispatch rather than isolating an agent's write access to a harness."
+    },
+    {
+     "technique": "assertion-vs-judgment",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/EvalTab.tsx:168 Scores are rendered directly from mock dimension data with neither deterministic assertions nor LLM judge rubrics."
+    },
+    {
+     "technique": "resolution-precondition",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/ledger.ts:45 A hardcoded 5-point drop threshold flags mock regressions in the UI ledger without checking between-condition spread against standard deviation."
+    },
+    {
+     "technique": "outcome-conditioned-cost",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/types.ts:11 Cost is an enum key for a mock radar dimension rather than an efficiency metric conditioned on successful trial outcomes."
+    },
+    {
+     "technique": "certification-levels",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/index.tsx:24 The React reducer manages mock production and experimental tags for the UI without theoretical or empirical certification levels."
+    },
+    {
+     "technique": "failure-attribution",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:91 Loser status is a UI boolean driving an animation badge rather than a failure attributed to one of the seven harness layers."
+    },
+    {
+     "technique": "rebase-the-varied-input",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/TabBackdrop.tsx:16 The backdrop displays static illustrative theme graphics with no invariance checks or input rebasing."
+    },
+    {
+     "technique": "probe-the-decision-not-the-artifact",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:85 The arena input displays static localized strings rather than probing upstream pipeline decisions."
+    },
+    {
+     "technique": "measurement-revision",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:163 The replay button resets the client chat animation sequence rather than revising a published evaluation measurement."
+    },
+    {
+     "technique": "monitor-inside-the-loop",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:93 Status text indicates simulated chat playback phase rather than an automated monitor reviewing an agent execution loop."
+    },
+    {
+     "technique": "treatment-election-rate",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/data.ts:27 Filter configuration is presented as static text in a chat diff rather than evaluating capability election rates across trials."
+    },
+    {
+     "technique": "unaided-baseline-screening",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/EvalTab.tsx:64 Delta vs baseline is an arithmetic difference between static mock numbers rather than an unaided baseline screening of scenario fixtures."
+    }
+   ],
+   "registryProposal": "The golden path should clarify that front-end UI presentation components that project mock or static evaluation scores for visual illustration without executing non-deterministic agent or model runs fall outside the eval-harness subject boundary."
+  },
+  {
+   "context": "Why Agents & Use Cases",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/use-cases/index.tsx:26 This component renders a decorative slot-reels animation of tools dealt into a persona hand on the marketing landing page, and a grep of the use-cases directory for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", \"harness\", and \"eval\" finds no matches.",
+   "techniques": [
+    {
+     "technique": "comparison-modes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/index.tsx:39 Reel state manages animation phases (need, consider, spinning, locked) for visual display rather than comparison evaluation modes."
+    },
+    {
+     "technique": "candidate-write-access",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/index.tsx:77 The persona hand component displays visual capability icons with no candidate execution or write access to an evaluation harness."
+    },
+    {
+     "technique": "scenario-design",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/index.tsx:81 Cases are landing showcase need categories rendered as spinning reels rather than versioned non-deterministic eval scenarios."
+    },
+    {
+     "technique": "eval-economics",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/index.tsx:16 BEATS defines animation durations in milliseconds for UI reel timing rather than model spend limits or concurrency bounds."
+    },
+    {
+     "technique": "assertion-vs-judgment",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/components/ConnectorIcon.tsx:14 The connector icon flattens SVG glyphs into single-tone images for visual styling without deterministic assertions or LLM judges."
+    }
+   ]
+  },
+  {
+   "context": "Section Preview & Demo Harness",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/preview/page.tsx:19 The preview harness is a dev-only UI Storybook-lite mount tool for inspecting React landing page sections in isolation, and a grep across preview and demo routes for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", and \"eval\" yields zero matches.",
+   "techniques": [
+    {
+     "technique": "eval-economics",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/derive.ts:47 The derivation maps component exports into preview slugs for local UI rendering rather than managing model execution budgets or matrix fan-out caps."
+    },
+    {
+     "technique": "scenario-design",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/registry.ts:47 Preview slugs represent lazy React section components rather than versioned evaluation scenario fixtures."
+    },
+    {
+     "technique": "candidate-write-access",
+     "verdict": "not-applicable",
+     "evidence": "src/app/demo/page.tsx:25 The demo entry page initializes client-side demo auth store state rather than evaluating an agent with write access to an evaluation harness."
+    },
+    {
+     "technique": "assertion-vs-judgment",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/registry.test.ts:21 Unit tests assert string parsing transformations of React export names rather than scoring non-deterministic agent outputs."
+    },
+    {
+     "technique": "certification-levels",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/[section]/page.tsx:15 The route guards dev-only component mounting in production builds rather than implementing theoretical or empirical certification levels."
+    },
+    {
+     "technique": "comparison-modes",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/PreviewMount.tsx:35 Section lookup retrieves a React component from the preview registry map rather than running comparison evaluation modes."
+    }
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/healthFormat.ts:18 This module formats visual status icons and color tints for dashboard system health check rows, and a grep of the file for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", \"harness\", and \"eval\" reveals no evaluation harness functionality.",
+   "techniques": [
+    {
+     "technique": "metric-role-contract",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/healthFormat.ts:44 Status ranks order four operational check states for UI dot aggregation rather than defining an optimization metric and constraint thresholds for an evaluation harness."
+    },
+    {
+     "technique": "reliability-aggregation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/healthFormat.ts:48 Status aggregation selects the worst severity rank among health check items rather than computing repeated trial distributions or any-of-N/all-of-N pass rates."
+    },
+    {
+     "technique": "assertion-vs-judgment",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/healthFormat.ts:24 Status styles map hardcoded enum states to Tailwind CSS classes with no model judgment or non-deterministic test assertions."
+    },
+    {
+     "technique": "failure-signatures-beside-the-pass-rate",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/healthFormat.ts:26 Error status renders a visual icon for system health monitoring rather than tallying evaluation failure signatures beside a benchmark pass rate."
+    }
+   ]
+  },
+  {
+   "context": "Observability Deck & Security Vault",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/feature-lazy.tsx:6 This module configures lazy code-splitting for landing feature showcases including SecurityVault and ObservabilityDeck, and a grep across the context files for \"judge\", \"rubric\", \"holdout\", \"deprived\", \"scenario\", \"harness\", and \"eval\" reveals no evaluation harness execution.",
+   "techniques": [
+    {
+     "technique": "eval-economics",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/feature-lazy.tsx:7 Code-splitting manages browser bundle hydration and client performance rather than model evaluation spend, fan-out caps, or scenario caches."
+    },
+    {
+     "technique": "outcome-conditioned-cost",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/observability-deck/types.ts:12 Cost is a string property in a UI activity row interface for mock display rather than an outcome-conditioned cost metric evaluated across trial runs."
+    },
+    {
+     "technique": "candidate-write-access",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/SecurityVault.tsx:16 The security vault animates cryptographic key protection graphics with no candidate agent execution or write access to an evaluation harness."
+    },
+    {
+     "technique": "assertion-vs-judgment",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/SecurityVault.tsx:27 Motion value drives SVG seal animation progression with no deterministic assertions or LLM judge evaluations."
+    },
+    {
+     "technique": "metric-role-contract",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/observability-deck/types.ts:11 Duration is a string property formatted for display in an activity log table rather than an operational constraint threshold in an evaluation contract."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T04:25:19.195969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "assertion-vs-judgment",
+    "candidate-write-access",
+    "certification-levels",
+    "comparison-modes",
+    "eval-economics",
+    "failure-attribution",
+    "judge-stability",
+    "measurement-revision",
+    "metric-role-contract",
+    "monitor-inside-the-loop",
+    "outcome-conditioned-cost",
+    "pairing-schedule",
+    "probe-the-decision-not-the-artifact",
+    "rebase-the-varied-input",
+    "resolution-precondition",
+    "scenario-design",
+    "selection-over-noise",
+    "treatment-election-rate",
+    "unaided-baseline-screening",
+    "uncontrolled-games-beside-the-win-rate"
+   ],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T04:25:19.195969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "assertion-vs-judgment",
+    "candidate-write-access",
+    "comparison-modes",
+    "eval-economics",
+    "scenario-design"
+   ],
+   "deviations": 0,
+   "context": "Why Agents & Use Cases",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T04:25:19.195969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "assertion-vs-judgment",
+    "candidate-write-access",
+    "certification-levels",
+    "comparison-modes",
+    "eval-economics",
+    "scenario-design"
+   ],
+   "deviations": 0,
+   "context": "Section Preview & Demo Harness",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T04:25:19.195969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "assertion-vs-judgment",
+    "failure-signatures-beside-the-pass-rate",
+    "metric-role-contract",
+    "reliability-aggregation"
+   ],
+   "deviations": 0,
+   "context": "System Health Panel",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T04:25:19.195969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "assertion-vs-judgment",
+    "candidate-write-access",
+    "eval-economics",
+    "metric-role-contract",
+    "outcome-conditioned-cost"
+   ],
+   "deviations": 0,
+   "context": "Observability Deck & Security Vault",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
