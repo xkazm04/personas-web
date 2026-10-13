@@ -1,0 +1,54 @@
+{
+ "schema": "conform-run/1",
+ "worker": "fa0bec11-f23d-4c2a-bd56-1d5fad89f567",
+ "subject": "hitl-approval",
+ "evaluatedAt": "2026-10-13T11:49:05.879386+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/guide/GuideMarkdown.tsx:14 GuideMarkdown only splits a topic body into rendered blocks, and a search of src/components/guide for verdict, unattended, severity, oracle, and consent found no matches, so this context never pauses a machine for a human decision.",
+   "techniques": [
+    {
+     "technique": "fail-loud-classification-default",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/blocks/Callout.tsx:13 The line names guide-markdown decoration. Callout.tsx:56 maps an unknown type to the info style; that default does not classify a review-queue payload, and this directory does not reference the review ladder."
+    },
+    {
+     "technique": "human-performed-steps",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/blocks/Checklist.tsx:70 The checklist counts guide strings the reader ticked in localStorage. It does not hand a person a step the machine is forbidden to perform."
+    }
+   ],
+   "absenceTerms": [
+    "verdict",
+    "unattended",
+    "severity",
+    "oracle",
+    "consent"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T11:49:05.879386+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [
+    "fail-loud-classification-default",
+    "human-performed-steps"
+   ],
+   "deviations": 0,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

@@ -3713,8 +3713,12 @@
           "revision": 21,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 GuideMarkdown only splits a topic body into rendered blocks, and a search of src/components/guide for verdict, unattended, severity, oracle, and consent found no matches, so this context never pauses a machine for a human decision.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:bc33acb280c8df96",
+          "evaluatedRevision": 21
         },
         {
           "subject": "repository-landing-document",
