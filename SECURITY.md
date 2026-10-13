@@ -13,6 +13,11 @@ Contact the repository owner privately through their GitHub profile instead.
   job log without failing it until the first baseline is triaged; then delete its
   `continue-on-error` to make it blocking. CodeQL is not wired: it needs an action this repo
   does not pin yet, so adding it is an owner step.
+- [x] Blocking SAST on every push and PR to `master`: Semgrep over this repo's own trust-boundary
+  rules (`.github/semgrep-trust-boundary.yml`: the `service_role` key outside its two server
+  modules, a `NEXT_PUBLIC_` `service_role` name, `eval()`/`new Function()`, `child_process` in an
+  API route) in `.github/workflows/sast-trust-boundary.yml`. Blocking: one finding fails the job.
+  Its shape is held by `src/lib/sastTrustBoundary.test.ts`.
 - [x] Secret scanning on every push and PR to `master`: detect-secrets over the changed files,
   in `.github/workflows/security-scan.yml`, job `secrets`. Blocking: a new secret fails the job.
 - [x] Dependency updates: `.github/dependabot.yml`, weekly PRs for npm and GitHub Actions.

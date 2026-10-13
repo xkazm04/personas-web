@@ -1,0 +1,64 @@
+# Semgrep rules for this repository's own trust boundary. BLOCKING: run by
+# .github/workflows/sast-trust-boundary.yml with --error, so one finding fails
+# the job. Each rule matched nothing in `src/` when it was written (2026-10-13),
+# so the job starts green and any hit is new code.
+#
+# The broad registry ruleset (p/default) stays advisory in security-scan.yml
+# until its baseline is triaged (docs/decisions/2026-10-13-release-provenance-and-sast-triage.md).
+# These rules are narrow on purpose: each names a failure this repo has a
+# written rule against, so a hit is a defect, not a triage question.
+# The shape is pinned by src/lib/sastTrustBoundary.test.ts.
+
+rules:
+  - id: service-role-key-outside-server-modules
+    message: >-
+      SUPABASE_SERVICE_ROLE_KEY is read outside src/lib/server/env.ts and
+      src/lib/supabase-admin.ts. Reach the key through getSupabaseAdmin() instead
+      (.claude/CLAUDE.md convention 6, docs/threat-model.md "The service_role boundary").
+    severity: ERROR
+    languages: [typescript, javascript]
+    paths:
+      exclude:
+        - "**/lib/server/env.ts"
+        - "**/lib/supabase-admin.ts"
+        - "*.test.ts"
+    pattern-either:
+      - pattern: process.env.SUPABASE_SERVICE_ROLE_KEY
+      - pattern: process.env["SUPABASE_SERVICE_ROLE_KEY"]
+      - pattern: '"SUPABASE_SERVICE_ROLE_KEY"'
+
+  - id: service-role-key-public-prefix
+    message: >-
+      A NEXT_PUBLIC_ name for the service_role key would be inlined into client
+      JavaScript. The key must never carry the NEXT_PUBLIC_ prefix.
+    severity: ERROR
+    languages: [typescript, javascript]
+    paths:
+      exclude:
+        - "*.test.ts"
+    pattern-regex: NEXT_PUBLIC_\w*SERVICE_ROLE
+
+  - id: dynamic-code-evaluation
+    message: >-
+      eval() and new Function() run strings as code. The production CSP has no
+      'unsafe-eval' (docs/decisions/2026-10-09-sse-session-gate-and-production-no-eval.md),
+      so this breaks in the browser and widens injection on the server.
+    severity: ERROR
+    languages: [typescript, javascript]
+    paths:
+      exclude:
+        - "*.test.ts"
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: new Function(...)
+
+  - id: child-process-in-api-route
+    message: >-
+      An API route spawns a process. Request data reaching a shell is command
+      injection; API routes do not shell out.
+    severity: ERROR
+    languages: [typescript, javascript]
+    paths:
+      include:
+        - "**/app/api/**"
+    pattern-regex: (from\s+|require\(\s*)["'](node:)?child_process["']

@@ -18,6 +18,16 @@
 
 ## Follow-up (needs a person)
 
-`eslint.config.mjs` is a gate config that unattended lanes may not edit. Replace its header comment with a one-line pointer to this record. `.claude/architect/config.md` also restates the number in prose. Remove it there the same way.
+`eslint.config.mjs` is a gate config that unattended lanes may not edit. Replace its 48-line header comment with this pointer:
+
+```js
+// Lint policy (two severities, a warning ceiling that only goes down, and why
+// require-animation-gating stays `warn`): docs/decisions/2026-10-12-lint-warning-ceiling-ratchet.md.
+// The ceiling itself is the `lint` script in package.json and nowhere else.
+```
+
+`.claude/architect/config.md` also restates the number in prose (its "is a ratchet" line). Name it there as "the ceiling in `package.json`" instead.
+
+`src/lib/lintCeilingSingleSource.test.ts` holds this decision. It fails when any config, guidance or doc file restates the ceiling as a number. The two files above are its `STALE_RESTATERS` list, and it fails again once either is fixed, until that file's entry is removed. Dated records (`.claude/perfect/config.md` lessons, `.claude/illustrate/runs/`, `docs/concepts/mobile-revival/SURVEY.md`) are exempt, because the number there was true on their date.
 
 The header also says nine of the warnings are `custom-quality/max-tsx-lines`. On 2026-10-13 none were: the four largest TSX files sat at 198 lines, one under the rule's line count of 200. They were split to give them headroom (`src/components/dashboard/views/executions/useExecutionsList.ts`, `src/components/sections/feature-voting/components/FeatureCommentsPanel.tsx`, `src/components/tour/spotlightFrame.ts`, `src/components/tour/useCountdownBlip.ts`). Before lowering the ceiling, count the warnings by rule with `npx eslint . -f json`.

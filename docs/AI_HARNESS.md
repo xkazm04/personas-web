@@ -227,6 +227,29 @@ To re-measure, and also on any harness upgrade:
 3. The owner updates the cited date in `.claude/CLAUDE.md`. If step 2 pushed, the
    guidance no longer holds: add a deny pattern for a plain `git push` instead.
 
+### Guidance policy invariants
+
+Every session reads `.claude/CLAUDE.md` as policy before any gate runs, so a softened
+prohibition would take effect before a reviewer saw it. `src/lib/guidancePolicyInvariants.test.ts`
+pins the sentences that, if dropped or inverted, would widen what an agent may do:
+
+- the git policy: never push, no force-push or pull request unless asked, and no working
+  around the gate;
+- the `service_role` boundary: server-only, never `NEXT_PUBLIC_`, and never read outside a
+  `server-only` module (plus the matching pointers in `src/app/api/CLAUDE.md` and
+  `src/lib/server/CLAUDE.md`);
+- no route-path change without confirmation, and no `.env*` commit other than `.env.example`;
+- the "do not work around it" clauses on the custom lint rules.
+
+The spec also rejects softening phrasings ("may push", "skip the hooks", "may commit `.env`"
+and similar) in the canonical file and the three scoped `CLAUDE.md` files, so adding a
+looser sentence beside an intact one also fails `test:unit`. An owner who rewords a pinned
+sentence on purpose updates the spec in the same commit.
+
+Generating the prose and the `permissions.deny` list from one source is the owner's call,
+because both live under `.claude/`. Until then, `src/lib/harnessDeny.test.ts` checks that
+the two agree.
+
 ## Provenance
 
 Agent and lane commits are identified today by their `Co-Authored-By` trailer and, for
