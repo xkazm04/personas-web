@@ -167,6 +167,13 @@ fails when an i18n check script is not a mode or the selector loses a locale.
   order) or its set of link and image targets differs from the English. The topics that
   differ today are listed inline in the spec as a ratchet that may only shrink; one that
   matches again fails the spec until it is taken off the list.
+- **Roles** (`docs/agents/roles/`): versioned specs for the tasks lanes repeat (a gate
+  workflow and its shape spec, a mutation spec, a decision record, a 14-locale string
+  change). A skill is a tool; a role says how to do the task, what a good result looks
+  like and what to refuse. They sit outside `.claude/` so lanes can improve them.
+  `src/lib/agentRoleSpecs.test.ts` holds each role's version, sections, cited files and
+  `done-when` scripts, and evaluates the role's merged exemplars against the structure
+  the role demands, so agent-authored output is checked for shape, not only for passing.
 - Open gap: `native-copy` has no golden output (its checker lives in the registry), and
   `icon-gen`'s tools themselves are untested. The next step is to split `icon-gen`'s pure
   helpers (`parseArgs`, `hexToRgb`, `buildIco`, the tile SVGs) out of
