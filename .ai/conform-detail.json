@@ -813,6 +813,47 @@
       "evaluatedTs": "2026-10-13T02:20:45.884Z",
       "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
       "techniques": []
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/agent-instruction-files": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T03:19:23.769Z",
+      "worker": "64195fab-547d-406d-ad1c-5c310ec52e84",
+      "techniques": []
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/agent-instruction-files": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T03:19:23.769Z",
+      "worker": "64195fab-547d-406d-ad1c-5c310ec52e84",
+      "techniques": [],
+      "registryProposal": "The golden path should state that a human-only product guide which no coding harness loads falls outside this subject, because prompt-tutorial copy otherwise sits next to the instruction-file failure modes."
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/agent-instruction-files": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T03:19:23.769Z",
+      "worker": "64195fab-547d-406d-ad1c-5c310ec52e84",
+      "techniques": []
+    },
+    "Product Documentation (Guide)/Guide Content Blocks & Markdown/agent-instruction-files": {
+      "context": "Guide Content Blocks & Markdown",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-13",
+      "evaluatedTs": "2026-10-13T03:19:23.769Z",
+      "worker": "64195fab-547d-406d-ad1c-5c310ec52e84",
+      "techniques": []
     }
   }
 }

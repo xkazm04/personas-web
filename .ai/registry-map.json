@@ -858,7 +858,11 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:33 These files are a download call-to-action, an FAQ accordion, and footer chrome; searches of PrimaryCTA.tsx, DownloadCTA.tsx, download-cta, FAQ.tsx, faq, and Footer.tsx for AGENTS.md, CLAUDE.md, SKILL.md, frontmatter, instruction file, always-loaded, and skill found no matches.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "engine-binding-surface",
@@ -1880,7 +1884,11 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:49 This module is a tour diagram that mounts scripted chat, arena, evolution, and eval panels; a search of src/components/feature-sections/lab and Lab.tsx for plugin, AGENTS.md, CLAUDE.md, SKILL.md, frontmatter, instruction file, always-loaded, skill, and canonical found no matches, and the only hook hits are React useStillMotion imports.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "node-boot-and-declarative-bootstrap",
@@ -3235,7 +3243,11 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/topics.ts:48 These files are human-guide topic strings; a search for AGENTS.md, CLAUDE.md, SKILL.md, frontmatter, instruction file, always-loaded, canonical, and marker fences found only product copy that build-engine prompt versions are labeled auto-generated at src/data/guide/locales/ar/content/agents-prompts.ts:171.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "docs-sync",
@@ -3625,7 +3637,11 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideBlocks.tsx:3 This code renders guide markdown into callout, fence, and card blocks for topic pages; searches of GuideBlocks.tsx, GuideMarkdown.tsx, and the listed block files for AGENTS.md, CLAUDE.md, SKILL.md, frontmatter, instruction file, always-loaded, prompt, skill, and generator found no matches.",
+          "evaluatedAt": "2026-10-13",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "hitl-approval",
