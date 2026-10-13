@@ -16,6 +16,8 @@ defence is their Controls cell. Each row naming an IP rate limit must answer 429
 `Retry-After` once one IP exceeds its budget, while another IP is still served. Each row
 naming an allowlist must refuse an id outside it with 400. A row that names either control
 without a harness in that spec fails until one is added.
+`src/lib/threatModelAbuseCases.test.ts` attacks the key-lending routes the way
+"## Abuse cases" describes, and fails when a mitigation stops holding.
 
 ## Assets
 
@@ -65,6 +67,26 @@ a route, a verb or an allowlist there drifts from the handler.
 **Highest blast radius:** `orchestrator/[...path]`. Misjudging its gate lends the
 orchestrator's full authority to anyone on the internet, and its answers are
 served on the origin that holds the phone signing key.
+
+## Abuse cases
+
+The Routes rows say which controls exist. These rows say how someone would try to get past
+the controls on the three routes that lend `TEAM_API_KEY`, and what must still hold when
+they do. `src/lib/threatModelAbuseCases.test.ts` runs each case against every route its row
+names, with a verified session where the attack needs one. Global `fetch` is stubbed, so no
+request leaves the test. A row without a drill in that spec fails, and so does a drill
+without a row.
+
+| Case | Routes | Attack | What must hold |
+|---|---|---|---|
+| `session-from-authorization` | `orchestrator/[...path]` `events/stream` `executions/[id]/stream` | send a live Supabase token as `Authorization: Bearer`, hoping the gate reads the standard header | 401. Only `X-User-Token` is a session, and nothing is asked of Supabase or the orchestrator |
+| `oversized-token` | `orchestrator/[...path]` `events/stream` `executions/[id]/stream` | send an `X-User-Token` longer than any Supabase token (over 8192 chars) to make Auth do the work | 401 without a call to Supabase Auth or the orchestrator |
+| `caller-headers-not-relayed` | `orchestrator/[...path]` `events/stream` `executions/[id]/stream` | a verified caller adds its own `Authorization`, `Cookie` and `X-Forwarded-Host` | upstream gets exactly the route's own header set, and its `Authorization` is the team key, never the caller's |
+| `execution-id-escape` | `executions/[id]/stream` | an id built to leave the path: `../../admin`, `%2e%2e`, `//evil.test`, `a?x=1#frag`, `..%2f` | every upstream URL stays on the orchestrator origin as `/api/executions/<the id as one segment>/stream`, with no query or fragment |
+| `stream-query-dropped` | `events/stream` `executions/[id]/stream` | append `?upstream=https://evil.test&token=stolen` to the stream URL | the upstream URL carries none of it |
+| `sse-error-body-not-relayed` | `events/stream` `executions/[id]/stream` | the upstream answers an error with an HTML body | the browser gets `{"error":"upstream_unreachable"}` as JSON with the same status, never the body |
+| `sse-answer-is-never-markup` | `events/stream` `executions/[id]/stream` | the upstream answers 200 with `text/html` | the answer is served as `text/event-stream`, which a browser does not render |
+| `unreachable-hides-host` | `orchestrator/[...path]` `events/stream` `executions/[id]/stream` | the upstream is unreachable and the error message names its host | 502 `{"error":"upstream_unreachable"}`, and the body does not name the orchestrator host |
 
 ## The `service_role` boundary
 

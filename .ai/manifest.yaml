@@ -13,8 +13,13 @@ repo:
 # names the canonical file and the docs that govern the folder and restates no rule.
 # src/lib/guidanceCanonical.test.ts fails when the canonical file is missing, when a
 # CLAUDE.md or AGENTS.md under src/ is not listed here, or when a pointer starts carrying rules.
+# `projections` are the per-agent entry points (Copilot, Cursor) that scripts/project-guidance.mjs
+# generates from the canonical file; src/lib/guidanceProjections.test.ts fails when one is stale.
 guidance:
   canonical: .claude/CLAUDE.md
+  projections:
+    - .github/copilot-instructions.md
+    - .cursor/rules/personas-web.mdc
   pointers:
     - src/app/api/CLAUDE.md
     - src/lib/server/CLAUDE.md

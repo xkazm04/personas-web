@@ -1,0 +1,61 @@
+name: e2e full (sharded)
+
+# The whole Playwright suite on every PR, split four ways. ci.yml `e2e` runs the
+# same suite nightly as one serial job of about 10 minutes (playwright.config.ts:
+# workers 1, fullyParallel false, and the webServer rebuilds the app). That length
+# is why it was nightly-only, and why a UI regression could merge and surface the
+# next morning. e2e-smoke.yml keeps four high-risk specs on the PR; this job adds
+# the rest without adding wall-clock time: each shard builds once and runs a
+# quarter of the spec files, so a PR waits for the slowest shard, not the sum.
+#
+# Budget: `timeout-minutes` below, per shard. If a shard outgrows it the job fails,
+# and the answer is to add a shard or speed the slow spec up, not to raise the
+# number. Each shard uploads its Playwright JSON report (per-test durations) even
+# when it passes, so the slowest specs can be read off a real run.
+# The shape is pinned by src/lib/e2eShardedTier.test.ts; the reasoning is in
+# docs/testing/e2e-smoke-tier.md § Full suite on PRs.
+
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-full-sharded-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e-shard:
+    name: playwright full suite, shard ${{ matrix.shard }}/4
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    env:
+      PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-report/durations-${{ matrix.shard }}.json
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --shard=${{ matrix.shard }}/4 --reporter=list,json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: playwright-durations-${{ matrix.shard }}
+          path: playwright-report/
+          retention-days: 14
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: playwright-traces-${{ matrix.shard }}
+          path: test-results/
+          retention-days: 7
