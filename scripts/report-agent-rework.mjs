@@ -2,7 +2,7 @@
 /**
  * How agent commits fared, not just who wrote them.
  *
- *   node scripts/report-agent-rework.mjs [<range>] [--window N] [--list] [--strict]
+ *   node scripts/report-agent-rework.mjs [<range>] [--window N] [--list] [--strict] [--block-in <pr-range>]
  *
  * The trailers (`Co-Authored-By: Claude`, `Ascent-Resolves:`) mark which
  * commits an agent wrote. This reads them back to answer the next question:
@@ -21,13 +21,20 @@
  * same file for an unrelated reason), so read it as a trend between lanes, not
  * as a verdict on one commit; `--list` prints each reworked commit and the
  * commit that reworked it so a reviewer can check the pairing.
+ *
+ * Hard band. A lane far past the budget (`HARD_REWORK_BUDGET`) is no longer a
+ * trend to read, and an advisory flag on it is easy to scroll past. With
+ * `--block-in <pr-range>` the meter prints a `BLOCK` line and exits 1 for each
+ * lane over the hard band that also has a commit in that range, so the PR that
+ * would add to a struggling lane's record stops, and a PR from anyone else does
+ * not. The FLAG band stays advisory.
  */
 
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { commitTypeAdvice, isAgentCommit } from "./check-ai-change.mjs";
+import { commitTypeAdvice, isAgentCommit, isLaneShaped } from "./check-ai-change.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -74,13 +81,15 @@ export function resolvesOf(message) {
 /**
  * The group a commit is counted under: `human`, `ascent` (a lane commit),
  * `skill:<name>` (an agent commit whose message names a registry or project
- * skill), or `agent-other`.
+ * skill), `agent-other`, or `lane-untrailered` (no agent trailer, but a subject
+ * in the lane runner's template, so it is not counted into the human baseline).
  *
  * @param {string} message
  * @param {string[]} skills skill names to look for
  * @returns {string}
  */
 export function laneOf(message, skills) {
+  if (!isAgentCommit(message) && isLaneShaped(message)) return "lane-untrailered";
   if (!isAgentCommit(message)) return "human";
   if (resolvesOf(message).length) return "ascent";
   // Several skill names are plain words ("perfect", "friend", "consult"), so a
@@ -181,6 +190,28 @@ export function budgetFlags(rows, budget = {}) {
 }
 
 /**
+ * The hard band: twice the FLAG ceiling, a wider margin over the human rate, and
+ * twice the commits before a lane is judged at all. A lane past this is not a
+ * heuristic wobble; half its commits needed a follow-up repair.
+ */
+export const HARD_REWORK_BUDGET = Object.freeze({ maxRate: 0.5, overHuman: 0.3, minCommits: 20 });
+
+/**
+ * Lanes over the hard band that also have a commit in the range under review.
+ * A lane that is over the band but adds nothing to this range is left to the
+ * FLAG annotation: blocking it here would stop a PR it took no part in.
+ *
+ * @param {{ lane: string, commits: number, reworked: number, rate: number }[]} rows
+ * @param {string[]} rangeLanes the lane of each commit in the range under review
+ * @param {{ maxRate?: number, overHuman?: number, minCommits?: number }} [budget]
+ * @returns {{ lane: string, rate: number, reason: string }[]}
+ */
+export function hardBlocks(rows, rangeLanes, budget = HARD_REWORK_BUDGET) {
+  const present = new Set(rangeLanes);
+  return budgetFlags(rows, { ...HARD_REWORK_BUDGET, ...budget }).filter((f) => present.has(f.lane));
+}
+
+/**
  * Skill names this repo knows: `.ai/manifest.yaml` `skills:` plus the
  * project-owned directories under `.claude/skills/`.
  *
@@ -198,11 +229,16 @@ function main() {
   const args = process.argv.slice(2);
   const windowAt = args.indexOf("--window");
   const window = windowAt >= 0 ? Number(args[windowAt + 1]) : 10;
-  if (!Number.isInteger(window) || window < 1) {
-    console.error("usage: node scripts/report-agent-rework.mjs [<range>] [--window N] [--list] [--strict]");
+  const blockAt = args.indexOf("--block-in");
+  const blockRange = blockAt >= 0 ? args[blockAt + 1] : undefined;
+  if (!Number.isInteger(window) || window < 1 || (blockAt >= 0 && (!blockRange || blockRange.startsWith("--")))) {
+    console.error(
+      "usage: node scripts/report-agent-rework.mjs [<range>] [--window N] [--list] [--strict] [--block-in <pr-range>]",
+    );
     process.exit(2);
   }
-  const range = args.find((a, i) => !a.startsWith("--") && (windowAt < 0 || i !== windowAt + 1));
+  const valueAt = new Set([windowAt, blockAt].filter((i) => i >= 0).map((i) => i + 1));
+  const range = args.find((a, i) => !a.startsWith("--") && !valueAt.has(i));
   const rangeArgs = range ? [range] : ["-n", "300", "HEAD"];
 
   const manifestPath = path.join(REPO_ROOT, ".ai", "manifest.yaml");
@@ -229,6 +265,17 @@ function main() {
   }
   const flags = budgetFlags(rows);
   for (const f of flags) console.log(`  FLAG ${f.lane}: ${f.reason}`);
+  if (blockRange) {
+    const rangeLog = execFileSync("git", ["log", "--no-merges", "--format=%x1e%H%x1f%B%x1f", blockRange], {
+      cwd: REPO_ROOT,
+      encoding: "utf8",
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    const rangeLanes = parseLog(rangeLog).map((c) => laneOf(c.message, skills));
+    const blocks = hardBlocks(rows, rangeLanes);
+    for (const b of blocks) console.log(`  BLOCK ${b.lane}: ${b.reason} (hard band), and ${blockRange} adds to it`);
+    if (blocks.length) process.exit(1);
+  }
   if (flags.length && args.includes("--strict")) process.exit(1);
 }
 

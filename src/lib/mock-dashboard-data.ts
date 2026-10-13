@@ -1,5 +1,9 @@
 // ── Mock data for dashboard visualizations ──────────────────────────
 // Generates realistic-looking data for maximum visitor impression.
+//
+// Layer 2 of 3 in the demo mocks: dashboard-only fixtures, derived from
+// ./mockData (layer 1, fixtures `ApiClient` serves). Data only: a new call or
+// command goes in ./mockApi (layer 3). Pinned by mockModuleLayers.test.ts.
 
 import {
   MOCK_DAILY_METRICS,

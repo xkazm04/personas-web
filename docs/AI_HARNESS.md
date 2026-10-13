@@ -315,6 +315,13 @@ commit's signature status (`git log --format=%G?`) next to its trailers and sort
 | Carries `Co-Authored-By: Claude` or `Ascent-Resolves:` | agent | checked; a problem fails |
 | No agent trailer, good signature (`G`) | verified | skipped |
 | No agent trailer, anything else | unverified | checked; a problem prints as a warning |
+| Unverified, subject in the lane runner's shape | unverified | as above, plus a missing-trailer problem of its own |
+
+The last row is how a lane commit that dropped its trailer stays visible. `isLaneShaped`
+reads the runner's subject template (`fix: Added ...`, a capitalised past-tense verb after
+`fix:`, or a subject ending `(via Ascent)`); people write the imperative. Such a commit gets
+"lane-shaped subject but no trailer" even when its diff is clean, so the PR log names it,
+and `--strict-provenance` fails it. `src/lib/agentReworkHardBand.test.ts` pins the shape.
 
 Before this, an agent commit that left out its trailer was skipped without a word. Now it
 runs the same anchor, protected-path and scope checks, and the PR log names it with
@@ -368,6 +375,23 @@ that wiring. The limits were chosen before anyone ran the meter against this his
 Run it once, and if the human baseline or a healthy lane sits close to a limit, move that
 limit in the same commit and record the measured rates here. `budgetFlags` is pinned by
 `src/lib/agentReworkBudget.test.ts`.
+
+**Hard band.** The FLAG band advises; `HARD_REWORK_BUDGET` stops. A lane with at least 20
+commits in the window whose rate is over 50%, or more than 30 points over the human rate,
+is past the point where the heuristic's noise could explain it. `--block-in <pr-range>`
+prints a `BLOCK` line and exits 1 for each such lane that also has a commit in the PR, so
+the PR that would add to a struggling lane's record fails, and a PR from anyone else does
+not. `.github/workflows/agent-rework-hard-band.yml` runs it on every PR to `master` with the
+PR's own commits as the range and turns each `BLOCK` line into an error annotation. To let
+a blocked lane through, narrow it as below, or have the owner move the band in the script
+with the measured rates in the commit. `src/lib/agentReworkHardBand.test.ts` pins the band
+and the wiring. Like the FLAG limits, the hard band was set without running the meter on
+this history; the first PR run prints the rates to check it against.
+
+A lane commit that lost its trailer is not counted as a person's: `laneOf` puts an
+untrailered commit whose subject has the lane runner's shape (`isLaneShaped` in
+`scripts/check-ai-change.mjs`) under `lane-untrailered`, so it neither hides from the
+budget nor inflates the human baseline.
 
 ### When a lane degrades
 

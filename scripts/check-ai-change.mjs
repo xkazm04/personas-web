@@ -25,6 +25,9 @@
  * unsigned untrailered commit runs the same checks and its problems print as
  * warnings. `--strict-provenance` (or AI_GATE_STRICT_PROVENANCE=1) fails them
  * instead, for once lane commits are signed (docs/AI_HARNESS.md "Provenance").
+ * An unsigned untrailered commit whose subject has the lane runner's shape
+ * (`isLaneShaped`) also gets a missing-trailer problem of its own, so a lane
+ * commit that dropped its trailer is named even when its diff is clean.
  *
  * Escape hatch, visible in the log: a commit line `AI-Gate-Override: <reason>`
  * skips checks 2 and 3 for that commit and prints the reason. It does not
@@ -49,6 +52,21 @@ const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 /** True when the commit message carries an agent trailer. */
 export function isAgentCommit(message) {
   return /^Co-Authored-By:\s*Claude\b/im.test(message) || /^Ascent-Resolves:/im.test(message);
+}
+
+/**
+ * True when the subject reads like the lane runner's template: a `fix:` that
+ * opens with a capitalised past-tense verb ("fix: Added ...", "fix: Unified
+ * ..."), or a subject ending "(via Ascent)". People write the imperative
+ * ("fix: add ..."), so the shape is a reliable hint that a commit came from a
+ * lane, which is how a lane commit that lost its trailer is still seen.
+ *
+ * @param {string} message
+ * @returns {boolean}
+ */
+export function isLaneShaped(message) {
+  const [subject = ""] = message.split(/\r?\n/);
+  return /^fix: [A-Z][a-z]+ed\b/.test(subject) || /\(via Ascent\)\s*$/i.test(subject);
 }
 
 /**
@@ -296,6 +314,9 @@ function main() {
     const problems = override ? [] : [...protectedPathProblems(changes), ...scopeProblems(changes)];
     const added = addedMarkdownLines(git("show", "--unified=0", "--format=", sha, "--", "*.md"));
     for (const [md, addedLines] of Object.entries(added)) problems.push(...anchorProblems(md, addedLines, ctx));
+    if (kind === "unverified" && isLaneShaped(message)) {
+      problems.push("lane-shaped subject but no `Ascent-Resolves:` or `Co-Authored-By: Claude` trailer");
+    }
 
     const subject = message.split("\n")[0];
     const short = sha.slice(0, 8);
