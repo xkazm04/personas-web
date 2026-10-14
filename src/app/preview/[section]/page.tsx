@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { PreviewSectionMount } from "../PreviewMount";
+import Roadmap from "@/components/sections/roadmap";
 
 /**
  * Dev-only single-section preview. Mounts the component registered for
@@ -17,5 +18,7 @@ export default async function PreviewSection({
   }
 
   const { section } = await params;
-  return <PreviewSectionMount section={section} />;
+  // The roadmap derives its counts from server-only catalog modules, so it is
+  // rendered here (server) and passed down, never imported by the client registry.
+  return <PreviewSectionMount section={section} serverSlot={section === "roadmap" ? <Roadmap /> : undefined} />;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement } from "react";
+import { createElement, type ReactNode } from "react";
 import Link from "next/link";
 import StageSection from "@/components/StageSection";
 import LazyMount from "@/components/LazyMount";
@@ -31,7 +31,14 @@ export function PreviewIndexList() {
   );
 }
 
-export function PreviewSectionMount({ section }: { section: string }) {
+export function PreviewSectionMount({
+  section,
+  serverSlot,
+}: {
+  section: string;
+  /** The section, when the server page rendered it itself (it imports server-only modules). */
+  serverSlot?: ReactNode;
+}) {
   const Section = PREVIEW_REGISTRY.get(section);
   const stage = HOME_STAGE_BY_SLUG.get(section);
 
@@ -75,14 +82,14 @@ export function PreviewSectionMount({ section }: { section: string }) {
         <StageSection glow={stage.glow} fromColor={stage.fromColor} toColor={stage.toColor}>
           {stage.gate ? (
             <LazyMount stage minHeight={640}>
-              {createElement(Section)}
+              {(serverSlot ?? createElement(Section))}
             </LazyMount>
           ) : (
-            createElement(Section)
+            (serverSlot ?? createElement(Section))
           )}
         </StageSection>
       ) : (
-        createElement(Section)
+        (serverSlot ?? createElement(Section))
       )}
     </>
   );

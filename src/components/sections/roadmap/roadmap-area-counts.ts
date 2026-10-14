@@ -1,3 +1,4 @@
+import "server-only";
 import { templates, type Category } from "@/lib/templates";
 import { connectors } from "@/data/connectors";
 import { LANGUAGES } from "@/stores/i18nStore";
@@ -8,7 +9,7 @@ import type { AreaCounts } from "./areas";
  * catalog/registry modules and reduces them to plain, serializable counts.
  *
  * This module must only ever be imported by the SERVER component
- * (`index.tsx`) — that keeps the heavy templates/connectors catalogs out of
+ * (`index.tsx`); `import "server-only"` makes a client import fail the build — that keeps the heavy templates/connectors catalogs out of
  * the client bundle while still deriving the card numbers from the shipped
  * product, so they can't drift. The result is passed into `buildAreas()` as
  * a prop.

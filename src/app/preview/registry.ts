@@ -5,6 +5,11 @@ import * as howSections from "@/components/sections/how-lazy";
 import * as athenaSections from "@/components/sections/athena-lazy";
 import { buildPreviewRegistry } from "./derive";
 
+/** Placeholder for a section the server page renders itself; see PREVIEW_EXTRAS.roadmap. */
+function ServerRenderedSlot() {
+  return null;
+}
+
 /**
  * Sections available at /preview/[section] (dev-only - both preview routes 404
  * in production).
@@ -33,7 +38,12 @@ import { buildPreviewRegistry } from "./derive";
 export const PREVIEW_EXTRAS: Record<string, ComponentType> = {
   hero: dynamic(() => import("@/components/sections/hero-hive")),
   footer: dynamic(() => import("@/components/sections/Footer")),
-  roadmap: dynamic(() => import("@/components/sections/roadmap")),
+  // Server-only section (its area counts are derived from the heavy catalogs, and
+  // `roadmap-area-counts.ts` is `server-only`): importing it here would drag the
+  // catalogs into this client graph. The slug is registered so it is listed and
+  // resolvable; the section itself is rendered by the server page and handed to
+  // `PreviewSectionMount` as a slot, which wins over this placeholder.
+  roadmap: ServerRenderedSlot,
   "feature-voting": dynamic(() => import("@/components/sections/feature-voting")),
   // Preview-only: no page mounts these.
   "platform-command": dynamic(() => import("@/components/sections/platform-command")),

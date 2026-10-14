@@ -4,10 +4,11 @@
  * shipped catalogs at module load; nothing here is typed by hand, and
  * `public-claims.test.ts` fails on a hand-typed `\d+\+` floor in those surfaces.
  *
- * SERVER-ONLY by convention: it imports the full connector and template
- * catalogs. Client components must keep importing the light constants from
+ * SERVER-ONLY, enforced by `import "server-only"` below: it imports the full connector and template
+ * catalogs. A client import fails the build. Client components must keep importing the light constants from
  * `@/lib/seo` instead.
  */
+import "server-only";
 import { connectors } from "@/data/connectors";
 import { templateList } from "@/lib/templates";
 

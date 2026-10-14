@@ -27,6 +27,7 @@
 # Trust boundary: server-only modules, API routes and the data layer
 /src/lib/server/ @xkazm04
 /src/lib/supabase-admin.ts @xkazm04
+/src/components/sections/roadmap/roadmap-area-counts.ts @xkazm04
 /src/app/api/ @xkazm04
 *.sql @xkazm04
 
