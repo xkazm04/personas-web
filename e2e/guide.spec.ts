@@ -139,6 +139,19 @@ test.describe("User Guide", () => {
     await expect(page.locator("article")).toContainText("Creating Your First Agent");
   });
 
+
+  test("in-place topic change moves focus to the new h1; cold load does not", async ({ page }) => {
+    await page.goto("/guide/getting-started/installing-personas");
+    const active = () => page.evaluate(() => document.activeElement?.id || document.activeElement?.tagName);
+    // Cold load: focus stays where the document put it, scroll untouched.
+    expect(await active()).not.toBe("guide-topic-content");
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await page.locator("a[href*='/creating-your-first-agent']").last().click();
+    await expect(page).toHaveURL("/guide/getting-started/creating-your-first-agent");
+    await expect(page.locator("#guide-topic-content")).toBeFocused();
+    await expect(page.locator("#guide-topic-content")).toHaveAttribute("tabindex", "-1");
+  });
+
   test("sidebar topic link navigates directly to topic", async ({ page }) => {
     await page.goto("/guide");
     const sidebar = page.locator("aside").first();

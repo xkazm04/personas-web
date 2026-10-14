@@ -36,11 +36,16 @@ interface TopicViewProps {
   related: RelatedTopic[];
 }
 
+// Topic the reader last landed on, held at module scope on purpose: Next remounts
+// this component when the [topic] segment changes, so any ref inside it restarts
+// on every navigation and a mount-flag guard can never tell a swap from a cold load.
+// null until the first landing, so a cold load never moves focus.
+let lastLandedTopicId: string | null = null;
+
 export default function TopicView({ category, topic, content, initialUnit, initialLanguage, initialHeadings, prevTopic, nextTopic, related }: TopicViewProps) {
   const { t } = useTranslation();
   const contentH1Ref = useRef<HTMLHeadingElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
-  const didMountRef = useRef(false);
   // A search body hit lands on its #section; mark the matched words there.
   const hitMarked = useArrivalMark(bodyRef, topic.id);
   // Locale-aware unit. The server resolves the unit for the locale cookie the
@@ -103,12 +108,12 @@ export default function TopicView({ category, topic, content, initialUnit, initi
   // On client-side topic change (prev/next nav or search), move focus to the
   // topic <h1> so screen-reader/keyboard users land on the new content and hear
   // its title, instead of focus sitting on a now-stale link or the search input.
-  // Skip the initial mount so we never steal focus on first load.
+  // Guarded on topic identity (see lastLandedTopicId), so first paint and a
+  // Strict-Mode double effect never steal focus while a real change does.
   useEffect(() => {
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      return;
-    }
+    const previous = lastLandedTopicId;
+    lastLandedTopicId = topic.id;
+    if (previous === null || previous === topic.id) return;
     // A #section arrival (search hit, shared link) keeps its landing scroll.
     contentH1Ref.current?.focus({ preventScroll: window.location.hash.length > 1 });
   }, [topic.id]);
@@ -136,7 +141,7 @@ export default function TopicView({ category, topic, content, initialUnit, initi
             ref={contentH1Ref}
             id="guide-topic-content"
             tabIndex={-1}
-            className="text-3xl font-bold tracking-tight text-foreground outline-none sm:text-4xl"
+            className="scroll-mt-24 text-3xl font-bold tracking-tight text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-cyan/60 sm:text-4xl"
           >
             {localized.title}
           </h1>
