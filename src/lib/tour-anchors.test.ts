@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { TOURS_BY_ID, type TourStep } from "@/lib/tour-script";
+import { HOME_STAGES } from "@/lib/home-manifest";
 
 /**
  * Anchor-contract gate for the guided tour.
@@ -29,15 +30,11 @@ import { TOURS_BY_ID, type TourStep } from "@/lib/tour-script";
  * - **Runtime geometry.** Whether the anchor is visible, scrolled to, or
  *   spotlighted correctly is `e2e/tour.spec.ts`'s job. This gate only asserts
  *   the identifiers exist in source.
- * - **`scrollTarget` element ids** (`#tools`, `#pipelines`, `#vision`,
- *   `#download-section`). Those ids are not written on any element: the
- *   homepage composes sections from a table in `src/app/page.tsx` that passes
- *   `wrapperId: "tools"` into `SectionWrapper`. Verifying them would mean
- *   either matching the bare word `"tools"` anywhere in `src/` (which also hits
- *   unrelated guide tags, so it could never fail) or hard-coding knowledge of
- *   the `wrapperId` prop. Both are worse than saying so out loud. Attribute-form
- *   `scrollTarget`s — the dashboard steps — ARE checked, since those are real
- *   selectors.
+ * - **Runtime presence of `scrollTarget` element ids** (`#tools`, `#lab`, ...).
+ *   Their SOURCE presence is checked (see "bare-id scroll targets" below): a
+ *   home wrapper id must be a `wrapperId`/`anchorId` in `HOME_STAGES`, any
+ *   other must be an `id` literal somewhere in `src/`. Whether the element is
+ *   in the DOM at first paint is `anchor-coverage`'s dev guard and the e2e specs.
  * - **Unreferenced anchors.** Some anchors exist in components that no step
  *   points at (`dashboard-health`, `dashboard-incidents`, `dashboard-ticker`,
  *   `command-center`). That is slack for future steps, not a defect, so it is
@@ -131,6 +128,13 @@ const ALL_REFS: SelectorRef[] = Object.entries(TOURS_BY_ID).flatMap(([tourId, st
 );
 
 const ATTRIBUTE_REFS = ALL_REFS.filter((r) => /^\[[\w-]+\s*=/.test(r.selector));
+/** Bare `#id` scroll targets: declared addresses, resolved below. */
+const ID_REFS = Object.entries(TOURS_BY_ID).flatMap(([tourId, steps]) =>
+  steps
+    .filter((st) => /^#[\w-]+$/.test(st.scrollTarget))
+    .map((st) => ({ id: st.scrollTarget.slice(1), step: `${tourId} tour, step "${st.id}" (scrollTarget)` })),
+);
+
 /** Non-selector literals in step actions: a click aimed by on-screen text. */
 const TEXT_REFS = ALL_REFS.filter((r) => !r.selector.startsWith("["));
 
@@ -235,6 +239,20 @@ describe("tour anchor manifest", () => {
       ).toBe(true);
     },
   );
+
+  it("bare-id scroll targets: every #id the tour scrolls to has a host in source (home wrapper or an id literal)", () => {
+    expect(ID_REFS.length, "no #id scroll targets extracted - the extraction drifted").toBeGreaterThanOrEqual(10);
+    const homeIds = new Set(HOME_STAGES.flatMap((st) => [st.anchorId, st.wrapperId].filter((x): x is string => !!x)));
+    const dead = ID_REFS.filter(({ id }) => {
+      if (homeIds.has(id)) return false;
+      const literal = new RegExp(String.raw`\bid\s*=\s*\{?\s*(["'])` + escape(id) + String.raw`\1`);
+      return !SOURCES.some((src) => literal.test(src.text));
+    });
+    expect(
+      dead.map((d) => `${d.step}: #${d.id}`),
+      "The tour scrolls to an id no element or home stage provides. Restore the anchor; do not delete the step.",
+    ).toEqual([]);
+  });
 
   it("aims no action by on-screen text (labels are translated; anchors are not)", () => {
     // A click aimed by a control's visible label only works while that copy is

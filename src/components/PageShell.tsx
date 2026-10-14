@@ -7,6 +7,7 @@ import { ParticleHost } from "@/components/ParticleHost";
 import { SectionObserverProvider } from "@/contexts/SectionObserverContext";
 import { TourProvider } from "@/contexts/TourContext";
 import TourOverlay from "@/components/tour/TourOverlay";
+import { useAnchorCoverageGuard } from "@/hooks/useAnchorCoverageGuard";
 
 interface ScrollMapItem {
   label: string;
@@ -29,6 +30,8 @@ export default function PageShell({
     () => scrollMapItems.map((item) => item.href.replace("#", "")),
     [scrollMapItems],
   );
+
+  useAnchorCoverageGuard(sectionIds, "the scroll map");
 
   return (
     <SectionObserverProvider sectionIds={sectionIds}>
