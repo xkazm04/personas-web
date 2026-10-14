@@ -2458,6 +2458,104 @@
           "evidence": "playwright.config.ts:6 Number conversion accepts NaN, fractional numbers, and out-of-range ports without validation; the result is reused in baseURL and the webServer configuration."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/voice-io": {
+      "context": "Mobile App Shell & Views",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T22:58:56.850Z",
+      "techniques": [
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/Dial.tsx:67 The displayed avatar video is muted; searches found no narration or speech affordance in these context directories."
+        }
+      ],
+      "withdrawn": {
+        "worker": "b708fbe5-cc12-49ae-94f0-7af40be49114",
+        "state": "not-applicable",
+        "at": "2026-10-14T22:59:21.427494+00:00",
+        "reason": "reviewer (sonnet): The anchor Dial.tsx:67 is a muted decorative video, which does not itself show that voice I/O is absent from the context; the not-applicable rests only on a grep over the listed terms, so the anchor is incidental."
+      }
+    },
+    "Marketing & Landing/Guided Product Tour/voice-io": {
+      "context": "Guided Product Tour",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T22:58:56.850Z",
+      "worker": "b708fbe5-cc12-49ae-94f0-7af40be49114",
+      "techniques": [
+        {
+          "technique": "bounded-playback-wait",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:158 The watchdog uses a full-duration wall-clock timeout rearmed on play and metadata events, rather than detecting a stall from playback-position progress as required for a pausable channel."
+        },
+        {
+          "technique": "duplex-agent-sessions",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:104 The tour plays prepared media clips; the inspected path establishes no vendor conversation session."
+        },
+        {
+          "technique": "real-time-synthesis-budget",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:68 Synthesis occurs before publication of the clips, so this runtime has no live synthesis turn loop to admit an engine into."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "not-applicable",
+          "evidence": "scripts/generate-tour-audio.mjs:79 The inspected generation path uses fixed narration scripts, which the technique explicitly allows to bypass display-markup normalization."
+        },
+        {
+          "technique": "stt-pipeline",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:133 The tour's analyser observes media playback, not microphone capture; searches found no recognition or microphone acquisition in this path."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:219 Playback rejection is swallowed without a failed or blocked outcome reaching the tour surface."
+        },
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:170 Narration completion drives step progression; manual navigation and error fallbacks do not satisfy the standard's independent-flow requirement."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/voice-io": {
+      "context": "Messages & Settings",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T22:58:56.850Z",
+      "worker": "b708fbe5-cc12-49ae-94f0-7af40be49114",
+      "techniques": [
+        {
+          "technique": "bounded-playback-wait",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:50 Preview emits a synchronous notification signal and does not wait for playback completion."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:52 The preview forwards display content after taking its first line and trimming; composeAnnouncement only clips it before speak constructs the utterance, leaving markdown and URLs unnormalized."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:39 Turning announcements off only updates the preference; the opened store and speech path contain no cancellation that stops an active or queued utterance."
+        },
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:96 The voice control exposes preference state without speaking, blocked, or unavailable state, and offers no explanation when the underlying speech API is absent."
+        }
+      ]
     }
   }
 }

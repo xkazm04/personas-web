@@ -843,7 +843,11 @@
           "revision": 20,
           "changedAt": "2026-10-12",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/contexts/TourContext.tsx:151 Audio-bearing steps bypass independent dwell progression and instead advance through narration completion or its failure watchdog, violating the rule that narration follows the flow without governing it.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:fa03abeab38c89c7",
+          "evaluatedRevision": 21
         },
         {
           "subject": "conversation-orchestration",
@@ -5535,7 +5539,11 @@
           "revision": 20,
           "changedAt": "2026-10-12",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:91 Preview availability depends only on the preference toggle although the traced speech helper silently returns when speech synthesis is absent, allowing an enabled-looking control to do nothing without explanation.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:fa03abeab38c89c7",
+          "evaluatedRevision": 21
         },
         {
           "subject": "table",
