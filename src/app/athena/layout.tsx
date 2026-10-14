@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preload } from "react-dom";
 import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-static";
@@ -36,6 +37,19 @@ export const metadata: Metadata = {
   },
 };
 
+/*
+ * The hero is a client-only chunk (`ssr: false`, see sections/athena-lazy.tsx), so
+ * the avatar poster it paints is named nowhere in the served markup and the
+ * look-ahead scanner cannot find it: the request would start only after the page
+ * script and the hero chunk have run. The reference cannot move into markup
+ * without server-rendering the hero, so it is declared here - one preload, for the
+ * one image the first screen is built around. Both Orb branches use this exact
+ * address (the `poster` of the clip, the `<img>` under reduced motion), so the
+ * preload is always consumed.
+ */
+const HERO_POSTER = "/athena/athena_baseline.jpg";
+
 export default function AthenaLayout({ children }: { children: React.ReactNode }) {
+  preload(HERO_POSTER, { as: "image", fetchPriority: "high" });
   return children;
 }
