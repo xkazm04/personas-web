@@ -2556,6 +2556,109 @@
           "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:96 The voice control exposes preference state without speaking, blocked, or unavailable state, and offers no explanation when the underlying speech API is absent."
         }
       ]
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/concurrency-guards": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "concurrency-guards",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T23:37:15.432Z",
+      "worker": "8bfd3e9a-b9a2-4a89-8cf3-2ec37d884fb4",
+      "techniques": [
+        {
+          "technique": "atomic-file-publish",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/json-file-store.ts:60 Replacement is attempted once; the surrounding implementation provides neither a durable flush nor classified, bounded retries."
+        },
+        {
+          "technique": "critical-section-across-a-suspension",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/json-file-store.ts:76 Within one process, the read, awaited update and write remain inside one yielding critical section."
+        },
+        {
+          "technique": "cross-process-exclusion",
+          "verdict": "deviation",
+          "evidence": "src/lib/fileLock.ts:37 The mutex has process-local state only; the module explicitly documents that another process can overwrite a concurrent file update."
+        },
+        {
+          "technique": "guard-key-design",
+          "verdict": "conformant",
+          "evidence": "src/app/api/votes/route.ts:164 Filesystem vote mutations use one stable key for the shared votes document, including edits by different voters."
+        },
+        {
+          "technique": "idempotency-by-design",
+          "verdict": "deviation",
+          "evidence": "src/app/api/votes/route.ts:172 The endpoint toggles membership, so retrying a completed add after losing its response removes that vote instead of preserving the original intent."
+        },
+        {
+          "technique": "release-guarantees",
+          "verdict": "deviation",
+          "evidence": "src/lib/fileLock.ts:44 A callback that never settles blocks subsequent writers indefinitely; the primitive supplies no execution deadline or reclamation mechanism."
+        },
+        {
+          "technique": "single-flight-primitives",
+          "verdict": "deviation",
+          "evidence": "src/lib/fileLock.ts:43 Each caller queues behind its predecessor without a queue-depth limit or wait bound."
+        }
+      ]
+    },
+    "Theming, i18n & Shared Utilities/Internationalization (14 locales)/concurrency-guards": {
+      "context": "Internationalization (14 locales)",
+      "subject": "concurrency-guards",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T23:37:15.432Z",
+      "worker": "8bfd3e9a-b9a2-4a89-8cf3-2ec37d884fb4",
+      "techniques": [
+        {
+          "technique": "attempt-attribution",
+          "verdict": "conformant",
+          "evidence": "src/components/LocaleOffer.tsx:50 Each effect has its own live flag, invalidated during cleanup and checked immediately before publishing its asynchronous result."
+        },
+        {
+          "technique": "guard-key-design",
+          "verdict": "conformant",
+          "evidence": "src/i18n/catalog.ts:121 Section loads use stable section and locale identities, distinguishing independent loads while joining duplicates."
+        },
+        {
+          "technique": "idempotency-by-design",
+          "verdict": "conformant",
+          "evidence": "src/i18n/catalog.ts:177 Repeated registration of the same section identity is a synchronous no-op before any mutation or loading effects."
+        },
+        {
+          "technique": "release-guarantees",
+          "verdict": "deviation",
+          "evidence": "src/i18n/catalog.ts:142 The cached load has no owner timeout or reclamation deadline, so a never-settling loader leaves every subsequent caller waiting on it."
+        },
+        {
+          "technique": "single-flight-primitives",
+          "verdict": "deviation",
+          "evidence": "src/i18n/catalog.ts:189 The activation gate suppresses retries after failure because requested remains unchanged and the rejection handler performs no recovery."
+        }
+      ]
+    },
+    "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/concurrency-guards": {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "concurrency-guards",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-14",
+      "evaluatedTs": "2026-10-14T23:37:15.432Z",
+      "worker": "8bfd3e9a-b9a2-4a89-8cf3-2ec37d884fb4",
+      "techniques": [
+        {
+          "technique": "attempt-attribution",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useExecutionPolling.ts:48 This polling caller appends fetched output after awaiting without verifying the current execution identity, allowing an old execution's response to modify the replacement execution's state."
+        },
+        {
+          "technique": "single-flight-primitives",
+          "verdict": "deviation",
+          "evidence": "src/hooks/usePolling.ts:75 Serial scheduling applies only within one effect lifetime; cleanup does not settle or join the pending callback before a replacement lifetime starts."
+        }
+      ]
     }
   }
 }

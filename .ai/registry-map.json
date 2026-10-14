@@ -4700,7 +4700,11 @@
           "revision": 14,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/server/json-file-store.ts:60 The publisher replaces the destination without flushing the temporary file or retrying transient sharing errors, falling short of the atomic publication standard.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:a22cbe60c40eb259",
+          "evaluatedRevision": 15
         },
         {
           "subject": "mcp-tools",
@@ -9533,7 +9537,11 @@
           "revision": 14,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/hooks/usePolling.ts:75 Restarting the polling effect starts another callback while a callback from its previous lifetime may still be pending.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:a22cbe60c40eb259",
+          "evaluatedRevision": 15
         },
         {
           "subject": "import-normalization",
@@ -9791,7 +9799,11 @@
           "revision": 14,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/i18n/catalog.ts:189 A failed locale activation leaves the requested-locale gate unchanged, causing another activation of that locale to return without retrying.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:a22cbe60c40eb259",
+          "evaluatedRevision": 15
         },
         {
           "subject": "engine-binding-surface",
