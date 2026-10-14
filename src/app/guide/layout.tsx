@@ -3,12 +3,12 @@ import Navbar from "@/components/Navbar";
 import GuideSidebar from "@/components/guide/GuideSidebar";
 import { CHROME_PAD_NAVBAR } from "@/components/guide/guide-chrome";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
-import { GUIDE_TOPICS } from "@/data/guide/topics";
 import { GUIDE_NAV_CATEGORIES } from "@/data/guide/topics-nav";
+import { countVisibleTopics } from "@/lib/guide-utils";
 
 // Counts are derived from the guide data, not typed by hand — the description
 // used to claim "10 categories" after an 11th (companion) had shipped.
-const TOPIC_FLOOR = Math.floor(GUIDE_TOPICS.length / 10) * 10;
+const TOPIC_FLOOR = Math.floor(countVisibleTopics() / 10) * 10;
 
 export const metadata: Metadata = {
   title: "User Guide",

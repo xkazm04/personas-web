@@ -37,6 +37,17 @@ export function isTopicVisible(topic: GuideTopic): boolean {
   return !topic.devOnly || isDevTopicsVisible();
 }
 
+/**
+ * How many topics the navigation actually shows (sidebar, sitemap, category
+ * lists): the same `isTopicVisible` predicate they use. Every count a reader
+ * or crawler sees (meta description, JSON-LD) derives from this, so it names
+ * the same population as the tree and cannot disagree with it by a hidden
+ * dev-only topic.
+ */
+export function countVisibleTopics(): number {
+  return GUIDE_TOPICS.filter(isTopicVisible).length;
+}
+
 export interface RelatedTopic {
   topic: GuideTopic;
   category: GuideCategory;

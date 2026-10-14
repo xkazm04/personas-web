@@ -14,7 +14,7 @@ import type { GuideMode } from "@/data/guide/types";
 import { useTranslation } from "@/i18n/useTranslation";
 import { fadeUp, staggerContainer } from "@/lib/animations";
 import { BRAND_VAR } from "@/lib/brand-theme";
-import { isCategoryVisibleForMode, isTopicVisible, isTopicVisibleForMode } from "@/lib/guide-utils";
+import { countVisibleTopics, isCategoryVisibleForMode, isTopicVisible, isTopicVisibleForMode } from "@/lib/guide-utils";
 import { SITE_URL, safeJsonLd } from "@/lib/seo";
 
 import { GuideCategoryGrid } from "./guide-page/GuideCategoryGrid";
@@ -60,6 +60,8 @@ function GuidePageInner() {
     0,
   );
 
+  const visibleTopicTotal = countVisibleTopics();
+
   return (
     <div className="px-4 pb-24 sm:px-6">
       <script
@@ -69,14 +71,14 @@ function GuidePageInner() {
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             name: "Personas User Guide",
-            description: `Everything you need to know about Personas - from your first agent to advanced multi-agent pipelines. ${GUIDE_TOPICS.length} topics across ${GUIDE_CATEGORIES.length} categories.`,
+            description: `Everything you need to know about Personas - from your first agent to advanced multi-agent pipelines. ${visibleTopicTotal} topics across ${GUIDE_CATEGORIES.length} categories.`,
             url: `${SITE_URL}/guide`,
             isPartOf: {
               "@type": "WebSite",
               name: "Personas",
               url: SITE_URL,
             },
-            numberOfItems: GUIDE_TOPICS.length,
+            numberOfItems: visibleTopicTotal,
           }),
         }}
       />
