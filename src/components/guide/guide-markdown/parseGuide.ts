@@ -442,7 +442,8 @@ export interface GuideHeading {
   tabLabels?: string[];
 }
 
-const stripInline = (text: string) =>
+/** Inline markup removed: what a reader sees of a string, for consumers that cannot render it (JSON-LD). */
+export const stripInline = (text: string) =>
   text
     .replace(/\*\*\*(.+?)\*\*\*/g, "$1")
     .replace(/\*\*(.+?)\*\*/g, "$1")

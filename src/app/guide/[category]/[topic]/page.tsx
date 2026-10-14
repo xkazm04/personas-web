@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { GUIDE_CATEGORIES } from "@/data/guide/categories";
 import { GUIDE_TOPICS } from "@/data/guide/topics";
-import { headingsOf, parseGuide, stepsOf } from "@/components/guide/guide-markdown/parseGuide";
+import { headingsOf, parseGuide, stepsOf, stripInline } from "@/components/guide/guide-markdown/parseGuide";
 import { getRelatedTopics, isTopicVisible } from "@/lib/guide-utils";
 import { SITE_URL, SITE_NAME, safeJsonLd } from "@/lib/seo";
 import { resolveTopicUnit } from "@/data/guide/getLocalized";
@@ -28,8 +28,10 @@ function buildHowToJsonLd(
     step: steps.map((s, i) => ({
       "@type": "HowToStep",
       position: i + 1,
-      name: s.title,
-      text: s.body || s.title,
+      // Structured data states what the reader sees: StepWizard renders the inline
+      // markup, so the emitted text carries none of it (no backticks, no link syntax).
+      name: stripInline(s.title),
+      text: stripInline(s.body || s.title),
     })),
   };
 }

@@ -5,7 +5,7 @@ import { isValidElement, type ReactElement } from "react";
 import { describe, expect, it } from "vitest";
 
 import { HeadingAnchor } from "./HeadingAnchor";
-import { headingsOf, parseGuide, stepsOf, type GuideNode } from "./parseGuide";
+import { headingsOf, parseGuide, stepsOf, stripInline, type GuideNode } from "./parseGuide";
 import { renderGuideDoc } from "./renderGuideDoc";
 
 // One grammar for the guide dialect: the renderer, the content gate, the TOC
@@ -122,5 +122,23 @@ describe("parseGuide - corpus", () => {
       if (JSON.stringify(rendered) !== JSON.stringify(toc)) failures.push(`${where}: TOC ids differ from rendered ids`);
     }
     expect(failures).toEqual([]);
+  }, 60_000);
+});
+
+describe("parseGuide - HowTo emission states what the reader sees", () => {
+  it("stripInline leaves no inline markup in a step's emitted text", () => {
+    expect(stripInline("run `claude --version` or see [docs](https://x.dev)")).toBe("run claude --version or see docs");
+  });
+
+  it("14 locales x every topic: no step title or body would reach JSON-LD carrying markup", async () => {
+    const bodies = await loadBodies(contentDirs);
+    const leaks: string[] = [];
+    for (const { where, body } of bodies) {
+      for (const s of stepsOf(parseGuide(body).doc)) {
+        const text = stripInline(`${s.title} ${s.body}`);
+        if (/`|\*\*|\]\(/.test(text)) leaks.push(`${where}: ${text.slice(0, 60)}`);
+      }
+    }
+    expect(leaks).toEqual([]);
   }, 60_000);
 });
