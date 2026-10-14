@@ -5,6 +5,7 @@ import { motion, type useAnimationControls, type Variants } from "framer-motion"
 type AnimationControls = ReturnType<typeof useAnimationControls>;
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import type { StackLayer } from "./layers";
+import { SLAB_DURATION, SLAB_EASE, SLAB_GAP, slabCollapsedY, slabDelay } from "./slabMotion";
 
 /**
  * The exploded stack: one isometric slab per layer, drawn with a 2D CSS
@@ -16,7 +17,7 @@ import type { StackLayer } from "./layers";
  */
 export const STACK = {
   /** Distance between slab tops, px. */
-  gap: 60,
+  gap: SLAB_GAP,
   /** Slab thickness, px. */
   depth: 8,
   /** Top of the first slab, px from the top of the illustration box. */
@@ -36,10 +37,10 @@ export const slabMidY = (i: number) => `calc(${slabTop(i)}px + var(--s) * 0.5)`;
 
 /** Entrance: slabs start pressed together under the first one, then spread. */
 export const slabVariants: Variants = {
-  collapsed: (i: number) => ({ y: -i * (STACK.gap - 10), transition: { duration: 0 } }),
-  exploded: (i: number) => ({
+  collapsed: ({ i }: { i: number }) => ({ y: slabCollapsedY(i), transition: { duration: 0 } }),
+  exploded: ({ i, count }: { i: number; count: number }) => ({
     y: 0,
-    transition: { duration: 0.8, delay: 0.15 + i * 0.07, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: SLAB_DURATION, delay: slabDelay(i, count), ease: [...SLAB_EASE] },
   }),
 };
 
@@ -69,7 +70,7 @@ export function LayerSlabs({
         return (
           <motion.div
             key={layer.card.id}
-            custom={i}
+            custom={{ i, count: layers.length }}
             variants={slabVariants}
             initial={false}
             animate={controls}
