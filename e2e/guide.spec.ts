@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { GUIDE_TOPICS } from "../src/data/guide/topics";
+import { countVisibleTopics } from "../src/lib/guide-utils";
 
 test.describe("User Guide", () => {
   // The cookie banner is a fixed bottom card; at 1280x720 it covers the
@@ -9,14 +9,14 @@ test.describe("User Guide", () => {
     await page.addInitScript(() => localStorage.setItem("personas-cookie-consent", "essential"));
   });
 
-  test("guide JSON-LD numberOfItems matches GUIDE_TOPICS.length", async ({ page }) => {
+  test("guide JSON-LD numberOfItems matches the visible topic count", async ({ page }) => {
     await page.goto("/guide");
     const ldJson = await page.locator('script[type="application/ld+json"]').first().textContent();
     expect(ldJson).not.toBeNull();
     const data = JSON.parse(ldJson!);
     expect(data["@type"]).toBe("CollectionPage");
-    expect(data.numberOfItems).toBe(GUIDE_TOPICS.length);
-    expect(data.description).toContain(`${GUIDE_TOPICS.length} topics`);
+    expect(data.numberOfItems).toBe(countVisibleTopics());
+    expect(data.description).toContain(`${countVisibleTopics()} topics`);
   });
 
   // fixme: the navbar has no Guide link and the footer Resources column is
