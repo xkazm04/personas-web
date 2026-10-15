@@ -7395,7 +7395,11 @@
           "revision": 7,
           "changedAt": "2026-10-08",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:110 The event stream proxy terminates upstream and wraps the response in a ReadableStream, but deviates across heartbeat sizing, abort classification, resume cursor forwarding, lifetime rotation, and error telemetry correlation.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:35d2934ae538833a",
+          "evaluatedRevision": 7
         },
         {
           "subject": "client-fetch-cache",

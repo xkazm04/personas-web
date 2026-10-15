@@ -1,0 +1,105 @@
+{
+ "schema": "conform-run/1",
+ "worker": "6efef4bc-f099-4326-a002-0d7dbb8b8a5b",
+ "subject": "stream-proxy-hop",
+ "evaluatedAt": "2026-10-15T01:06:02.142127+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Event Bus & Stream Monitoring",
+   "subject": "stream-proxy-hop",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/api/events/stream/route.ts:110 The event stream proxy terminates upstream and wraps the response in a ReadableStream, but deviates across heartbeat sizing, abort classification, resume cursor forwarding, lifetime rotation, and error telemetry correlation.",
+   "techniques": [
+    {
+     "technique": "abort-versus-unreachable",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:66 Classifies aborts by inspecting error shape rather than checking req.signal.aborted, and mid-stream drops close cleanly without a terminal error event."
+    },
+    {
+     "technique": "credential-attachment-at-the-hop",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:50 The outbound header allowlist attaches the service key and caller token but omits the Last-Event-ID resume cursor, losing replay on reconnect."
+    },
+    {
+     "technique": "idle-heartbeat-injection",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:119 Heartbeat interval is hardcoded inline at 25s rather than sized at half the shortest idle timeout in a named constant, and lacks anti-buffering headers."
+    },
+    {
+     "technique": "lifetime-cap-rotation",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:19 The route declares no maxDuration lifetime cap and implements no proactive rotation before platform execution limits expire."
+    },
+    {
+     "technique": "origin-non-disclosure",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:75 The error response scrubs the upstream host but fails to generate or return an opaque correlation handle for telemetry lookup."
+    },
+    {
+     "technique": "progress-lease-not-wall-clock",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:130 The upstream read loop awaits chunks without a byte-progress lease watchdog to detect stalled upstream transfers."
+    },
+    {
+     "technique": "reconnect-storm-hygiene",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/events/index.tsx:41 Mounted stream consumer uses backoff without jitter that resets immediately on open, with an indicator lacking attempt counts or a failed state."
+    },
+    {
+     "technique": "upstream-status-normalization",
+     "verdict": "deviation",
+     "evidence": "src/app/api/events/stream/route.ts:89 Clamps upstream status to 200-599 before constructing Response, but lacks a cause taxonomy and an explicit retryability flag."
+    }
+   ],
+   "registryProposal": "Clarify in upstream-status-normalization that native EventSource sets readyState to CLOSED without retrying on non-200 handshake statuses per the W3C/HTML SSE specification; the infinite reconnect storm against 5xx is driven specifically by application-level onerror handlers (such as useEventStream) scheduling manual reconnect loops rather than the browser's built-in EventSource mechanism."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "stream-proxy-hop",
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "reason": "The context provides dashboard layout, navigation chrome, and UI status components; it contains no gateway, edge function, or server-side stream proxy hop terminating and re-emitting long-lived outbound streams."
+  },
+  {
+   "subject": "stream-proxy-hop",
+   "context": "Orchestrator API Client & Mock Data",
+   "reason": "The context implements REST API client wrappers, mock datasets, and a buffered non-streaming catch-all proxy route (await upstream.text()); it does not terminate or re-emit long-lived streams (the subject's unit of work)."
+  },
+  {
+   "subject": "stream-proxy-hop",
+   "context": "Supabase Client",
+   "reason": "The context configures Supabase clients, database setup scripts, and poll-based device sync reachability gating; it does not implement or terminate long-lived streaming proxy hops."
+  },
+  {
+   "subject": "stream-proxy-hop",
+   "context": "Error Monitoring & Analytics",
+   "reason": "The context configures Sentry error monitoring and page view tracking; it does not implement or terminate long-lived streaming proxy hops."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T01:06:02.142127+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "stream-proxy-hop"
+   ],
+   "techniques": [
+    "abort-versus-unreachable",
+    "credential-attachment-at-the-hop",
+    "idle-heartbeat-injection",
+    "lifetime-cap-rotation",
+    "origin-non-disclosure",
+    "progress-lease-not-wall-clock",
+    "reconnect-storm-hygiene",
+    "upstream-status-normalization"
+   ],
+   "deviations": 1,
+   "context": "Event Bus & Stream Monitoring",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

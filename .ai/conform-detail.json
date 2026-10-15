@@ -3089,6 +3089,58 @@
         "at": "2026-10-15T00:37:09.449213+00:00",
         "reason": "reviewer (sonnet): The anchor manifest.ts:14 is the `start_url` field of the web-app manifest and does not itself show the repository-landing precondition is absent, so the anchor is incidental."
       }
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/stream-proxy-hop": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "stream-proxy-hop",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:06:02.142Z",
+      "worker": "6efef4bc-f099-4326-a002-0d7dbb8b8a5b",
+      "techniques": [
+        {
+          "technique": "abort-versus-unreachable",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:66 Classifies aborts by inspecting error shape rather than checking req.signal.aborted, and mid-stream drops close cleanly without a terminal error event."
+        },
+        {
+          "technique": "credential-attachment-at-the-hop",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:50 The outbound header allowlist attaches the service key and caller token but omits the Last-Event-ID resume cursor, losing replay on reconnect."
+        },
+        {
+          "technique": "idle-heartbeat-injection",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:119 Heartbeat interval is hardcoded inline at 25s rather than sized at half the shortest idle timeout in a named constant, and lacks anti-buffering headers."
+        },
+        {
+          "technique": "lifetime-cap-rotation",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:19 The route declares no maxDuration lifetime cap and implements no proactive rotation before platform execution limits expire."
+        },
+        {
+          "technique": "origin-non-disclosure",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:75 The error response scrubs the upstream host but fails to generate or return an opaque correlation handle for telemetry lookup."
+        },
+        {
+          "technique": "progress-lease-not-wall-clock",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:130 The upstream read loop awaits chunks without a byte-progress lease watchdog to detect stalled upstream transfers."
+        },
+        {
+          "technique": "reconnect-storm-hygiene",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/events/index.tsx:41 Mounted stream consumer uses backoff without jitter that resets immediately on open, with an indicator lacking attempt counts or a failed state."
+        },
+        {
+          "technique": "upstream-status-normalization",
+          "verdict": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:89 Clamps upstream status to 200-599 before constructing Response, but lacks a cause taxonomy and an explicit retryability flag."
+        }
+      ],
+      "registryProposal": "Clarify in upstream-status-normalization that native EventSource sets readyState to CLOSED without retrying on non-200 handshake statuses per the W3C/HTML SSE specification; the infinite reconnect storm against 5xx is driven specifically by application-level onerror handlers (such as useEventStream) scheduling manual reconnect loops rather than the browser's built-in EventSource mechanism."
     }
   }
 }
