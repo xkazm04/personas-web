@@ -1141,7 +1141,8 @@ export const fr: LocaleTranslations = {
       },
       toast: {
         configured: "configur\u00e9 (d\u00e9mo)",
-        installed: "activ\u00e9 (d\u00e9mo)"
+        installed: "activ\u00e9 (d\u00e9mo)",
+        undo: "Annuler la correction"
       },
       blast: {
         impact: "Affecte {agents} agents sur {total} \u00b7 {calls} appels en 14 jours",

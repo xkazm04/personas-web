@@ -4,15 +4,17 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 
 import { api } from "@/lib/api";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
 import {
   MOCK_CREDENTIAL_ROTATIONS,
   MOCK_HEALTH_DIGEST,
   MOCK_MEMORY_ACTIONS,
-  MOCK_OPEN_INCIDENTS,
   MOCK_UNREAD_MESSAGES,
   MOCK_VAULT_CHANGES,
 } from "@/lib/mock-dashboard-data";
 import { detectCostAnomalies } from "@/lib/observabilitySeries";
+import { openIncidentCount } from "@/lib/settleThread";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import type { DailyMetric, HealthIssue } from "@/lib/types";
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -89,6 +91,7 @@ export function useMissionReadings(now: number): {
   issues: HealthIssue[];
 } {
   const isDemo = useAuthStore((s) => s.isDemo);
+  const demoThreads = useDemoThreads();
   const pendingReviews = useReviewStore((s) => s.pendingReviewCount);
   const listNotServed = useReviewStore((s) => s.listNotServed);
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
@@ -107,7 +110,7 @@ export function useMissionReadings(now: number): {
   }, [fetchReviews]);
 
   const dailyQuery = useSWR("observability:daily", api.getObservabilityDaily, SWR_OPTIONS);
-  const issuesQuery = useSWR("observability:health-issues", api.getObservabilityHealthIssues, SWR_OPTIONS);
+  const issuesQuery = useSWR(DEMO_THREAD_KEYS.healthIssues, api.getObservabilityHealthIssues, SWR_OPTIONS);
   const routines = useUpcomingRoutines();
 
   const reviewsReady = reviewsSettled && !reviewsLoading;
@@ -128,7 +131,7 @@ export function useMissionReadings(now: number): {
         };
 
   const demoQueueExtras = isDemo
-    ? { alerts: MOCK_OPEN_INCIDENTS, memory: MOCK_MEMORY_ACTIONS.length, reports: MOCK_UNREAD_MESSAGES }
+    ? { alerts: openIncidentCount(demoThreads.auditIncidents), memory: MOCK_MEMORY_ACTIONS.length, reports: MOCK_UNREAD_MESSAGES }
     : { alerts: 0, memory: 0, reports: 0 };
 
   const readings: MissionReadings = {

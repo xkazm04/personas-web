@@ -113,11 +113,24 @@ export function relatedTo(threads: IncidentThread[], id: string): RelatedLink[] 
   const thread = threads.find((t) => t.members.some((m) => m.id === id));
   const self = thread?.members.find((m) => m.id === id);
   if (!thread || !self) return [];
-  const seen = new Set<IncidentRoute>([KIND_ROUTE[self.kind]]);
+  return linksToMembers(thread.members, KIND_ROUTE[self.kind]);
+}
+
+/**
+ * One link per route the members reach, in link order, skipping `exclude` (the
+ * route the reader is on). Members of a kind with no focus target (an SLA
+ * target, an audit incident) are passed over, so a correlated incident's
+ * signals can be handed in as they are.
+ */
+export function linksToMembers(
+  members: readonly { kind: string; id: string }[],
+  exclude?: IncidentRoute,
+): RelatedLink[] {
+  const seen = new Set<IncidentRoute>(exclude ? [exclude] : []);
   const links: RelatedLink[] = [];
   for (const kind of LINK_KINDS) {
     const route = KIND_ROUTE[kind];
-    const member = thread.members.find((m) => m.kind === kind);
+    const member = members.find((m) => m.kind === kind);
     if (!member || seen.has(route)) continue;
     seen.add(route);
     links.push({ route, kind, id: member.id, href: focusHref(kind, member.id) });

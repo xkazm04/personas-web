@@ -11,6 +11,8 @@ Health is the fleet's system-status board: four cards of health checks, each ite
 
 A check that is one fragment of a wider incident (today: Slack's "Webhook circuit-broken") shows **Related** chips that deep-link to the same incident on SLA and Observability, and `/dashboard/health?focus=<check id>` rings that row and scrolls it into view, next to its Configure button.
 
+**Fix the cause once.** Configuring such a check fixes the whole incident for the session, not just the row: the Health badge drops, the Observability issue (`hi_2`) reads resolved, the SLA breach (`br_1`) closes at the fix time with its minutes frozen and its target leaves active breach, the Incidents entry (`inc_1`) and its correlated cluster resolve, and Mission Control's Recovery cell loses the paused breaker - all without a reload. History stays (the breach row, the budget the target consumed, the issue's circuit-breaker flag). The toast offers **Undo fix**, which reopens every one of them; a reload also restores the outage.
+
 Each card's header dot reflects the worst item status. Like the rest of `/dashboard/*`, all data is **mock** — there's no real host to probe in this repo.
 
 ## How it works
@@ -21,7 +23,8 @@ Key behaviors:
 - **Worst-status header dot** — `worstStatus(items)` ranks error > warn > info > ok; the section header dot + icon take that status's tint.
 - **Demo actions** — items with an `action` (`install` | `configure`) render a button; clicking calls `onAction`, which (1) `resolveHealthAction(prev, item)` - records `{ [item.id]: item.action }`, same reference when nothing changes - and (2) composes a localized toast message (`{name} {verb}`) for `ExecuteToast`. `applyHealthResolutions(sections, resolutions, detail)` (memoized in the page) turns each resolved check into `status: "ok"`, no `action`, and `detail` = the matching `t.healthPage.toast` string; untouched sections keep their reference, the fixture is never mutated, and because it is keyed by id a resolution survives an SWR refetch. It lasts for the page's lifetime (no persistence). Toast `key` increments per action so the dismiss timer restarts.
 - **Focus + related links** — `HealthSectionCard` reads `useFocusParam()` once and passes `focused` to each `HealthCheckRow`, which adds a `ring-brand-cyan/50` class (class only — markup shape never depends on the URL, and the server/hydrating render see `null`) and calls `useScrollIntoViewWhen`. Rows whose id is in an incident thread (`causeKey` on the fixture, `src/lib/incidentThreads.ts`) render `RelatedIncidentLinks` under the detail line; the rest render nothing extra.
-- **Nav badge** — `MOCK_HEALTH_ALERTS` (count of `error` items) drives the sidebar badge. It is a module constant, so resolving Slack on this page does not lower it.
+- **Thread fixes** — an item with a `causeKey` does not use the local map: `onAction` calls `fixCause(causeKey, action, at)` (`src/lib/demoCauseFix.ts`), which writes `{ at, kind }` into the session slice `useResolvedCausesStore` (`src/stores/resolvedCausesStore.ts`, in memory only) and writes the new value of every thread-member SWR key (`DEMO_THREAD_KEYS`, `src/lib/demoThreads.ts`) straight into the SWR cache, so views kept alive in `<Activity>` and views not yet visited read the settled thread. The pure projector `settleThread` (`src/lib/settleThread.ts`, beside `buildIncidentThreads`) is applied once, inside the mock reads (`mockApi.ts` "Thread-member reads"), and by `useDemoThreads()` for the synchronous readers. The page overlays the fixed causes onto its rows with `withFixedCauses` so the row settles at once with the localized "done" line. The toast's **Undo fix** (`t.healthPage.toast.undo`, via the new optional `action` prop on `ExecuteToast`) calls `undoCauseFix(causeKey)`.
+- **Nav badge** — `healthAlertCount` (count of `error` items) over `useDemoThreads()` drives the sidebar badge, so a fixed cause lowers it. Demo-only: a real session's selector never reads the slice.
 
 ### Loading tiers
 
@@ -36,25 +39,28 @@ Follows [loading-orchestration](loading-orchestration.md).
 | File | Role |
 | --- | --- |
 | `src/components/dashboard/views/health/index.tsx` | Page shell: load, apply demo resolutions, 2-col section grid, disk-bar footer on Resources, action toast |
-| `src/components/dashboard/views/health/health-page/healthActions.ts` | Pure demo reducer (`resolveHealthAction`) + projection (`applyHealthResolutions`); pinned by `healthActions.test.ts` |
+| `src/components/dashboard/views/health/health-page/healthActions.ts` | Pure demo reducer (`resolveHealthAction`) + projection (`applyHealthResolutions`) + fixed-cause overlay (`withFixedCauses`); pinned by `healthActions.test.ts` |
+| `src/lib/settleThread.ts` | `settleThread` projector, `projectDemoThreads`, badge selectors `healthAlertCount` / `openIncidentCount`; pinned by `settleThread.test.ts` |
+| `src/lib/demoCauseFix.ts` | `fixCause` / `undoCauseFix`: the session slice + the SWR cache writes; pinned by `demoCauseFix.test.ts` |
+| `src/stores/resolvedCausesStore.ts` | Session-only slice of fixed causes, keyed by `causeKey` |
 | `src/lib/healthFormat.ts` | Status → dot/text/icon maps, section icon/accent maps, `worstStatus` |
 | `src/components/dashboard/views/health/health-page/useSystemHealth.ts` | Demo-gated SWR (`useDemoOnlySWR`) over the standalone `getSystemHealth` mock fetcher |
 | `src/components/dashboard/views/health/health-page/HealthSectionCard.tsx` | One section card: header status dot + `HealthCheckRow` items (focus ring, Related chips) + optional footer + action buttons |
 | `src/components/dashboard/views/health/health-page/DiskUsageBar.tsx` | Disk-usage gauge (fill-tinted bar + used/free readouts) |
 
 ## Data & state
-- **Source:** Demo-only. `MOCK_HEALTH_CHECKS` (4 sections), `MOCK_DISK_USAGE`, `HEALTH_SECTION_ORDER`, `MOCK_HEALTH_ALERTS` in `src/lib/mock-dashboard-data.ts`; `getSystemHealth()` standalone fetcher in `src/lib/mockApi.ts`.
-- **Types:** `HealthCheckSection`, `HealthCheckItem`, `HealthCheckStatus`, `HealthSectionKey`, `HealthActionKind` (`mock-dashboard-data.ts`).
-- **Stores:** none — SWR + local `resolutions` and `toast` state only.
+- **Source:** Demo-only. `MOCK_HEALTH_CHECKS` (4 sections), `MOCK_DISK_USAGE`, `HEALTH_SECTION_ORDER` in `src/lib/mock-dashboard-data.ts`, served through the session projection (`settleThread`); `getSystemHealth()` / `getBlastRadiusInputs()` standalone fetchers in `src/lib/mockApi.ts`.
+- **Types:** `HealthCheckSection`, `HealthCheckItem`, `HealthCheckStatus`, `HealthSectionKey`, `HealthActionKind` (`mock-dashboard-data.ts`); `ResolvedCauses`, `ThreadFixtures` (`settleThread.ts`).
+- **Stores:** `useResolvedCausesStore` (session-only fixed causes); otherwise SWR + local `resolutions` and `toast` state.
 - **API routes:** none — direct mock fetcher.
 
 ## Integration points
-- **Dashboard shell** — nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `HeartPulse` icon) with a `MOCK_HEALTH_ALERTS` badge in `getBadge`. Not in `SCOPED_ROUTE_PREFIXES` (no persona scoping).
+- **Dashboard shell** — nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `HeartPulse` icon) with a `healthAlertCount` badge in `getBadge` (a selector over the session projection). Not in `SCOPED_ROUTE_PREFIXES` (no persona scoping).
 - **Shared primitives** — `GlowCard`, `GradientText`, and `ExecuteToast` (reused from the agents surface for the demo-action toast). Status ramp matches the dashboard standard (emerald/amber/rose/cyan).
 - **i18n** — nav label `t.dashboard.health` + the `t.healthPage` namespace (`src/i18n/en.ts`), hand-translated into all 13 non-en locales.
 
 ## Conventions & gotchas
-- **Demo-only:** all checks are mock fixtures; `getSystemHealth` never probes a real host, and a real tenant never sees them (live-unavailable empty state). Install/Configure only change in-session UI state (the row settles to ok) and show a toast - no call leaves the page.
+- **Demo-only:** all checks are mock fixtures; `getSystemHealth` never probes a real host, and a real tenant never sees them (live-unavailable empty state). Install/Configure only change in-session UI state (the row settles to ok, or the whole incident thread settles for a `causeKey` check) and show a toast - no call leaves the page. A fix is session-only: a reload restores the outage. Drills / `?drill=` seeking are not built.
 - **i18n 14-locale lockstep:** new keys under `t.dashboard` / `t.healthPage` propagate to all 13 locales in the same commit (non-Latin as `\uXXXX` escapes to dodge the mojibake-on-disk hazard). Item names + details + version metadata are **verbatim demo data** (technical identifiers / proper nouns) — not translated.
 - **React 19 purity:** no impure calls in render — the toast id and the resolutions map update via functional `setState` updaters; the disk-bar width is a deterministic `style.width` percentage.
 - **Animation gating:** no rAF/looping motion here; `ExecuteToast` gates its own entrance motion. The disk bar is static.

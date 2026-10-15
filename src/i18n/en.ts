@@ -882,6 +882,8 @@
     toast: {
       configured: string;
       installed: string;
+      /** Reopens a fixed incident thread (System Health toast). */
+      undo: string;
     };
     blast: {
       impact: string;
@@ -3007,6 +3009,7 @@ export const en: CoreTranslations = {
     toast: {
       configured: 'configured (demo)',
       installed: 'enabled (demo)',
+      undo: 'Undo fix',
     },
     blast: {
       impact: 'Takes out {agents} of {total} agents · {calls} calls per 14 days',

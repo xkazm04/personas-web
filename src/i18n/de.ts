@@ -1141,7 +1141,8 @@ export const de: LocaleTranslations = {
       },
       toast: {
         configured: "konfiguriert (Demo)",
-        installed: "aktiviert (Demo)"
+        installed: "aktiviert (Demo)",
+        undo: "Korrektur r\u00fcckg\u00e4ngig"
       },
       blast: {
         impact: "Legt {agents} von {total} Agents lahm \u00b7 {calls} Aufrufe in 14 Tagen",

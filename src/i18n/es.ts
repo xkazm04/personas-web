@@ -1141,7 +1141,8 @@ export const es: LocaleTranslations = {
       },
       toast: {
         configured: "configurado (demo)",
-        installed: "activado (demo)"
+        installed: "activado (demo)",
+        undo: "Deshacer correcci\u00f3n"
       },
       blast: {
         impact: "Afecta a {agents} de {total} agentes \u00b7 {calls} llamadas en 14 d\u00edas",

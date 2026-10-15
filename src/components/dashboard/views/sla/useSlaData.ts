@@ -3,14 +3,10 @@
 import { useEffect, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedSla } from "@/lib/supabaseApi";
-import {
-  MOCK_SLA_BREACHES,
-  MOCK_SLA_TARGETS,
-  type SLABreach,
-  type SLATarget,
-} from "@/lib/mock-dashboard-data";
+import type { SLABreach, SLATarget } from "@/lib/mock-dashboard-data";
 
 export interface SlaData {
   targets: SLATarget[];
@@ -21,28 +17,26 @@ export interface SlaData {
 }
 
 /**
- * SLA data source. Dev/demo → the static mock (unchanged). Real/supabase mode →
- * app-defined default objectives computed against synced executions by
+ * SLA data source. Dev/demo → the mock fixtures as this session sees them
+ * (`useDemoThreads`: a fixed incident cause closes its breach and takes its
+ * target out of active breach, keeping the budget it consumed). Real/supabase
+ * mode → app-defined default objectives computed against synced executions by
  * getSyncedSla (no desktop-side SLA config exists).
  */
 export function useSlaData(): SlaData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
+  const demo = useDemoThreads();
 
-  const [targets, setTargets] = useState<SLATarget[]>(
-    useMock ? MOCK_SLA_TARGETS : [],
-  );
-  const [breaches, setBreaches] = useState<SLABreach[]>(
-    useMock ? MOCK_SLA_BREACHES : [],
-  );
+  const [targets, setTargets] = useState<SLATarget[]>([]);
+  const [breaches, setBreaches] = useState<SLABreach[]>([]);
   const [loading, setLoading] = useState(!useMock);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // Mock/demo mode is decided once per session; the useState initializers
-    // above already seed the mock fixtures, so the effect only drives the
-    // async real-data fetch.
+    // Mock/demo mode is decided once per session and reads the projection
+    // synchronously, so the effect only drives the async real-data fetch.
     if (useMock) return;
 
     let cancelled = false;
@@ -68,5 +62,9 @@ export function useSlaData(): SlaData {
     };
   }, [useMock, reloadKey]);
 
-  return { targets, breaches, loading, error, retry: () => setReloadKey((k) => k + 1) };
+  const retry = () => setReloadKey((k) => k + 1);
+  if (useMock) {
+    return { targets: demo.slaTargets, breaches: demo.slaBreaches, loading: false, error: null, retry };
+  }
+  return { targets, breaches, loading, error, retry };
 }

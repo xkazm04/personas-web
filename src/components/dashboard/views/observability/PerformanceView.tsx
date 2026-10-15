@@ -12,9 +12,11 @@ import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useFocusParam } from "@/hooks/useFocusParam";
 import { api } from "@/lib/api";
-import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
+import { MOCK_COST_ANOMALIES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import { CostAnomalyBanner } from "./performance-view/CostAnomalyBanner";
 import { PerformanceChartGrid } from "./performance-view/PerformanceChartGrid";
 import { PerformanceHealthPanel } from "./performance-view/PerformanceHealthPanel";
@@ -26,6 +28,7 @@ import { BUDGET_THRESHOLD, type SeverityFilter } from "./performance-view/perfor
 export default function PerformanceView() {
   const { t } = useTranslation();
   const isDemo = useAuthStore((s) => s.isDemo);
+  const demoIssues = useDemoThreads().healthIssues;
   const [compareEnabled, setCompareEnabled] = useState(false);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
   // A ?focus= deep link (e.g. back/forward onto a filtered list) must never
@@ -36,7 +39,7 @@ export default function PerformanceView() {
     setSeenFocus(focusId);
     if (focusId) setSeverityFilter("all");
   }
-  const { data, isLoading: loading, isValidating, error, mutate } = useSWR("observability", api.getObservability, {
+  const { data, isLoading: loading, isValidating, error, mutate } = useSWR(DEMO_THREAD_KEYS.observability, api.getObservability, {
     refreshInterval: 30_000,
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
@@ -55,11 +58,11 @@ export default function PerformanceView() {
   const displayHealthIssues: MockHealthIssue[] = useMemo(() => {
     // Demo falls back to the illustrative fixture; real mode shows the genuine
     // (possibly empty) synced health issues — never the mock.
-    if (healthIssues.length === 0) return isDemo ? MOCK_HEALTH_ISSUES : [];
+    if (healthIssues.length === 0) return isDemo ? demoIssues : [];
     // MockHealthIssue extends the API's HealthIssue, so synced issues need no
     // reshaping — they simply arrive without the auto-healing extras.
     return healthIssues;
-  }, [healthIssues, isDemo]);
+  }, [healthIssues, isDemo, demoIssues]);
 
   const filteredHealthIssues = useMemo(() => {
     if (severityFilter === "all") return displayHealthIssues;

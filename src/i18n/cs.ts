@@ -1141,7 +1141,8 @@ export const cs: LocaleTranslations = {
       },
       toast: {
         configured: "nakonfigurov\u00e1no (demo)",
-        installed: "aktivov\u00e1no (demo)"
+        installed: "aktivov\u00e1no (demo)",
+        undo: "Vr\u00e1tit opravu"
       },
       blast: {
         impact: "Vy\u0159ad\u00ed {agents} z {total} agent\u016f \u00b7 {calls} vol\u00e1n\u00ed za 14 dn\u00ed",

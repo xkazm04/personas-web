@@ -1632,7 +1632,15 @@
             "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx",
             "src/components/dashboard/views/health/health-page/DiskUsageBar.tsx",
             "src/components/dashboard/views/health/health-page/healthActions.ts",
-            "src/components/dashboard/views/health/health-page/healthActions.test.ts"
+            "src/components/dashboard/views/health/health-page/healthActions.test.ts",
+            "src/lib/settleThread.ts",
+            "src/lib/settleThread.test.ts",
+            "src/lib/demoCauseFix.ts",
+            "src/lib/demoCauseFix.test.ts",
+            "src/lib/demoThreads.ts",
+            "src/stores/resolvedCausesStore.ts",
+            "src/hooks/useDemoThreads.ts",
+            "e2e/cause-fix.spec.ts"
           ],
           "target": null,
           "apiRoutes": []

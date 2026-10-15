@@ -1141,7 +1141,8 @@ export const ko: LocaleTranslations = {
       },
       toast: {
         configured: "\uad6c\uc131\ub428 (\ub370\ubaa8)",
-        installed: "\ud65c\uc131\ud654\ub428 (\ub370\ubaa8)"
+        installed: "\ud65c\uc131\ud654\ub428 (\ub370\ubaa8)",
+        undo: "\uc218\uc815 \ucde8\uc18c"
       },
       blast: {
         impact: "\uc5d0\uc774\uc804\ud2b8 {total}\uac1c \uc911 {agents}\uac1c \uc911\ub2e8 \u00b7 14\uc77c\uac04 \ud638\ucd9c {calls}\ud68c",

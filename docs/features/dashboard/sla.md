@@ -18,7 +18,7 @@ It renders three stacked sections:
 ## How it works
 
 **Data hook — `useSlaData()`** (`src/components/dashboard/views/sla/useSlaData.ts`). Returns `{ targets, breaches, loading, error }`. The mode is decided once per session from `authStore.isDemo`:
-- **Demo mode** (this repo's default): `useState` initializers seed the static fixtures `MOCK_SLA_TARGETS` / `MOCK_SLA_BREACHES`, `loading` starts `false`, and the effect early-returns (`if (useMock) return;`) — no fetch runs (`useSlaData.ts:44`).
+- **Demo mode** (this repo's default): the hook returns `MOCK_SLA_TARGETS` / `MOCK_SLA_BREACHES` as this session sees them, synchronously from `useDemoThreads()` (`src/hooks/useDemoThreads.ts` over `settleThread`, `src/lib/settleThread.ts`), with `loading: false`; the effect early-returns (`if (useMock) return;`) — no fetch runs. When the visitor configures the broken Slack check on Health (a fixed `causeKey`, `src/lib/demoCauseFix.ts`), `br_1` re-renders with `resolvedAt` = the fix time and `durationMinutes` frozen at the minutes it ran, and its target `sla_5` leaves active breach while keeping its `timeInSLA` / `current` (the budget consumed stays visible). Health's **Undo fix**, or a reload, reopens it.
 - **Real/Supabase mode**: the effect calls `getSyncedSla()` (`src/lib/supabaseApi.ts:831`), which derives default objectives from the `synced_leaderboard` per-persona aggregates (no desktop-side SLA config exists). Errors are captured to Sentry with `tags: { scope: "useSlaData" }` and surfaced via `error`.
 
 **Page composition — `page.tsx`.** `SLAPage` calls `useSlaData()`, then derives the two summary numbers in a `useMemo` (`page.tsx:24`): `overallCompliance` = mean of `target.timeInSLA`, `activeBreachCount` = count of `target.activeBreach`. `fetchedAt` is captured once in a lazy `useState(() => Date.now())` initializer (React 19 purity rule) and fed to `StalenessIndicator`. `error` renders a `DashboardErrorBanner` above content. Loading follows the dashboard tier standard (see **Loading tiers** below) - no framer page stagger, no `SkeletonCard`s.
@@ -56,7 +56,7 @@ Follows [loading-orchestration](loading-orchestration.md).
 | File | Role |
 | --- | --- |
 | `src/components/dashboard/views/sla/index.tsx` | Route page; composes sections, derives compliance/active-breach summary, loading/error states |
-| `src/components/dashboard/views/sla/useSlaData.ts` | Data hook; demo mocks vs. `getSyncedSla()`; returns `{ targets, breaches, loading, error }` |
+| `src/components/dashboard/views/sla/useSlaData.ts` | Data hook; demo mocks (session projection via `useDemoThreads`) vs. `getSyncedSla()`; returns `{ targets, breaches, loading, error }` |
 | `src/components/dashboard/views/sla/sla-page/SLASummaryGrid.tsx` | Three headline tiles (compliance / active breaches / objectives) |
 | `src/components/dashboard/views/sla/sla-page/SLATargetGrid.tsx` | Per-objective cards + All/At risk/Healthy status filter pills |
 | `src/components/dashboard/views/sla/sla-page/SLABreachLog.tsx` | Breach/incident list, severity filter, single-open expansion state, `maxDuration` + same-persona tally |
@@ -71,7 +71,7 @@ Follows [loading-orchestration](loading-orchestration.md).
 
 ## Data & state
 - **Source:** `MOCK_SLA_TARGETS` (5 objectives) and `MOCK_SLA_BREACHES` (4 incidents) in `src/lib/mock-dashboard-data.ts`. Breach `startedAt`/`resolvedAt` are generated relative to `Date.now()` at module load so relative times stay fresh. In real mode, `getSyncedSla()` derives both from the `synced_leaderboard` Supabase view.
-- **Stores:** No Zustand store for SLA data itself — all state is local (`useSlaData`'s `useState` + component-local `filter`/`openId`). `authStore.isDemo` selects mock vs. live mode. `systemStore` (global health) is *not* consumed by this surface.
+- **Stores:** No Zustand store for SLA data itself — live-mode state is local (`useSlaData`'s `useState` + component-local `filter`/`openId`). `authStore.isDemo` selects mock vs. live mode; in demo, `useResolvedCausesStore` (session-only fixed causes, read through `useDemoThreads`) decides which thread breaches read closed. `systemStore` (global health) is *not* consumed by this surface.
 - **API routes:** None. Data is either in-process mocks (demo) or a direct Supabase query via `getSyncedSla` (live).
 - **Types:** `SLATarget`, `SLABreach`, `SLAMetricType` (`"availability" | "latency" | "successRate"`), `SLASeverity` (`"minor" | "major" | "critical"`) — all exported from `src/lib/mock-dashboard-data.ts`. `SlaData` is the hook's return shape.
 

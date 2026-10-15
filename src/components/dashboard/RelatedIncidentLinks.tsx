@@ -12,7 +12,14 @@ import type { RelatedLink } from "@/lib/incidentThreads";
  * the dashboard nav names. Renders nothing when the row has no thread, and its
  * shape depends only on the row id, never on the URL, so it hydrates cleanly.
  */
-export default function RelatedIncidentLinks({ links }: { links: RelatedLink[] }) {
+export default function RelatedIncidentLinks({
+  links,
+  onNavigate,
+}: {
+  links: RelatedLink[];
+  /** Called as a chip is followed, e.g. to close the dialog that holds it. */
+  onNavigate?: () => void;
+}) {
   const { t } = useTranslation();
   if (links.length === 0) return null;
 
@@ -23,6 +30,7 @@ export default function RelatedIncidentLinks({ links }: { links: RelatedLink[] }
         <Link
           key={link.href}
           href={link.href}
+          onClick={onNavigate}
           className="flex items-center gap-1 rounded-full border border-brand-cyan/25 bg-brand-cyan/10 px-2 py-0.5 font-medium text-brand-cyan transition-colors hover:bg-brand-cyan/15 focus-ring"
         >
           {t.dashboard[link.route]}

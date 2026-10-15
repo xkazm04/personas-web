@@ -1141,7 +1141,8 @@ export const vi: LocaleTranslations = {
       },
       toast: {
         configured: "\u0111\u00e3 c\u1ea5u h\u00ecnh (demo)",
-        installed: "\u0111\u00e3 b\u1eadt (demo)"
+        installed: "\u0111\u00e3 b\u1eadt (demo)",
+        undo: "Ho\u00e0n t\u00e1c s\u1eeda l\u1ed7i"
       },
       blast: {
         impact: "\u1ea2nh h\u01b0\u1edfng {agents}/{total} agent \u00b7 {calls} l\u1ea7n g\u1ecdi trong 14 ng\u00e0y",

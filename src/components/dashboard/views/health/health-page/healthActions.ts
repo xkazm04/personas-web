@@ -3,6 +3,7 @@ import type {
   HealthCheckItem,
   HealthCheckSection,
 } from "@/lib/mock-dashboard-data";
+import type { ResolvedCauses } from "@/lib/settleThread";
 
 /**
  * In-session outcome of the System Health demo actions: which checks the
@@ -19,6 +20,29 @@ export function resolveHealthAction(
 ): HealthResolutions {
   if (!item.action || state[item.id] === item.action) return state;
   return { ...state, [item.id]: item.action };
+}
+
+/**
+ * Adds the session's fixed incident causes to the local resolutions: a check
+ * whose `causeKey` is fixed reads as done with the action that fixed it, so it
+ * shows the localized "done" line the moment the fix lands. Same reference
+ * back when no check on screen carries a fixed cause.
+ */
+export function withFixedCauses(
+  sections: HealthCheckSection[],
+  resolutions: HealthResolutions,
+  fixed: ResolvedCauses,
+): HealthResolutions {
+  let next: Record<string, HealthActionKind> | null = null;
+  for (const section of sections) {
+    for (const item of section.items) {
+      const cause = item.causeKey ? fixed[item.causeKey] : undefined;
+      if (!cause || resolutions[item.id] === cause.kind) continue;
+      next ??= { ...resolutions };
+      next[item.id] = cause.kind;
+    }
+  }
+  return next ?? resolutions;
 }
 
 /**

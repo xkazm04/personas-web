@@ -1391,6 +1391,8 @@ export interface AuditIncident {
   recommendation: string;
   isCircuitBreaker?: boolean;
   autoFixApplied?: string;
+  /** Demo incident thread this incident belongs to (see lib/settleThread.ts). */
+  causeKey?: string;
 }
 
 export const INCIDENT_SEVERITIES: IncidentSeverity[] = ["critical", "high", "medium", "low"];
@@ -1423,6 +1425,7 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     category: "delivery",
     recommendation: "Verify the Slack incoming-webhook URL in the vault and reset the breaker once upstream recovers.",
     isCircuitBreaker: true,
+    causeKey: "slack-circuit-break",
   },
   {
     id: "inc_2",
@@ -1654,14 +1657,8 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
   },
 ];
 
-/**
- * Unresolved-incident count for the nav badge (mirrors MOCK_UNREAD_MESSAGES).
- * "Unresolved" = open + escalated, matching the Incidents KPI header's headline
- * so the badge and the page agree.
- */
-export const MOCK_OPEN_INCIDENTS = MOCK_AUDIT_INCIDENTS.filter(
-  (incident) => incident.status === "open" || incident.status === "escalated",
-).length;
+// The Incidents nav badge (open + escalated) is `openIncidentCount` in
+// lib/settleThread.ts: a selector over the session's projection, so a fix moves it.
 
 // ── System Health Panel (runtime / services / resources / integrations) ──
 // Mirrors the desktop overview's System Health Panel (components/health): four
@@ -1743,11 +1740,8 @@ export const MOCK_HEALTH_CHECKS: HealthCheckSection[] = [
 /** Disk-usage gauge for the Resources card. */
 export const MOCK_DISK_USAGE = { usedGb: 142, totalGb: 256 };
 
-/** Non-ok health-check count, for the nav badge. */
-export const MOCK_HEALTH_ALERTS = MOCK_HEALTH_CHECKS.reduce(
-  (n, section) => n + section.items.filter((i) => i.status === "error").length,
-  0,
-);
+// The Health nav badge (failing checks) is `healthAlertCount` in
+// lib/settleThread.ts: a selector over the session's projection, so a fix moves it.
 
 // ── Activity Metrics: Athena usage + Value Rollup ───────────────────
 // Mirrors the desktop overview's Activity Metrics: the Companion (Athena)

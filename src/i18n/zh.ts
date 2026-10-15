@@ -1141,7 +1141,8 @@ export const zh: LocaleTranslations = {
       },
       toast: {
         configured: "\u5df2\u914d\u7f6e\uff08\u6f14\u793a\uff09",
-        installed: "\u5df2\u542f\u7528\uff08\u6f14\u793a\uff09"
+        installed: "\u5df2\u542f\u7528\uff08\u6f14\u793a\uff09",
+        undo: "\u64a4\u9500\u4fee\u590d"
       },
       blast: {
         impact: "\u5f71\u54cd {total} \u4e2a\u4ee3\u7406\u4e2d\u7684 {agents} \u4e2a \u00b7 14 \u5929\u5185 {calls} \u6b21\u8c03\u7528",

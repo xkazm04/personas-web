@@ -1141,7 +1141,8 @@ export const id: LocaleTranslations = {
       },
       toast: {
         configured: "dikonfigurasi (demo)",
-        installed: "diaktifkan (demo)"
+        installed: "diaktifkan (demo)",
+        undo: "Batalkan perbaikan"
       },
       blast: {
         impact: "Melumpuhkan {agents} dari {total} agen \u00b7 {calls} panggilan per 14 hari",

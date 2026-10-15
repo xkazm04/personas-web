@@ -6,7 +6,9 @@ import { useSystemStore } from "@/stores/systemStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { useExecutionStore } from "@/stores/executionStore";
 import { useAuthStore } from "@/stores/authStore";
-import { MOCK_HEALTH_ALERTS, MOCK_OPEN_INCIDENTS, MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
+import { MOCK_UNREAD_MESSAGES } from "@/lib/mock-dashboard-data";
+import { healthAlertCount, openIncidentCount } from "@/lib/settleThread";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import { dashboardHref, viewIdFromPath, type DashboardViewId } from "@/components/dashboard/spa/views";
 import { navSections, type NavGroupKey, type NavLabelKey, type NavSectionDef } from "./navRegistry";
 import DesktopSidebar from "./DesktopSidebar";
@@ -88,6 +90,10 @@ export function useNavState() {
   // count itself changes, not on every unrelated execution-list mutation.
   const activeCount = useExecutionStore((s) => s.activeCount);
   const isDemo = useAuthStore((s) => s.isDemo);
+  // The session's projection: a fixed cause drops both counts at once.
+  const demoThreads = useDemoThreads();
+  const openIncidents = openIncidentCount(demoThreads.auditIncidents);
+  const healthAlerts = healthAlertCount(demoThreads.healthChecks);
 
   const isConnected = health?.status === "ok";
 
@@ -103,8 +109,8 @@ export function useNavState() {
     if (view === "executions" && activeCount > 0) return activeCount;
     if (!isDemo) return null;
     if (view === "messages" && MOCK_UNREAD_MESSAGES > 0) return MOCK_UNREAD_MESSAGES;
-    if (view === "incidents" && MOCK_OPEN_INCIDENTS > 0) return MOCK_OPEN_INCIDENTS;
-    if (view === "health" && MOCK_HEALTH_ALERTS > 0) return MOCK_HEALTH_ALERTS;
+    if (view === "incidents" && openIncidents > 0) return openIncidents;
+    if (view === "health" && healthAlerts > 0) return healthAlerts;
     return null;
   };
 

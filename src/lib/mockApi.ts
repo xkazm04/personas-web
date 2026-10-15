@@ -16,10 +16,7 @@ import {
 } from "./mockData";
 import {
   MOCK_ATHENA_USAGE,
-  MOCK_AUDIT_INCIDENTS,
-  MOCK_HEALTH_ISSUES,
   MOCK_DISK_USAGE,
-  MOCK_HEALTH_CHECKS,
   MOCK_VALUE_ROLLUP,
   MOCK_DIRECTOR_PORTFOLIO,
   MOCK_DIRECTOR_VERDICTS,
@@ -35,10 +32,11 @@ import {
   type DirectorPortfolio,
   type DirectorVerdict,
   type HealthCheckSection,
-  MOCK_SLA_BREACHES,
   type ValueRollup,
 } from "./mock-dashboard-data";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
+import { currentDemoThreads, DEMO_THREAD_KEYS } from "./demoThreads";
+import { correlate, DEMO_CORRELATION_WINDOW_MS, demoSignals, type Incident } from "./incidentCorrelate";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { statusAfterFailedAttempt } from "./eventStatusFsm";
 import { AUTO_RETRY_LIMIT } from "./eventWireStatus";
@@ -350,19 +348,8 @@ export const mockApi: ApiClient = {
     personaSpend: PersonaSpend[];
     healthIssues: HealthIssue[];
   }> => {
-    const [metrics, dailyMetrics, personaSpend, healthIssues] = await Promise.all([
-      delay(300).then(() => ({ ...MOCK_OBSERVABILITY_METRICS })),
-      delay(300).then(() => [...MOCK_DAILY_METRICS]),
-      delay(300).then(() => [...MOCK_PERSONA_SPEND]),
-      delay(300).then(() => [...MOCK_HEALTH_ISSUES]),
-    ]);
-
-    return {
-      metrics,
-      dailyMetrics,
-      personaSpend,
-      healthIssues,
-    };
+    await delay(300);
+    return observabilitySnapshot();
   },
 
   // Tiered field-selected variants — fastest (metrics) → slowest (joins)
@@ -384,7 +371,7 @@ export const mockApi: ApiClient = {
 
   getObservabilityHealthIssues: async (): Promise<HealthIssue[]> => {
     await delay(600);
-    return [...MOCK_HEALTH_ISSUES];
+    return healthIssuesSnapshot();
   },
 
   getUsageAnalytics: async (): Promise<{
@@ -447,7 +434,17 @@ export const mockApi: ApiClient = {
  */
 export async function getAuditIncidents(): Promise<AuditIncident[]> {
   await delay(300);
-  return [...MOCK_AUDIT_INCIDENTS];
+  return auditIncidentsSnapshot();
+}
+
+/**
+ * The audit incidents and the other routes' signals, correlated into
+ * incidents (lib/incidentCorrelate.ts) over the session's projection, so a
+ * fixed cause's incident reads resolved. Demo-only standalone fetcher.
+ */
+export async function getCorrelatedIncidents(): Promise<Incident[]> {
+  await delay(300);
+  return correlatedIncidentsSnapshot();
 }
 
 /**
@@ -460,7 +457,7 @@ export async function getSystemHealth(): Promise<{
   diskUsage: { usedGb: number; totalGb: number };
 }> {
   await delay(300);
-  return { sections: MOCK_HEALTH_CHECKS.map((s) => ({ ...s })), diskUsage: { ...MOCK_DISK_USAGE } };
+  return systemHealthSnapshot();
 }
 
 /**
@@ -469,12 +466,66 @@ export async function getSystemHealth(): Promise<{
  */
 export async function getBlastRadiusInputs() {
   await delay(300);
+  return blastRadiusInputsSnapshot();
+}
+
+// ── Thread-member reads ─────────────────────────────────────────────
+// Every demo read that serves a member of an incident thread goes through the
+// session's projection (lib/settleThread.ts via currentDemoThreads), here and
+// nowhere else, so a fixed cause reads settled on every route at once. The
+// synchronous snapshots back both the async getters above and the cache write
+// a fix makes (lib/demoCauseFix.ts), keyed by the SWR key each hook reads.
+
+function auditIncidentsSnapshot(): AuditIncident[] {
+  return [...currentDemoThreads().auditIncidents];
+}
+
+function correlatedIncidentsSnapshot(): Incident[] {
+  return correlate(demoSignals(currentDemoThreads()), { windowMs: DEMO_CORRELATION_WINDOW_MS });
+}
+
+function systemHealthSnapshot() {
+  return {
+    sections: currentDemoThreads().healthChecks.map((s) => ({ ...s })),
+    diskUsage: { ...MOCK_DISK_USAGE },
+  };
+}
+
+function blastRadiusInputsSnapshot() {
   return {
     usage: MOCK_TOOL_USAGE_BY_PERSONA,
-    breaches: MOCK_SLA_BREACHES.map((b) => ({ id: b.id, persona: b.persona, resolvedAt: b.resolvedAt })),
+    breaches: currentDemoThreads().slaBreaches.map((b) => ({ id: b.id, persona: b.persona, resolvedAt: b.resolvedAt })),
     totalPersonas: MOCK_PERSONAS.length,
   };
 }
+
+function healthIssuesSnapshot(): HealthIssue[] {
+  return [...currentDemoThreads().healthIssues];
+}
+
+function observabilitySnapshot(): {
+  metrics: ObservabilityMetrics;
+  dailyMetrics: DailyMetric[];
+  personaSpend: PersonaSpend[];
+  healthIssues: HealthIssue[];
+} {
+  return {
+    metrics: { ...MOCK_OBSERVABILITY_METRICS },
+    dailyMetrics: [...MOCK_DAILY_METRICS],
+    personaSpend: [...MOCK_PERSONA_SPEND],
+    healthIssues: healthIssuesSnapshot(),
+  };
+}
+
+/** Each thread-member SWR key's demo value, as its getter would return it now. */
+export const DEMO_THREAD_SNAPSHOTS: Record<(typeof DEMO_THREAD_KEYS)[keyof typeof DEMO_THREAD_KEYS], () => unknown> = {
+  [DEMO_THREAD_KEYS.systemHealth]: systemHealthSnapshot,
+  [DEMO_THREAD_KEYS.blastInputs]: blastRadiusInputsSnapshot,
+  [DEMO_THREAD_KEYS.auditIncidents]: auditIncidentsSnapshot,
+  [DEMO_THREAD_KEYS.incidentClusters]: correlatedIncidentsSnapshot,
+  [DEMO_THREAD_KEYS.observability]: observabilitySnapshot,
+  [DEMO_THREAD_KEYS.healthIssues]: healthIssuesSnapshot,
+};
 
 /**
  * Director coaching snapshot for /dashboard/director: portfolio scorecard,
