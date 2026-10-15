@@ -677,7 +677,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.15,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     6,
@@ -1266,7 +1266,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.27,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -2197,7 +2197,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.3,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -2558,7 +2558,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.15,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     4,
@@ -3181,7 +3181,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.28,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     6,
@@ -3551,7 +3551,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.1,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -3939,7 +3939,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.31,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -4123,7 +4123,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.28,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -4937,7 +4937,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.22,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -5114,7 +5114,7 @@
     "failed",
     "completed"
    ],
-   "costTodayUsd": 0.3,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     6,
@@ -5529,7 +5529,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.12,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -5647,7 +5647,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.17,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     0,
@@ -5765,7 +5765,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.18,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     4,
@@ -5902,7 +5902,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.06,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     6,
@@ -6217,7 +6217,7 @@
     "completed",
     "completed"
    ],
-   "costTodayUsd": 0.11,
+   "costTodayUsd": 0,
    "liveToolCalls": 0,
    "spark24h": [
     9,

@@ -1,3 +1,4 @@
+import { crewDayFigures } from "@/lib/demoWorld/crew";
 import raw from "./fleet.json";
 
 /* ── The synthetic demo fleet ───────────────────────────────────────
@@ -113,7 +114,20 @@ export interface Fleet {
   usage: { plan: string; windows: UsageWindow[] };
 }
 
-export const FLEET = raw as unknown as Fleet;
+/**
+ * The fleet as the stage shows it. The five crew agents' day (runs today,
+ * spend, success rate, the newest run dots) is projected from the demo
+ * world's log (`src/lib/demoWorld/crew.ts`), where the synced personas' runs
+ * live, so a crew tile and the Executions, Observability and SLA pages read
+ * the same runs. The other 94 agents are `fleet.json` as written, and the
+ * world's log is projected from them.
+ */
+export const FLEET: Fleet = withCrewDays(raw as unknown as Fleet);
+
+function withCrewDays(fleet: Fleet): Fleet {
+  const days = crewDayFigures();
+  return { ...fleet, agents: fleet.agents.map((a) => ({ ...a, ...days.get(a.id) })) };
+}
 
 export type FleetScale = 10 | 30 | 99;
 export const FLEET_SCALES: readonly FleetScale[] = [10, 30, 99];

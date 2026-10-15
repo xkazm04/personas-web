@@ -13,6 +13,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { ExecutionDetailModal } from "./executions-page/ExecutionDetailModal";
 import { ExecutionsEmptyState } from "./executions-page/ExecutionsEmptyState";
 import { ExecutionsFilters } from "./executions-page/ExecutionsFilters";
+import { ExecutionsScopeTotals } from "./executions-page/ExecutionsScopeTotals";
 import { LoadMoreExecutions } from "./executions-page/LoadMoreExecutions";
 import {
   buildExecutionColumns,
@@ -35,6 +36,7 @@ export default function ExecutionsPage() {
   const { t } = useTranslation();
   const {
     allExecutions,
+    totals,
     scopeEmpty,
     executionsLoading,
     executionsError,
@@ -103,8 +105,9 @@ export default function ExecutionsPage() {
 
       {executionsError && <DashboardErrorBanner message={executionsError} />}
 
-      {/* T1: the status filter toolbar. */}
+      {/* T1: the status filter toolbar, and what the scoped list adds up to. */}
       <div className={ARRIVE} style={arriveAt(0)}>
+        {!awaitingFirstData && <ExecutionsScopeTotals runs={totals.runs} costUsd={totals.costUsd} />}
         <ExecutionsFilters
           filter={filter}
           counts={counts}

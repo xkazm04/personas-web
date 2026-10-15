@@ -32,6 +32,7 @@ export function undoCauseFix(causeKey: string): void {
 
 function writeThreadReads(): void {
   for (const [key, snapshot] of Object.entries(DEMO_THREAD_SNAPSHOTS)) {
-    void mutate(key, snapshot(), { revalidate: false });
+    const value = snapshot();
+    if (value !== undefined) void mutate(key, value, { revalidate: false });
   }
 }

@@ -11,7 +11,9 @@ import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { type LeaderboardPersona } from "@/lib/mock-dashboard-data";
+import { useAuthStore } from "@/stores/authStore";
 
 import { LeaderboardPodium } from "./leaderboard-page/LeaderboardPodium";
 import { LeaderboardRadarCard } from "./leaderboard-page/LeaderboardRadarCard";
@@ -22,6 +24,7 @@ import { useLeaderboardData } from "./useLeaderboardData";
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
+  const isDemo = useAuthStore((s) => s.isDemo);
   // `personas`: the rows in the scope bar's persona; `ranked`: the whole field,
   // which the podium, the ranks and the benchmark are counted in.
   const { personas, ranked, scopeEmpty, loading, error, retry } = useLeaderboardData();
@@ -86,6 +89,11 @@ export default function LeaderboardPage() {
           <p className="mt-1 text-base text-muted-dark">
             {t.leaderboardPage.subtitle}
           </p>
+          {isDemo && ranked.length > 0 && (
+            <p className="mt-1 text-sm text-muted-dark">
+              {fillTemplate(t.executionsPage.population.fleetRanked, { count: ranked.length })}
+            </p>
+          )}
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </div>
@@ -93,7 +101,7 @@ export default function LeaderboardPage() {
       {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
-        // First load (real mode only; demo is synchronous): a held, shapeless
+        // First load (the demo world, or the synced rows): a held, shapeless
         // reservation - the generic skeleton grid matched neither the podium
         // nor the table, and showed with no delay.
         <ViewGap />

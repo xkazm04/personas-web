@@ -1300,7 +1300,17 @@ export const ko: LocaleTranslations = {
       noFilteredCancelled: "\uc774 \ubcf4\uae30\uc5d0\ub294 \ucde8\uc18c\ub41c \uc2e4\ud589\uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
       filteredEmptyDesc: "\ub2e4\ub978 \uc2e4\ud589\uc774 \uc788\uc9c0\ub9cc \uc774 \ud544\ud130\uc640 \uc77c\uce58\ud558\ub294 \ud56d\ubaa9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
       showAllExecutions: "\ubaa8\ub450 \ud45c\uc2dc",
-      outputUnavailable: "\uc774 \uc2e4\ud589\uc758 \uae30\ub85d\uc744 \uc0ac\uc6a9\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4."
+      outputUnavailable: "\uc774 \uc2e4\ud589\uc758 \uae30\ub85d\uc744 \uc0ac\uc6a9\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.",
+      drill: {
+        showRuns: "\uc774 \uc2e4\ud589 \ubcf4\uae30",
+        scopeRuns: "\ubc94\uc704 \ub0b4 \uc2e4\ud589",
+        scopeSpend: "\ubc94\uc704 \ub0b4 \ube44\uc6a9"
+      },
+      population: {
+        fleetWindow: "\ub370\ubaa8 \ud50c\ub9bf: \uc5d0\uc774\uc804\ud2b8 {count}\uac1c, \ucd5c\uadfc {days}\uc77c",
+        fleetRanked: "\ub370\ubaa8 \ud50c\ub9bf: \uc5d0\uc774\uc804\ud2b8 {count}\uac1c \uc21c\uc704",
+        crewObjectives: "\ub3d9\uae30\ud654\ub41c \uc5d0\uc774\uc804\ud2b8 {count}\uac1c\uc5d0 \ubaa9\ud45c \uc124\uc815"
+      }
     },
     eventsPage: {
       title: "\uc774\ubca4\ud2b8",

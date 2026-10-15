@@ -13,12 +13,13 @@ import { SLABreachLog } from "./sla-page/SLABreachLog";
 import { SLASummaryGrid } from "./sla-page/SLASummaryGrid";
 import { SLATargetGrid } from "./sla-page/SLATargetGrid";
 import { useSlaData } from "./useSlaData";
+import { fillTemplate } from "@/lib/fillTemplate";
 
 export default function SLAPage() {
   const { t } = useTranslation();
   const [fetchedAt] = useState(() => Date.now());
   // Rows in the scope bar's persona + window (useSlaData); the summary counts them.
-  const { targets, breaches, scopeEmpty, loading, error, retry } = useSlaData();
+  const { targets, breaches, scopeEmpty, objectiveAgents, loading, error, retry } = useSlaData();
   // T2 placeholders show only on a first load with nothing held (a refetch
   // keeps the last data); `coldStart` lets content that arrives after such a
   // load play its entrance, while data present on the first frame does not
@@ -46,6 +47,11 @@ export default function SLAPage() {
             <GradientText variant="silver">{t.slaPage.title}</GradientText>
           </h1>
           <p className="mt-1 text-base text-muted-dark">{t.slaPage.subtitle}</p>
+          {objectiveAgents !== null && (
+            <p className="mt-1 text-sm text-muted-dark">
+              {fillTemplate(t.executionsPage.population.crewObjectives, { count: objectiveAgents })}
+            </p>
+          )}
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </div>

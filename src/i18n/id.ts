@@ -1300,7 +1300,17 @@ export const id: LocaleTranslations = {
       noFilteredCancelled: "Tidak ada eksekusi dibatalkan dalam tampilan ini",
       filteredEmptyDesc: "Ada eksekusi lain, tetapi tidak ada yang cocok dengan filter ini.",
       showAllExecutions: "Tampilkan semua",
-      outputUnavailable: "Catatan eksekusi ini tidak tersedia."
+      outputUnavailable: "Catatan eksekusi ini tidak tersedia.",
+      drill: {
+        showRuns: "Tampilkan eksekusi ini",
+        scopeRuns: "Eksekusi dalam cakupan",
+        scopeSpend: "Biaya dalam cakupan"
+      },
+      population: {
+        fleetWindow: "Armada demo: {count} agen, {days} hari terakhir",
+        fleetRanked: "Armada demo: peringkat {count} agen",
+        crewObjectives: "Sasaran ditetapkan untuk {count} agen tersinkron"
+      }
     },
     eventsPage: {
       title: "Event",

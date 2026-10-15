@@ -19,13 +19,17 @@ export interface SlaData {
   breaches: SLABreach[];
   /** The scope emptied a list that has rows (each list judged on its own). */
   scopeEmpty: { targets: boolean; breaches: boolean };
+  /** Demo: how many agents carry objectives (the crew; the other 94 have none). Null in real mode. */
+  objectiveAgents: number | null;
   loading: boolean;
   error: string | null;
   retry: () => void;
 }
 
 /**
- * SLA data source. Dev/demo → the mock fixtures as this session sees them
+ * SLA data source. Dev/demo → the crew's objectives and breaches, computed by
+ * the engine the Supabase plane uses (`sli` / `breachEpisodes`) over the demo
+ * world's log (src/lib/demoWorld/crew.ts), as this session sees them
  * (`useDemoThreads`: a fixed incident cause closes its breach and takes its
  * target out of active breach, keeping the budget it consumed). Real/supabase
  * mode → app-defined default objectives computed against synced executions by
@@ -85,7 +89,8 @@ export function useSlaData(): SlaData {
     breaches: scopeHidAll(allBreaches, scoped.breaches),
   };
   if (useMock) {
-    return { ...scoped, scopeEmpty, loading: false, error: null, retry };
+    const objectiveAgents = new Set(allTargets.map((target) => target.persona)).size;
+    return { ...scoped, scopeEmpty, objectiveAgents, loading: false, error: null, retry };
   }
-  return { ...scoped, scopeEmpty, loading, error, retry };
+  return { ...scoped, scopeEmpty, objectiveAgents: null, loading, error, retry };
 }

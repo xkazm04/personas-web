@@ -1040,6 +1040,18 @@
     showAllExecutions: string;
     /** The run detail when the plane holds no record of that run (never a status). */
     outputUnavailable: string;
+    /** A metric's drill-down to the runs behind it, and the scoped list's totals (demo). */
+    drill: {
+      showRuns: string;
+      scopeRuns: string;
+      scopeSpend: string;
+    };
+    /** Which agents a demo figure covers: `{count}` agents, `{days}` days. */
+    population: {
+      fleetWindow: string;
+      fleetRanked: string;
+      crewObjectives: string;
+    };
   };
   eventsPage: {
     title: string;
@@ -3180,6 +3192,16 @@ export const en: CoreTranslations = {
     filteredEmptyDesc: 'Other runs exist but none match this filter.',
     showAllExecutions: 'Show all',
     outputUnavailable: "This run's record is unavailable.",
+    drill: {
+      showRuns: "Show these runs",
+      scopeRuns: "Runs in scope",
+      scopeSpend: "Spend in scope",
+    },
+    population: {
+      fleetWindow: "Demo fleet: {count} agents, last {days} days",
+      fleetRanked: "Demo fleet: {count} agents ranked",
+      crewObjectives: "Objectives set on {count} synced agents",
+    },
   },
   eventsPage: {
     title: 'Events',

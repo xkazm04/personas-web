@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { MOCK_DAILY_METRICS } from "./mockData";
+import { observabilityOf } from "./demoWorld/fleetReads";
+import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "./mockData";
 import {
   breachEpisodes,
   burnRate,
@@ -10,9 +11,12 @@ import {
   type SliPoint,
 } from "./sloEngine";
 
-const fromDaily: SliPoint[] = MOCK_DAILY_METRICS.map((d) => ({
+// The demo's daily series (the world's log, as the charts draw it). A ratio SLI
+// counts finished runs: a run still in flight is neither good nor bad yet.
+const DEMO_DAILY = observabilityOf({ rows: MOCK_EXECUTIONS, personas: MOCK_PERSONAS }).dailyMetrics;
+const fromDaily: SliPoint[] = DEMO_DAILY.map((d) => ({
   date: d.date,
-  total: d.executions,
+  total: d.successes + d.failures,
   good: d.successes,
 }));
 
@@ -30,8 +34,8 @@ describe("errorBudget", () => {
 
   it("reconciles with the demo daily series the charts draw", () => {
     const b = errorBudget(fromDaily, 95);
-    expect(b.total).toBe(MOCK_DAILY_METRICS.reduce((s, d) => s + d.executions, 0));
-    expect(b.bad).toBe(MOCK_DAILY_METRICS.reduce((s, d) => s + d.failures, 0));
+    expect(b.total).toBe(DEMO_DAILY.reduce((s, d) => s + d.successes + d.failures, 0));
+    expect(b.bad).toBe(DEMO_DAILY.reduce((s, d) => s + d.failures, 0));
     expect(b.allowed).toBeCloseTo(b.total * 0.05, 6);
   });
 

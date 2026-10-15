@@ -1300,7 +1300,17 @@ export const zh: LocaleTranslations = {
       noFilteredCancelled: "\u6b64\u89c6\u56fe\u4e2d\u6ca1\u6709\u5df2\u53d6\u6d88\u7684\u6267\u884c",
       filteredEmptyDesc: "\u5b58\u5728\u5176\u4ed6\u6267\u884c\uff0c\u4f46\u6ca1\u6709\u7b26\u5408\u6b64\u7b5b\u9009\u6761\u4ef6\u7684\u3002",
       showAllExecutions: "\u663e\u793a\u5168\u90e8",
-      outputUnavailable: "\u6b64\u6b21\u6267\u884c\u7684\u8bb0\u5f55\u4e0d\u53ef\u7528\u3002"
+      outputUnavailable: "\u6b64\u6b21\u6267\u884c\u7684\u8bb0\u5f55\u4e0d\u53ef\u7528\u3002",
+      drill: {
+        showRuns: "\u663e\u793a\u8fd9\u4e9b\u6267\u884c",
+        scopeRuns: "\u8303\u56f4\u5185\u7684\u6267\u884c",
+        scopeSpend: "\u8303\u56f4\u5185\u7684\u8d39\u7528"
+      },
+      population: {
+        fleetWindow: "\u6f14\u793a\u8230\u961f\uff1a{count} \u4e2a\u667a\u80fd\u4f53\uff0c\u6700\u8fd1 {days} \u5929",
+        fleetRanked: "\u6f14\u793a\u8230\u961f\uff1a{count} \u4e2a\u667a\u80fd\u4f53\u6392\u540d",
+        crewObjectives: "\u5df2\u4e3a {count} \u4e2a\u540c\u6b65\u667a\u80fd\u4f53\u8bbe\u5b9a\u76ee\u6807"
+      }
     },
     eventsPage: {
       title: "\u4e8b\u4ef6",

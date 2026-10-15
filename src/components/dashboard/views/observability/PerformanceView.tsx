@@ -13,7 +13,7 @@ import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useFocusParam } from "@/hooks/useFocusParam";
 import { api } from "@/lib/api";
 import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
-import { MOCK_COST_ANOMALIES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
+import type { MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
 import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
@@ -25,6 +25,7 @@ import { PerformanceLatencyCard } from "./performance-view/PerformanceLatencyCar
 import { PerformanceMetricsGrid } from "./performance-view/PerformanceMetricsGrid";
 import { PerformanceSpendCard } from "./performance-view/PerformanceSpendCard";
 import { BUDGET_THRESHOLD, type SeverityFilter } from "./performance-view/performanceViewTypes";
+import { usePerformanceOverlays } from "./performance-view/usePerformanceOverlays";
 
 export default function PerformanceView() {
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ export default function PerformanceView() {
   const healthIssues = useMemo(() => data?.healthIssues ?? [], [data]);
   const costChartData = useMemo(() => dailyMetrics.map((day) => ({ date: day.date.slice(5), Cost: day.cost })), [dailyMetrics]);
   const execChartData = useMemo(() => dailyMetrics.map((day) => ({ date: day.date.slice(5), Successes: day.successes, Failures: day.failures })), [dailyMetrics]);
-  const spendPieData = useMemo(() => personaSpend.map((persona) => ({ name: persona.personaName, value: persona.totalCost, color: persona.personaColor })), [personaSpend]);
+  const overlays = usePerformanceOverlays(isDemo, dailyMetrics, personaSpend);
 
   const displayHealthIssues: MockHealthIssue[] = useMemo(() => {
     // Demo falls back to the illustrative fixture; real mode shows the genuine
@@ -113,7 +114,7 @@ export default function PerformanceView() {
       {/* Cost-anomaly detection isn't synced — demo only. */}
       {isDemo && (
         <CostAnomalyBanner
-          anomalies={MOCK_COST_ANOMALIES}
+          anomalies={overlays.anomalies}
           label={t.observabilityPage.costAnomalyDetected}
           dismissLabel={t.common.close}
         />
@@ -128,20 +129,26 @@ export default function PerformanceView() {
       )}
       {/* T2: the KPI tiles answer the tab's question first. */}
       <div className={ARRIVE} style={arriveAt(2)}>
-        <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} />
+        <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} drill={overlays.drill} population={overlays.population} />
       </div>
       <PerformanceChartGrid
         costChartData={costChartData}
         execChartData={execChartData}
         compareEnabled={compareEnabled}
-        costPrevious={isDemo ? MOCK_COST_COMPARE : []}
-        execPrevious={isDemo ? MOCK_EXEC_COMPARE : []}
-        annotations={isDemo ? MOCK_ANNOTATIONS : []}
+        costPrevious={overlays.costPrevious}
+        execPrevious={overlays.execPrevious}
+        annotations={overlays.annotations}
         labels={t.observabilityPage}
       />
       <PerformanceLatencyCard labels={t.observabilityPage} />
       <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(5)}>
-        <PerformanceSpendCard personaSpend={personaSpend} spendPieData={spendPieData} labels={t.observabilityPage} />
+        <PerformanceSpendCard
+          personaSpend={personaSpend}
+          spendPieData={overlays.spendPieData}
+          labels={t.observabilityPage}
+          drillFor={overlays.drillFor}
+          compact={overlays.compactSpend}
+        />
         <PerformanceHealthPanel
           openIssues={openIssues}
           filteredHealthIssues={filteredHealthIssues}

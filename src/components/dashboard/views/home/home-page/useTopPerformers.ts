@@ -5,8 +5,11 @@ import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { useTranslation } from "@/i18n/useTranslation";
+import { getDemoLeaderboard } from "@/lib/mockApi";
 import { getSyncedLeaderboard } from "@/lib/supabaseApi";
-import { MOCK_LEADERBOARD, type LeaderboardPersona } from "@/lib/mock-dashboard-data";
+import type { LeaderboardPersona } from "@/lib/mock-dashboard-data";
+
+const EMPTY: LeaderboardPersona[] = [];
 
 export interface TopPerformersData {
   leaderboard: LeaderboardPersona[];
@@ -16,38 +19,33 @@ export interface TopPerformersData {
 }
 
 /**
- * Top-performers data source. Demo → the static MOCK_LEADERBOARD (unchanged).
- * Real/supabase mode → the synced composite-scored leaderboard (already sorted
- * by composite desc), or an empty array when nothing has synced yet.
+ * Top-performers data source. Demo → the demo world's leaderboard
+ * (`standings()` over its snapshots, the whole demo fleet). Real/supabase mode
+ * → the synced composite-scored leaderboard (already sorted by composite
+ * desc), or an empty array when nothing has synced yet.
  */
 export function useTopPerformers(): TopPerformersData {
   const isDemo = useAuthStore((s) => s.isDemo);
-  const useMock = isDemo;
   // Localized fallback for errors that carry no message of their own. Held as a
   // plain string so the fetch effect only re-runs when the locale changes.
   const { t } = useTranslation();
   const loadFailed = t.dashboard.home.errors.topPerformers;
 
-  // Only the *fetched* half lives in state. The demo values are a pure function
-  // of `useMock`, so they're derived during render below rather than copied
-  // into state by the effect: mirroring store state into React state costs an
-  // extra render pass before paint, and left one frame of the previous
-  // account's leaderboard on screen whenever `isDemo` flipped mid-session.
-  const [fetchedLeaderboard, setFetchedLeaderboard] = useState<LeaderboardPersona[]>([]);
+  // Rows are held with the mode that fetched them, so a mid-session flip of
+  // `isDemo` never shows the previous account's leaderboard as this one's.
+  const [fetched, setFetched] = useState<{ demo: boolean; rows: LeaderboardPersona[] } | null>(null);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // Demo mode has nothing to fetch; the mock leaderboard is derived below.
-    if (useMock) return;
     let cancelled = false;
     (async () => {
       setFetchLoading(true);
       try {
-        const rows = await getSyncedLeaderboard();
+        const rows = await (isDemo ? getDemoLeaderboard() : getSyncedLeaderboard());
         if (cancelled) return;
-        setFetchedLeaderboard(rows);
+        setFetched({ demo: isDemo, rows });
         setFetchError(null);
       } catch (err) {
         if (cancelled) return;
@@ -60,11 +58,13 @@ export function useTopPerformers(): TopPerformersData {
     return () => {
       cancelled = true;
     };
-  }, [useMock, reloadKey, loadFailed]);
+  }, [isDemo, reloadKey, loadFailed]);
 
-  const leaderboard = useMock ? MOCK_LEADERBOARD : fetchedLeaderboard;
-  const loading = useMock ? false : fetchLoading;
-  const error = useMock ? null : fetchError;
+  const current = fetched !== null && fetched.demo === isDemo ? fetched.rows : null;
+  const leaderboard = current ?? EMPTY;
+  // Real mode reads as it always has (the fetch in flight); the demo is loading until its first rows land.
+  const loading = isDemo ? current === null && !fetchError : fetchLoading;
+  const error = fetchError;
 
   return { leaderboard, loading, error, retry: () => setReloadKey((k) => k + 1) };
 }

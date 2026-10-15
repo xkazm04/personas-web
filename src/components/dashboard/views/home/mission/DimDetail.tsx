@@ -5,8 +5,10 @@ import GlowCard from "@/components/GlowCard";
 import FleetOptimizationCard from "@/components/dashboard/FleetOptimizationCard";
 import HealthDigestPanel from "@/components/dashboard/HealthDigestPanel";
 import MemoryActionsPanel from "@/components/dashboard/MemoryActionsPanel";
+import DrillToRuns from "@/components/dashboard/drill/DrillToRuns";
 import { useTranslation } from "@/i18n/useTranslation";
-import { MOCK_FLEET_EXECUTIONS, MOCK_FLEET_RECOMMENDATION } from "@/lib/mock-dashboard-data";
+import { MOCK_FLEET_RECOMMENDATION } from "@/lib/mock-dashboard-data";
+import { drillOver } from "@/lib/metricDrill";
 import type { DailyMetric, HealthIssue } from "@/lib/types";
 import { useAuthStore } from "@/stores/authStore";
 import { RotationOverviewCard } from "../../settings/settings-sections/RotationOverviewCard";
@@ -44,11 +46,15 @@ export function DimDetail({
   const { t } = useTranslation();
   const isDemo = useAuthStore((s) => s.isDemo);
   const outcomes = readings.outcomes;
+  // The run total and the spend sum these scoped days of the fleet: in the demo
+  // they open the executions behind them (the whole log is served there).
+  const drill = isDemo ? drillOver(null, daily) : null;
 
   switch (id) {
     case "outcomes":
       return (
         <>
+          <DrillToRuns drill={drill} className="mb-3" />
           <TrafficErrorsCard
             chartData={daily.map((day) => ({ date: day.date.slice(5), Executions: day.executions, Errors: day.failures }))}
             loadObservability
@@ -96,13 +102,18 @@ export function DimDetail({
       return (
         <>
           {isDemo && (
-            <FleetOptimizationCard recommendation={MOCK_FLEET_RECOMMENDATION} executionCount={MOCK_FLEET_EXECUTIONS} />
+            <FleetOptimizationCard recommendation={MOCK_FLEET_RECOMMENDATION} executionCount={daily.reduce((sum, day) => sum + day.executions, 0)} />
           )}
           <HealingIssues issues={issues} />
         </>
       );
     case "spend":
-      return <CostByDay daily={daily} />;
+      return (
+        <>
+          <DrillToRuns drill={drill} className="mb-3" />
+          <CostByDay daily={daily} />
+        </>
+      );
     case "autonomy":
       return (
         <>

@@ -12,3 +12,13 @@
  * any fixture module computes a timestamp.
  */
 export const DEMO_SEED_NOW: number = Date.now();
+
+/**
+ * The Personas Board's frozen "now" (`fleet.json` `nowMs`) and how much of its
+ * UTC day had passed then: the demo world's day so far. The Board's "runs
+ * today" are the runs of that span, so the world places today's runs in the
+ * same span before the seed clock (never before today's UTC midnight). Pinned
+ * to `fleet.json` by `src/lib/demoWorld/world.test.ts`.
+ */
+export const DEMO_FLEET_NOW_MS = 1_790_864_400_000;
+export const DEMO_BOARD_DAY_MS = DEMO_FLEET_NOW_MS % 86_400_000;

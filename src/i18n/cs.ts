@@ -1300,7 +1300,17 @@ export const cs: LocaleTranslations = {
       noFilteredCancelled: "V tomto zobrazen\u00ed nejsou \u017e\u00e1dn\u00e9 zru\u0161en\u00e9 b\u011bhy",
       filteredEmptyDesc: "Existuj\u00ed dal\u0161\u00ed b\u011bhy, ale \u017e\u00e1dn\u00fd neodpov\u00edd\u00e1 tomuto filtru.",
       showAllExecutions: "Zobrazit v\u0161e",
-      outputUnavailable: "Z\u00e1znam tohoto spu\u0161t\u011bn\u00ed nen\u00ed k dispozici."
+      outputUnavailable: "Z\u00e1znam tohoto spu\u0161t\u011bn\u00ed nen\u00ed k dispozici.",
+      drill: {
+        showRuns: "Zobrazit tato spu\u0161t\u011bn\u00ed",
+        scopeRuns: "Spu\u0161t\u011bn\u00ed v rozsahu",
+        scopeSpend: "Cena v rozsahu"
+      },
+      population: {
+        fleetWindow: "Demo flotila: {count} agent\u016f, posledn\u00edch {days} dn\u00ed",
+        fleetRanked: "Demo flotila: po\u0159ad\u00ed {count} agent\u016f",
+        crewObjectives: "C\u00edle nastaven\u00e9 pro {count} synchronizovan\u00fdch agent\u016f"
+      }
     },
     eventsPage: {
       title: "Ud\u00e1losti",

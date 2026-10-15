@@ -1300,7 +1300,17 @@ export const es: LocaleTranslations = {
       noFilteredCancelled: "No hay ejecuciones canceladas en esta vista",
       filteredEmptyDesc: "Existen otras ejecuciones, pero ninguna coincide con este filtro.",
       showAllExecutions: "Mostrar todas",
-      outputUnavailable: "El registro de esta ejecuci\u00f3n no est\u00e1 disponible."
+      outputUnavailable: "El registro de esta ejecuci\u00f3n no est\u00e1 disponible.",
+      drill: {
+        showRuns: "Mostrar estas ejecuciones",
+        scopeRuns: "Ejecuciones en el \u00e1mbito",
+        scopeSpend: "Costo en el \u00e1mbito"
+      },
+      population: {
+        fleetWindow: "Flota de demostraci\u00f3n: {count} agentes, \u00faltimos {days} d\u00edas",
+        fleetRanked: "Flota de demostraci\u00f3n: {count} agentes clasificados",
+        crewObjectives: "Objetivos definidos para {count} agentes sincronizados"
+      }
     },
     eventsPage: {
       title: "Eventos",

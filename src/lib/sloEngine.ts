@@ -1,6 +1,7 @@
 // SLO engine — pure functions over per-persona daily SLIs. No I/O, no
 // Date.now(): callers pass the series, so the real plane (synced snapshots)
-// and the demo plane (MOCK_DAILY_METRICS) run one code path and tests are
+// and the demo plane (the crew's daily SLIs from the demo world's log,
+// src/lib/demoWorld/crew.ts) run one code path and tests are
 // deterministic. Same shape of module as standings.ts / observabilitySeries.ts.
 //
 // Granularity caveat: the input is one point per day, so an episode is

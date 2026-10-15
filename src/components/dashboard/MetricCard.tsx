@@ -20,6 +20,7 @@ export default function MetricCard({
   accent,
   sparklineData,
   goodDirection = "up",
+  footer,
 }: {
   icon: React.ElementType;
   label: string;
@@ -35,6 +36,8 @@ export default function MetricCard({
    * direction of the change, while the color reflects whether it is favorable.
    */
   goodDirection?: GoodDirection;
+  /** Below the figure: e.g. a link to the runs behind it. */
+  footer?: React.ReactNode;
 }) {
   // Arrow follows the numeric sign so the tile stays honest about what moved.
   const isRising = (trend ?? 0) >= 0;
@@ -56,7 +59,7 @@ export default function MetricCard({
           </div>
         )}
       </div>
-      <p className="text-2xl font-bold tracking-tight tabular-nums text-foreground">
+      <p data-metric-value={label} className="text-2xl font-bold tracking-tight tabular-nums text-foreground">
         {value}
       </p>
       {trend !== undefined && (
@@ -73,6 +76,7 @@ export default function MetricCard({
           {trendLabel && <span className="text-muted-dark">{trendLabel}</span>}
         </div>
       )}
+      {footer && <div className="mt-2">{footer}</div>}
     </GlowCard>
   );
 }

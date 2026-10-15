@@ -8,8 +8,8 @@
 // planes share one implementation of each rule.
 //
 // Trend window contract:
-// - Demo: the 14-day window vs the 14-day prior window
-//   (`MOCK_DAILY_METRICS` vs `MOCK_DAILY_PRIOR_METRICS`), the same pair the
+// - Demo: the 14-day window vs the 14-day prior window of the demo world's
+//   log (src/lib/demoWorld/fleetReads.ts `observabilityOf`), the same pair the
 //   Compare overlay plots.
 // - Supabase: no prior window is synced, so `halvesTrend` compares the recent
 //   half of the synced daily series with the earlier half. Same `periodTrend`

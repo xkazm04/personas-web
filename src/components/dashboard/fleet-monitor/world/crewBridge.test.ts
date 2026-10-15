@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DEMO_CREW } from "@/lib/demoCrew";
 import { MOCK_TIMINGS, MOCK_RUN_TIMINGS } from "@/lib/commands/mockCommandPlane";
-import { MOCK_DAILY_METRICS, MOCK_EVENTS, MOCK_EXECUTIONS, MOCK_OBSERVABILITY_METRICS, MOCK_PERSONAS } from "@/lib/mockData";
+import { MOCK_EVENTS, MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
+import { observabilityOf } from "@/lib/demoWorld/fleetReads";
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/authStore";
 import { useCommandStore } from "@/stores/commandStore";
@@ -113,8 +114,8 @@ describe("the bridge end to end, on the demo's own command plane", () => {
   const personas = MOCK_PERSONAS.map((p) => ({ ...p }));
   const executions = MOCK_EXECUTIONS.map((e) => ({ ...e }));
   const events = MOCK_EVENTS.map((e) => ({ ...e }));
-  const daily = MOCK_DAILY_METRICS.map((d) => ({ ...d }));
-  const totals = { ...MOCK_OBSERVABILITY_METRICS };
+  /** Observability as mockApi serves it now: the world's log folded with the session's rows. */
+  const observability = () => observabilityOf({ rows: MOCK_EXECUTIONS, personas: MOCK_PERSONAS });
   let w: FleetWorld;
   const agent = (id: string) => w.store.getState().sim.agents.find((a) => a.id === id)!;
 
@@ -133,8 +134,6 @@ describe("the bridge end to end, on the demo's own command plane", () => {
     MOCK_PERSONAS.splice(0, MOCK_PERSONAS.length, ...personas.map((p) => ({ ...p })));
     MOCK_EXECUTIONS.splice(0, MOCK_EXECUTIONS.length, ...executions.map((e) => ({ ...e })));
     MOCK_EVENTS.splice(0, MOCK_EVENTS.length, ...events.map((e) => ({ ...e })));
-    MOCK_DAILY_METRICS.splice(0, MOCK_DAILY_METRICS.length, ...daily.map((d) => ({ ...d })));
-    Object.assign(MOCK_OBSERVABILITY_METRICS, totals);
   });
 
   /** Let the plane's lazy import and its timers run. */
@@ -143,7 +142,7 @@ describe("the bridge end to end, on the demo's own command plane", () => {
   };
 
   it("a settled Run on a crew agent puts exec-<commandId> in api.listExecutions() exactly once, and today's cost rises by that run only", async () => {
-    const before = MOCK_DAILY_METRICS.map((d) => ({ ...d }));
+    const before = observability();
     const ready = w.store.getState().sim.agents.find((a) => a.id === PR.agentId)!;
     // PR Review Agent waits for an answer: answer it first so Run is admitted.
     if (ready.state === "input_required") w.dispatch({ type: "answer", id: PR.agentId });
@@ -164,11 +163,14 @@ describe("the bridge end to end, on the demo's own command plane", () => {
     const exec = listed.find((e) => e.id === execId)!;
     expect(exec).toMatchObject({ personaId: PR.personaId, status: "completed" });
     // Today's bucket took that run's cost and count once; the other 13 days are untouched.
-    const today = MOCK_DAILY_METRICS.at(-1)!;
-    expect(today.cost).toBeCloseTo(before.at(-1)!.cost + exec.costUsd, 6);
-    expect(today.executions).toBe(before.at(-1)!.executions + 1);
-    expect(MOCK_DAILY_METRICS.slice(0, -1)).toEqual(before.slice(0, -1));
-    expect(MOCK_OBSERVABILITY_METRICS.totalExecutions).toBe(totals.totalExecutions + 1);
+    // (L3: observability is a fold of the run log, so the run counts by being a row, not by a side write.)
+    const after = observability();
+    const today = after.dailyMetrics.at(-1)!;
+    expect(today.cost).toBeCloseTo(before.dailyMetrics.at(-1)!.cost + exec.costUsd, 6);
+    expect(today.executions).toBe(before.dailyMetrics.at(-1)!.executions + 1);
+    expect(after.dailyMetrics.slice(0, -1)).toEqual(before.dailyMetrics.slice(0, -1));
+    expect(after.metrics.totalExecutions).toBe(before.metrics.totalExecutions + 1);
+    expect(observability().metrics.totalExecutions).toBe(after.metrics.totalExecutions);
     // The Board's own run did not start the agent a second time.
     expect(w.store.getState().sim.events.filter((e) => e.agentId === PR.agentId && e.decision?.act === "run")).toHaveLength(1);
   });

@@ -2,15 +2,15 @@ import { describe, expect, it } from "vitest";
 
 import { resolveScopeFilter, scopeHidAll, type Scope } from "@/lib/dashboardScope";
 import { DEMO_SEED_NOW } from "@/lib/demoClock";
+import { listWorldExecutions, observabilityOf, worldLeaderboard } from "@/lib/demoWorld/fleetReads";
 import {
   MOCK_KNOWLEDGE_PATTERNS,
-  MOCK_LEADERBOARD,
   MOCK_MEMORIES,
   MOCK_MESSAGE_THREADS,
   MOCK_SLA_BREACHES,
   MOCK_SLA_TARGETS,
 } from "@/lib/mock-dashboard-data";
-import { MOCK_DAILY_METRICS, MOCK_EVENTS, MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
+import { MOCK_EVENTS, MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
 import type { DateRangePreset } from "@/stores/dashboardFilterStore";
 import type { ManualReviewItem } from "@/lib/types";
 
@@ -30,6 +30,11 @@ import {
  * rows each view's data hook reads), measured from the demo's seed clock as the
  * hooks do. Before this change no view read the store, so every surface showed
  * its "All personas" counts whatever the bar said.
+ *
+ * L3 re-baseline: executions, the leaderboard and Mission Control's run total
+ * now read the demo world (the Board's 99-agent fleet, a 14-day log of ~24k
+ * runs) instead of the 12-row / 47-run fixtures, so their counts are computed
+ * here from the rows rather than pinned; the fixed fixtures keep their numbers.
  */
 
 const IR = "p-0002-mock"; // Incident Responder
@@ -45,15 +50,29 @@ function scope(personaId: string | null, dateRange: DateRangePreset): Scope {
   return { filter: resolveScopeFilter({ personaId, dateRange }, MOCK_PERSONAS), now: DEMO_SEED_NOW };
 }
 
+// What the demo serves (mockApi reads these): the world's log and its folds.
+const SESSION = { rows: MOCK_EXECUTIONS, personas: MOCK_PERSONAS };
+const EXECUTIONS = listWorldExecutions(SESSION);
+const DAILY = observabilityOf(SESSION).dailyMetrics;
+const LEADERBOARD = worldLeaderboard(SESSION);
+const HOUR = 3_600_000;
+
+/** Independent of `inScope`: runs of a persona (or all) created at or after `since`. */
+const runsSince = (personaId: string | null, since: number) =>
+  EXECUTIONS.filter((e) => (personaId === null || e.personaId === personaId) && Date.parse(e.createdAt) >= since).length;
+/** The run total of the days whose UTC midnight is at or after `since`. */
+const runsOfDaysSince = (since: number) =>
+  DAILY.filter((d) => Date.parse(`${d.date}T00:00:00Z`) >= since).reduce((sum, d) => sum + d.executions, 0);
+
 function surfaces(s: Scope) {
   const sla = scopeSla({ targets: MOCK_SLA_TARGETS, breaches: MOCK_SLA_BREACHES }, s);
   const knowledge = scopeKnowledge({ patterns: MOCK_KNOWLEDGE_PATTERNS, memories: MOCK_MEMORIES }, s);
-  const daily = scopeDaily(MOCK_DAILY_METRICS, s);
+  const daily = scopeDaily(DAILY, s);
   return {
-    executions: scopeExecutions(MOCK_EXECUTIONS, s),
+    executions: scopeExecutions(EXECUTIONS, s),
     reviews: scopeReviews(REVIEWS, s),
     events: scopeEvents(MOCK_EVENTS, s),
-    leaderboard: scopeLeaderboard(MOCK_LEADERBOARD, s),
+    leaderboard: scopeLeaderboard(LEADERBOARD, s),
     slaTargets: sla.targets,
     slaBreaches: sla.breaches,
     patterns: knowledge.patterns,
@@ -71,10 +90,12 @@ const counts = (s: ReturnType<typeof surfaces>) =>
 describe("the default scope (All personas, 7 days)", () => {
   it("keeps every list row the fixtures hold: the lists paint as before", () => {
     const s = surfaces(scope(null, "7d"));
-    expect(s.executions).toEqual(MOCK_EXECUTIONS);
+    // The log reaches back 14 days, so the 7-day window keeps the runs of its own 7 days.
+    expect(s.executions).toEqual(EXECUTIONS.filter((e) => Date.parse(e.createdAt) >= DEMO_SEED_NOW - 7 * 24 * HOUR));
+    expect(s.executions.length).toBeLessThan(EXECUTIONS.length);
     expect(s.reviews).toEqual(REVIEWS);
     expect(s.events).toEqual(MOCK_EVENTS);
-    expect(s.leaderboard).toEqual(MOCK_LEADERBOARD);
+    expect(s.leaderboard).toEqual(LEADERBOARD);
     expect(s.slaTargets).toEqual(MOCK_SLA_TARGETS);
     expect(s.slaBreaches).toEqual(MOCK_SLA_BREACHES);
     expect(s.patterns).toEqual(MOCK_KNOWLEDGE_PATTERNS);
@@ -83,11 +104,13 @@ describe("the default scope (All personas, 7 days)", () => {
   });
 
   it("reads Mission Control's last 7 of its 14 days, which its header now states", () => {
-    expect(MOCK_DAILY_METRICS).toHaveLength(14);
-    expect(surfaces(scope(null, "7d"))).toMatchObject({ homeDays: 7, homeRuns: 24 });
+    expect(DAILY).toHaveLength(14);
+    const week = DAILY.slice(-7).reduce((sum, d) => sum + d.executions, 0);
+    const fortnight = DAILY.reduce((sum, d) => sum + d.executions, 0);
+    expect(surfaces(scope(null, "7d"))).toMatchObject({ homeDays: 7, homeRuns: week });
     // The whole fortnight (the old fixed 14-day reading) is one window away.
-    expect(surfaces(scope(null, "30d"))).toMatchObject({ homeDays: 14, homeRuns: 47 });
-    expect(surfaces(scope(null, "90d"))).toMatchObject({ homeDays: 14, homeRuns: 47 });
+    expect(surfaces(scope(null, "30d"))).toMatchObject({ homeDays: 14, homeRuns: fortnight });
+    expect(surfaces(scope(null, "90d"))).toMatchObject({ homeDays: 14, homeRuns: fortnight });
   });
 });
 
@@ -96,13 +119,31 @@ describe("Incident Responder, last 24 hours", () => {
   const after = surfaces(scope(IR, "24h"));
 
   it("changes the four verified surfaces: executions, reviews, leaderboard, home run total", () => {
-    expect(before).toMatchObject({ executions: 12, reviews: 6, leaderboard: 5, homeRuns: 24 });
-    expect(counts(after)).toMatchObject({ executions: 1, reviews: 1, leaderboard: 1, homeRuns: 2 });
+    const day = DEMO_SEED_NOW - 24 * HOUR;
+    expect(before).toMatchObject({
+      executions: runsSince(null, DEMO_SEED_NOW - 7 * 24 * HOUR),
+      reviews: 6,
+      leaderboard: LEADERBOARD.length,
+      homeRuns: DAILY.slice(-7).reduce((sum, d) => sum + d.executions, 0),
+    });
+    expect(counts(after)).toMatchObject({
+      executions: runsSince(IR, day),
+      reviews: 1,
+      leaderboard: 1,
+      // Mission Control has no persona: the window alone, in whole days.
+      homeRuns: runsOfDaysSince(day),
+    });
+    expect(after.executions.length).toBeGreaterThan(0);
+    expect(after.executions.length).toBeLessThan(before.executions as number);
   });
 
   it("narrows every other scoped surface too", () => {
     expect(before).toMatchObject({ events: 22, slaTargets: 5, slaBreaches: 4, patterns: 8, memories: 20, threads: 20 });
-    expect(counts(after)).toMatchObject({ events: 8, slaTargets: 1, slaBreaches: 1, patterns: 2, memories: 4, threads: 4 });
+    // Incident Responder's breaches that overlap the last 24 hours (the SLA engine dates them from the log).
+    const irBreaches = MOCK_SLA_BREACHES.filter(
+      (b) => b.persona === IR_NAME && (b.resolvedAt === null || Date.parse(b.resolvedAt) >= DEMO_SEED_NOW - 24 * HOUR),
+    ).length;
+    expect(counts(after)).toMatchObject({ events: 8, slaTargets: 1, slaBreaches: irBreaches, patterns: 2, memories: 4, threads: 4 });
   });
 
   it("keeps only that persona's rows", () => {
@@ -122,7 +163,8 @@ describe("Incident Responder, last 24 hours", () => {
     expect(wide.slaTargets).toEqual(after.slaTargets);
     expect(wide.memories).toEqual(after.memories);
     // ...and the window alone narrows the timed lists.
-    expect(counts(surfaces(scope(null, "24h")))).toMatchObject({ executions: 6, homeRuns: 2 });
+    const day = DEMO_SEED_NOW - 24 * HOUR;
+    expect(counts(surfaces(scope(null, "24h")))).toMatchObject({ executions: runsSince(null, day), homeRuns: runsOfDaysSince(day) });
   });
 });
 
@@ -136,9 +178,15 @@ describe("going back", () => {
 
 describe("a scope that matches nothing", () => {
   it("empties a list that has rows, which the views read as 'nothing in this window'", () => {
-    const s = scope("p-0004-mock", "24h"); // Security Scanner queued no run in the last day
-    expect(scopeExecutions(MOCK_EXECUTIONS, s)).toEqual([]);
-    expect(scopeHidAll(MOCK_EXECUTIONS, scopeExecutions(MOCK_EXECUTIONS, s))).toBe(true);
+    // Every crew persona ran today (the world's log), so the empty slice is a
+    // window before the log begins: Security Scanner, one day two months back.
+    const old = new Date(DEMO_SEED_NOW - 60 * 24 * HOUR).toISOString().slice(0, 10);
+    const s: Scope = {
+      filter: resolveScopeFilter({ personaId: "p-0004-mock", dateRange: "custom", customStart: old, customEnd: old }, MOCK_PERSONAS),
+      now: DEMO_SEED_NOW,
+    };
+    expect(scopeExecutions(EXECUTIONS, s)).toEqual([]);
+    expect(scopeHidAll(EXECUTIONS, scopeExecutions(EXECUTIONS, s))).toBe(true);
   });
 });
 

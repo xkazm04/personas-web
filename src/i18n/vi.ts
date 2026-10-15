@@ -1300,7 +1300,17 @@ export const vi: LocaleTranslations = {
       noFilteredCancelled: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y \u0111\u00e3 h\u1ee7y trong khung nh\u00ecn n\u00e0y",
       filteredEmptyDesc: "C\u00f3 c\u00e1c l\u01b0\u1ee3t ch\u1ea1y kh\u00e1c nh\u01b0ng kh\u00f4ng kh\u1edbp v\u1edbi b\u1ed9 l\u1ecdc n\u00e0y.",
       showAllExecutions: "Hi\u1ec3n th\u1ecb t\u1ea5t c\u1ea3",
-      outputUnavailable: "B\u1ea3n ghi c\u1ee7a l\u01b0\u1ee3t th\u1ef1c thi n\u00e0y kh\u00f4ng kh\u1ea3 d\u1ee5ng."
+      outputUnavailable: "B\u1ea3n ghi c\u1ee7a l\u01b0\u1ee3t th\u1ef1c thi n\u00e0y kh\u00f4ng kh\u1ea3 d\u1ee5ng.",
+      drill: {
+        showRuns: "Hi\u1ec3n th\u1ecb c\u00e1c l\u01b0\u1ee3t th\u1ef1c thi n\u00e0y",
+        scopeRuns: "L\u01b0\u1ee3t th\u1ef1c thi trong ph\u1ea1m vi",
+        scopeSpend: "Chi ph\u00ed trong ph\u1ea1m vi"
+      },
+      population: {
+        fleetWindow: "\u0110\u1ed9i demo: {count} t\u00e1c nh\u00e2n, {days} ng\u00e0y qua",
+        fleetRanked: "\u0110\u1ed9i demo: x\u1ebfp h\u1ea1ng {count} t\u00e1c nh\u00e2n",
+        crewObjectives: "M\u1ee5c ti\u00eau \u0111\u1eb7t cho {count} t\u00e1c nh\u00e2n \u0111\u00e3 \u0111\u1ed3ng b\u1ed9"
+      }
     },
     eventsPage: {
       title: "S\u1ef1 ki\u1ec7n",

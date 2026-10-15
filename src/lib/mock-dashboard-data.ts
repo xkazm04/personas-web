@@ -1,38 +1,13 @@
 // ── Mock data for dashboard visualizations ──────────────────────────
 // Generates realistic-looking data for maximum visitor impression.
 
-import {
-  MOCK_DAILY_METRICS,
-  MOCK_DAILY_PRIOR_METRICS,
-  MOCK_OBSERVABILITY_METRICS,
-  MOCK_PERSONA_SPEND,
-  MOCK_PERSONAS,
-  seededRandom,
-} from "./mockData";
-import {
-  anchorAnnotations,
-  detectCostAnomalies,
-  previousSeries,
-  type ChartAnnotation,
-  type ComparePoint,
-  type CostAnomaly,
-} from "./observabilitySeries";
+import { MOCK_PERSONAS, seededRandom } from "./mockData";
+import { crewHeatmap, crewSla, crewWorld } from "./demoWorld/crew";
+import type { ChartAnnotation, ComparePoint, CostAnomaly } from "./observabilitySeries";
 import type { HealthIssue } from "./types";
 import type { LearnedMemoryRow } from "./commands/reviewLearning";
 import type { SyncedNote } from "./notes/notesModel";
 import type { ChatMessage, ChatSession } from "./chat/chatModel";
-
-function generateTimeSeries(
-  days: number,
-  baseFn: (i: number, total: number) => number,
-  noise: number,
-  seed = 42,
-): number[] {
-  const rng = seededRandom(seed);
-  return Array.from({ length: days }, (_, i) =>
-    Math.max(0, baseFn(i, days) + (rng() - 0.5) * noise),
-  );
-}
 
 // ── Canonical demo fleet roster ─────────────────────────────────────
 // The demo dashboard runs ONE fleet. The roster is not re-declared here: it is
@@ -61,19 +36,11 @@ export const FLEET: FleetMember[] = MOCK_PERSONAS.map((persona) => ({
 
 const [PR_REVIEW, INCIDENT, STANDUP, SECURITY, FEEDBACK] = FLEET;
 
-/**
- * Executions the fleet completed in the 14-day observability window. Derived
- * from the same daily series the traffic chart plots, so "how busy is this
- * fleet?" has exactly one answer across the dashboard.
- */
-export const MOCK_FLEET_EXECUTIONS = MOCK_OBSERVABILITY_METRICS.totalExecutions;
-
-// ── Sparkline data for metric cards ─────────────────────────────────
-// The Performance tiles' cost / execution / success sparklines are not fixtures:
-// `useSparklines` projects them from MOCK_DAILY_METRICS with
-// `sparklinesFromDaily`, the same function the Supabase plane uses.
-
-export const SPARKLINE_AGENTS = generateTimeSeries(14, (i) => 5 + Math.floor(i / 4), 1, 40);
+// ── The run log and its aggregates are not fixtures here ────────────
+// Executions, the daily series, spend, the Performance tab's overlays and the
+// leaderboard project from the demo world's log (`src/lib/demoWorld/`, served
+// by `mockApi`): the Board's 99 agents, the five above among them. Nothing in
+// this file restates a run count or a spend figure.
 
 // ── Latency percentile data ─────────────────────────────────────────
 
@@ -103,19 +70,11 @@ export const MOCK_LATENCY_DATA: LatencyPoint[] = (() => {
 })();
 
 // ── Performance-tab overlays ────────────────────────────────────────
-// Projections of the ONE daily root (MOCK_DAILY_METRICS, plus the prior window
-// MOCK_DAILY_PRIOR_METRICS) through `./observabilitySeries` — never separately
-// seeded. The Compare overlay, the tiles' "vs last period" trends, the anomaly
-// banner and the chart annotations therefore describe the same fortnight as
-// the headline tiles and the charts they sit on.
+// The Compare overlay, the anomaly banner and the chart annotations project
+// from the world's daily series (`src/lib/demoWorld/fleetReads.ts`), the same
+// fortnight the tiles and charts show.
 
 export type { ComparePoint, CostAnomaly, ChartAnnotation };
-
-export const MOCK_COST_COMPARE: ComparePoint[] = previousSeries(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS, "cost");
-export const MOCK_EXEC_COMPARE: ComparePoint[] = previousSeries(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS, "executions");
-
-/** Days at or past 2σ above the window's mean daily cost. */
-export const MOCK_COST_ANOMALIES: CostAnomaly[] = detectCostAnomalies(MOCK_DAILY_METRICS, 2);
 
 // ── Health issues with auto-healing ─────────────────────────────────
 
@@ -391,18 +350,6 @@ export const EVENT_TYPES = [
   "alert.fired",
 ];
 
-// ── Chart annotation marks ──────────────────────────────────────────
-// Anchored to real days of the chart's x axis (days before today), so recharts
-// can place every ReferenceLine. The deploy lands on the window's cost spike
-// (MOCK_COST_ANOMALIES); the Slack outage is today's open circuit-breaker
-// (MOCK_HEALTH_ISSUES hi_2, detected minutes ago).
-
-export const MOCK_ANNOTATIONS: ChartAnnotation[] = anchorAnnotations(MOCK_DAILY_METRICS, [
-  { dayOffset: 9, label: "1k executions", type: "milestone" },
-  { dayOffset: 3, label: "v2.1 deployed", type: "deployment" },
-  { dayOffset: 0, label: "Slack outage", type: "incident" },
-]);
-
 // ── Memory actions for home page ────────────────────────────────────
 
 export interface MemoryAction {
@@ -604,63 +551,12 @@ export interface LeaderboardPersona {
   composite: number; // derived average, also exposed
   trend: LeaderboardTrend;
   delta: number; // +/- vs last period
-  /** 1-based rank per weekly window, oldest first; real plane only. */
+  /** 1-based rank per weekly window, oldest first (from `standings()`). */
   rankHistory?: (number | null)[];
 }
 
-function computeComposite(m: LeaderboardPersona["metrics"]): number {
-  const avg =
-    (m.reliability + m.cost + m.speed + m.quality + m.volume) / 5;
-  return Math.round(avg);
-}
-
-export const MOCK_LEADERBOARD: LeaderboardPersona[] = (() => {
-  const base: Omit<LeaderboardPersona, "composite">[] = [
-    {
-      id: INCIDENT.id,
-      name: INCIDENT.name,
-      color: INCIDENT.color,
-      metrics: { reliability: 95, cost: 82, speed: 78, quality: 92, volume: 88 },
-      trend: "up",
-      delta: 4,
-    },
-    {
-      id: PR_REVIEW.id,
-      name: PR_REVIEW.name,
-      color: PR_REVIEW.color,
-      metrics: { reliability: 91, cost: 88, speed: 72, quality: 94, volume: 66 },
-      trend: "up",
-      delta: 2,
-    },
-    {
-      id: SECURITY.id,
-      name: SECURITY.name,
-      color: SECURITY.color,
-      metrics: { reliability: 88, cost: 74, speed: 54, quality: 90, volume: 48 },
-      trend: "flat",
-      delta: 0,
-    },
-    {
-      id: FEEDBACK.id,
-      name: FEEDBACK.name,
-      color: FEEDBACK.color,
-      metrics: { reliability: 68, cost: 78, speed: 84, quality: 72, volume: 94 },
-      trend: "down",
-      delta: -6,
-    },
-    {
-      id: STANDUP.id,
-      name: STANDUP.name,
-      color: STANDUP.color,
-      metrics: { reliability: 42, cost: 90, speed: 96, quality: 64, volume: 82 },
-      trend: "down",
-      delta: -12,
-    },
-  ];
-  return base
-    .map((p) => ({ ...p, composite: computeComposite(p.metrics) }))
-    .sort((a, b) => b.composite - a.composite);
-})();
+// The demo leaderboard is not declared here: `standings()` ranks the world's
+// daily snapshots (`src/lib/demoWorld/fleetReads.ts`, served by `mockApi`).
 
 // ── SLA monitoring ──────────────────────────────────────────────────
 
@@ -680,68 +576,15 @@ export interface SLATarget {
   activeBreach: boolean;
 }
 
-export const MOCK_SLA_TARGETS: SLATarget[] = [
-  {
-    id: "sla_1",
-    persona: INCIDENT.name,
-    personaColor: INCIDENT.color,
-    metric: "availability",
-    target: 99.9,
-    current: 99.97,
-    unit: "%",
-    timeInSLA: 0.9987,
-    direction: "higher",
-    activeBreach: false,
-  },
-  {
-    id: "sla_2",
-    persona: PR_REVIEW.name,
-    personaColor: PR_REVIEW.color,
-    metric: "latency",
-    target: 500,
-    current: 312,
-    unit: "ms",
-    timeInSLA: 0.998,
-    direction: "lower",
-    activeBreach: false,
-  },
-  {
-    id: "sla_3",
-    persona: FEEDBACK.name,
-    personaColor: FEEDBACK.color,
-    metric: "successRate",
-    target: 98,
-    current: 96.4,
-    unit: "%",
-    timeInSLA: 0.943,
-    direction: "higher",
-    activeBreach: true,
-  },
-  {
-    id: "sla_4",
-    persona: SECURITY.name,
-    personaColor: SECURITY.color,
-    metric: "latency",
-    target: 30_000,
-    current: 34_800,
-    unit: "ms",
-    timeInSLA: 0.882,
-    direction: "lower",
-    activeBreach: true,
-  },
-  {
-    id: "sla_5",
-    persona: STANDUP.name,
-    personaColor: STANDUP.color,
-    metric: "availability",
-    target: 99.5,
-    current: 97.1,
-    unit: "%",
-    timeInSLA: 0.915,
-    direction: "higher",
-    activeBreach: true,
-  },
-];
+/**
+ * SLA objectives for the crew (the five synced agents; the other 94 have none),
+ * read through the engine the Supabase plane uses (`sli`, `breachEpisodes`) over
+ * the world's log. Not hand-typed: `current` is today's SLI, `timeInSLA` the share
+ * of the 30-day window's days in range.
+ */
+const CREW_SLA = crewSla();
+
+export const MOCK_SLA_TARGETS: SLATarget[] = CREW_SLA.targets;
 
 export interface SLABreach {
   id: string;
@@ -759,50 +602,12 @@ export interface SLABreach {
   causeKey?: string;
 }
 
-export const MOCK_SLA_BREACHES: SLABreach[] = [
-  {
-    id: "br_1",
-    persona: STANDUP.name,
-    metric: "availability",
-    startedAt: new Date(Date.now() - 45 * 60_000).toISOString(),
-    resolvedAt: null,
-    durationMinutes: 45,
-    severity: "critical",
-    summary: "Slack webhook circuit-broken; 3 retries exhausted.",
-    causeKey: "slack-circuit-break",
-  },
-  {
-    id: "br_2",
-    persona: SECURITY.name,
-    metric: "latency",
-    startedAt: new Date(Date.now() - 3 * 3600_000).toISOString(),
-    resolvedAt: null,
-    durationMinutes: 180,
-    severity: "major",
-    summary: "P95 latency sustained above 30s target.",
-    causeKey: "security-latency",
-  },
-  {
-    id: "br_3",
-    persona: FEEDBACK.name,
-    metric: "successRate",
-    startedAt: new Date(Date.now() - 6 * 3600_000).toISOString(),
-    resolvedAt: new Date(Date.now() - 4 * 3600_000).toISOString(),
-    durationMinutes: 120,
-    severity: "major",
-    summary: "Success rate fell to 94% during CSV parser regression.",
-  },
-  {
-    id: "br_4",
-    persona: INCIDENT.name,
-    metric: "latency",
-    startedAt: new Date(Date.now() - 24 * 3600_000).toISOString(),
-    resolvedAt: new Date(Date.now() - 23 * 3600_000).toISOString(),
-    durationMinutes: 60,
-    severity: "minor",
-    summary: "Upstream search-API latency spike, recovered autonomously.",
-  },
-];
+/**
+ * SLA breaches: the engine (`breachEpisodes`) over the crew's daily SLIs, each
+ * episode dated by the runs inside it (`src/lib/demoWorld/crew.ts`). A breach
+ * that a declared fault caused carries the fault's id and incident thread.
+ */
+export const MOCK_SLA_BREACHES: SLABreach[] = CREW_SLA.breaches;
 
 // ── Async feedback messages ─────────────────────────────────────────
 // Mirrors desktop sub_messages: persisted async feedback from personas
@@ -1161,10 +966,9 @@ export interface HealthDigest {
 
 export const MOCK_UNREAD_MESSAGES = 7;
 
-// (The fleet's own execution volume lives in MOCK_FLEET_EXECUTIONS, derived
-// from the observability window at the top of this file. There is deliberately
-// no second, larger "global" counter: a demo fleet that has run 47 times must
-// not also claim 12,847 runs three cards away.)
+// (The fleet's own execution volume is the world log's, folded by mockApi
+// (src/lib/demoWorld/fleetReads.ts). There is deliberately no second "global"
+// counter here: a run count three cards away must be the same fold.)
 
 // ── Fleet optimization recommendation ───────────────────────────────
 // Mirrors desktop's single-top-recommendation panel. Surfaced on /dashboard/home.
@@ -1217,11 +1021,10 @@ export const MOCK_HEALTH_DIGEST: HealthDigest = {
 
 // ── Execution heatmap (home: per-agent activity, last 7 days) ────────
 // Mirrors the desktop ExecutionHeatmap as a compact agent × day grid: one row
-// per persona, one cell per day (oldest → newest). Each COLUMN sums to exactly
-// that day's execution count in MOCK_DAILY_METRICS — the same series the home
-// traffic chart plots — so the heatmap and the chart describe one fleet rather
-// than two. Per-agent share follows MOCK_PERSONA_SPEND (the same 14-day
-// window); the paused agent has no share and stays empty.
+// per synced persona, one cell per UTC day (oldest → newest). The population
+// is the crew (the five synced agents), and each cell counts that persona's
+// runs in the world's log that day (`crewHeatmap`), so a cell and the
+// executions list scoped to that persona and day give one number.
 
 export const HEATMAP_DAYS = 7;
 
@@ -1232,53 +1035,7 @@ export interface HeatmapRow {
   days: number[];
 }
 
-/**
- * Split `total` runs across agents by `weights`, largest-remainder style, so
- * the parts always add back up to `total` (no drift between the grid and the
- * chart it is supposed to decompose).
- */
-function splitByWeight(total: number, weights: number[]): number[] {
-  const sum = weights.reduce((a, b) => a + b, 0);
-  if (sum <= 0 || total <= 0) return weights.map(() => 0);
-  const exact = weights.map((w) => (total * w) / sum);
-  const out = exact.map((v) => Math.floor(v));
-  let remainder = total - out.reduce((a, b) => a + b, 0);
-  const byFraction = exact
-    .map((v, i) => ({ i, frac: v - Math.floor(v) }))
-    .sort((a, b) => b.frac - a.frac || a.i - b.i);
-  for (const { i } of byFraction) {
-    if (remainder <= 0) break;
-    out[i] += 1;
-    remainder -= 1;
-  }
-  return out;
-}
-
-export const MOCK_EXECUTION_HEATMAP: HeatmapRow[] = (() => {
-  const rng = seededRandom(7);
-  const spendByPersona = new Map(
-    MOCK_PERSONA_SPEND.map((row) => [row.personaId, row.executionCount]),
-  );
-  // Base share of fleet volume per agent over the window.
-  const baseWeights = FLEET.map((member) => spendByPersona.get(member.id) ?? 0);
-  const rows: HeatmapRow[] = FLEET.map((member) => ({
-    persona: member.name,
-    color: member.color,
-    days: Array.from({ length: HEATMAP_DAYS }, () => 0),
-  }));
-
-  const window = MOCK_DAILY_METRICS.slice(-HEATMAP_DAYS);
-  window.forEach((day, d) => {
-    // Jitter the shares per day (deterministically) so the grid reads as real
-    // activity rather than the same column repeated seven times.
-    const weights = baseWeights.map((w) => w * (0.45 + rng()));
-    splitByWeight(day.executions, weights).forEach((count, agentIdx) => {
-      rows[agentIdx].days[d] = count;
-    });
-  });
-
-  return rows;
-})();
+export const MOCK_EXECUTION_HEATMAP: HeatmapRow[] = crewHeatmap(HEATMAP_DAYS);
 
 // ── Demo clock ──────────────────────────────────────────────────────
 // Home fixtures that describe *when* something happened or will happen carry
@@ -1421,6 +1178,7 @@ export const INCIDENT_SOURCES: IncidentSource[] = [
 
 const INCIDENT_MIN = 60_000;
 const INCIDENT_HOUR = 3_600_000;
+const CSV_REGRESSION_FROM = crewWorld().faults.find((f) => f.id === "br_3")!.from;
 
 export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
   {
@@ -1465,7 +1223,9 @@ export const MOCK_AUDIT_INCIDENTS: AuditIncident[] = [
     source: "executions",
     persona: FEEDBACK.name,
     personaColor: FEEDBACK.color,
-    detectedAt: new Date(Date.now() - 5 * INCIDENT_HOUR).toISOString(),
+    // An hour into yesterday's CSV parser regression (the crew's declared
+    // fault br_3): the same code path, a different symptom.
+    detectedAt: new Date(CSV_REGRESSION_FROM + INCIDENT_HOUR).toISOString(),
     resolvedAt: null,
     category: "resource",
     recommendation: "Profile the parser heap and release row buffers after each batch flush.",

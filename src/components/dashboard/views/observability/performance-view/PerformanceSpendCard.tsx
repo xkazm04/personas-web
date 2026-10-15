@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import { Users } from "lucide-react";
 import GlowCard from "@/components/GlowCard";
 import Deferred from "@/components/dashboard/arrival/Deferred";
+import DrillToRuns from "@/components/dashboard/drill/DrillToRuns";
+import type { MetricDrill } from "@/lib/metricDrill";
 import { fadeUp } from "@/lib/animations";
 import { BUDGET_THRESHOLD, type ObservabilityLabels } from "./performanceViewTypes";
 
@@ -20,10 +22,16 @@ export function PerformanceSpendCard({
   personaSpend,
   spendPieData,
   labels,
+  drillFor,
+  compact = false,
 }: {
   personaSpend: { personaId: string; personaName: string; personaColor: string; totalCost: number; budgetUsd?: number | null }[];
   spendPieData: { name: string; value: number; color: string }[];
   labels: ObservabilityLabels;
+  /** A row's drill to the runs behind its spend, where the scope can hold its agent. */
+  drillFor?: (personaId: string) => MetricDrill | null;
+  /** Scroll a long list (the demo fleet) instead of growing the card. */
+  compact?: boolean;
 }) {
   return (
     <GlowCard accent="purple" variants={fadeUp} className="p-5 lg:col-span-2">
@@ -38,8 +46,10 @@ export function PerformanceSpendCard({
               <SpendPieChart data={spendPieData} />
             </div>
           </Deferred>
-          <div className="mt-2 space-y-2">
-            {personaSpend.map((persona) => <PersonaSpendRow key={persona.personaId} persona={persona} />)}
+          <div className={compact ? "mt-2 max-h-72 space-y-2 overflow-y-auto pr-1" : "mt-2 space-y-2"}>
+            {personaSpend.map((persona) => (
+              <PersonaSpendRow key={persona.personaId} persona={persona} drill={drillFor?.(persona.personaId) ?? null} />
+            ))}
           </div>
         </>
       ) : (
@@ -49,12 +59,19 @@ export function PerformanceSpendCard({
   );
 }
 
-function PersonaSpendRow({ persona }: { persona: { personaName: string; personaColor: string; totalCost: number; budgetUsd?: number | null } }) {
+function PersonaSpendRow({
+  persona,
+  drill,
+}: {
+  persona: { personaName: string; personaColor: string; totalCost: number; budgetUsd?: number | null };
+  drill: MetricDrill | null;
+}) {
   return (
     <div className="flex items-center gap-2 text-sm">
       <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: persona.personaColor }} />
       <span className="flex-1 text-muted truncate">{persona.personaName}</span>
       <span className="tabular-nums text-foreground font-medium">${persona.totalCost.toFixed(2)}</span>
+      <DrillToRuns drill={drill} iconOnly className="p-0.5" />
       {persona.budgetUsd && (
         <div className="w-16">
           <div className="h-1 rounded-full bg-white/[0.06] overflow-hidden">

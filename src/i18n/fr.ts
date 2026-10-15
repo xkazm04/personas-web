@@ -1300,7 +1300,17 @@ export const fr: LocaleTranslations = {
       noFilteredCancelled: "Aucune ex\u00e9cution annul\u00e9e dans cette vue",
       filteredEmptyDesc: "D'autres ex\u00e9cutions existent mais aucune ne correspond \u00e0 ce filtre.",
       showAllExecutions: "Tout afficher",
-      outputUnavailable: "L\u2019enregistrement de cette ex\u00e9cution n\u2019est pas disponible."
+      outputUnavailable: "L\u2019enregistrement de cette ex\u00e9cution n\u2019est pas disponible.",
+      drill: {
+        showRuns: "Afficher ces ex\u00e9cutions",
+        scopeRuns: "Ex\u00e9cutions dans le p\u00e9rim\u00e8tre",
+        scopeSpend: "Co\u00fbt dans le p\u00e9rim\u00e8tre"
+      },
+      population: {
+        fleetWindow: "Flotte de d\u00e9mo : {count} agents, {days} derniers jours",
+        fleetRanked: "Flotte de d\u00e9mo : {count} agents class\u00e9s",
+        crewObjectives: "Objectifs d\u00e9finis pour {count} agents synchronis\u00e9s"
+      }
     },
     eventsPage: {
       title: "\u00c9v\u00e9nements",

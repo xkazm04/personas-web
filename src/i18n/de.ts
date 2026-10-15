@@ -1300,7 +1300,17 @@ export const de: LocaleTranslations = {
       noFilteredCancelled: "Keine abgebrochenen Ausf\u00fchrungen in dieser Ansicht",
       filteredEmptyDesc: "Es gibt andere Ausf\u00fchrungen, aber keine entspricht diesem Filter.",
       showAllExecutions: "Alle anzeigen",
-      outputUnavailable: "Der Datensatz dieser Ausf\u00fchrung ist nicht verf\u00fcgbar."
+      outputUnavailable: "Der Datensatz dieser Ausf\u00fchrung ist nicht verf\u00fcgbar.",
+      drill: {
+        showRuns: "Diese Ausf\u00fchrungen anzeigen",
+        scopeRuns: "Ausf\u00fchrungen im Bereich",
+        scopeSpend: "Kosten im Bereich"
+      },
+      population: {
+        fleetWindow: "Demo-Flotte: {count} Agenten, letzte {days} Tage",
+        fleetRanked: "Demo-Flotte: {count} Agenten im Ranking",
+        crewObjectives: "Ziele f\u00fcr {count} synchronisierte Agenten festgelegt"
+      }
     },
     eventsPage: {
       title: "Events",

@@ -3,6 +3,7 @@ import { scopeExecutions } from "@/components/dashboard/scope/scopeProjections";
 import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
 import { usePolling } from "@/hooks/usePolling";
 import { scopeHidAll } from "@/lib/dashboardScope";
+import { runTotals } from "@/lib/metricDrill";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import type { GlobalExecution } from "@/lib/types";
 
@@ -77,6 +78,9 @@ export function useExecutionsList() {
     return next;
   }, [executions]);
 
+  // What the scoped list adds up to: a metric drilled here reads its own figure back.
+  const totals = useMemo(() => runTotals(executions), [executions]);
+
   const handleCancel = useCallback(
     async (id: string) => {
       try {
@@ -93,6 +97,8 @@ export function useExecutionsList() {
     allExecutions,
     /** The runs in the scope bar's persona + window. */
     executions,
+    /** Their count and summed spend. */
+    totals,
     /** The scope emptied a list that has runs: "nothing in this window", not "no runs". */
     scopeEmpty: scopeHidAll(allExecutions, executions),
     executionsLoading,
