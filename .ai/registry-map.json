@@ -6465,7 +6465,11 @@
           "revision": 18,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:21 The classifier asserts that a partial agent is a complete FleetAgent without documenting its safety invariant, replacing a checkable narrow dependency contract with an unchecked assertion.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:7c8008f2207b1946",
+          "evaluatedRevision": 18
         }
       ],
       "governance": "governed"
