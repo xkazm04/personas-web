@@ -4135,7 +4135,11 @@
           "revision": 7,
           "changedAt": "2026-09-24",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/how-role-path/Route.tsx:70 The route stroke runs for a raw 1.6s on one shared cubic, and reduced motion sets that duration to exactly 0, so the timing is neither a named ladder step nor a near-zero rebind of the motion vocabulary.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:165125b7a54d0de3",
+          "evaluatedRevision": 7
         },
         {
           "subject": "prompt-assembly",
@@ -8115,7 +8119,11 @@
           "revision": 7,
           "changedAt": "2026-09-24",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/hooks/useAnimatedNumber.ts:10 The count-up defaults to a raw 600ms and a local easeOut cubic, so the CSS duration ladder cannot retune it and reduced motion is a per-hook snap to the final value.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:165125b7a54d0de3",
+          "evaluatedRevision": 7
         },
         {
           "subject": "test-harness",
@@ -9708,7 +9716,11 @@
           "revision": 7,
           "changedAt": "2026-09-24",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/styles/themes.css:316 Light themes invert a fixed catalog of bg-white utilities to black rgba with !important, so those surfaces follow a class list instead of a rebound role and a new white-alpha utility stays uninverted until the catalog is extended.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:165125b7a54d0de3",
+          "evaluatedRevision": 7
         }
       ],
       "governance": "governed"
