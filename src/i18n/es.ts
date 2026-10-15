@@ -1147,7 +1147,8 @@ export const es: LocaleTranslations = {
       blast: {
         impact: "Afecta a {agents} de {total} agentes \u00b7 {calls} llamadas en 14 d\u00edas",
         sla: "SLA en riesgo: {n}",
-        unmapped: "Herramientas sin asignar: {n}"
+        unmapped: "Herramientas sin asignar: {n}",
+        latestRun: "Abrir la \u00faltima ejecuci\u00f3n de {name}"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const es: LocaleTranslations = {
       noFilteredFailed: "No hay ejecuciones fallidas en esta vista",
       noFilteredCancelled: "No hay ejecuciones canceladas en esta vista",
       filteredEmptyDesc: "Existen otras ejecuciones, pero ninguna coincide con este filtro.",
-      showAllExecutions: "Mostrar todas"
+      showAllExecutions: "Mostrar todas",
+      outputUnavailable: "El registro de esta ejecuci\u00f3n no est\u00e1 disponible."
     },
     eventsPage: {
       title: "Eventos",

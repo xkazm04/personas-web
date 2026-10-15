@@ -74,7 +74,7 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 | `src/components/dashboard/views/reviews/ReviewsSplitPane.tsx` | List + detail layout; polling, escalation interval, filtering/sorting, keyboard wiring |
 | `src/components/dashboard/views/reviews/ReviewsFocusFlow.tsx` | One-card-at-a-time queue; `a`/`r`/`s`/`Esc` handling |
 | `src/components/dashboard/views/reviews/reviews-split-pane/ReviewList.tsx` · `ReviewRow.tsx` | Scrollable list + per-row render (select box, severity dot, status dot, parse-error flag) |
-| `src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx` | Detail view: content, execution id, reviewer notes editor, approve/reject actions |
+| `src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx` | Detail view: content, execution id (`ReviewExecutionRow.tsx`: an `ExecutionLink` to `/dashboard/executions?focus=<id>`, which opens that run's detail; Back returns), reviewer notes editor, approve/reject actions |
 | `src/components/dashboard/views/reviews/reviews-split-pane/ReviewsBulkToolbar.tsx` | Select-all + bulk approve/reject toolbar |
 | `src/components/dashboard/views/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx` | `ReviewUndoToast` (ledger window to UndoToast, shared with focus flow) + BulkProgressBar / BulkResultToast / ConfirmDialog |
 | `src/components/dashboard/views/reviews/reviews-split-pane/useReviewKeyboardShortcuts.ts` | `j`/`k`/`a`/`r`/`Esc` for the split-pane |

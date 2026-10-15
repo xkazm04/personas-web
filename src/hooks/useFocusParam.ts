@@ -2,12 +2,16 @@
 
 import { useEffect, useSyncExternalStore, type RefObject } from "react";
 
-import { DEMO_FOCUS_IDS, resolveFocus } from "@/lib/incidentThreads";
+import { DEMO_FOCUS_IDS, holdsId, resolveFocus } from "@/lib/incidentThreads";
+import { useExecutionStore } from "@/stores/executionStore";
+import { useReviewStore } from "@/stores/reviewStore";
 import { useStillMotion } from "./useStillMotion";
 
 /**
- * The row a `?focus=<id>` deep link names, allow-listed against the demo's
- * known row ids (the query value is untrusted input), or null.
+ * The row a `?focus=<id>` deep link names, allow-listed (the query value is
+ * untrusted input) against the demo's fixed row ids plus the rows the
+ * executions and reviews stores hold now, so a run this session created
+ * resolves too; anything else is null.
  *
  * Read through `useSyncExternalStore` with a null server snapshot instead of
  * Next's `useSearchParams`: the server and the hydrating render both see null,
@@ -17,7 +21,8 @@ import { useStillMotion } from "./useStillMotion";
  *
  * Back/forward fires `popstate`. A client navigation INTO the route may render
  * before Next writes the URL (an insertion effect); React re-reads the
- * snapshot in its post-commit check, so the focus still lands.
+ * snapshot in its post-commit check, so the focus still lands. A store id
+ * resolves once the store has loaded it (a cold link waits for the first fetch).
  */
 
 function subscribe(onChange: () => void): () => void {
@@ -30,7 +35,10 @@ const getServerSnapshot = () => null;
 
 export function useFocusParam(): string | null {
   const raw = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  return resolveFocus(raw, DEMO_FOCUS_IDS);
+  // Primitive selectors: a list refetch re-renders only when the answer flips.
+  const inExecutions = useExecutionStore((s) => holdsId(s.rawExecutions, raw));
+  const inReviews = useReviewStore((s) => holdsId(s.baseReviews, raw));
+  return resolveFocus(raw, DEMO_FOCUS_IDS, inExecutions || inReviews);
 }
 
 /** Brings the focused row into view: smooth, or instant under reduced motion. */

@@ -1147,7 +1147,8 @@ export const ko: LocaleTranslations = {
       blast: {
         impact: "\uc5d0\uc774\uc804\ud2b8 {total}\uac1c \uc911 {agents}\uac1c \uc911\ub2e8 \u00b7 14\uc77c\uac04 \ud638\ucd9c {calls}\ud68c",
         sla: "\uc704\ud5d8\ud55c SLA: {n}",
-        unmapped: "\ub9e4\ud551\ub418\uc9c0 \uc54a\uc740 \ub3c4\uad6c: {n}"
+        unmapped: "\ub9e4\ud551\ub418\uc9c0 \uc54a\uc740 \ub3c4\uad6c: {n}",
+        latestRun: "{name}\uc758 \ucd5c\uadfc \uc2e4\ud589 \uc5f4\uae30"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const ko: LocaleTranslations = {
       noFilteredFailed: "\uc774 \ubcf4\uae30\uc5d0\ub294 \uc2e4\ud328\ud55c \uc2e4\ud589\uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
       noFilteredCancelled: "\uc774 \ubcf4\uae30\uc5d0\ub294 \ucde8\uc18c\ub41c \uc2e4\ud589\uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
       filteredEmptyDesc: "\ub2e4\ub978 \uc2e4\ud589\uc774 \uc788\uc9c0\ub9cc \uc774 \ud544\ud130\uc640 \uc77c\uce58\ud558\ub294 \ud56d\ubaa9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.",
-      showAllExecutions: "\ubaa8\ub450 \ud45c\uc2dc"
+      showAllExecutions: "\ubaa8\ub450 \ud45c\uc2dc",
+      outputUnavailable: "\uc774 \uc2e4\ud589\uc758 \uae30\ub85d\uc744 \uc0ac\uc6a9\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4."
     },
     eventsPage: {
       title: "\uc774\ubca4\ud2b8",

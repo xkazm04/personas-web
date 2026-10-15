@@ -1147,7 +1147,8 @@ export const vi: LocaleTranslations = {
       blast: {
         impact: "\u1ea2nh h\u01b0\u1edfng {agents}/{total} agent \u00b7 {calls} l\u1ea7n g\u1ecdi trong 14 ng\u00e0y",
         sla: "SLA c\u00f3 nguy c\u01a1: {n}",
-        unmapped: "C\u00f4ng c\u1ee5 ch\u01b0a \u00e1nh x\u1ea1: {n}"
+        unmapped: "C\u00f4ng c\u1ee5 ch\u01b0a \u00e1nh x\u1ea1: {n}",
+        latestRun: "M\u1edf l\u01b0\u1ee3t th\u1ef1c thi g\u1ea7n nh\u1ea5t c\u1ee7a {name}"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const vi: LocaleTranslations = {
       noFilteredFailed: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y th\u1ea5t b\u1ea1i trong khung nh\u00ecn n\u00e0y",
       noFilteredCancelled: "Kh\u00f4ng c\u00f3 l\u01b0\u1ee3t ch\u1ea1y \u0111\u00e3 h\u1ee7y trong khung nh\u00ecn n\u00e0y",
       filteredEmptyDesc: "C\u00f3 c\u00e1c l\u01b0\u1ee3t ch\u1ea1y kh\u00e1c nh\u01b0ng kh\u00f4ng kh\u1edbp v\u1edbi b\u1ed9 l\u1ecdc n\u00e0y.",
-      showAllExecutions: "Hi\u1ec3n th\u1ecb t\u1ea5t c\u1ea3"
+      showAllExecutions: "Hi\u1ec3n th\u1ecb t\u1ea5t c\u1ea3",
+      outputUnavailable: "B\u1ea3n ghi c\u1ee7a l\u01b0\u1ee3t th\u1ef1c thi n\u00e0y kh\u00f4ng kh\u1ea3 d\u1ee5ng."
     },
     eventsPage: {
       title: "S\u1ef1 ki\u1ec7n",

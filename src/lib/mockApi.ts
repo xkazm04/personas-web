@@ -168,7 +168,10 @@ export const mockApi: ApiClient = {
 
   getExecution: async (id: string, offset?: number): Promise<ExecutionDetail> => {
     await delay(200);
-    return getMockExecutionDetail(id, offset);
+    const detail = getMockExecutionDetail(id, offset);
+    // The real planes' contract for an id they do not hold (supabaseApi.getExecution).
+    if ("unavailable" in detail) throw new ApiError(404, "Execution not found");
+    return detail;
   },
 
   // The demo is a command plane like the live mirror (PHASE2-SPEC.md 6.3):
@@ -460,9 +463,21 @@ export async function getSystemHealth(): Promise<{
   return systemHealthSnapshot();
 }
 
+/** Each persona's most recent run (by creation time) in the session's executions. */
+function latestRunByPersona(): Record<string, string> {
+  const latest: Record<string, { id: string; at: number }> = {};
+  for (const e of MOCK_EXECUTIONS) {
+    const at = Date.parse(e.createdAt);
+    const held = latest[e.personaId];
+    if (!held || at > held.at) latest[e.personaId] = { id: e.id, at };
+  }
+  return Object.fromEntries(Object.entries(latest).map(([personaId, run]) => [personaId, run.id]));
+}
+
 /**
  * Inputs for the System Health blast-radius panel: who calls which tools, the
- * SLA breaches, and the fleet size. Demo-only standalone fetcher.
+ * SLA breaches, the fleet size, and each agent's latest run (its chip opens
+ * it). Demo-only standalone fetcher.
  */
 export async function getBlastRadiusInputs() {
   await delay(300);
@@ -496,6 +511,7 @@ function blastRadiusInputsSnapshot() {
     usage: MOCK_TOOL_USAGE_BY_PERSONA,
     breaches: currentDemoThreads().slaBreaches.map((b) => ({ id: b.id, persona: b.persona, resolvedAt: b.resolvedAt })),
     totalPersonas: MOCK_PERSONAS.length,
+    latestRunByPersona: latestRunByPersona(),
   };
 }
 

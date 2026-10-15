@@ -228,7 +228,9 @@ export interface KnowledgePattern {
 export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
   {
     id: "kp_1",
-    lastExecutionId: "e-0001-mock",
+    // Provenance cites a run its own persona owns, whose content fits the
+    // pattern (pinned by knowledgeProvenance.test.ts): INC-891's triage.
+    lastExecutionId: "e-0002-mock",
     personaName: INCIDENT.name,
     knowledgeType: "tool_sequence",
     patternKey: "web_search → summarize → email",
@@ -237,26 +239,28 @@ export const MOCK_KNOWLEDGE_PATTERNS: KnowledgePattern[] = [
     confidence: 0.97,
     avgCostUsd: 0.023,
     avgDurationMs: 4200,
-    description: "Optimal research pipeline: search web first, then summarize findings, and deliver via email. 97% success rate with average cost $0.023.",
+    description: "Optimal triage pipeline: search runbooks and the web first, then summarize findings, and deliver via email. 97% success rate with average cost $0.023.",
     lastSeen: new Date(Date.now() - 1800_000).toISOString(),
   },
   {
     id: "kp_2",
-    lastExecutionId: "e-0002-mock",
+    // PR #339's run, which failed on a 148k-token diff.
+    lastExecutionId: "e-0004-mock",
     personaName: PR_REVIEW.name,
     knowledgeType: "failure_pattern",
-    patternKey: "large_diff_timeout",
+    patternKey: "large_diff_context_overflow",
     successCount: 0,
     failureCount: 12,
     confidence: 0.85,
-    avgCostUsd: 0.089,
-    avgDurationMs: 120_000,
-    description: "Diffs exceeding 500 lines consistently cause timeout failures. Recommend splitting into smaller review chunks.",
+    avgCostUsd: 0.002,
+    avgDurationMs: 3_400,
+    description: "Diffs exceeding 500 lines overflow the context window and fail before review starts (the latest was 148k tokens). Recommend splitting into smaller review chunks.",
     lastSeen: new Date(Date.now() - 7200_000).toISOString(),
   },
   {
     id: "kp_3",
-    lastExecutionId: "e-0003-mock",
+    // The weekly Zendesk export it parses.
+    lastExecutionId: "e-0005-mock",
     personaName: FEEDBACK.name,
     knowledgeType: "cost_quality",
     patternKey: "haiku_vs_sonnet_csv",

@@ -1147,7 +1147,8 @@ export const id: LocaleTranslations = {
       blast: {
         impact: "Melumpuhkan {agents} dari {total} agen \u00b7 {calls} panggilan per 14 hari",
         sla: "SLA berisiko: {n}",
-        unmapped: "Alat tidak terpetakan: {n}"
+        unmapped: "Alat tidak terpetakan: {n}",
+        latestRun: "Buka eksekusi terbaru {name}"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const id: LocaleTranslations = {
       noFilteredFailed: "Tidak ada eksekusi gagal dalam tampilan ini",
       noFilteredCancelled: "Tidak ada eksekusi dibatalkan dalam tampilan ini",
       filteredEmptyDesc: "Ada eksekusi lain, tetapi tidak ada yang cocok dengan filter ini.",
-      showAllExecutions: "Tampilkan semua"
+      showAllExecutions: "Tampilkan semua",
+      outputUnavailable: "Catatan eksekusi ini tidak tersedia."
     },
     eventsPage: {
       title: "Event",

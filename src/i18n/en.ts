@@ -889,6 +889,8 @@
       impact: string;
       sla: string;
       unmapped: string;
+      /** Accessible name of an affected agent's chip, which opens its latest run. */
+      latestRun: string;
     };
   };
   messagesPage: {
@@ -1033,6 +1035,8 @@
     noFilteredCancelled: string;
     filteredEmptyDesc: string;
     showAllExecutions: string;
+    /** The run detail when the plane holds no record of that run (never a status). */
+    outputUnavailable: string;
   };
   eventsPage: {
     title: string;
@@ -3015,6 +3019,7 @@ export const en: CoreTranslations = {
       impact: 'Takes out {agents} of {total} agents · {calls} calls per 14 days',
       sla: 'SLAs at risk: {n}',
       unmapped: 'Unmapped tools: {n}',
+      latestRun: 'Open the latest run of {name}',
     },
   },
   messagesPage: {
@@ -3159,6 +3164,7 @@ export const en: CoreTranslations = {
     noFilteredCancelled: 'No cancelled runs in this view',
     filteredEmptyDesc: 'Other runs exist but none match this filter.',
     showAllExecutions: 'Show all',
+    outputUnavailable: "This run's record is unavailable.",
   },
   eventsPage: {
     title: 'Events',

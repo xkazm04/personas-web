@@ -138,9 +138,18 @@ export function linksToMembers(
   return links;
 }
 
-/** `?focus=` is untrusted input: only an id we know passes through. */
-export function resolveFocus(raw: string | null, known: ReadonlySet<string>): string | null {
-  return raw !== null && known.has(raw) ? raw : null;
+/**
+ * `?focus=` is untrusted input: only an id we know passes through. Known is
+ * the fixed demo rows, or `held`: the id is a row a store holds right now (a
+ * run this session created, `exec-<commandId>`, is in no fixed list).
+ */
+export function resolveFocus(raw: string | null, known: ReadonlySet<string>, held = false): string | null {
+  return raw !== null && (held || known.has(raw)) ? raw : null;
+}
+
+/** Whether `rows` holds a row with this id (an exact match, never a prefix). */
+export function holdsId(rows: readonly { id: string }[], id: string | null): boolean {
+  return id !== null && rows.some((row) => row.id === id);
 }
 
 export function initialBreachLogState(

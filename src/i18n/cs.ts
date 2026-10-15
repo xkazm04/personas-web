@@ -1147,7 +1147,8 @@ export const cs: LocaleTranslations = {
       blast: {
         impact: "Vy\u0159ad\u00ed {agents} z {total} agent\u016f \u00b7 {calls} vol\u00e1n\u00ed za 14 dn\u00ed",
         sla: "SLA v ohro\u017een\u00ed: {n}",
-        unmapped: "Nep\u0159i\u0159azen\u00e9 n\u00e1stroje: {n}"
+        unmapped: "Nep\u0159i\u0159azen\u00e9 n\u00e1stroje: {n}",
+        latestRun: "Otev\u0159\u00edt posledn\u00ed spu\u0161t\u011bn\u00ed agenta {name}"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const cs: LocaleTranslations = {
       noFilteredFailed: "V tomto zobrazen\u00ed nejsou \u017e\u00e1dn\u00e9 ne\u00fasp\u011b\u0161n\u00e9 b\u011bhy",
       noFilteredCancelled: "V tomto zobrazen\u00ed nejsou \u017e\u00e1dn\u00e9 zru\u0161en\u00e9 b\u011bhy",
       filteredEmptyDesc: "Existuj\u00ed dal\u0161\u00ed b\u011bhy, ale \u017e\u00e1dn\u00fd neodpov\u00edd\u00e1 tomuto filtru.",
-      showAllExecutions: "Zobrazit v\u0161e"
+      showAllExecutions: "Zobrazit v\u0161e",
+      outputUnavailable: "Z\u00e1znam tohoto spu\u0161t\u011bn\u00ed nen\u00ed k dispozici."
     },
     eventsPage: {
       title: "Ud\u00e1losti",

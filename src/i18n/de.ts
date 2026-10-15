@@ -1147,7 +1147,8 @@ export const de: LocaleTranslations = {
       blast: {
         impact: "Legt {agents} von {total} Agents lahm \u00b7 {calls} Aufrufe in 14 Tagen",
         sla: "Gef\u00e4hrdete SLAs: {n}",
-        unmapped: "Nicht zugeordnete Tools: {n}"
+        unmapped: "Nicht zugeordnete Tools: {n}",
+        latestRun: "Letzte Ausf\u00fchrung von {name} \u00f6ffnen"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const de: LocaleTranslations = {
       noFilteredFailed: "Keine fehlgeschlagenen Ausf\u00fchrungen in dieser Ansicht",
       noFilteredCancelled: "Keine abgebrochenen Ausf\u00fchrungen in dieser Ansicht",
       filteredEmptyDesc: "Es gibt andere Ausf\u00fchrungen, aber keine entspricht diesem Filter.",
-      showAllExecutions: "Alle anzeigen"
+      showAllExecutions: "Alle anzeigen",
+      outputUnavailable: "Der Datensatz dieser Ausf\u00fchrung ist nicht verf\u00fcgbar."
     },
     eventsPage: {
       title: "Events",

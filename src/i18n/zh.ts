@@ -1147,7 +1147,8 @@ export const zh: LocaleTranslations = {
       blast: {
         impact: "\u5f71\u54cd {total} \u4e2a\u4ee3\u7406\u4e2d\u7684 {agents} \u4e2a \u00b7 14 \u5929\u5185 {calls} \u6b21\u8c03\u7528",
         sla: "\u6709\u98ce\u9669\u7684 SLA\uff1a{n}",
-        unmapped: "\u672a\u6620\u5c04\u7684\u5de5\u5177\uff1a{n}"
+        unmapped: "\u672a\u6620\u5c04\u7684\u5de5\u5177\uff1a{n}",
+        latestRun: "\u6253\u5f00 {name} \u7684\u6700\u8fd1\u4e00\u6b21\u6267\u884c"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const zh: LocaleTranslations = {
       noFilteredFailed: "\u6b64\u89c6\u56fe\u4e2d\u6ca1\u6709\u5931\u8d25\u7684\u6267\u884c",
       noFilteredCancelled: "\u6b64\u89c6\u56fe\u4e2d\u6ca1\u6709\u5df2\u53d6\u6d88\u7684\u6267\u884c",
       filteredEmptyDesc: "\u5b58\u5728\u5176\u4ed6\u6267\u884c\uff0c\u4f46\u6ca1\u6709\u7b26\u5408\u6b64\u7b5b\u9009\u6761\u4ef6\u7684\u3002",
-      showAllExecutions: "\u663e\u793a\u5168\u90e8"
+      showAllExecutions: "\u663e\u793a\u5168\u90e8",
+      outputUnavailable: "\u6b64\u6b21\u6267\u884c\u7684\u8bb0\u5f55\u4e0d\u53ef\u7528\u3002"
     },
     eventsPage: {
       title: "\u4e8b\u4ef6",

@@ -875,13 +875,21 @@ const MOCK_OUTPUT_LINES = [
   "- Code quality: Excellent",
 ];
 
-export function getMockExecutionDetail(executionId: string, offset = 0): ExecutionDetail {
+/** No run with this id in the demo's fixtures: there is no status to report. */
+export interface MockExecutionUnavailable {
+  executionId: string;
+  unavailable: true;
+}
+
+export function getMockExecutionDetail(executionId: string, offset = 0): ExecutionDetail | MockExecutionUnavailable {
   // Simulate progressive output for the "running" execution. The caller (the
   // polling hook) owns the cursor and advances it by output.length, matching the
   // stateless real/supabase getExecution(id, offset) contract — so two concurrent
   // pollers (or a StrictMode double-invoke) no longer fight over a shared global.
   const exec = MOCK_EXECUTIONS.find((e) => e.id === executionId);
-  const isRunning = exec?.status === "running";
+  // An unknown id is unavailable, never a run that "completed" (it used to be).
+  if (!exec) return { executionId, unavailable: true };
+  const isRunning = exec.status === "running";
 
   if (isRunning) {
     const start = Math.max(0, offset);
@@ -901,11 +909,11 @@ export function getMockExecutionDetail(executionId: string, offset = 0): Executi
 
   return {
     executionId,
-    status: exec?.status ?? "completed",
+    status: exec.status,
     outputLines: 0,
-    output: exec?.outputData ? exec.outputData.split("\n") : [],
-    durationMs: exec?.durationMs ?? undefined,
-    totalCostUsd: exec?.costUsd ?? undefined,
+    output: exec.outputData ? exec.outputData.split("\n") : [],
+    durationMs: exec.durationMs ?? undefined,
+    totalCostUsd: exec.costUsd ?? undefined,
   };
 }
 

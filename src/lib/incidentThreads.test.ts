@@ -83,6 +83,21 @@ describe("resolveFocus", () => {
     expect(resolveFocus("__proto__", DEMO_FOCUS_IDS)).toBeNull();
     expect(resolveFocus(null, DEMO_FOCUS_IDS)).toBeNull();
   });
+
+  it("admits an id a store holds now (a session-created run) and still rejects junk", async () => {
+    const { resolveFocus, holdsId, DEMO_FOCUS_IDS } = await threads();
+    const executions = [{ id: "e-0004-mock" }, { id: "exec-cmd-42" }];
+    const reviews = [{ id: "ev-0004-mock" }];
+    const resolve = (raw: string | null) =>
+      resolveFocus(raw, DEMO_FOCUS_IDS, holdsId(executions, raw) || holdsId(reviews, raw));
+    expect(resolve("exec-cmd-42")).toBe("exec-cmd-42");
+    expect(resolve("ev-0004-mock")).toBe("ev-0004-mock");
+    expect(resolve("br_1")).toBe("br_1");
+    expect(resolve("nope")).toBeNull();
+    expect(resolve("exec-cmd")).toBeNull(); // a prefix is not a match
+    expect(resolve("__proto__")).toBeNull();
+    expect(resolve(null)).toBeNull();
+  });
 });
 
 describe("initialBreachLogState", () => {

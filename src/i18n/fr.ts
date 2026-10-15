@@ -1147,7 +1147,8 @@ export const fr: LocaleTranslations = {
       blast: {
         impact: "Affecte {agents} agents sur {total} \u00b7 {calls} appels en 14 jours",
         sla: "SLA \u00e0 risque\u00a0: {n}",
-        unmapped: "Outils non associ\u00e9s\u00a0: {n}"
+        unmapped: "Outils non associ\u00e9s\u00a0: {n}",
+        latestRun: "Ouvrir la derni\u00e8re ex\u00e9cution de {name}"
       }
     },
     messagesPage: {
@@ -1291,7 +1292,8 @@ export const fr: LocaleTranslations = {
       noFilteredFailed: "Aucune ex\u00e9cution \u00e9chou\u00e9e dans cette vue",
       noFilteredCancelled: "Aucune ex\u00e9cution annul\u00e9e dans cette vue",
       filteredEmptyDesc: "D'autres ex\u00e9cutions existent mais aucune ne correspond \u00e0 ce filtre.",
-      showAllExecutions: "Tout afficher"
+      showAllExecutions: "Tout afficher",
+      outputUnavailable: "L\u2019enregistrement de cette ex\u00e9cution n\u2019est pas disponible."
     },
     eventsPage: {
       title: "\u00c9v\u00e9nements",
