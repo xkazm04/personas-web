@@ -3410,6 +3410,74 @@
           "evidence": "src/components/sections/how-role-path/Route.tsx:46 The route eyebrow composes size and a literal tracking value. It does not use the EYEBROW recipe (text-xs, tracking 0.14em)."
         }
       ]
+    },
+    "Product Documentation (Guide)/Guide Pages & Navigation/docs-content-model": {
+      "context": "Guide Pages & Navigation",
+      "subject": "docs-content-model",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:04:20.622Z",
+      "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+      "techniques": [
+        {
+          "technique": "draft-visibility-gating",
+          "verdict": "deviation",
+          "evidence": "src/app/guide/layout.tsx:11 TOPIC_FLOOR derives from unfiltered GUIDE_TOPICS.length without calling isTopicVisible, leaking draft counts into layout metadata."
+        },
+        {
+          "technique": "derived-navigation-projection",
+          "verdict": "deviation",
+          "evidence": "src/app/guide/[category]/[topic]/page.tsx:98 Prev/next sequence walks topics in implicit source array declaration order because GuideTopic lacks a declared position ordering field."
+        },
+        {
+          "technique": "product-location-mapping",
+          "verdict": "conformant",
+          "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:148 TopicView renders the mapped desktop product location badge from TOPIC_MODULE_MAP for the current topic."
+        },
+        {
+          "technique": "catalog-referential-invariants",
+          "verdict": "conformant",
+          "evidence": "src/app/guide/[category]/[topic]/page.tsx:48 Topic page dynamically imports category content modules lazily per category rather than eagerly bundling the markdown corpus."
+        }
+      ],
+      "registryProposal": "Next.js opengraph-image.tsx routes should be explicitly enumerated in draft-visibility-gating as direct-address metadata consumers that bypass page.tsx and notFound() guards."
+    },
+    "Product Documentation (Guide)/Guide Data, Content & Search Index/docs-content-model": {
+      "context": "Guide Data, Content & Search Index",
+      "subject": "docs-content-model",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:04:20.622Z",
+      "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+      "techniques": [
+        {
+          "technique": "catalog-referential-invariants",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/categories.ts:3 GUIDE_CATEGORIES contains no self-evaluating load-time referential assertions and categories lack introductory body modules."
+        },
+        {
+          "technique": "per-topic-freshness-metadata",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/types.ts:41 Documentation acknowledges contentReviewedAt dates are backfilled from git history rather than earned human review dates."
+        },
+        {
+          "technique": "product-location-mapping",
+          "verdict": "conformant",
+          "evidence": "src/data/guide/desktop-modules.ts:6 Desktop module registry explicitly declares external source-of-truth registry file paths in the desktop repository."
+        },
+        {
+          "technique": "draft-visibility-gating",
+          "verdict": "conformant",
+          "evidence": "src/lib/guide-search.ts:96 Search index walk gates topic matches through isTopicVisible to prevent surfacing unreleased draft topics."
+        },
+        {
+          "technique": "derived-navigation-projection",
+          "verdict": "conformant",
+          "evidence": "src/data/guide/content/index.ts:13 GUIDE_CONTENT re-exports category content blocks into a single derived map used by lazy full-text body search indexing."
+        }
+      ]
     }
   }
 }

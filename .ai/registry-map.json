@@ -3665,7 +3665,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/data/guide/categories.ts:3 The guide category catalog defines category metadata without introductory body modules and lacks self-contained load-time referential assertions.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:95cdaebc076df84d",
+          "evaluatedRevision": 2
         },
         {
           "subject": "index-free-random-access",
@@ -3970,7 +3974,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/guide/layout.tsx:11 Layout metadata calculates the topic count floor from raw GUIDE_TOPICS length without applying isTopicVisible, leaking draft topics into the published description count.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:95cdaebc076df84d",
+          "evaluatedRevision": 2
         },
         {
           "subject": "repository-landing-document",
