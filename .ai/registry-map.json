@@ -2020,7 +2020,11 @@
           "revision": 9,
           "changedAt": "2026-09-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/design-blueprint/index.tsx:80 The context renders an interactive SVG blueprint, and searches for failover and finish_reason found no context-directory matches establishing a multi-upstream request plane.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:f268193750c0a517",
+          "evaluatedRevision": 9
         },
         {
           "subject": "eval-harness",
@@ -6276,7 +6280,11 @@
           "revision": 9,
           "changedAt": "2026-09-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:22 The context manages signed persona commands and event subscriptions, and searches for failover and finish_reason found no context-directory matches indicating a multi-provider gateway execution path.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:f268193750c0a517",
+          "evaluatedRevision": 9
         }
       ],
       "governance": "governed"
@@ -7383,7 +7391,11 @@
           "revision": 9,
           "changedAt": "2026-09-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:22 The stream route relays one configured orchestrator, while searches found upstream references but no failover or finish_reason matches in the context directories, placing it within the standard's single-origin boundary.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:f268193750c0a517",
+          "evaluatedRevision": 9
         },
         {
           "subject": "streaming-output",
@@ -8429,7 +8441,11 @@
           "revision": 9,
           "changedAt": "2026-09-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/layout.tsx:15 The context implements the dashboard application shell and display state, and searches for failover and finish_reason found no context-directory matches establishing a multi-upstream gateway.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:f268193750c0a517",
+          "evaluatedRevision": 9
         },
         {
           "subject": "test-harness",

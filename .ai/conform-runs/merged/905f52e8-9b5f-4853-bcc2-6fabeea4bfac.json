@@ -1,0 +1,381 @@
+{
+ "schema": "conform-run/1",
+ "worker": "905f52e8-9b5f-4853-bcc2-6fabeea4bfac",
+ "subject": "multi-provider-gateway-plane",
+ "evaluatedAt": "2026-10-15T04:29:11.400892+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Memory Layers & Multi-Provider AI",
+   "subject": "multi-provider-gateway-plane",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/design-blueprint/index.tsx:80 The context renders an interactive SVG blueprint, and searches for failover and finish_reason found no context-directory matches establishing a multi-upstream request plane.",
+   "techniques": [
+    {
+     "technique": "adapter-direction-asymmetry",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/Band.tsx:39 The band renders sentence UI; it defines no upstream adapter interface."
+    },
+    {
+     "technique": "caller-scoped-normalization-strictness",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/shared/Sentence.tsx:14 Text segmentation supports the illustration, without translating upstream responses."
+    },
+    {
+     "technique": "exclusive-authorship-of-a-measured-decision",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/index.tsx:48 Visitor answers determine drawing state; no measured candidate selector is present."
+    },
+    {
+     "technique": "join-breadth-follows-the-wrong-match-cost",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/shared/DecisionText.tsx:17 The split formats decision text; no upstream catalog join occurs."
+    },
+    {
+     "technique": "named-members-over-a-uniform-collection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/geometry.ts:22 These members position illustrated tool marks, without collecting upstream inventories."
+    },
+    {
+     "technique": "one-typed-carrier-for-echoed-state",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/Callout.tsx:108 Revisions pass local option indices; no upstream continuation state crosses a client round trip."
+    },
+    {
+     "technique": "per-provider-stream-framing",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/TestRun.tsx:79 The run uses animation keyframes, without consuming upstream byte streams."
+    },
+    {
+     "technique": "policy-verdict-in-the-status-space",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/Band.tsx:74 Answers invoke UI callbacks; no status-matching failover consumer exists."
+    },
+    {
+     "technique": "router-versus-candidate-failure",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/Parts.tsx:40 Parts consume drawing state; no candidate execution loop requires failure attribution."
+    },
+    {
+     "technique": "strategy-tree-with-inherited-policy",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/paths.ts:24 The structure stores SVG paths by drawing dimension, without routing strategies."
+    },
+    {
+     "technique": "upstream-identity-before-inventory",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/shared/DesignIntro.tsx:41 The introduction launches a product tour; it performs no endpoint discovery or inventory import."
+    }
+   ],
+   "absenceTerms": [
+    "failover",
+    "finish_reason"
+   ]
+  },
+  {
+   "context": "Event Bus & Stream Monitoring",
+   "subject": "multi-provider-gateway-plane",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/events/stream/route.ts:22 The stream route relays one configured orchestrator, while searches found upstream references but no failover or finish_reason matches in the context directories, placing it within the standard's single-origin boundary.",
+   "techniques": [
+    {
+     "technique": "adapter-direction-asymmetry",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:132 The proxy forwards received bytes without a roster of dialect adapters."
+    },
+    {
+     "technique": "caller-scoped-normalization-strictness",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:149 The endpoint returns its relayed event stream without heterogeneous response normalization."
+    },
+    {
+     "technique": "exclusive-authorship-of-a-measured-decision",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/events/index.tsx:47 Test Flow publishes a bus event; it does not evaluate upstream selection policies."
+    },
+    {
+     "technique": "join-breadth-follows-the-wrong-match-cost",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventBusVisualization.tsx:34 Source records become visual nodes directly, without matching upstream artifact names."
+    },
+    {
+     "technique": "named-members-over-a-uniform-collection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventBusStats.tsx:20 Metrics aggregate the event log, without probing independent upstream inventories."
+    },
+    {
+     "technique": "one-typed-carrier-for-echoed-state",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventsListPanel.tsx:32 The application retains event and ledger state locally; no provider token must survive an opaque client round trip."
+    },
+    {
+     "technique": "per-provider-stream-framing",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:46 There is one configured upstream stream endpoint, the technique's explicit single-upstream exclusion."
+    },
+    {
+     "technique": "policy-verdict-in-the-status-space",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:35 This gate authenticates the caller; no operator-configured candidate loop consumes content-policy verdicts."
+    },
+    {
+     "technique": "router-versus-candidate-failure",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:25 Configuration failure returns immediately; no remaining candidates can be swept."
+    },
+    {
+     "technique": "strategy-tree-with-inherited-policy",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventSwimlane.tsx:27 The collection organizes persona visualization lanes, without execution-policy subtrees."
+    },
+    {
+     "technique": "upstream-identity-before-inventory",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:39 The target is explicitly configured; shared-protocol endpoint discovery and inventory import are absent."
+    }
+   ],
+   "absenceTerms": [
+    "failover",
+    "finish_reason"
+   ]
+  },
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "multi-provider-gateway-plane",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "scripts/gen-command-envelope-fixture.mjs:22 The context manages signed persona commands and event subscriptions, and searches for failover and finish_reason found no context-directory matches indicating a multi-provider gateway execution path.",
+   "techniques": [
+    {
+     "technique": "adapter-direction-asymmetry",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/subscriptions-panel/CreateSubscriptionForm.tsx:33 The form creates an event subscription through an application operation, without designing upstream adapters."
+    },
+    {
+     "technique": "caller-scoped-normalization-strictness",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/ExecuteToast.tsx:20 This is a presentation status for execution feedback, without upstream response normalization."
+    },
+    {
+     "technique": "exclusive-authorship-of-a-measured-decision",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/commands/commandReducer.test.ts:145 The test establishes command-display authority; it does not measure candidate-selection outcomes."
+    },
+    {
+     "technique": "join-breadth-follows-the-wrong-match-cost",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:68 Subscriptions join personas by their shared identifier; no independently named upstream catalog is involved."
+    },
+    {
+     "technique": "named-members-over-a-uniform-collection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:22 The panel reads one application subscription store, without heterogeneous inventory contributors."
+    },
+    {
+     "technique": "one-typed-carrier-for-echoed-state",
+     "verdict": "not-applicable",
+     "evidence": "fixtures/command-envelope-v1.json:2 The signature authenticates a remote command; it is not provider state echoed through a stateless gateway."
+    },
+    {
+     "technique": "per-provider-stream-framing",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 This panel displays fixture-backed memory suggestions without consuming provider streams."
+    },
+    {
+     "technique": "policy-verdict-in-the-status-space",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/commands/commandReducer.test.ts:42 Command outcomes carry structured status and reasons directly; no status-integer candidate policy consumer is present."
+    },
+    {
+     "technique": "router-versus-candidate-failure",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/subscriptions-panel/SubscriptionCard.tsx:30 The card issues one subscription update, without a fallback candidate loop."
+    },
+    {
+     "technique": "strategy-tree-with-inherited-policy",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/subscriptions-panel/subscriptionTypes.ts:9 These values filter displayed subscriptions; they define no routing-policy scopes."
+    },
+    {
+     "technique": "upstream-identity-before-inventory",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/PersonaAvatar.tsx:24 Avatar defaults are cosmetic; the component performs no implementation-identity probe."
+    }
+   ],
+   "absenceTerms": [
+    "failover",
+    "finish_reason"
+   ]
+  },
+  {
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "subject": "multi-provider-gateway-plane",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/dashboard/layout.tsx:15 The context implements the dashboard application shell and display state, and searches for failover and finish_reason found no context-directory matches establishing a multi-upstream gateway.",
+   "techniques": [
+    {
+     "technique": "adapter-direction-asymmetry",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardNavbar.tsx:28 The navbar chooses display text from account metadata, without translating upstream request dialects."
+    },
+    {
+     "technique": "caller-scoped-normalization-strictness",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardErrorBanner.tsx:9 The component presents application fetch failures, without publishing normalized provider responses."
+    },
+    {
+     "technique": "exclusive-authorship-of-a-measured-decision",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/FleetOptimizationCard.tsx:63 The threshold controls recommendation visibility; the card dispatches no measured selection decision."
+    },
+    {
+     "technique": "join-breadth-follows-the-wrong-match-cost",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardScopeBar.tsx:54 The selector resolves a persona by exact application ID, without joining upstream naming schemes."
+    },
+    {
+     "technique": "named-members-over-a-uniform-collection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardNavigation.tsx:123 Navigation composes UI members; it aggregates no upstream inventories."
+    },
+    {
+     "technique": "one-typed-carrier-for-echoed-state",
+     "verdict": "not-applicable",
+     "evidence": "src/app/dashboard/layout.tsx:36 The shell mounts application synchronization, without returning provider continuation state to external clients."
+    },
+    {
+     "technique": "per-provider-stream-framing",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/ConnectionStatusIndicator.tsx:40 The indicator consumes connection state and does not frame upstream bytes."
+    },
+    {
+     "technique": "policy-verdict-in-the-status-space",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardErrorBoundary.tsx:110 Retry exhaustion controls render-error UI, without a status-integer failover policy."
+    },
+    {
+     "technique": "router-versus-candidate-failure",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardErrorBoundary.tsx:68 The boundary reports React rendering errors; no upstream candidate loop consumes them."
+    },
+    {
+     "technique": "strategy-tree-with-inherited-policy",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardNavigation.tsx:75 The hierarchy organizes navigation links, without inherited request execution policies."
+    },
+    {
+     "technique": "upstream-identity-before-inventory",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DesktopSidebar.tsx:135 The sidebar displays supplied health data; it performs no shared-protocol implementation discovery."
+    }
+   ],
+   "absenceTerms": [
+    "failover",
+    "finish_reason"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-15T04:29:11.400892+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "multi-provider-gateway-plane"
+   ],
+   "techniques": [
+    "adapter-direction-asymmetry",
+    "caller-scoped-normalization-strictness",
+    "exclusive-authorship-of-a-measured-decision",
+    "join-breadth-follows-the-wrong-match-cost",
+    "named-members-over-a-uniform-collection",
+    "one-typed-carrier-for-echoed-state",
+    "per-provider-stream-framing",
+    "policy-verdict-in-the-status-space",
+    "router-versus-candidate-failure",
+    "strategy-tree-with-inherited-policy",
+    "upstream-identity-before-inventory"
+   ],
+   "deviations": 0,
+   "context": "Memory Layers & Multi-Provider AI",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T04:29:11.400892+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "multi-provider-gateway-plane"
+   ],
+   "techniques": [
+    "adapter-direction-asymmetry",
+    "caller-scoped-normalization-strictness",
+    "exclusive-authorship-of-a-measured-decision",
+    "join-breadth-follows-the-wrong-match-cost",
+    "named-members-over-a-uniform-collection",
+    "one-typed-carrier-for-echoed-state",
+    "per-provider-stream-framing",
+    "policy-verdict-in-the-status-space",
+    "router-versus-candidate-failure",
+    "strategy-tree-with-inherited-policy",
+    "upstream-identity-before-inventory"
+   ],
+   "deviations": 0,
+   "context": "Event Bus & Stream Monitoring",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T04:29:11.400892+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "multi-provider-gateway-plane"
+   ],
+   "techniques": [
+    "adapter-direction-asymmetry",
+    "caller-scoped-normalization-strictness",
+    "exclusive-authorship-of-a-measured-decision",
+    "join-breadth-follows-the-wrong-match-cost",
+    "named-members-over-a-uniform-collection",
+    "one-typed-carrier-for-echoed-state",
+    "per-provider-stream-framing",
+    "policy-verdict-in-the-status-space",
+    "router-versus-candidate-failure",
+    "strategy-tree-with-inherited-policy",
+    "upstream-identity-before-inventory"
+   ],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-15T04:29:11.400892+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "multi-provider-gateway-plane"
+   ],
+   "techniques": [
+    "adapter-direction-asymmetry",
+    "caller-scoped-normalization-strictness",
+    "exclusive-authorship-of-a-measured-decision",
+    "join-breadth-follows-the-wrong-match-cost",
+    "named-members-over-a-uniform-collection",
+    "one-typed-carrier-for-echoed-state",
+    "per-provider-stream-framing",
+    "policy-verdict-in-the-status-space",
+    "router-versus-candidate-failure",
+    "strategy-tree-with-inherited-policy",
+    "upstream-identity-before-inventory"
+   ],
+   "deviations": 0,
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
