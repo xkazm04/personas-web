@@ -8628,7 +8628,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:56 The mobile page table of contents hardcodes an unbudgeted 60px fixed top offset rather than deriving its position from a shared fixed chrome offset budget.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:ee082e781491937e",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"

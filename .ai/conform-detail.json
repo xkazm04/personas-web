@@ -3478,6 +3478,42 @@
           "evidence": "src/data/guide/content/index.ts:13 GUIDE_CONTENT re-exports category content blocks into a single derived map used by lazy full-text body search indexing."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Layout, Navigation & Page Shell/long-form-reading-surface": {
+      "context": "Layout, Navigation & Page Shell",
+      "subject": "long-form-reading-surface",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T03:25:00.766Z",
+      "worker": "4a5bcde1-7448-454a-9dcc-b76f6ab9d957",
+      "techniques": [
+        {
+          "technique": "anchor-id-single-assigner",
+          "verdict": "not-applicable",
+          "evidence": "src/components/PageShell.tsx:29 Consumes pre-formed href anchors passed via scrollMapItems rather than generating heading anchor ids from document prose."
+        },
+        {
+          "technique": "fixed-chrome-offset-budget",
+          "verdict": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:56 The mobile page table of contents hardcodes top-[60px] instead of referencing a shared fixed chrome offset budget."
+        },
+        {
+          "technique": "focus-transfer-on-in-place-navigation",
+          "verdict": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:47 Scrolling to a section from the mobile TOC does not transfer programmatic focus to the target heading."
+        },
+        {
+          "technique": "scroll-spy-reading-band",
+          "verdict": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:23 Collapses the empty observation state to index 0, highlighting the first section even before reaching it."
+        },
+        {
+          "technique": "server-parsed-once-reused",
+          "verdict": "not-applicable",
+          "evidence": "src/components/InfoPageLayout.tsx:47 The layout renders pre-declared static scrollMapItems without server-side document parsing or heading extraction."
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,175 @@
+{
+ "schema": "conform-run/1",
+ "worker": "4a5bcde1-7448-454a-9dcc-b76f6ab9d957",
+ "subject": "long-form-reading-surface",
+ "evaluatedAt": "2026-10-15T03:25:00.766560+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "long-form-reading-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:46 The focus-transfer effect relies on a component-scoped didMountRef that resets on route changes, preventing programmatic focus handoff to the article heading upon client-side in-place navigation.",
+   "techniques": [
+    {
+     "technique": "anchor-id-single-assigner",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/page.tsx:118 A single parseGuide invocation per topic uses createHeadingIdAssigner to produce consistent heading IDs for both TOC and content."
+    },
+    {
+     "technique": "fixed-chrome-offset-budget",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:267 The desktop TOC container has no max-height or internal overflow scrolling, allowing long heading lists to overflow past the viewport."
+    },
+    {
+     "technique": "focus-transfer-on-in-place-navigation",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:46 The mount guard uses a component-scoped ref that resets on route changes, preventing programmatic focus handoff to the article heading upon in-place navigation."
+    },
+    {
+     "technique": "scroll-spy-reading-band",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:127 The reading progress indicator is mounted without target scoping to the article body, measuring total page scroll including navigation CTAs and footer."
+    },
+    {
+     "technique": "server-parsed-once-reused",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:81 TopicView checks for measured content divergence against initialUnit.body and reuses the server-prepared initialHeadings directly when identical."
+    }
+   ]
+  },
+  {
+   "context": "Layout, Navigation & Page Shell",
+   "subject": "long-form-reading-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/MobilePageTOC.tsx:56 The mobile page table of contents hardcodes an unbudgeted 60px fixed top offset rather than deriving its position from a shared fixed chrome offset budget.",
+   "techniques": [
+    {
+     "technique": "anchor-id-single-assigner",
+     "verdict": "not-applicable",
+     "evidence": "src/components/PageShell.tsx:29 Consumes pre-formed href anchors passed via scrollMapItems rather than generating heading anchor ids from document prose."
+    },
+    {
+     "technique": "fixed-chrome-offset-budget",
+     "verdict": "deviation",
+     "evidence": "src/components/MobilePageTOC.tsx:56 The mobile page table of contents hardcodes top-[60px] instead of referencing a shared fixed chrome offset budget."
+    },
+    {
+     "technique": "focus-transfer-on-in-place-navigation",
+     "verdict": "deviation",
+     "evidence": "src/components/MobilePageTOC.tsx:47 Scrolling to a section from the mobile TOC does not transfer programmatic focus to the target heading."
+    },
+    {
+     "technique": "scroll-spy-reading-band",
+     "verdict": "deviation",
+     "evidence": "src/components/MobilePageTOC.tsx:23 Collapses the empty observation state to index 0, highlighting the first section even before reaching it."
+    },
+    {
+     "technique": "server-parsed-once-reused",
+     "verdict": "not-applicable",
+     "evidence": "src/components/InfoPageLayout.tsx:47 The layout renders pre-declared static scrollMapItems without server-side document parsing or heading extraction."
+    }
+   ]
+  },
+  {
+   "context": "Blog",
+   "subject": "long-form-reading-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/blog/[slug]/BlogArticle.tsx:63 The blog reading surface displays a manually authored reading time constant rather than deriving reading time from the article markdown body at preparation time.",
+   "techniques": [
+    {
+     "technique": "anchor-id-single-assigner",
+     "verdict": "not-applicable",
+     "evidence": "src/app/blog/[slug]/blog-article/BlogArticleContent.tsx:23 Blog posts render headings via parseBlocks but lack a table of contents or contents panel to share heading addresses with."
+    },
+    {
+     "technique": "fixed-chrome-offset-budget",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/[slug]/BlogArticle.tsx:38 The blog article layout introduces an ad-hoc 96px spacer (h-24) to clear the fixed navbar rather than deriving clearance from a shared offset budget."
+    },
+    {
+     "technique": "focus-transfer-on-in-place-navigation",
+     "verdict": "not-applicable",
+     "evidence": "src/app/blog/[slug]/BlogArticle.tsx:43 Blog post navigation operates via standard document links without client-side article swaps or in-place focus handoff."
+    },
+    {
+     "technique": "scroll-spy-reading-band",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/[slug]/BlogArticle.tsx:36 ReadingProgress is mounted globally on the page without scoping to the article element, tracking entire document scroll instead of article body progress."
+    },
+    {
+     "technique": "server-parsed-once-reused",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/[slug]/BlogArticle.tsx:63 Reading time is presented from a manually authored static integer in post metadata rather than derived from the article markdown body."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "long-form-reading-surface",
+   "context": "Shared Types, Utilities & Hooks",
+   "reason": "The context consists of general shared utility functions and hooks (such as useFocusTrap, bodyScrollLock, and format-date) with no long-form prose rendering, heading table of contents, or reading surface chrome."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T03:25:00.766560+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "long-form-reading-surface"
+   ],
+   "techniques": [
+    "anchor-id-single-assigner",
+    "fixed-chrome-offset-budget",
+    "focus-transfer-on-in-place-navigation",
+    "scroll-spy-reading-band",
+    "server-parsed-once-reused"
+   ],
+   "deviations": 1,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-15T03:25:00.766560+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "long-form-reading-surface"
+   ],
+   "techniques": [
+    "anchor-id-single-assigner",
+    "fixed-chrome-offset-budget",
+    "focus-transfer-on-in-place-navigation",
+    "scroll-spy-reading-band",
+    "server-parsed-once-reused"
+   ],
+   "deviations": 1,
+   "context": "Layout, Navigation & Page Shell",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-15T03:25:00.766560+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "long-form-reading-surface"
+   ],
+   "techniques": [
+    "anchor-id-single-assigner",
+    "fixed-chrome-offset-budget",
+    "focus-transfer-on-in-place-navigation",
+    "scroll-spy-reading-band",
+    "server-parsed-once-reused"
+   ],
+   "deviations": 1,
+   "context": "Blog",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
