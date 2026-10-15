@@ -12,6 +12,7 @@ import {
   type InflightMap,
 } from "@/lib/commands/commandReducer";
 import { COMMAND_TTL_MS, type CommandVerb } from "@/lib/commands/envelope";
+import { notifyDemoFixtureChange } from "@/lib/demoFixtureSignal";
 
 /**
  * The web's command plane (PHASE2-SPEC.md 2.4): send a verb, then follow it
@@ -102,10 +103,37 @@ function refreshChat() {
   void import("@/stores/chatStore").then((m) => m.useChatStore.getState().refreshOpen());
 }
 
-/** The demo desktop wrote its fixtures: re-read what the rows and the open chat show. */
+/**
+ * Re-read the review queue. Loaded lazily: reviewStore loads this store on
+ * first use, so a static import here would make the two a cycle.
+ */
+function refetchReviews() {
+  void import("@/stores/reviewStore").then((m) => m.useReviewStore.getState().fetchReviews());
+}
+
+/**
+ * Re-read what the demo desktop has learned (a committed review verdict
+ * writes a memory). Written into the SWR cache directly, not just revalidated:
+ * Knowledge is usually a hidden view then, with no mounted reader to refetch.
+ */
+function refreshKnowledgeMemories() {
+  void Promise.all([import("swr"), import("@/lib/mockApi"), import("@/lib/knowledgeMemories")]).then(
+    ([{ mutate }, { getKnowledgeMemories }, { KNOWLEDGE_MEMORIES_KEY }]) =>
+      mutate(KNOWLEDGE_MEMORIES_KEY, getKnowledgeMemories(), { revalidate: false }),
+  );
+}
+
+/**
+ * The demo desktop wrote its fixtures: re-read what the rows, the review queue,
+ * the open chat and Knowledge show, and tell the readers outside the stores (the
+ * Personas stage's crew, `fleet-monitor/world/crewBridge.ts`).
+ */
 function onDemoFixtureChange() {
   refetchExecutions();
+  refetchReviews();
   refreshChat();
+  refreshKnowledgeMemories();
+  notifyDemoFixtureChange();
 }
 
 export const useCommandStore = create<CommandState>((set, get) => ({

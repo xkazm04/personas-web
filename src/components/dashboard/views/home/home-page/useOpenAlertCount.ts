@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { api } from "@/lib/api";
-import { MOCK_HEALTH_ISSUES } from "@/lib/mock-dashboard-data";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import { useAuthStore } from "@/stores/authStore";
 import { countOpenAlertsForPolicy, useSettingsStore } from "@/stores/settingsStore";
 import { isNotServed } from "../mission/readings";
@@ -12,7 +12,8 @@ import { isNotServed } from "../mission/readings";
 type AlertIssue = { status: string; severity: string };
 
 /**
- * Open-alert count. Demo → the mock health-issue fixture count (unchanged).
+ * Open-alert count. Demo → the session projection of the health-issue fixture
+ * (a fixed incident cause resolves its issue).
  * Real/supabase mode → the count of synced healing issues with status "open".
  * `null` means unknown: the first real read is in flight, or it failed (the
  * desktop plane answers 501 not_on_desktop, which is expected and not reported).
@@ -24,7 +25,9 @@ export function useOpenAlertCount(): number | null {
   const useMock = isDemo;
 
   const policy = useSettingsStore((s) => s.alertSeverity);
-  const [issues, setIssues] = useState<AlertIssue[] | null>(() => (useMock ? MOCK_HEALTH_ISSUES : null));
+  const demoIssues = useDemoThreads().healthIssues;
+  const [fetched, setIssues] = useState<AlertIssue[] | null>(null);
+  const issues = useMock ? demoIssues : fetched;
 
   useEffect(() => {
     if (useMock) return;

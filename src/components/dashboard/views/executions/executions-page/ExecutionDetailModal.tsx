@@ -122,6 +122,7 @@ export function ExecutionDetailModal({
               waitingForWorker: t.executionsPage.waitingForWorker,
               noOutputYet: t.executionsPage.noOutputYet,
               jumpToLatest: t.dashboardUi.jumpToLatest,
+              unavailable: t.executionsPage.outputUnavailable,
             }}
           />
         </>

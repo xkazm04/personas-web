@@ -56,6 +56,7 @@ Per the [loading standard](loading-orchestration.md). The framer `staggerContain
 | `src/components/dashboard/DashboardNavigation.tsx` | Nav badge — `getBadge` returns `MOCK_UNREAD_MESSAGES` for the Messages item |
 
 ## Data & state
+- **Scope:** `useMessagesData` cuts threads (desktop list and phone) to the scope bar's persona (name) + window (`latestTimestamp`); counts and unread follow. A list the scope emptied shows `ScopeEmpty`.
 - **Source:** `MOCK_MESSAGE_THREADS` in `src/lib/mock-dashboard-data.ts` — a seeded (`seededRandom(711)`) fixture of 14 threads (~42 messages) built from `THREAD_REPLY_COUNTS`. Parent unread for the first 3 threads; one extra unread reply on thread index 1. Bodies are interpolated markdown run reports (5 templates round-robined). `MOCK_UNREAD_MESSAGES = 7` is a separate fixed constant used only for the nav badge.
 - **Stores:** `useAuthStore` (read-only `isDemo` flag, picks mock vs. synced source). No dedicated messages Zustand store — all read-state is **local component state** (`overrides` map, `page`, `openThreadId`, `fetchedAt`), so it resets on navigation/reload.
 - **API routes:** None in this repo. Outside demo mode `getSyncedMessageThreads()` reads Supabase `synced_messages`.

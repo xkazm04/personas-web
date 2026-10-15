@@ -6,11 +6,14 @@ import { Trophy } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useTranslation } from "@/i18n/useTranslation";
+import { fillTemplate } from "@/lib/fillTemplate";
 import { type LeaderboardPersona } from "@/lib/mock-dashboard-data";
+import { useAuthStore } from "@/stores/authStore";
 
 import { LeaderboardPodium } from "./leaderboard-page/LeaderboardPodium";
 import { LeaderboardRadarCard } from "./leaderboard-page/LeaderboardRadarCard";
@@ -21,7 +24,10 @@ import { useLeaderboardData } from "./useLeaderboardData";
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
-  const { personas, loading, error, retry } = useLeaderboardData();
+  const isDemo = useAuthStore((s) => s.isDemo);
+  // `personas`: the rows in the scope bar's persona; `ranked`: the whole field,
+  // which the podium, the ranks and the benchmark are counted in.
+  const { personas, ranked, scopeEmpty, loading, error, retry } = useLeaderboardData();
   // null = no explicit pick yet → fall back to the top-ranked persona. This
   // keeps the selection valid as data loads / changes without a sync effect.
   const [pickedId, setPickedId] = useState<string | null>(null);
@@ -39,7 +45,7 @@ export default function LeaderboardPage() {
 
   // The top-ranked persona doubles as the benchmark; we overlay its profile
   // faintly whenever a lower-ranked agent is in focus so the gap is legible.
-  const benchmark = personas[0];
+  const benchmark = ranked[0];
   const isComparing = Boolean(selected && benchmark && selected.id !== benchmark.id);
 
   const radarData = useMemo(() => {
@@ -63,8 +69,8 @@ export default function LeaderboardPage() {
   // Podium re-ranks by the selected dimension (composite or a single metric);
   // the detailed table+radar below keep their own composite ordering + sorts.
   const top = useMemo(
-    () => rankByDimension(personas, rankDim).slice(0, 3),
-    [personas, rankDim],
+    () => rankByDimension(ranked, rankDim).slice(0, 3),
+    [ranked, rankDim],
   );
 
   return (
@@ -83,6 +89,11 @@ export default function LeaderboardPage() {
           <p className="mt-1 text-base text-muted-dark">
             {t.leaderboardPage.subtitle}
           </p>
+          {isDemo && ranked.length > 0 && (
+            <p className="mt-1 text-sm text-muted-dark">
+              {fillTemplate(t.executionsPage.population.fleetRanked, { count: ranked.length })}
+            </p>
+          )}
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </div>
@@ -90,10 +101,12 @@ export default function LeaderboardPage() {
       {error && <DashboardErrorBanner message={error} onRetry={retry} />}
 
       {loading ? (
-        // First load (real mode only; demo is synchronous): a held, shapeless
+        // First load (the demo world, or the synced rows): a held, shapeless
         // reservation - the generic skeleton grid matched neither the podium
         // nor the table, and showed with no delay.
         <ViewGap />
+      ) : scopeEmpty ? (
+        <ScopeEmpty />
       ) : personas.length === 0 ? (
         <EmptyState
           icon={Trophy}
@@ -130,6 +143,7 @@ export default function LeaderboardPage() {
           <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(2)}>
           <LeaderboardTable
             personas={personas}
+            rankedAgainst={ranked}
             selectedId={selectedId}
             labels={{
               rank: t.leaderboardPage.rank,

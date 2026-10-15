@@ -1,0 +1,123 @@
+{
+  "schema": "conform-run/1",
+  "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+  "subject": "agent-runtime-assembly",
+  "evaluatedAt": "2026-10-13T08:45:59.538102+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [
+    {
+      "context": "Animation & Motion System",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/particle-host/particleHostRegistry.ts:148 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found no matches; this module mounts an HTML5 canvas to manage client-side particle rendering and motion pause behavior rather than an agent execution runtime.",
+      "techniques": [],
+      "absenceTerms": [
+        "checkpoint_mode",
+        "hook_placement",
+        "assembly_identity"
+      ]
+    },
+    {
+      "context": "Authentication & User Session",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/stores/authStore.ts:215 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found zero hits; this module manages browser user authentication via Supabase OAuth rather than assembling an agent runtime.",
+      "techniques": [],
+      "absenceTerms": [
+        "checkpoint_mode",
+        "hook_placement",
+        "assembly_identity"
+      ]
+    },
+    {
+      "context": "Execution History & Streaming",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/api/executions/[id]/stream/route.ts:59 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') returned no hits; this endpoint acts as an SSE proxy forwarding execution output from an external orchestrator URL to the client rather than assembling an agent runtime.",
+      "techniques": [],
+      "absenceTerms": [
+        "checkpoint_mode",
+        "hook_placement",
+        "assembly_identity"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "agent-runtime-assembly",
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor DownloadCTA.tsx:36 is a comment and constant declarations that don't show the precondition is absent, so it is incidental. It also lies in a download/waitlist section, which doesn't say anything about agent-runtime assembly."
+    },
+    {
+      "subject": "agent-runtime-assembly",
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor layout.tsx:20 is the end of a doc comment just before the component declaration, so it is incidental. The shell imports a SyncedRealtimeProvider and a TourOverlay, and I did not open those or the other context files, so I could not confirm that nothing in this context assembles a runtime."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-13T08:45:59.538102+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-runtime-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Animation & Motion System",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T08:45:59.538102+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-runtime-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Authentication & User Session",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T08:45:59.538102+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-runtime-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Execution History & Streaming",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T08:45:59.538102+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-runtime-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-13T08:45:59.538102+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-runtime-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}

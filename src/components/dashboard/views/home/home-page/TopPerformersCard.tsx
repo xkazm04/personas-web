@@ -29,7 +29,7 @@ const TREND: Record<LeaderboardTrend, { Icon: React.ElementType; color: string }
 /**
  * Top-performers snapshot: the leaderboard's top three personas with medal,
  * trend, and composite score. The web counterpart to the desktop overview's
- * TopPerformersWidget. MOCK_LEADERBOARD is pre-sorted by composite desc.
+ * TopPerformersWidget. The leaderboard arrives ranked (composite desc).
  */
 export function TopPerformersCard() {
   const { t } = useTranslation();

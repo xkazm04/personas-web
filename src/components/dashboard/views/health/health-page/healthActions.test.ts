@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 import { worstStatus } from "@/lib/healthFormat";
 import { MOCK_HEALTH_CHECKS, type HealthCheckItem, type HealthCheckSection } from "@/lib/mock-dashboard-data";
 
-import { applyHealthResolutions, resolveHealthAction, type HealthResolutions } from "./healthActions";
+import { applyHealthResolutions, resolveHealthAction, withFixedCauses, type HealthResolutions } from "./healthActions";
 
 /**
  * The System Health demo actions: Configure / Install must visibly settle the
@@ -85,5 +85,22 @@ describe("applyHealthResolutions", () => {
     const state = resolveHealthAction(EMPTY, find(MOCK_HEALTH_CHECKS, "rt_gpu"));
     const refetched: HealthCheckSection[] = JSON.parse(JSON.stringify(MOCK_HEALTH_CHECKS));
     expect(find(applyHealthResolutions(refetched, state, DETAIL), "rt_gpu").status).toBe("ok");
+  });
+});
+
+describe("withFixedCauses", () => {
+  const FIX = { at: "2030-01-01T00:00:00.000Z", kind: "configure" as const };
+
+  it("marks a check on a fixed thread as done, so it reads the localized line at once", () => {
+    const state = withFixedCauses(MOCK_HEALTH_CHECKS, EMPTY, { "slack-circuit-break": FIX });
+    expect(state).toEqual({ in_slack: "configure" });
+    const slack = find(applyHealthResolutions(MOCK_HEALTH_CHECKS, state, DETAIL), "in_slack");
+    expect(slack).toMatchObject({ status: "ok", action: undefined, detail: DETAIL.configure });
+  });
+
+  it("keeps the local resolutions object when no check carries a fixed cause", () => {
+    const local = resolveHealthAction(EMPTY, find(MOCK_HEALTH_CHECKS, "rt_gpu"));
+    expect(withFixedCauses(MOCK_HEALTH_CHECKS, local, {})).toBe(local);
+    expect(withFixedCauses(MOCK_HEALTH_CHECKS, local, { nope: FIX })).toBe(local);
   });
 });

@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { api } from "@/lib/api";
+import { ApiError } from "@/lib/api-error";
 import { usePolling } from "@/hooks/usePolling";
 import type { PersonaExecutionStatus } from "@/lib/types";
 
@@ -8,6 +9,8 @@ interface ExecutionPollState {
   status: PersonaExecutionStatus;
   durationMs?: number;
   totalCostUsd?: number;
+  /** The plane holds no run with this id (a 404): there is no status or output to show. */
+  unavailable?: boolean;
 }
 
 const TERMINAL_STATUSES = new Set(["completed", "failed", "cancelled"]);
@@ -43,7 +46,18 @@ export function useExecutionPolling(
 
   const poll = useCallback(async () => {
     if (!executionId) return;
-    const data = await api.getExecution(executionId, offsetRef.current);
+    let data;
+    try {
+      data = await api.getExecution(executionId, offsetRef.current);
+    } catch (err) {
+      // An id the plane does not hold is unavailable, not a run still queued.
+      if (err instanceof ApiError && err.status === 404) {
+        setState({ output: [], status: "queued", unavailable: true });
+        setStopped(true);
+        return;
+      }
+      throw err;
+    }
     setState((prev) => ({
       output: [...prev.output, ...data.output].slice(-MAX_OUTPUT_LINES),
       status: data.status,

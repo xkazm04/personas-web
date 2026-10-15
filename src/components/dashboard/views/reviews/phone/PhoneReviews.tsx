@@ -17,6 +17,8 @@ import { useReviewStore } from "@/stores/reviewStore";
 import { useReviewClock } from "../review-due";
 import { ReviewUndoToast } from "../reviews-split-pane/ReviewsSplitPaneToasts";
 import { useReviewGate } from "../useReviewGate";
+import { useScopedReviews } from "../useScopedReviews";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import EscalationFailureNotice from "../EscalationFailureNotice";
 import PhoneReviewCard, { splitReviewContent } from "./PhoneReviewCard";
 
@@ -41,7 +43,8 @@ export default function PhoneReviews() {
   const copy = mobileCopy.reviews;
   const demo = useAuthStore((s) => s.isDemo);
   const { reach, canDecide, blocked } = useReviewGate();
-  const reviews = useReviewStore((s) => s.reviews);
+  // Pending cards follow the scope bar; "not served" and first load read the whole list.
+  const { all: reviews, reviews: scopedReviews, scopeEmpty } = useScopedReviews();
   const loading = useReviewStore((s) => s.reviewsLoading);
   // Desktop plane: the list is not served, so "no reviews" would be false; the note stands in for it.
   const unserved = useReviewStore((s) => s.listNotServed) && reviews.length === 0;
@@ -67,7 +70,10 @@ export default function PhoneReviews() {
   // Leaving the view commits an open window rather than dropping it.
   useEffect(() => () => useReviewStore.getState().flushDecisions(), []);
 
-  const pending = useMemo(() => orderByDue(reviews.filter((r) => r.status === "pending"), policy, now), [reviews, policy, now]);
+  const pending = useMemo(
+    () => orderByDue(scopedReviews.filter((r) => r.status === "pending"), policy, now),
+    [scopedReviews, policy, now],
+  );
   const decided = useMemo(() => {
     const byId = new Map(reviews.map((r) => [r.id, r]));
     return decidedIds
@@ -110,6 +116,8 @@ export default function PhoneReviews() {
             ))}
           </ul>
         </div>
+      ) : scopeEmpty ? (
+        <ScopeEmpty compact />
       ) : pending.length === 0 ? (
         <p data-reviews-empty className="rounded-2xl border border-glass bg-white/[0.02] p-4 text-sm text-muted">
           {t.reviewsPage.focus.empty}

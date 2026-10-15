@@ -575,6 +575,8 @@ export interface PersonasMonitorCopy {
       openAgent: string;
       dismiss: string;
       close: string;
+      /** A crew agent's row (demo): the same act on the synced page. */
+      synced: { executions: string; reviews: string };
     };
     keys: {
       title: string;
@@ -1245,6 +1247,7 @@ export const personasMonitorCopy: PersonasMonitorCopy = {
       openAgent: 'Open',
       dismiss: 'Dismiss',
       close: 'Close the activity log',
+      synced: { executions: 'In Executions', reviews: 'In Reviews' },
     },
     keys: {
       title: 'Keyboard shortcuts',

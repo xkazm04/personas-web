@@ -11,8 +11,21 @@ import {
   type ReactNode,
 } from "react";
 import { useStillMotion } from "@/hooks/useStillMotion";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import type { TourStep } from "@/lib/tour-script";
 import { INTRO_AUDIO_SRC } from "@/lib/tour-audio";
+import { onTourSignal } from "@/lib/tourSignals";
+import {
+  NO_TALLY,
+  actionsRunOnClock,
+  armStepDwell,
+  armStepSignal,
+  clipAdvances,
+  outcomeOf,
+  tallySignal,
+  type ShiftTally,
+} from "@/lib/tour-progress";
+import { navigateDashboard } from "@/components/dashboard/spa/navigate";
 import { useTourAudio } from "@/hooks/useTourAudio";
 import { useTourScroll } from "@/hooks/useTourScroll";
 import { useTourVolume } from "@/hooks/useTourVolume";
@@ -20,9 +33,9 @@ import { useTourNavigation } from "@/hooks/useTourNavigation";
 import { useTourSpotlightSequence } from "@/hooks/useTourSpotlightSequence";
 import { useTourCueClock } from "@/hooks/useTourCueClock";
 import { useTourKeyboard } from "@/hooks/useTourKeyboard";
-import type { TourBridgeStrings, TourContextValue, TourStartOptions } from "./tourTypes";
+import type { TourBridgeStrings, TourContextValue, TourRecap, TourStartOptions } from "./tourTypes";
 
-export type { TourBridgeStrings } from "./tourTypes";
+export type { TourBridgeStrings, TourRecap, TourStartOptions } from "./tourTypes";
 
 const TourContext = createContext<TourContextValue | null>(null);
 
@@ -35,8 +48,14 @@ export function TourProvider({ children }: { children: ReactNode }) {
   const [bridge, setBridge] = useState<TourBridgeStrings | null>(null);
   const [atBridge, setAtBridge] = useState(false);
   const [atIntro, setAtIntro] = useState(false);
+  const [recap, setRecap] = useState<TourRecap | null>(null);
+  // "Show me" presses: the step they were for, and a count so a second press replays.
+  const [shown, setShown] = useState<{ step: number; n: number }>({ step: -1, n: 0 });
   const [volume, setVolume] = useTourVolume();
   const prefersReducedMotion = useStillMotion();
+  const hidden = usePageVisibility();
+  // What the visitor did this run, counted from the signals the tour saw.
+  const tallyRef = useRef<ShiftTally>(NO_TALLY);
 
   const start = useCallback((nextSteps: TourStep[], options?: TourStartOptions) => {
     setSteps(nextSteps);
@@ -45,6 +64,9 @@ export function TourProvider({ children }: { children: ReactNode }) {
     setBridge(options?.bridge ?? null);
     setAtBridge(false);
     setAtIntro(options?.intro ?? false);
+    setRecap(null);
+    setShown({ step: -1, n: 0 });
+    tallyRef.current = NO_TALLY;
     setActive(true);
     setPlaying(true);
   }, []);
@@ -54,6 +76,7 @@ export function TourProvider({ children }: { children: ReactNode }) {
     setPlaying(false);
     setAtBridge(false);
     setAtIntro(false);
+    setRecap(null);
   }, []);
 
   const beginTour = useCallback(() => setAtIntro(false), []);
@@ -99,20 +122,69 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const togglePlay = useCallback(() => setPlaying((p) => !p), []);
 
-  // Dwell-timer auto-advance for steps without audio (audio uses `ended`).
+  // A user-started demonstration: refused while the tab is hidden (nobody is
+  // watching it), and it un-pauses the tour so its clock runs.
+  const showMe = useCallback(() => {
+    if (typeof document !== "undefined" && document.hidden) return;
+    setShown((s) => ({ step: stepIndex, n: s.n + 1 }));
+    setPlaying(true);
+  }, [stepIndex]);
+
+  // A new step forgets the last step's "Show me" (prev-state reset, React 19).
+  const [shownStepIndex, setShownStepIndex] = useState(stepIndex);
+  if (stepIndex !== shownStepIndex) {
+    setShownStepIndex(stepIndex);
+    setShown((s) => ({ step: -1, n: s.n }));
+  }
+
+  const stepping = active && !atBridge && !atIntro && !recap && steps.length > 0;
+  const step = steps[stepIndex];
+
+  // Count what the visitor does for the whole run (the recap's numbers).
   useEffect(() => {
-    if (!active || !playing || atBridge || atIntro || steps.length === 0) return;
-    if (steps[stepIndex].audioSrc) return;
-    const id = window.setTimeout(next, steps[stepIndex].dwellMs);
-    return () => window.clearTimeout(id);
-  }, [active, playing, atBridge, atIntro, stepIndex, next, steps]);
+    if (!active) return;
+    return onTourSignal((signal) => {
+      tallyRef.current = tallySignal(tallyRef.current, signal);
+    });
+  }, [active]);
+
+  // The step's own exit: the visitor's action. Armed while stepping, paused or
+  // not (an action is explicit), re-armed on step change.
+  useEffect(() => {
+    if (!stepping || !step) return;
+    const last = stepIndex >= steps.length - 1;
+    return armStepSignal(step, (signal) => {
+      const outcome = outcomeOf(step, last, signal);
+      if (outcome.type === "next") {
+        next();
+        return;
+      }
+      // The visitor finished the tour by acting: say what they did, and take
+      // them where their action leads (the run behind their verdict).
+      setPlaying(false);
+      setRecap({ ...tallyRef.current, openedRun: outcome.href !== null });
+      if (outcome.href) navigateDashboard(outcome.href);
+    });
+  }, [stepping, step, stepIndex, steps.length, next]);
+
+  // Dwell-timer fallback (audio steps advance on `ended`; a step that waits
+  // for its signal never dwells). Held while paused or the tab is hidden.
+  useEffect(() => {
+    if (!stepping || !playing || hidden || !step) return;
+    return armStepDwell(step, next);
+  }, [stepping, playing, hidden, step, next]);
+
+  // A clip's end advances the step, unless the step waits for the visitor.
+  const advanceAfterClip = useCallback(() => {
+    if (clipAdvances(steps[stepIndex])) next();
+  }, [steps, stepIndex, next]);
 
   // Live narration element: its currentTime is the step clock the cues run on.
   const narrationRef = useRef<HTMLAudioElement | null>(null);
 
   // Narration audio + AnalyserNode for the Athena companion's reactivity.
   const audioAnalyser = useTourAudio({
-    active,
+    active: active && !recap,
     atIntro,
     atBridge,
     introSrc: INTRO_AUDIO_SRC,
@@ -120,32 +192,37 @@ export function TourProvider({ children }: { children: ReactNode }) {
     stepIndex,
     steps,
     volume,
-    next,
+    next: advanceAfterClip,
     clockRef: narrationRef,
   });
 
   // Timed in-step manipulations: each action's `run` fires when the step's
   // narration clock (audio currentTime, or a virtual clock on silent steps)
   // passes its `atMs`. The clock freezes while paused, so a pause stops the
-  // diagram too; it is re-armed from zero on step change / exit.
-  const stepActions = steps[stepIndex]?.actions;
+  // diagram too; it is re-armed from zero on step change / exit. A step the
+  // visitor does (`advanceOn`) plays its actions only on "Show me", re-armed
+  // from zero on each press.
+  const stepActions = step?.actions;
   const actionCues = useMemo(
     () => stepActions?.map((a) => ({ atMs: a.atMs, fire: a.run })),
     [stepActions],
   );
-  useTourCueClock(active && !atIntro && steps.length > 0, playing, stepIndex, narrationRef, actionCues);
+  const shownHere = shown.step === stepIndex;
+  const actionsArmed = actionsRunOnClock(step) || shownHere;
+  useTourCueClock(stepping && actionsArmed, playing, `${stepIndex}:${shownHere ? shown.n : 0}`, narrationRef, actionCues);
 
   // Navigate cross-page steps, resolve the live spotlight target (which follows
-  // in-step sweeps), and scroll it into view (all paused during the intro).
-  useTourNavigation(active, stepIndex, steps);
+  // in-step sweeps), and scroll it into view (all paused during the intro). Not
+  // after a recap: the tour has handed the visitor to where their action led.
+  useTourNavigation(active && !recap, stepIndex, steps);
   const activeSpotlight = useTourSpotlightSequence(active, atIntro, playing, stepIndex, steps, narrationRef);
-  useTourScroll(active && !atIntro, activeSpotlight, steps[stepIndex]?.scrollTarget ?? null, prefersReducedMotion);
+  useTourScroll(active && !atIntro && !recap, activeSpotlight, step?.scrollTarget ?? null, prefersReducedMotion);
 
   useTourKeyboard(active, { exit, next, prev });
 
   const value = useMemo<TourContextValue>(
-    () => ({ active, steps, stepIndex, activeSpotlight, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge }),
-    [active, steps, stepIndex, activeSpotlight, playing, atBridge, atIntro, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge],
+    () => ({ active, steps, stepIndex, activeSpotlight, playing, atBridge, atIntro, recap, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge, showMe }),
+    [active, steps, stepIndex, activeSpotlight, playing, atBridge, atIntro, recap, audioAnalyser, volume, setVolume, bridge, start, exit, next, prev, goTo, togglePlay, beginTour, confirmBridge, dismissBridge, showMe],
   );
 
   return <TourContext.Provider value={value}>{children}</TourContext.Provider>;

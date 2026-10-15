@@ -1,14 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
+import { scopeMessages } from "@/components/dashboard/scope/scopeProjections";
+import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
+import { scopeHidAll } from "@/lib/dashboardScope";
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedMessageThreads } from "@/lib/supabaseApi";
 import { MOCK_MESSAGE_THREADS, type MessageThread } from "@/lib/mock-dashboard-data";
 
 export interface MessagesData {
+  /** Threads in the scope bar's persona whose latest message is inside its window. */
   threads: MessageThread[];
+  /** The scope emptied a list that has threads. */
+  scopeEmpty: boolean;
   loading: boolean;
   error: string | null;
   retry: () => void;
@@ -18,7 +24,8 @@ export interface MessagesData {
  * Messages module data source. Dev/demo → the static mock threads (unchanged
  * behavior). Real/supabase mode → synced_messages grouped into threads. The
  * page layers per-message read-state overrides on top of whatever base list
- * this returns.
+ * this returns. Either way the threads are then cut to the scope bar's
+ * persona + window (`scopeMessages`).
  */
 export function useMessagesData(): MessagesData {
   const isDemo = useAuthStore((s) => s.isDemo);
@@ -60,9 +67,17 @@ export function useMessagesData(): MessagesData {
     };
   }, [useMock, reloadKey]);
 
-  const threads = useMock ? MOCK_MESSAGE_THREADS : fetchedThreads;
+  const allThreads = useMock ? MOCK_MESSAGE_THREADS : fetchedThreads;
+  const scope = useDashboardScope();
+  const threads = useMemo(() => scopeMessages(allThreads, scope), [allThreads, scope]);
   const loading = useMock ? false : fetchLoading;
   const error = useMock ? null : fetchError;
 
-  return { threads, loading, error, retry: () => setReloadKey((k) => k + 1) };
+  return {
+    threads,
+    scopeEmpty: scopeHidAll(allThreads, threads),
+    loading,
+    error,
+    retry: () => setReloadKey((k) => k + 1),
+  };
 }

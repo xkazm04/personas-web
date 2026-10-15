@@ -16,10 +16,13 @@ export default function ExecuteToast({
   status,
   message,
   onDismiss,
+  action,
 }: {
   status: "success" | "error";
   message: string;
   onDismiss: () => void;
+  /** Optional follow-up the toast offers, e.g. System Health's "Undo fix". */
+  action?: { label: string; onClick: () => void };
 }) {
   const { t } = useTranslation();
   const isError = status === "error";
@@ -52,10 +55,19 @@ export default function ExecuteToast({
           aria-hidden="true"
         />
         <span className="min-w-0 text-sm text-foreground">{message}</span>
+        {action && (
+          <button
+            type="button"
+            onClick={action.onClick}
+            className="ml-auto flex-shrink-0 rounded-lg border border-glass-hover px-2.5 py-1 text-sm font-medium text-foreground transition-colors hover:bg-white/[0.06] focus-ring focus-visible:ring-offset-0"
+          >
+            {action.label}
+          </button>
+        )}
         <button
           onClick={onDismiss}
           aria-label={t.common.close}
-          className="ml-auto flex-shrink-0 rounded-lg p-1.5 text-muted-dark transition-colors hover:text-foreground focus-ring focus-visible:ring-offset-0"
+          className={`${action ? "" : "ml-auto "}flex-shrink-0 rounded-lg p-1.5 text-muted-dark transition-colors hover:text-foreground focus-ring focus-visible:ring-offset-0`}
         >
           <X className="h-3.5 w-3.5" aria-hidden="true" />
         </button>

@@ -4,12 +4,11 @@ import { useMemo } from "react";
 
 import {
   MOCK_HEALTH_DIGEST,
-  MOCK_HEALTH_ISSUES,
-  MOCK_SLA_BREACHES,
   type IncidentSeverity,
   type SLASeverity,
 } from "@/lib/mock-dashboard-data";
 import { focusHref } from "@/lib/incidentThreads";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import type { ReviewSeverity } from "@/lib/types";
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
@@ -97,12 +96,14 @@ export function useTriageEmptyKind(count: number): TriageEmptyKind {
 export function useTriageQueue(): TriageItem[] {
   const isDemo = useAuthStore((s) => s.isDemo);
   const reviews = useReviewStore((s) => s.reviews);
+  // The session's projection: a fixed cause leaves the queue with its thread.
+  const demo = useDemoThreads();
 
   return useMemo(() => {
     const items: TriageItem[] = [];
 
     if (isDemo) {
-      for (const breach of MOCK_SLA_BREACHES) {
+      for (const breach of demo.slaBreaches) {
         if (breach.resolvedAt !== null) continue; // ongoing breaches only
         items.push({
           id: `tri-${breach.id}`,
@@ -116,7 +117,7 @@ export function useTriageQueue(): TriageItem[] {
           href: focusHref("slaBreach", breach.id),
         });
       }
-      for (const issue of MOCK_HEALTH_ISSUES) {
+      for (const issue of demo.healthIssues) {
         if (issue.status !== "open") continue;
         items.push({
           id: `tri-${issue.id}`,
@@ -155,5 +156,5 @@ export function useTriageQueue(): TriageItem[] {
           (b.startedAt ?? "").localeCompare(a.startedAt ?? ""),
       )
       .slice(0, MAX_ITEMS);
-  }, [isDemo, reviews]);
+  }, [isDemo, reviews, demo]);
 }

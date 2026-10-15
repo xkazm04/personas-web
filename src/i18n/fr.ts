@@ -486,6 +486,7 @@ export const fr: LocaleTranslations = {
       },
       scope: {
         allPersonas: "Tous les personas",
+        emptyInScope: "Rien sur cette période. Essayez une période plus large ou tous les personas.",
         personaLabel: "Filtre persona",
         compare: "Comparer",
         dateRange: {
@@ -498,7 +499,13 @@ export const fr: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Mesures des 14 derniers jours",
+          windowNote: {
+            last24h: "Mesures des dernières 24 heures",
+            last7d: "Mesures des 7 derniers jours",
+            last30d: "Mesures des 30 derniers jours",
+            last90d: "Mesures des 90 derniers jours",
+            custom: "Mesures des dates choisies"
+          },
           hint: "Appuyez sur 1 \u00e0 8 pour ouvrir une dimension, Esc pour revenir",
           wallLabel: "Dimensions de la flotte",
           openDimension: "Ouvrir {label}",
@@ -1141,12 +1148,14 @@ export const fr: LocaleTranslations = {
       },
       toast: {
         configured: "configur\u00e9 (d\u00e9mo)",
-        installed: "activ\u00e9 (d\u00e9mo)"
+        installed: "activ\u00e9 (d\u00e9mo)",
+        undo: "Annuler la correction"
       },
       blast: {
         impact: "Affecte {agents} agents sur {total} \u00b7 {calls} appels en 14 jours",
         sla: "SLA \u00e0 risque\u00a0: {n}",
-        unmapped: "Outils non associ\u00e9s\u00a0: {n}"
+        unmapped: "Outils non associ\u00e9s\u00a0: {n}",
+        latestRun: "Ouvrir la derni\u00e8re ex\u00e9cution de {name}"
       }
     },
     messagesPage: {
@@ -1290,7 +1299,18 @@ export const fr: LocaleTranslations = {
       noFilteredFailed: "Aucune ex\u00e9cution \u00e9chou\u00e9e dans cette vue",
       noFilteredCancelled: "Aucune ex\u00e9cution annul\u00e9e dans cette vue",
       filteredEmptyDesc: "D'autres ex\u00e9cutions existent mais aucune ne correspond \u00e0 ce filtre.",
-      showAllExecutions: "Tout afficher"
+      showAllExecutions: "Tout afficher",
+      outputUnavailable: "L\u2019enregistrement de cette ex\u00e9cution n\u2019est pas disponible.",
+      drill: {
+        showRuns: "Afficher ces ex\u00e9cutions",
+        scopeRuns: "Ex\u00e9cutions dans le p\u00e9rim\u00e8tre",
+        scopeSpend: "Co\u00fbt dans le p\u00e9rim\u00e8tre"
+      },
+      population: {
+        fleetWindow: "Flotte de d\u00e9mo : {count} agents, {days} derniers jours",
+        fleetRanked: "Flotte de d\u00e9mo : {count} agents class\u00e9s",
+        crewObjectives: "Objectifs d\u00e9finis pour {count} agents synchronis\u00e9s"
+      }
     },
     eventsPage: {
       title: "\u00c9v\u00e9nements",
@@ -1854,10 +1874,15 @@ export const fr: LocaleTranslations = {
       features4: "Et vous ne perdez jamais rien de vue. Chaque ex\u00e9cution, message, \u00e9v\u00e9nement, et m\u00e9moire circule en direct via un seul tableau d'observabilit\u00e9 \u2014 sparklines, co\u00fbts, et statuts, tout en temps r\u00e9el. Transparence totale, z\u00e9ro configuration.",
       features5: "Les bons agents sont rarement parfaits du premier coup, c'est pourquoi le Lab est l'endroit o\u00f9 vous les affinez. Discutez avec un persona pour le coacher, opposez deux versions dans l'ar\u00e8ne, faites-le \u00e9voluer \u00e0 travers des g\u00e9n\u00e9rations, ou \u00e9valuez-le sur les dimensions qui comptent. Chaque am\u00e9lioration que vous conservez est versionn\u00e9e et r\u00e9versible.",
       features6: "Personas est livr\u00e9 avec six plugins sp\u00e9cialis\u00e9s, chacun un espace de travail autonome que vos agents peuvent piloter. Prenez Dev Tools : il transforme un persona en co\u00e9quipier de code qui ex\u00e9cute des t\u00e2ches, lit le r\u00e9sultat, et it\u00e8re. Changez d'onglet et vous rencontrez un autre sp\u00e9cialiste \u2014 tous partageant les m\u00eames identifiants et la m\u00eame m\u00e9moire.",
-      dashboardHome: "Bienvenue au centre de contr\u00f4le \u2014 toute votre flotte sur un seul \u00e9cran. En haut, les signes vitaux : taux de r\u00e9ussite, ex\u00e9cutions en cours, agents actifs, alertes ouvertes, et r\u00e9visions en attente pour vous. En dessous, l'optimiseur fait remonter un correctif \u00e0 fort impact \u00e0 la fois \u2014 en ce moment, un changement de routage qui r\u00e9duit les co\u00fbts sans toucher \u00e0 la qualit\u00e9. Les deux panneaux en dessous suivent la sant\u00e9 de chaque agent et les nouvelles m\u00e9moires qu'ils ont apprises et souhaitent promouvoir. Puis l'image en direct : chaque ex\u00e9cution au fur et \u00e0 mesure qu'elle arrive \u00e0 gauche, quatorze jours de trafic et d'erreurs \u00e0 droite. La carte thermique montre les ex\u00e9cutions par agent, jour par jour, et la ligne du bas compl\u00e8te le tout \u2014 vos meilleurs performeurs, les prochaines routines planifi\u00e9es, et chaque rotation d'identifiants. Une seule page, toute l'op\u00e9ration.",
-      dashboardExecutions: "Chaque ex\u00e9cution r\u00e9alis\u00e9e par la flotte se trouve ici, la plus r\u00e9cente en premier. Le tableau affiche la persona, le statut, la dur\u00e9e, le co\u00fbt et l'heure de d\u00e9marrage \u2014 filtrez sur les seuls \u00e9checs ou celles encore en cours. Cliquez sur une ligne et l'ex\u00e9cution compl\u00e8te s'ouvre : une bande de m\u00e9triques, toute explication d'erreur et la sortie en direct diffus\u00e9e ligne par ligne, exactement telle que l'agent l'a produite.",
-      dashboardEvents: "Les agents ne travaillent pas isol\u00e9ment \u2014 ils r\u00e9agissent aux \u00e9v\u00e9nements. Voici le bus d'\u00e9v\u00e9nements : chaque signal traversant le syst\u00e8me, des plannings et webhooks aux messages entre agents. Chaque ligne montre le type d'\u00e9v\u00e9nement, sa source, son statut, et depuis combien de temps il s'est d\u00e9clench\u00e9. Les \u00e9v\u00e9nements \u00e9chou\u00e9s peuvent \u00eatre r\u00e9essay\u00e9s sur place, et les \u00e9v\u00e9nements li\u00e9s s'encha\u00eenent pour que vous puissiez suivre une seule cascade de bout en bout.",
       dashboardReviews: "Certaines d\u00e9cisions n\u00e9cessitent un humain. Quand un agent rencontre quelque chose qu'il ne devrait pas d\u00e9cider seul, il se met en pause et route la d\u00e9cision ici. Chaque \u00e9l\u00e9ment porte le persona, le contexte, et l'action qu'il propose \u2014 approuvez-la, rejetez-la, ou passez pour plus tard, par clic ou par clavier. Rien de risqu\u00e9 n'est d\u00e9ploy\u00e9 sans votre validation, et la file d'attente garde le reste de la flotte en mouvement pendant que vous d\u00e9cidez.",
+      dashboardBoard: "Voici votre flotte sur un seul tableau : chaque agent s'allume quand il a besoin de vous. Ouvrez-en un et envoyez-lui une commande ; le tableau change d\u00e8s que la machine l'a ex\u00e9cut\u00e9e.",
+      dashboardMission: "Le centre de contr\u00f4le r\u00e9sume la sant\u00e9 de la flotte en huit voyants, allum\u00e9s seulement quand l'un d'eux a besoin de vous. Ouvrez un voyant allum\u00e9 pour voir les preuves qui le justifient.",
+      dashboardHealth: "Le webhook Slack est en panne, et la panne touche agents, SLA et incidents. Configurez-le une fois, et chaque page qui affiche la panne revient au calme.",
+      dashboardReviewsTask: "\u00c0 vous de jouer : approuvez ou rejetez la r\u00e9vision \u00e0 l'\u00e9cran. La visite se termine d\u00e8s que votre d\u00e9cision est valid\u00e9e.",
+      showMe: "Montrez-moi",
+      keepLooking: "Continuer \u00e0 explorer",
+      recapCounts: "Commandes ex\u00e9cut\u00e9es : {commands} \u00b7 D\u00e9cisions valid\u00e9es : {verdicts}",
+      recapRun: "Ouverte : l'ex\u00e9cution sur laquelle portait votre d\u00e9cision.",
       roadmap1: "Voici o\u00f9 nous en sommes maintenant : chaque phase de la feuille de route est not\u00e9e selon son statut au fur et \u00e0 mesure de sa livraison.",
       roadmap2: "La suite d\u00e9pend de vous \u2014 votez pour les fonctionnalit\u00e9s que vous voulez le plus, et les meilleures id\u00e9es fa\u00e7onnent ce que nous construisons.",
       roadmap3: "Et voici tout ce qui a d\u00e9j\u00e0 \u00e9t\u00e9 livr\u00e9 \u2014 chaque version pr\u00e9sent\u00e9e dans l'ordre, la plus r\u00e9cente en premier."

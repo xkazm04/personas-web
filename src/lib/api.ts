@@ -437,6 +437,11 @@ const desktopApi: ApiClient = createDesktopApi(orchestratorFetch, realApi);
  * orchestrator depending on NEXT_PUBLIC_DATA_SOURCE. Behaviour is identical in
  * every environment — demo is always an explicit user choice, never auto-on.
  */
+/** True while `api` answers from the demo plane (`mockApi`): for callers that size a read to the plane. */
+export function isDemoPlane(): boolean {
+  return useAuthStore.getState().isDemo;
+}
+
 export const api: ApiClient = new Proxy({} as ApiClient, {
   get(_target, prop: string | symbol) {
     const { isDemo } = useAuthStore.getState();

@@ -1,0 +1,148 @@
+{
+ "schema": "conform-run/1",
+ "worker": "1dba1d21-3d61-4ef6-a9bc-499ec1824056",
+ "subject": "chat-transcript",
+ "evaluatedAt": "2026-10-13T10:35:43.870052+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "chat-transcript",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/guide/GuideMarkdown.tsx:14 Searched context files and directories for chat-transcript terms ('turn_queue', 'ready_gate', 'virtual_channel', 'metadata_strip') with zero hits; GuideMarkdown parses static documentation handbook strings into editorial guide blocks rather than managing a multi-author chat transcript.",
+   "techniques": [
+    {
+     "technique": "markdown-and-code-rendering",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/blocks/CodeFence.tsx:145 CodeFence and CopyButton render static documentation code snippets with copy affordances rather than sanitizing untrusted streaming model output in a chat transcript."
+    },
+    {
+     "technique": "inline-structured-rows",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/blocks/CliBlock.tsx:29 CliBlock classifies lines in static shell documentation rather than dispatching interactive tool calls, errors, or approval rows in a live chat transcript."
+    }
+   ],
+   "absenceTerms": [
+    "turn_queue",
+    "ready_gate",
+    "virtual_channel",
+    "metadata_strip"
+   ],
+   "registryProposal": "Product Documentation (Guide)/Guide Content Blocks & Markdown was matched to chat-transcript purely on lexical terms ('markdown', 'blocks', 'code'), but provides a static documentation reader; the matcher should require conversational keywords before pairing with chat-transcript."
+  },
+  {
+   "context": "Visual Flow Composer & Playground Page",
+   "subject": "chat-transcript",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/playground/TerminalSim.tsx:86 Searched context files and directories for chat-transcript terms ('turn_queue', 'ready_gate', 'virtual_channel', 'metadata_strip') with zero hits; TerminalSim iterates over hardcoded sample script lines from PROMPTS in a simulated CLI container rather than managing an alternating-turn chat transcript.",
+   "techniques": [
+    {
+     "technique": "composer-turn-queue",
+     "verdict": "not-applicable",
+     "evidence": "src/components/flow-composer/components/EventQueueBar.tsx:36 EventQueueBar renders an SVG diagram element labeled EVENT QUEUE for visual flow wiring, not a prompt queue accepting submissions while a chat turn is running."
+    },
+    {
+     "technique": "progress-narration",
+     "verdict": "not-applicable",
+     "evidence": "src/app/playground/TerminalSim.tsx:116 TerminalSim switches a simulated status string based on timer flags for a landing demo rather than collapsing in-flight progress narration steps into a trail at turn settlement."
+    },
+    {
+     "technique": "transcript-scroll",
+     "verdict": "not-applicable",
+     "evidence": "src/app/playground/TerminalSim.tsx:67 scrollTerminal forces scroll-to-bottom on each scripted line append in a mockup terminal pane rather than honoring a pin-to-tail contract with ready gates and user override detection in a chat transcript."
+    }
+   ],
+   "absenceTerms": [
+    "turn_queue",
+    "ready_gate",
+    "virtual_channel",
+    "metadata_strip"
+   ],
+   "registryProposal": "Interactive Demos & Playground/Visual Flow Composer & Playground Page was matched to chat-transcript due to spurious lexical collisions on 'composer', 'queue', and 'tool', which actually describe an SVG diagram canvas and CLI simulation; semantic disambiguation should separate visual flow composers from chat composers."
+  },
+  {
+   "context": "Execution History & Streaming",
+   "subject": "chat-transcript",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:59 Searched context files and directories for chat-transcript terms ('turn_queue', 'ready_gate', 'virtual_channel', 'metadata_strip') with zero hits; this endpoint acts as an SSE proxy relaying orchestrator execution stream lines rather than hosting a multi-author chat transcript.",
+   "techniques": [
+    {
+     "technique": "markdown-and-code-rendering",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/MarkdownReport.tsx:40 MarkdownReport renders completed static text reports into HTML blocks without handling incremental streaming tokens, provisional closure, or conversational turn boundaries."
+    },
+    {
+     "technique": "turn-model",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useExecutionPolling.ts:48 useExecutionPolling polls flat string arrays of process stdout/log output for an execution rather than maintaining identified turns with distinct streaming and settled phases."
+    },
+    {
+     "technique": "virtual-filtered-channel",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/FilterBar.tsx:38 FilterBar renders UI pill tabs for user selection in a dashboard view rather than deriving a virtual filtered channel that filters stream events at ingest into an independent bounded buffer."
+    }
+   ],
+   "absenceTerms": [
+    "turn_queue",
+    "ready_gate",
+    "virtual_channel",
+    "metadata_strip"
+   ],
+   "registryProposal": "Observability & Event Monitoring/Execution History & Streaming was matched to chat-transcript based on 'streaming', 'markdown', and 'history', but belongs to the streaming-output or event-bus subjects; execution log relays should not be mapped to chat-transcript."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T10:35:43.870052+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "chat-transcript"
+   ],
+   "techniques": [
+    "inline-structured-rows",
+    "markdown-and-code-rendering"
+   ],
+   "deviations": 0,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T10:35:43.870052+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "chat-transcript"
+   ],
+   "techniques": [
+    "composer-turn-queue",
+    "progress-narration",
+    "transcript-scroll"
+   ],
+   "deviations": 0,
+   "context": "Visual Flow Composer & Playground Page",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T10:35:43.870052+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "chat-transcript"
+   ],
+   "techniques": [
+    "markdown-and-code-rendering",
+    "turn-model",
+    "virtual-filtered-channel"
+   ],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

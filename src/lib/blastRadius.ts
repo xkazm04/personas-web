@@ -26,6 +26,8 @@ export interface BlastRadiusInputs {
   usage: ToolUsageByPersona[];
   breaches: BreachRef[];
   totalPersonas: number;
+  /** Persona id -> its most recent run's id, so an affected agent's chip can open that run. */
+  latestRunByPersona?: Readonly<Record<string, string>>;
 }
 
 export interface BlastRadius {

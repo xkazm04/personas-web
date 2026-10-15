@@ -6,15 +6,14 @@ import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
-import { SPARKLINE_AGENTS } from "@/lib/mock-dashboard-data";
-import { MOCK_DAILY_METRICS } from "@/lib/mockData";
+import { getObservabilityWorld } from "@/lib/mockApi";
 import { sparklinesFromDaily } from "@/lib/observabilitySeries";
 
 export interface Sparklines {
   cost: number[];
   executions: number[];
   success: number[];
-  /** Active-agents-over-time has no synced source — kept empty (flat line). */
+  /** Agents that ran each day: the demo world counts them; no synced source, so real mode keeps it empty (flat line). */
   agents: number[];
 }
 
@@ -24,11 +23,6 @@ export interface SparklinesResult {
   error: string | null;
   retry: () => void;
 }
-
-const MOCK_SPARKLINES: Sparklines = {
-  ...sparklinesFromDaily(MOCK_DAILY_METRICS),
-  agents: SPARKLINE_AGENTS,
-};
 
 const EMPTY_SPARKLINES: Sparklines = {
   cost: [],
@@ -40,31 +34,30 @@ const EMPTY_SPARKLINES: Sparklines = {
 /**
  * Metric-card sparkline series: cost, executions and per-day success rate (%),
  * projected by `sparklinesFromDaily` from the same daily series the tiles total
- * — MOCK_DAILY_METRICS in demo, the synced observability rollup in real mode.
- * The "agents over time" sparkline has no synced source: demo keeps its seeded
- * fixture, real mode stays empty and the card renders a flat line rather than
- * a fabricated trend.
+ * — the demo world's window in demo, the synced observability rollup in real
+ * mode. The "agents over time" sparkline counts the demo world's agents that
+ * ran each day; it has no synced source, so real mode stays empty and the card
+ * renders a flat line rather than a fabricated trend.
  */
 export function useSparklines(): SparklinesResult {
   const isDemo = useAuthStore((s) => s.isDemo);
-  const useMock = isDemo;
 
-  const [sparklines, setSparklines] = useState<Sparklines>(
-    useMock ? MOCK_SPARKLINES : EMPTY_SPARKLINES,
-  );
-  const [loading, setLoading] = useState(!useMock);
+  const [sparklines, setSparklines] = useState<Sparklines>(EMPTY_SPARKLINES);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (useMock) return;
     let cancelled = false;
     (async () => {
       setLoading(true);
       try {
-        const daily = await api.getObservabilityDaily();
+        const [daily, world] = await Promise.all([
+          api.getObservabilityDaily(),
+          isDemo ? getObservabilityWorld() : Promise.resolve(null),
+        ]);
         if (cancelled) return;
-        setSparklines({ ...sparklinesFromDaily(daily), agents: [] });
+        setSparklines({ ...sparklinesFromDaily(daily), agents: world?.activeAgents ?? [] });
         setError(null);
       } catch (err) {
         if (cancelled) return;
@@ -80,7 +73,7 @@ export function useSparklines(): SparklinesResult {
     return () => {
       cancelled = true;
     };
-  }, [useMock, reloadKey]);
+  }, [isDemo, reloadKey]);
 
   return {
     data: sparklines,

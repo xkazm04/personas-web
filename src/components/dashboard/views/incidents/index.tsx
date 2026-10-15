@@ -16,6 +16,11 @@ import { IncidentsFilters } from "./incidents-page/IncidentsFilters";
 import { IncidentsGroupByTabs } from "./incidents-page/IncidentsGroupByTabs";
 import { IncidentsKpiHeader } from "./incidents-page/IncidentsKpiHeader";
 import { useAuditIncidents } from "./incidents-page/useAuditIncidents";
+import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
+import { incidentContaining } from "@/lib/incidentCorrelate";
+import { linksToMembers } from "@/lib/incidentThreads";
+import { getCorrelatedIncidents } from "@/lib/mockApi";
 import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
 /**
@@ -37,6 +42,14 @@ export default function IncidentsPage() {
   const groupBy = useIncidentsFilterStore((s) => s.groupBy);
 
   const [selected, setSelected] = useState<AuditIncident | null>(null);
+  // The audit log and the other routes' signals, correlated: an incident in a
+  // multi-signal cluster links to its SLA / Observability / Health fragments,
+  // and the cluster resolves when its signals do (demo-only, like the list).
+  const { data: clusters } = useDemoOnlySWR(DEMO_THREAD_KEYS.incidentClusters, getCorrelatedIncidents);
+  const selectedLinks = useMemo(() => {
+    const cluster = selected && clusters ? incidentContaining(clusters, selected.id) : null;
+    return cluster ? linksToMembers(cluster.members) : [];
+  }, [selected, clusters]);
 
   const filtered = useMemo(
     () => applyIncidentFilters(incidents, { status, severity, source, persona }),
@@ -114,7 +127,7 @@ export default function IncidentsPage() {
         </>
       )}
 
-      <IncidentDetailModal incident={selected} onClose={() => setSelected(null)} />
+      <IncidentDetailModal incident={selected} related={selectedLinks} onClose={() => setSelected(null)} />
     </div>
   );
 }

@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 
+import { scopeDaily } from "@/components/dashboard/scope/scopeProjections";
+import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
 import { api } from "@/lib/api";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
 import {
   MOCK_CREDENTIAL_ROTATIONS,
   MOCK_HEALTH_DIGEST,
   MOCK_MEMORY_ACTIONS,
-  MOCK_OPEN_INCIDENTS,
   MOCK_UNREAD_MESSAGES,
   MOCK_VAULT_CHANGES,
 } from "@/lib/mock-dashboard-data";
 import { detectCostAnomalies } from "@/lib/observabilitySeries";
+import { openIncidentCount } from "@/lib/settleThread";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import type { DailyMetric, HealthIssue } from "@/lib/types";
+import type { DateRangePreset } from "@/stores/dashboardFilterStore";
 import { useAuthStore } from "@/stores/authStore";
 import { useReviewStore } from "@/stores/reviewStore";
 import { effectiveNextRunMs } from "../home-page/relativeLabels";
@@ -81,14 +86,20 @@ function recoveryOf(issues: HealthIssue[]) {
  * (observability, healing issues, reviews, routines) are read in both modes;
  * the rest are demo fixtures and read as "not measured" for a real tenant
  * rather than showing it numbers from somebody else's fleet.
+ *
+ * The daily series (outcomes, spend and their evidence charts) is cut to the
+ * scope's window in whole days (`scopeDaily`); it has no persona, so the
+ * scope's persona does not apply. `window` is what the header states.
  */
 export function useMissionReadings(now: number): {
   readings: MissionReadings;
   sources: SourceState[];
   daily: DailyMetric[];
   issues: HealthIssue[];
+  window: DateRangePreset;
 } {
   const isDemo = useAuthStore((s) => s.isDemo);
+  const demoThreads = useDemoThreads();
   const pendingReviews = useReviewStore((s) => s.pendingReviewCount);
   const listNotServed = useReviewStore((s) => s.listNotServed);
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
@@ -107,7 +118,12 @@ export function useMissionReadings(now: number): {
   }, [fetchReviews]);
 
   const dailyQuery = useSWR("observability:daily", api.getObservabilityDaily, SWR_OPTIONS);
-  const issuesQuery = useSWR("observability:health-issues", api.getObservabilityHealthIssues, SWR_OPTIONS);
+  const scope = useDashboardScope();
+  const daily = useMemo(
+    () => (dailyQuery.data === undefined ? undefined : scopeDaily(dailyQuery.data, scope)),
+    [dailyQuery.data, scope],
+  );
+  const issuesQuery = useSWR(DEMO_THREAD_KEYS.healthIssues, api.getObservabilityHealthIssues, SWR_OPTIONS);
   const routines = useUpcomingRoutines();
 
   const reviewsReady = reviewsSettled && !reviewsLoading;
@@ -128,11 +144,11 @@ export function useMissionReadings(now: number): {
         };
 
   const demoQueueExtras = isDemo
-    ? { alerts: MOCK_OPEN_INCIDENTS, memory: MOCK_MEMORY_ACTIONS.length, reports: MOCK_UNREAD_MESSAGES }
+    ? { alerts: openIncidentCount(demoThreads.auditIncidents), memory: MOCK_MEMORY_ACTIONS.length, reports: MOCK_UNREAD_MESSAGES }
     : { alerts: 0, memory: 0, reports: 0 };
 
   const readings: MissionReadings = {
-    outcomes: fromSwr(dailyQuery.data, dailyQuery.error, outcomesOf),
+    outcomes: fromSwr(daily, dailyQuery.error, outcomesOf),
     agents: isDemo
       ? {
           status: "ready",
@@ -156,7 +172,7 @@ export function useMissionReadings(now: number): {
       extras: demoQueueExtras,
     }),
     recovery: fromSwr(issuesQuery.data, issuesQuery.error, recoveryOf),
-    spend: fromSwr(dailyQuery.data, dailyQuery.error, spendOf),
+    spend: fromSwr(daily, dailyQuery.error, spendOf),
     autonomy: routinesReading,
     vault: isDemo
       ? {
@@ -183,5 +199,11 @@ export function useMissionReadings(now: number): {
   ];
   readings.instruments = instrumentsReading(sources);
 
-  return { readings, sources, daily: dailyQuery.data ?? [], issues: issuesQuery.data ?? [] };
+  return {
+    readings,
+    sources,
+    daily: daily ?? [],
+    issues: issuesQuery.data ?? [],
+    window: scope.filter.dateRange,
+  };
 }

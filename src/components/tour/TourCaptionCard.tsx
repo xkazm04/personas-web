@@ -5,10 +5,12 @@ import { usePathname } from "next/navigation";
 import { Play, Pause, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
 import { useDialogFocusTrap, type DialogFocusTrapOptions } from "@/hooks/useDialogFocusTrap";
+import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTranslation } from "@/i18n/useTranslation";
 import { TRANSITION_NORMAL } from "@/lib/animations";
 import AthenaCompanion from "./AthenaCompanion";
 import TourVolumeControl from "./TourVolumeControl";
+import TourStepActions from "./TourStepActions";
 
 type Chapter = "home" | "features" | "dashboard";
 
@@ -37,7 +39,9 @@ const BTN_BASE =
 export default function TourCaptionCard() {
   const { t } = useTranslation();
   const pathname = usePathname();
-  const { steps, stepIndex, playing, next, prev, goTo, togglePlay, exit } = useTour();
+  const { steps, stepIndex, playing, next, prev, goTo, togglePlay, exit, showMe } = useTour();
+  const still = useStillMotion();
+  const transition = still ? { duration: 0 } : TRANSITION_NORMAL;
   // Declared aria-modal, so Tab is contained here too. Escape stays with
   // `useTourKeyboard`; the trap only owns Tab and focus restore.
   const panelRef = useDialogFocusTrap(true, exit, TRAP);
@@ -52,10 +56,11 @@ export default function TourCaptionCard() {
       role="dialog"
       aria-modal="true"
       aria-label={t.tour.launch}
+      data-tour-card
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 24 }}
-      transition={TRANSITION_NORMAL}
+      transition={transition}
       className="fixed inset-x-0 bottom-6 z-[90] mx-auto flex w-[min(94vw,36rem)] flex-col gap-4 rounded-2xl border border-glass-hover bg-surface/95 p-5 shadow-2xl backdrop-blur-md"
     >
       {/* Companion + narration — announced to assistive tech as it changes. */}
@@ -68,14 +73,17 @@ export default function TourCaptionCard() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
-              transition={TRANSITION_NORMAL}
+              transition={transition}
               className="text-base leading-relaxed text-foreground"
             >
               {t.tour[step.narration]}
             </motion.p>
           </AnimatePresence>
+          {step.task && <p className="mt-2 text-base font-medium text-brand-cyan">{t.tour[step.task]}</p>}
         </div>
       </div>
+
+      <TourStepActions step={step} onShowMe={showMe} onKeepLooking={exit} />
 
       {/* Progress dots — also jump-to controls. */}
       <div className="flex items-center justify-center gap-2">

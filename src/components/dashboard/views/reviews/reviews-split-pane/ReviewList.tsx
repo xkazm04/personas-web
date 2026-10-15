@@ -1,3 +1,4 @@
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { ManualReviewItem } from "@/lib/types";
 import { ReviewRow } from "./ReviewRow";
@@ -9,6 +10,7 @@ export function ReviewList({
   listRef,
   now,
   waiting = false,
+  scopeEmpty = false,
   filtered,
   selectedId,
   selectedIds,
@@ -19,6 +21,8 @@ export function ReviewList({
   now: number;
   /** The first fetch has not settled and nothing is held: ghost, don't claim "empty". */
   waiting?: boolean;
+  /** The scope bar's persona + window emptied a queue that has reviews. */
+  scopeEmpty?: boolean;
   filtered: ManualReviewItem[];
   selectedId: string | null;
   selectedIds: Set<string>;
@@ -43,6 +47,8 @@ export function ReviewList({
             ))}
           </div>
         </div>
+      ) : filtered.length === 0 && scopeEmpty ? (
+        <ScopeEmpty compact />
       ) : filtered.length === 0 ? (
         <div className="flex items-center justify-center py-12 text-sm text-muted-dark/60">
           {t.dashboardUi.noReviewsInFilter}

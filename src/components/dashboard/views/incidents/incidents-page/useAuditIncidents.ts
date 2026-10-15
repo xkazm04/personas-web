@@ -1,6 +1,7 @@
 "use client";
 
 import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
 import { getAuditIncidents } from "@/lib/mockApi";
 import type { AuditIncident } from "@/lib/mock-dashboard-data";
 
@@ -17,6 +18,6 @@ export function useAuditIncidents(): {
   retry: () => void;
   liveUnavailable: boolean;
 } {
-  const { data, ...rest } = useDemoOnlySWR("audit-incidents", getAuditIncidents);
+  const { data, ...rest } = useDemoOnlySWR(DEMO_THREAD_KEYS.auditIncidents, getAuditIncidents);
   return { incidents: data ?? [], ...rest };
 }

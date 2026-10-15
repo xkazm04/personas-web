@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { useMemo } from "react";
-import { api, isCommandAck } from "@/lib/api";
+import { api, isCommandAck, isDemoPlane } from "@/lib/api";
 import { usePersonaStore } from "./personaStore";
 import { settleCommand } from "./commandStore";
 import type {
@@ -11,6 +11,8 @@ import type {
 } from "@/lib/types";
 
 const personaLookupCache = new WeakMap<Persona[], Map<string, Persona>>();
+/** Each raw row's enriched copy, per roster lookup: a refetch that hands back the same rows re-enriches none of them. */
+const enrichedCache = new WeakMap<PersonaExecution, { map: Map<string, Persona>; keepOwn: boolean; row: GlobalExecution }>();
 let executionFetchSeq = 0;
 
 function getPersonaLookup(personas: Persona[]): Map<string, Persona> {
@@ -28,14 +30,23 @@ function enrichWithPersona(
   personas: Persona[],
 ): GlobalExecution[] {
   const map = getPersonaLookup(personas);
+  // In the demo, a row whose agent is not on the roster keeps the name it came
+  // with: the world log's stage-only agents (the roster is the five synced
+  // personas). A real plane's rows are joined exactly as before.
+  const keepOwn = isDemoPlane();
   return records.map((r) => {
+    const held = enrichedCache.get(r);
+    if (held && held.map === map && held.keepOwn === keepOwn) return held.row;
     const p = map.get(r.personaId);
-    return {
+    const own = keepOwn && !p ? (r as Partial<GlobalExecution>) : {};
+    const row: GlobalExecution = {
       ...r,
-      personaName: p?.name,
-      personaIcon: p?.icon ?? undefined,
-      personaColor: p?.color ?? undefined,
+      personaName: p?.name ?? own.personaName,
+      personaIcon: p?.icon ?? own.personaIcon,
+      personaColor: p?.color ?? own.personaColor,
     };
+    enrichedCache.set(r, { map, keepOwn, row });
+    return row;
   });
 }
 
@@ -93,7 +104,9 @@ export const useExecutionStore = create<ExecutionState>((set, get) => ({
     const seq = ++executionFetchSeq;
     set({ executionsLoading: true });
     try {
-      const raw = await api.listExecutions({ limit: 50, ...opts });
+      // The demo serves its whole 14-day log (the table pages it, and the
+      // scope and a metric drill-down cut it); a real plane its newest 50.
+      const raw = await api.listExecutions({ limit: isDemoPlane() ? undefined : 50, ...opts });
       if (seq === executionFetchSeq) {
         set({
           rawExecutions: raw,

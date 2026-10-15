@@ -21,8 +21,8 @@ import BoardRail from "./BoardRail";
 import FleetList from "./FleetList";
 import Toast from "./Toast";
 import { readHost } from "./host";
-import { useArrival, useBoardSim, useHostStatus, useJustIn, useSize, useTitleBadge, useToast } from "./useBoardRuntime";
-import { isOpen, openControl, useCommands } from "./useCommands";
+import { useArrival, useBoardSim, useCommands, useHostStatus, useJustIn, useSize, useTitleBadge, useToast } from "./useBoardRuntime";
+import { isOpen, openControl } from "./useCommands";
 import FleetPauseDialog from "./FleetPauseDialog";
 import CommandPalette from "./CommandPalette";
 import ShortcutMap from "./ShortcutMap";
@@ -31,6 +31,7 @@ import { useBoardNav } from "./useBoardNav";
 import b from "./board.module.css";
 import s from "./tiles.module.css";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
+import { useAuthStore } from "@/stores/authStore";
 
 /** The shared attention colours, handed to the board's CSS as variables. */
 const ATTENTION_VARS = {
@@ -58,15 +59,16 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
   const still = useStillMotion();
   const hidden = usePageVisibility();
   const hostStatus = useHostStatus();
+  const demo = useAuthStore((st) => st.isDemo);
   const offline = hostStatus === "offline";
   const live = !still && !hidden && !offline;
   const arriving = useArrival(still);
   const stageRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const { width, height } = useSize(mainRef);
-  const [sim, dispatch] = useBoardSim(scale, still, hidden, offline);
+  const [sim] = useBoardSim(scale, still, hidden, offline);
   const [toast, showToast] = useToast();
-  const commands = useCommands(dispatch, sim);
+  const commands = useCommands();
   const [confirmPause, setConfirmPause] = useState(false);
   const [focus, setFocus] = useState<FocusFilter>(NO_FOCUS);
   const [palette, setPalette] = useState(false);
@@ -127,7 +129,7 @@ export default function BoardPrototype({ scale, onView, onScale }: BoardProps) {
         {!deep && <JustIn alerts={justIn.alerts} scope={scope} copy={copy} onOpen={(id) => { justIn.clear(); openAgentFrom(id); }} onDismiss={justIn.dismiss} />}
         <AnimatePresence>
           {activity && (
-            <ActivityDrawer key="activity" events={sim.events} scope={scope} cmds={commands.cmds} simMs={sim.simMs} copy={copy} hostName={host.name} still={still} onClose={() => setActivity(false)} onOpenAgent={openAgentFrom} />
+            <ActivityDrawer key="activity" events={sim.events} scope={scope} cmds={commands.cmds} simMs={sim.simMs} copy={copy} hostName={host.name} still={still} onClose={() => setActivity(false)} onOpenAgent={openAgentFrom} synced={demo} />
           )}
         </AnimatePresence>
         <Toast toast={toast} />

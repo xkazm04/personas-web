@@ -1,0 +1,153 @@
+{
+  "schema": "conform-run/1",
+  "worker": "b708fbe5-cc12-49ae-94f0-7af40be49114",
+  "subject": "voice-io",
+  "evaluatedAt": "2026-10-14T22:58:56.850187+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "Guided Product Tour",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/contexts/TourContext.tsx:151 Audio-bearing steps bypass independent dwell progression and instead advance through narration completion or its failure watchdog, violating the rule that narration follows the flow without governing it.",
+      "techniques": [
+        {
+          "technique": "bounded-playback-wait",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:158 The watchdog uses a full-duration wall-clock timeout rearmed on play and metadata events, rather than detecting a stall from playback-position progress as required for a pausable channel."
+        },
+        {
+          "technique": "duplex-agent-sessions",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:104 The tour plays prepared media clips; the inspected path establishes no vendor conversation session."
+        },
+        {
+          "technique": "real-time-synthesis-budget",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:68 Synthesis occurs before publication of the clips, so this runtime has no live synthesis turn loop to admit an engine into."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "not-applicable",
+          "evidence": "scripts/generate-tour-audio.mjs:79 The inspected generation path uses fixed narration scripts, which the technique explicitly allows to bypass display-markup normalization."
+        },
+        {
+          "technique": "stt-pipeline",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:133 The tour's analyser observes media playback, not microphone capture; searches found no recognition or microphone acquisition in this path."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:219 Playback rejection is swallowed without a failed or blocked outcome reaching the tour surface."
+        },
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:170 Narration completion drives step progression; manual navigation and error fallbacks do not satisfy the standard's independent-flow requirement."
+        }
+      ]
+    },
+    {
+      "context": "Messages & Settings",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:91 Preview availability depends only on the preference toggle although the traced speech helper silently returns when speech synthesis is absent, allowing an enabled-looking control to do nothing without explanation.",
+      "techniques": [
+        {
+          "technique": "bounded-playback-wait",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:50 Preview emits a synchronous notification signal and does not wait for playback completion."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:52 The preview forwards display content after taking its first line and trimming; composeAnnouncement only clips it before speak constructs the utterance, leaving markdown and URLs unnormalized."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:39 Turning announcements off only updates the preference; the opened store and speech path contain no cancellation that stops an active or queued utterance."
+        },
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:96 The voice control exposes preference state without speaking, blocked, or unavailable state, and offers no explanation when the underlying speech API is absent."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "voice-io",
+      "context": "Manual Review Queue",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "voice-io",
+      "context": "Memory Layers & Multi-Provider AI",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "voice-io",
+      "context": "Mobile App Shell & Views",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor Dial.tsx:67 is a muted decorative video, which does not itself show that voice I/O is absent from the context; the not-applicable rests only on a grep over the listed terms, so the anchor is incidental."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-14T22:58:56.850187+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [
+        "voice-ux-integration"
+      ],
+      "deviations": 0,
+      "context": "Mobile App Shell & Views",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-14T22:58:56.850187+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [
+        "bounded-playback-wait",
+        "duplex-agent-sessions",
+        "real-time-synthesis-budget",
+        "speech-ready-text",
+        "stt-pipeline",
+        "tts-pipeline",
+        "voice-ux-integration"
+      ],
+      "deviations": 1,
+      "context": "Guided Product Tour",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-14T22:58:56.850187+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [
+        "bounded-playback-wait",
+        "speech-ready-text",
+        "tts-pipeline",
+        "voice-ux-integration"
+      ],
+      "deviations": 1,
+      "context": "Messages & Settings",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

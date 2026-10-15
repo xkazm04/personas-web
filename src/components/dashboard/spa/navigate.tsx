@@ -1,6 +1,7 @@
 "use client";
 
 import type { AnchorHTMLAttributes, MouseEvent } from "react";
+import { emitTourSignal, viewSignalFor } from "@/lib/tourSignals";
 
 /**
  * Move inside the dashboard without a route change. Next.js syncs native
@@ -13,6 +14,9 @@ export function navigateDashboard(href: string, { replace = false } = {}) {
   if (current === href) return;
   if (replace) window.history.replaceState(null, "", href);
   else window.history.pushState(null, "", href);
+  // The guided tour's `view` signal (lib/tourSignals.ts): a no-op outside a tour.
+  const signal = viewSignalFor(href);
+  if (signal) emitTourSignal(signal);
 }
 
 type DashLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {

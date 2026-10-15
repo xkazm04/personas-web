@@ -148,6 +148,10 @@ the content. Tokens per theme: `--dash-glow-a`, `--dash-glow-b`, `--dash-pattern
 Dropped under `forced-colors` and print. Add a theme → add its block to
 `dashboard.css` beside its `themes.css` block.
 
+## Demo data loading
+
+The demo's run log ([the demo world](../infrastructure/orchestrator-client-mocks.md#the-demo-world)) is not in the dashboard's first load: `mockApi` imports `src/lib/demoWorld/fleetReads.ts` (and with it `fleet.json`, ~140 KB) on the first read that needs it, and builds the world once. Views that read it (Executions, Observability, Mission Control's outcomes and spend, the leaderboard) treat it as T2 data: the first load holds the view's reservation (`ViewGap` / the table's held block) until it lands, as a real plane's fetch would. The crew's slice (SLA, the incident threads, the heatmap) is small and synchronous.
+
 ## Conventions & gotchas
 
 - `ViewOutlet`'s `onAnimationEnd` only marks `dash-arrive` / `dash-settle`. Other

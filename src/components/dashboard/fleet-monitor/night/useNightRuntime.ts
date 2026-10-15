@@ -3,19 +3,20 @@
 import { useMemo } from "react";
 import { DEMO_HOST } from "../board/host";
 import { makeOperator } from "../board/operator";
-import { useBoardSim, useToast } from "../board/useBoardRuntime";
-import { useCommands } from "../board/useCommands";
+import { useBoardSim, useCommands, useToast } from "../board/useBoardRuntime";
 import type { Packet } from "./Packets";
 import { personasMonitorCopy } from "@/i18n/pending/personasMonitor";
 
 /**
  * The city runs on the Board's own simulation and command plane, so the
  * console it opens is the Board's console, with working controls, and what
- * the console changes shows in the windows. Ticks while the tab is visible.
+ * the console changes shows in the windows. It is the stage's one world
+ * (`world/fleetWorld.ts`), so what is decided here is still so on the Board.
+ * Ticks while the tab is visible.
  */
 export function useNightRuntime(scale: number, still: boolean, hidden: boolean) {
-  const [sim, dispatch] = useBoardSim(scale, still, hidden, false);
-  const commands = useCommands(dispatch, sim);
+  const [sim] = useBoardSim(scale, still, hidden, false);
+  const commands = useCommands();
   const [toast, showToast] = useToast();
 
   const scoped = useMemo(() => sim.agents.slice(0, scale), [sim.agents, scale]);

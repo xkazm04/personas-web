@@ -1,22 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { Play } from "lucide-react";
 import { useTour } from "@/contexts/TourContext";
+import { TOUR_SEEN_KEY as STORAGE_KEY, loadTourSteps, useTourAutostart } from "@/hooks/useTourAutostart";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { TourId } from "@/lib/tour-script";
-
-const STORAGE_KEY = "personas-tour-seen";
 
 /**
  * Entry point for the guided tour. Hides itself while a tour is running.
  * Each page passes its own `steps` array so one engine drives all pages.
  *
- * Extras: `?tour=1` in the URL auto-starts the tour on mount; a localStorage
- * flag remembers that a visitor has seen the tour so the first-time pulse
- * only shows once.
+ * Extras: `?tour=1` in the URL auto-starts the tour on mount (unless
+ * `autostart` is off: the dashboard tour autostarts from the dashboard layout,
+ * wherever `/demo` lands); a localStorage flag remembers that a visitor has
+ * seen the tour so the first-time pulse only shows once.
  */
 export type BridgeKey = "features" | "dashboard";
 
@@ -25,6 +25,7 @@ export default function TourLauncher({
   bridgeHref,
   bridgeKey,
   intro = false,
+  autostart = true,
 }: {
   /** Which tour to run — resolved to its step array client-side, so the
    *  function-bearing `actions` never cross the Server→Client boundary. */
@@ -35,6 +36,8 @@ export default function TourLauncher({
   bridgeKey?: BridgeKey;
   /** Show the welcome intro pop-up before the first step. */
   intro?: boolean;
+  /** Start on `?tour=1`. Off where another component owns the autostart. */
+  autostart?: boolean;
 }) {
   const { t } = useTranslation();
   const { active, start } = useTour();
@@ -44,10 +47,7 @@ export default function TourLauncher({
   // the above-fold chunk: this launcher sits in the hero, and the vast
   // majority of visitors never start a tour. Resolved on hover/focus (so the
   // chunk is usually warm by the time the click lands) and awaited on click.
-  const loadSteps = useCallback(
-    () => import("@/lib/tour-script").then((m) => m.TOURS_BY_ID[tourId]),
-    [tourId],
-  );
+  const loadSteps = useCallback(() => loadTourSteps(tourId), [tourId]);
 
   // Build the per-tour bridge copy from i18n. Undefined when bridgeKey is
   // unset → TourBridgeCard uses the default (features) strings. Memoized so
@@ -66,7 +66,6 @@ export default function TourLauncher({
   // Default to "seen" so returning visitors don't see a one-frame pulse
   // before the effect below flips state.
   const [seen, setSeen] = useState(true);
-  const autostartedRef = useRef(false);
 
   // Read the seen flag once on mount (client-only).
   useEffect(() => {
@@ -80,21 +79,8 @@ export default function TourLauncher({
     });
   }, []);
 
-  // Auto-start when ?tour=1 in the URL.
-  useEffect(() => {
-    if (autostartedRef.current) return;
-    if (typeof window === "undefined") return;
-    const sp = new URLSearchParams(window.location.search);
-    if (sp.get("tour") === "1") {
-      autostartedRef.current = true;
-      try {
-        window.localStorage.setItem(STORAGE_KEY, "1");
-      } catch {
-        /* ignored */
-      }
-      void loadSteps().then((steps) => start(steps, { bridgeHref, bridge, intro }));
-    }
-  }, [start, loadSteps, bridgeHref, bridge, intro]);
+  // Auto-start when ?tour=1 in the URL (and the tab is shown).
+  useTourAutostart(tourId, { bridgeHref, bridge, intro }, autostart);
 
   if (active) return null;
 

@@ -4,6 +4,8 @@ import { Lightbulb, ShieldCheck, Zap } from "lucide-react";
 
 import { Modal } from "@/components/dashboard/Modal";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
+import RelatedIncidentLinks from "@/components/dashboard/RelatedIncidentLinks";
+import type { RelatedLink } from "@/lib/incidentThreads";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { AuditIncident } from "@/lib/mock-dashboard-data";
 import { severityStyle, sourceIcon, statusStyle } from "@/lib/incidentFormat";
@@ -24,9 +26,12 @@ function MetaItem({ label, value }: { label: string; value: React.ReactNode }) {
  */
 export function IncidentDetailModal({
   incident,
+  related = [],
   onClose,
 }: {
   incident: AuditIncident | null;
+  /** The other routes' fragments correlated with this incident (lib/incidentCorrelate.ts). */
+  related?: RelatedLink[];
   onClose: () => void;
 }) {
   const { t } = useTranslation();
@@ -74,7 +79,10 @@ export function IncidentDetailModal({
             )}
           </div>
 
-          <p className="text-sm leading-relaxed text-muted">{incident.description}</p>
+          <div>
+            <p className="text-sm leading-relaxed text-muted">{incident.description}</p>
+            <RelatedIncidentLinks links={related} onNavigate={onClose} />
+          </div>
 
           <div className="grid grid-cols-2 gap-4 rounded-xl border border-glass bg-white/[0.02] p-4 sm:grid-cols-3">
             <MetaItem

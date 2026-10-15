@@ -1,6 +1,7 @@
 "use client";
 
 import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
 import { getSystemHealth } from "@/lib/mockApi";
 import type { HealthCheckSection } from "@/lib/mock-dashboard-data";
 
@@ -18,7 +19,7 @@ export function useSystemHealth(): {
   retry: () => void;
   liveUnavailable: boolean;
 } {
-  const { data, ...rest } = useDemoOnlySWR("system-health", getSystemHealth);
+  const { data, ...rest } = useDemoOnlySWR(DEMO_THREAD_KEYS.systemHealth, getSystemHealth);
   return {
     sections: data?.sections ?? [],
     diskUsage: data?.diskUsage ?? { usedGb: 0, totalGb: 0 },

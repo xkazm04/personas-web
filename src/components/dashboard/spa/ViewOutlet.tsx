@@ -44,7 +44,8 @@ export default function ViewOutlet({ children }: { children?: React.ReactNode })
 
   return (
     <div className={traits?.fullBleed ? undefined : "mx-auto max-w-7xl"} onAnimationEnd={markArrived}>
-      {traits?.scoped && <DashboardScopeBar />}
+      {/* Only the controls the view's data honours (spa/views.ts `scope`). */}
+      {traits && traits.scope.length > 0 && <DashboardScopeBar dims={traits.scope} />}
       {/* The route's own output: null for a view, the 404 for anything else. */}
       {children}
       {/* Fixed order, so showing a kept view never moves DOM nodes around. */}

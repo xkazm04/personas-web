@@ -13,6 +13,7 @@ import { FocusReviewCard } from "./reviews-focus-flow/FocusReviewCard";
 import { ReviewUndoToast } from "./reviews-split-pane/ReviewsSplitPaneToasts";
 import { useReviewClock } from "./review-due";
 import type { ReviewGate } from "./useReviewGate";
+import { useScopedReviews } from "./useScopedReviews";
 
 interface Props {
   onExit: () => void;
@@ -24,7 +25,8 @@ interface Props {
 
 export default function ReviewsFocusFlow({ onExit, now: pageNow, canDecide }: Props) {
   const { t } = useTranslation();
-  const reviews = useReviewStore((state) => state.reviews);
+  // The walk covers the queue the scope bar shows (its persona + window).
+  const { reviews } = useScopedReviews();
   const decide = useReviewStore((state) => state.decide);
   const policy = useReviewStore((state) => state.escalationPolicy);
   const ownNow = useReviewClock(pageNow === undefined);

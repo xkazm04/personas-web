@@ -10,9 +10,6 @@ import {
   MOCK_TRIGGERS,
   MOCK_HEALTH,
   MOCK_STATUS,
-  MOCK_OBSERVABILITY_METRICS,
-  MOCK_DAILY_METRICS,
-  MOCK_PERSONA_SPEND,
   MOCK_TOOL_USAGE,
   MOCK_TOOL_USAGE_OVER_TIME,
   MOCK_TOOL_USAGE_BY_PERSONA,
@@ -20,10 +17,7 @@ import {
 } from "./mockData";
 import {
   MOCK_ATHENA_USAGE,
-  MOCK_AUDIT_INCIDENTS,
-  MOCK_HEALTH_ISSUES,
   MOCK_DISK_USAGE,
-  MOCK_HEALTH_CHECKS,
   MOCK_VALUE_ROLLUP,
   MOCK_DIRECTOR_PORTFOLIO,
   MOCK_DIRECTOR_VERDICTS,
@@ -39,10 +33,18 @@ import {
   type DirectorPortfolio,
   type DirectorVerdict,
   type HealthCheckSection,
-  MOCK_SLA_BREACHES,
+  type LeaderboardPersona,
+  MOCK_LEARNED_MEMORIES,
+  MOCK_MEMORIES,
+  type MemoryItem,
   type ValueRollup,
 } from "./mock-dashboard-data";
+import { memoryItemFromSynced } from "./knowledgeMemories";
+import { crewWorld } from "./demoWorld/crew";
+import type { ChartAnnotation } from "./observabilitySeries";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
+import { currentDemoThreads, DEMO_THREAD_KEYS } from "./demoThreads";
+import { correlate, DEMO_CORRELATION_WINDOW_MS, demoSignals, type Incident } from "./incidentCorrelate";
 import { reviewDecideParams, type ReviewDecisionInput } from "./commands/reviewDecide";
 import { statusAfterFailedAttempt } from "./eventStatusFsm";
 import { AUTO_RETRY_LIMIT } from "./eventWireStatus";
@@ -75,6 +77,24 @@ import type {
   ToolUsageByPersona,
   EventStatus,
 } from "./types";
+
+/**
+ * The demo world's reads (src/lib/demoWorld/fleetReads.ts): the run log and
+ * every aggregate of it, over the Board's 99 agents. Loaded on the first read
+ * that needs it, so neither it nor `fleet.json` is in the dashboard's first
+ * load; held once loaded, so a cache write (lib/demoCauseFix.ts) can read it
+ * synchronously.
+ */
+type FleetReads = typeof import("./demoWorld/fleetReads");
+let fleetReadsModule: FleetReads | null = null;
+
+async function fleetReads(): Promise<FleetReads> {
+  fleetReadsModule ??= await import("./demoWorld/fleetReads");
+  return fleetReadsModule;
+}
+
+/** The session as the world's reads see it: its rows and its roster, now. */
+const session = () => ({ rows: MOCK_EXECUTIONS, personas: MOCK_PERSONAS });
 
 /** The demo's commands go to the scripted desktop, which needs no device id. */
 const DEMO_TARGET = { demo: true, deviceId: null } as const;
@@ -160,21 +180,21 @@ export const mockApi: ApiClient = {
     return { deleted: true };
   },
 
-  listExecutions: async (_opts?: ExecFilterOpts): Promise<PersonaExecution[]> => {
+  // The world's run log (99 agents, 14 days) with the session's rows, newest
+  // first, filtered and paged as the real planes do (`limit` honoured when given).
+  listExecutions: async (opts?: ExecFilterOpts): Promise<PersonaExecution[]> => {
     await delay();
-    let result = [...MOCK_EXECUTIONS];
-    if (_opts?.personaId) {
-      result = result.filter((e) => e.personaId === _opts.personaId);
-    }
-    if (_opts?.status) {
-      result = result.filter((e) => e.status === _opts.status);
-    }
-    return result;
+    return (await fleetReads()).listWorldExecutions(session(), opts);
   },
 
   getExecution: async (id: string, offset?: number): Promise<ExecutionDetail> => {
     await delay(200);
-    return getMockExecutionDetail(id, offset);
+    const detail = getMockExecutionDetail(id, offset);
+    if (!("unavailable" in detail)) return detail;
+    const world = (await fleetReads()).worldExecutionDetail(id);
+    // The real planes' contract for an id they do not hold (supabaseApi.getExecution).
+    if (!world) throw new ApiError(404, "Execution not found");
+    return world;
   },
 
   // The demo is a command plane like the live mirror (PHASE2-SPEC.md 6.3):
@@ -354,41 +374,31 @@ export const mockApi: ApiClient = {
     personaSpend: PersonaSpend[];
     healthIssues: HealthIssue[];
   }> => {
-    const [metrics, dailyMetrics, personaSpend, healthIssues] = await Promise.all([
-      delay(300).then(() => ({ ...MOCK_OBSERVABILITY_METRICS })),
-      delay(300).then(() => [...MOCK_DAILY_METRICS]),
-      delay(300).then(() => [...MOCK_PERSONA_SPEND]),
-      delay(300).then(() => [...MOCK_HEALTH_ISSUES]),
-    ]);
-
-    return {
-      metrics,
-      dailyMetrics,
-      personaSpend,
-      healthIssues,
-    };
+    await delay(300);
+    return observabilityFrom(await fleetReads());
   },
 
   // Tiered field-selected variants — fastest (metrics) → slowest (joins)
-  // so the progressive-reveal page can render each tier as it arrives.
+  // so the progressive-reveal page can render each tier as it arrives. Each
+  // is a fold of the same log, so the tiers agree with each other.
   getObservabilityMetrics: async (): Promise<ObservabilityMetrics> => {
     await delay(100);
-    return { ...MOCK_OBSERVABILITY_METRICS };
+    return (await fleetReads()).observabilityOf(session()).metrics;
   },
 
   getObservabilityDaily: async (): Promise<DailyMetric[]> => {
     await delay(300);
-    return [...MOCK_DAILY_METRICS];
+    return (await fleetReads()).observabilityOf(session()).dailyMetrics;
   },
 
   getObservabilityPersonaSpend: async (): Promise<PersonaSpend[]> => {
     await delay(600);
-    return [...MOCK_PERSONA_SPEND];
+    return (await fleetReads()).observabilityOf(session()).personaSpend;
   },
 
   getObservabilityHealthIssues: async (): Promise<HealthIssue[]> => {
     await delay(600);
-    return [...MOCK_HEALTH_ISSUES];
+    return healthIssuesSnapshot();
   },
 
   getUsageAnalytics: async (): Promise<{
@@ -451,7 +461,17 @@ export const mockApi: ApiClient = {
  */
 export async function getAuditIncidents(): Promise<AuditIncident[]> {
   await delay(300);
-  return [...MOCK_AUDIT_INCIDENTS];
+  return auditIncidentsSnapshot();
+}
+
+/**
+ * The audit incidents and the other routes' signals, correlated into
+ * incidents (lib/incidentCorrelate.ts) over the session's projection, so a
+ * fixed cause's incident reads resolved. Demo-only standalone fetcher.
+ */
+export async function getCorrelatedIncidents(): Promise<Incident[]> {
+  await delay(300);
+  return correlatedIncidentsSnapshot();
 }
 
 /**
@@ -464,20 +484,115 @@ export async function getSystemHealth(): Promise<{
   diskUsage: { usedGb: number; totalGb: number };
 }> {
   await delay(300);
-  return { sections: MOCK_HEALTH_CHECKS.map((s) => ({ ...s })), diskUsage: { ...MOCK_DISK_USAGE } };
+  return systemHealthSnapshot();
+}
+
+/** Each crew persona's most recent run (by creation time): the session's rows and the world's log. */
+function latestRunByPersona(): Record<string, string> {
+  const latest: Record<string, { id: string; at: number }> = {};
+  const consider = (personaId: string, id: string, at: number) => {
+    const held = latest[personaId];
+    if (!held || at > held.at) latest[personaId] = { id, at };
+  };
+  for (const e of MOCK_EXECUTIONS) consider(e.personaId, e.id, Date.parse(e.createdAt));
+  for (const log of crewWorld().logs) {
+    const newest = log.runs[0];
+    if (newest && MOCK_PERSONAS.some((p) => p.id === log.agent.personaId)) consider(log.agent.personaId, newest.id, newest.at);
+  }
+  return Object.fromEntries(Object.entries(latest).map(([personaId, run]) => [personaId, run.id]));
 }
 
 /**
  * Inputs for the System Health blast-radius panel: who calls which tools, the
- * SLA breaches, and the fleet size. Demo-only standalone fetcher.
+ * SLA breaches, the fleet size, and each agent's latest run (its chip opens
+ * it). Demo-only standalone fetcher.
  */
 export async function getBlastRadiusInputs() {
   await delay(300);
+  return blastRadiusInputsSnapshot();
+}
+
+// ── Thread-member reads ─────────────────────────────────────────────
+// Every demo read that serves a member of an incident thread goes through the
+// session's projection (lib/settleThread.ts via currentDemoThreads), here and
+// nowhere else, so a fixed cause reads settled on every route at once. The
+// synchronous snapshots back both the async getters above and the cache write
+// a fix makes (lib/demoCauseFix.ts), keyed by the SWR key each hook reads.
+
+function auditIncidentsSnapshot(): AuditIncident[] {
+  return [...currentDemoThreads().auditIncidents];
+}
+
+function correlatedIncidentsSnapshot(): Incident[] {
+  return correlate(demoSignals(currentDemoThreads()), { windowMs: DEMO_CORRELATION_WINDOW_MS });
+}
+
+function systemHealthSnapshot() {
+  return {
+    sections: currentDemoThreads().healthChecks.map((s) => ({ ...s })),
+    diskUsage: { ...MOCK_DISK_USAGE },
+  };
+}
+
+function blastRadiusInputsSnapshot() {
   return {
     usage: MOCK_TOOL_USAGE_BY_PERSONA,
-    breaches: MOCK_SLA_BREACHES.map((b) => ({ id: b.id, persona: b.persona, resolvedAt: b.resolvedAt })),
+    breaches: currentDemoThreads().slaBreaches.map((b) => ({ id: b.id, persona: b.persona, resolvedAt: b.resolvedAt })),
     totalPersonas: MOCK_PERSONAS.length,
+    latestRunByPersona: latestRunByPersona(),
   };
+}
+
+function healthIssuesSnapshot(): HealthIssue[] {
+  return [...currentDemoThreads().healthIssues];
+}
+
+function observabilityFrom(reads: FleetReads): {
+  metrics: ObservabilityMetrics;
+  dailyMetrics: DailyMetric[];
+  personaSpend: PersonaSpend[];
+  healthIssues: HealthIssue[];
+} {
+  const { metrics, dailyMetrics, personaSpend } = reads.observabilityOf(session());
+  return { metrics, dailyMetrics, personaSpend, healthIssues: healthIssuesSnapshot() };
+}
+
+/**
+ * The observability read as it would answer now, or undefined before the
+ * world has loaded: nothing can hold that key yet, and the first read serves
+ * the settled thread anyway.
+ */
+function observabilitySnapshot() {
+  return fleetReadsModule ? observabilityFrom(fleetReadsModule) : undefined;
+}
+
+/**
+ * Each thread-member SWR key's demo value, as its getter would return it now
+ * (undefined: not readable yet, so no reader holds it; leave the key alone).
+ */
+export const DEMO_THREAD_SNAPSHOTS: Record<(typeof DEMO_THREAD_KEYS)[keyof typeof DEMO_THREAD_KEYS], () => unknown> = {
+  [DEMO_THREAD_KEYS.systemHealth]: systemHealthSnapshot,
+  [DEMO_THREAD_KEYS.blastInputs]: blastRadiusInputsSnapshot,
+  [DEMO_THREAD_KEYS.auditIncidents]: auditIncidentsSnapshot,
+  [DEMO_THREAD_KEYS.incidentClusters]: correlatedIncidentsSnapshot,
+  [DEMO_THREAD_KEYS.observability]: observabilitySnapshot,
+  [DEMO_THREAD_KEYS.healthIssues]: healthIssuesSnapshot,
+};
+
+/**
+ * Knowledge > Memories for the demo: what the scripted desktop learned from
+ * this session's review verdicts (MOCK_LEARNED_MEMORIES, newest first), then
+ * the seeded set. Learned rows are desktop persona-memory rows and are read
+ * through the same mapper real mode uses for synced rows. Demo-only standalone
+ * fetcher; the command store refreshes its SWR key when the desktop writes.
+ */
+export async function getKnowledgeMemories(): Promise<MemoryItem[]> {
+  await delay(150);
+  const nameById = new Map(MOCK_PERSONAS.map((p) => [p.id, p.name]));
+  return [
+    ...MOCK_LEARNED_MEMORIES.map((m) => memoryItemFromSynced(m, nameById.get(m.personaId) ?? m.personaId)),
+    ...MOCK_MEMORIES.map((m) => ({ ...m })),
+  ];
 }
 
 /**
@@ -522,4 +637,34 @@ export async function getActivityMetrics(): Promise<{
     athenaActionMix: MOCK_ATHENA_ACTION_MIX.map((a) => ({ ...a })),
     athenaLedger: { ...MOCK_ATHENA_LEDGER },
   };
+}
+
+/**
+ * The demo leaderboard: `standings()` (the engine the Supabase plane ranks
+ * synced snapshots with) over the world's daily snapshots, the whole demo
+ * fleet ranked. Demo-only standalone fetcher.
+ */
+export async function getDemoLeaderboard(): Promise<LeaderboardPersona[]> {
+  await delay(300);
+  return (await fleetReads()).worldLeaderboard(session());
+}
+
+/**
+ * What the Performance tab overlays on the window, from the same log: the
+ * prior 14 days (Compare and the trends), the agents active each day (the
+ * active-agents sparkline), the chart annotations and the population the
+ * figures cover. Demo-only standalone
+ * fetcher; real mode has no prior period and hides these.
+ */
+export async function getObservabilityWorld(): Promise<{
+  prior: DailyMetric[];
+  activeAgents: number[];
+  annotations: ChartAnnotation[];
+  /** The agents the window's figures cover (the demo fleet). */
+  agents: number;
+}> {
+  await delay(300);
+  const reads = await fleetReads();
+  const { dailyMetrics, prior, activeAgents, agents } = reads.observabilityOf(session());
+  return { prior, activeAgents, agents, annotations: reads.worldAnnotations(dailyMetrics) };
 }

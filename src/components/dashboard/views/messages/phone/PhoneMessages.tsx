@@ -9,6 +9,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import { mobileCopy } from "@/i18n/pending/mobile";
 import type { MessageThread } from "@/lib/mock-dashboard-data";
 import { useMessagesData } from "../useMessagesData";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useThreadReadState } from "../useThreadReadState";
 import { MessageRowGhosts } from "../messages-page/MessageRowGhosts";
 import PhoneThreadReader from "./PhoneThreadReader";
@@ -38,7 +39,7 @@ function scrollParent(el: HTMLElement | null): HTMLElement | null {
 export default function PhoneMessages() {
   const { t } = useTranslation();
   const copy = mobileCopy.messages;
-  const { threads: baseThreads, loading, error, retry } = useMessagesData();
+  const { threads: baseThreads, scopeEmpty, loading, error, retry } = useMessagesData();
   const { threads, unreadCount, markThreadRead, markAllRead } = useThreadReadState(baseThreads);
   const [shown, setShown] = useState(STEP);
   const [openId, setOpenId] = useState<string | null>(null);
@@ -102,6 +103,8 @@ export default function PhoneMessages() {
 
         {loading ? (
           <MessageRowGhosts />
+        ) : scopeEmpty ? (
+          <ScopeEmpty compact />
         ) : threads.length === 0 ? (
           <p className={`${ARRIVE} py-12 text-center text-sm text-muted-dark`} style={arriveAt(1)}>
             {t.messagesPage.empty}

@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { refusalOf, type SimAction, type SimState } from "./sim";
 import type { Refusal } from "./verbs";
 
@@ -102,82 +99,16 @@ export function inFlightFor(cmds: readonly Command[], agentId: string): Command 
   return cmds.find((c) => c.agentId === agentId && (c.status === "sending" || c.status === "acked"));
 }
 
-/**
- * The command plane. `sim` is the machine's current state: a landing command
- * is settled against the latest one (kept in a ref, read only in timers).
- */
-export function useCommands(dispatch: (a: SimAction) => void, sim: Pick<SimState, "agents">) {
-  const [cmds, setCmds] = useState<Command[]>([]);
-  const simRef = useRef(sim);
-  // Layout, not passive: a passive effect can flush after a timer that fires
-  // between commit and paint, settling a landing command against a stale sim
-  // (marking done what the reducer then refuses).
-  useLayoutEffect(() => {
-    simRef.current = sim;
-  }, [sim]);
-  const batchSeq = useRef(0);
-  /** Each open batch's command ids (kept here, not read from `cmds`, which an
-   *  Undo from an older render's toast would see stale, and which is capped). */
-  const batches = useRef(new Map<number, number[]>());
-  const timers = useRef(new Map<number, number[]>());
-  const held = useRef(new Set<number>());
-  const seq = useRef(0);
-
-  useEffect(() => {
-    const all = timers.current;
-    return () => all.forEach((ids) => ids.forEach((t) => window.clearTimeout(t)));
-  }, []);
-
-  const setStatus = (id: number, status: CmdStatus) => setCmds((cs) => cs.map((c) => (c.id === id ? { ...c, status } : c)));
-
-  const send = (spec: CommandSpec, hold = false): number => {
-    const id = ++seq.current;
-    setCmds((cs) => [{ ...spec, id, status: hold ? ("held" as const) : ("sending" as const) }, ...cs].slice(0, 40));
-    const t0 = hold ? HOLD_MS : 0;
-    if (hold) held.current.add(id);
-    if (spec.batch != null) batches.current.set(spec.batch, [...(batches.current.get(spec.batch) ?? []), id]);
-    const at = (ms: number, fn: () => void) => window.setTimeout(fn, ms);
-    timers.current.set(id, [
-      ...(hold ? [at(t0, () => { held.current.delete(id); setStatus(id, "sending"); })] : []),
-      at(t0 + SEND_MS, () => setStatus(id, "acked")),
-      at(t0 + SEND_MS + ACK_MS, () => {
-        timers.current.delete(id);
-        const { action, refusal } = settle(spec, simRef.current);
-        if (action) dispatch(action);
-        setCmds((cs) => cs.map((c) => (c.id === id ? closeCommand(c, refusal) : c)));
-      }),
-    ]);
-    return id;
-  };
-
-  /** Take back a held command; false once it has left (nothing to undo then). */
-  const undo = (id: number): boolean => {
-    if (!held.current.has(id)) return false;
-    held.current.delete(id);
-    timers.current.get(id)?.forEach((t) => window.clearTimeout(t));
-    timers.current.delete(id);
-    setStatus(id, "undone");
-    return true;
-  };
-
+/** The command plane the views drive (the stage world's, `world/fleetWorld.ts`). */
+export interface Commands {
+  /** Newest first: the session's command audit. */
+  cmds: Command[];
+  /** Send a command; `hold` keeps a verdict for the Undo window first. Returns its id. */
+  send: (spec: CommandSpec, hold?: boolean) => number;
+  /** Take back a held command; false once it has left. */
+  undo: (id: number) => boolean;
   /** A new batch id for a grouped verdict's commands. */
-  const newBatch = (): number => {
-    const id = ++batchSeq.current;
-    // Only a recent batch can still be undone (its toast is gone after HOLD_MS).
-    batches.current.delete(id - 20);
-    return id;
-  };
-
+  newBatch: () => number;
   /** Take back what is still held of a batch, and say how many had already left. */
-  const undoBatch = (batchId: number): { undone: number; alreadySent: number } => {
-    const ids = batches.current.get(batchId) ?? [];
-    batches.current.delete(batchId);
-    const plan = planBatchUndo(ids.map((id) => ({ id, batch: batchId, status: held.current.has(id) ? "held" : "sending" })), batchId);
-    const undone = plan.undo.filter((id) => undo(id)).length;
-    return { undone, alreadySent: plan.alreadySent + plan.undo.length - undone };
-  };
-
-  return { cmds, send, undo, newBatch, undoBatch };
+  undoBatch: (batchId: number) => { undone: number; alreadySent: number };
 }
-
-export type Commands = ReturnType<typeof useCommands>;

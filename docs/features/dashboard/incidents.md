@@ -7,7 +7,8 @@ Incidents is the fleet's audit-log inbox: every notable event the orchestrator r
 - **KPI header** — the unresolved count (open + escalated) over the total, a severity breakdown (critical / high / medium / low), and a source breakdown (executions / events / triggers / vault / messages / reviews).
 - **Filters** — status, severity, source, and persona pill bars. Pill counts reflect the full set; selections persist across reloads.
 - **Group by** — none (flat list), agent, severity, or source, with collapsible sections.
-- **Detail modal** — click any incident for the full description, a metadata grid (source / category / agent / detected / resolved), badges (circuit-breaker, auto-fixed), and a recommended remediation.
+- **Detail modal** — click any incident for the full description, a metadata grid (source / category / agent / detected / resolved), badges (circuit-breaker, auto-fixed), and a recommended remediation. An incident that correlates with signals on other routes (today: the Slack outage with its SLA breach and Observability issue) shows **Related** chips that deep-link to them.
+- **Settles with its cause** — configuring the broken Slack check on Health resolves the Slack incident here (and its correlated cluster) in the same session, and lowers the nav badge; Health's **Undo fix** reopens it.
 
 It mirrors the desktop overview's Incidents Inbox (`sub_incidents`). Like the rest of `/dashboard/*`, all data is **mock** — incidents have no synced source in this repo.
 
@@ -18,7 +19,9 @@ Key behaviors:
 - **Persisted filters** — `useIncidentsFilterStore` mirrors `dashboardFilterStore`: a manual `hydrate()`/`persist()` pair keyed `incidents-filter-state`, type-guarding every field on load and writing after each mutation. Hydration runs once after store creation (SSR-safe).
 - **Demo-only fetch** — `getAuditIncidents` is a *standalone* export in `mockApi.ts` (not part of the `ApiClient` interface, so no real/supabase client changes); the hook calls it through `useDemoOnlySWR` (`src/hooks/useDemoOnlySWR.ts`), SWR keyed on `isDemo`, for a brief loading state. In a real (non-demo) session nothing is fetched and the page renders an `EmptyState` (`t.dashboardUi.liveUnavailableTitle` / `liveUnavailableDescription`) instead of the KPI header, filters and list.
 - **Grouping** — `groupIncidents` buckets by agent (busiest first) / severity (worst first) / source (canonical order) / none (single group); each group keeps the severity-then-recency order. Sections collapse via a local `Set<string>` of collapsed keys.
-- **Nav badge** — `MOCK_OPEN_INCIDENTS` (open + escalated) drives the sidebar badge, matching the KPI headline.
+- **Correlated clusters** — the page also reads `getCorrelatedIncidents` (`mockApi.ts`, demo-only, key `DEMO_THREAD_KEYS.incidentClusters`), which runs `correlate(demoSignals(projection))` (`src/lib/incidentCorrelate.ts`; mockApi is its production importer) over the session's projection. The cluster holding the selected incident is turned into chips by `linksToMembers` (`src/lib/incidentThreads.ts`) and rendered in the detail modal with the existing `RelatedIncidentLinks` (which closes the modal as a chip is followed). No new panel: the audit list stays the page's body. A failing health check is a signal only while it fails, so after a fix the cluster keeps its SLA and Observability fragments (resolved) and drops the Health one.
+- **Thread fixes** — `getAuditIncidents` serves `MOCK_AUDIT_INCIDENTS` through `settleThread` (`src/lib/settleThread.ts`): an incident declaring a fixed `causeKey` (`inc_1` = `slack-circuit-break`) reads `resolved` with `resolvedAt` = the fix time. A fix writes this key and the clusters key into the SWR cache (`src/lib/demoCauseFix.ts`), so the page agrees even when it was kept alive hidden.
+- **Nav badge** — `openIncidentCount` (open + escalated) over `useDemoThreads()` drives the sidebar badge, matching the KPI headline; a fixed cause lowers it.
 
 ### Loading tiers
 
@@ -44,13 +47,13 @@ Follows [loading-orchestration](loading-orchestration.md).
 | `src/components/dashboard/views/incidents/incidents-page/IncidentDetailModal.tsx` | Row→detail modal (description, meta grid, recommendation) on shared `Modal` |
 
 ## Data & state
-- **Source:** Demo-only. `MOCK_AUDIT_INCIDENTS` (16 deterministic incidents, dates stamped at module load) + `INCIDENT_SEVERITIES` / `INCIDENT_STATUSES` / `INCIDENT_SOURCES` / `MOCK_OPEN_INCIDENTS` live in `src/lib/mock-dashboard-data.ts`. `getAuditIncidents()` is a standalone fetcher in `src/lib/mockApi.ts`.
+- **Source:** Demo-only. `MOCK_AUDIT_INCIDENTS` (16 deterministic incidents, dates stamped at module load) + `INCIDENT_SEVERITIES` / `INCIDENT_STATUSES` / `INCIDENT_SOURCES` live in `src/lib/mock-dashboard-data.ts`. `getAuditIncidents()` and `getCorrelatedIncidents()` are standalone fetchers in `src/lib/mockApi.ts`, both over the session projection (`settleThread`). The badge count is the selector `openIncidentCount` (`src/lib/settleThread.ts`).
 - **Types:** `AuditIncident`, `IncidentSeverity`, `IncidentStatus`, `IncidentSource` (`mock-dashboard-data.ts`); `IncidentFilters`, `StatusFilter`, `SeverityFilter`, `SourceFilter`, `GroupByKey`, `IncidentGroup` (`incidentFormat.ts`).
-- **Stores:** `useIncidentsFilterStore` (persisted filters/group). No other store dependency. Modal open state is local `useState`.
+- **Stores:** `useIncidentsFilterStore` (persisted filters/group). The fixed-cause slice (`useResolvedCausesStore`) is read by the mock layer, not by the page. Modal open state is local `useState`.
 - **API routes:** none — direct mock fetcher only.
 
 ## Integration points
-- **Dashboard shell** — new nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `Siren` icon) with a `MOCK_OPEN_INCIDENTS` badge in `getBadge`. Route is **not** in `SCOPED_ROUTE_PREFIXES` (it owns a persona filter, so the global scope bar is intentionally hidden).
+- **Dashboard shell** — new nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `Siren` icon) with an `openIncidentCount` badge in `getBadge`. Route is **not** in `SCOPED_ROUTE_PREFIXES` (it owns a persona filter, so the global scope bar is intentionally hidden).
 - **Shared primitives** — `GlowCard`, `GradientText`, `FilterBar` (pills with count/pulse), `Modal`, `PersonaAvatar`, `EmptyState`; severity palette mirrors the observability health-issue rows (red/orange/amber/blue).
 - **i18n** — nav label `t.dashboard.incidents` + the `t.incidentsPage` namespace (`src/i18n/en.ts`), hand-translated into all 13 non-en locales.
 - **Format/util** — `relativeTime` from `src/lib/format.ts`.
@@ -62,7 +65,7 @@ Follows [loading-orchestration](loading-orchestration.md).
 - **React 19 purity:** filtering/grouping run in `useMemo` (deterministic — no `Date.now`/`Math.random`); incident dates are stamped once at module load in the mock fixture. The collapsed-set uses a lazy `useState(() => new Set())` initializer.
 - **Animation gating:** `IncidentList`'s collapse uses `AnimatePresence` height/opacity gated by `useReducedMotion`; `FilterBar`/`Modal` already gate their own motion. No raw rAF.
 - **HTML nesting:** detail-modal metadata values render in a `<div>` (not `<p>`) because the agent value embeds a `PersonaAvatar` (`<div>`) — a `<div>` inside `<p>` is invalid and triggers a hydration error.
-- **Open vs. unresolved:** the KPI headline and the nav badge both count **open + escalated** (`MOCK_OPEN_INCIDENTS`); the "Open" status filter pill counts only `status === "open"`.
+- **Open vs. unresolved:** the KPI headline and the nav badge both count **open + escalated** (`openIncidentCount`); the "Open" status filter pill counts only `status === "open"`.
 
 ## Related docs
 - [SLA](sla.md) — sibling oversight surface (breach log, severity tints, filter pills)

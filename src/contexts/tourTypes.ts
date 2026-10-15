@@ -1,4 +1,5 @@
 import type { TourStep } from "@/lib/tour-script";
+import type { ShiftTally } from "@/lib/tour-progress";
 
 /** Translated copy for the end-of-tour bridge prompt. */
 export interface TourBridgeStrings {
@@ -17,6 +18,12 @@ export interface TourStartOptions {
   intro?: boolean;
 }
 
+/** The end of a tour the visitor finished by acting: what they did, and where it led. */
+export interface TourRecap extends ShiftTally {
+  /** The tour opened the run the visitor's last action was about. */
+  openedRun: boolean;
+}
+
 /** What `useTour()` hands to the tour overlay and its launchers. */
 export interface TourContextValue {
   /** Whether the tour overlay is mounted. */
@@ -33,6 +40,8 @@ export interface TourContextValue {
   atBridge: boolean;
   /** Whether the welcome intro pop-up is showing (before step 0). */
   atIntro: boolean;
+  /** The recap of a tour the visitor finished by acting; null otherwise. */
+  recap: TourRecap | null;
   audioAnalyser: AnalyserNode | null;
   /** Narration output level (0..1). Persists via localStorage. */
   volume: number;
@@ -48,4 +57,6 @@ export interface TourContextValue {
   beginTour: () => void;
   confirmBridge: () => void;
   dismissBridge: () => void;
+  /** Play the current step's demonstration (its `actions`) instead of doing it yourself. */
+  showMe: () => void;
 }

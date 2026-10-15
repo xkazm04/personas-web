@@ -10,6 +10,7 @@ import ReviewsSplitPane from "./ReviewsSplitPane";
 import ReviewsFocusFlow from "./ReviewsFocusFlow";
 import { useReviewClock } from "./review-due";
 import { useReviewGate } from "./useReviewGate";
+import { useScopedReviews } from "./useScopedReviews";
 import EscalationFailureNotice from "./EscalationFailureNotice";
 import PhoneReviews from "./phone/PhoneReviews";
 import ReachabilityNotice from "@/components/dashboard/views/personas/phone/ReachabilityNotice";
@@ -37,10 +38,11 @@ function ReviewsPage() {
   // One clock for the page: the header count, the split pane's chips and the
   // focus card all read the same `now`.
   const now = useReviewClock();
-  const reviews = useReviewStore((s) => s.reviews);
+  // The scope bar's slice; "not served" is judged on the whole loaded list.
+  const { all, reviews } = useScopedReviews();
   const policy = useReviewStore((s) => s.escalationPolicy);
   // Desktop plane: the list is not served, so "no reviews" would be false; the note stands in for it.
-  const unserved = useReviewStore((s) => s.listNotServed) && reviews.length === 0;
+  const unserved = useReviewStore((s) => s.listNotServed) && all.length === 0;
   const overdue = useMemo(() => countOverdue(reviews, policy, now), [reviews, policy, now]);
 
   return (

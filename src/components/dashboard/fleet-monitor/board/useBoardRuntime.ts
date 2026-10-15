@@ -1,23 +1,37 @@
 "use client";
 
-import { useEffect, useReducer, useState, type RefObject } from "react";
+import { useEffect, useMemo, useState, type RefObject } from "react";
+import { useStore } from "zustand";
 import { parseDemoDesktop } from "@/lib/sync/reachability";
-import { initSim, simReducer } from "./sim";
 import type { HostStatus } from "./host";
-import { HOLD_MS } from "./useCommands";
+import { HOLD_MS, type Commands } from "./useCommands";
 import type { JustInAlert } from "./JustIn";
+import { fleetWorld } from "../world/fleetWorld";
+import { crewBridgeFor } from "../world/demoCrewPorts";
 
-/** Drives the seeded simulation once per second while the tab is visible.
+/** Drives the stage's one seeded simulation (`world/fleetWorld.ts`, shared by
+ *  Board and Night shift, so it survives switching between them) once per
+ *  second while this view is mounted and shown and the tab is visible.
  *  Reduced motion keeps the data ticking (slower), only the motion goes still.
- *  An offline machine reports nothing, so its last state stands still. */
+ *  An offline machine reports nothing, so its last state stands still. On
+ *  mount, the demo crew catches up with what the synced pages changed. */
 export function useBoardSim(scale: number, still: boolean, hidden: boolean, offline: boolean) {
-  const [sim, dispatch] = useReducer(simReducer, scale, initSim);
+  const [world] = useState(() => fleetWorld(scale));
+  const sim = useStore(world.store, (s) => s.sim);
+  useEffect(() => crewBridgeFor(world).reconcile(), [world]);
   useEffect(() => {
     if (hidden || offline) return;
-    const id = window.setInterval(() => dispatch({ type: "advance", dt: 1000, scale, still }), 1000);
+    const id = window.setInterval(() => world.dispatch({ type: "advance", dt: 1000, scale, still }), 1000);
     return () => window.clearInterval(id);
-  }, [scale, still, hidden, offline]);
-  return [sim, dispatch] as const;
+  }, [world, scale, still, hidden, offline]);
+  return [sim, world.dispatch] as const;
+}
+
+/** The world's command plane, with its audit list. */
+export function useCommands(): Commands {
+  const [world] = useState(() => fleetWorld());
+  const cmds = useStore(world.store, (s) => s.cmds);
+  return useMemo(() => ({ cmds, ...world.commands }), [cmds, world]);
 }
 
 /** Whether the demo machine answers: `?desktop=offline` (or `never`) switches it

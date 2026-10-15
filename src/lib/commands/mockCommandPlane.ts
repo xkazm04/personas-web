@@ -11,12 +11,13 @@
  * hidden tab (the use-playground-simulation precedent, CLAUDE.md rule 3).
  */
 import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
-import { MOCK_CHAT_DEVICE_ID, MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS, mockChatReply } from "@/lib/mock-dashboard-data";
+import { MOCK_CHAT_DEVICE_ID, MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS, MOCK_LEARNED_MEMORIES, mockChatReply } from "@/lib/mock-dashboard-data";
 import { ATHENA_PERSONA_ID, CHAT_MESSAGE_MAX_BYTES, utf8Bytes, type ChatThreadKind } from "@/lib/chat/chatModel";
 import type { EventStatus, GlobalExecution, Persona, PersonaEvent } from "@/lib/types";
 import { SAY_MAX_CHARS } from "./channelSay";
 import type { CommandRowUpdate } from "./commandReducer";
 import type { CommandVerb } from "./envelope";
+import { learnedMemoryFromVerdict } from "./reviewLearning";
 
 /** pending at 0 -> executing (the desktop's claim) -> completed. */
 export const MOCK_TIMINGS = { executingMs: 1200, completedMs: 2000 } as const;
@@ -85,7 +86,7 @@ function reviewStatus(status: EventStatus): "pending" | "approved" | "rejected" 
  * the event's status plus the reviewer notes; like the desktop's synced row,
  * it records no resolver.
  */
-async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort): Promise<CommandRowUpdate> {
+async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort, changed: () => void): Promise<CommandRowUpdate> {
   const reviewId = typeof cmd.params.reviewId === "string" ? cmd.params.reviewId : "";
   const decision = cmd.params.decision;
   const notes = typeof cmd.params.notes === "string" && cmd.params.notes ? cmd.params.notes : null;
@@ -96,7 +97,55 @@ async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort): P
   if (current !== "pending") return { id: cmd.id, status: "completed", result: { reviewId, status: current, changed: false } };
   const status: EventStatus = decision === "approved" ? "processed" : "failed";
   await reviews.update(reviewId, notes ? { status, metadata: JSON.stringify({ reviewerNotes: notes }) } : { status });
+  // The desktop's learning loop runs after the flip, only when it changed the
+  // status. This command is sent when the review queue's undo window commits,
+  // so an undone verdict never reaches here and never teaches. The flip itself
+  // is a fixture write (the crew bridge reads it), so `changed` fires either way.
+  learnFromVerdict(review, decision, notes);
+  changed();
   return { id: cmd.id, status: "completed", result: { reviewId, status: decision, changed: true } };
+}
+
+/** A review event's title and description, as the desktop's review row holds them. */
+function reviewFields(payload: string | null): { title: string; description: string | null } {
+  try {
+    const p: unknown = JSON.parse(payload ?? "{}");
+    if (p && typeof p === "object") {
+      const { title, description } = p as Record<string, unknown>;
+      return { title: typeof title === "string" ? title : "", description: typeof description === "string" ? description : null };
+    }
+  } catch {
+    /* an unparseable payload has no title */
+  }
+  return { title: "", description: null };
+}
+
+/**
+ * Write the persona memory the desktop's `flip_status` writes for this verdict
+ * (reviewLearning.ts), newest first. The demo's personas have no team, so it is
+ * always a solo branch. Returns whether a memory was written.
+ */
+function learnFromVerdict(review: PersonaEvent, verdict: "approved" | "rejected", notes: string | null): boolean {
+  const learned = learnedMemoryFromVerdict(
+    { ...reviewFields(review.payload), personaId: review.targetPersonaId ?? "", executionId: review.sourceId, contextData: review.payload, teamId: null },
+    verdict,
+    notes,
+  );
+  if (!learned || learned.scope !== "persona") return false;
+  const at = new Date().toISOString();
+  MOCK_LEARNED_MEMORIES.unshift({
+    id: `mem-review-${review.id}`,
+    personaId: learned.personaId,
+    title: learned.title,
+    content: learned.content,
+    category: learned.category,
+    sourceExecutionId: learned.sourceExecutionId,
+    importance: learned.importance,
+    tags: JSON.stringify(learned.tags),
+    createdAt: at,
+    updatedAt: at,
+  });
+  return true;
 }
 
 /** The id of the execution a mock run creates: derived from the command, so a resend cannot run twice. */
@@ -167,6 +216,8 @@ function scheduleRunLifecycle(
         outputData,
       };
     });
+    // Today's observability counts it from here: every aggregate the demo
+    // serves is a fold of this array with the world's log (demoWorld/fleetReads.ts).
     if (done) changed();
   }, at.completedMs);
 }
@@ -395,7 +446,7 @@ export function runMockCommand(cmd: MockCommand, onUpdate: (row: CommandRowUpdat
       return;
     }
     // The verdict goes through the api, which answers asynchronously.
-    executeReviewDecide(cmd, deps.reviews ?? apiReviews)
+    executeReviewDecide(cmd, deps.reviews ?? apiReviews, changed)
       .catch((err: unknown): CommandRowUpdate => ({ id: cmd.id, status: "failed", error_message: err instanceof Error ? err.message : "failed" }))
       .then((row) => {
         if (!stopped) onUpdate(row);

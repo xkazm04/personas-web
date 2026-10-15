@@ -1,0 +1,191 @@
+{
+  "schema": "conform-run/1",
+  "worker": "962d7bd3-c9b6-47e5-891d-8c48531f40d7",
+  "subject": "repository-landing-document",
+  "evaluatedAt": "2026-10-15T00:36:48.006509+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "Guide Pages & Navigation",
+      "subject": "repository-landing-document",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/guide/[category]/[topic]/page.tsx:130 The searched landing-document and badge-image terms had no context hits, while the code publishes addressable guide articles that the standard explicitly separates from repository landing documents.",
+      "techniques": [
+        {
+          "technique": "caption-carrying-figures",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/page.tsx:95 The illustration belongs to a guide category page."
+        },
+        {
+          "technique": "evidence-linked-badges",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/CategoryTopics.tsx:80 This is a guide topic's module reference badge."
+        },
+        {
+          "technique": "host-metadata-is-a-second-document",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/layout.tsx:14 This metadata describes the website's guide section."
+        },
+        {
+          "technique": "input-channel-distinction",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:196 The content is a localized guide article."
+        },
+        {
+          "technique": "landing-document-as-router",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/CategoryTopics.tsx:72 This routes between documentation-site records."
+        },
+        {
+          "technique": "multi-surface-degradation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/[topic]/page.tsx:74 The publication surface is a website article."
+        },
+        {
+          "technique": "style-rule-ships-its-detector",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/guide-page/guidePageData.ts:12 These are application filter options, not prose style rules."
+        },
+        {
+          "technique": "visual-text-cadence",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:88 This measures guide reading time, outside repository-front-page composition."
+        }
+      ],
+      "absenceTerms": [
+        "shields.io",
+        "badge.svg"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "repository-landing-document",
+      "context": "Mobile App Shell & Views",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor src/app/m2/page.tsx:19 is the closing of an unrelated `M2Page` component and shows no absence of a landing document; the not-applicable rests only on a shields.io/badge.svg grep and on the whole repo having a README.md the context never touches."
+    },
+    {
+      "subject": "repository-landing-document",
+      "context": "Guide Content Blocks & Markdown",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor GuideBlocks.tsx:3 is a re-export-shim comment that says nothing about repository landing documents, so the anchor is incidental."
+    },
+    {
+      "subject": "repository-landing-document",
+      "context": "Localized Guide Content (14 locales)",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor emit-guide-status.mjs:56 is a `const CONTENT_DIR` declaration, which is incidental and does not show the precondition is absent."
+    },
+    {
+      "subject": "repository-landing-document",
+      "context": "SEO & Social Metadata",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor manifest.ts:14 is the `start_url` field of the web-app manifest and does not itself show the repository-landing precondition is absent, so the anchor is incidental."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-15T00:36:48.006509+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "repository-landing-document"
+      ],
+      "techniques": [
+        "caption-carrying-figures",
+        "evidence-linked-badges",
+        "host-metadata-is-a-second-document",
+        "input-channel-distinction",
+        "landing-document-as-router",
+        "multi-surface-degradation",
+        "style-rule-ships-its-detector",
+        "visual-text-cadence"
+      ],
+      "deviations": 0,
+      "context": "Mobile App Shell & Views",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T00:36:48.006509+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "repository-landing-document"
+      ],
+      "techniques": [
+        "caption-carrying-figures",
+        "evidence-linked-badges",
+        "host-metadata-is-a-second-document",
+        "input-channel-distinction",
+        "landing-document-as-router",
+        "multi-surface-degradation",
+        "style-rule-ships-its-detector",
+        "visual-text-cadence"
+      ],
+      "deviations": 0,
+      "context": "Guide Pages & Navigation",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T00:36:48.006509+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "repository-landing-document"
+      ],
+      "techniques": [
+        "caption-carrying-figures",
+        "evidence-linked-badges",
+        "host-metadata-is-a-second-document",
+        "input-channel-distinction",
+        "landing-document-as-router",
+        "multi-surface-degradation",
+        "visual-text-cadence"
+      ],
+      "deviations": 0,
+      "context": "Guide Content Blocks & Markdown",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T00:36:48.006509+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "repository-landing-document"
+      ],
+      "techniques": [
+        "caption-carrying-figures",
+        "evidence-linked-badges",
+        "host-metadata-is-a-second-document",
+        "input-channel-distinction",
+        "landing-document-as-router",
+        "multi-surface-degradation",
+        "style-rule-ships-its-detector",
+        "visual-text-cadence"
+      ],
+      "deviations": 0,
+      "context": "Localized Guide Content (14 locales)",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-15T00:36:48.006509+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "repository-landing-document"
+      ],
+      "techniques": [
+        "caption-carrying-figures",
+        "evidence-linked-badges",
+        "host-metadata-is-a-second-document",
+        "input-channel-distinction",
+        "landing-document-as-router",
+        "multi-surface-degradation",
+        "style-rule-ships-its-detector",
+        "visual-text-cadence"
+      ],
+      "deviations": 0,
+      "context": "SEO & Social Metadata",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

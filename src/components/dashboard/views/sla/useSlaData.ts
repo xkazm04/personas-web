@@ -1,48 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
+import { scopeSla } from "@/components/dashboard/scope/scopeProjections";
+import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
+import { useFocusParam } from "@/hooks/useFocusParam";
+import { scopeHidAll } from "@/lib/dashboardScope";
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedSla } from "@/lib/supabaseApi";
-import {
-  MOCK_SLA_BREACHES,
-  MOCK_SLA_TARGETS,
-  type SLABreach,
-  type SLATarget,
-} from "@/lib/mock-dashboard-data";
+import type { SLABreach, SLATarget } from "@/lib/mock-dashboard-data";
 
 export interface SlaData {
+  /** Objectives in the scope bar's persona (standing state: the window does not apply). */
   targets: SLATarget[];
+  /** Breaches in the scope bar's persona that overlap its window; a `?focus=` breach always stays. */
   breaches: SLABreach[];
+  /** The scope emptied a list that has rows (each list judged on its own). */
+  scopeEmpty: { targets: boolean; breaches: boolean };
+  /** Demo: how many agents carry objectives (the crew; the other 94 have none). Null in real mode. */
+  objectiveAgents: number | null;
   loading: boolean;
   error: string | null;
   retry: () => void;
 }
 
 /**
- * SLA data source. Dev/demo → the static mock (unchanged). Real/supabase mode →
- * app-defined default objectives computed against synced executions by
- * getSyncedSla (no desktop-side SLA config exists).
+ * SLA data source. Dev/demo → the crew's objectives and breaches, computed by
+ * the engine the Supabase plane uses (`sli` / `breachEpisodes`) over the demo
+ * world's log (src/lib/demoWorld/crew.ts), as this session sees them
+ * (`useDemoThreads`: a fixed incident cause closes its breach and takes its
+ * target out of active breach, keeping the budget it consumed). Real/supabase
+ * mode → app-defined default objectives computed against synced executions by
+ * getSyncedSla (no desktop-side SLA config exists). Either way the rows are
+ * then cut to the scope bar's persona + window (`scopeSla`).
  */
 export function useSlaData(): SlaData {
   const isDemo = useAuthStore((s) => s.isDemo);
   const useMock = isDemo;
+  const demo = useDemoThreads();
 
-  const [targets, setTargets] = useState<SLATarget[]>(
-    useMock ? MOCK_SLA_TARGETS : [],
-  );
-  const [breaches, setBreaches] = useState<SLABreach[]>(
-    useMock ? MOCK_SLA_BREACHES : [],
-  );
+  const [targets, setTargets] = useState<SLATarget[]>([]);
+  const [breaches, setBreaches] = useState<SLABreach[]>([]);
   const [loading, setLoading] = useState(!useMock);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    // Mock/demo mode is decided once per session; the useState initializers
-    // above already seed the mock fixtures, so the effect only drives the
-    // async real-data fetch.
+    // Mock/demo mode is decided once per session and reads the projection
+    // synchronously, so the effect only drives the async real-data fetch.
     if (useMock) return;
 
     let cancelled = false;
@@ -68,5 +75,22 @@ export function useSlaData(): SlaData {
     };
   }, [useMock, reloadKey]);
 
-  return { targets, breaches, loading, error, retry: () => setReloadKey((k) => k + 1) };
+  const retry = () => setReloadKey((k) => k + 1);
+  const scope = useDashboardScope();
+  const focusId = useFocusParam();
+  const allTargets = useMock ? demo.slaTargets : targets;
+  const allBreaches = useMock ? demo.slaBreaches : breaches;
+  const scoped = useMemo(
+    () => scopeSla({ targets: allTargets, breaches: allBreaches }, scope, focusId),
+    [allTargets, allBreaches, scope, focusId],
+  );
+  const scopeEmpty = {
+    targets: scopeHidAll(allTargets, scoped.targets),
+    breaches: scopeHidAll(allBreaches, scoped.breaches),
+  };
+  if (useMock) {
+    const objectiveAgents = new Set(allTargets.map((target) => target.persona)).size;
+    return { ...scoped, scopeEmpty, objectiveAgents, loading: false, error: null, retry };
+  }
+  return { ...scoped, scopeEmpty, objectiveAgents: null, loading, error, retry };
 }

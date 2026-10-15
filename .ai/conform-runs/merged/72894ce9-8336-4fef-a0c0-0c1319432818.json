@@ -1,0 +1,152 @@
+{
+ "schema": "conform-run/1",
+ "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+ "subject": "docs-content-model",
+ "evaluatedAt": "2026-10-15T03:04:20.622618+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "docs-content-model",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/guide/layout.tsx:11 Layout metadata calculates the topic count floor from raw GUIDE_TOPICS length without applying isTopicVisible, leaking draft topics into the published description count.",
+   "techniques": [
+    {
+     "technique": "draft-visibility-gating",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/layout.tsx:11 TOPIC_FLOOR derives from unfiltered GUIDE_TOPICS.length without calling isTopicVisible, leaking draft counts into layout metadata."
+    },
+    {
+     "technique": "derived-navigation-projection",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/page.tsx:98 Prev/next sequence walks topics in implicit source array declaration order because GuideTopic lacks a declared position ordering field."
+    },
+    {
+     "technique": "product-location-mapping",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:148 TopicView renders the mapped desktop product location badge from TOPIC_MODULE_MAP for the current topic."
+    },
+    {
+     "technique": "catalog-referential-invariants",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/page.tsx:48 Topic page dynamically imports category content modules lazily per category rather than eagerly bundling the markdown corpus."
+    }
+   ],
+   "registryProposal": "Next.js opengraph-image.tsx routes should be explicitly enumerated in draft-visibility-gating as direct-address metadata consumers that bypass page.tsx and notFound() guards."
+  },
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "docs-content-model",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/data/guide/categories.ts:3 The guide category catalog defines category metadata without introductory body modules and lacks self-contained load-time referential assertions.",
+   "techniques": [
+    {
+     "technique": "catalog-referential-invariants",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/categories.ts:3 GUIDE_CATEGORIES contains no self-evaluating load-time referential assertions and categories lack introductory body modules."
+    },
+    {
+     "technique": "per-topic-freshness-metadata",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/types.ts:41 Documentation acknowledges contentReviewedAt dates are backfilled from git history rather than earned human review dates."
+    },
+    {
+     "technique": "product-location-mapping",
+     "verdict": "conformant",
+     "evidence": "src/data/guide/desktop-modules.ts:6 Desktop module registry explicitly declares external source-of-truth registry file paths in the desktop repository."
+    },
+    {
+     "technique": "draft-visibility-gating",
+     "verdict": "conformant",
+     "evidence": "src/lib/guide-search.ts:96 Search index walk gates topic matches through isTopicVisible to prevent surfacing unreleased draft topics."
+    },
+    {
+     "technique": "derived-navigation-projection",
+     "verdict": "conformant",
+     "evidence": "src/data/guide/content/index.ts:13 GUIDE_CONTENT re-exports category content blocks into a single derived map used by lazy full-text body search indexing."
+    }
+   ]
+  },
+  {
+   "context": "SEO & Social Metadata",
+   "subject": "docs-content-model",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/guide/[category]/[topic]/opengraph-image.tsx:11 The topic OpenGraph image route resolves topic records directly by id without checking isTopicVisible, rendering social preview cards for unpublished draft topics.",
+   "techniques": [
+    {
+     "technique": "draft-visibility-gating",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/opengraph-image.tsx:11 OpenGraph image route resolves topic records without isTopicVisible gating, leaking draft topics to social crawlers."
+    },
+    {
+     "technique": "derived-navigation-projection",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/opengraph-image.tsx:12 Category OpenGraph card derives topicCount directly from GUIDE_TOPICS without isTopicVisible, failing count-carries-predicate."
+    },
+    {
+     "technique": "catalog-referential-invariants",
+     "verdict": "conformant",
+     "evidence": "src/app/sitemap.ts:43 Sitemap maps visible guide topics to canonical URLs using categoryId foreign keys to ensure all listed topic URLs resolve."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-15T03:04:20.622618+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-content-model"
+   ],
+   "techniques": [
+    "catalog-referential-invariants",
+    "derived-navigation-projection",
+    "draft-visibility-gating",
+    "product-location-mapping"
+   ],
+   "deviations": 1,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-15T03:04:20.622618+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-content-model"
+   ],
+   "techniques": [
+    "catalog-referential-invariants",
+    "derived-navigation-projection",
+    "draft-visibility-gating",
+    "per-topic-freshness-metadata",
+    "product-location-mapping"
+   ],
+   "deviations": 1,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-15T03:04:20.622618+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-content-model"
+   ],
+   "techniques": [
+    "catalog-referential-invariants",
+    "derived-navigation-projection",
+    "draft-visibility-gating"
+   ],
+   "deviations": 1,
+   "context": "SEO & Social Metadata",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

@@ -6,17 +6,20 @@ import { Activity } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useTranslation } from "@/i18n/useTranslation";
 
 import { SLABreachLog } from "./sla-page/SLABreachLog";
 import { SLASummaryGrid } from "./sla-page/SLASummaryGrid";
 import { SLATargetGrid } from "./sla-page/SLATargetGrid";
 import { useSlaData } from "./useSlaData";
+import { fillTemplate } from "@/lib/fillTemplate";
 
 export default function SLAPage() {
   const { t } = useTranslation();
   const [fetchedAt] = useState(() => Date.now());
-  const { targets, breaches, loading, error, retry } = useSlaData();
+  // Rows in the scope bar's persona + window (useSlaData); the summary counts them.
+  const { targets, breaches, scopeEmpty, objectiveAgents, loading, error, retry } = useSlaData();
   // T2 placeholders show only on a first load with nothing held (a refetch
   // keeps the last data); `coldStart` lets content that arrives after such a
   // load play its entrance, while data present on the first frame does not
@@ -44,6 +47,11 @@ export default function SLAPage() {
             <GradientText variant="silver">{t.slaPage.title}</GradientText>
           </h1>
           <p className="mt-1 text-base text-muted-dark">{t.slaPage.subtitle}</p>
+          {objectiveAgents !== null && (
+            <p className="mt-1 text-sm text-muted-dark">
+              {fillTemplate(t.executionsPage.population.crewObjectives, { count: objectiveAgents })}
+            </p>
+          )}
         </div>
         <StalenessIndicator fetchedAt={fetchedAt} className="mt-2" />
       </div>
@@ -64,6 +72,7 @@ export default function SLAPage() {
           objectives: t.slaPage.objectives,
         }}
       />
+      {scopeEmpty.targets && <ScopeEmpty compact />}
       <SLATargetGrid
         targets={targets}
         pending={pending}
@@ -82,7 +91,8 @@ export default function SLAPage() {
         settle={coldStart}
         labels={{
           title: t.slaPage.breachLog.title,
-          empty: t.slaPage.breachLog.empty,
+          // The scope emptied a log that has breaches: say that, not "no breaches".
+          empty: scopeEmpty.breaches ? t.dashboard.scope.emptyInScope : t.slaPage.breachLog.empty,
           all: t.slaPage.breachLog.all,
           duration: t.slaPage.breachLog.duration,
           ongoing: t.slaPage.breachLog.ongoing,

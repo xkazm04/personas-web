@@ -486,6 +486,7 @@ export const id: LocaleTranslations = {
       },
       scope: {
         allPersonas: "Semua persona",
+        emptyInScope: "Tidak ada apa pun dalam rentang ini. Coba rentang yang lebih lebar atau semua persona.",
         personaLabel: "Filter persona",
         compare: "Bandingkan",
         dateRange: {
@@ -498,7 +499,13 @@ export const id: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Data mencakup 14 hari terakhir",
+          windowNote: {
+            last24h: "Data mencakup 24 jam terakhir",
+            last7d: "Data mencakup 7 hari terakhir",
+            last30d: "Data mencakup 30 hari terakhir",
+            last90d: "Data mencakup 90 hari terakhir",
+            custom: "Data mencakup tanggal yang dipilih"
+          },
           hint: "Tekan 1 sampai 8 untuk membuka dimensi, Esc untuk kembali",
           wallLabel: "Dimensi armada",
           openDimension: "Buka {label}",
@@ -1141,12 +1148,14 @@ export const id: LocaleTranslations = {
       },
       toast: {
         configured: "dikonfigurasi (demo)",
-        installed: "diaktifkan (demo)"
+        installed: "diaktifkan (demo)",
+        undo: "Batalkan perbaikan"
       },
       blast: {
         impact: "Melumpuhkan {agents} dari {total} agen \u00b7 {calls} panggilan per 14 hari",
         sla: "SLA berisiko: {n}",
-        unmapped: "Alat tidak terpetakan: {n}"
+        unmapped: "Alat tidak terpetakan: {n}",
+        latestRun: "Buka eksekusi terbaru {name}"
       }
     },
     messagesPage: {
@@ -1290,7 +1299,18 @@ export const id: LocaleTranslations = {
       noFilteredFailed: "Tidak ada eksekusi gagal dalam tampilan ini",
       noFilteredCancelled: "Tidak ada eksekusi dibatalkan dalam tampilan ini",
       filteredEmptyDesc: "Ada eksekusi lain, tetapi tidak ada yang cocok dengan filter ini.",
-      showAllExecutions: "Tampilkan semua"
+      showAllExecutions: "Tampilkan semua",
+      outputUnavailable: "Catatan eksekusi ini tidak tersedia.",
+      drill: {
+        showRuns: "Tampilkan eksekusi ini",
+        scopeRuns: "Eksekusi dalam cakupan",
+        scopeSpend: "Biaya dalam cakupan"
+      },
+      population: {
+        fleetWindow: "Armada demo: {count} agen, {days} hari terakhir",
+        fleetRanked: "Armada demo: peringkat {count} agen",
+        crewObjectives: "Sasaran ditetapkan untuk {count} agen tersinkron"
+      }
     },
     eventsPage: {
       title: "Event",
@@ -1854,10 +1874,15 @@ export const id: LocaleTranslations = {
       features4: "Dan Anda tak pernah kehilangan jejak apa pun. Setiap eksekusi, pesan, peristiwa, dan memori mengalir langsung melalui satu dek observabilitas \u2014 sparkline, biaya, dan status, semuanya secara real-time. Transparansi penuh, tanpa penyiapan.",
       features5: "Agen hebat jarang benar pada percobaan pertama, jadi Lab adalah tempat Anda menyempurnakannya. Mengobrollah dengan persona untuk melatihnya, adu dua versi di arena, kembangkan lintas generasi, atau beri skor pada dimensi yang penting. Setiap peningkatan yang Anda simpan terversi dan dapat dikembalikan.",
       features6: "Personas hadir dengan enam plugin yang dibuat khusus, masing-masing ruang kerja mandiri yang dapat dijalankan agen Anda. Ambil Dev Tools: ia mengubah persona menjadi rekan koding yang menjalankan tugas, membaca keluaran, dan berulang. Ganti tab dan Anda bertemu spesialis lain \u2014 semuanya berbagi kredensial dan memori yang sama.",
-      dashboardHome: "Selamat datang di pusat kendali \u2014 seluruh armada Anda dalam satu layar. Di atas, tanda-tanda vital: tingkat keberhasilan, proses yang berjalan, agen aktif, peringatan terbuka, dan tinjauan yang menanti Anda. Di bawahnya, pengoptimal menampilkan satu perbaikan berdampak besar pada satu waktu \u2014 saat ini, perubahan perutean yang memangkas biaya tanpa menyentuh kualitas. Dua panel di bawahnya melacak kesehatan tiap agen dan memori baru yang telah mereka pelajari dan ingin dipromosikan. Lalu gambaran langsung: setiap eksekusi saat tiba di kiri, empat belas hari lalu lintas dan kesalahan di kanan. Peta panas menampilkan proses per agen, hari demi hari, dan baris bawah melengkapinya \u2014 agen terbaik Anda, rutinitas terjadwal berikutnya, dan setiap rotasi kredensial. Satu halaman, seluruh operasi.",
-      dashboardExecutions: "Setiap proses yang pernah dijalankan armada ada di sini, terbaru lebih dulu. Tabel menampilkan persona, status, durasi, biaya, dan waktu mulai \u2014 saring hanya yang gagal, atau yang masih berjalan. Klik baris mana pun dan eksekusi lengkap terbuka: strip metrik, penjelasan kesalahan apa pun, dan keluaran langsung yang mengalir baris demi baris, persis seperti yang dihasilkan agen.",
-      dashboardEvents: "Agen tidak bekerja sendirian \u2014 mereka bereaksi terhadap peristiwa. Ini bus peristiwa: setiap sinyal yang mengalir melalui sistem, dari jadwal dan webhook hingga pesan antar-agen. Setiap baris menampilkan jenis peristiwa, sumbernya, status, dan berapa lama sejak terpicu. Peristiwa yang gagal dapat dicoba lagi di tempat, dan peristiwa terkait saling terangkai sehingga Anda dapat mengikuti satu kaskade dari ujung ke ujung.",
       dashboardReviews: "Beberapa keputusan membutuhkan manusia. Ketika agen menemui sesuatu yang tidak boleh diputuskannya sendiri, ia berhenti dan mengalihkan keputusan itu ke sini. Setiap item memuat persona, konteks, dan tindakan yang diusulkannya \u2014 setujui, tolak, atau lewati untuk nanti, dengan klik atau keyboard. Tidak ada yang berisiko diluncurkan tanpa persetujuan Anda, dan antrean menjaga sisa armada tetap berjalan selagi Anda memutuskan.",
+      dashboardBoard: "Inilah armada Anda dalam satu papan: setiap agen menyala saat membutuhkan Anda. Buka salah satunya dan kirimi perintah; papan berubah begitu mesin selesai menjalankannya.",
+      dashboardMission: "Pusat Kendali merangkum kesehatan armada menjadi delapan lampu, yang hanya menyala saat salah satunya membutuhkan Anda. Buka lampu yang menyala untuk melihat bukti di baliknya.",
+      dashboardHealth: "Webhook Slack sedang mati, dan gangguannya menjalar ke agen, SLA, dan insiden. Konfigurasikan sekali, dan setiap halaman yang menampilkan gangguan itu kembali normal.",
+      dashboardReviewsTask: "Giliran Anda: setujui atau tolak tinjauan di layar. Tur berakhir begitu keputusan Anda diterapkan.",
+      showMe: "Tunjukkan",
+      keepLooking: "Lihat-lihat dulu",
+      recapCounts: "Perintah terlaksana: {commands} \u00b7 Keputusan diterapkan: {verdicts}",
+      recapRun: "Dibuka: proses yang menjadi pokok keputusan Anda.",
       roadmap1: "Inilah posisi kami sekarang: setiap fase di peta jalan dinilai menurut status begitu dirilis.",
       roadmap2: "Apa yang berikutnya terserah Anda \u2014 pilih fitur yang paling Anda inginkan, dan ide terpopuler membentuk apa yang kami bangun.",
       roadmap3: "Dan inilah semua yang sudah dirilis \u2014 setiap rilis ditata berurutan, yang terbaru lebih dulu."

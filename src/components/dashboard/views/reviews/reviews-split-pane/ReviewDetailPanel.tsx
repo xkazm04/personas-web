@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { AlertOctagon, Bookmark, Check, ClipboardCheck, Clock, Terminal, X } from "lucide-react";
+import { AlertOctagon, Bookmark, Check, ClipboardCheck, Terminal, X } from "lucide-react";
 import PersonaAvatar from "@/components/dashboard/PersonaAvatar";
 import StatusBadge from "@/components/dashboard/StatusBadge";
 import { mobileCopy } from "@/i18n/pending/mobile";
@@ -9,6 +9,7 @@ import { REVIEW_NOTES_KEPT } from "@/lib/commands/reviewDecide";
 import type { ManualReviewItem } from "@/lib/types";
 import { useReviewStore } from "@/stores/reviewStore";
 import { DueChip } from "../review-due";
+import { ReviewExecutionRow } from "./ReviewExecutionRow";
 import { reviewSeverityConfig } from "./reviewSeverityConfig";
 
 export function ReviewDetailPanel({
@@ -129,15 +130,7 @@ function ReviewDetailContent({
           <pre className="whitespace-pre-wrap wrap-break-word font-mono text-sm leading-relaxed text-slate-300">{review.content}</pre>
         </div>
       </div>
-      {review.executionId && (
-        <div className="rounded-lg border border-glass bg-white/[0.02] p-2.5">
-          <div className="flex items-center gap-1.5">
-            <Clock className="h-3 w-3 text-muted-dark" />
-            <span className="text-sm font-medium uppercase tracking-wider text-muted-dark">{t.dashboardUi.execution}</span>
-            <span className="ml-auto font-mono text-sm text-muted-dark">{review.executionId.slice(0, 16)}</span>
-          </div>
-        </div>
-      )}
+      {review.executionId && <ReviewExecutionRow executionId={review.executionId} label={t.dashboardUi.execution} />}
       {isPending ? (
         <ReviewNotesEditor notes={notes} setNotes={setNotes} notesRef={notesRef} />
       ) : (
@@ -178,12 +171,12 @@ function ReviewResolveActions({ disabled, onResolve }: { disabled: boolean; onRe
   const { t } = useTranslation();
   return (
     <div className="flex-shrink-0 border-t border-glass px-4 py-3 flex items-center gap-2">
-      <button onClick={() => onResolve("approved")} disabled={disabled} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60">
+      <button onClick={() => onResolve("approved")} disabled={disabled} data-review-decide="approved" className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60">
         <Check className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.approve}
         <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-sm">A</kbd>
       </button>
-      <button onClick={() => onResolve("rejected")} disabled={disabled} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-60">
+      <button onClick={() => onResolve("rejected")} disabled={disabled} data-review-decide="rejected" className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-60">
         <X className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.reject}
         <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-sm">R</kbd>

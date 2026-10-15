@@ -486,6 +486,7 @@ export const de: LocaleTranslations = {
       },
       scope: {
         allPersonas: "Alle Personas",
+        emptyInScope: "In diesem Zeitraum gibt es nichts. Wählen Sie einen längeren Zeitraum oder alle Personas.",
         personaLabel: "Persona-Filter",
         compare: "Vergleichen",
         dateRange: {
@@ -498,7 +499,13 @@ export const de: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Messwerte der letzten 14 Tage",
+          windowNote: {
+            last24h: "Messwerte der letzten 24 Stunden",
+            last7d: "Messwerte der letzten 7 Tage",
+            last30d: "Messwerte der letzten 30 Tage",
+            last90d: "Messwerte der letzten 90 Tage",
+            custom: "Messwerte für den gewählten Zeitraum"
+          },
           hint: "1 bis 8 \u00f6ffnet eine Dimension, Esc f\u00fchrt zur\u00fcck",
           wallLabel: "Dimensionen der Flotte",
           openDimension: "{label} \u00f6ffnen",
@@ -1141,12 +1148,14 @@ export const de: LocaleTranslations = {
       },
       toast: {
         configured: "konfiguriert (Demo)",
-        installed: "aktiviert (Demo)"
+        installed: "aktiviert (Demo)",
+        undo: "Korrektur r\u00fcckg\u00e4ngig"
       },
       blast: {
         impact: "Legt {agents} von {total} Agents lahm \u00b7 {calls} Aufrufe in 14 Tagen",
         sla: "Gef\u00e4hrdete SLAs: {n}",
-        unmapped: "Nicht zugeordnete Tools: {n}"
+        unmapped: "Nicht zugeordnete Tools: {n}",
+        latestRun: "Letzte Ausf\u00fchrung von {name} \u00f6ffnen"
       }
     },
     messagesPage: {
@@ -1290,7 +1299,18 @@ export const de: LocaleTranslations = {
       noFilteredFailed: "Keine fehlgeschlagenen Ausf\u00fchrungen in dieser Ansicht",
       noFilteredCancelled: "Keine abgebrochenen Ausf\u00fchrungen in dieser Ansicht",
       filteredEmptyDesc: "Es gibt andere Ausf\u00fchrungen, aber keine entspricht diesem Filter.",
-      showAllExecutions: "Alle anzeigen"
+      showAllExecutions: "Alle anzeigen",
+      outputUnavailable: "Der Datensatz dieser Ausf\u00fchrung ist nicht verf\u00fcgbar.",
+      drill: {
+        showRuns: "Diese Ausf\u00fchrungen anzeigen",
+        scopeRuns: "Ausf\u00fchrungen im Bereich",
+        scopeSpend: "Kosten im Bereich"
+      },
+      population: {
+        fleetWindow: "Demo-Flotte: {count} Agenten, letzte {days} Tage",
+        fleetRanked: "Demo-Flotte: {count} Agenten im Ranking",
+        crewObjectives: "Ziele f\u00fcr {count} synchronisierte Agenten festgelegt"
+      }
     },
     eventsPage: {
       title: "Events",
@@ -1854,10 +1874,15 @@ export const de: LocaleTranslations = {
       features4: "Und nichts davon entgeht Ihnen. Jede Ausf\u00fchrung, Nachricht, jedes Ereignis und jede Erinnerung str\u00f6mt live durch ein einziges Observability-Deck \u2014 Sparklines, Kosten und Status, alles in Echtzeit. Volle Transparenz, kein Setup.",
       features5: "Gro\u00dfartige Agenten sind selten beim ersten Versuch perfekt, also ist das Lab der Ort, an dem Sie sie verfeinern. Chatten Sie mit einer Persona, um sie zu coachen, lassen Sie zwei Versionen in der Arena gegeneinander antreten, entwickeln Sie sie \u00fcber Generationen, oder bewerten Sie sie in den entscheidenden Dimensionen. Jede Verbesserung, die Sie behalten, ist versioniert und umkehrbar.",
       features6: "Personas bringt sechs zweckgebaute Plugins mit, jedes ein eigenst\u00e4ndiger Arbeitsbereich, den Ihre Agenten steuern k\u00f6nnen. Nehmen Sie Dev Tools: Es macht aus einer Persona einen Programmierkollegen, der Aufgaben ausf\u00fchrt, die Ausgabe liest und iteriert. Ein Tab-Wechsel, und Sie treffen einen weiteren Spezialisten \u2014 alle teilen sich dieselben Anmeldedaten und denselben Speicher.",
-      dashboardHome: "Willkommen in der Kommandozentrale \u2014 Ihre gesamte Flotte auf einem Bildschirm. Ganz oben die Vitalwerte: Erfolgsrate, laufende Aufgaben, aktive Agenten, offene Warnungen und Pr\u00fcfungen, die auf Sie warten. Darunter hebt der Optimizer eine wirkungsvolle Verbesserung nach der anderen hervor \u2014 gerade eine Routing-\u00c4nderung, die Kosten senkt, ohne die Qualit\u00e4t zu ber\u00fchren. Die zwei Panels darunter verfolgen die Gesundheit jedes Agenten und die neuen Erinnerungen, die sie gelernt haben und \u00fcbernehmen m\u00f6chten. Dann das Live-Bild: links jede Ausf\u00fchrung beim Eintreffen, rechts vierzehn Tage Traffic und Fehler. Die Heatmap zeigt L\u00e4ufe pro Agent, Tag f\u00fcr Tag, und die untere Reihe rundet alles ab \u2014 Ihre Top-Performer, die n\u00e4chsten geplanten Routinen und jede Rotation von Anmeldedaten. Eine Seite, der gesamte Betrieb.",
-      dashboardExecutions: "Jeder Lauf, den die Flotte je gemacht hat, lebt hier \u2014 der neueste zuerst. Die Tabelle zeigt Persona, Status, Dauer, Kosten und Startzeitpunkt \u2014 filtern Sie auf nur die Fehlschl\u00e4ge oder die noch laufenden. Klicken Sie auf eine Zeile, und die vollst\u00e4ndige Ausf\u00fchrung \u00f6ffnet sich: ein Metrik-Streifen, eine etwaige Fehlererkl\u00e4rung und die Live-Ausgabe, Zeile f\u00fcr Zeile, genau so, wie der Agent sie erzeugt hat.",
-      dashboardEvents: "Agenten arbeiten nicht isoliert \u2014 sie reagieren auf Ereignisse. Das ist der Event-Bus: jedes Signal, das durch das System flie\u00dft, von Zeitpl\u00e4nen und Webhooks bis zu Nachrichten zwischen Agenten. Jede Zeile zeigt den Ereignistyp, die Quelle, den Status und wie lange es her ist. Fehlgeschlagene Ereignisse lassen sich an Ort und Stelle erneut versuchen, und verwandte Ereignisse verketten sich, sodass Sie eine einzelne Kaskade von Anfang bis Ende verfolgen k\u00f6nnen.",
       dashboardReviews: "Manche Entscheidungen brauchen einen Menschen. Wenn ein Agent auf etwas st\u00f6\u00dft, das er nicht allein entscheiden sollte, h\u00e4lt er inne und leitet den Fall hierher. Jeder Eintrag enth\u00e4lt die Persona, den Kontext und die vorgeschlagene Aktion \u2014 genehmigen, ablehnen oder f\u00fcr sp\u00e4ter \u00fcberspringen, per Klick oder Tastatur. Nichts Riskantes geht ohne Ihre Freigabe live, und die Warteschlange h\u00e4lt den Rest der Flotte in Bewegung, w\u00e4hrend Sie entscheiden.",
+      dashboardBoard: "Das ist Ihre Flotte auf einem Board: Jeder Agent leuchtet auf, wenn er Sie braucht. \u00d6ffnen Sie einen und senden Sie ihm einen Befehl; das Board \u00e4ndert sich, sobald die Maschine ihn ausgef\u00fchrt hat.",
+      dashboardMission: "Die Kommandozentrale fasst den Zustand der Flotte in acht Lampen zusammen, die nur leuchten, wenn eine Sie braucht. \u00d6ffnen Sie eine leuchtende Lampe, um die Belege dahinter zu sehen.",
+      dashboardHealth: "Der Slack-Webhook ist ausgefallen, und der Ausfall reicht bis zu Agenten, SLAs und Vorf\u00e4llen. Konfigurieren Sie ihn einmal, und jede Seite, die den Ausfall zeigt, kommt zur Ruhe.",
+      dashboardReviewsTask: "Jetzt sind Sie dran: Genehmigen oder lehnen Sie die angezeigte Pr\u00fcfung ab. Die Tour endet, sobald Ihre Entscheidung feststeht.",
+      showMe: "Zeigen Sie es mir",
+      keepLooking: "Weiter umsehen",
+      recapCounts: "Ausgef\u00fchrte Befehle: {commands} \u00b7 Best\u00e4tigte Entscheidungen: {verdicts}",
+      recapRun: "Ge\u00f6ffnet: der Lauf, um den es bei Ihrer Entscheidung ging.",
       roadmap1: "Hier stehen wir jetzt: Jede Phase der Roadmap wird beim Ausliefern nach Status bewertet.",
       roadmap2: "Was als N\u00e4chstes kommt, liegt bei Ihnen \u2014 stimmen Sie f\u00fcr die Funktionen ab, die Sie am meisten wollen, und die Topideen pr\u00e4gen, was wir bauen.",
       roadmap3: "Und hier ist alles, was bereits ausgeliefert wurde \u2014 jede Version der Reihe nach, die neueste zuerst."

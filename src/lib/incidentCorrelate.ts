@@ -5,6 +5,7 @@ import {
   MOCK_SLA_BREACHES,
   type AuditIncident,
   type HealthCheckItem,
+  type HealthCheckSection,
   type MockHealthIssue,
   type SLABreach,
 } from "./mock-dashboard-data";
@@ -232,14 +233,42 @@ export function auditIncidentSignal(i: AuditIncident): Signal {
   };
 }
 
-/** Every demo signal. Only a failing health check is a signal; an ok one is not. */
-export function demoSignals(): Signal[] {
+/** The fixtures signals are lifted from: the demo's own, or a session projection of them. */
+export interface SignalFixtures {
+  slaBreaches: SLABreach[];
+  healthIssues: MockHealthIssue[];
+  healthChecks: HealthCheckSection[];
+  auditIncidents: AuditIncident[];
+}
+
+const DEMO_SIGNAL_FIXTURES: SignalFixtures = {
+  slaBreaches: MOCK_SLA_BREACHES,
+  healthIssues: MOCK_HEALTH_ISSUES,
+  healthChecks: MOCK_HEALTH_CHECKS,
+  auditIncidents: MOCK_AUDIT_INCIDENTS,
+};
+
+/** The window the demo Incidents page correlates with: 90 minutes. */
+export const DEMO_CORRELATION_WINDOW_MS = 90 * 60_000;
+
+/**
+ * Every demo signal. Only a failing health check is a signal; an ok one is not.
+ * Given the session's projection (lib/settleThread.ts), a fixed cause's
+ * signals arrive settled, so its incident resolves.
+ */
+export function demoSignals(fixtures: SignalFixtures = DEMO_SIGNAL_FIXTURES): Signal[] {
   return [
-    ...MOCK_SLA_BREACHES.map(slaBreachSignal),
-    ...MOCK_HEALTH_ISSUES.map(healthIssueSignal),
-    ...MOCK_HEALTH_CHECKS.flatMap((s) => s.items)
+    ...fixtures.slaBreaches.map(slaBreachSignal),
+    ...fixtures.healthIssues.map(healthIssueSignal),
+    ...fixtures.healthChecks
+      .flatMap((s) => s.items)
       .filter((c) => c.status === "error")
       .map(healthCheckSignal),
-    ...MOCK_AUDIT_INCIDENTS.map(auditIncidentSignal),
+    ...fixtures.auditIncidents.map(auditIncidentSignal),
   ];
+}
+
+/** The correlated incident holding a signal id, or null. */
+export function incidentContaining(incidents: readonly Incident[], signalId: string): Incident | null {
+  return incidents.find((i) => i.members.some((m) => m.id === signalId)) ?? null;
 }

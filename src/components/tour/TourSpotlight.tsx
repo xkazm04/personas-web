@@ -4,27 +4,18 @@ import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTour } from "@/contexts/TourContext";
-import { blendEdges, cutoutFrame, TWEEN_MS, type Edges } from "./spotlightFrame";
+import { breadcrumbMissedAnchor, clamp, ease, fence, unfence, useSpotlightMarker } from "./spotlightParts";
 
+/** Breathing room (px) drawn around the spotlit element. */
+const PADDING = 22;
+/** Minimum gap kept between the cutout and the viewport edge. */
+const MARGIN = 44;
+/** Extra bottom clearance so the cutout never runs under the caption card. */
+const BOTTOM_GAP = 150;
+/** Step-to-step tween duration. */
+const TWEEN_MS = 600;
 /** Anchor wait before the missed-anchor policy fires (covers lazy hydration). */
 const ANCHOR_TIMEOUT_MS = 3000;
-
-/** Data-free breadcrumb: no SENSITIVE_FIELDS key, no user-derived value. */
-function breadcrumbMissedAnchor(waitedMs: number): void {
-  if (typeof window === "undefined") return;
-  void import("@sentry/nextjs")
-    .then((Sentry) => {
-      Sentry.addBreadcrumb({
-        category: "tour",
-        level: "warning",
-        message: "tour spotlight anchor never resolved; dropping the scrim",
-        data: { waitedMs },
-      });
-    })
-    .catch(() => {
-      /* Sentry is optional — the scrim is dropped either way. */
-    });
-}
 
 /**
  * Dims the page except a rounded cutout that *glides* between step targets.
@@ -55,37 +46,24 @@ function breadcrumbMissedAnchor(waitedMs: number): void {
  * for modal surfaces, not scrims) — not blanket permission for literal colours
  * elsewhere in the tour. The ring, by contrast, uses the themed `--brand-cyan`
  * accent so it matches the caption card and the rest of the active theme.
+ *
+ * **Click-through cutout.** The overlay itself takes no pointer events; four
+ * transparent panels fence the page *around* the cutout (moved with it every
+ * frame), so the spotlit target can be clicked (a step the visitor does) while
+ * the dimmed page cannot. The fence comes down with the scrim when an anchor is
+ * missed. Keyboard focus is unchanged: the caption card keeps its trap and
+ * Escape still exits; its "Show me" is the keyboard way to the target.
  */
 export default function TourSpotlight() {
   const { active, activeSpotlight } = useTour();
   const cutoutRef = useRef<HTMLDivElement>(null);
+  const blockersRef = useRef<(HTMLDivElement | null)[]>([null, null, null, null]);
   const prevTargetRef = useRef<string | null>(activeSpotlight);
   const prevRectRef = useRef<DOMRect | null>(null);
   const tweenStartRef = useRef<number>(0);
   const prefersReducedMotion = useStillMotion();
 
-  // Mark the live spotlight target with `data-tour-active="true"` so the
-  // element itself can react to being in focus (subtle scale + glow lift in
-  // globals.css). Retries for lazy-hydrated targets.
-  useEffect(() => {
-    if (!active || !activeSpotlight) return;
-    const selector = activeSpotlight;
-    let marked: HTMLElement | null = null;
-    const apply = () => {
-      const el = document.querySelector<HTMLElement>(selector);
-      if (el && el !== marked) {
-        marked?.removeAttribute("data-tour-active");
-        el.setAttribute("data-tour-active", "true");
-        marked = el;
-      }
-    };
-    apply();
-    const id = window.setInterval(apply, 200);
-    return () => {
-      window.clearInterval(id);
-      marked?.removeAttribute("data-tour-active");
-    };
-  }, [active, activeSpotlight]);
+  useSpotlightMarker(active, activeSpotlight);
 
   useEffect(() => {
     if (!active || !activeSpotlight) return;
@@ -115,19 +93,37 @@ export default function TourSpotlight() {
         const r = el.getBoundingClientRect();
         if (r.width > 0 || r.height > 0) {
           resolved = true;
-          let edges: Edges = r;
+          let left = r.left;
+          let top = r.top;
+          let right = r.right;
+          let bottom = r.bottom;
           // Blend from the previous rect toward the live new rect for the
           // first TWEEN_MS — after that, snap to live and just track.
           if (prevRectRef.current) {
             const t = Math.min(1, (performance.now() - tweenStartRef.current) / TWEEN_MS);
-            edges = blendEdges(prevRectRef.current, r, t);
+            const e = ease(t);
+            const p = prevRectRef.current;
+            left = p.left * (1 - e) + r.left * e;
+            top = p.top * (1 - e) + r.top * e;
+            right = p.right * (1 - e) + r.right * e;
+            bottom = p.bottom * (1 - e) + r.bottom * e;
             if (t >= 1) prevRectRef.current = null;
           }
-          const frameBox = cutoutFrame(edges, window.innerWidth, window.innerHeight);
-          cutout.style.transform = `translate(${frameBox.x}px, ${frameBox.y}px)`;
-          cutout.style.width = `${frameBox.width}px`;
-          cutout.style.height = `${frameBox.height}px`;
+          const vw = window.innerWidth;
+          const vh = window.innerHeight;
+          // Narrow viewports get tighter margins so the frame doesn't crush
+          // the visible content area.
+          const m = vw < 480 ? 18 : MARGIN;
+          const bg = vw < 480 ? 180 : BOTTOM_GAP;
+          const cl = clamp(left - PADDING, m, vw - m);
+          const ct = clamp(top - PADDING, m, vh - m);
+          const cr = clamp(right + PADDING, m, vw - m);
+          const cb = clamp(bottom + PADDING, m, vh - bg);
+          cutout.style.transform = `translate(${cl}px, ${ct}px)`;
+          cutout.style.width = `${Math.max(0, cr - cl)}px`;
+          cutout.style.height = `${Math.max(0, cb - ct)}px`;
           cutout.style.opacity = "1";
+          fence(blockersRef.current, cl, ct, cr, cb, vw, vh);
         }
       }
       // Missed-anchor policy (see docblock). Two boolean reads per frame once
@@ -137,6 +133,7 @@ export default function TourSpotlight() {
         if (waitedMs > ANCHOR_TIMEOUT_MS) {
           dropped = true;
           cutout.style.opacity = "0";
+          unfence(blockersRef.current);
           breadcrumbMissedAnchor(Math.round(waitedMs));
         }
       }
@@ -149,15 +146,26 @@ export default function TourSpotlight() {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[80]"
+      className="pointer-events-none fixed inset-0 z-[80]"
       aria-hidden="true"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={prefersReducedMotion ? { duration: 0 } : undefined}
     >
+      {[0, 1, 2, 3].map((i) => (
+        <div
+          key={i}
+          ref={(el) => {
+            blockersRef.current[i] = el;
+          }}
+          data-tour-fence=""
+          className="pointer-events-auto absolute left-0 top-0 h-0 w-0"
+        />
+      ))}
       <div
         ref={cutoutRef}
-        className="tour-cutout-pulse absolute left-0 top-0 rounded-2xl opacity-0"
+        className="tour-cutout-pulse pointer-events-none absolute left-0 top-0 rounded-2xl opacity-0"
         style={{
           border: "2px solid color-mix(in srgb, var(--brand-cyan) 80%, transparent)",
           boxShadow:

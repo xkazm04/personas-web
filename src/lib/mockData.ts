@@ -7,21 +7,20 @@ import type {
   HealthResponse,
   StatusResponse,
   GlobalExecution,
-  ObservabilityMetrics,
-  DailyMetric,
-  PersonaSpend,
   ToolUsageSummary,
   ToolUsageOverTime,
   ToolUsageByPersona,
 } from "./types";
-import { periodTrend } from "./observabilitySeries";
+import { DEMO_SEED_NOW } from "./demoClock";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
+// Anchored to the seed clock, so the dashboard scope's windows cut these rows
+// at the same place on every load (see ./demoClock).
 function ago(minutes: number): string {
-  return new Date(Date.now() - minutes * 60_000).toISOString();
+  return new Date(DEMO_SEED_NOW - minutes * 60_000).toISOString();
 }
 
 function id(prefix: string, n: number): string {
@@ -156,6 +155,14 @@ export const MOCK_PERSONAS: Persona[] = [
 // Executions
 // ---------------------------------------------------------------------------
 
+/**
+ * The crew's authored runs, and (as the session goes on) the runs the scripted
+ * desktop writes. The rest of the demo's run log is projected, not declared
+ * here: `src/lib/demoWorld/` expands the fleet's root (the Board's 99 agents,
+ * the five synced personas among them) into 14 days of runs, and these rows
+ * hold their slots in it. Mutable for the session: the command plane writes
+ * through to this array, and every read folds it in exactly once.
+ */
 export const MOCK_EXECUTIONS: GlobalExecution[] = [
   {
     id: id("e", 1),
@@ -325,10 +332,8 @@ export const MOCK_EXECUTIONS: GlobalExecution[] = [
     personaIcon: undefined,
     personaColor: "#06b6d4",
   },
-  // The eight completed runs against the single failure above are what makes
-  // the fleet's terminal success rate (8/9 ≈ 89%) agree with the observability
-  // window's 89.4% — the home success ring and the 14-day chart read the same
-  // fleet, so they must not be able to disagree by 45 points.
+  // Older authored runs. Each one holds a slot in its day of the world's log
+  // (src/lib/demoWorld/crew.ts), so the daily series counts it exactly once.
   {
     id: id("e", 8),
     personaId: id("p", 3),
@@ -448,6 +453,57 @@ export const MOCK_EXECUTIONS: GlobalExecution[] = [
     personaName: "Daily Standup Digest",
     personaIcon: undefined,
     personaColor: "#a855f7",
+  },
+  // The two crew agents the Board shows running (Incident Responder for 17
+  // minutes, Customer Feedback Analyzer for 12): their runs in flight, so the
+  // phone and Executions can cancel the same run the Board's tile is timing.
+  {
+    id: id("e", 13),
+    personaId: id("p", 2),
+    triggerId: null,
+    useCaseId: null,
+    status: "running",
+    inputData: '{"alert_id": "INC-904", "severity": "P3"}',
+    outputData: null,
+    claudeSessionId: "sess-bcd890",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 0,
+    outputTokens: 0,
+    costUsd: 0,
+    errorMessage: null,
+    durationMs: null,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(17),
+    completedAt: null,
+    createdAt: ago(17),
+    personaName: "Incident Responder",
+    personaIcon: undefined,
+    personaColor: "#f43f5e",
+  },
+  {
+    id: id("e", 14),
+    personaId: id("p", 5),
+    triggerId: null,
+    useCaseId: null,
+    status: "running",
+    inputData: '{"source": "zendesk", "window": "24h", "retry": 1}',
+    outputData: null,
+    claudeSessionId: "sess-efg123",
+    modelUsed: "claude-sonnet-4-5-20250929",
+    inputTokens: 0,
+    outputTokens: 0,
+    costUsd: 0,
+    errorMessage: null,
+    durationMs: null,
+    retryOfExecutionId: null,
+    retryCount: 0,
+    startedAt: ago(12),
+    completedAt: null,
+    createdAt: ago(12),
+    personaName: "Customer Feedback Analyzer",
+    personaIcon: undefined,
+    personaColor: "#fbbf24",
   },
 ];
 
@@ -875,13 +931,27 @@ const MOCK_OUTPUT_LINES = [
   "- Code quality: Excellent",
 ];
 
-export function getMockExecutionDetail(executionId: string, offset = 0): ExecutionDetail {
+/** No run with this id in the demo's fixtures: there is no status to report. */
+export interface MockExecutionUnavailable {
+  executionId: string;
+  unavailable: true;
+}
+
+export function getMockExecutionDetail(executionId: string, offset = 0): ExecutionDetail | MockExecutionUnavailable {
   // Simulate progressive output for the "running" execution. The caller (the
   // polling hook) owns the cursor and advances it by output.length, matching the
   // stateless real/supabase getExecution(id, offset) contract — so two concurrent
   // pollers (or a StrictMode double-invoke) no longer fight over a shared global.
   const exec = MOCK_EXECUTIONS.find((e) => e.id === executionId);
-  const isRunning = exec?.status === "running";
+  // An unknown id is unavailable, never a run that "completed" (it used to be).
+  if (!exec) return { executionId, unavailable: true };
+  const isRunning = exec.status === "running";
+
+  // The scripted transcript is a PR review: only PR Review Agent's runs stream
+  // it. Another persona's run in flight has written nothing yet.
+  if (isRunning && exec.personaId !== id("p", 1)) {
+    return { executionId, status: "running", outputLines: 0, output: [] };
+  }
 
   if (isRunning) {
     const start = Math.max(0, offset);
@@ -901,11 +971,11 @@ export function getMockExecutionDetail(executionId: string, offset = 0): Executi
 
   return {
     executionId,
-    status: exec?.status ?? "completed",
+    status: exec.status,
     outputLines: 0,
-    output: exec?.outputData ? exec.outputData.split("\n") : [],
-    durationMs: exec?.durationMs ?? undefined,
-    totalCostUsd: exec?.costUsd ?? undefined,
+    output: exec.outputData ? exec.outputData.split("\n") : [],
+    durationMs: exec.durationMs ?? undefined,
+    totalCostUsd: exec.costUsd ?? undefined,
   };
 }
 
@@ -941,80 +1011,17 @@ export const MOCK_STATUS: StatusResponse = {
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-// Observability metrics
+// Observability
 // ---------------------------------------------------------------------------
 
 function daysAgo(d: number): string {
-  const date = new Date(Date.now() - d * 86400_000);
+  const date = new Date(DEMO_SEED_NOW - d * 86400_000);
   return date.toISOString().split("T")[0];
 }
 
-// The 14-day observability window, oldest → newest. These three series are the
-// SINGLE source of truth for every fleet magnitude in the demo: the totals
-// below, the per-agent spend table, the home traffic chart and the execution
-// heatmap are all derived from (or reconciled against) them. They are hand-
-// tuned rather than randomised so the numbers stay identical between the
-// server render and the client, and between one card and the next.
-const DAILY_EXECUTIONS = [2, 3, 4, 3, 5, 4, 2, 3, 4, 3, 5, 3, 4, 2]; // Σ 47
-const DAILY_FAILURES = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0]; //   Σ 5
-// Day 10 (three days ago) is the window's one genuine cost spike — z ≈ 3.2 —
-// so the Performance tab's anomaly banner has a real day to name; the rest of
-// the fortnight gave the difference back to keep the window at Σ 4.82.
-const DAILY_COST = [0.21, 0.31, 0.39, 0.31, 0.41, 0.35, 0.21, 0.31, 0.35, 0.31, 0.79, 0.31, 0.35, 0.21]; // Σ 4.82
-
-// The 14 days BEFORE the window, same magnitude: the Compare overlay plots it
-// under the window and the tiles' "vs last period" trends are its % change.
-const DAILY_PRIOR_EXECUTIONS = [3, 2, 3, 4, 3, 2, 3, 4, 3, 2, 4, 3, 4, 3]; // Σ 43
-const DAILY_PRIOR_FAILURES = [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0]; //    Σ 4
-const DAILY_PRIOR_COST = [0.29, 0.21, 0.31, 0.39, 0.29, 0.21, 0.31, 0.39, 0.29, 0.21, 0.41, 0.29, 0.41, 0.29]; // Σ 4.30
-
-function dailySeries(
-  executions: number[],
-  failures: number[],
-  cost: number[],
-  newestDaysAgo: number,
-): DailyMetric[] {
-  return executions.map((execs, i) => ({
-    date: daysAgo(newestDaysAgo + executions.length - 1 - i),
-    cost: cost[i],
-    executions: execs,
-    successes: execs - failures[i],
-    failures: failures[i],
-  }));
-}
-
-export const MOCK_DAILY_METRICS: DailyMetric[] = dailySeries(DAILY_EXECUTIONS, DAILY_FAILURES, DAILY_COST, 0);
-
-/** The prior 14-day window (27 → 14 days ago), oldest → newest. */
-export const MOCK_DAILY_PRIOR_METRICS: DailyMetric[] = dailySeries(
-  DAILY_PRIOR_EXECUTIONS,
-  DAILY_PRIOR_FAILURES,
-  DAILY_PRIOR_COST,
-  DAILY_EXECUTIONS.length,
-);
-
-const WINDOW_EXECUTIONS = DAILY_EXECUTIONS.reduce((a, b) => a + b, 0);
-const WINDOW_FAILURES = DAILY_FAILURES.reduce((a, b) => a + b, 0);
-const WINDOW_COST = DAILY_COST.reduce((a, b) => a + b, 0);
-const WINDOW_TREND = periodTrend(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS);
-
-export const MOCK_OBSERVABILITY_METRICS: ObservabilityMetrics = {
-  totalCost: +WINDOW_COST.toFixed(2),
-  totalExecutions: WINDOW_EXECUTIONS,
-  successRate: +(((WINDOW_EXECUTIONS - WINDOW_FAILURES) / WINDOW_EXECUTIONS) * 100).toFixed(1),
-  activePersonas: MOCK_PERSONAS.filter((persona) => persona.enabled).length,
-  // Rounded to 1 dp, as the tiles show them.
-  costTrend: +WINDOW_TREND.cost.toFixed(1),
-  execTrend: +WINDOW_TREND.executions.toFixed(1),
-  successTrend: +WINDOW_TREND.success.toFixed(1),
-};
-
-export const MOCK_PERSONA_SPEND: PersonaSpend[] = [
-  { personaId: id("p", 1), personaName: "PR Review Agent", personaColor: "#06b6d4", totalCost: 1.45, executionCount: 18, budgetUsd: 5.0 },
-  { personaId: id("p", 2), personaName: "Incident Responder", personaColor: "#f43f5e", totalCost: 1.89, executionCount: 8, budgetUsd: 10.0 },
-  { personaId: id("p", 3), personaName: "Daily Standup Digest", personaColor: "#a855f7", totalCost: 0.62, executionCount: 10, budgetUsd: 2.0 },
-  { personaId: id("p", 5), personaName: "Customer Feedback Analyzer", personaColor: "#fbbf24", totalCost: 0.86, executionCount: 11, budgetUsd: 4.0 },
-];
+// The run log and every aggregate of it (the daily series, totals, trends,
+// per-agent spend) project from the demo world (`src/lib/demoWorld/`), served
+// by `mockApi`. Nothing here restates a run count or a spend figure.
 
 // Health issues live in ONE place: `MOCK_HEALTH_ISSUES` in
 // `./mock-dashboard-data` (richer shape — circuit-breaker + auto-fix fields —

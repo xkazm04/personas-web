@@ -1,0 +1,113 @@
+{
+ "schema": "conform-run/1",
+ "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+ "subject": "prompt-assembly",
+ "evaluatedAt": "2026-10-13T02:20:45.884791+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Authentication & User Session",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/authStore.ts:215 Context and repository searches found authentication UI names and user-cache management here, while the actual session implementation invokes Supabase OAuth rather than assembling model prompts.",
+   "techniques": []
+  },
+  {
+   "context": "Orchestration & Platform Visualizers",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/orchestration-hub/index.tsx:56 Context and repository searches found only guide-image paths mentioning prompts in this visualizer, whose implementation renders trigger-selection widgets without assembling model input.",
+   "techniques": []
+  },
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 Context and repository searches found no prompt assembler or model-call path in the listed Lab modules, where timers replay a fixed chat script and the other tabs display predefined experiment data.",
+   "techniques": []
+  },
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:196 Context and repository searches found prompt descriptions and literal examples in the locale files, whose content is selected by the locale resolver and rendered as website documentation rather than assembled into model requests.",
+   "techniques": []
+  },
+  {
+   "context": "Execution History & Streaming",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:117 Context and repository searches found no prompt-assembly or model-call path in these files, whose stream route relays upstream output and whose remaining modules render, filter or poll execution results.",
+   "techniques": []
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-13T02:20:45.884791+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Authentication & User Session",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-13T02:20:45.884791+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Orchestration & Platform Visualizers",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-13T02:20:45.884791+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-13T02:20:45.884791+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-13T02:20:45.884791+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

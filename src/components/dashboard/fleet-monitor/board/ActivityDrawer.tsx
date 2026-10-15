@@ -9,6 +9,8 @@ import { fill, type BoardEvent, type BoardEventKind, type SimAgent } from "./mod
 import { FLEET_EVENT_ID } from "./sim";
 import { KIND_COLOR } from "./BottomStrip";
 import type { Command } from "./useCommands";
+import { DashLink } from "@/components/dashboard/spa/navigate";
+import { SYNCED_HREF, syncedPageOf } from "../world/crewLinks";
 
 export type ActivityFilter = "all" | "attention" | "decisions" | "messages" | "runs" | "commands";
 const FILTERS: readonly ActivityFilter[] = ["all", "attention", "decisions", "messages", "runs", "commands"];
@@ -36,6 +38,8 @@ interface ActivityDrawerProps {
   still: boolean;
   onClose: () => void;
   onOpenAgent: (id: string) => void;
+  /** Demo: a crew agent's row links to the synced page that shows the same act. */
+  synced?: boolean;
 }
 
 const STATUS_TONE: Record<Command["status"], string> = {
@@ -46,7 +50,7 @@ const STATUS_TONE: Record<Command["status"], string> = {
  * The bottom strip, opened up: the whole log with filters, and the audit
  * trail of every command sent to the machine this session with where it is.
  */
-export default function ActivityDrawer({ events, scope, cmds, simMs, copy: c, hostName, still, onClose, onOpenAgent }: ActivityDrawerProps) {
+export default function ActivityDrawer({ events, scope, cmds, simMs, copy: c, hostName, still, onClose, onOpenAgent, synced = false }: ActivityDrawerProps) {
   const [filter, setFilter] = useState<ActivityFilter>("all");
   const byId = new Map(scope.map((a) => [a.id, a]));
   const list = filterEvents(events, filter).filter((e) => byId.has(e.agentId) || e.agentId === FLEET_EVENT_ID);
@@ -98,6 +102,7 @@ export default function ActivityDrawer({ events, scope, cmds, simMs, copy: c, ho
           <ol>
             {list.map((e, i) => {
               const a = byId.get(e.agentId);
+              const page = synced ? syncedPageOf(e) : null;
               return (
                 <li key={`${e.tsMs}-${e.agentId}-${i}`} className="grid grid-cols-[5rem_8.5rem_4.5rem_minmax(0,1fr)_auto] items-center gap-3 border-b border-glass px-2 py-1.5 text-sm">
                   <span className="font-mono text-xs tabular-nums text-muted-dark">{formatClock(e.tsMs)}</span>
@@ -109,7 +114,14 @@ export default function ActivityDrawer({ events, scope, cmds, simMs, copy: c, ho
                     <button type="button" onClick={() => onOpenAgent(a.id)} className="truncate rounded text-left font-mono text-xs font-semibold text-foreground hover:underline focus-visible:outline-2 focus-visible:outline-foreground">{a.callsign}</button>
                   ) : <span className="font-mono text-xs font-semibold text-foreground">{c.cmd.fleetCallsign}</span>}
                   <span className="truncate text-foreground">{eventText(e, c)}</span>
-                  <span className="whitespace-nowrap text-xs text-muted-dark">{ago(now - e.tsMs, c)}</span>
+                  <span className="flex items-center gap-3 whitespace-nowrap text-xs text-muted-dark">
+                    {page && (
+                      <DashLink href={SYNCED_HREF[page]} data-synced-link={page} className="rounded text-brand-cyan hover:underline focus-visible:outline-2 focus-visible:outline-foreground">
+                        {c.activity.synced[page]}
+                      </DashLink>
+                    )}
+                    {ago(now - e.tsMs, c)}
+                  </span>
                 </li>
               );
             })}

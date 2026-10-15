@@ -1,0 +1,111 @@
+{
+ "schema": "conform-run/1",
+ "worker": "81055a62-9d99-4a0f-b1b2-2f406d9ae64d",
+ "subject": "module-design",
+ "evaluatedAt": "2026-10-15T04:11:07.358317+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Fleet Playground (prototypes)",
+   "subject": "module-design",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/fleet-monitor/attention.ts:21 The classifier asserts that a partial agent is a complete FleetAgent without documenting its safety invariant, replacing a checkable narrow dependency contract with an unchecked assertion.",
+   "techniques": [
+    {
+     "technique": "borrowed-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/fleet-monitor/FleetFrame.tsx:29 The frame composes supplied content; it does not implicitly adopt another object's callable surface."
+    },
+    {
+     "technique": "concurrency-at-the-edge",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:17 The browser hook schedules ticks and supplies elapsed time as action data to the synchronous simulation."
+    },
+    {
+     "technique": "declarative-or-sequential",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/fleet-monitor/attention.ts:55 One explicit pass maintains category counts and the overlapping critical tally."
+    },
+    {
+     "technique": "emitted-code-names-from-a-root",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/fleet-monitor/board/ActivityDrawer.tsx:26 The inspected transformations return event data, with no caller-scope source generation found."
+    },
+    {
+     "technique": "host-primitive-facade",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:28 This hook reads a browser demo setting; it is not a library driving work on two execution hosts."
+    },
+    {
+     "technique": "io-free-core",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:248 The reducer takes state and actions, advances time from action.dt, and carries its random seed in state; commands.test.ts exercises decisions directly."
+    },
+    {
+     "technique": "marked-unverifiable-region",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/fleet-monitor/attention.ts:21 attentionOf accepts a Pick but asserts the full type without a written invariant; needsYou only needs state and reviews and could accept that checked shape."
+    },
+    {
+     "technique": "mirror-type-at-the-edge",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/fleet-monitor/attention.ts:30 The decision accepts ordinary record fields, not an input type constructible only by a host."
+    },
+    {
+     "technique": "module-depth",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/fleet-monitor/board/attStore.ts:20 Callers learn get, set, and subscribe while the store hides equality suppression, listener ownership, and unsubscribe behavior."
+    },
+    {
+     "technique": "state-carrier-decides-the-lane",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/fleet-monitor/board/attStore.ts:27 Attention updates one shared local closure; no existing carrier copied into a separate execution lane was found."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "module-design",
+   "context": "Memory Layers & Multi-Provider AI",
+   "reason": "evidence leans on shared/machine.ts, which is not a tracked file"
+  },
+  {
+   "subject": "module-design",
+   "context": "Split & Pipeline Playground",
+   "reason": "evidence leans on shared/useMindRun.ts, which is not a tracked file"
+  },
+  {
+   "subject": "module-design",
+   "context": "Agent Execution Timeline Race",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T04:11:07.358317+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "module-design"
+   ],
+   "techniques": [
+    "borrowed-surface",
+    "concurrency-at-the-edge",
+    "declarative-or-sequential",
+    "emitted-code-names-from-a-root",
+    "host-primitive-facade",
+    "io-free-core",
+    "marked-unverifiable-region",
+    "mirror-type-at-the-edge",
+    "module-depth",
+    "state-carrier-decides-the-lane"
+   ],
+   "deviations": 1,
+   "context": "Fleet Playground (prototypes)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

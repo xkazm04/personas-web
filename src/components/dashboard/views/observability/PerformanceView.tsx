@@ -12,9 +12,12 @@ import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useFocusParam } from "@/hooks/useFocusParam";
 import { api } from "@/lib/api";
-import { MOCK_COST_ANOMALIES, MOCK_HEALTH_ISSUES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
+import type { MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
+import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
+import { useDemoThreads } from "@/hooks/useDemoThreads";
 import { CostAnomalyBanner } from "./performance-view/CostAnomalyBanner";
 import { PerformanceChartGrid } from "./performance-view/PerformanceChartGrid";
 import { PerformanceHealthPanel } from "./performance-view/PerformanceHealthPanel";
@@ -22,11 +25,16 @@ import { PerformanceLatencyCard } from "./performance-view/PerformanceLatencyCar
 import { PerformanceMetricsGrid } from "./performance-view/PerformanceMetricsGrid";
 import { PerformanceSpendCard } from "./performance-view/PerformanceSpendCard";
 import { BUDGET_THRESHOLD, type SeverityFilter } from "./performance-view/performanceViewTypes";
+import { usePerformanceOverlays } from "./performance-view/usePerformanceOverlays";
 
 export default function PerformanceView() {
   const { t } = useTranslation();
   const isDemo = useAuthStore((s) => s.isDemo);
-  const [compareEnabled, setCompareEnabled] = useState(false);
+  const demoIssues = useDemoThreads().healthIssues;
+  // The dashboard's one Compare flag (persisted with the scope), shared with
+  // the Activity tab: only Observability has a prior period to show.
+  const compareEnabled = useDashboardFilterStore((s) => s.compareEnabled);
+  const setCompareEnabled = useDashboardFilterStore((s) => s.setCompareEnabled);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
   // A ?focus= deep link (e.g. back/forward onto a filtered list) must never
   // land on a row the severity filter hides: clear the filter when it changes.
@@ -36,7 +44,7 @@ export default function PerformanceView() {
     setSeenFocus(focusId);
     if (focusId) setSeverityFilter("all");
   }
-  const { data, isLoading: loading, isValidating, error, mutate } = useSWR("observability", api.getObservability, {
+  const { data, isLoading: loading, isValidating, error, mutate } = useSWR(DEMO_THREAD_KEYS.observability, api.getObservability, {
     refreshInterval: 30_000,
     dedupingInterval: 8_000,
     revalidateOnFocus: false,
@@ -50,16 +58,16 @@ export default function PerformanceView() {
   const healthIssues = useMemo(() => data?.healthIssues ?? [], [data]);
   const costChartData = useMemo(() => dailyMetrics.map((day) => ({ date: day.date.slice(5), Cost: day.cost })), [dailyMetrics]);
   const execChartData = useMemo(() => dailyMetrics.map((day) => ({ date: day.date.slice(5), Successes: day.successes, Failures: day.failures })), [dailyMetrics]);
-  const spendPieData = useMemo(() => personaSpend.map((persona) => ({ name: persona.personaName, value: persona.totalCost, color: persona.personaColor })), [personaSpend]);
+  const overlays = usePerformanceOverlays(isDemo, dailyMetrics, personaSpend);
 
   const displayHealthIssues: MockHealthIssue[] = useMemo(() => {
     // Demo falls back to the illustrative fixture; real mode shows the genuine
     // (possibly empty) synced health issues — never the mock.
-    if (healthIssues.length === 0) return isDemo ? MOCK_HEALTH_ISSUES : [];
+    if (healthIssues.length === 0) return isDemo ? demoIssues : [];
     // MockHealthIssue extends the API's HealthIssue, so synced issues need no
     // reshaping — they simply arrive without the auto-healing extras.
     return healthIssues;
-  }, [healthIssues, isDemo]);
+  }, [healthIssues, isDemo, demoIssues]);
 
   const filteredHealthIssues = useMemo(() => {
     if (severityFilter === "all") return displayHealthIssues;
@@ -100,13 +108,13 @@ export default function PerformanceView() {
           rather than show an empty/fabricated comparison. */}
       {isDemo && (
         <div className={`${ARRIVE} mb-6 flex justify-end`} style={arriveAt(1)}>
-          <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
+          <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled(!compareEnabled)} label={t.dashboard.scope.compare} />
         </div>
       )}
       {/* Cost-anomaly detection isn't synced — demo only. */}
       {isDemo && (
         <CostAnomalyBanner
-          anomalies={MOCK_COST_ANOMALIES}
+          anomalies={overlays.anomalies}
           label={t.observabilityPage.costAnomalyDetected}
           dismissLabel={t.common.close}
         />
@@ -121,20 +129,26 @@ export default function PerformanceView() {
       )}
       {/* T2: the KPI tiles answer the tab's question first. */}
       <div className={ARRIVE} style={arriveAt(2)}>
-        <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} />
+        <PerformanceMetricsGrid metrics={metrics} labels={t.observabilityPage} drill={overlays.drill} population={overlays.population} />
       </div>
       <PerformanceChartGrid
         costChartData={costChartData}
         execChartData={execChartData}
         compareEnabled={compareEnabled}
-        costPrevious={isDemo ? MOCK_COST_COMPARE : []}
-        execPrevious={isDemo ? MOCK_EXEC_COMPARE : []}
-        annotations={isDemo ? MOCK_ANNOTATIONS : []}
+        costPrevious={overlays.costPrevious}
+        execPrevious={overlays.execPrevious}
+        annotations={overlays.annotations}
         labels={t.observabilityPage}
       />
       <PerformanceLatencyCard labels={t.observabilityPage} />
       <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(5)}>
-        <PerformanceSpendCard personaSpend={personaSpend} spendPieData={spendPieData} labels={t.observabilityPage} />
+        <PerformanceSpendCard
+          personaSpend={personaSpend}
+          spendPieData={overlays.spendPieData}
+          labels={t.observabilityPage}
+          drillFor={overlays.drillFor}
+          compact={overlays.compactSpend}
+        />
         <PerformanceHealthPanel
           openIssues={openIssues}
           filteredHealthIssues={filteredHealthIssues}

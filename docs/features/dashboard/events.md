@@ -130,6 +130,7 @@ per-node-id lookup of realistic mock JSON), syntax-highlighted by `highlightJson
 | `src/components/dashboard/ConnectionStatusIndicator.tsx` | Title-bar dot reading `connectionStatus` from the store |
 
 ## Data & state
+- **Scope:** `useScopedEvents` cuts the log to the scope bar's persona (`targetPersonaId`; an event aimed at no persona leaves once one is chosen) + window (`createdAt`) for the list tab and its badge (`tabCounts` judges "unknown" on the whole log). The Visualization and Swimlane tabs draw the live bus unscoped. A list the scope emptied shows `ScopeEmpty`, after the not-served note.
 
 - **Source:** Demo-only. List/replay/discard/subscriptions read mocks via `api.*` →
   `src/lib/mockApi.ts` (`listEvents`, `publishEvent`, `updateEvent`,

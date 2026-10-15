@@ -96,6 +96,7 @@ export default function DataTable<T>({
             <div
               key={id}
               role="row"
+              data-row-id={id}
               className={`border-b border-glass last:border-0 ${extraClass}`}
             >
               <div

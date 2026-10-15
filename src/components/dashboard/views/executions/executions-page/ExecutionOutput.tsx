@@ -21,9 +21,10 @@ export function ExecutionOutput({
     waitingForWorker: string;
     noOutputYet: string;
     jumpToLatest: string;
+    unavailable: string;
   };
 }) {
-  const { output, status, durationMs, totalCostUsd } =
+  const { output, status, durationMs, totalCostUsd, unavailable } =
     useExecutionPolling(executionId);
 
   const reduceMotion = useReducedMotion();
@@ -74,6 +75,16 @@ export function ExecutionOutput({
     stickyBottomRef.current = true;
     scrollToBottom(true);
   };
+
+  // The plane holds no record of this run: say so, instead of a status or an
+  // empty log that would read as "queued" or "no output yet".
+  if (unavailable) {
+    return (
+      <p role="status" className="rounded-xl border border-glass bg-white/[0.02] p-4 text-sm text-muted-dark">
+        {labels.unavailable}
+      </p>
+    );
+  }
 
   return (
     <div className="space-y-3">

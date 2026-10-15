@@ -1,0 +1,134 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7aba2320-7ab0-4793-895b-e76357d61c99",
+ "subject": "docs-sync",
+ "evaluatedAt": "2026-10-13T21:48:14.205760+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "docs-sync",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/data/guide/locales/ar/content/getting-started.ts:5 The localized guide content instructs readers to download macOS and Linux desktop installers that do not exist in the shipped product, because translation staleness is anchored exclusively to English source text rather than checked against shipped product capabilities.",
+   "techniques": [
+    {
+     "technique": "translations-drift-against-the-product",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/locales/ar/content/getting-started.ts:5 Localized content advertises unreleased platforms because translation freshness is pinned solely to English source hashes without a secondary check against shipped product capabilities."
+    },
+    {
+     "technique": "negative-claims-are-pinned",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/locales/ar/content/credentials.ts:72 Security negative boundaries instructing users never to paste credentials into prompts are unpinned in localized files, lacking substring assertions or forbidden phrasing sweeps."
+    }
+   ]
+  },
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "docs-sync",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/data/guide/content/credentials.ts:141 The guide content states connector counts using an unanchored 'as of this writing' phrase rather than an instrumented, dated correction, causing prose claims to drift unobserved from the shipped connector catalog.",
+   "techniques": [
+    {
+     "technique": "dated-corrections",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/content/credentials.ts:141 Prose uses an unanchored 'as of this writing' count without a date, measurement predicate, or instrument."
+    },
+    {
+     "technique": "same-change-enforcement",
+     "verdict": "deviation",
+     "evidence": ".github/workflows/ci.yml:65 CI runs drift coverage in advisory report-only mode without enforcement thresholds, and no pre-commit/PR gate inspects VCS diffs for coupled doc obligations."
+    },
+    {
+     "technique": "catch-up-markers",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/types.ts:40 Historical catch-up passes (e.g. pass T.4) were documented only in source comments rather than leaving a structured marker artifact recording commit anchor, coverage, and skipped gaps."
+    },
+    {
+     "technique": "cross-repo-drift-detection",
+     "verdict": "conformant",
+     "evidence": "src/data/guide/types.ts:61 Topics declare coarse watchedFiles and contentReviewedAt, which check-guide-coverage.mjs queries against the desktop repo history per unique pair."
+    },
+    {
+     "technique": "checked-vs-skipped-denominators",
+     "verdict": "conformant",
+     "evidence": "scripts/check-guide-coverage.mjs:57 The coverage script defines distinct SKIP reason classes, reporting null rather than empty findings when the remote repository cannot be queried."
+    },
+    {
+     "technique": "source-as-data-without-the-app",
+     "verdict": "conformant",
+     "evidence": "scripts/check-guide-coverage.mjs:140 The drift scanner regex-scrapes GUIDE_TOPICS directly from the TypeScript source file and evaluates the array literal without bundling the application."
+    },
+    {
+     "technique": "source-doc-mapping",
+     "verdict": "conformant",
+     "evidence": "src/data/guide/desktop-modules.test.ts:17 The test asserts complete coverage of TOPIC_MODULE_MAP over all guide topics, verifying that no topic lacks a desktop module location."
+    },
+    {
+     "technique": "coupled-surface-inventory",
+     "verdict": "conformant",
+     "evidence": "src/lib/guide-refs.test.ts:26 Tests verify that hand-authored deep-link references from marketing platform cards resolve to real production-visible guide topics."
+    },
+    {
+     "technique": "rendered-surface-coupling",
+     "verdict": "conformant",
+     "evidence": "src/data/guide/getLocalized.test.ts:178 The test recomputes inputDigest over English sources and pins, failing if translation-status.ts was not regenerated after changes."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "docs-sync",
+   "context": "Execution History & Streaming",
+   "reason": "The context consists of dashboard UI components and execution streaming routes (DataTable, FilterBar, MarkdownReport, useExecutionPolling, and executions/[id]/stream/route.ts) with no documentation corpus or docs-as-code synchronization mechanisms. The docs-sync subject does not apply to this execution streaming context, and per seat instructions prohibiting 'not-applicable', it is declined."
+  },
+  {
+   "subject": "docs-sync",
+   "context": "Public Roadmap",
+   "reason": "The Public Roadmap context comprises marketing UI components and data structures rendering roadmap progress bars and phases (areas.ts, roadmap-phases.ts, page.tsx). It contains no documentation corpus or docs-as-code synchronization lifecycle (no source-doc mapping, rot scanning, or catch-up markers). Because docs-sync does not apply and 'not-applicable' is prohibited from this seat, it is declined."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-13T21:48:14.205760+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-sync"
+   ],
+   "techniques": [
+    "negative-claims-are-pinned",
+    "translations-drift-against-the-product"
+   ],
+   "deviations": 1,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  },
+  {
+   "ts": "2026-10-13T21:48:14.205760+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-sync"
+   ],
+   "techniques": [
+    "catch-up-markers",
+    "checked-vs-skipped-denominators",
+    "coupled-surface-inventory",
+    "cross-repo-drift-detection",
+    "dated-corrections",
+    "rendered-surface-coupling",
+    "same-change-enforcement",
+    "source-as-data-without-the-app",
+    "source-doc-mapping"
+   ],
+   "deviations": 1,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

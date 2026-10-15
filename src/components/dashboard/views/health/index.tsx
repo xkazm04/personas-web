@@ -11,9 +11,18 @@ import { ARRIVE, arrive, arriveAt } from "@/components/dashboard/arrival/arrive"
 import { useTranslation } from "@/i18n/useTranslation";
 import { HEALTH_SECTION_ORDER, type HealthCheckItem, type HealthCheckSection } from "@/lib/mock-dashboard-data";
 import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
+import { fixCause, undoCauseFix } from "@/lib/demoCauseFix";
+import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
 import { getBlastRadiusInputs } from "@/lib/mockApi";
+import { NO_RESOLVED_CAUSES } from "@/lib/settleThread";
+import { useResolvedCausesStore } from "@/stores/resolvedCausesStore";
 import { DiskUsageBar } from "./health-page/DiskUsageBar";
-import { applyHealthResolutions, resolveHealthAction, type HealthResolutions } from "./health-page/healthActions";
+import {
+  applyHealthResolutions,
+  resolveHealthAction,
+  withFixedCauses,
+  type HealthResolutions,
+} from "./health-page/healthActions";
 import { HealthSectionCard } from "./health-page/HealthSectionCard";
 import { useSystemHealth } from "./health-page/useSystemHealth";
 
@@ -21,23 +30,29 @@ import { useSystemHealth } from "./health-page/useSystemHealth";
  * System Health Panel — runtime / services / resources / integrations status
  * cards with status dots, a disk-usage gauge, and illustrative install/
  * configure actions (the row settles to ok in-session, plus a toast - see
- * health-page/healthActions.ts). Mirrors the desktop overview's System Health
+ * health-page/healthActions.ts). A check on an incident thread (it carries a
+ * causeKey) is fixed for the whole thread instead: Health, Observability, SLA,
+ * Incidents and the nav badges settle together, and the toast offers
+ * "Undo fix" (lib/demoCauseFix.ts). Mirrors the desktop overview's System Health
  * Panel; demo-only — a real (non-demo) session sees an empty state instead.
  */
 export default function HealthPage() {
   const { t } = useTranslation();
   const labels = t.healthPage;
   const { sections: fetched, diskUsage, isLoading, error, retry, liveUnavailable } = useSystemHealth();
-  const { data: blastInputs } = useDemoOnlySWR("health-blast-inputs", getBlastRadiusInputs);
-  const [toast, setToast] = useState<{ id: number; message: string } | null>(null);
+  const { data: blastInputs } = useDemoOnlySWR(DEMO_THREAD_KEYS.blastInputs, getBlastRadiusInputs);
+  const [toast, setToast] = useState<{ id: number; message: string; causeKey?: string } | null>(null);
+  // Checks with no incident thread settle here only; a check on a thread is
+  // fixed for the whole session (lib/demoCauseFix.ts) and settles everywhere.
   const [resolutions, setResolutions] = useState<HealthResolutions>({});
+  const resolvedCauses = useResolvedCausesStore((s) => (liveUnavailable ? NO_RESOLVED_CAUSES : s.resolved));
   const sections = useMemo(
     () =>
-      applyHealthResolutions(fetched, resolutions, {
+      applyHealthResolutions(fetched, withFixedCauses(fetched, resolutions, resolvedCauses), {
         configure: labels.toast.configured,
         install: labels.toast.installed,
       }),
-    [fetched, resolutions, labels.toast.configured, labels.toast.installed],
+    [fetched, resolutions, resolvedCauses, labels.toast.configured, labels.toast.installed],
   );
 
   // A cold load with nothing held paints the four card chromes (T1) from the
@@ -52,9 +67,11 @@ export default function HealthPage() {
     : sections;
 
   const handleAction = (item: HealthCheckItem) => {
-    setResolutions((prev) => resolveHealthAction(prev, item));
+    const causeKey = item.causeKey;
+    if (causeKey && item.action) fixCause(causeKey, item.action, new Date().toISOString());
+    else setResolutions((prev) => resolveHealthAction(prev, item));
     const verb = item.action === "install" ? labels.toast.installed : labels.toast.configured;
-    setToast((prev) => ({ id: (prev?.id ?? 0) + 1, message: `${item.name} ${verb}` }));
+    setToast((prev) => ({ id: (prev?.id ?? 0) + 1, message: `${item.name} ${verb}`, causeKey }));
   };
 
   return (
@@ -115,6 +132,17 @@ export default function HealthPage() {
           status="success"
           message={toast.message}
           onDismiss={() => setToast(null)}
+          action={
+            toast.causeKey
+              ? {
+                  label: labels.toast.undo,
+                  onClick: () => {
+                    if (toast.causeKey) undoCauseFix(toast.causeKey);
+                    setToast(null);
+                  },
+                }
+              : undefined
+          }
         />
       )}
     </div>

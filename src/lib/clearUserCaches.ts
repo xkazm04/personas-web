@@ -9,6 +9,7 @@ import { useCommandStore } from "@/stores/commandStore";
 import { useControllerStore } from "@/stores/controllerStore";
 import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
 import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
+import { useResolvedCausesStore } from "@/stores/resolvedCausesStore";
 
 /**
  * Drop every in-memory cache that holds user-scoped data so a freshly
@@ -48,6 +49,8 @@ export function clearUserScopedCaches(): void {
   useDeviceStore.getState().reset();
   useCommandStore.getState().reset();
   useControllerStore.getState().reset();
+  // The demo's fixed incident causes: a new (demo) session starts on the outage.
+  useResolvedCausesStore.getState().reset();
   // Chat threads, transcripts and unsent messages. Lazy, like the chat itself:
   // if no chat sheet ever loaded the store, there is nothing to drop.
   void import("@/stores/chatStore").then((m) => m.useChatStore.getState().reset());

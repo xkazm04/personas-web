@@ -1,0 +1,188 @@
+{
+ "schema": "conform-run/1",
+ "worker": "ad4b5bc2-a31d-451c-9437-93db1dd9e080",
+ "subject": "design-tokens",
+ "evaluatedAt": "2026-10-15T02:46:00.449963+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Theme System",
+   "subject": "design-tokens",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/styles/themes.css:316 Light themes invert a fixed catalog of bg-white utilities to black rgba with !important, so those surfaces follow a class list instead of a rebound role and a new white-alpha utility stays uninverted until the catalog is extended.",
+   "techniques": [
+    {
+     "technique": "cross-language-token-parity",
+     "verdict": "deviation",
+     "evidence": "src/lib/colors.ts:3 Hand-written RGB mirror of default --brand-cyan (#06b6d4) for canvas and inline styles; no generator, no getComputedStyle readback, and no test references BRAND_COLORS."
+    },
+    {
+     "technique": "density-and-scale-axes",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/themeStore.ts:108 The only persisted appearance choice is themeId. Searched these files and the repo for density, text-scale, font-scale, and prefers-contrast: no user axis rebinds spacing or type roles."
+    },
+    {
+     "technique": "motion-tokens",
+     "verdict": "deviation",
+     "evidence": "src/components/ThemeSwitcher.tsx:174 Tooltip motion inlines 150ms and a curve-named ease. The swatch also uses duration-200 and the theme class is cleared after 300ms, beside an unused --duration-* ladder of 100/150/250/400ms."
+    },
+    {
+     "technique": "theme-architecture",
+     "verdict": "deviation",
+     "evidence": "src/components/ThemeSwitcher.tsx:162 The swatch icon branches on theme.isLight and inlines rgba. First visit in the pre-paint script picks a random theme id, and globals.css interpolates background-color, color, border-color, and fill for 250ms on .theme-transitioning outside the reduced-motion block."
+    },
+    {
+     "technique": "token-enforcement",
+     "verdict": "deviation",
+     "evidence": "src/lib/brand-theme.ts:105 A raw rgba glow sits in the brand module next to the CSS variables. eslint-rules has no raw-color ban and no test reads themes.css to recompute contrast."
+    },
+    {
+     "technique": "token-taxonomy",
+     "verdict": "deviation",
+     "evidence": "src/lib/brand-theme.ts:102 Accent class bundles consume Tailwind palette steps whose names encode the hue. dark-bronze rebinds --brand-cyan to #f59e0b, which these classes never see."
+    }
+   ],
+   "registryProposal": "The three-state model is specified as explicit light, explicit dark, and follow-platform. It does not say what follow-platform selects when the vocabulary is many named themes rather than two."
+  },
+  {
+   "context": "Animation & Motion System",
+   "subject": "design-tokens",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/hooks/useAnimatedNumber.ts:10 The count-up defaults to a raw 600ms and a local easeOut cubic, so the CSS duration ladder cannot retune it and reduced motion is a per-hook snap to the final value.",
+   "techniques": [
+    {
+     "technique": "cross-language-token-parity",
+     "verdict": "deviation",
+     "evidence": "src/components/FloatingParticles.tsx:14 Particle fill colors are the midnight brand triplets written out for canvas. A theme rebind of --brand-cyan does not reach the draw loop."
+    },
+    {
+     "technique": "density-and-scale-axes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/FloatingParticles.tsx:11 The only axis in these files is a performance particle budget. Searched them for density, text-scale, font-scale, and prefers-contrast and found no spacing or type rebind."
+    },
+    {
+     "technique": "motion-tokens",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useAnimatedNumber.ts:6 Easing is a local cubic named by curve shape, and the 600ms default is off the 100/150/250/400ms ladder. Reduced motion is a per-consumer useStillMotion or useReducedMotion branch, including ScrollMap duration-300 and particle durations of 5\u201313s."
+    },
+    {
+     "technique": "theme-architecture",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useAnimationPause.ts:8 These modules pause and gate motion. A search of the listed files for data-theme, isLight, themeId, and prefers-color-scheme returned no hits."
+    },
+    {
+     "technique": "token-enforcement",
+     "verdict": "deviation",
+     "evidence": "src/components/ScrollMap.tsx:53 duration-300 is an off-ladder Tailwind step on a surface that also uses brand and muted roles. Nothing in eslint-rules fails a raw duration or a non-member timing value."
+    },
+    {
+     "technique": "token-taxonomy",
+     "verdict": "deviation",
+     "evidence": "src/components/LazyMount.tsx:76 This uppercase label composes an arbitrary size and tracking value. The shared EYEBROW recipe is text-xs with tracking 0.14em, and this call site does not use it."
+    }
+   ]
+  },
+  {
+   "context": "How It Works & Changelog",
+   "subject": "design-tokens",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/how-role-path/Route.tsx:70 The route stroke runs for a raw 1.6s on one shared cubic, and reduced motion sets that duration to exactly 0, so the timing is neither a named ladder step nor a near-zero rebind of the motion vocabulary.",
+   "techniques": [
+    {
+     "technique": "cross-language-token-parity",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/Route.tsx:58 This 0.4s matches --duration-slow and TRANSITION_SLOW but is inlined, so a retune of either authority misses it. Ambience does read canvas ink back with getComputedStyle; this timing does not."
+    },
+    {
+     "technique": "density-and-scale-axes",
+     "verdict": "not-applicable",
+     "evidence": "src/app/how/page.tsx:40 The page axis is a content role (developer, product-manager, enterprise). Searched these files for density, text-scale, font-scale, and prefers-contrast: no user appearance axis."
+    },
+    {
+     "technique": "motion-tokens",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/Route.tsx:70 1.6s is off the duration ladder, EASE_CURVE is one cubic rather than enter/exit/move/expressive, and reduced motion uses duration 0. Stop also staggers with delay 0.1 * index and a raw 0.45s."
+    },
+    {
+     "technique": "theme-architecture",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/changelog-timeline/index.tsx:72 These sections color surfaces and accents through var(--background), var(--border-glass-hover), var(--surface-overlay), and BRAND_VAR. A search of the listed files found no data-theme or isLight branch."
+    },
+    {
+     "technique": "token-enforcement",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/Stop.tsx:42 duration-500 is a raw timing utility on a themed control. No rule in eslint-rules fails an off-ladder duration."
+    },
+    {
+     "technique": "token-taxonomy",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/Route.tsx:46 The route eyebrow composes size and a literal tracking value. It does not use the EYEBROW recipe (text-xs, tracking 0.14em)."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-15T02:46:00.449963+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "design-tokens"
+   ],
+   "techniques": [
+    "cross-language-token-parity",
+    "density-and-scale-axes",
+    "motion-tokens",
+    "theme-architecture",
+    "token-enforcement",
+    "token-taxonomy"
+   ],
+   "deviations": 1,
+   "context": "Theme System",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-15T02:46:00.449963+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "design-tokens"
+   ],
+   "techniques": [
+    "cross-language-token-parity",
+    "density-and-scale-axes",
+    "motion-tokens",
+    "theme-architecture",
+    "token-enforcement",
+    "token-taxonomy"
+   ],
+   "deviations": 1,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-15T02:46:00.449963+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "design-tokens"
+   ],
+   "techniques": [
+    "cross-language-token-parity",
+    "density-and-scale-axes",
+    "motion-tokens",
+    "theme-architecture",
+    "token-enforcement",
+    "token-taxonomy"
+   ],
+   "deviations": 1,
+   "context": "How It Works & Changelog",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

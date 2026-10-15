@@ -1,0 +1,25 @@
+{
+  "id": "2026-10-15-demo-dashboard",
+  "root": "C:/Users/kazda/kiro/personas-web",
+  "area": [
+    "src/components/dashboard",
+    "src/app/dashboard"
+  ],
+  "head": "23b2b07530c95f0b32245f98cfdce40afafa3a0d",
+  "created": "2026-10-15T14:37:54.979Z",
+  "rounds": {
+    "1": {
+      "started": "2026-10-15T14:42:09.353Z",
+      "seats": {},
+      "finished": "2026-10-15T14:52:59.933Z",
+      "stray_changes": 0
+    },
+    "2": {
+      "started": "2026-10-15T14:53:12.465Z",
+      "seats": {},
+      "finished": "2026-10-15T15:02:36.979Z",
+      "stray_changes": 0
+    }
+  },
+  "seats": "agy:gemini-4-argon@high,codex:gpt-6.1-sol@xhigh,grok:grok-4.7@high,claude:claude-opus-5-5@xhigh"
+}

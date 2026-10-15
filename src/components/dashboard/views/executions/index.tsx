@@ -5,13 +5,15 @@ import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import DataTable from "@/components/dashboard/DataTable";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
+import { navigateDashboard } from "@/components/dashboard/spa/navigate";
+import { useFocusParam } from "@/hooks/useFocusParam";
 import { useTranslation } from "@/i18n/useTranslation";
-
-import type { GlobalExecution } from "@/lib/types";
 
 import { ExecutionDetailModal } from "./executions-page/ExecutionDetailModal";
 import { ExecutionsEmptyState } from "./executions-page/ExecutionsEmptyState";
 import { ExecutionsFilters } from "./executions-page/ExecutionsFilters";
+import { ExecutionsScopeTotals } from "./executions-page/ExecutionsScopeTotals";
 import { LoadMoreExecutions } from "./executions-page/LoadMoreExecutions";
 import {
   buildExecutionColumns,
@@ -19,9 +21,23 @@ import {
 } from "./executions-page/buildExecutionColumns";
 import { useExecutionsList } from "./useExecutionsList";
 
+/**
+ * Closing a focused run's detail takes `?focus=` out of the URL in place, so a
+ * reload does not reopen what was dismissed and Back still leaves the view.
+ */
+function dropFocusParam() {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("focus")) return;
+  url.searchParams.delete("focus");
+  navigateDashboard(url.pathname + url.search, { replace: true });
+}
+
 export default function ExecutionsPage() {
   const { t } = useTranslation();
   const {
+    allExecutions,
+    totals,
+    scopeEmpty,
     executionsLoading,
     executionsError,
     cancellingIds,
@@ -35,7 +51,26 @@ export default function ExecutionsPage() {
     isFilteredEmpty,
     awaitingFirstData,
   } = useExecutionsList();
-  const [selected, setSelected] = useState<GlobalExecution | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // A `?focus=<id>` link (an evidence chip, a review's run) opens that run's
+  // detail. The record comes from the whole loaded list, so neither the scope,
+  // the status filter nor the page window can hide it, and a status filter that
+  // would hide its row is cleared (the PerformanceView precedent; the scope is
+  // the visitor's persisted choice and stays). The URL losing the focus (Back)
+  // closes it. An unknown id resolves to null: no modal.
+  const focusId = useFocusParam();
+  const [seenFocus, setSeenFocus] = useState<string | null>(null);
+  if (focusId !== seenFocus) {
+    setSeenFocus(focusId);
+    setSelectedId(focusId);
+    if (focusId && !filtered.some((execution) => execution.id === focusId)) handleFilterChange("all");
+  }
+  const selected = selectedId ? (allExecutions.find((execution) => execution.id === selectedId) ?? null) : null;
+  const closeDetail = () => {
+    setSelectedId(null);
+    dropFocusParam();
+  };
 
   const columns = useMemo(
     () =>
@@ -70,8 +105,9 @@ export default function ExecutionsPage() {
 
       {executionsError && <DashboardErrorBanner message={executionsError} />}
 
-      {/* T1: the status filter toolbar. */}
+      {/* T1: the status filter toolbar, and what the scoped list adds up to. */}
       <div className={ARRIVE} style={arriveAt(0)}>
+        {!awaitingFirstData && <ExecutionsScopeTotals runs={totals.runs} costUsd={totals.costUsd} />}
         <ExecutionsFilters
           filter={filter}
           counts={counts}
@@ -100,15 +136,19 @@ export default function ExecutionsPage() {
               columns={columns}
               data={visibleExecutions}
               keyExtractor={(row) => row.id}
-              onRowClick={(row) => setSelected(row)}
+              onRowClick={(row) => setSelectedId(row.id)}
               rowClassName={executionRowClassName}
               emptyState={
-                <ExecutionsEmptyState
-                  isFilteredEmpty={isFilteredEmpty}
-                  filter={filter}
-                  labels={t.executionsPage}
-                  onShowAll={() => handleFilterChange("all")}
-                />
+                scopeEmpty ? (
+                  <ScopeEmpty />
+                ) : (
+                  <ExecutionsEmptyState
+                    isFilteredEmpty={isFilteredEmpty}
+                    filter={filter}
+                    labels={t.executionsPage}
+                    onShowAll={() => handleFilterChange("all")}
+                  />
+                )
               }
             />
 
@@ -123,7 +163,7 @@ export default function ExecutionsPage() {
           </div>
         )}
 
-        <ExecutionDetailModal execution={selected} onClose={() => setSelected(null)} />
+        <ExecutionDetailModal execution={selected} onClose={closeDetail} />
       </div>
     </div>
   );

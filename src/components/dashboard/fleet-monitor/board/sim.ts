@@ -1,4 +1,4 @@
-import { FLEET } from "../fleet-data";
+import { FLEET, type FleetReview } from "../fleet-data";
 import { slotCapacity } from "./host";
 import {
   MESSAGE_TEXTS,
@@ -45,6 +45,8 @@ export type SimAction =
   | { type: "review"; id: string; rid: string; approve: boolean }
   | { type: "draft"; id: string; approve: boolean }
   | { type: "answer"; id: string; text?: string }
+  /** A review raised elsewhere (a crew persona's, in demo) lands on its agent. */
+  | { type: "reviewIn"; id: string; review: FleetReview }
   | { type: AgentVerb; id: string }
   | { type: "pauseAll"; stop: boolean }
   | { type: "resumeAll" };
@@ -259,6 +261,7 @@ export function simReducer(state: SimState, action: SimAction): SimState {
   }
   const scale = state.scale;
   if (action.type === "pauseAll" || action.type === "resumeAll") return fleetDecision(d, state, action);
+  if (action.type === "reviewIn") return reviewIn(d, state, action.id, action.review);
   if (refusalOf(state, action)) return state;
   const idx = state.agents.findIndex((a) => a.id === action.id);
   if (idx < 0) return state;
@@ -307,6 +310,18 @@ export function simReducer(state: SimState, action: SimAction): SimState {
     a.unreadMessages = [];
     d.push({ ...base, decision: { act: "read", n } }, simMs);
   }
+  return { ...state, agents: d.agents, events: d.events, seed: d.seed };
+}
+
+/** A new review on an agent (once per id): it now needs you, and the log says so. */
+function reviewIn(d: Draft, state: SimState, id: string, review: FleetReview): SimState {
+  const idx = state.agents.findIndex((a) => a.id === id);
+  if (idx < 0 || state.agents[idx].reviews.some((r) => r.id === review.id)) return state;
+  const a = d.edit(idx);
+  // Ages count on from sim time 0 (needAgeMs adds simMs), so a review raised now is 0 min old.
+  a.reviews.push({ ...review, ageMin: -state.simMs / 60_000 });
+  if (a.state === "idle") a.state = "attention";
+  d.push({ agentId: id, toAgentId: null, kind: "review_requested", text: review.title }, state.simMs);
   return { ...state, agents: d.agents, events: d.events, seed: d.seed };
 }
 

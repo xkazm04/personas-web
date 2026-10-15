@@ -8,10 +8,10 @@ import RelatedIncidentLinks from "@/components/dashboard/RelatedIncidentLinks";
 import { useFocusParam, useScrollIntoViewWhen } from "@/hooks/useFocusParam";
 import { useTranslation } from "@/i18n/useTranslation";
 import { blastRadius, INTEGRATION_PREFIXES, type BlastRadiusInputs } from "@/lib/blastRadius";
-import { fillTemplate } from "@/lib/fillTemplate";
 import { DEMO_THREADS, relatedTo } from "@/lib/incidentThreads";
 import type { HealthCheckItem, HealthCheckSection } from "@/lib/mock-dashboard-data";
 import { sectionAccent, sectionIcon, statusStyle, worstStatus } from "@/lib/healthFormat";
+import { BlastRadiusPanel } from "./BlastRadiusPanel";
 
 /** Ghost rows per card on a cold load (the fixture's typical section size). */
 const GHOST_ROWS = 4;
@@ -120,10 +120,8 @@ function HealthCheckRow({
     blastInputs && item.status !== "ok"
       ? blastRadius(item.id, blastInputs.usage, INTEGRATION_PREFIXES, blastInputs.breaches)
       : null;
-  const blast = labels.blast;
-
   return (
-    <div ref={ref} className={`rounded-lg px-2 py-1.5 ${focused ? "ring-2 ring-brand-cyan/50" : ""}`}>
+    <div ref={ref} data-health-check={item.id} className={`rounded-lg px-2 py-1.5 ${focused ? "ring-2 ring-brand-cyan/50" : ""}`}>
       <div className="flex items-center gap-2.5">
         <span
           className={`h-2 w-2 flex-shrink-0 rounded-full ${statusStyle[item.status].dot}`}
@@ -141,6 +139,7 @@ function HealthCheckRow({
         {item.action && (
           <button
             type="button"
+            data-health-action={item.id}
             onClick={() => onAction(item)}
             className="flex-shrink-0 rounded-lg border border-glass-hover bg-white/[0.03] px-2.5 py-1 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground focus-ring focus-visible:ring-offset-0"
           >
@@ -149,32 +148,7 @@ function HealthCheckRow({
         )}
       </div>
       {radius && radius.personas.length > 0 && blastInputs && (
-        <div className="mt-1.5 space-y-1 pl-[1.125rem] text-sm" data-testid="blast-radius">
-          <p className="text-foreground">
-            {fillTemplate(blast.impact, {
-              agents: radius.personas.length,
-              total: blastInputs.totalPersonas,
-              calls: radius.invocations,
-            })}
-          </p>
-          <ul className="flex flex-wrap gap-1.5">
-            {radius.personas.map((p) => (
-              <li
-                key={p.id}
-                className="flex items-center gap-1.5 rounded-full border border-glass-hover px-2 py-0.5 text-muted"
-              >
-                <span aria-hidden className="h-2 w-2 rounded-full" style={{ backgroundColor: p.color }} />
-                {p.name}
-              </li>
-            ))}
-          </ul>
-          {radius.slaAtRisk.length > 0 && (
-            <p className="text-muted-dark">{fillTemplate(blast.sla, { n: radius.slaAtRisk.length })}</p>
-          )}
-          {radius.unmappedTools > 0 && (
-            <p className="text-muted-dark">{fillTemplate(blast.unmapped, { n: radius.unmappedTools })}</p>
-          )}
-        </div>
+        <BlastRadiusPanel radius={radius} inputs={blastInputs} />
       )}
       {links.length > 0 && (
         <div className="pl-[1.125rem]">

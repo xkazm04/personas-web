@@ -1,0 +1,1194 @@
+{
+  "proposals": [
+    {
+      "id": "P01",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 1,
+      "title": "Wire DashboardScopeBar to filter and compare all eight scoped views",
+      "kind": "connect",
+      "outcome": "Selecting a persona, changing the 7d/30d/90d/custom window, or toggling Compare in the top scope bar immediately filters rows and overlays prior-window deltas across all 8 scoped views (Reviews, Executions, Events, Observability, Leaderboard, SLA, Knowledge, Messages), and clicking any persona chip deep-links into a persona-scoped view.",
+      "builds_on": "ViewOutlet already mounts DashboardScopeBar on the 8 views marked `scoped: true` in views.ts, and `useDashboardFilterStore` already manages `personaId`, `dateRange`, custom bounds, and `compareEnabled` with full ARIA and responsive polish.",
+      "mechanism": "Add a shared `useScopedProjection` selector in `src/stores/dashboardFilterStore.ts` (synced with `?persona=` and `?range=` URL search params) and consume it in the data hooks of the 8 scoped views (`reviews`, `executions`, `events`, `observability`, `leaderboard`, `sla`, `knowledge`, `messages`). Remove the duplicate local `compareEnabled` state and second `<CompareToggle>` inside `PerformanceView.tsx:29-35,101-105` so Observability's ghosted prior-period series and delta chips bind directly to the global scope bar.",
+      "anchors": [
+        "src/components/dashboard/spa/views.ts:49-59",
+        "src/components/dashboard/spa/ViewOutlet.tsx:46-47",
+        "src/components/dashboard/DashboardScopeBar.tsx:16-179",
+        "src/stores/dashboardFilterStore.ts:74-118",
+        "src/components/dashboard/views/observability/PerformanceView.tsx:29-35",
+        "src/components/dashboard/views/observability/PerformanceView.tsx:101-105",
+        "src/components/dashboard/views/knowledge/useKnowledgeData.ts:138-178",
+        "src/components/dashboard/views/sla/useSlaData.ts:17-72"
+      ],
+      "evidence": "Observed in code: `views.ts:49-59` marks 8 views `scoped: true` and `ViewOutlet.tsx:47` renders `<DashboardScopeBar />`, but `DashboardScopeBar.tsx:5` is the only consumer of `useDashboardFilterStore` in the entire repo (`0` view imports). Observed: `PerformanceView.tsx:101-105` renders a second `<CompareToggle>` right below `DashboardScopeBar.tsx:172-176`. Hypothesis: making the primary filter bar actually filter and compare turns 8 static tables/charts into an interactive slice-and-dice console for any single persona.",
+      "effort": "S",
+      "risk": "Filtering small demo fixtures (e.g. 5 knowledge patterns or 3 SLA breaches) by a single persona and narrow window could yield empty states if fixtures are sparse; mitigate by ensuring each of `p-0001-mock`..`p-0005-mock` has at least one row across scoped fixtures and showing a one-click 'Reset scope to All Personas' pill when a filter narrows to zero rows.",
+      "verify": "In `/dashboard/executions`, `/dashboard/reviews`, `/dashboard/events`, `/dashboard/observability`, `/dashboard/leaderboard`, `/dashboard/sla`, and `/dashboard/knowledge`, selecting `Incident Responder` (`p-0002-mock`) in `DashboardScopeBar` reduces visible rows/series to `p-0002-mock` only; toggling `Compare` in `DashboardScopeBar` activates prior-window delta badges across scoped KPI cards with only one `Compare` button rendered on `/dashboard/observability`.",
+      "why_groundbreaking": "It eliminates the most visible 'disconnected control' in the dashboard shell and compounds across eight views at once, turning isolated pages into a cohesive per-agent diagnostic workbench.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P02",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 1,
+      "title": "Unify the two demo fleets and command plane under one causal clock",
+      "kind": "leap",
+      "outcome": "The 5 canonical personas (`PR Review Agent`, `Incident Responder`, `Daily Standup Digest`, `Security Scanner`, `Customer Feedback Analyzer`) appear as the lead agents on the desktop Fleet Board alongside the broader cohort, and any action taken on the Board, in Athena Chat, or in PhonePersonas writes through to Executions, Events, Reviews, Mission Control, and Observability in real time.",
+      "builds_on": "The desktop Fleet Board (`BoardSim` + `useCommands`) already delivers a tactile spatial canvas with pause/restart/approve/reject/kill controls and Athena chat, while `mockCommandPlane.ts` already implements deterministic state machines, receipt latency, and `onDemoFixtureChange` notifications for the 5 canonical personas.",
+      "mechanism": "Map the first 5 entries of `FLEET` in `src/components/dashboard/fleet-monitor/fleet-data.ts:116-164` to the 5 canonical `MOCK_PERSONAS` (`p-0001-mock`..`p-0005-mock` from `src/lib/mockData.ts:52-153`) so they are always included in the default `scale=10` Board slice. Route Board operator verbs (`useCommands.ts:133-151`) for those 5 personas through `mockCommandPlane.ts`, and expand `mockCommandPlane.ts:118-172` + `commandStore.ts:106-109` so every settled `run_persona`, `stop_execution`, `review_decide`, or `chat_send` appends a matching `PersonaEvent` to `MOCK_EVENTS`, updates today's bucket in `MOCK_DAILY_METRICS` / `MOCK_PERSONA_SPEND` (`mockApi.ts:347-388`), and invalidates SWR `dashboardKeys`.",
+      "anchors": [
+        "src/components/dashboard/fleet-monitor/fleet-data.ts:116-164",
+        "src/components/dashboard/fleet-monitor/board/useCommands.ts:133-151",
+        "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:19-46",
+        "src/lib/commands/mockCommandPlane.ts:118-172",
+        "src/stores/commandStore.ts:106-109",
+        "src/lib/mockData.ts:52-153",
+        "src/lib/mockApi.ts:347-388",
+        "src/components/dashboard/views/home/mission/useMissionReadings.ts:44-56"
+      ],
+      "evidence": "Observed in code and dossier (`brief.md:157-163`, `PHASE2-SPEC.md:631`): desktop `/dashboard/personas` loads `fleet.json` (`fleet-data.ts:116`) whose agents share zero IDs or names with `MOCK_PERSONAS` (`mockData.ts:52-153`), and `commandStore.ts:106-109` only refreshes `executionStore` and `chatStore` on `onDemoFixtureChange`. Hypothesis: anchoring the 5 canonical personas at the front of the Board and projecting command mutations across stores makes the spatial canvas and the analytical views tell one unified story.",
+      "effort": "M",
+      "risk": "High-frequency autonomous ticks in `BoardSim` (`sim.ts`, every 900ms) for 99 background agents would flood `MOCK_EXECUTIONS` and `MOCK_EVENTS` if every ambient tick wrote to the stores; mitigate by only bridging operator-initiated commands and canonical 5-persona state transitions into `mockCommandPlane` while keeping ambient choreography for agents 6..99 local to `BoardSim`.",
+      "verify": "Triggering `Run now` or `Approve` on `PR Review Agent` (`p-0001-mock`) from either `/dashboard/personas` (desktop Board or phone deck) creates a new `e-100x-mock` row in `/dashboard/executions`, appends a `PersonaEvent` in `/dashboard/events`, increments the active/completed counters on `/dashboard/home` (`useMissionReadings`), and updates `PR Review Agent`'s tile state on the Board without reloading.",
+      "why_groundbreaking": "It transforms the demo from fifteen side-by-side mock screens into a single reactive simulation where acting on the spatial stage visibly moves every downstream ledger, chart, and queue.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P03",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 1,
+      "title": "Close the incident-resolution loop across Health, SLA, and Incidents",
+      "kind": "deepen",
+      "outcome": "Visitors can trace the Slack webhook outage (`in_slack`) from Mission Control, SLA (`br_1`), or Observability (`hi_2`) into `/dashboard/health`, see the correlated multi-signal incident cluster on `/dashboard/incidents`, click `Configure` to fix the webhook, and watch the blast radius clear, the SLA breach resolve, the sidebar alert count drop, and Mission Control's lamp settle.",
+      "builds_on": "`computeBlastRadius` (`src/lib/blastRadius.ts`), `correlate` (`src/lib/incidentCorrelate.ts`), and `incidentThreads` (`src/lib/incidentThreads.ts`) already model the exact causal graph between `in_slack`, `br_1`, `hi_2`, and affected personas (`Incident Responder`, `Customer Feedback Analyzer`).",
+      "mechanism": "Promote `HealthResolutions` (`src/components/dashboard/views/health/health-page/healthActions.ts:13-46`) from local `useState` in `views/health/index.tsx:33-34` to a shared Zustand store that updates live check statuses read by `computeBlastRadius`, `useSlaData.ts:32-36`, `PerformanceView.tsx:55-62`, `useMissionReadings.ts:69-77`, and `DashboardNavigation.tsx:106-107`. Wire `correlate(demoSignals())` (`src/lib/incidentCorrelate.ts:100-141,236-245`) into `src/components/dashboard/views/incidents/index.tsx:31-79` above the static audit log so operators see the live correlated incident clusters and watch them transition to resolved when the underlying health check is fixed.",
+      "anchors": [
+        "src/components/dashboard/views/health/index.tsx:33-58",
+        "src/components/dashboard/views/health/health-page/healthActions.ts:13-46",
+        "src/lib/blastRadius.ts:60-90",
+        "src/lib/incidentCorrelate.ts:100-141",
+        "src/lib/incidentCorrelate.ts:236-245",
+        "src/lib/incidentThreads.ts:90-155",
+        "src/components/dashboard/views/incidents/index.tsx:31-79",
+        "src/components/dashboard/DashboardNavigation.tsx:97-109"
+      ],
+      "evidence": "Observed in code: `incidentCorrelate.ts:100-141,236-245` implements a full Jaccard/temporal correlation engine over `demoSignals()`, but `git grep incidentCorrelate` shows it is only imported by its own unit test (`incidentCorrelate.test.ts`), while `views/incidents/index.tsx:31` reads static `MOCK_AUDIT_INCIDENTS`. Observed: `views/health/index.tsx:33-58` stores `Configure`/`Rotate` resolutions in component-local `useState`, so fixing `in_slack` is forgotten the moment the user clicks back to `/dashboard/sla` or `/dashboard/home`.",
+      "effort": "S",
+      "risk": "Once an evaluator resolves `in_slack` and `cr_anthropic`, the demo's failure states are gone for the rest of the session; mitigate by keeping the existing per-card `Undo` action (`HealthSectionCard.tsx:99-108`) and adding a 'Re-inject outage' toggle in the Health header so evaluators can replay the failure-to-recovery arc at will.",
+      "verify": "Navigate from `/dashboard/sla` breach `br_1` via the `RelatedIncidentLinks` chip to `/dashboard/health?focus=in_slack`, click `Configure` on `Slack Webhook`: (1) the sidebar Health badge drops from `2` to `1`, (2) navigating to `/dashboard/sla` shows `br_1` resolved (`ongoing: false`), (3) `/dashboard/observability` shows `hi_2` as `resolved`, and (4) `/dashboard/incidents` moves the correlated Slack incident cluster from active to resolved.",
+      "why_groundbreaking": "It turns a one-way diagnostic breadcrumb trail into a closed-loop remediation experience, proving in 15 seconds why a unified agent control plane beats stitched-together point tools.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P04",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 1,
+      "title": "Turn the passive dashboard tour into an interactive incident drill",
+      "kind": "extend",
+      "outcome": "Starting the guided tour from `/demo?tour=1` or the header button runs a synchronized, live-choreographed walkthrough across the Fleet Board, Mission Control, Health blast radius, Events dead-letter cohort, and Reviews, concluding with an interactive 3-mission Operator Drill card that tracks the visitor's hands-on fixes.",
+      "builds_on": "`TourCueClock` (`src/lib/tour-cue-clock.ts`) and `TourContext.tsx` already support narration-clocked DOM actions (`clickTarget`, `dispatchCustom`) and chapter handoff cards (`TourBridgeCard.tsx`), which `HOME_TOUR_STEPS` and `FEATURES_TOUR_STEPS` already use to drive live UI choreography.",
+      "mechanism": "Update `DASHBOARD_TOUR_STEPS` (`src/lib/tour-script.ts:295-339`) to include `/dashboard/personas` and `/dashboard/health?focus=in_slack`, replace the legacy compatibility `TOUR_ANCHORS` shims in `views/home/index.tsx:29-35` with the real Mission Control `[data-tour]` targets (`mission-attention`, `mission-pulse`), and attach timed `TourAction` cues (`tour-script.ts:109-121`) that expand an agent on the Board, fire a `demoRealtime` event beat, and open a review card in sync with the narration. Replace `bridgeHref: null` for the `dashboard` chapter (`TourContext.tsx:108-116`) with an interactive drill mode in `TourBridgeCard.tsx:23-67` that gives the visitor 3 concrete live tasks (approve/reject the Redis review, retry the PagerDuty dead-letter cohort, configure the Slack webhook) with live completion checkmarks.",
+      "anchors": [
+        "src/lib/tour-script.ts:295-339",
+        "src/lib/tour-cue-clock.ts:36-69",
+        "src/contexts/TourContext.tsx:108-116",
+        "src/contexts/TourContext.tsx:161-189",
+        "src/components/tour/TourBridgeCard.tsx:23-67",
+        "src/components/dashboard/views/home/index.tsx:29-35",
+        "src/app/demo/page.tsx:33-38"
+      ],
+      "evidence": "Observed in code and docs (`docs/features/dashboard/home-overview.md:64`): `DASHBOARD_TOUR_STEPS` (`tour-script.ts:295-339`) has `0` timed `actions` (whereas `HOME_TOUR_STEPS` and `FEATURES_TOUR_STEPS` define 11 timed cues), never visits `/dashboard/personas` despite `/demo` redirecting visitors there (`src/app/demo/page.tsx:34`), and ends with `bridgeHref: null` (`TourContext.tsx:114`) so `TourBridgeCard` never renders at the end of the dashboard tour.",
+      "effort": "M",
+      "risk": "Updating step routes in `DASHBOARD_TOUR_STEPS` while keeping the old `dashboard-1.mp3` audio clip would desynchronize voice and visuals on steps that change topic; mitigate by retaining the existing audio clips for the matching Mission Control, Executions, Events, and Reviews stops while running the new Fleet Board / Health stops on `TourCueClock`'s built-in silent virtual clock (`tour-cue-clock.ts:12-13,56-58`) until new clips are cut.",
+      "verify": "Launching `?tour=1` visits `/dashboard/personas`, `/dashboard/home`, `/dashboard/health`, `/dashboard/events`, and `/dashboard/reviews`, fires at least 1 automated UI action per step via `TourCueClock`, and upon completion renders `TourBridgeCard` with 3 clickable drill tasks whose checkmarks flip to complete as the user resolves each item.",
+      "why_groundbreaking": "Instead of passively watching a slideshow and being dropped on an inert table when the voice stops, evaluators are smoothly handed the controls mid-incident with a clear, rewarding mission to finish.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 7,
+        "total": 7,
+        "bad": []
+      }
+    },
+    {
+      "id": "P05",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 1,
+      "title": "Link execution provenance across Reviews, Knowledge, and Director",
+      "kind": "connect",
+      "outcome": "Clicking an execution evidence chip on any Knowledge pattern/memory or Review row jumps to `/dashboard/executions?focus=<id>` and auto-expands that run's full trace, while deciding a review with reviewer notes promotes a new learned memory into Knowledge and logs a fresh coaching verdict in Director.",
+      "builds_on": "`KnowledgeEvidenceChip.tsx`, `useKnowledgeData.ts`, and `reviewStore.ts` already attach canonical execution IDs (`e-0001-mock`..`e-0005-mock`) to patterns, memories, and reviews, and `reviewDecide.ts:1-6` explicitly documents that a review decision drives status writes and learned memory creation.",
+      "mechanism": "Update `KnowledgeEvidenceChip.tsx:15-22` and review row links to navigate to `/dashboard/executions?focus=${executionId}`, and wire `useFocusParam` into `src/components/dashboard/views/executions/index.tsx:19-60` to scroll to and auto-expand the focused execution row. Extend `decideReview` in `src/lib/commands/mockCommandPlane.ts:174-200` so that submitting a decision with notes appends a promoted `MockMemoryEntry` (`sourceExecutionId: review.executionId`) to `MOCK_MEMORIES` and a new `DirectorVerdict` to `MOCK_DIRECTOR_VERDICTS`, and make `VerdictFeedCard.tsx:90-120` rows deep-link to their target health check, execution, or knowledge entry.",
+      "anchors": [
+        "src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-24",
+        "src/components/dashboard/views/knowledge/useKnowledgeData.ts:62-107",
+        "src/components/dashboard/views/executions/index.tsx:19-60",
+        "src/lib/commands/reviewDecide.ts:1-12",
+        "src/lib/commands/mockCommandPlane.ts:174-200",
+        "src/stores/reviewStore.ts:88-111",
+        "src/components/dashboard/views/director/index.tsx:35-72",
+        "src/components/dashboard/views/director/director-page/VerdictFeedCard.tsx:90-120"
+      ],
+      "evidence": "Observed in code: `KnowledgeEvidenceChip.tsx:16` hardcodes `href=\"/dashboard/executions\"` without passing `executionId`, and `views/executions/index.tsx` never calls `useFocusParam` (unlike `HealthPage` and `PerformanceView`). Observed: `reviewDecide.ts:2-5` states `review_decide` runs `(status write, learned memory, team-step resume)`, yet `mockCommandPlane.ts:174-200` only mutates `MOCK_EVENTS[idx].status` and leaves `MOCK_MEMORIES` and `MOCK_DIRECTOR_VERDICTS` static.",
+      "effort": "M",
+      "risk": "Auto-promoting every review verdict into `MOCK_MEMORIES` could look noisy if a user clicks Approve with blank notes; mitigate by only promoting a new `Learned from review` memory when the reviewer provides non-empty notes or rejects a critical action, and tagging the new row with an arrival highlight (`ARRIVE`).",
+      "verify": "1) Click `Executions e-0002-m` on pattern `pat_2` in `/dashboard/knowledge` and verify `/dashboard/executions?focus=e-0002-mock` opens with execution `e-0002-mock` highlighted and expanded. 2) Approve or reject `ev-0004-mock` in `/dashboard/reviews` with note `'Require canary before Redis restart'`, navigate to `/dashboard/knowledge` and `/dashboard/director`, and verify the new memory entry (linked to `e-0002-mock`) and coaching verdict appear at the top of their feeds.",
+      "why_groundbreaking": "It makes the agent learning loop tangible in the browser: human review decisions visibly become institutional agent memory and coaching intelligence, with verifiable provenance back to the exact execution trace.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P06",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 1,
+      "title": "Run every demo view off the Board's fleet, through the product's own engines",
+      "kind": "connect",
+      "outcome": "A visitor who starts a run, retries a failed agent or approves a review on the Board (the default landing view) sees the same act in Executions, Events, Reviews, Observability, Leaderboard, SLA and Incidents, with the same agents and the same magnitudes on every screen. The analytic views show figures computed by the product's real engines, not hand-typed constants. Board and Night shift keep one world, so a decision survives switching tabs.",
+      "builds_on": "The Board's pure, seeded simulation reducer, and the repo's pure, clock-free engines (standings, sloEngine, incidentCorrelate, blastRadius, busProjection). Those engines already run one code path for any data plane that hands them rows.",
+      "mechanism": "Step 1 (days): move useBoardSim and useCommands out of BoardPrototype and NightCity into a dashboard-level world store. It is started by the layout, ticks every 1 s, stops on a hidden tab and outlives view switches, so Board, Night shift and every later consumer read one fleet. Step 2: make fleet.json the root roster and have mockApi project from the world's log instead of fixed constants. listExecutions comes from run_completed/run_failed events plus command-plane runs. manual_review events come from agents' pending reviews, with verdicts written both ways. Daily metrics and snapshot rows come from runsToday/spark24h plus a seeded 28-day backfill. MOCK_PERSONAS becomes a projection of the world, so the phone layouts show the same agents (this answers PHASE2-SPEC open question 5). Step 3: send the analytic views through the engines the Supabase plane already uses: standings() for Leaderboard, sli/breachEpisodes for SLA, correlate(signals) for Incidents, blastRadius over the world's tool usage. mockApi loads the world module by dynamic import, so the 140 KB fleet.json stays out of /dashboard first-load JS.",
+      "anchors": [
+        "src/components/dashboard/views/personas/index.tsx:136-139",
+        "src/components/dashboard/fleet-monitor/night/useNightRuntime.ts:16-18",
+        "src/components/dashboard/fleet-monitor/board/sim.ts:54-75",
+        "src/lib/mockData.ts:958-963",
+        "src/lib/mock-dashboard-data.ts:604-612",
+        "src/lib/incidentCorrelate.ts:236-245",
+        "src/lib/supabaseApi.ts:799-812",
+        "src/stores/commandStore.ts:106-109"
+      ],
+      "evidence": "Observed: fleet.json's 99 agents total 1,634 runs today, $148.15 spent today and 32 pending reviews. The observability window every other view reads is 47 runs and $4.82 over 14 days for 5 personas (mockData.ts:958-963), with about 5 pending reviews in MOCK_EVENTS: roughly 490x the daily run rate. No file under fleet-monitor imports a store, api, mockApi or MOCK_* (grep), so a Board decision never leaves the Board. Board and Night shift each call initSim and the stage mounts only one of them, so switching tabs resets the world. Of 15 views only 5 re-read changed fixtures (executions, phone personas, reviews, the home queue, events). Leaderboard, SLA, incidents, health, knowledge and director serve constants fixed when the module loads (e.g. hand-typed MOCK_LEADERBOARD metrics at mock-dashboard-data.ts:604-650). correlate() and demoSignals() have no non-test importer, and standings() and sloEngine run only on the Supabase plane (supabaseApi.ts:19-20, 799-812). The registry's demo-data-plane standard: 'a fixture set is a world, projected once'; surfaces that disagree are 'worse than no fixture set at all'. Hypothesis, not measured (the demo has no analytics): visitors who move between views notice the magnitude break.",
+      "effort": "L",
+      "risk": "Changing the fixtures breaks numbers pinned across 98 test files and the hand-tuned 'one answer' magnitudes, and could pull fleet.json into first-load JS. Mitigation: ship as three independent steps (move the simulation up, then project the 5 views that already update, then put the analytic views on the engines). Change mockFleetConsistency.test.ts to assert cross-view equalities instead of constants. Keep the world behind a dynamic import and hold npm run check:bundle at 1413 KB or less.",
+      "verify": "(a) New vitest: at sim time T, the sum of the Board's runs today equals today's executions from api.getObservability(), which equals the number of today's rows from api.listExecutions(); the leaderboard order equals standings() over the projected snapshots. (b) Playwright: approve review R on the Board, and after one refetch /dashboard/reviews no longer lists R; the reverse direction clears the Board's review. (c) Pause an agent, switch Board -> Night shift -> Board: the agent is still paused (fails today). (d) correlate has at least one non-test importer. (e) check:bundle keeps /dashboard at 1413 KB or less.",
+      "why_groundbreaking": "The demo goes from 15 good rooms with different populations to one fleet the visitor actually operates. The product's real analytic engines finally run in front of the people deciding whether to trust them.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P07",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 1,
+      "title": "Fault drills: let the visitor break the fleet and watch it recover",
+      "kind": "leap",
+      "outcome": "From the Board's command palette or the Mission Control header, a visitor starts one of three drills: 'Slack goes down', 'Spend runs away' or 'A key leaks'. They watch the product respond across every view on one clock: the health check goes red, the blast radius marks the agents that use it, runs fail and become dead letters, an incident correlates, the SLA budget burns, and a review asks for a human decision. They resolve it with real actions (approve the key rotation, retry, pause/resume), get a time-to-recover figure from the log, and can send ?drill=slack-outage&t=180 to show a colleague that exact moment.",
+      "builds_on": "Causal cross-linking (blast radius, signal correlation, ?focus= threads), the deterministic living demo (seeded random generators, a pure reducer, run-script's seekable virtual clock), and the existing switchable fault ?desktop=offline, which the Board, host card and phone layout already show honestly.",
+      "mechanism": "A drill is a list of timed fault events played on run-script's clock (frameAt, nextBoundary, seek), not a sequence of scripted screens. Each event injects one fault into the shared world from the 'one world' proposal: set the in_slack health check to error; raise the failure rate of agents whose tools use the slack_ prefix; spike one team's spend; push the 'Rotate leaked staging API key' review that demoRealtime already holds in its pool. Every consequence comes from the existing pure engines (blastRadius, the mock's retry-then-dead-letter sweep, correlate, sli/breachEpisodes, Mission Control's judge()), so the visitor sees what the product would compute. Because frameAt is pure and the reducer is seeded, any moment can be reproduced with t=. Visitors start drills themselves, so a drill refuses to start in a hidden tab, per the motion convention. The shell shows a persistent DEMO DRILL marker. A drill ends on the visitor's fix, not a call to action. No new route; this is the slate's one new-surface feature.",
+      "anchors": [
+        "src/lib/run-script/frameAt.ts:37-58",
+        "src/lib/run-script/useRunClock.ts:21-68",
+        "src/lib/blastRadius.ts:43-65",
+        "src/lib/incidentCorrelate.ts:100",
+        "src/lib/mockApi.ts:113-128",
+        "src/lib/demoRealtime.ts:23-27",
+        "src/lib/demoRealtime.ts:96-112",
+        "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:23-31"
+      ],
+      "evidence": "Observed: the causal machinery exists but is fed static fixtures. demoRealtime has exactly one scheduled event (demoRealtime.ts:96). The in_slack -> slack_ prefix map and the blast radius are computed only over fixed tool usage. correlate() has no production caller. The run-script commit (fa243840) says the remaining demos are 'not yet ported'. ?desktop=offline shows the pattern already works: one URL switch for a fault that every surface renders honestly. The registry's demo-data-plane standard asks for 'a way to provoke errors deliberately'. Prior art: Stripe test clocks advance simulated time in a sandbox so time-dependent failures can be watched (https://docs.stripe.com/billing/testing/test-clocks); PagerDuty's Failure Fridays inject faults to rehearse incident response in a safe place (https://www.informationweek.com/cyber-resilience/failure-fridays-four-lessons-we-learned); Grafana Play is a public sandbox with no login (https://grafana.com/blog/2025/11/17/grafana-play-updates-a-redesigned-homepage-to-celebrate-our-community). Hypothesis, not measured: an ops lead's trust comes from seeing failure handled, not from all-green dashboards.",
+      "effort": "L",
+      "risk": "It could turn into a scripted show that drifts from how the desktop actually behaves, or a noisy mode that confuses visitors who didn't ask for it. Mitigation: drill events only inject faults; every consequence must come from an engine shared with the real plane (a test asserts the drill module reads no fixtures for consequences). Drills never start on their own, show a persistent marker, and have a one-click 'End drill' that restores the world as it was before. Ships after the 'one world' proposal, which it depends on.",
+      "verify": "(a) vitest: each drill run to its end twice with the same seed gives identical world hashes, and seek(t) matches playing up to t. (b) For slack-outage: the set of agents that fail equals blastRadius('in_slack').personas; Incidents shows at least one correlated incident whose members include the in_slack check; an affected agent's SLA budget burn goes above 1. (c) Playwright: /demo?drill=slack-outage&t=180 in a fresh profile shows in_slack in error on Health, the correlated incident in Incidents, and Mission Control's Agents cell at 'needs you'. (d) Resolving every drill review and retry returns Mission Control to all-steady and shows a time-to-recover figure taken from the log.",
+      "why_groundbreaking": "It turns the demo from a tour of screens into a rehearsal of the job: the visitor sees what happens on a bad night, which is what an ops buyer actually needs to believe. That makes it a public, replayable incident simulator for agent fleets, which no screenshot or video can imitate.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P08",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 1,
+      "title": "Make every agent, run, review and incident mention link to that entity",
+      "kind": "deepen",
+      "outcome": "A visitor can follow a cause-and-effect chain end to end without hitting a dead end: failing check -> the agents in its blast radius -> that agent's console on the Board -> its failed run in Executions -> the review it raised. Every step is a URL that opens that exact item on reload or when shared.",
+      "builds_on": "The cross-linking already proven between SLA, Observability and Health: allow-listed ?focus= deep links, relatedTo threads and RelatedIncidentLinks.",
+      "mechanism": "Generalise useFocusParam's allow-list and focusHref into one entity address (?focus=<id>, with the kind derived from an id minted once), and teach the views that keep only local state to honour it. Executions opens ExecutionDetailModal for that run, Reviews selects the review, Incidents opens its detail modal, and the Board opens the agent console (?agent=IR01). Knowledge's evidence chip passes the execution id it already displays. Turn the plain-text mentions into SPA links (DashLink): the blast-radius persona chips, the knowledge chip, and incident rows pointing to the SLA, Health or Observability rows they belong to, via relatedTo. No new user-facing copy beyond aria labels.",
+      "anchors": [
+        "src/hooks/useFocusParam.ts:28-34",
+        "src/lib/incidentThreads.ts:77-79",
+        "src/lib/incidentThreads.ts:151-155",
+        "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:160-170",
+        "src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-22",
+        "src/components/dashboard/RelatedIncidentLinks.tsx:9-15"
+      ],
+      "evidence": "Observed: only sla, observability and health accept a link to a specific item. Executions, personas, reviews, events, knowledge, messages, leaderboard, incidents, director and notes cannot be linked to one. Eight views (executions, events, leaderboard, incidents, messages, director, settings and the desktop-width Board) have no links out to other views. The knowledge chip shows the execution id but links to the bare list via next/link (KnowledgeEvidenceChip.tsx:16,21). The blast-radius persona chips are plain <li> text (HealthSectionCard.tsx:161-168). Incidents never link to the SLA or Health rows they're about. The registry's demo-data-plane standard notes that viewers 'send a colleague a link and describe what to look at'.",
+      "effort": "S",
+      "risk": "Links could point at items that don't exist in the current plane (a real tenant) or that the world later changes. Mitigation: keep resolveFocus's rule (the query string is untrusted; only known ids pass), so an unknown id means no focus, never an error. In real mode, links resolve only against served ids, keeping the 'not served' honesty rule.",
+      "verify": "(a) A vitest that builds the view-to-view link graph from DashLink and focusHref call sites: dead-end views drop from 8 to 2 or fewer (settings, notes). (b) Playwright: starting from /dashboard/health with in_slack failing, reach the affected agent's failed-execution modal in 3 clicks or fewer, and a reload at each step keeps the same item open. (c) A cold load of /dashboard/executions?focus=<execution id> opens that run's modal.",
+      "why_groundbreaking": "It makes the demo's cause and effect something a visitor can walk and share. It also gives every later move (tour steps, drills, the shared world) a URL to aim at, so it compounds.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 6,
+        "total": 6,
+        "bad": []
+      }
+    },
+    {
+      "id": "P09",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 1,
+      "title": "Start the tour on the Board and advance it on what the visitor does",
+      "kind": "deepen",
+      "outcome": "The guided tour (/demo?tour=1) starts on the Board, the default view, which the tour never visits today. Each step completes when the visitor actually does the thing: opens triage, approves a review (with Undo), retries the failed agent, follows a blast-radius link. Captions describe the current layout. The tour ends on a recap of what the visitor did and how the fleet responded, instead of stopping silently on Reviews.",
+      "builds_on": "The tour engine's narration clock, timed actions, spotlight sequences, support for silent steps (the Roadmap tour already has no audio) and navigation between routes, plus the Board's command audit trail, which records every command with its sim time and outcome.",
+      "mechanism": "Add advanceOn?: (signal) => boolean to TourStep. The shared world store and command plane (step 1 of 'one world'), plus the SPA's navigation, emit typed signals such as {verb:'approve'} or {view:'health', focus}. The tour advances on a match, and otherwise falls back to the dwell timer and a 'Show me' button that runs the existing clickTarget action. Cut a hole in the overlay over the spotlight so the target can be clicked; today the overlay is a full-screen fixed layer. Retire the stale dashboardHome sweep and its old-cockpit anchor map, and write new caption keys, translated in all 14 locales; audio stays optional and can be recorded later. The last step reads the session's command log to build the recap ('You approved 2 and retried 1; 3 agents back to work in 40 s of fleet time'). No call to action, per the owner's rule.",
+      "anchors": [
+        "src/lib/tour-script.ts:45-50",
+        "src/lib/tour-script.ts:295-339",
+        "src/components/dashboard/views/home/index.tsx:28-35",
+        "src/components/tour/TourSpotlight.tsx:178-185",
+        "src/contexts/TourContext.tsx:107-120",
+        "src/components/dashboard/fleet-monitor/board/useCommands.ts:133-151",
+        "src/app/demo/page.tsx:33-35"
+      ],
+      "evidence": "Observed: DASHBOARD_TOUR_STEPS is 4 spotlight-only steps (a 48 s home sweep, executions, events, reviews), none with actions. The tour never visits personas, the default and most-developed view (fleet w1..w10). The home anchors were 'carried over from the old cockpit regions' (home/index.tsx:28), and the narration describes the removed layout (home-overview.md:64). The last step simply exits, with no bridge (TourContext.tsx:108-116). The overlay is fixed inset-0 with no pointer-through, so it blocks clicks. The registry's guided-tours standard calls for action-driven advancement and says 'an outdated tour is active misinformation'. Vendor data, self-reported and directional: completion falls as steps are added (https://www.arcade.software/post/interactive-demo-statistics); a persona-specific demo roughly doubled completion in Navattic's own experiment (https://navattic.com/blog/persona-interactive-demos). Hypothesis, not measured: that doing beats watching here.",
+      "effort": "M",
+      "risk": "Visitors who don't act get stuck, or the clickable hole lets them wander off-script. Mitigation: every action step has the dwell fallback, 'Show me' (the existing actions/clickTarget) and a one-gesture exit. Navigating off-script pauses the tour with a 'Resume' chip instead of breaking it. Extend tour-anchors.test to accept signal matchers. Hand-translating 13 locales is a real cost and is budgeted.",
+      "verify": "(a) Playwright tour.spec: a fresh profile at /demo?tour=1 lands on /dashboard/personas; the approve step does not advance until the visitor approves a review on the Board, then advances within 1 s; the recap's verdict count matches the command log. (b) tour-anchors test: no anchors left pointing at old cockpit names (the TOUR_ANCHORS map is deleted). (c) A consent-gated trackEvent('dashboard_tour_step') per step gives the repo its first tour-completion funnel (today: not measured).",
+      "why_groundbreaking": "The tour stops being a narrated slideshow of an old layout and becomes the visitor's first shift as an operator, which is the demo's whole promise.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 7,
+        "total": 7,
+        "bad": []
+      }
+    },
+    {
+      "id": "P10",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 1,
+      "title": "Let visitors pick their team and watch one of its agents do a real run",
+      "kind": "extend",
+      "outcome": "A visitor picks the team closest to their job (finance, support, eng, legal or any of the Board's nine) and the Board zooms to that team's bay. Opening one of its agents plays a concrete run in the console: the plan, the team's real tools, the check, and the result (e.g. 214 invoices matched, 3 exceptions), ending as a draft or review they decide. They leave knowing what the product would do for their own work, not just how the operator screens behave.",
+      "builds_on": "The Board's team bays, FocusFilter and openTeam drill-down; the console's run log with its six step keys and per-team tool names; and the virtual-clock run engine that already plays scripted runs on the landing page.",
+      "mechanism": "(1) ?team=<id>, plus a team chip in the personas toolbar and command palette, sets FocusFilter to that team and opens its bay via nav.openTeam. (2) Each team gets one authored run script (one step per STEP_KEY) whose tool calls come from TEAM_TOOLS and that ends in a concrete output. The console plays it on useRunClock (pauses on a hidden tab, can jump to any point, goes still under reduced motion) instead of runLog's stylised lines. When the run ends it sets the existing draft_ready/review state, so it lands in the Board's triage (and, with 'one world', in Reviews and Executions too). The 'Tool calls: stylised illustration' caption is dropped only where an authored run is playing. Copy goes in the personasMonitor namespace, which is already approved as English-only pending copy.",
+      "anchors": [
+        "src/components/dashboard/fleet-monitor/board/agentLog.ts:4-27",
+        "src/components/dashboard/fleet-monitor/board/focus.ts:13-21",
+        "src/components/dashboard/fleet-monitor/board/useBoardNav.ts:79",
+        "src/lib/run-script/useRunClock.ts:21-68",
+        "src/components/sections/playground-split/shared/useMindRun.ts:41-57",
+        "src/i18n/pending/personasMonitor.ts:1027"
+      ],
+      "evidence": "Observed: agentLog.ts:4-11 says the fleet 'carries counts ... but no transcript, so the agent console draws a stylised one', and the copy labels it so ('Tool calls: stylised illustration', personasMonitor.ts:1027). run-script is used only by the landing page's useMindRun; nothing under src/components/dashboard imports it. fleet.json already has concrete task lines per agent ('Matching 214 invoices to bank lines'), 9 teams shaped like business functions, and per-team tool names in agentLog.ts. The dossier names the visitor's job as knowing 'what it would do for their work'. Vendor data, directional: Navattic reported roughly 2x completion for a persona-specific demo versus a generic one (https://navattic.com/blog/persona-interactive-demos). The lift here is a hypothesis, not measured.",
+      "effort": "M",
+      "risk": "Authored runs could read as marketing copy or claim capabilities the desktop doesn't have. Mitigation: write each run from the desktop's real execution-output shape and only use connectors from the shipped catalog (src/data/connectors); keep the DEMO label; English-only for now in the pending namespace, translated when the namespace moves to the 14 locales.",
+      "verify": "(a) vitest: each of the 9 teams has a script whose tool names are all in TEAM_TOOLS[team] and whose last step yields draft_ready; jumping to the end and playing to the end produce the same console lines. (b) Playwright: /demo?team=finance opens the Finance bay; pressing Run on IR01 plays to a draft that appears in triage within the script's length; that console no longer shows the stylised caption. (c) Consent-gated analytics: the share of demo sessions that open a console run, compared with today.",
+      "why_groundbreaking": "The demo stops showing only how an operator watches agents and starts showing what an agent actually does for this visitor's kind of work.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 6,
+        "total": 6,
+        "bad": []
+      }
+    },
+    {
+      "id": "P11",
+      "seat": "codex-gpt-6.1-sol_xhigh",
+      "round": 1,
+      "title": "Let visitors inspect the exact run behind a learned claim",
+      "kind": "deepen",
+      "outcome": "A visitor can inspect the concrete execution behind a knowledge pattern or review, read its output or failure, and return to the original item without searching the execution table.",
+      "builds_on": "Knowledge already carries source execution IDs, and the execution modal already exposes output, errors, cost and retries. This completes the existing promise of inspectable evidence.",
+      "mechanism": "In a 3–5 day slice, make evidence chips and review execution IDs open /dashboard/executions?execution=<id>, with the existing modal controlled by that parameter. Resolve the requested demo record independently of table filters; reuse api.getExecution for output. Reconcile seeded provenance with the actual owning persona and run content: for example, make an oversized-diff pattern reference e-0004-mock and describe its actual context-window error. Remove unsupported provenance IDs. Change the mock detail resolver's missing-ID fallback into an explicit unavailable result. Browser Back restores the originating panel. Reuse the resolver across the knowledge table, graph, memories and reviews.",
+      "anchors": [
+        "src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:6-22",
+        "src/components/dashboard/views/executions/index.tsx:26-65",
+        "src/components/dashboard/views/executions/executions-page/ExecutionDetailModal.tsx:23-42",
+        "src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx:132-139",
+        "src/lib/mock-dashboard-data.ts:228-268",
+        "src/lib/mockData.ts:159-254",
+        "src/lib/mockData.ts:878-909"
+      ],
+      "evidence": "Observed: KnowledgeEvidenceChip displays an ID but links only to the executions route; the execution page selects records only through row clicks. All three seeded patterns with lastExecutionId reference executions owned by different personas. An unknown execution ID currently returns status completed. Hypothesis: letting evaluators inspect a coherent supporting observation makes the learning feature more credible.",
+      "effort": "S",
+      "risk": "One supporting run could be mistaken for proof of an aggregate success rate. Label it as the latest supporting execution, preserve the distinction between aggregate statistics and individual evidence, and show unavailable when the source cannot be established. Translate additional copy into all 14 locales.",
+      "verify": "Every retained seeded provenance ID resolves to a semantically matching execution. Clicking evidence opens that exact execution even when its status is excluded by the table filter; reload preserves the selection, and Back restores the source panel. A nonexistent ID displays unavailable and never completed. Verify these paths from both knowledge presentations and a review.",
+      "why_groundbreaking": "The learning showcase becomes something an evaluator can interrogate. Each additional evidence producer gains the same path from a claim to a concrete observation.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 7,
+        "total": 7,
+        "bad": []
+      }
+    },
+    {
+      "id": "P12",
+      "seat": "codex-gpt-6.1-sol_xhigh",
+      "round": 1,
+      "title": "Make one fleet action stay true across the whole demo",
+      "kind": "connect",
+      "outcome": "A visitor can start or stop work on the Board, follow the same agent and execution through Events and Executions, and see the corresponding Mission Control and spending changes in either desktop or phone layouts.",
+      "builds_on": "The dashboard already has a deterministic Board reducer, desktop-shaped mock command lifecycles, shared stores and derived summaries. Connecting them turns its existing operational depth into a continuous experience.",
+      "mechanism": "Create a demo-session store owned above ViewOutlet, containing a canonical identity registry, virtual time and an ordered journal of command acknowledgements and resulting state changes. Retain the five authored personas as members of a 99-agent registry, generating the remaining members deterministically; keep 10/30/99 as explicit Board subsets. Adapt the existing reducers and mock command handlers to commit through this session. Give related commands, executions, reviews and bus events stable references. Seed historical summaries once, then apply each terminal execution's count and cost delta exactly once to the relevant time window. Refresh existing Zustand and SWR consumers from those projections. Deliver Board Run → execution → event → Mission Control first, then connect the remaining affected reads and decisions.",
+      "anchors": [
+        "src/app/dashboard/layout.tsx:29-50",
+        "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:10-20",
+        "src/components/dashboard/fleet-monitor/fleet-data.ts:3-9",
+        "src/lib/mock-dashboard-data.ts:36-59",
+        "src/components/dashboard/fleet-monitor/board/sim.ts:54-74",
+        "src/lib/demoRealtime.ts:61-110",
+        "src/lib/commands/mockCommandPlane.ts:361-369",
+        "src/components/dashboard/views/home/mission/useMissionReadings.ts:109-159"
+      ],
+      "evidence": "Observed: the Board initializes from its 99-agent fixture, while dashboard fixtures project five MOCK_PERSONAS. Its simulation belongs to a view hook. The phone mock run handler already creates an execution and schedules its lifecycle, providing a reusable working connection. Demo realtime currently inserts a review with sourceId null. Mission Control consumes separate daily summaries and fixtures. Hypothesis: seeing one's own action produce consistent consequences communicates orchestration more convincingly than unrelated activity.",
+      "effort": "L",
+      "risk": "A partial connection could produce more contradictions, especially through duplicate timers or mixing current runs with historical aggregates. Establish one session clock and commit authority, retain desktop status rules, and declare population and time-window scope. Keep adapters behind the explicit demo gate and lazy-load scenario data within the existing bundle ceiling.",
+      "verify": "At a fixed seed, start one Board run and visit at least five other views before returning. The same execution survives view eviction, reaches one terminal state, emits linked lifecycle events and contributes its cost and completion exactly once to matching summaries. Switching viewport width preserves its identity and state. Replaying the same actions at the same virtual times yields identical projections regardless of navigation order; hiding the tab freezes progression.",
+      "why_groundbreaking": "The dashboard demonstrates a fleet responding to the visitor's decisions across its existing instruments. The owner also gains one reproducible source for future demo stories.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P13",
+      "seat": "codex-gpt-6.1-sol_xhigh",
+      "round": 1,
+      "title": "Let visitors rewind a decision and try the alternative",
+      "kind": "leap",
+      "outcome": "An evaluator can complete a short operational task, rewind to the decision point, try another supported action and compare the consequences using the actual dashboard.",
+      "builds_on": "The Board already distinguishes Pause from Cancel, checks commands against one rulebook and records decisions. The repository also has a virtual-clock engine with seek and reset, while the tour supplies an existing entry point and overlay.",
+      "mechanism": "After the shared-session connection, add one opt-in rehearsal through the existing tour launcher and routes. Start with a 90-second task: stop an agent taking new work while preserving its current run. Advance prompts when actual commands land, then show completion, interruption and subsequent scheduling evidence. Snapshot the session at the decision boundary and offer replay with an alternative action. Reconstruct branches from the snapshot and journal using the same command rules. Fix external scenario beats to virtual timestamps so different choices are compared under the same conditions. Extend useRunClock to drive replay; it supplies timing, not application-state reconstruction. Keep this as one rehearsal mode with a text debrief and current Mission Control terminology.",
+      "anchors": [
+        "src/lib/tour-script.ts:295-338",
+        "src/contexts/TourContext.tsx:107-120",
+        "src/lib/run-script/frameAt.ts:1-47",
+        "src/lib/run-script/useRunClock.ts:8-67",
+        "src/components/dashboard/fleet-monitor/board/sim.ts:22-35",
+        "src/components/dashboard/fleet-monitor/board/sim.ts:267-304",
+        "src/components/dashboard/fleet-monitor/board/verbs.ts:45-60",
+        "src/components/dashboard/fleet-monitor/board/useCommands.ts:133-148"
+      ],
+      "evidence": "Observed: Pause disables new work while allowing an active run to finish; Cancel stops the active run without disabling the agent. These are substantive, inspectable operational differences already implemented. The tour currently advances by narration or dwell and ends at Reviews. The virtual-clock hook already exposes start, reset and seek, but has no dashboard state replay. Hypothesis: trying and comparing these choices teaches the operating model better than watching narrated navigation.",
+      "effort": "L",
+      "risk": "Scripted outcomes could imply predictive simulation or unsupported desktop capabilities. Describe the exercise as a scripted demo and restrict choices to existing verbs. Restore command and review state as well as agents when branching, cancel obsolete scheduled work, and hold external beats constant. Use localized prompts, existing motion gates and Deferred loading.",
+      "verify": "From one checkpoint, Pause allows the current execution to complete and prevents the next scheduled start; Cancel interrupts it and leaves the agent enabled. Repeating either branch yields identical event and execution records, with no effects leaking from the discarded branch. In a pilot, at least 8 of 10 first-time evaluators complete the task unaided within three minutes and correctly explain the difference afterwards. These are proposed thresholds, not measured results.",
+      "why_groundbreaking": "The demo becomes a small operator training environment as well as a showcase. Visitors leave having exercised judgment about running an agent fleet, with evidence of what their decisions changed.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P14",
+      "seat": "grok-grok-4.7_high",
+      "round": 1,
+      "title": "Project every dashboard view from one seeded scenario",
+      "kind": "leap",
+      "outcome": "A visitor opens one link and sees the same fleet moment on the Board, Mission Control, executions, the event bus, and reviews, then scrubs or acts and watches every one of those views move together.",
+      "builds_on": "The demo is already deterministic and several views are already pure projections of a log: the event bus draws only events that exist, the Board is a pure seeded reducer, and run-script can seek a script without timers.",
+      "mechanism": "Add one pure projector, projectScenario(seed, t, actions), whose clock is run-script's frameAt and whose event log is the Board reducer plus the demoRealtime beats. Every dashboard view reads that projection at the scenario's now (FLEET.nowMs + t) instead of its private fixture clock. A user action (Board command settled, review verdict, mock run) appends to the log; it does not write a side fixture. ?seed= already selects the realtime script; ?t= seeks it, so a link shares a moment. The scrubber is the existing Memories range input, placed on the demo badge row the stage already renders. Created-at values come from the scenario clock, so a reload of the same seed and t paints the same rows. Ship the projector with the bus (already a projection), executions, and the home queue lamp first; other views keep the t=now snapshot until they opt in.",
+      "anchors": [
+        "src/lib/busProjection.ts:1-7",
+        "src/components/dashboard/fleet-monitor/board/sim.ts:12-50",
+        "src/lib/run-script/frameAt.ts:1-47",
+        "src/lib/demoRealtime.ts:17-45",
+        "src/lib/mockFleetConsistency.test.ts:10-20",
+        "src/lib/commands/mockCommandPlane.ts:21-28",
+        "src/components/dashboard/views/knowledge/memories-view/MemoriesTimeline.tsx:5-20",
+        "src/lib/mock-dashboard-data.ts:36-40"
+      ],
+      "evidence": "Observed: the Board steps its own simMs, demoRealtime steps a second seeded clock (first review at 20s), the mock command plane schedules runs on wall timers (queued, running at 1s, completed at 8s), and mockData stamps fixtures with Date.now() via ago(). mockFleetConsistency only locks the mockData-derived pages to each other. The October event-bus redraw already proved a view can be a pure function of one log. Hypothesis: a visitor who decides a review and sees the execution, the bus particle, and the home queue lamp change together will read the product as one machine. Prior art: Stripe test clocks freeze time and advance every billing object on that clock together (https://docs.stripe.com/billing/testing/test-clocks).",
+      "effort": "L",
+      "risk": "Projecting all 15 views at 99 agents in one change will blow the fixture suite and the 1413 KB budget. Mitigation: the projector and three readers ship first, heavy views stay dynamic ssr:false, and stage-only agents stay out of the synced projection until the crew map exists. The scrubber is the only new control, and it is a range input the Memories tab already ships.",
+      "verify": "Load /dashboard/executions?seed=1&t=0 and record the execution count and the home queue count. Seek to t=20000. The review queue grows by exactly one, and the new review id is stable across two reloads of seed 1. Settle a run on a synced persona: within one projection step the executions list contains that run's id and the home outcomes run count includes it. Reloading seed 1 at t=0 restores the original counts. A second seed yields a different stable review title.",
+      "why_groundbreaking": "The demo stops being fifteen pictures of a product and becomes a case you can share, scrub, and intervene in. That is the argument an evaluating visitor cannot get from a landing page: a fleet is one causal story.",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P15",
+      "seat": "grok-grok-4.7_high",
+      "round": 1,
+      "title": "Make the scope bar filter the views that claim it",
+      "kind": "connect",
+      "outcome": "Choosing one persona and a window (24h, 7d, 30d, 90d) changes the review queue, the execution table, the leaderboard, the knowledge table, and the Mission Control figures to that slice, and a reload keeps the choice.",
+      "builds_on": "The scope bar, the persisted filter store, and the scoped trait on eight views already exist, and the desktop annunciator wall already has a window and a persona filter. The web wall states a fixed 14-day window and has no control.",
+      "mechanism": "One pure predicate, inScope(row, filter, now), applied where the row already carries a persona id and a timestamp: executions, events, reviews, leaderboard, knowledge, SLA, messages, and the daily series behind Mission Control. Home's header states the active window in place of the hardcoded 14-day note. A filter that matches nothing renders an explicit empty ('nothing in this window'), which stays distinct from the existing listNotServed note. The default stays 7d and all personas, so the first paint matches today. PerformanceView's private compare flag reads the store flag the scope bar already toggles.",
+      "anchors": [
+        "src/components/dashboard/spa/views.ts:43-62",
+        "src/stores/dashboardFilterStore.ts:74-94",
+        "src/components/dashboard/DashboardScopeBar.tsx:16-26",
+        "src/components/dashboard/views/home/index.tsx:69-70",
+        "src/components/dashboard/views/home/mission/useMissionReadings.ts:44-56",
+        "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:68-72",
+        "src/components/dashboard/views/observability/PerformanceView.tsx:29"
+      ],
+      "evidence": "Observed: useDashboardFilterStore is read by the scope bar and by cache reset, and by no view. views.ts marks reviews, executions, events, observability, leaderboard, SLA, knowledge, and messages scoped: true, and shell-chrome records that those traits are claims. Home sums every day in the fixture. Hypothesis: the evaluating visitor's job, 'what would this do for my work', is exactly one agent and one window, and the control for it is already on screen. Wiring it also removes a visible lie, which is the honesty rule this dashboard already enforces elsewhere.",
+      "effort": "S",
+      "risk": "A 24h slice of a sparse fixture can look like a broken chart. Mitigation: the header counts what the filter hid, 7d stays the default, and the predicate is unit-tested on a mixed list so a view cannot claim scoped and then ignore the store.",
+      "verify": "Before: pick Incident Responder and Last 24h; the scope label changes and the execution rows, review rows, leaderboard rows, and home run total stay identical. After: those four surfaces contain only that persona's rows inside the window, All personas and 7d restores the prior counts exactly, and a reload keeps the selection. A unit test of inScope on a mixed fixture asserts the counts.",
+      "why_groundbreaking": "",
+      "parents": [],
+      "anchor_check": {
+        "ok": 7,
+        "total": 7,
+        "bad": []
+      }
+    },
+    {
+      "id": "P16",
+      "seat": "grok-grok-4.7_high",
+      "round": 1,
+      "title": "Give the stage and the synced pages one crew",
+      "kind": "connect",
+      "outcome": "The five people on the phone, in reviews, on the leaderboard, and in Mission Control are five named agents on the Board. Pausing one on the phone shows that same agent paused on the Board. The other agents stay on the stage.",
+      "builds_on": "mock-dashboard-data already projects one roster from MOCK_PERSONAS so the synced pages cannot disagree with each other, and the Board already addresses agents by stable id. The phone command plane already writes a pause and a run through to the fixtures those pages read.",
+      "mechanism": "Declare a crew of five fleet.json agent ids. Invert the roster projection so those agents are the source of id, name, color, and enabled, and the existing rich fixtures keep their numbers under those ids. The Board hover and the phone row for a crew id show the same name. A Board command that settles for a crew agent uses the mock command plane's fixture write (pause flips enabled, run unshifts an execution, approve updates the review). An activity-log row for an agent outside the crew offers no synced-page link; opening one by URL shows the existing not-served note. Scale 10/30/99 still slices fleet.json; the crew is a subset, and the stage keeps its mass.",
+      "anchors": [
+        "src/components/dashboard/views/personas/index.tsx:36-44",
+        "src/lib/mock-dashboard-data.ts:36-59",
+        "src/lib/mockData.ts:52-70",
+        "src/components/dashboard/fleet-monitor/fleet-data.ts:151-164",
+        "src/components/dashboard/fleet-monitor/board/useCommands.ts:7-19",
+        "src/lib/commands/mockCommandPlane.ts:1-8",
+        "src/lib/mockFleetConsistency.test.ts:10-20",
+        "docs/concepts/mobile-revival/PHASE2-SPEC.md:631"
+      ],
+      "evidence": "Observed: the phone layout reads personaStore (five MOCK_PERSONAS, starting with PR Review Agent) and the desktop stage reads fleet.json (99 agents, starting with Invoice Reconciler IR01). Board commands apply only to sim state; the mock command plane writes only MOCK_PERSONAS and MOCK_EXECUTIONS. PHASE2-SPEC question 5 leaves the mismatch open. Hypothesis: the same name on the tile and in the review queue is what makes the two-population demo feel like one product, and keeping the other 94 agents on the stage preserves the mass the Board was built for.",
+      "effort": "M",
+      "risk": "Renaming the five synced personas touches Director copy, review titles, and any screenshot pinned to 'PR Review Agent'. Mitigation: change id, name, and color only; keep each fixture's story and numbers; extend mockFleetConsistency so the names cannot drift back. Tour audio that names the old cast is already recorded against a retired layout, so this does not wait on a re-record.",
+      "verify": "The consistency test asserts every MOCK_PERSONAS id is a fleet.json agent and that name and color match. The phone list and the Board hover for those ids render the same string. Pause that persona on the phone: the Board tile for that id shows paused after the command completes. A run started on that tile appears at the front of the executions list with id exec-<commandId>. A stage-only agent has no executions link.",
+      "why_groundbreaking": "",
+      "parents": [],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P17",
+      "seat": "grok-grok-4.7_high",
+      "round": 1,
+      "title": "Open the exact row a causal link names",
+      "kind": "deepen",
+      "outcome": "A knowledge pattern's evidence chip, an incident's related-link chip, and a Board activity row open the specific execution, breach, or review they name, and Back returns to the source.",
+      "builds_on": "Causal cross-links are already a product strength: blast radius, derived incidents, and ?focus= between SLA, Observability, and Health. The focus hook allow-lists ids and scrolls the row into view. Knowledge already stores the teaching execution id and prints its prefix.",
+      "mechanism": "Generalize the allow-list so an id passes when it is in DEMO_FOCUS_IDS or present in the current executions, reviews, or events store (a session-created exec-<commandId> then resolves; an unknown id still resolves to null). KnowledgeEvidenceChip's href becomes /dashboard/executions?focus=<executionId>. The executions page reads useFocusParam and opens the existing ExecutionDetailModal on that row, using the same scroll helper. Board activity rows of kind run_failed and review_requested on a crew agent deep-link the same way. A chip with no resolvable id renders nothing, which is the rule the evidence chip already follows when no id was synced.",
+      "anchors": [
+        "src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-23",
+        "src/hooks/useFocusParam.ts:8-33",
+        "src/lib/incidentThreads.ts:128-155",
+        "src/components/dashboard/views/executions/index.tsx:36",
+        "src/components/dashboard/RelatedIncidentLinks.tsx:9-15",
+        "src/components/dashboard/fleet-monitor/board/ActivityDrawer.tsx:29-38",
+        "src/lib/blastRadius.ts:3-12"
+      ],
+      "evidence": "Observed: the evidence chip links to /dashboard/executions and shows the first eight characters of the id, and the executions page keeps the open row in local useState with no focus param. useFocusParam and initialBreachLogState already open the exact SLA or health row, and the comment on resolveFocus says the query is untrusted. Hypothesis: the links that drop the id are where a visitor loses the causal plot the rest of the dashboard is built to show. The allow-list plus the live store keeps that honesty for ids the session just created.",
+      "effort": "S",
+      "risk": "A focus param that matches a row hidden by a later scope filter would open nothing and look broken. Mitigation: the same rule SLA already uses, a focus match clears the local filter that would hide it, and an unknown id leaves the table closed with no modal.",
+      "verify": "From a knowledge pattern, activate the evidence chip. Executions opens with that execution's detail modal, and the id prefix matches the chip. Back returns to the pattern. Visiting /dashboard/executions?focus=nope opens the table with no modal. A review or activity link with a real id opens that row; the same link with the id removed renders no chip.",
+      "why_groundbreaking": "",
+      "parents": [],
+      "anchor_check": {
+        "ok": 7,
+        "total": 7,
+        "bad": []
+      }
+    },
+    {
+      "id": "P18",
+      "seat": "grok-grok-4.7_high",
+      "round": 1,
+      "title": "Finish the tour on the visitor's own decision",
+      "kind": "extend",
+      "outcome": "The guided tour ends when the visitor approves or rejects the review it cued, the undo window has closed, and the tour then opens the execution that review belongs to.",
+      "builds_on": "The tour already narrates four real views, clocks its cues off the audio, and lands on the review queue, which already has a decision ledger and a 5-second undo. demoRealtime already inserts a deterministic first review 20 seconds into a seeded run.",
+      "mechanism": "Add one tour step that stays on /dashboard/reviews. Its clock is the existing cue clock, and it does not advance on the clip's ended event. It advances when reviewStore records a verdict for the cued review id and the undo window elapses without an undo. A 'Keep looking' control ends the tour on the queue and is counted separately from a verdict. On a verdict, the step navigates to that review's execution with ?focus=, using the focus path above. The cued review is the demoRealtime beat for the page's seed, so two visitors with the same seed decide the same item. No new audio: the existing reviews clip plays, then one i18n line tells the visitor the next move is theirs. The home clip stays as it is.",
+      "anchors": [
+        "src/lib/tour-script.ts:289-338",
+        "src/lib/tour-cue-clock.ts:1-16",
+        "src/components/dashboard/views/home/index.tsx:28-35",
+        "src/lib/demoRealtime.ts:17-19",
+        "src/components/dashboard/views/reviews/index.tsx:32-44",
+        "src/components/dashboard/views/reviews/reviews-split-pane/ReviewsSplitPaneToasts.tsx:9-16"
+      ],
+      "evidence": "Observed: the tour script says Reviews is the end of the journey and lists four steps out of fifteen views. The home step's spotlights are remapped onto wall cells while the recorded narration still describes the old cockpit. The review page already shares one clock and one undo path between the desk and the phone. Hypothesis: the evaluating visitor's job is to operate the fleet for a few minutes; a tour that completes on their verdict, visible in the ledger and followed to the execution, is the difference between watching the product and using it. Tour completion is unmeasured today; this step is a countable event.",
+      "effort": "M",
+      "risk": "A forced click will annoy someone who wanted to wander, and the stale home narration still plays first. Mitigation: Keep looking ends the tour without a verdict, Esc still exits, and this change does not re-record audio or add a sign-up prompt. Undo inside the 5 seconds must not count as completion.",
+      "verify": "Start at /demo?tour=1. After the reviews clip ends, the tour remains on the queue. Approving the highlighted review and waiting out the undo moves the tour to done and opens that review's execution via ?focus=. Undo within 5 seconds leaves the tour on the step. Keep looking ends the tour on reviews with no verdict. A fake-timer test asserts all three outcomes.",
+      "why_groundbreaking": "",
+      "parents": [],
+      "anchor_check": {
+        "ok": 6,
+        "total": 6,
+        "bad": []
+      }
+    },
+    {
+      "id": "P19",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 2,
+      "title": "Close the execution provenance and learning loop across Knowledge and Reviews",
+      "kind": "connect",
+      "outcome": "Clicking any execution reference on a Knowledge pattern, graph node, memory, Review detail panel, or Director verdict opens /dashboard/executions?focus=<id> with that exact run's ExecutionDetailModal open (even if excluded by table status filters) and coherent persona/error content, while deciding a review with reviewer notes promotes a new learned memory into Knowledge and a coaching verdict into Director linked back to that execution.",
+      "builds_on": "KnowledgeEvidenceChip, ReviewDetailPanel, and useKnowledgeData already display execution IDs; ExecutionDetailModal already renders full run output, cost, and error traces; useFocusParam already provides allow-listed deep linking; and reviewDecide.ts explicitly documents that review_decide drives status writes and learned memory creation.",
+      "mechanism": "1) Reconcile broken provenance in src/lib/mock-dashboard-data.ts:228-268 so kp_1 (Incident Responder) references e-0002-mock, kp_2 (PR Review Agent large_diff_timeout) references e-0004-mock (148k-token context-window error), kp_3 (Customer Feedback Analyzer) references e-0005-mock, and kp_4 (Daily Standup Digest) references e-0003-mock, and fix getMockExecutionDetail (src/lib/mockData.ts:878-909) so unknown IDs return an explicit unavailable state instead of status: 'completed'. 2) Extend useFocusParam (src/hooks/useFocusParam.ts:28-34) and incidentThreads.ts:150-155 so ?focus=<id> resolves against DEMO_FOCUS_IDS plus live executionStore/reviewStore IDs, update KnowledgeEvidenceChip.tsx:11-24, ReviewDetailPanel.tsx:132-140, and VerdictFeedCard.tsx:90-120 to link via SPA navigation to /dashboard/executions?focus=<id>, and wire views/executions/index.tsx:26-65 to open ExecutionDetailModal for the focused ID independent of the active table status filter. 3) Extend executeReviewDecide in src/lib/commands/mockCommandPlane.ts:88-100 (and set a valid sourceId on demoRealtime.ts:79) so deciding a review with non-empty notes appends a promoted MockMemoryEntry (sourceExecutionId: review.sourceId) to MOCK_MEMORIES and a DirectorVerdict to MOCK_DIRECTOR_VERDICTS.",
+      "anchors": [
+        "src/lib/mock-dashboard-data.ts:228-268",
+        "src/lib/mockData.ts:159-279",
+        "src/lib/mockData.ts:878-909",
+        "src/hooks/useFocusParam.ts:28-34",
+        "src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-24",
+        "src/components/dashboard/views/executions/index.tsx:26-65",
+        "src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx:132-140",
+        "src/lib/commands/mockCommandPlane.ts:88-100"
+      ],
+      "evidence": "Observed in code: all 3 seeded MOCK_KNOWLEDGE_PATTERNS with lastExecutionId (mock-dashboard-data.ts:228-268) point to executions owned by a different persona in mockData.ts:159-254 (e.g., PR Review Agent's large_diff_timeout points to Incident Responder's e-0002-mock instead of PR Review Agent's e-0004-mock), getMockExecutionDetail (mockData.ts:904) returns status 'completed' for nonexistent IDs, KnowledgeEvidenceChip.tsx:16 drops executionId from href, ReviewDetailPanel.tsx:137 renders executionId as plain text, and executeReviewDecide (mockCommandPlane.ts:88-100) never writes to MOCK_MEMORIES despite reviewDecide.ts:2-5. Hypothesis: combining P11's fixture reconciliation and filter-independent modal resolution with P05's write-back learning loop and P08's unified ?focus= deep-linking makes agent learning both inspectable and interactive.",
+      "effort": "M",
+      "risk": "Promoting every blank-note approval into MOCK_MEMORIES could clutter the feed, and deep-linking an unknown execution ID in live/desktop mode must not fabricate a completed run; mitigate by only promoting reviews with reviewer notes or rejected critical actions, and rendering an explicit unavailable state in ExecutionDetailModal when getMockExecutionDetail finds no matching record.",
+      "verify": "1) Every seeded KnowledgePattern lastExecutionId matches its owning persona and error/output in mockFleetConsistency.test.ts. 2) Clicking the evidence chip on kp_2 in /dashboard/knowledge (or the execution chip in ReviewDetailPanel) opens /dashboard/executions?focus=e-0004-mock with ExecutionDetailModal showing PR Review Agent's 148k-token error even when the table filter is set to 'running', and Browser Back returns to the source view. 3) Visiting /dashboard/executions?focus=unknown-id shows no false 'completed' modal. 4) Approving or rejecting ev-0004-mock in /dashboard/reviews with notes adds a linked memory in /dashboard/knowledge and a verdict in /dashboard/director whose chip opens e-0002-mock.",
+      "why_groundbreaking": "It fixes P05 and P08's blind spot (where deep links would have opened the wrong persona's execution or failed under table filters) while elevating P11 from a static read-only inspection into a complete, closed-loop demonstration of how human review verdicts become verifiable institutional agent memory.",
+      "parents": [
+        "P05",
+        "P11",
+        "P08"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P20",
+      "seat": "agy-gemini-4-argon_high",
+      "round": 2,
+      "title": "Run interactive fault drills and action-driven tours over live blast radius",
+      "kind": "leap",
+      "outcome": "Visitors launching the guided tour (?tour=1) or a fault drill (?drill=slack-outage&t=180) from the Fleet Board or Mission Control watch a live or seekable outage propagate through the real blastRadius, incidentCorrelate, and SLA engines, click directly through the tour spotlight to remediate the failing integration and review, and watch the blast radius, correlated incident cluster, SLA breach, and Mission Control annunciator recover in real time.",
+      "builds_on": "computeBlastRadius (blastRadius.ts), correlate(demoSignals()) (incidentCorrelate.ts), and HealthResolutions (healthActions.ts) already model the exact causal chain between in_slack, br_1, and hi_2; useRunClock and frameAt already provide a deterministic seekable clock; and TourSpotlight and TourContext already drive multi-route spotlight choreography.",
+      "mechanism": "1) Promote HealthResolutions from local useState in views/health/index.tsx:33-58 into a shared Zustand fault-and-health store read by computeBlastRadius (blastRadius.ts:60-90), correlate(demoSignals()) wired into views/incidents/index.tsx:31-79, useSlaData.ts:32-36, PerformanceView.tsx:55-62, useMissionReadings.ts:69-77, and DashboardNavigation.tsx:106-107. 2) Drive fault injection (in_slack outage, cr_anthropic expiry, and demoRealtime.ts:23-27 review beats with valid sourceId) from useRunClock (useRunClock.ts:21-68) so ?drill=slack-outage&t= can deterministically inject, seek, or re-inject the outage without waiting on a 99-agent rewrite. 3) Add pointer-events-none to the TourSpotlight scrim wrapper (TourSpotlight.tsx:178-185) so spotlighted controls are clickable, replace the legacy TOUR_ANCHORS shim in views/home/index.tsx:28-35, and add advanceOn?: (signal) => boolean (with dwell and 'Show me' clickTarget fallback) to DASHBOARD_TOUR_STEPS (tour-script.ts:295-339) starting on /dashboard/personas and concluding when the visitor resolves the live drill tasks.",
+      "anchors": [
+        "src/components/dashboard/views/health/index.tsx:33-58",
+        "src/lib/blastRadius.ts:60-90",
+        "src/lib/incidentCorrelate.ts:100-141",
+        "src/components/dashboard/views/incidents/index.tsx:31-79",
+        "src/lib/run-script/useRunClock.ts:21-68",
+        "src/components/tour/TourSpotlight.tsx:178-185",
+        "src/lib/tour-script.ts:295-339",
+        "src/components/dashboard/views/home/index.tsx:28-35"
+      ],
+      "evidence": "Observed in code: incidentCorrelate.ts:100-141,236-245 has zero non-test importers while views/incidents/index.tsx:31 renders static MOCK_AUDIT_INCIDENTS; views/health/index.tsx:33-34 stores Configure/Rotate resolutions in local useState so fixing in_slack resets on navigation; TourSpotlight.tsx:178-185 renders a fixed inset-0 z-[80] div without pointer-events-none that blocks clicks on spotlit controls; and DASHBOARD_TOUR_STEPS (tour-script.ts:295-339) skips /dashboard/personas and uses legacy cockpit anchors (views/home/index.tsx:28-35). Hypothesis: fusing P03's shared health-and-correlation store with P07's seekable fault clock and P09's click-through action-driven tour delivers P07's rehearsal experience at M effort without blocking on an L-effort 99-agent rewrite.",
+      "effort": "M",
+      "risk": "Visitors who prefer watching rather than clicking could stall on an action step, and resolving all faults leaves the session green; mitigate by keeping P09's dwell timer + 'Show me' clickTarget fallback on every step and exposing a 'Re-inject fault drill' control in the Health and Mission Control headers.",
+      "verify": "1) Opening /dashboard/incidents renders correlated incident clusters from correlate(demoSignals()). 2) Starting /demo?tour=1 lands on /dashboard/personas, allows clicking through TourSpotlight, and advances steps when the user triggers the spotlighted action (or via 'Show me'). 3) In ?drill=slack-outage&t=180 or the tour's Health step, clicking Configure on in_slack drops the sidebar Health badge from 2 to 1, marks SLA breach br_1 and Observability hi_2 resolved, transitions the correlated Slack incident in /dashboard/incidents to resolved, and settles Mission Control's recovery reading.",
+      "why_groundbreaking": "It decouples P07's replayable fault simulator from an L-effort fleet rewrite by anchoring it directly to the already-built blastRadius, incidentCorrelate, and HealthResolutions engines (P03), while using P09's cut-through spotlight and action signals to turn the passive tour into a hands-on incident recovery rehearsal.",
+      "parents": [
+        "P03",
+        "P07",
+        "P09"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P21",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 2,
+      "title": "Fix the cause once and watch every surface on its thread settle",
+      "kind": "deepen",
+      "outcome": "A visitor clicks Configure on the circuit-broken Slack check (or arrives there from any link on its thread). In the same session, without a reload, every member of the 'slack-circuit-break' thread settles: the hi_2 breaker issue resolves, br_1 gets a resolved time and stops accruing, the blast radius drops its SLA-at-risk count, the correlated incident in Incidents moves to resolved, the Health sidebar badge decrements, and Mission Control's Recovery cell loses the paused breaker. An 'Undo fix' on the existing toast reopens the whole thread, so the failure-to-recovery arc can be replayed.",
+      "builds_on": "Causal cross-linking: buildIncidentThreads already joins in_slack, hi_2 and br_1 by causeKey, demoSignals() already treats an ok check as no signal, blastRadius already 'heals when the check settles', and Health already applies resolutions as a pure projection (applyHealthResolutions).",
+      "mechanism": "(1) Key a fix by thread, not by check: a demo-only session slice resolvedCauses: Record<causeKey, {at, kind}>, written by the Health action when the item carries a causeKey. (2) One pure projector beside buildIncidentThreads, settleThread(fixtures, resolvedCauses), returns copies in which every thread member is settled: checks become ok, health issues resolved, breaches get resolvedAt = at with their duration frozen. Untouched threads come back by reference. (3) Apply it once, inside mockApi's reads (getSystemHealth, getBlastRadiusInputs, getObservability.healthIssues, the SLA and audit-incident reads), not in five components. Every reader, including views kept alive in <Activity>, then gets it from SWR revalidation; the fix mutates those keys. (4) Replace the import-time constants MOCK_HEALTH_ALERTS and MOCK_OPEN_INCIDENTS with selectors over the projection so the nav badge can move. (5) Incidents runs correlate(demoSignals(projected)), the engine's first non-test importer, so the Slack cluster's status follows from the signals. (6) Health has no undo today: the toast gains 'Undo fix', which deletes the causeKey entry and re-injects the outage. (7) Recovery-cell evidence rows on the home wall link each open issue with focusHref, so the walk can start on Mission Control. Gated to demo (useDemoOnlySWR); real mode never reads the slice. No new route or panel; one new toast label, translated in all 14 locales.",
+      "anchors": [
+        "src/lib/incidentThreads.ts:90-110",
+        "src/components/dashboard/views/health/index.tsx:33-58",
+        "src/components/dashboard/views/health/health-page/healthActions.ts:13-46",
+        "src/lib/incidentCorrelate.ts:235-245",
+        "src/lib/mockApi.ts:460-476",
+        "src/lib/mock-dashboard-data.ts:1734",
+        "src/components/dashboard/DashboardNavigation.tsx:97-109",
+        "src/components/dashboard/views/home/mission/useMissionReadings.ts:69-77"
+      ],
+      "evidence": "Observed: causeKey 'slack-circuit-break' sits on in_slack (mock-dashboard-data.ts:1734), hi_2 (:158) and br_1 (:759), and buildIncidentThreads groups them. Resolutions live in HealthPage useState (health/index.tsx:33) and rewrite only that page's rows. MOCK_HEALTH_ALERTS (:1747) and MOCK_OPEN_INCIDENTS (:1662) are computed once at import, so the badge cannot move today. demoSignals already drops ok checks. getBlastRadiusInputs already passes breach resolvedAt, so the radius heals once breaches settle. correlate() has only a test importer. grep finds no undo in views/health, so P03's 'existing Undo' mitigation must be built. Owner preference (brief): accepts honesty-of-state and causal work and rejects new surfaces; this adds none. Hypothesis, not measured: an ops evaluator trusts a console that shows recovery, not only failure.",
+      "effort": "M",
+      "risk": "If the projection reaches only some reads, views disagree, which is worse than today; and a visitor who fixes the outage loses the demo's most instructive failure. Mitigation: one projector applied in mockApi for every read of a thread member, plus a vitest asserting every api read of the thread agrees after a settle. The fix is session-only (a reload restores the outage) and 'Undo fix' re-injects it at once.",
+      "verify": "(a) vitest: settleThread(DEMO_INCIDENT_FIXTURES, {'slack-circuit-break'}) leaves zero open members of that thread and returns the 'security-latency' thread by reference; correlate(demoSignals(projected)) has no active cluster containing in_slack. (b) Playwright, no reload: from /dashboard/sla?focus=br_1 follow the Health chip and click Configure on Slack. Then the Health nav badge drops by one, /dashboard/observability shows hi_2 resolved, /dashboard/sla shows br_1 with a resolved time, /dashboard/incidents shows the Slack cluster resolved, and /dashboard/home?dim=recovery shows zero paused breakers. (c) 'Undo fix' restores all five readings. (d) grep: correlate has a non-test importer and MOCK_HEALTH_ALERTS is no longer a constant.",
+      "why_groundbreaking": "The causal graph stops being read-only breadcrumbs and becomes something the visitor acts on: one fix, and every instrument on the thread agrees. That is the control-plane argument (one action, consistent consequences) delivered in 30 seconds without waiting for the full one-world rebuild.",
+      "parents": [
+        "P03",
+        "P17"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P22",
+      "seat": "claude-claude-opus-5-5_xhigh",
+      "round": 2,
+      "title": "Turn a review verdict into a traceable learned memory, as the desktop does",
+      "kind": "connect",
+      "outcome": "A visitor approves or rejects a review. After the 5 s undo window closes, a new memory appears at the top of Knowledge > Memories, filed as a decision when approved and a constraint when rejected, carrying their notes. Its evidence chip opens the exact run that raised the review in Executions, and Back returns. The review's own execution id is a link too. Every evidence chip in Knowledge opens a run its persona actually owns, and an unknown id reads 'unavailable', never 'completed'.",
+      "builds_on": "Truth-sourcing and honest provenance: the desktop's review learning loop, KnowledgeEvidenceChip's 'never imply provenance it does not have' rule, MemoryItem.sourceExecutionId, seeded reviews that already carry execution ids, and the review ledger's single commit point after undo.",
+      "mechanism": "(1) Copy the desktop's rule into the scripted desktop: after executeReviewDecide writes the verdict, append one memory exactly as the desktop's flip_status does. Title 'Human {approved|rejected}: {title}', content with the reviewer notes when non-empty, category decision (importance 7) for approve and constraint (8) for reject, deduped by title, sourceExecutionId = review.sourceId. Serve memories through a mockApi read; useKnowledgeData reads the MOCK_MEMORIES constant directly today, so nothing new could appear. Refresh it from commandStore's existing onDemoFixtureChange. The memory is written at commit, after the undo window, so an undone verdict never teaches. (2) Exact-row links (P17): resolveFocus admits DEMO_FOCUS_IDS plus ids present in the execution store. executions/index.tsx reads useFocusParam and opens ExecutionDetailModal, clearing a status filter that would hide the row (the PerformanceView seenFocus precedent). KnowledgeEvidenceChip and ReviewDetailPanel's execution id become ?focus= links. (3) Provenance repair (P11): kp_1..kp_3 cite runs their own persona owns, and getMockExecutionDetail returns an explicit unavailable result for an unknown id. (4) No Director verdict: the desktop does not write one. Any new UI label is translated in all 14 locales.",
+      "anchors": [
+        "src/lib/commands/mockCommandPlane.ts:88-101",
+        "src/stores/commandStore.ts:105-109",
+        "src/components/dashboard/views/knowledge/useKnowledgeData.ts:172-173",
+        "src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-24",
+        "src/hooks/useFocusParam.ts:31-34",
+        "src/components/dashboard/views/executions/index.tsx:26-36",
+        "src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx:132-139",
+        "src/lib/mock-dashboard-data.ts:228-268"
+      ],
+      "evidence": "Observed in the desktop repo (../personas, src-tauri/db/src/repos/communication/manual_reviews.rs, flip_status, about lines 586-660): every approved or rejected review writes a memory 'Human {verdict}: {title}', decision (7) or constraint (8), appends the notes when non-empty, dedups by title, and returns a LearnedMemoryRef. reviewDecide.ts:2-5 here names 'learned memory' as part of the decision body, yet executeReviewDecide writes only the status. MOCK_MEMORIES is generated with no sourceExecutionId, so no memory evidence chip renders in the demo today. Seeded reviews carry execution ids (mockData.ts:509, 524, 539, 765); the Redis-restart review cites e-0002, which its own persona owns. The pattern provenance is wrong-persona (kp_1 names Incident Responder but cites e-0001, owned by p1), and getMockExecutionDetail falls back to 'completed' for an unknown id. resolveFocus admits only DEMO_FOCUS_IDS, so P05's bare ?focus= would resolve null. Hypothesis, not measured: watching one's own decision become agent memory, traceable to its run, is the most direct proof of 'agents learn from human review'.",
+      "effort": "M",
+      "risk": "A bulk approve could flood Knowledge, and the mirror could drift from the desktop. Mitigation: dedup by title exactly as the desktop does, newest first. A parity test cites flip_status, following eventStatusFsm.desktopParity.test.ts. The demoRealtime review (sourceId null) yields a memory with no chip, which is the honest rendering.",
+      "verify": "(a) vitest parity: approving a seeded review with notes yields exactly one memory titled 'Human approved: <title>', category decision, importance 7, sourceExecutionId equal to the review's sourceId; rejecting yields constraint, 8; repeating the verdict adds none; an undo inside the 5 s window adds none. (b) Playwright: approve 'Proposed Incident Mitigation' in /dashboard/reviews and wait out the undo. /dashboard/knowledge then shows the new memory first; its chip opens /dashboard/executions?focus=e-0002-mock with that run's modal open, and Back returns to Knowledge. (c) vitest: every kp_* lastExecutionId resolves to an execution whose personaId matches the pattern's persona. (d) /dashboard/executions?focus=nope opens no modal, and api.getExecution('nope') reports unavailable, not completed.",
+      "why_groundbreaking": "Knowledge stops being a static list and becomes the visible output of the visitor's own decisions, traced back to the run that prompted them. The browser shows end to end the learning loop the desktop actually runs.",
+      "parents": [
+        "P05",
+        "P11",
+        "P17"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P23",
+      "seat": "codex-gpt-6.1-sol_xhigh",
+      "round": 2,
+      "title": "Explain fleet metrics with the exact executions that changed them",
+      "kind": "connect",
+      "outcome": "Start a run on the Board or phone, see consistent Mission Control and Observability figures, then open a run-count or spend figure to inspect its contributing executions under the same persona and time window.",
+      "builds_on": "The deterministic Board reducer, command-derived execution IDs, existing execution detail modal, shared scope controls and Mission Control's derived readings.",
+      "mechanism": "Own a demo session above ViewOutlet with one canonical roster, fixed epoch, clock and execution journal; retain the five authored personas as themselves within the larger fleet. Seed dated historical execution records for supported windows and route Board and phone commands through the same authority. Project summaries and their contributing execution IDs together, with explicit definitions for started, active and completed counts and recorded cost. Keep accounting separate from the Board's capped display log and apply each settlement once. Make metric links open the existing execution table with the same scope and selected evidence, independently resolving records outside the loaded page. Preserve authored evidence relationships and return unavailable for missing records or unsupported history. Keep scenario data lazy, motion independent of data progression, and new copy translated.",
+      "anchors": [
+        "src/app/dashboard/layout.tsx:29-48",
+        "src/components/dashboard/fleet-monitor/board/model.ts:44-51",
+        "src/components/dashboard/fleet-monitor/board/sim.ts:52-74",
+        "src/lib/commands/mockCommandPlane.ts:102-170",
+        "src/lib/mockData.ts:878-909",
+        "src/lib/mockData.ts:952-1016",
+        "src/components/dashboard/views/home/mission/useMissionReadings.ts:44-65",
+        "src/components/dashboard/views/executions/index.tsx:26-65"
+      ],
+      "evidence": "Observed: Board events lack execution IDs and costs, daily metrics are fleet aggregates, and unknown execution details report completed; the current structures cannot justify an exact metric drill-down. Hypothesis: letting evaluators reconcile figures to their own actions makes cross-view consistency independently credible.",
+      "effort": "L",
+      "risk": "Backfilled history or ambiguous count definitions could create convincing but contradictory evidence; seed records before deriving aggregates, declare population and coverage, preserve unavailable states, and assert reconciliation for every supported metric.",
+      "verify": "For each supported persona and period, the contributing execution count and summed cost equal the displayed figures, including prior-period comparisons. Completing one command-created run adds its completion and recorded cost once; duplicate settlement adds nothing and cancellation never becomes completion. These equalities survive five-view eviction and viewport changes, evidence opens outside table filters, unknown IDs show unavailable, hidden tabs freeze session time, and the existing bundle ceiling holds.",
+      "why_groundbreaking": "A dashboard number becomes an inspectable claim tied to the visitor's actions. The same underlying records make filtering, comparison and provenance agree.",
+      "parents": [
+        "P11",
+        "P12",
+        "P15"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P24",
+      "seat": "codex-gpt-6.1-sol_xhigh",
+      "round": 2,
+      "title": "Prove an outage recovered before clearing its alerts",
+      "kind": "deepen",
+      "outcome": "Repair the existing Slack outage, inspect a recorded verification run, and watch the related Health, Observability, SLA and Incidents records resolve together while unrelated problems and historical failures remain visible.",
+      "builds_on": "The declared Slack causeKey thread, tool-derived blast radius, mock command lifecycle, execution output viewer and existing tour launcher.",
+      "mechanism": "Introduce one demo-only outage episode above ViewOutlet, keyed by slack-circuit-break and explicitly joining in_slack, hi_2 and br_1. Configure records the attempted repair and starts a clearly labelled scripted Slack verification execution for Daily Standup Digest, with stable execution and event references. Require a recorded successful slack_send_message result before resolving the episode; failure, cancellation and generic run completion cannot clear it. Project live checks, issue status, breach resolution timestamps, correlated signals, navigation badges and Mission Control recovery from that episode while retaining historical failures and consumed budget. Offer the same episode as a short silent tour using actual mounted targets and accessible pointer and keyboard interaction; advance only after confirmed verification. Reset starts a new episode generation and invalidates obsolete callbacks.",
+      "anchors": [
+        "src/components/dashboard/views/health/index.tsx:30-58",
+        "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:116-122",
+        "src/lib/mock-dashboard-data.ts:148-158",
+        "src/lib/mock-dashboard-data.ts:749-759",
+        "src/lib/mockData.ts:1059-1063",
+        "src/lib/commands/mockCommandPlane.ts:145-172",
+        "src/lib/incidentCorrelate.ts:178-245",
+        "src/components/tour/TourSpotlight.tsx:178-196"
+      ],
+      "evidence": "Observed: Configure currently overlays local ok state and immediately hides the blast radius without a verification execution; the Slack check, issue and breach already share a causeKey, and Daily Standup Digest has recorded Slack usage. Hypothesis: an inspectable successful probe makes remediation more persuasive than a cosmetic state change or timed tour completion.",
+      "effort": "M",
+      "risk": "A generic completed run could falsely imply delivery succeeded, or resolution could clear unrelated incidents; require an explicit integration-specific result, retain exact episode membership, keep the DEMO label, make no external calls and translate the added states.",
+      "verify": "A failed or cancelled probe leaves the Slack episode open. A successful probe supplies an inspectable execution and event, resolves hi_2 and br_1 at the same session time, removes the single Health error badge and updates Mission Control recovery while br_2 and historical failures remain. Navigating through five views preserves the episode, resetting rejects stale callbacks, and the optional tour completes only on confirmed probe success.",
+      "why_groundbreaking": "Users can complete and audit a whole failure-to-recovery episode across the existing dashboard. Recovery has visible operational evidence and preserved history.",
+      "parents": [
+        "P03",
+        "P07",
+        "P09",
+        "P11"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P25",
+      "seat": "grok-grok-4.7_high",
+      "round": 2,
+      "title": "Bridge a named crew's commands without merging fleet totals",
+      "kind": "connect",
+      "outcome": "Pausing, running, or approving one of five named Board agents updates that same agent on the phone, in Executions, and in Reviews, and the pause is still there after a Board to Night shift round trip, while the other agents and the 47-run window stay as they are.",
+      "builds_on": "The Board reducer and the mock command plane already perform these verbs on separate fleets, and commandStore already refetches personas and executions when a phone command settles.",
+      "mechanism": "Choose five fleet.json ids other than the positional prefix IR01–LE05. Hoist the single useBoardSim to the personas stage so Board and Night shift read one reducer. A settled command for a crew id goes through mockCommandPlane’s existing write: pause flips enabled, run unshifts exec-<commandId>, a review updates the event, and commandStore refetches reviews beside the persona and execution refetches it already performs. A non-crew activity row renders no synced-page link. A crew run adds its own cost once onto today’s bucket of the existing daily series.",
+      "anchors": [
+        "src/components/dashboard/fleet-monitor/fleet-data.ts:116-120",
+        "src/components/dashboard/views/personas/index.tsx:136-139",
+        "src/components/dashboard/fleet-monitor/night/useNightRuntime.ts:16-18",
+        "src/stores/commandStore.ts:168-181",
+        "src/lib/commands/mockCommandPlane.ts:361-369",
+        "src/lib/mockData.ts:952-963",
+        "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:13-19",
+        "src/lib/mockFleetConsistency.test.ts:10-20"
+      ],
+      "evidence": "Observed: DEFAULT_FLEET_SCALE is 99, the first five agents are Invoice Reconciler through Lead Enricher, fleet.json sums to 1634 runs and $148.15 against a 47-run $4.82 window, and each stage view constructs its own sim while only one is mounted. Hypothesis: one person who moves on both surfaces teaches orchestration better than replacing every chart’s magnitude.",
+      "effort": "M",
+      "risk": "A partial map could show a paused phone row whose Board tile is a different person. The consistency test asserts the five id pairs share name and color, and a non-crew agent renders no synced link; the 14-day series stays the series the fixture tests already pin.",
+      "verify": "Pause crew agent A on the phone, then open Board, Night shift, and Board again: A’s tile stays paused. Run A on the Board: Executions shows exec-<commandId> once and today’s observability cost rises by that run only. A non-crew activity row has no executions href. A reload still shows the 47-run window.",
+      "why_groundbreaking": "The visitor can act on a person and see that person move on the other surface, which is the demo’s missing causal step, while the hand-tuned fleet the rest of the dashboard is pinned to stays intact.",
+      "parents": [
+        "P02",
+        "P06",
+        "P12"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    },
+    {
+      "id": "P26",
+      "seat": "grok-grok-4.7_high",
+      "round": 2,
+      "title": "Seek and close the Slack outage the links already name",
+      "kind": "leap",
+      "outcome": "Opening /dashboard/health?drill=slack-outage&t=180 shows the Slack webhook failing together with its blast radius, the SLA breach, and the observability issue. Configuring the webhook clears all four and the sidebar count, and End drill restores the outage. A link with t= shares that moment.",
+      "builds_on": "incidentThreads already joins in_slack, hi_2, and br_1 on causeKey slack-circuit-break, the blast radius already disappears once a check is ok, and frameAt can seek a script without timers.",
+      "mechanism": "projectSlack(t, actions) is a pure overlay on the members of causeKey slack-circuit-break. Health, SLA, Observability, the nav badge, and Mission Control’s recovery count read that overlay. Configure appends a resolve action stamped with the scenario clock. End drill clears the action list and the static fixtures show through. ?drill=slack-outage&t= seeks with frameAt. The tour recordings and the 99-agent stage stay as they are. The views keep rendering the thread they already link, and correlate() stays a test-only engine.",
+      "anchors": [
+        "src/lib/incidentThreads.ts:90-109",
+        "src/lib/mock-dashboard-data.ts:148-159",
+        "src/lib/mock-dashboard-data.ts:749-760",
+        "src/lib/mock-dashboard-data.ts:1734-1747",
+        "src/components/dashboard/views/health/index.tsx:33-40",
+        "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:117-122",
+        "src/components/dashboard/DashboardNavigation.tsx:104-107",
+        "src/lib/run-script/frameAt.ts:37-47"
+      ],
+      "evidence": "Observed: health resolutions die in local useState, MOCK_HEALTH_ALERTS is a module-load count of error checks and only in_slack is an error, useSlaData seeds MOCK_SLA_BREACHES once, the health folder has no Undo, and demoRealtime schedules one beat. Hypothesis: a linked outage that clears because the visitor clicked Configure is more convincing than a tour of click targets over a stale narration.",
+      "effort": "M",
+      "risk": "A seekable overlay can drift from the fixtures the tests pin. The overlay is keyed only by slack-circuit-break, the base fixtures stay immutable, and a test with no drill param asserts every reader returns today’s values, including a health badge of 1.",
+      "verify": "With no drill param, br_1 is ongoing, hi_2 is open, and the health badge is 1. Load ?drill=slack-outage&t=180 twice: both loads show in_slack in error and br_1 ongoing. Configure Slack: the badge drops to 0, br_1 reads resolved, hi_2 reads resolved, and the blast-radius block is gone. End drill restores all four. A second seed-free reload of the same t matches the first load.",
+      "why_groundbreaking": "The demo’s best causal chain becomes a moment a visitor can open, close, and hand to someone else, using the thread the product already draws.",
+      "parents": [
+        "P03",
+        "P07",
+        "P04"
+      ],
+      "anchor_check": {
+        "ok": 8,
+        "total": 8,
+        "bad": []
+      }
+    }
+  ],
+  "ratings": [
+    {
+      "id": "P06",
+      "score": 8,
+      "why": "Checked src/components/dashboard/views/personas/index.tsx:136-139, src/components/dashboard/fleet-monitor/night/useNightRuntime.ts:16-18, src/lib/supabaseApi.ts:799-812, and src/lib/incidentCorrelate.ts:236-245, confirming that switching between Board and Night shift resets simulation state and that standings() and correlate() are bypassed in demo mode, though replacing the 5-persona MOCK_PERSONAS roster with all 99 fleet.json agents creates high test and UI churn.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P07",
+      "score": 9,
+      "why": "Checked src/lib/run-script/frameAt.ts:37-58, src/lib/run-script/useRunClock.ts:21-68, src/lib/demoRealtime.ts:23-27,96-112, and src/lib/blastRadius.ts:43-65, confirming the seekable virtual clock and causal engines already exist to turn the single-beat demoRealtime channel into a replayable, URL-shareable incident drill once health and signal state are shared.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P08",
+      "score": 6,
+      "why": "Checked src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:160-170, src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-22, and src/components/dashboard/fleet-monitor/board/useBoardNav.ts:93-95, finding that linking HealthSectionCard blast-radius chips (p-0002-mock) to the Board (?agent=IR01) silently fails in openAgent unless fleet IDs are unified and KnowledgeEvidenceChip links open wrong-persona runs unless MOCK_KNOWLEDGE_PATTERNS is fixed.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P09",
+      "score": 8,
+      "why": "Checked src/components/tour/TourSpotlight.tsx:178-185, src/lib/tour-script.ts:295-339, and src/components/dashboard/views/home/index.tsx:28-35, confirming the fixed inset-0 z-[80] scrim lacks pointer-events-none (blocking clicks on spotlit controls) and the tour skips /dashboard/personas while relying on legacy cockpit anchor shims.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P10",
+      "score": 6,
+      "why": "Checked src/components/dashboard/fleet-monitor/board/agentLog.ts:4-27, src/i18n/pending/personasMonitor.ts:1027, and src/lib/run-script/useRunClock.ts:21-68, confirming the Board console renders a stylised log and useRunClock is unused in /dashboard, but authoring 9 team scripts inside one drawer has narrower value than fixing cross-view disconnects.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P11",
+      "score": 9,
+      "why": "Checked src/lib/mock-dashboard-data.ts:228-268, src/lib/mockData.ts:159-254,878-909, src/components/dashboard/views/knowledge/KnowledgeEvidenceChip.tsx:11-22, and src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx:132-139, confirming all three seeded lastExecutionId values point to executions owned by the wrong persona and getMockExecutionDetail falsely returns status 'completed' for missing IDs.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P12",
+      "score": 8,
+      "why": "Checked src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:10-20, src/lib/commands/mockCommandPlane.ts:361-369, src/lib/demoRealtime.ts:79, and src/components/dashboard/views/home/mission/useMissionReadings.ts:109-159, confirming that lifting the Board reducer into a session store while keeping the 5 canonical personas inside the 99-agent registry cleanly bridges Board actions to Executions and Mission Control.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P13",
+      "score": 5,
+      "why": "Checked src/components/dashboard/fleet-monitor/board/sim.ts:290-304 and src/components/dashboard/fleet-monitor/board/verbs.ts:45-60, which do distinguish pause (finishes active run) from cancel (stops run, keeps agent enabled), but building full state-snapshot branching and journal replay at effort L is heavy machinery to teach a single verb distinction.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P14",
+      "score": 4,
+      "why": "Checked src/lib/run-script/frameAt.ts:1-47, src/components/dashboard/fleet-monitor/board/sim.ts:12-50, and src/components/dashboard/views/personas/index.tsx:68-79, finding that frameAt only indexes a static Beat[] rather than the iterative simReducer and that placing the scrubber on the stage's demo badge row hides it on /dashboard/executions, /dashboard/events, and /dashboard/home—the three views P14's initial rollout targets.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P15",
+      "score": 4,
+      "why": "Checked src/components/dashboard/views/home/mission/useMissionReadings.ts:44-56, src/lib/mock-dashboard-data.ts:228-270,604-680, and src/components/dashboard/spa/views.ts:48, finding that DailyMetric has no personaId, LeaderboardPersona and SLATarget have no timestamps, KnowledgePattern and SLABreach store personaName instead of personaId, and applying a 7d default to Home's 14-day series alters first-paint totals on a view marked scoped: false.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P16",
+      "score": 3,
+      "why": "Checked src/components/dashboard/views/personas/index.tsx:13-15, src/components/dashboard/fleet-monitor/fleet-data.ts:51-75, and src/lib/mockData.ts:160-255, finding that sourcing MOCK_PERSONAS from fleet.json pulls the 130 KB lazy-loaded fleet.json into /dashboard first-load JS, FleetAgent has hue rather than color, and renaming PR Review Agent to Invoice Reconciler while keeping existing fixture stories leaves Invoice Reconciler reviewing GitHub PRs and Redis outages.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P17",
+      "score": 5,
+      "why": "Checked src/lib/mock-dashboard-data.ts:228-268, src/components/dashboard/fleet-monitor/board/ActivityDrawer.tsx:29-38, and src/components/dashboard/fleet-monitor/fleet-data.ts:77-83, finding that P17 wires KnowledgeEvidenceChip without fixing the broken lastExecutionId persona mappings caught by P11 and that BoardEvent rows in ActivityDrawer carry no executionId or reviewId field to build a ?focus= link.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P18",
+      "score": 3,
+      "why": "Checked src/lib/demoRealtime.ts:70-94 and found emitReview hardcodes sourceId: null at line 79, so the demoRealtime review that P18 cues has no executionId and cannot navigate to /dashboard/executions?focus= after the visitor's verdict as claimed.",
+      "by": "agy-gemini-4-argon_high"
+    },
+    {
+      "id": "P01",
+      "score": 5,
+      "why": "Confirmed DashboardScopeBar is the only reader of useDashboardFilterStore and PerformanceView.tsx:29,101-105 duplicates CompareToggle, but prior-window deltas exist only in Observability's fixtures, MOCK_LEADERBOARD rows carry no timestamp to window, and eight views is not effort S.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P02",
+      "score": 4,
+      "why": "The write-through goal is right, but the anchors misstate the code (DEFAULT_FLEET_SCALE is 99 not 10; useBoardSim ticks every 1000 ms not 900) and mapping FLEET's first five slots (Invoice Reconciler, Ticket Triager...) onto PR Review Agent/Incident Responder puts them in the wrong team bays; P16 does this correctly.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P03",
+      "score": 7,
+      "why": "Verified HealthPage keeps resolutions in local useState (health/index.tsx:33), correlate() has only a test importer, and causeKey 'slack-circuit-break' already threads in_slack/hi_2/br_1, but the 'existing per-card Undo' mitigation does not exist in HealthSectionCard and in_slack's blast radius is all four slack_ callers, not the two named.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P04",
+      "score": 6,
+      "why": "Confirmed DASHBOARD_TOUR_STEPS has no actions and the dashboard chapter exits without a bridge (TourContext.tsx:108-116); handing off to concrete tasks is the right ending, but it keeps the stale dashboardHome narration over remapped anchors and does not design how the drill checkmarks detect completion across views.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P05",
+      "score": 5,
+      "why": "Verified KnowledgeEvidenceChip hardcodes /dashboard/executions, but adding useFocusParam to executions would resolve null because e-000x ids are not in DEMO_FOCUS_IDS, the per-review Director verdict is invented, and 'memory only with notes' diverges from the desktop, which learns from every verdict (manual_reviews.rs flip_status).",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P11",
+      "score": 7,
+      "why": "Both claims check out: kp_1..kp_3 cite e-0001..e-0003, owned by p1/p2/p3 while naming Incident/PR Review/Feedback, and getMockExecutionDetail returns 'completed' for an unknown id; a small honesty-first fix, though it does not address the focus allow-list that would block the link.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P12",
+      "score": 6,
+      "why": "The right problem with the best-stated risk (a partial connection adds contradictions), and its anchors hold (phone run_persona write-through at mockCommandPlane.ts:361-369, demoRealtime review sourceId null), but the mechanism stays abstract (registry, journal, virtual time) with an L cost and no measurable first slice beyond 'Board Run first'.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P13",
+      "score": 3,
+      "why": "Pause-vs-Cancel semantics are real (verbs.ts:45-55, sim.ts pause/cancel branches), but it is L effort, depends on a shared session that does not exist, and builds snapshot-and-branch replay to teach one nuance few evaluators come looking for; the 8/10 pilot cannot be measured here.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P14",
+      "score": 6,
+      "why": "Coherent and bold (busProjection is already pure; mockData stamps rows with Date.now() via ago()), and a shareable ?t= moment is a real upgrade, but frameAt is a beat indexer for one run script, not a fleet clock, and the cost of re-running the Board reducer on every seek and journaling user actions is undersold.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P15",
+      "score": 6,
+      "why": "Same verified dead-control gap as P01, handled more honestly (an explicit empty kept distinct from listNotServed, default unchanged, a tested predicate), but it pulls Home in although views.ts:46-47 deliberately leaves it unscoped, and leaderboard rows have no timestamp to window.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P16",
+      "score": 7,
+      "why": "Verified PhonePersonas reads personaStore while the stage reads fleet.json, and fleet.json already has natural crew matches (p004 PR Reviewer, p040 Incident Scribe, p094 Security Scanner, p047 Sentiment Scanner); the smallest coherent answer to Q5 that keeps the stage's mass, though the rename touches many fixture strings.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P17",
+      "score": 6,
+      "why": "Verified the chip drops the id and resolveFocus admits only DEMO_FOCUS_IDS, so admitting live store ids is the right fix, but linking today's provenance would open runs owned by a different persona (P11's catch) and the Board activity links depend on P16's crew.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P18",
+      "score": 4,
+      "why": "The 5 s ledger undo is real (ReviewsSplitPaneToasts.tsx:9-16), but the TourSpotlight overlay (fixed inset-0 z-[80], TourSpotlight.tsx:180) blocks the approve click the step waits for, and the cued demoRealtime review has sourceId null, so 'open the execution it belongs to' has nothing to open.",
+      "by": "claude-claude-opus-5-5_xhigh"
+    },
+    {
+      "id": "P01",
+      "score": 7,
+      "why": "DashboardScopeBar.tsx and PerformanceView.tsx confirm disconnected filters and duplicate Compare controls, but mockData.ts lacks persona-by-day history, so comparisons across eight views exceed the claimed S effort.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P02",
+      "score": 6,
+      "why": "useCommands.ts confirms the valuable integration gap, but fleet-data.ts defaults to 99 agents and mockCommandPlane.ts creates exec-<commandId> records, contradicting the proposal's default-scale and execution-ID assumptions.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P03",
+      "score": 7,
+      "why": "health/index.tsx and DashboardNavigation.tsx confirm disconnected remediation, but HealthSectionCard.tsx has no claimed Undo, the initial Health badge is 1, and ViewOutlet.tsx preserves four views instead of immediately forgetting resolutions.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P04",
+      "score": 4,
+      "why": "tour-script.ts confirms passive dashboard steps, but the proposed mission-attention and mission-pulse anchors do not exist, TourBridgeCard.tsx traps focus, and retaining the home recording preserves the stale narration.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P05",
+      "score": 5,
+      "why": "KnowledgeEvidenceChip.tsx confirms dropped execution IDs, but the cited mockCommandPlane.ts:174-200 handles chat and mock-dashboard-data.ts gives all three evidence-bearing patterns the wrong execution owner, which this learning loop leaves uncorrected.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P06",
+      "score": 8,
+      "why": "fleet.json confirms 1634 runs, $148.15 and 32 reviews, and useNightRuntime.ts confirms separate simulation ownership, but BoardEvent lacks execution IDs and costs and sim.ts caps its log at 400 events, requiring a richer history source.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P07",
+      "score": 4,
+      "why": "frameAt.ts selects script beats while mockApi.ts advances retries on reads, so reproducible fault consequences require substantial new replay machinery in addition to the prerequisite shared world.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P08",
+      "score": 7,
+      "why": "useFocusParam.ts and HealthSectionCard.tsx confirm valuable navigation gaps, but fleet-data.ts and mockData.ts use disjoint agent identities, so the promised Health-to-Board chain needs more than generalized URLs.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P09",
+      "score": 8,
+      "why": "tour-script.ts, home/index.tsx and TourSpotlight.tsx confirm stale narration, a missing Board chapter and blocked pointer access, making refreshed captions and advancement on confirmed actions valuable despite the shared-world dependency.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P10",
+      "score": 5,
+      "why": "agentLog.ts confirms reusable steps and illustrative transcripts, but explicitly identifies TEAM_TOOLS as demo names, so authoring nine scripts and removing the illustration caption does not establish the claimed shipped-tool fidelity.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P11",
+      "score": 10,
+      "why": "KnowledgeEvidenceChip.tsx, mock-dashboard-data.ts:228-268 and getMockExecutionDetail confirm the dropped ID, three wrong-owner references and fabricated completed fallback, making this focused provenance repair exceptionally valuable for S effort.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P12",
+      "score": 9,
+      "why": "layout.tsx, useBoardRuntime.ts, mockCommandPlane.ts:361-369 and useMissionReadings.ts confirm the integration seams, and the proposed journal, preserved canonical identities and exactly-once accounting directly address the central cross-view contradiction.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P13",
+      "score": 5,
+      "why": "sim.ts:290-304 and verbs.ts confirm meaningful Pause-versus-Cancel behavior, but frameAt.ts and useRunClock.ts reconstruct timing rather than application state, leaving expensive branching and timer isolation beyond the prerequisite session work.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P14",
+      "score": 3,
+      "why": "busProjection.ts supports pure projections, but sim.ts changes progression with scale and reduced motion, frameAt.ts supplies no state replay, and a seed-plus-time link cannot reproduce decisions unless it also carries their journal.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P15",
+      "score": 6,
+      "why": "Repository search confirms unused scope state, but dashboardFilterStore.ts already persists presets, LeaderboardPersona has no timestamp, and Mission Control currently sums 14 days, so one predicate cannot supply the promised aggregates or preserve today's first paint.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P16",
+      "score": 2,
+      "why": "fleet.json and mockData.ts confirm the identity mismatch, but retaining authored execution stories while changing only identity fields risks false provenance, and useCommands.ts remains a separate reducer with no specified phone-to-Board subscription.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P17",
+      "score": 7,
+      "why": "KnowledgeEvidenceChip.tsx and executions/index.tsx validate the focused navigation improvement, but BoardEvent carries neither execution nor review IDs and resolving only current-store rows cannot recover a missing record on a cold load.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P18",
+      "score": 3,
+      "why": "demoRealtime.ts gives the cued review sourceId null, TourSpotlight.tsx blocks clicks, and review-ledger.ts separates optimistic verdicts from command settlement, so the execution handoff cannot work as specified after merely waiting five seconds.",
+      "by": "codex-gpt-6.1-sol_xhigh"
+    },
+    {
+      "id": "P01",
+      "score": 8,
+      "why": "views.ts marks eight views scoped and only DashboardScopeBar plus clearUserCaches read the filter store, so wiring a persona-and-window predicate is a real S-sized gain even though the outcome skips the 24h preset the bar renders and leaves ActivityMetricsView’s own CompareToggle in place.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P02",
+      "score": 5,
+      "why": "The two fleets share no ids, but the first five fleet agents are IR01 Invoice Reconciler through LE05 Lead Enricher and DEFAULT_FLEET_SCALE is 99, so the scale=10 inclusion story is already true for every slice and the M plan would rename the wrong crew.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P03",
+      "score": 5,
+      "why": "in_slack, hi_2, and br_1 do share causeKey slack-circuit-break, but HealthSectionCard.tsx:99-108 is a focus comment with no Undo, cr_anthropic does not exist, and the health badge counts error checks of which the fixture has one (in_slack), not two.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P04",
+      "score": 5,
+      "why": "DASHBOARD_TOUR_STEPS has no actions and the dashboard launcher passes no bridgeHref, but HOME plus FEATURES define 16 action cues rather than 11, and TourContext.tsx:114 is the generic exit path.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P05",
+      "score": 5,
+      "why": "executeReviewDecide at mockCommandPlane.ts:88-99 only updates the review event, while the cited lines 174-200 are executeChat and do not touch MOCK_EVENTS, and the three patterned execution ids already belong to other personas.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P06",
+      "score": 7,
+      "why": "fleet.json does sum to 1634 runs, $148.15, and 32 reviews against the 47-run $4.82 window, and nothing under fleet-monitor imports a store, but standings and sloEngine run only from supabaseApi, so the L rewrite replaces the pinned magnitudes.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P07",
+      "score": 6,
+      "why": "fa243840 does say the remaining demos are not yet ported and demoRealtime schedules a single beat, but the drill is specified to wait on a separate one-world change, so this L does not itself produce the rehearsal.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P08",
+      "score": 7,
+      "why": "useFocusParam is consumed only by SLA, Observability, and Health, KnowledgeEvidenceChip links to the bare executions route, and the blast-radius personas are plain list items, which is a real dead end at S cost.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P09",
+      "score": 6,
+      "why": "The tour never routes to personas and TourSpotlight.tsx:178 is a full-screen layer that does not pass clicks through the cutout, but each step is specified to wait on a shared world store the dashboard does not have.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P10",
+      "score": 6,
+      "why": "agentLog.ts says the console draws a stylised transcript and useRunClock is used only by useMindRun, but FocusFilter holds a query and attention piles only, so a team id cannot be stored there.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P11",
+      "score": 8,
+      "why": "All three patterned lastExecutionIds point at another persona’s run, e-0004-mock is the PR Review context-window failure the oversized-diff pattern describes, and getMockExecutionDetail returns status completed when the id is absent.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P12",
+      "score": 6,
+      "why": "run_persona already unshifts an execution at mockCommandPlane.ts:361-369 and the Board sim lives inside useBoardSim, but folding all 99 agents into the synced summaries is the same L magnitude break as P06 with a journal in front of it.",
+      "by": "grok-grok-4.7_high"
+    },
+    {
+      "id": "P13",
+      "score": 4,
+      "why": "Pause lets the current run finish and Cancel stops it (sim.ts:290-304), but useRunClock only seeks a script and the acceptance check is an 8-of-10 study that ships after another shared-session project.",
+      "by": "grok-grok-4.7_high"
+    }
+  ],
+  "seats": {
+    "agy-gemini-4-argon_high": {
+      "letter": "A",
+      "spec": "agy:gemini-4-argon@high"
+    },
+    "claude-claude-opus-5-5_xhigh": {
+      "letter": "B",
+      "spec": "claude:claude-opus-5-5@xhigh"
+    },
+    "codex-gpt-6.1-sol_xhigh": {
+      "letter": "C",
+      "spec": "codex:gpt-6.1-sol@xhigh"
+    },
+    "grok-grok-4.7_high": {
+      "letter": "D",
+      "spec": "grok:grok-4.7@high"
+    }
+  },
+  "problems": {}
+}
