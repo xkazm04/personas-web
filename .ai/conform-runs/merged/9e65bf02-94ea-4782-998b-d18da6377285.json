@@ -1,0 +1,56 @@
+{
+  "schema": "conform-run/1",
+  "worker": "9e65bf02-94ea-4782-998b-d18da6377285",
+  "subject": "translation-quality-measurement",
+  "evaluatedAt": "2026-10-15T21:15:18.434546+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "translation-quality-measurement",
+      "context": "Manual Review Queue",
+      "reason": "The context implements human approval workflows for autonomous AI agent executions (ManualReviewItem) and escalation policies in the application dashboard, having no relationship to machine translation quality measurement."
+    },
+    {
+      "subject": "translation-quality-measurement",
+      "context": "Leaderboard & Rankings",
+      "reason": "The context evaluates and ranks autonomous agent personas across operational execution metrics (reliability, speed, cost, quality, volume), rather than evaluating machine translation engines or language pairs."
+    },
+    {
+      "subject": "translation-quality-measurement",
+      "context": "Notes (Goal Board)",
+      "reason": "The context implements desktop-to-web synced goal boards and quest log tracking across brainstorm and plan rails, containing no translation stores or measurement constructs."
+    },
+    {
+      "subject": "translation-quality-measurement",
+      "context": "Internationalization (14 locales)",
+      "reason": "withdrawn after review: reviewer (sonnet): src/i18n/localeRelease.ts:61 is an empty release list, and its comment says that is an owner-controlled gate, not a missing quality pipeline; the cs.ts mojibake (\"Pr\\u0139\\u017bvodce\", \"Bezpe\\u00c4\\u0164nost\") is real, but I found no evidence for the claim that no sampling protocol or measurement pi"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-15T21:15:18.434546+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "translation-quality-measurement"
+      ],
+      "techniques": [
+        "context-sufficiency-signals",
+        "cost-and-licence-of-measurement",
+        "deterministic-checks-before-estimates",
+        "engine-quality-from-reviewer-corrections",
+        "error-typology-over-a-single-score",
+        "human-review-sampling-under-a-budget",
+        "language-scoped-check-exemptions",
+        "per-pair-engine-selection",
+        "reference-free-quality-estimation",
+        "regression-detection-under-a-moving-engine"
+      ],
+      "deviations": 1,
+      "context": "Internationalization (14 locales)",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}

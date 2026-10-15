@@ -3839,6 +3839,73 @@
           "evidence": "src/components/dashboard/DesktopSidebar.tsx:135 The sidebar displays supplied health data; it performs no shared-protocol implementation discovery."
         }
       ]
+    },
+    "Theming, i18n & Shared Utilities/Internationalization (14 locales)/translation-quality-measurement": {
+      "context": "Internationalization (14 locales)",
+      "subject": "translation-quality-measurement",
+      "bundle": "localization",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T21:15:18.434Z",
+      "techniques": [
+        {
+          "technique": "human-review-sampling-under-a-budget",
+          "verdict": "deviation",
+          "evidence": "src/i18n/localeRelease.ts:61 The release list ships empty and leaves all 13 non-English locales unreleased because no stratified random sample or targeted review queue is defined to verify corpus fitness."
+        },
+        {
+          "technique": "deterministic-checks-before-estimates",
+          "verdict": "deviation",
+          "evidence": "src/i18n/cs.ts:28 Committed Czech translations contain unverified encoding corruption and lack deterministic placeholder skeleton parity or termbase checks before being bundled."
+        },
+        {
+          "technique": "error-typology-over-a-single-score",
+          "verdict": "deviation",
+          "evidence": "src/i18n/localeRelease.ts:51 Locale release metadata only tracks an unanchored release date without capturing multidimensional error categories such as accuracy, fluency, terminology, or locale convention."
+        },
+        {
+          "technique": "per-pair-engine-selection",
+          "verdict": "deviation",
+          "evidence": "src/i18n/localeRelease.ts:31 Supported languages are defined in a flat registry without per-pair machine translation engine selection or pair-specific evaluation datasets."
+        },
+        {
+          "technique": "language-scoped-check-exemptions",
+          "verdict": "deviation",
+          "evidence": "src/i18n/localeRelease.ts:28 The language metadata structure only tracks right-to-left layout and records no language-scoped check exemptions or orthographic equivalents for punctuation and scripts."
+        },
+        {
+          "technique": "regression-detection-under-a-moving-engine",
+          "verdict": "deviation",
+          "evidence": "src/i18n/localeRelease.ts:85 Locales are released or previewed via list membership without running a frozen probe set or tracking churn rates to guard against engine regressions."
+        },
+        {
+          "technique": "reference-free-quality-estimation",
+          "verdict": "deviation",
+          "evidence": "src/components/LanguageSwitcher.tsx:8 Reachable locales are served directly without reference-free quality estimation scores to order segments for reviewer attention."
+        },
+        {
+          "technique": "context-sufficiency-signals",
+          "verdict": "deviation",
+          "evidence": "src/i18n/en.ts:1 The source English contract defines raw translation keys without context notes or multi-model divergence checks to surface ambiguous source strings."
+        },
+        {
+          "technique": "engine-quality-from-reviewer-corrections",
+          "verdict": "deviation",
+          "evidence": "src/components/LocaleOffer.tsx:78 The application accepts locale selections but tracks no human post-edit distance, approved-unchanged rates, or reviewer correction signals to gauge translation quality."
+        },
+        {
+          "technique": "cost-and-licence-of-measurement",
+          "verdict": "deviation",
+          "evidence": "src/i18n/localeRelease.ts:48 The release entry interface records no model checkpoint pins, cost ladder tiers, or weight licensing constraints for quality estimation instruments."
+        }
+      ],
+      "registryProposal": "For web applications where client-side runtime deep-merge silently falls back to source English, translation quality measurement standards should specify sampling thresholds that explicitly distinguish between missing-key fallback and mistranslated content.",
+      "withdrawn": {
+        "worker": "9e65bf02-94ea-4782-998b-d18da6377285",
+        "state": "deviation",
+        "at": "2026-10-15T21:15:38.057722+00:00",
+        "reason": "reviewer (sonnet): src/i18n/localeRelease.ts:61 is an empty release list, and its comment says that is an owner-controlled gate, not a missing quality pipeline; the cs.ts mojibake (\"Pr\\u0139\\u017bvodce\", \"Bezpe\\u00c4\\u0164nost\") is real, but I found no evidence for the claim that no sampling protocol or measurement pi"
+      }
     }
   }
 }
