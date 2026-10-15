@@ -7100,11 +7100,11 @@
           "revision": 15,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "not-applicable",
-          "evidence": "src/app/dashboard/observability/activity-view/AthenaSpendLane.tsx:47-105 and PerformanceView.tsx:63/103-110 (BUDGET_THRESHOLD banner) only render spend figures sourced from mock fixtures (useActivityMetrics.ts:26 via mockApi) or api.getObservability — no price table, usage ledger, preflight estimation, or budget-enforcement gate exists anywhere in these files; the 0.8 threshold banner is a presentational comparison, not an enforcement point that blocks a call.",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256:c701b1133c188f8a",
-          "stale": true
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:51 The observability spend view plots total daily cost without isolating failed-call spend into its own series or providing row-level drill-down to underlying ledger rows, folding failure waste invisibly into aggregate spend.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:7247db31eb8f3dce",
+          "evaluatedRevision": 15
         },
         {
           "subject": "data-viz",

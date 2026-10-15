@@ -1,0 +1,66 @@
+{
+ "schema": "conform-run/1",
+ "worker": "b6a70212-054a-4478-ac05-28f320c2b741",
+ "subject": "cost-metering",
+ "evaluatedAt": "2026-10-15T02:10:12.275757+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "cost-metering",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:51 The observability spend view plots total daily cost without isolating failed-call spend into its own series or providing row-level drill-down to underlying ledger rows, folding failure waste invisibly into aggregate spend.",
+   "techniques": [
+    {
+     "technique": "spend-observability",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:51 The daily spend chart folds failed-call spend into aggregate cost rather than tracking money spent on failed calls as its own series, and provides no row-level drill-down."
+    },
+    {
+     "technique": "spend-attribution",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceSpendCard.tsx:42 Per-agent spend card maps only known personas and omits an unattributed spend bucket, hiding unattributed spend."
+    },
+    {
+     "technique": "budget-enforcement",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:74 Budget checks are advisory client-side threshold comparisons (BUDGET_THRESHOLD = 0.8) displaying an alert banner rather than gating call paths."
+    },
+    {
+     "technique": "usage-ledgers",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:28 Activity metrics spend summary is only fetched from demo-only mock data via useDemoOnlySWR with no synced durable usage ledger behind it in production."
+    }
+   ],
+   "registryProposal": "spend-observability should clarify whether consumer dashboards consuming pre-aggregated daily metrics are expected to synthesize failure spend breakdowns or if upstream aggregation schemas must explicitly provide them."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "cost-metering",
+   "context": "Authentication & User Session",
+   "reason": "Precondition does not hold: authentication and user session files handle user authentication, OAuth callbacks, and cache invalidation, with no code paths for token metering, price tables, or budget enforcement."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-15T02:10:12.275757+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "cost-metering"
+   ],
+   "techniques": [
+    "budget-enforcement",
+    "spend-attribution",
+    "spend-observability",
+    "usage-ledgers"
+   ],
+   "deviations": 1,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

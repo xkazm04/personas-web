@@ -25,19 +25,40 @@
       "context": "Observability Charts & SLA",
       "subject": "cost-metering",
       "bundle": "software-engineering",
-      "state": "not-applicable",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T02:10:12.275Z",
+      "worker": "b6a70212-054a-4478-ac05-28f320c2b741",
       "techniques": [
         {
-          "technique": "budget-enforcement",
-          "verdict": "not-applicable",
-          "evidence": "PerformanceView.tsx:63 overBudgetPersonas only drives a warning banner (lines 103-110); no call is ever refused"
+          "technique": "spend-observability",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:51 The daily spend chart folds failed-call spend into aggregate cost rather than tracking money spent on failed calls as its own series, and provides no row-level drill-down."
         },
         {
-          "technique": "spend-observability",
-          "verdict": "not-applicable",
-          "evidence": "AthenaSpendLane.tsx:47-105 displays totals it does not compute or meter; the metering system, if any, is outside this repo"
+          "technique": "spend-attribution",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceSpendCard.tsx:42 Per-agent spend card maps only known personas and omits an unattributed spend bucket, hiding unattributed spend."
+        },
+        {
+          "technique": "budget-enforcement",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:74 Budget checks are advisory client-side threshold comparisons (BUDGET_THRESHOLD = 0.8) displaying an alert banner rather than gating call paths."
+        },
+        {
+          "technique": "usage-ledgers",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:28 Activity metrics spend summary is only fetched from demo-only mock data via useDemoOnlySWR with no synced durable usage ledger behind it in production."
+        }
+      ],
+      "registryProposal": "spend-observability should clarify whether consumer dashboards consuming pre-aggregated daily metrics are expected to synthesize failure spend breakdowns or if upstream aggregation schemas must explicitly provide them.",
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/observability/activity-view/AthenaSpendLane.tsx:47-105 and PerformanceView.tsx:63/103-110 (BUDGET_THRESHOLD banner) only render spend figures sourced from mock fixtures (useActivityMetrics.ts:26 via mockApi) or api.getObservability — no price table, usage ledger, preflight estimation, or budget-enforcement gate exists anywhere in these files; the 0.8 threshold banner is a presentational comparison, not an enforcement point that blocks a call.",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by b6a70212-054a-4478-ac05-28f320c2b741"
         }
       ]
     },
