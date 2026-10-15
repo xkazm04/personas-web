@@ -5870,7 +5870,11 @@
           "revision": 3,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx:25 The graph's population stat is a count of agents on knowledge patterns, not a cohort of identifiable people.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:cb03bdda55f3119d",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"
@@ -7196,7 +7200,11 @@
           "revision": 3,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/UsageView.tsx:25 The usage tab loads product usage analytics of tool invocations, which this subject sets aside as telemetry about the product rather than measurement of identifiable people.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:cb03bdda55f3119d",
+          "evaluatedRevision": 3
         },
         {
           "subject": "measurement-honesty",
@@ -8476,7 +8484,11 @@
           "revision": 3,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardNavbar.tsx:66 The shell shows the signed-in account and routes between views; it does not publish a measurement report that names or ranks people.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:cb03bdda55f3119d",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"
@@ -9057,7 +9069,11 @@
           "revision": 3,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/analytics.ts:88 Web-vital events are tagged with the route alone, so this context measures product performance rather than identifiable people.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:cb03bdda55f3119d",
+          "evaluatedRevision": 3
         },
         {
           "subject": "stream-proxy-hop",

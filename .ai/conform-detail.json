@@ -2659,6 +2659,217 @@
           "evidence": "src/hooks/usePolling.ts:75 Serial scheduling applies only within one effect lifetime; cleanup does not settle or join the pending callback before a replacement lifetime starts."
         }
       ]
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/people-analytics-ethics": {
+      "context": "Observability Charts & SLA",
+      "subject": "people-analytics-ethics",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:11:23.751Z",
+      "worker": "4982dbba-2b8c-4bed-9766-622ed3da53fb",
+      "techniques": [
+        {
+          "technique": "naming-population-floor",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/UsageView.tsx:91 Usage bars are keyed by product persona, so there is no distinct-human cohort for a naming floor."
+        },
+        {
+          "technique": "aggregate-vs-individual-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:37 The rollup sums fleet outcome counts; it is not an org producer beside a person's own view."
+        },
+        {
+          "technique": "risk-framing-anonymization",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:118 The budget warning names agents over a spend threshold, not a person framed as a liability."
+        },
+        {
+          "technique": "contribution-eligibility-floors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/activity-view/AthenaSpendLane.tsx:65 Spend tiles are companion turn totals, so no person is admitted to a distribution or ranking."
+        },
+        {
+          "technique": "private-view-separation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:28 Activity data is one fleet snapshot with no viewer-scoped personal producer."
+        },
+        {
+          "technique": "producer-enforced-suppression",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/performance-view/CostAnomalyBanner.tsx:53 Anomalies publish a date and a dollar figure; there is no person-level field a floor would withhold."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/people-analytics-ethics": {
+      "context": "Knowledge Base",
+      "subject": "people-analytics-ethics",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:11:23.751Z",
+      "worker": "4982dbba-2b8c-4bed-9766-622ed3da53fb",
+      "techniques": [
+        {
+          "technique": "naming-population-floor",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:45 The distinct count is persona names on patterns, not people who would need a naming floor."
+        },
+        {
+          "technique": "aggregate-vs-individual-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:113 Rows are synced patterns and memories labeled with the owning persona, not a human self-view split from an org view."
+        },
+        {
+          "technique": "risk-framing-anonymization",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:45 Failure counts belong to the knowledge pattern, not a risk or gap claim about a person."
+        },
+        {
+          "technique": "contribution-eligibility-floors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/memories-view/MemoryCard.tsx:56 A memory card shows a persona chip; no person is gated into a ranking or distribution."
+        },
+        {
+          "technique": "private-view-separation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-dense-table/buildKnowledgeColumns.ts:10 The name column is the agent that owns the pattern, not a viewer's private engineering row."
+        },
+        {
+          "technique": "producer-enforced-suppression",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:32 The panel prints the pattern's persona name; there is no person-level withheld state to enforce."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Director Coaching/people-analytics-ethics": {
+      "context": "Director Coaching",
+      "subject": "people-analytics-ethics",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:11:23.751Z",
+      "techniques": [
+        {
+          "technique": "naming-population-floor",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:69 Roster membership is an agent, so a distinct-person naming floor has no human cohort to test."
+        },
+        {
+          "technique": "aggregate-vs-individual-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/director-page/ScoreDistributionCard.tsx:29 The histogram and the filtered table both describe agents in one coaching scope, not an org aggregate beside a person's own rows."
+        },
+        {
+          "technique": "risk-framing-anonymization",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:75 A low verdict flags an agent roster entry; it is not a liability claim about a person."
+        },
+        {
+          "technique": "contribution-eligibility-floors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:17 Fourteen days marks an agent review stale for a chip; it does not decide whether a human enters a ranking."
+        },
+        {
+          "technique": "private-view-separation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:21 One director snapshot feeds the command center; identity is not taken from the viewer as a self-only scope."
+        },
+        {
+          "technique": "producer-enforced-suppression",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:110 The identity column is the agent, so there is no person-level payload a producer floor would withhold."
+        }
+      ],
+      "registryProposal": "The subject defines its party as an identifiable human and carves out product telemetry, but it never says a named, scored, deficit-flagged product agent is out of scope. Director Coaching is that scoreboard for agents. A when-not-to-use line for software agents would stop human floors being applied to agent operations.",
+      "withdrawn": {
+        "worker": "4982dbba-2b8c-4bed-9766-622ed3da53fb",
+        "state": "not-applicable",
+        "at": "2026-10-15T00:11:51.916537+00:00",
+        "reason": "reviewer (sonnet): The cited anchor src/components/dashboard/views/director/index.tsx:25 is an import line, so it does not show the 'per-agent verdict history' claim; that wording sits in the doc comment a few lines below, and the absence of identifiable people was not shown at the anchor."
+      }
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/people-analytics-ethics": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "people-analytics-ethics",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:11:23.751Z",
+      "worker": "4982dbba-2b8c-4bed-9766-622ed3da53fb",
+      "techniques": [
+        {
+          "technique": "naming-population-floor",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardScopeBar.tsx:18 The scope control loads the operator's product personas, not a cohort of people."
+        },
+        {
+          "technique": "aggregate-vs-individual-split",
+          "verdict": "not-applicable",
+          "evidence": "src/app/dashboard/layout.tsx:15 The layout is chrome around the view the URL names; it does not build an org or a personal measurement producer."
+        },
+        {
+          "technique": "risk-framing-anonymization",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/FleetOptimizationCard.tsx:103 A fleet recommendation may name an agent; it is not a risk finding about a person."
+        },
+        {
+          "technique": "contribution-eligibility-floors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/ConnectionStatusIndicator.tsx:40 The indicator reads transport connection state, so no individual enters a distribution."
+        },
+        {
+          "technique": "private-view-separation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardScopeBar.tsx:24 Persona id filters which agent the operator is viewing; it is not a private view of one human that could be widened to colleagues."
+        },
+        {
+          "technique": "producer-enforced-suppression",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardNavbar.tsx:28 The only human string here is the signed-in account label, not a person-level measurement payload a floor would withhold."
+        }
+      ]
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/people-analytics-ethics": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "people-analytics-ethics",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:11:23.751Z",
+      "worker": "4982dbba-2b8c-4bed-9766-622ed3da53fb",
+      "techniques": [
+        {
+          "technique": "naming-population-floor",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:69 A page view carries the path and no person, so a naming floor has no cohort to count."
+        },
+        {
+          "technique": "aggregate-vs-individual-split",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:83 The series is a route-level web vital, not an organizational producer split from a person's own rows."
+        },
+        {
+          "technique": "risk-framing-anonymization",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sentry.ts:8 Error capture turns default PII off; it does not emit a risk or gap finding about a named person."
+        },
+        {
+          "technique": "contribution-eligibility-floors",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:111 Download events record platform, placement, and outcome, so no contributor is scored or ranked."
+        },
+        {
+          "technique": "private-view-separation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/PageViewTracker.tsx:17 The tracker records a normalized path; it has no identity scope that could return another person's rows."
+        },
+        {
+          "technique": "producer-enforced-suppression",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sentry-pii.ts:84 user_name is on the crash-event denylist; that scrubs error telemetry, which this subject treats as a different kind of scrubbing from a people-measurement floor."
+        }
+      ]
     }
   }
 }
