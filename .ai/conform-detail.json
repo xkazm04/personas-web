@@ -2870,6 +2870,225 @@
           "evidence": "src/lib/sentry-pii.ts:84 user_name is on the crash-event denylist; that scrubs error telemetry, which this subject treats as a different kind of scrubbing from a people-measurement floor."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/repository-landing-document": {
+      "context": "Mobile App Shell & Views",
+      "subject": "repository-landing-document",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:36:48.006Z",
+      "techniques": [
+        {
+          "technique": "caption-carrying-figures",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/Dial.tsx:66 This image belongs to the application's animated dial."
+        },
+        {
+          "technique": "evidence-linked-badges",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/DialFixed.tsx:28 The badge is application SVG artwork."
+        },
+        {
+          "technique": "host-metadata-is-a-second-document",
+          "verdict": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:14 This sets website route metadata, not repository-host fields."
+        },
+        {
+          "technique": "input-channel-distinction",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/CardLayer.tsx:102 Quoted content appears in an application dialog."
+        },
+        {
+          "technique": "landing-document-as-router",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/Chrome.tsx:36 This is the mobile page's chapter navigation."
+        },
+        {
+          "technique": "multi-surface-degradation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:15 This configures indexing of a website route."
+        },
+        {
+          "technique": "style-rule-ships-its-detector",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/ClockLanding.tsx:27 The module documents a website interaction, not a prose style guide."
+        },
+        {
+          "technique": "visual-text-cadence",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/Faq.tsx:130 These paragraphs render an interactive website FAQ."
+        }
+      ],
+      "withdrawn": {
+        "worker": "962d7bd3-c9b6-47e5-891d-8c48531f40d7",
+        "state": "not-applicable",
+        "at": "2026-10-15T00:37:09.379963+00:00",
+        "reason": "reviewer (sonnet): The anchor src/app/m2/page.tsx:19 is the closing of an unrelated `M2Page` component and shows no absence of a landing document; the not-applicable rests only on a shields.io/badge.svg grep and on the whole repo having a README.md the context never touches."
+      }
+    },
+    "Product Documentation (Guide)/Guide Content Blocks & Markdown/repository-landing-document": {
+      "context": "Guide Content Blocks & Markdown",
+      "subject": "repository-landing-document",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:36:48.006Z",
+      "techniques": [
+        {
+          "technique": "caption-carrying-figures",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/blocks/ArchitectureDiagram.tsx:22 This renders a diagram inside guide content."
+        },
+        {
+          "technique": "evidence-linked-badges",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/blocks/CardsBlock.tsx:71 The label is rendered inside an application card."
+        },
+        {
+          "technique": "host-metadata-is-a-second-document",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/GuideMarkdown.tsx:11 This component uses runtime translations, not repository-host settings."
+        },
+        {
+          "technique": "input-channel-distinction",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/blocks/CliBlock.tsx:53 The shell label belongs to a documentation-site component."
+        },
+        {
+          "technique": "landing-document-as-router",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/GuideBlocks.tsx:4 This is a component import facade, not a front-page document router."
+        },
+        {
+          "technique": "multi-surface-degradation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 This renders guide markup within the application."
+        },
+        {
+          "technique": "visual-text-cadence",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/blocks/CalloutStack.tsx:82 This renders individual guide fragments rather than composing a repository front page."
+        }
+      ],
+      "withdrawn": {
+        "worker": "962d7bd3-c9b6-47e5-891d-8c48531f40d7",
+        "state": "not-applicable",
+        "at": "2026-10-15T00:37:09.408862+00:00",
+        "reason": "reviewer (sonnet): The anchor GuideBlocks.tsx:3 is a re-export-shim comment that says nothing about repository landing documents, so the anchor is incidental."
+      }
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/repository-landing-document": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "repository-landing-document",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:36:48.006Z",
+      "techniques": [
+        {
+          "technique": "caption-carrying-figures",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/content/deployment.ts:19 The diagram is embedded in a localized guide topic."
+        },
+        {
+          "technique": "evidence-linked-badges",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/TranslationNotice.tsx:28 This is a translation notice within the guide UI."
+        },
+        {
+          "technique": "host-metadata-is-a-second-document",
+          "verdict": "not-applicable",
+          "evidence": "scripts/i18n/guide-drift.mjs:105 These topics are documentation records, not repository-host topics."
+        },
+        {
+          "technique": "input-channel-distinction",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/content/agents-prompts.ts:27 Prompt instructions belong to a keyed guide article."
+        },
+        {
+          "technique": "landing-document-as-router",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/content/getting-started.ts:26 This is a localized documentation topic, not the repository's entry document."
+        },
+        {
+          "technique": "multi-surface-degradation",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/getLocalized.test.ts:80 The test checks locale-unit serving rather than document syndication."
+        },
+        {
+          "technique": "style-rule-ships-its-detector",
+          "verdict": "not-applicable",
+          "evidence": "scripts/i18n/guide-drift.mjs:104 The classifier targets guide content freshness, not house prose style."
+        },
+        {
+          "technique": "visual-text-cadence",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/getLocalized.test.ts:83 The contract concerns complete localized topics rather than front-page density."
+        }
+      ],
+      "withdrawn": {
+        "worker": "962d7bd3-c9b6-47e5-891d-8c48531f40d7",
+        "state": "not-applicable",
+        "at": "2026-10-15T00:37:09.428507+00:00",
+        "reason": "reviewer (sonnet): The anchor emit-guide-status.mjs:56 is a `const CONTENT_DIR` declaration, which is incidental and does not show the precondition is absent."
+      }
+    },
+    "Infrastructure & Telemetry/SEO & Social Metadata/repository-landing-document": {
+      "context": "SEO & Social Metadata",
+      "subject": "repository-landing-document",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T00:36:48.006Z",
+      "techniques": [
+        {
+          "technique": "caption-carrying-figures",
+          "verdict": "not-applicable",
+          "evidence": "src/app/opengraph-image.tsx:14 This text is part of a generated website preview image."
+        },
+        {
+          "technique": "evidence-linked-badges",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/opengraph-image.tsx:12 This badge is preview-image artwork, not a repository evidence link."
+        },
+        {
+          "technique": "host-metadata-is-a-second-document",
+          "verdict": "not-applicable",
+          "evidence": "src/app/manifest.ts:13 This configures a web application, not a code host's About fields."
+        },
+        {
+          "technique": "input-channel-distinction",
+          "verdict": "not-applicable",
+          "evidence": "src/app/robots.ts:13 These are crawler directives, not reader input blocks."
+        },
+        {
+          "technique": "landing-document-as-router",
+          "verdict": "not-applicable",
+          "evidence": "src/app/sitemap.ts:67 A generated website sitemap is outside the landing-document routing rule."
+        },
+        {
+          "technique": "multi-surface-degradation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/guide/[category]/[topic]/opengraph-image.tsx:20 This preview represents a website guide page."
+        },
+        {
+          "technique": "style-rule-ships-its-detector",
+          "verdict": "not-applicable",
+          "evidence": "src/app/blog/[slug]/opengraph-image.tsx:42 This constructs a preview image rather than declaring prose style rules."
+        },
+        {
+          "technique": "visual-text-cadence",
+          "verdict": "not-applicable",
+          "evidence": "src/app/how/opengraph-image.tsx:15 Image-template tags do not constitute a repository landing document."
+        }
+      ],
+      "withdrawn": {
+        "worker": "962d7bd3-c9b6-47e5-891d-8c48531f40d7",
+        "state": "not-applicable",
+        "at": "2026-10-15T00:37:09.449213+00:00",
+        "reason": "reviewer (sonnet): The anchor manifest.ts:14 is the `start_url` field of the web-app manifest and does not itself show the repository-landing precondition is absent, so the anchor is incidental."
+      }
     }
   }
 }
