@@ -10,7 +10,15 @@
  * Timers start only on a user action, and the plane refuses to start in a
  * hidden tab (the use-playground-simulation precedent, CLAUDE.md rule 3).
  */
-import { MOCK_EXECUTIONS, MOCK_PERSONAS } from "@/lib/mockData";
+import {
+  MOCK_DAILY_METRICS,
+  MOCK_DAILY_PRIOR_METRICS,
+  MOCK_EXECUTIONS,
+  MOCK_OBSERVABILITY_METRICS,
+  MOCK_PERSONA_SPEND,
+  MOCK_PERSONAS,
+} from "@/lib/mockData";
+import { periodTrend } from "@/lib/observabilitySeries";
 import { MOCK_CHAT_DEVICE_ID, MOCK_CHAT_MESSAGES, MOCK_CHAT_SESSIONS, mockChatReply } from "@/lib/mock-dashboard-data";
 import { ATHENA_PERSONA_ID, CHAT_MESSAGE_MAX_BYTES, utf8Bytes, type ChatThreadKind } from "@/lib/chat/chatModel";
 import type { EventStatus, GlobalExecution, Persona, PersonaEvent } from "@/lib/types";
@@ -85,7 +93,7 @@ function reviewStatus(status: EventStatus): "pending" | "approved" | "rejected" 
  * the event's status plus the reviewer notes; like the desktop's synced row,
  * it records no resolver.
  */
-async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort): Promise<CommandRowUpdate> {
+async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort, changed: () => void): Promise<CommandRowUpdate> {
   const reviewId = typeof cmd.params.reviewId === "string" ? cmd.params.reviewId : "";
   const decision = cmd.params.decision;
   const notes = typeof cmd.params.notes === "string" && cmd.params.notes ? cmd.params.notes : null;
@@ -96,6 +104,7 @@ async function executeReviewDecide(cmd: MockCommand, reviews: MockReviewPort): P
   if (current !== "pending") return { id: cmd.id, status: "completed", result: { reviewId, status: current, changed: false } };
   const status: EventStatus = decision === "approved" ? "processed" : "failed";
   await reviews.update(reviewId, notes ? { status, metadata: JSON.stringify({ reviewerNotes: notes }) } : { status });
+  changed();
   return { id: cmd.id, status: "completed", result: { reviewId, status: decision, changed: true } };
 }
 
@@ -105,6 +114,53 @@ export function mockRunExecutionId(commandId: string): string {
 }
 
 type Schedule = (fn: () => void, ms: number) => void;
+
+/** Executions already counted into today's bucket (a run counts once). */
+const countedRuns = new Set<string>();
+
+/**
+ * A demo run that finished today counts once in the 14-day window's newest
+ * day: its cost and one successful execution, and the window totals, trends
+ * and the persona's spend row that are read from that series follow, so the
+ * observability screens still give one answer. The other 13 days, and every
+ * figure the fixtures were seeded with, stay as they are.
+ */
+export function countRunToday(run: Pick<GlobalExecution, "id" | "personaId" | "costUsd" | "personaName" | "personaColor">): void {
+  if (countedRuns.has(run.id) || !MOCK_DAILY_METRICS.length) return;
+  countedRuns.add(run.id);
+  const cost = run.costUsd;
+  const i = MOCK_DAILY_METRICS.length - 1;
+  const today = MOCK_DAILY_METRICS[i];
+  MOCK_DAILY_METRICS[i] = { ...today, cost: +(today.cost + cost).toFixed(4), executions: today.executions + 1, successes: today.successes + 1 };
+
+  const sum = (pick: (d: (typeof MOCK_DAILY_METRICS)[number]) => number) => MOCK_DAILY_METRICS.reduce((a, d) => a + pick(d), 0);
+  const executions = sum((d) => d.executions);
+  const trend = periodTrend(MOCK_DAILY_METRICS, MOCK_DAILY_PRIOR_METRICS);
+  Object.assign(MOCK_OBSERVABILITY_METRICS, {
+    totalCost: +sum((d) => d.cost).toFixed(2),
+    totalExecutions: executions,
+    successRate: +((sum((d) => d.successes) / executions) * 100).toFixed(1),
+    costTrend: +trend.cost.toFixed(1),
+    execTrend: +trend.executions.toFixed(1),
+    successTrend: +trend.success.toFixed(1),
+  });
+
+  const si = MOCK_PERSONA_SPEND.findIndex((s) => s.personaId === run.personaId);
+  if (si !== -1) {
+    const row = MOCK_PERSONA_SPEND[si];
+    MOCK_PERSONA_SPEND[si] = { ...row, totalCost: +(row.totalCost + cost).toFixed(4), executionCount: row.executionCount + 1 };
+  } else {
+    const persona = MOCK_PERSONAS.find((p) => p.id === run.personaId);
+    MOCK_PERSONA_SPEND.push({
+      personaId: run.personaId,
+      personaName: run.personaName ?? persona?.name ?? run.personaId,
+      personaColor: run.personaColor ?? persona?.color ?? "#64748b",
+      totalCost: cost,
+      executionCount: 1,
+      budgetUsd: persona?.maxBudgetUsd ?? null,
+    });
+  }
+}
 
 /** Move a fixture execution on, only from the status it is expected to be in (a cancel may have landed first). */
 function advance(executionId: string, from: GlobalExecution["status"], patch: (e: GlobalExecution) => Partial<GlobalExecution>): boolean {
@@ -167,7 +223,11 @@ function scheduleRunLifecycle(
         outputData,
       };
     });
-    if (done) changed();
+    if (done) {
+      const run = MOCK_EXECUTIONS.find((e) => e.id === executionId);
+      if (run) countRunToday(run);
+      changed();
+    }
   }, at.completedMs);
 }
 
@@ -395,7 +455,7 @@ export function runMockCommand(cmd: MockCommand, onUpdate: (row: CommandRowUpdat
       return;
     }
     // The verdict goes through the api, which answers asynchronously.
-    executeReviewDecide(cmd, deps.reviews ?? apiReviews)
+    executeReviewDecide(cmd, deps.reviews ?? apiReviews, changed)
       .catch((err: unknown): CommandRowUpdate => ({ id: cmd.id, status: "failed", error_message: err instanceof Error ? err.message : "failed" }))
       .then((row) => {
         if (!stopped) onUpdate(row);

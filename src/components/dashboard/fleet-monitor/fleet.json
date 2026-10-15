@@ -252,9 +252,9 @@
   {
    "id": "p004",
    "callsign": "PR04",
-   "name": "PR Reviewer",
+   "name": "PR Review Agent",
    "team": "eng",
-   "hue": 262,
+   "hue": 189,
    "enabled": true,
    "state": "input_required",
    "runningSinceMs": null,
@@ -307,16 +307,10 @@
    ],
    "reviews": [
     {
-     "id": "p004-r0",
+     "id": "ev-0016-mock",
      "severity": "warning",
-     "title": "Delete 412 stale records?",
-     "ageMin": 114
-    },
-    {
-     "id": "p004-r1",
-     "severity": "critical",
-     "title": "Merge needs a human look",
-     "ageMin": 451
+     "title": "Override Failing Check on Dependency Bump",
+     "ageMin": 180
     }
    ],
    "unreadMessages": [
@@ -3036,10 +3030,10 @@
   },
   {
    "id": "p047",
-   "callsign": "SS47",
-   "name": "Sentiment Scanner",
+   "callsign": "CF47",
+   "name": "Customer Feedback Analyzer",
    "team": "support",
-   "hue": 197,
+   "hue": 43,
    "enabled": true,
    "state": "running",
    "runningSinceMs": 702000,
@@ -3090,7 +3084,14 @@
     9,
     0
    ],
-   "reviews": [],
+   "reviews": [
+    {
+     "id": "ev-0005-mock",
+     "severity": "info",
+     "title": "Publish Weekly Insights to Slack",
+     "ageMin": 1440
+    }
+   ],
    "unreadMessages": []
   },
   {
@@ -4030,10 +4031,10 @@
   },
   {
    "id": "p063",
-   "callsign": "AD63",
-   "name": "Alert Deduper",
+   "callsign": "IR63",
+   "name": "Incident Responder",
    "team": "infra",
-   "hue": 9,
+   "hue": 350,
    "enabled": true,
    "state": "running",
    "runningSinceMs": 1021000,
@@ -4084,7 +4085,14 @@
     4,
     4
    ],
-   "reviews": [],
+   "reviews": [
+    {
+     "id": "ev-0004-mock",
+     "severity": "critical",
+     "title": "Proposed Incident Mitigation",
+     "ageMin": 14
+    }
+   ],
    "unreadMessages": []
   },
   {
@@ -5429,12 +5437,12 @@
   },
   {
    "id": "p085",
-   "callsign": "CW85",
-   "name": "Changelog Writer",
+   "callsign": "DS85",
+   "name": "Daily Standup Digest",
    "team": "eng",
-   "hue": 269,
+   "hue": 271,
    "enabled": true,
-   "state": "idle",
+   "state": "attention",
    "runningSinceMs": null,
    "task": null,
    "progress": null,
@@ -5483,7 +5491,14 @@
     0,
     0
    ],
-   "reviews": [],
+   "reviews": [
+    {
+     "id": "ev-0018-mock",
+     "severity": "info",
+     "title": "Add Two Repositories to the Digest",
+     "ageMin": 20
+    }
+   ],
    "unreadMessages": []
   },
   {
@@ -5982,11 +5997,11 @@
    "callsign": "SS94",
    "name": "Security Scanner",
    "team": "eng",
-   "hue": 259,
-   "enabled": true,
-   "state": "failed",
+   "hue": 158,
+   "enabled": false,
+   "state": "attention",
    "runningSinceMs": null,
-   "task": "Last run failed: tool timeout",
+   "task": null,
    "progress": null,
    "runsToday": 51,
    "successRate": 0.75,
@@ -6033,7 +6048,14 @@
     8,
     1
    ],
-   "reviews": [],
+   "reviews": [
+    {
+     "id": "ev-0017-mock",
+     "severity": "critical",
+     "title": "Revoke Leaked Deploy Token",
+     "ageMin": 85
+    }
+   ],
    "unreadMessages": []
   },
   {

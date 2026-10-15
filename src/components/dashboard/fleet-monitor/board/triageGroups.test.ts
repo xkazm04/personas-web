@@ -6,7 +6,8 @@ import { groupItems, groupPredicate, groupRetry, groupVerdicts, markAll, reconci
 import { makeOperator } from "./operator";
 import { planBatchUndo, type Command, type CommandSpec, type Commands } from "./useCommands";
 
-/* Triage by question: the 45 decisions at 99 agents are 16 questions. One
+/* Triage by question: the 47 decisions at 99 agents are 21 questions (the
+ * five crew agents carry their personas' own reviews, each its own question). One
  * judgment covers a homogeneous group; bulk-approve is withheld when any
  * member is critical; a batch is one Undo that reports a split honestly. */
 
@@ -19,22 +20,22 @@ const groups = groupItems(items, scope);
 const byTitle = (t: string) => groups.find((g) => g.title === t)!;
 
 describe("triage by question", () => {
-  it("groups the 45 decisions into 16: failures, singleton answers, drafts and 8 review questions", () => {
-    expect(items).toHaveLength(45);
-    expect(groups).toHaveLength(16);
+  it("groups the 47 decisions into 21: failures, singleton answers, drafts and 13 review questions", () => {
+    expect(items).toHaveLength(47);
+    expect(groups).toHaveLength(21);
     const keys = groups.flatMap((g) => g.members.map((m) => m.key));
-    expect(keys).toHaveLength(45);
+    expect(keys).toHaveLength(47);
     expect(new Set(keys)).toEqual(new Set(items.map((i) => i.key)));
     const of = (k: string) => groups.filter((g) => g.kind === k);
-    expect(of("failed").map((g) => g.members.length)).toEqual([4]);
+    expect(of("failed").map((g) => g.members.length)).toEqual([3]);
     expect(of("input").map((g) => g.members.length)).toEqual([1, 1, 1, 1, 1, 1]);
     expect(of("draft").map((g) => g.members.length)).toEqual([3]);
-    expect(of("review")).toHaveLength(8);
-    expect(byTitle("Merge needs a human look").members).toHaveLength(7);
+    expect(of("review")).toHaveLength(13);
+    expect(byTitle("Merge needs a human look").members).toHaveLength(6);
   });
 
   it("withholds bulk approve when any member is critical", () => {
-    expect(groupPredicate(byTitle("Merge needs a human look")).severities).toEqual({ critical: 5, warning: 2 });
+    expect(groupPredicate(byTitle("Merge needs a human look")).severities).toEqual({ critical: 4, warning: 2 });
     expect(groupVerdicts(byTitle("Merge needs a human look"))).toEqual(["sendback"]);
     expect(groupVerdicts(byTitle("Contract clause outside playbook"))).toEqual(["approve", "sendback"]);
   });
@@ -67,22 +68,22 @@ describe("triage by question", () => {
     const op = makeOperator({ commands, toast: () => {}, copy: c, hostName: "Studio PC", offline: false, simMs: 0 });
     const batchId = op.verdictBatch(g, false, scope);
     expect(batchId).toBe(7);
-    expect(sent).toHaveLength(7);
+    expect(sent).toHaveLength(6);
     expect(sent.every((x) => x.hold === true && x.spec.batch === 7 && x.spec.verb === "sendback")).toBe(true);
 
     const cmds: Command[] = sent.map((x, i) => ({ ...x.spec, id: 101 + i, status: "held" }));
     expect(planBatchUndo(cmds, 7)).toEqual({ undo: cmds.map((x) => x.id), alreadySent: 0 });
     const left = cmds.map((x, i) => (i === 2 ? { ...x, status: "sending" as const } : x));
     const plan = planBatchUndo(left, 7);
-    expect({ undone: plan.undo.length, alreadySent: plan.alreadySent }).toEqual({ undone: 6, alreadySent: 1 });
+    expect({ undone: plan.undo.length, alreadySent: plan.alreadySent }).toEqual({ undone: 5, alreadySent: 1 });
   });
 
   it("offers Retry counting only the members the rulebook admits (a paused one is skipped)", () => {
     const g = groups.find((x) => x.kind === "failed")!;
-    expect(g.members).toHaveLength(4);
+    expect(g.members).toHaveLength(3);
     // initSim(99) has no paused failed agent: construct one.
     const paused = scope.map((a) => (a.id === g.members[1].agentId ? { ...a, enabled: false } : a));
-    expect(groupRetry(g, paused)).toEqual({ verb: "retry", n: 3, skipped: 1 });
+    expect(groupRetry(g, paused)).toEqual({ verb: "retry", n: 2, skipped: 1 });
   });
 
   it("deciding a group adds its members to the tally and one-at-a-time resumes at the first undecided item", () => {
@@ -91,7 +92,7 @@ describe("triage by question", () => {
     const handled = markAll(new Map(), g.members.map((m) => m.key), "decided");
     expect([...handled.values()].filter((v) => v === "decided")).toHaveLength(5);
     const rest = triageList(snapshot, scope, new Set(handled.keys()));
-    expect(rest).toHaveLength(40);
+    expect(rest).toHaveLength(42);
     expect(rest.some((i) => handled.has(i.key))).toBe(false);
     expect(rest[0].key).toBe(snapshot.find((k) => !handled.has(k)));
   });

@@ -1,5 +1,6 @@
 import { resolveTicker } from "@/lib/motion/loop-gate";
 import { MOCK_EVENTS, MOCK_PERSONAS } from "@/lib/mockData";
+import { notifyDemoFixtureChange } from "@/lib/demoFixtureSignal";
 import type { ChannelLike } from "@/hooks/syncedRealtimeBindings";
 import type { PersonaEvent } from "@/lib/types";
 
@@ -87,6 +88,8 @@ export function createDemoChannel(opts: DemoChannelOptions): DemoChannel {
       retryCount: 0,
     };
     MOCK_EVENTS.unshift(event);
+    // A crew persona's new review also lands on its Board agent.
+    notifyDemoFixtureChange();
     emit("synced_manual_reviews", {
       eventType: "INSERT",
       new: { id: event.id, status: "pending", title: pick.title, severity: pick.severity, persona_id: persona.id },
