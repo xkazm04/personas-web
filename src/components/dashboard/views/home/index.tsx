@@ -11,6 +11,7 @@ import TourLauncher from "@/components/tour/TourLauncher";
 import { useGreeting } from "@/hooks/useGreeting";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
+import type { DateRangePreset } from "@/stores/dashboardFilterStore";
 import { loadTrafficChart } from "./home-page/TrafficErrorsCard";
 import { useLiveClock } from "./home-page/useLiveClock";
 import { DimDetail } from "./mission/DimDetail";
@@ -24,6 +25,14 @@ const HOME = "/dashboard/home";
 /** The shortest evidence body (one card); Deferred keeps it as a floor, so never larger. */
 const DETAIL_MIN_HEIGHT = 288;
 const hrefFor = (id: DimensionId) => `${HOME}?dim=${id}`;
+/** The header states the scope window the readings cover (set from any scoped view's bar). */
+const WINDOW_NOTE_KEY: Record<DateRangePreset, "last24h" | "last7d" | "last30d" | "last90d" | "custom"> = {
+  "24h": "last24h",
+  "7d": "last7d",
+  "30d": "last30d",
+  "90d": "last90d",
+  custom: "custom",
+};
 
 /** The guided tour's spotlight targets, carried over from the old cockpit regions. */
 const TOUR_ANCHORS: Partial<Record<DimensionId, { tourTarget: string }>> = {
@@ -49,7 +58,7 @@ export default function MissionControlView() {
   const displayName = user?.user_metadata?.full_name?.split(" ")[0] ?? t.dashboard.greetingFallback;
 
   const now = useLiveClock();
-  const { readings, sources, daily, issues } = useMissionReadings(now);
+  const { readings, sources, daily, issues, window } = useMissionReadings(now);
   const dims = DIMENSION_IDS.map((id, index) => describeDimension(id, index, readings, copy, now));
 
   const param = useSearchParams().get("dim");
@@ -67,7 +76,7 @@ export default function MissionControlView() {
             <GradientText variant="silver">{t.dashboard.missionControl}</GradientText>
           </h1>
           <p className="mt-1 text-base text-muted-dark">
-            {greeting}, {displayName} · {copy.windowNote}
+            {greeting}, {displayName} · {copy.windowNote[WINDOW_NOTE_KEY[window]]}
           </p>
         </div>
         <TourLauncher tourId="dashboard" />

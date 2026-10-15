@@ -1,9 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
+import { scopeKnowledge } from "@/components/dashboard/scope/scopeProjections";
+import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
 import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
+import { scopeHidAll } from "@/lib/dashboardScope";
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
 import { KNOWLEDGE_MEMORIES_KEY, memoryItemFromSynced } from "@/lib/knowledgeMemories";
@@ -61,8 +64,12 @@ function mapSyncedPattern(
 }
 
 export interface KnowledgeData {
+  /** Patterns in the scope bar's persona, last seen inside its window. */
   patterns: KnowledgePattern[];
+  /** Memories in the scope bar's persona (standing knowledge: the window does not apply). */
   memories: MemoryItem[];
+  /** The scope emptied a list that has rows. */
+  scopeEmpty: { patterns: boolean; memories: boolean };
   /** The patterns (and, in real mode, the memories) are loading. */
   loading: boolean;
   /** The demo's separate memories read is in flight (real mode loads them with the patterns, under `loading`). */
@@ -77,7 +84,8 @@ export interface KnowledgeData {
  * learned from this session's review verdicts, newest first, then the seeded
  * set; the command store refreshes it when the desktop writes). Real/supabase
  * mode → the synced knowledge patterns + memories, mapped into the web display
- * shapes with persona names resolved via the API.
+ * shapes with persona names resolved via the API. Either way the rows are then
+ * cut to the scope bar's persona + window (`scopeKnowledge`).
  */
 export function useKnowledgeData(): KnowledgeData {
   const isDemo = useAuthStore((s) => s.isDemo);
@@ -138,8 +146,13 @@ export function useKnowledgeData(): KnowledgeData {
     };
   }, [useMock, reloadKey]);
 
-  const patterns = useMock ? MOCK_KNOWLEDGE_PATTERNS : fetchedPatterns;
-  const memories = useMock ? (demoMemories.data ?? []) : fetchedMemories;
+  const allPatterns = useMock ? MOCK_KNOWLEDGE_PATTERNS : fetchedPatterns;
+  const allMemories = useMock ? demoMemories.data : fetchedMemories;
+  const scope = useDashboardScope();
+  const { patterns, memories } = useMemo(
+    () => scopeKnowledge({ patterns: allPatterns, memories: allMemories ?? [] }, scope),
+    [allPatterns, allMemories, scope],
+  );
   const loading = useMock ? false : fetchLoading;
   const memoriesLoading = useMock && demoMemories.data === undefined && !demoMemories.error;
   const error = useMock ? demoMemories.error : fetchError;
@@ -147,6 +160,10 @@ export function useKnowledgeData(): KnowledgeData {
   return {
     patterns,
     memories,
+    scopeEmpty: {
+      patterns: scopeHidAll(allPatterns, patterns),
+      memories: scopeHidAll(allMemories ?? [], memories),
+    },
     loading,
     memoriesLoading,
     error,

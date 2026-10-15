@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
+import { scopeLeaderboard } from "@/components/dashboard/scope/scopeProjections";
+import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
+import { scopeHidAll } from "@/lib/dashboardScope";
 import { useAuthStore } from "@/stores/authStore";
 import { getSyncedLeaderboard } from "@/lib/supabaseApi";
 import {
@@ -11,7 +14,12 @@ import {
 } from "@/lib/mock-dashboard-data";
 
 export interface LeaderboardData {
+  /** The rows in the scope bar's persona (scores have no time, so the window does not apply). */
   personas: LeaderboardPersona[];
+  /** The whole ranked field: ranks, the podium and the benchmark are counted here. */
+  ranked: LeaderboardPersona[];
+  /** The scope emptied a field that has rows. */
+  scopeEmpty: boolean;
   loading: boolean;
   error: string | null;
   retry: () => void;
@@ -20,7 +28,8 @@ export interface LeaderboardData {
 /**
  * Leaderboard data source. Dev/demo → the static mock (unchanged). Real/supabase
  * mode → the `synced_leaderboard` aggregate, normalized into composite + radar
- * axes by getSyncedLeaderboard.
+ * axes by getSyncedLeaderboard. Either way the rows shown follow the scope
+ * bar's persona; the field they rank in stays whole.
  */
 export function useLeaderboardData(): LeaderboardData {
   const isDemo = useAuthStore((s) => s.isDemo);
@@ -65,9 +74,18 @@ export function useLeaderboardData(): LeaderboardData {
     };
   }, [useMock, reloadKey]);
 
-  const personas = useMock ? MOCK_LEADERBOARD : fetchedPersonas;
+  const ranked = useMock ? MOCK_LEADERBOARD : fetchedPersonas;
+  const scope = useDashboardScope();
+  const personas = useMemo(() => scopeLeaderboard(ranked, scope), [ranked, scope]);
   const loading = useMock ? false : fetchLoading;
   const error = useMock ? null : fetchError;
 
-  return { personas, loading, error, retry: () => setReloadKey((k) => k + 1) };
+  return {
+    personas,
+    ranked,
+    scopeEmpty: scopeHidAll(ranked, personas),
+    loading,
+    error,
+    retry: () => setReloadKey((k) => k + 1),
+  };
 }

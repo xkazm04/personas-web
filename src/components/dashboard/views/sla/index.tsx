@@ -6,6 +6,7 @@ import { Activity } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useTranslation } from "@/i18n/useTranslation";
 
 import { SLABreachLog } from "./sla-page/SLABreachLog";
@@ -16,7 +17,8 @@ import { useSlaData } from "./useSlaData";
 export default function SLAPage() {
   const { t } = useTranslation();
   const [fetchedAt] = useState(() => Date.now());
-  const { targets, breaches, loading, error, retry } = useSlaData();
+  // Rows in the scope bar's persona + window (useSlaData); the summary counts them.
+  const { targets, breaches, scopeEmpty, loading, error, retry } = useSlaData();
   // T2 placeholders show only on a first load with nothing held (a refetch
   // keeps the last data); `coldStart` lets content that arrives after such a
   // load play its entrance, while data present on the first frame does not
@@ -64,6 +66,7 @@ export default function SLAPage() {
           objectives: t.slaPage.objectives,
         }}
       />
+      {scopeEmpty.targets && <ScopeEmpty compact />}
       <SLATargetGrid
         targets={targets}
         pending={pending}
@@ -82,7 +85,8 @@ export default function SLAPage() {
         settle={coldStart}
         labels={{
           title: t.slaPage.breachLog.title,
-          empty: t.slaPage.breachLog.empty,
+          // The scope emptied a log that has breaches: say that, not "no breaches".
+          empty: scopeEmpty.breaches ? t.dashboard.scope.emptyInScope : t.slaPage.breachLog.empty,
           all: t.slaPage.breachLog.all,
           duration: t.slaPage.breachLog.duration,
           ongoing: t.slaPage.breachLog.ongoing,

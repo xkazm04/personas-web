@@ -82,7 +82,7 @@ Per the [loading standard](loading-orchestration.md). The generic `SkeletonCard`
 ## Integration points
 
 - **i18n:** `directorPage` namespace in `src/i18n/en.ts` (title/subtitle/period, `kpi.*`, `momentum.*`, `breakdown.*`, `distribution.*`, `coaching.*` incl. `flags`/`flagHints`, `verdictFeed.*`) plus the `dashboard.director` nav label — translated in all 14 locales. Interpolation via literal `{n}` / `{count}` / `{reviewed}` / `{unreviewed}` tokens + `String.replace`.
-- **Nav:** one entry in `navItemDefs` (`src/components/dashboard/DashboardNavigation.tsx`), `scoped: false` — the page has its own period window and ignores the persona/date-range scope bar. Sits after Leaderboard, so it lands in the mobile "More" menu.
+- **Nav:** one entry in `navItemDefs` (`src/components/dashboard/DashboardNavigation.tsx`), `scope: []` in `spa/views.ts` — the page has its own period window and ignores the persona/date-range scope bar. Sits after Leaderboard, so it lands in the mobile "More" menu.
 - **Shared chrome:** `GlowCard`, `PersonaAvatar`, `StalenessIndicator`, `DashboardErrorBanner`, `GradientText`; `Deferred` + `ARRIVE`/`arriveAt` from `src/components/dashboard/arrival/`.
 - **Charting/animation:** Recharts via `src/lib/chart-theme.tsx`; `useChartAnimation()` gates the histogram; section entrances are the CSS `.dash-arrive` / `.dash-settle` tiers (reduced motion handled in `dashboard.css`).
 

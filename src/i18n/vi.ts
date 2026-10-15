@@ -486,6 +486,7 @@ export const vi: LocaleTranslations = {
       },
       scope: {
         allPersonas: "T\u1ea5t c\u1ea3 persona",
+        emptyInScope: "Không có gì trong khoảng thời gian này. Hãy thử khoảng rộng hơn hoặc tất cả persona.",
         personaLabel: "B\u1ed9 l\u1ecdc persona",
         compare: "So s\u00e1nh",
         dateRange: {
@@ -498,7 +499,13 @@ export const vi: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Số liệu trong 14 ngày gần nhất",
+          windowNote: {
+            last24h: "Số liệu trong 24 giờ gần nhất",
+            last7d: "Số liệu trong 7 ngày gần nhất",
+            last30d: "Số liệu trong 30 ngày gần nhất",
+            last90d: "Số liệu trong 90 ngày gần nhất",
+            custom: "Số liệu trong các ngày đã chọn"
+          },
           hint: "Nhấn 1 đến 8 để mở một chỉ số, Esc để quay lại",
           wallLabel: "Các chỉ số của đội tác nhân",
           openDimension: "Mở {label}",

@@ -70,6 +70,7 @@ Follows [loading-orchestration](loading-orchestration.md).
 | `src/components/dashboard/RelatedIncidentLinks.tsx` | "Related" chips labelled with the dashboard nav names |
 
 ## Data & state
+- **Scope:** `useSlaData` cuts objectives by persona (name-keyed) and breaches by persona + overlap with the window (`scopeSla`: an open breach is in every window after it began); a `?focus=` breach always stays. The summary tiles count the scoped rows. A list the scope emptied says "Nothing in this window" (`ScopeEmpty` above the grid; the breach log's empty line).
 - **Source:** `MOCK_SLA_TARGETS` (5 objectives) and `MOCK_SLA_BREACHES` (4 incidents) in `src/lib/mock-dashboard-data.ts`. Breach `startedAt`/`resolvedAt` are generated relative to `Date.now()` at module load so relative times stay fresh. In real mode, `getSyncedSla()` derives both from the `synced_leaderboard` Supabase view.
 - **Stores:** No Zustand store for SLA data itself — live-mode state is local (`useSlaData`'s `useState` + component-local `filter`/`openId`). `authStore.isDemo` selects mock vs. live mode; in demo, `useResolvedCausesStore` (session-only fixed causes, read through `useDemoThreads`) decides which thread breaches read closed. `systemStore` (global health) is *not* consumed by this surface.
 - **API routes:** None. Data is either in-process mocks (demo) or a direct Supabase query via `getSyncedSla` (live).

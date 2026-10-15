@@ -486,6 +486,7 @@ export const de: LocaleTranslations = {
       },
       scope: {
         allPersonas: "Alle Personas",
+        emptyInScope: "In diesem Zeitraum gibt es nichts. Wählen Sie einen längeren Zeitraum oder alle Personas.",
         personaLabel: "Persona-Filter",
         compare: "Vergleichen",
         dateRange: {
@@ -498,7 +499,13 @@ export const de: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Messwerte der letzten 14 Tage",
+          windowNote: {
+            last24h: "Messwerte der letzten 24 Stunden",
+            last7d: "Messwerte der letzten 7 Tage",
+            last30d: "Messwerte der letzten 30 Tage",
+            last90d: "Messwerte der letzten 90 Tage",
+            custom: "Messwerte für den gewählten Zeitraum"
+          },
           hint: "1 bis 8 \u00f6ffnet eine Dimension, Esc f\u00fchrt zur\u00fcck",
           wallLabel: "Dimensionen der Flotte",
           openDimension: "{label} \u00f6ffnen",

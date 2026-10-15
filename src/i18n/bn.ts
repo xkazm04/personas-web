@@ -486,6 +486,7 @@ export const bn: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\u09b8\u09ac \u09aa\u09be\u09b0\u09b8\u09cb\u09a8\u09be",
+        emptyInScope: "এই সময়সীমায় কিছু নেই। বড় সময়সীমা বা সব পারসোনা বেছে নিন।",
         personaLabel: "\u09aa\u09be\u09b0\u09b8\u09cb\u09a8\u09be \u09ab\u09bf\u09b2\u09cd\u099f\u09be\u09b0",
         compare: "\u09a4\u09c1\u09b2\u09a8\u09be \u0995\u09b0\u09c1\u09a8",
         dateRange: {
@@ -498,7 +499,13 @@ export const bn: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "গত 14 দিনের রিডিং",
+          windowNote: {
+            last24h: "গত 24 ঘণ্টার রিডিং",
+            last7d: "গত 7 দিনের রিডিং",
+            last30d: "গত 30 দিনের রিডিং",
+            last90d: "গত 90 দিনের রিডিং",
+            custom: "বেছে নেওয়া তারিখগুলোর রিডিং"
+          },
           hint: "কোনো মাত্রা খুলতে 1–8 চাপুন, ফিরতে Esc",
           wallLabel: "ফ্লিটের মাত্রা",
           openDimension: "{label} খুলুন",

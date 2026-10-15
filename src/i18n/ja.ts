@@ -486,6 +486,7 @@ export const ja: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\u3059\u3079\u3066\u306e\u30da\u30eb\u30bd\u30ca",
+        emptyInScope: "この期間には何もありません。期間を広げるか、すべてのペルソナを選んでください。",
         personaLabel: "\u30da\u30eb\u30bd\u30ca\u30d5\u30a3\u30eb\u30bf\u30fc",
         compare: "\u6bd4\u8f03",
         dateRange: {
@@ -498,7 +499,13 @@ export const ja: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "直近14日間の計測値です",
+          windowNote: {
+            last24h: "直近24時間の計測値です",
+            last7d: "直近7日間の計測値です",
+            last30d: "直近30日間の計測値です",
+            last90d: "直近90日間の計測値です",
+            custom: "選択した期間の計測値です"
+          },
           hint: "1〜8 キーで観点を開き、Esc キーで戻ります",
           wallLabel: "フリートの観点",
           openDimension: "{label}を開く",

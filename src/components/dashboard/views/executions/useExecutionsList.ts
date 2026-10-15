@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { scopeExecutions } from "@/components/dashboard/scope/scopeProjections";
+import { useDashboardScope } from "@/components/dashboard/scope/useDashboardScope";
 import { usePolling } from "@/hooks/usePolling";
+import { scopeHidAll } from "@/lib/dashboardScope";
 import { useExecutionStore, useEnrichedExecutions } from "@/stores/executionStore";
 import type { GlobalExecution } from "@/lib/types";
 
@@ -11,10 +14,13 @@ const isActive = (execution: GlobalExecution) =>
 
 /**
  * Data side of the executions view: the first fetch, polling while a run is
- * active, the status filter, its per-status counts and the paged window.
+ * active, the scope bar's persona + window, then the status filter, its
+ * per-status counts and the paged window.
  */
 export function useExecutionsList() {
-  const executions = useEnrichedExecutions();
+  const allExecutions = useEnrichedExecutions();
+  const scope = useDashboardScope();
+  const executions = useMemo(() => scopeExecutions(allExecutions, scope), [allExecutions, scope]);
   const executionsLoading = useExecutionStore((state) => state.executionsLoading);
   const executionsError = useExecutionStore((state) => state.executionsError);
   const fetchExecutions = useExecutionStore((state) => state.fetchExecutions);
@@ -36,7 +42,8 @@ export function useExecutionsList() {
     };
   }, [fetchExecutions]);
 
-  const hasRunning = useMemo(() => executions.some(isActive), [executions]);
+  // Poll for every active run, in scope or not: one out of scope still moves.
+  const hasRunning = useMemo(() => allExecutions.some(isActive), [allExecutions]);
   usePolling(fetchExecutions, 3_000, hasRunning);
 
   const filtered = useMemo(() => {
@@ -82,8 +89,12 @@ export function useExecutionsList() {
   );
 
   return {
-    /** Every loaded run, whatever the filter or page shows (a focused run is looked up here). */
+    /** Every loaded run, whatever the scope, filter or page shows (a focused run is looked up here). */
+    allExecutions,
+    /** The runs in the scope bar's persona + window. */
     executions,
+    /** The scope emptied a list that has runs: "nothing in this window", not "no runs". */
+    scopeEmpty: scopeHidAll(allExecutions, executions),
     executionsLoading,
     executionsError,
     cancellingIds,
@@ -98,6 +109,6 @@ export function useExecutionsList() {
     // matches — distinguish "filtered out" from a genuinely idle system.
     isFilteredEmpty: filter !== "all" && executions.length > 0 && filtered.length === 0,
     // First load with nothing held (a warm store skips it); errors fall through.
-    awaitingFirstData: !firstFetchSettled && executions.length === 0 && !executionsError,
+    awaitingFirstData: !firstFetchSettled && allExecutions.length === 0 && !executionsError,
   };
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { CloudOff } from "lucide-react";
 
 import CompareToggle from "@/components/dashboard/CompareToggle";
@@ -9,6 +8,7 @@ import EmptyState from "@/components/dashboard/EmptyState";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ViewGap from "@/components/dashboard/arrival/ViewGap";
 import { useTranslation } from "@/i18n/useTranslation";
+import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
 import { AthenaActionMixCard } from "./activity-view/AthenaActionMixCard";
 import { AthenaSpendLane } from "./activity-view/AthenaSpendLane";
 import { AthenaUsageCard } from "./activity-view/AthenaUsageCard";
@@ -25,7 +25,9 @@ import { useActivityMetrics } from "./activity-view/useActivityMetrics";
  */
 export default function ActivityMetricsView() {
   const { t } = useTranslation();
-  const [compare, setCompare] = useState(false);
+  // The dashboard's one Compare flag, shared with the Performance tab's toggle.
+  const compare = useDashboardFilterStore((s) => s.compareEnabled);
+  const setCompare = useDashboardFilterStore((s) => s.setCompareEnabled);
   const { athenaUsage, valueRollup, athenaActionMix, athenaLedger, isLoading, error, retry, liveUnavailable } =
     useActivityMetrics();
 
@@ -53,7 +55,7 @@ export default function ActivityMetricsView() {
   return (
     <div>
       <div className={`${ARRIVE} mb-6 flex justify-end`} style={arriveAt(1)}>
-        <CompareToggle enabled={compare} onToggle={() => setCompare((prev) => !prev)} />
+        <CompareToggle enabled={compare} onToggle={() => setCompare(!compare)} label={t.dashboard.scope.compare} />
       </div>
       <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(2)}>
         <AthenaUsageCard data={athenaUsage} compare={compare} />

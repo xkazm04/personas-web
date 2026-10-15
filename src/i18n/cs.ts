@@ -486,6 +486,7 @@ export const cs: LocaleTranslations = {
       },
       scope: {
         allPersonas: "V\u0161echny persony",
+        emptyInScope: "V tomto období nic není. Zkuste delší období nebo všechny persony.",
         personaLabel: "Filtr persony",
         compare: "Porovnat",
         dateRange: {
@@ -498,7 +499,13 @@ export const cs: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "\u00dadaje za posledn\u00edch 14 dn\u00ed",
+          windowNote: {
+            last24h: "Údaje za posledních 24 hodin",
+            last7d: "Údaje za posledních 7 dní",
+            last30d: "Údaje za posledních 30 dní",
+            last90d: "Údaje za posledních 90 dní",
+            custom: "Údaje za zvolená data"
+          },
           hint: "Kl\u00e1vesami 1 a\u017e 8 otev\u0159ete dimenzi, Esc v\u00e1s vr\u00e1t\u00ed zp\u011bt",
           wallLabel: "Dimenze flotily",
           openDimension: "Otev\u0159\u00edt {label}",

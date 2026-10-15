@@ -486,6 +486,7 @@ export const es: LocaleTranslations = {
       },
       scope: {
         allPersonas: "Todas las personas",
+        emptyInScope: "No hay nada en este periodo. Prueba un periodo más amplio o todas las personas.",
         personaLabel: "Filtro de persona",
         compare: "Comparar",
         dateRange: {
@@ -498,7 +499,13 @@ export const es: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Lecturas de los \u00faltimos 14 d\u00edas",
+          windowNote: {
+            last24h: "Lecturas de las últimas 24 horas",
+            last7d: "Lecturas de los últimos 7 días",
+            last30d: "Lecturas de los últimos 30 días",
+            last90d: "Lecturas de los últimos 90 días",
+            custom: "Lecturas de las fechas elegidas"
+          },
           hint: "Pulsa 1 a 8 para abrir una dimensi\u00f3n, Esc para volver",
           wallLabel: "Dimensiones de la flota",
           openDimension: "Abrir {label}",

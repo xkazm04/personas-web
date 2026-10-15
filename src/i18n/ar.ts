@@ -486,6 +486,7 @@ export const ar: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\u062c\u0645\u064a\u0639 \u0627\u0644\u0634\u062e\u0635\u064a\u0627\u062a",
+        emptyInScope: "لا شيء في هذه الفترة. جرّب فترة أوسع أو جميع الشخصيات.",
         personaLabel: "\u062a\u0635\u0641\u064a\u0629 \u0627\u0644\u0634\u062e\u0635\u064a\u0629",
         compare: "\u0645\u0642\u0627\u0631\u0646\u0629",
         dateRange: {
@@ -498,7 +499,13 @@ export const ar: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "القراءات تغطي آخر 14 يومًا",
+          windowNote: {
+            last24h: "القراءات تغطي آخر 24 ساعة",
+            last7d: "القراءات تغطي آخر 7 أيام",
+            last30d: "القراءات تغطي آخر 30 يومًا",
+            last90d: "القراءات تغطي آخر 90 يومًا",
+            custom: "القراءات تغطي التواريخ المختارة"
+          },
           hint: "اضغط 1–8 لفتح مؤشر، وEsc للعودة",
           wallLabel: "مؤشرات الأسطول",
           openDimension: "فتح {label}",

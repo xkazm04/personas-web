@@ -486,6 +486,7 @@ export const ko: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\ubaa8\ub4e0 \ud398\ub974\uc18c\ub098",
+        emptyInScope: "이 기간에는 아무것도 없습니다. 기간을 넓히거나 모든 페르소나를 선택하세요.",
         personaLabel: "\ud398\ub974\uc18c\ub098 \ud544\ud130",
         compare: "\u00eb\u0105\u201e\u0119\u00b5\u0090",
         dateRange: {
@@ -498,7 +499,13 @@ export const ko: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "최근 14일 기준 수치입니다",
+          windowNote: {
+            last24h: "최근 24시간 기준 수치입니다",
+            last7d: "최근 7일 기준 수치입니다",
+            last30d: "최근 30일 기준 수치입니다",
+            last90d: "최근 90일 기준 수치입니다",
+            custom: "선택한 날짜 기준 수치입니다"
+          },
           hint: "1~8 키로 지표를 열고 Esc 키로 돌아갑니다",
           wallLabel: "플릿 지표",
           openDimension: "{label} 열기",

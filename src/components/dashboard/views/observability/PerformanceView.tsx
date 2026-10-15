@@ -16,6 +16,7 @@ import { DEMO_THREAD_KEYS } from "@/lib/demoThreads";
 import { MOCK_COST_ANOMALIES, MOCK_COST_COMPARE, MOCK_EXEC_COMPARE, MOCK_ANNOTATIONS, type MockHealthIssue } from "@/lib/mock-dashboard-data";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useAuthStore } from "@/stores/authStore";
+import { useDashboardFilterStore } from "@/stores/dashboardFilterStore";
 import { useDemoThreads } from "@/hooks/useDemoThreads";
 import { CostAnomalyBanner } from "./performance-view/CostAnomalyBanner";
 import { PerformanceChartGrid } from "./performance-view/PerformanceChartGrid";
@@ -29,7 +30,10 @@ export default function PerformanceView() {
   const { t } = useTranslation();
   const isDemo = useAuthStore((s) => s.isDemo);
   const demoIssues = useDemoThreads().healthIssues;
-  const [compareEnabled, setCompareEnabled] = useState(false);
+  // The dashboard's one Compare flag (persisted with the scope), shared with
+  // the Activity tab: only Observability has a prior period to show.
+  const compareEnabled = useDashboardFilterStore((s) => s.compareEnabled);
+  const setCompareEnabled = useDashboardFilterStore((s) => s.setCompareEnabled);
   const [severityFilter, setSeverityFilter] = useState<SeverityFilter>("all");
   // A ?focus= deep link (e.g. back/forward onto a filtered list) must never
   // land on a row the severity filter hides: clear the filter when it changes.
@@ -103,7 +107,7 @@ export default function PerformanceView() {
           rather than show an empty/fabricated comparison. */}
       {isDemo && (
         <div className={`${ARRIVE} mb-6 flex justify-end`} style={arriveAt(1)}>
-          <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled((prev) => !prev)} />
+          <CompareToggle enabled={compareEnabled} onToggle={() => setCompareEnabled(!compareEnabled)} label={t.dashboard.scope.compare} />
         </div>
       )}
       {/* Cost-anomaly detection isn't synced — demo only. */}

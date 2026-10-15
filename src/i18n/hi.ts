@@ -486,6 +486,7 @@ export const hi: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\u0938\u092d\u0940 personas",
+        emptyInScope: "इस अवधि में कुछ नहीं है। लंबी अवधि या सभी पर्सोना चुनें।",
         personaLabel: "Persona \u092b\u093c\u093f\u0932\u094d\u091f\u0930",
         compare: "\u0924\u0941\u0932\u0928\u093e \u0915\u0930\u0947\u0902",
         dateRange: {
@@ -498,7 +499,13 @@ export const hi: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "रीडिंग पिछले 14 दिनों की हैं",
+          windowNote: {
+            last24h: "रीडिंग पिछले 24 घंटों की हैं",
+            last7d: "रीडिंग पिछले 7 दिनों की हैं",
+            last30d: "रीडिंग पिछले 30 दिनों की हैं",
+            last90d: "रीडिंग पिछले 90 दिनों की हैं",
+            custom: "रीडिंग चुनी गई तारीखों की हैं"
+          },
           hint: "कोई आयाम खोलने के लिए 1–8 दबाएँ, लौटने के लिए Esc",
           wallLabel: "फ़्लीट के आयाम",
           openDimension: "{label} खोलें",

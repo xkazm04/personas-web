@@ -17,10 +17,12 @@ import { ReviewsBulkToolbar } from "./reviews-split-pane/ReviewsBulkToolbar";
 import { ReviewsSplitPaneToasts } from "./reviews-split-pane/ReviewsSplitPaneToasts";
 import { useReviewKeyboardShortcuts } from "./reviews-split-pane/useReviewKeyboardShortcuts";
 import type { ReviewGate } from "./useReviewGate";
+import { useScopedReviews } from "./useScopedReviews";
 
 export default function ReviewsSplitPane({ now, canDecide }: { now: number; canDecide: ReviewGate["canDecide"] }) {
   const { t } = useTranslation();
-  const reviews = useReviewStore((s) => s.reviews);
+  // The queue in the scope bar's persona + window; first-load is judged on the whole list.
+  const { all, reviews, scopeEmpty } = useScopedReviews();
   const reviewsLoading = useReviewStore((s) => s.reviewsLoading);
   const fetchReviews = useReviewStore((s) => s.fetchReviews);
   const decide = useReviewStore((s) => s.decide);
@@ -37,7 +39,7 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
     setPrevLoading(reviewsLoading);
     if (!reviewsLoading) setFirstLoadDone(true);
   }
-  const waiting = !firstLoadDone && reviews.length === 0;
+  const waiting = !firstLoadDone && all.length === 0;
 
   useEffect(() => {
     void fetchReviews();
@@ -123,7 +125,7 @@ export default function ReviewsSplitPane({ now, canDecide }: { now: number; canD
               <ReviewsBulkToolbar bulkCount={bulkCount} pendingInFiltered={bulk.pendingInFiltered} bulkResolving={bulk.bulkResolving} decideDisabled={!bulkAllowed} clearSelection={bulk.clearSelection} selectAll={bulk.selectAll} handleBulkAction={bulk.handleBulkAction} />
             )}
           </AnimatePresence>
-          <ReviewList listRef={listRef} now={now} waiting={waiting} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
+          <ReviewList listRef={listRef} now={now} waiting={waiting} scopeEmpty={scopeEmpty} filtered={filtered} selectedId={selectedId} selectedIds={bulk.selectedIds} toggleSelect={bulk.toggleSelect} setSelectedId={setSelectedId} />
           {reviewsLoading && !waiting && (
             <div className="flex-shrink-0 flex items-center justify-center gap-1.5 py-1.5 border-t border-glass bg-white/[0.02]">
               <Loader2 className="h-3 w-3 animate-spin text-muted-dark" />

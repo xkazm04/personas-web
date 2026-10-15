@@ -60,6 +60,7 @@ It then renders two side-by-side panels (a 5-column grid: table spans 3, radar s
 | `src/lib/supabaseApi.ts` | `getSyncedLeaderboard()` real-data normalizer over the `synced_leaderboard` view (`:754`). |
 
 ## Data & state
+- **Scope:** persona only (`scopeLeaderboard`; scores have no time, so the bar shows no window here). The table shows the chosen persona's row with its fleet rank (`LeaderboardTable rankedAgainst`); the podium and the radar benchmark stay the whole field (`ranked`).
 - **Source:** Demo → static `MOCK_LEADERBOARD` (5 personas, pre-sorted by composite) in `src/lib/mock-dashboard-data.ts:560`. Real → `getSyncedLeaderboard()` over the Supabase `synced_leaderboard` view (`src/lib/supabaseApi.ts:754`).
 - **Stores:** `authStore` (Zustand) — only `isDemo` is read, to pick the data source. No leaderboard-specific store; selection/sort state is local component state.
 - **API routes:** None. Demo runs purely on the in-memory mock; real data goes directly to Supabase (anon key) via `supabaseApi`, not through a Next.js route handler.

@@ -20,10 +20,12 @@ import { useEventStore } from "@/stores/eventStore";
 import { EventsPageTabs, type PageTab } from "./events-page/EventsPageTabs";
 import { EventsVisualizationView } from "./events-page/EventsVisualizationView";
 import { tabCounts } from "./events-page/tabCounts";
+import { useScopedEvents } from "./useScopedEvents";
 
 export default function EventsPage() {
   const { t } = useTranslation();
-  const events = useEventStore((state) => state.events);
+  // The tab badge counts the list tab's rows: the scope bar's slice.
+  const { all: allEvents, events } = useScopedEvents();
   const listNotServed = useEventStore((state) => state.listNotServed);
   const subscriptions = useEventStore((state) => state.subscriptions);
   const subscriptionsRead = useEventStore((state) => state.subscriptionsRead);
@@ -80,7 +82,7 @@ export default function EventsPage() {
         <div className={ARRIVE} style={arriveAt(0)}>
           <EventsPageTabs
             activeTab={pageTab}
-            {...tabCounts({ events, listNotServed, subscriptions, subscriptionsRead })}
+            {...tabCounts({ events: allEvents, scopedEvents: events, listNotServed, subscriptions, subscriptionsRead })}
             listLabel={t.eventsPage.title}
             labels={{
               events: t.eventsPage.tabEvents,

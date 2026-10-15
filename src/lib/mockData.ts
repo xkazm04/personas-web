@@ -15,13 +15,16 @@ import type {
   ToolUsageByPersona,
 } from "./types";
 import { periodTrend } from "./observabilitySeries";
+import { DEMO_SEED_NOW } from "./demoClock";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
+// Anchored to the seed clock, so the dashboard scope's windows cut these rows
+// at the same place on every load (see ./demoClock).
 function ago(minutes: number): string {
-  return new Date(Date.now() - minutes * 60_000).toISOString();
+  return new Date(DEMO_SEED_NOW - minutes * 60_000).toISOString();
 }
 
 function id(prefix: string, n: number): string {
@@ -953,7 +956,7 @@ export const MOCK_STATUS: StatusResponse = {
 // ---------------------------------------------------------------------------
 
 function daysAgo(d: number): string {
-  const date = new Date(Date.now() - d * 86400_000);
+  const date = new Date(DEMO_SEED_NOW - d * 86400_000);
   return date.toISOString().split("T")[0];
 }
 

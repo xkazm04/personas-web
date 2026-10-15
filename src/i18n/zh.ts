@@ -486,6 +486,7 @@ export const zh: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\u6240\u6709 persona",
+        emptyInScope: "此时间范围内没有内容。请扩大时间范围或选择所有 persona。",
         personaLabel: "Persona \u7b5b\u9009",
         compare: "\u5bf9\u6bd4",
         dateRange: {
@@ -498,7 +499,13 @@ export const zh: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "数据涵盖最近 14 天",
+          windowNote: {
+            last24h: "数据涵盖最近 24 小时",
+            last7d: "数据涵盖最近 7 天",
+            last30d: "数据涵盖最近 30 天",
+            last90d: "数据涵盖最近 90 天",
+            custom: "数据涵盖所选日期"
+          },
           hint: "按 1 到 8 打开对应维度，按 Esc 返回",
           wallLabel: "集群维度",
           openDimension: "打开{label}",

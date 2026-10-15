@@ -486,6 +486,7 @@ export const id: LocaleTranslations = {
       },
       scope: {
         allPersonas: "Semua persona",
+        emptyInScope: "Tidak ada apa pun dalam rentang ini. Coba rentang yang lebih lebar atau semua persona.",
         personaLabel: "Filter persona",
         compare: "Bandingkan",
         dateRange: {
@@ -498,7 +499,13 @@ export const id: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Data mencakup 14 hari terakhir",
+          windowNote: {
+            last24h: "Data mencakup 24 jam terakhir",
+            last7d: "Data mencakup 7 hari terakhir",
+            last30d: "Data mencakup 30 hari terakhir",
+            last90d: "Data mencakup 90 hari terakhir",
+            custom: "Data mencakup tanggal yang dipilih"
+          },
           hint: "Tekan 1 sampai 8 untuk membuka dimensi, Esc untuk kembali",
           wallLabel: "Dimensi armada",
           openDimension: "Buka {label}",

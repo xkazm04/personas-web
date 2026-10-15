@@ -20,6 +20,7 @@ import { MessageRowGhosts } from "./messages-page/MessageRowGhosts";
 import { ThreadDetailModal } from "./messages-page/ThreadDetailModal";
 import { ThreadRow } from "@/components/dashboard/ThreadRow";
 import { useMessagesData } from "./useMessagesData";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useThreadReadState } from "./useThreadReadState";
 import PhoneMessages from "./phone/PhoneMessages";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -52,7 +53,7 @@ function MessagesPage() {
   const [view, setView] = useState<MessageView>("threads");
   const [fetchedAt] = useState(() => Date.now());
 
-  const { threads: baseThreads, loading, error, retry } = useMessagesData();
+  const { threads: baseThreads, scopeEmpty, loading, error, retry } = useMessagesData();
   const { threads, unreadCount, markThreadRead, markAllRead } = useThreadReadState(baseThreads);
 
   // Flat (list) view: every message, parent and reply, newest first. Statuses
@@ -140,6 +141,8 @@ function MessagesPage() {
 
       {loading ? (
         <MessageRowGhosts />
+      ) : scopeEmpty ? (
+        <ScopeEmpty />
       ) : isEmpty ? (
         <p className={`${ARRIVE} py-12 text-center text-sm text-muted-dark`} style={arriveAt(1)}>
           {t.messagesPage.empty}

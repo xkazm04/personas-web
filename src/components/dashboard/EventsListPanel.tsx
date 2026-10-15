@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Inbox, Radio } from "lucide-react";
 import EmptyState from "@/components/dashboard/EmptyState";
 import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
+import { useScopedEvents } from "@/components/dashboard/views/events/useScopedEvents";
 import { fadeUp } from "@/lib/animations";
 import type { PersonaEvent } from "@/lib/types";
 import { isEventDiscardable, isEventRetryable } from "@/lib/eventStatusFsm";
@@ -25,7 +27,8 @@ const EVENTS_LOAD_STEP = 200;
 
 export default function EventsListPanel() {
   const { t } = useTranslation();
-  const storeEvents = useEventStore((s) => s.events);
+  // The log in the scope bar's persona + window; "not served" reads the whole log.
+  const { all: allEvents, events: storeEvents, scopeEmpty } = useScopedEvents();
   const ledger = useEventStore((s) => s.ledger);
   // Pending verdicts painted over the rows: a poll cannot un-discard a row
   // inside its undo window, and the lane drains the moment a verdict is armed.
@@ -136,7 +139,7 @@ export default function EventsListPanel() {
         labels={t}
       />
       <motion.div variants={fadeUp}>
-        <DataTable<PersonaEvent> columns={columns} data={visibleEvents} keyExtractor={(event) => event.id} expandable={(event) => <EventExpandedContent event={event} />} rowClassName={rowClassName} emptyState={listNotServed && events.length === 0 ? <DesktopUnsupportedNote /> : <EventsEmptyState filter={filter} hasActiveFilters={hasActiveFilters} labels={t} />} />
+        <DataTable<PersonaEvent> columns={columns} data={visibleEvents} keyExtractor={(event) => event.id} expandable={(event) => <EventExpandedContent event={event} />} rowClassName={rowClassName} emptyState={listNotServed && allEvents.length === 0 ? <DesktopUnsupportedNote /> : scopeEmpty ? <ScopeEmpty /> : <EventsEmptyState filter={filter} hasActiveFilters={hasActiveFilters} labels={t} />} />
       </motion.div>
       {filtered.length > visibleEvents.length && (
         <motion.div variants={fadeUp} className="mt-3 flex items-center justify-center">

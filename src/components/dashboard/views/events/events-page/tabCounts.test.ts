@@ -14,6 +14,11 @@ describe("tabCounts", () => {
   it("reads 0 when served and empty", () => {
     expect(tabCounts(base).eventCount).toBe(0);
   });
+  it("counts the scope bar's slice, judging 'unknown' on the whole log", () => {
+    expect(tabCounts({ ...base, events: rows(5), scopedEvents: rows(2) }).eventCount).toBe(2);
+    expect(tabCounts({ ...base, events: rows(5), scopedEvents: [] }).eventCount).toBe(0);
+    expect(tabCounts({ ...base, listNotServed: true, scopedEvents: [] }).eventCount).toBeUndefined();
+  });
   it("hides the subscriptions count until a read has succeeded", () => {
     expect(tabCounts({ ...base, subscriptionsRead: false }).subscriptionCount).toBeUndefined();
     expect(tabCounts({ ...base, subscriptionsRead: false, subscriptions: rows(3) }).subscriptionCount).toBeUndefined();

@@ -5,6 +5,7 @@ import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import DataTable from "@/components/dashboard/DataTable";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { navigateDashboard } from "@/components/dashboard/spa/navigate";
 import { useFocusParam } from "@/hooks/useFocusParam";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -33,7 +34,8 @@ function dropFocusParam() {
 export default function ExecutionsPage() {
   const { t } = useTranslation();
   const {
-    executions,
+    allExecutions,
+    scopeEmpty,
     executionsLoading,
     executionsError,
     cancellingIds,
@@ -50,10 +52,11 @@ export default function ExecutionsPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // A `?focus=<id>` link (an evidence chip, a review's run) opens that run's
-  // detail. The record comes from the whole loaded list, so neither the status
-  // filter nor the page window can hide it, and a filter that would hide its
-  // row is cleared (the PerformanceView precedent). The URL losing the focus
-  // (Back) closes it. An unknown id resolves to null: no modal.
+  // detail. The record comes from the whole loaded list, so neither the scope,
+  // the status filter nor the page window can hide it, and a status filter that
+  // would hide its row is cleared (the PerformanceView precedent; the scope is
+  // the visitor's persisted choice and stays). The URL losing the focus (Back)
+  // closes it. An unknown id resolves to null: no modal.
   const focusId = useFocusParam();
   const [seenFocus, setSeenFocus] = useState<string | null>(null);
   if (focusId !== seenFocus) {
@@ -61,7 +64,7 @@ export default function ExecutionsPage() {
     setSelectedId(focusId);
     if (focusId && !filtered.some((execution) => execution.id === focusId)) handleFilterChange("all");
   }
-  const selected = selectedId ? (executions.find((execution) => execution.id === selectedId) ?? null) : null;
+  const selected = selectedId ? (allExecutions.find((execution) => execution.id === selectedId) ?? null) : null;
   const closeDetail = () => {
     setSelectedId(null);
     dropFocusParam();
@@ -133,12 +136,16 @@ export default function ExecutionsPage() {
               onRowClick={(row) => setSelectedId(row.id)}
               rowClassName={executionRowClassName}
               emptyState={
-                <ExecutionsEmptyState
-                  isFilteredEmpty={isFilteredEmpty}
-                  filter={filter}
-                  labels={t.executionsPage}
-                  onShowAll={() => handleFilterChange("all")}
-                />
+                scopeEmpty ? (
+                  <ScopeEmpty />
+                ) : (
+                  <ExecutionsEmptyState
+                    isFilteredEmpty={isFilteredEmpty}
+                    filter={filter}
+                    labels={t.executionsPage}
+                    onShowAll={() => handleFilterChange("all")}
+                  />
+                )
               }
             />
 

@@ -486,6 +486,7 @@ export const ru: LocaleTranslations = {
       },
       scope: {
         allPersonas: "\u0412\u0441\u0435 \u043f\u0435\u0440\u0441\u043e\u043d\u044b",
+        emptyInScope: "За этот период ничего нет. Выберите период пошире или все персоны.",
         personaLabel: "\u0424\u0438\u043b\u044c\u0442\u0440 \u043f\u043e \u043f\u0435\u0440\u0441\u043e\u043d\u0435",
         compare: "\u0421\u0440\u0430\u0432\u043d\u0438\u0442\u044c",
         dateRange: {
@@ -498,7 +499,13 @@ export const ru: LocaleTranslations = {
       },
       home: {
         mission: {
-          windowNote: "Показания за последние 14 дней",
+          windowNote: {
+            last24h: "Показания за последние 24 часа",
+            last7d: "Показания за последние 7 дней",
+            last30d: "Показания за последние 30 дней",
+            last90d: "Показания за последние 90 дней",
+            custom: "Показания за выбранные даты"
+          },
           hint: "Нажмите 1–8, чтобы открыть параметр, Esc — чтобы вернуться",
           wallLabel: "Параметры флота",
           openDimension: "Открыть: {label}",

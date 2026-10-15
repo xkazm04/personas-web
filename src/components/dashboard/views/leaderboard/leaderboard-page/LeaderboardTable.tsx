@@ -17,12 +17,15 @@ import {
 
 export function LeaderboardTable({
   personas,
+  rankedAgainst = personas,
   selectedId,
   compareId = "",
   labels,
   onSelect,
 }: {
   personas: LeaderboardPersona[];
+  /** The field a row's rank is counted in: the whole fleet, when the scope shows one persona's row. */
+  rankedAgainst?: LeaderboardPersona[];
   selectedId: string;
   compareId?: string;
   labels: {
@@ -38,7 +41,7 @@ export function LeaderboardTable({
   const [sortField, setSortField] = useState<LeaderboardSortField>("composite");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
-  const ranks = useMemo(() => rankByComposite(personas), [personas]);
+  const ranks = useMemo(() => rankByComposite(rankedAgainst), [rankedAgainst]);
   const ordered = useMemo(
     () => sortPersonas(personas, sortField, sortDir),
     [personas, sortField, sortDir],
@@ -74,6 +77,7 @@ export function LeaderboardTable({
           return (
             <motion.button
               key={persona.id}
+              data-leaderboard-row={persona.id}
               layout={reduce ? false : "position"}
               type="button"
               onClick={() => onSelect(persona.id)}

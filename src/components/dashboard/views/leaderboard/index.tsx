@@ -6,6 +6,7 @@ import { Trophy } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
 import EmptyState from "@/components/dashboard/EmptyState";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import StalenessIndicator from "@/components/dashboard/StalenessIndicator";
 import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import ViewGap from "@/components/dashboard/arrival/ViewGap";
@@ -21,7 +22,9 @@ import { useLeaderboardData } from "./useLeaderboardData";
 
 export default function LeaderboardPage() {
   const { t } = useTranslation();
-  const { personas, loading, error, retry } = useLeaderboardData();
+  // `personas`: the rows in the scope bar's persona; `ranked`: the whole field,
+  // which the podium, the ranks and the benchmark are counted in.
+  const { personas, ranked, scopeEmpty, loading, error, retry } = useLeaderboardData();
   // null = no explicit pick yet → fall back to the top-ranked persona. This
   // keeps the selection valid as data loads / changes without a sync effect.
   const [pickedId, setPickedId] = useState<string | null>(null);
@@ -39,7 +42,7 @@ export default function LeaderboardPage() {
 
   // The top-ranked persona doubles as the benchmark; we overlay its profile
   // faintly whenever a lower-ranked agent is in focus so the gap is legible.
-  const benchmark = personas[0];
+  const benchmark = ranked[0];
   const isComparing = Boolean(selected && benchmark && selected.id !== benchmark.id);
 
   const radarData = useMemo(() => {
@@ -63,8 +66,8 @@ export default function LeaderboardPage() {
   // Podium re-ranks by the selected dimension (composite or a single metric);
   // the detailed table+radar below keep their own composite ordering + sorts.
   const top = useMemo(
-    () => rankByDimension(personas, rankDim).slice(0, 3),
-    [personas, rankDim],
+    () => rankByDimension(ranked, rankDim).slice(0, 3),
+    [ranked, rankDim],
   );
 
   return (
@@ -94,6 +97,8 @@ export default function LeaderboardPage() {
         // reservation - the generic skeleton grid matched neither the podium
         // nor the table, and showed with no delay.
         <ViewGap />
+      ) : scopeEmpty ? (
+        <ScopeEmpty />
       ) : personas.length === 0 ? (
         <EmptyState
           icon={Trophy}
@@ -130,6 +135,7 @@ export default function LeaderboardPage() {
           <div className={`${ARRIVE} grid gap-6 lg:grid-cols-5`} style={arriveAt(2)}>
           <LeaderboardTable
             personas={personas}
+            rankedAgainst={ranked}
             selectedId={selectedId}
             labels={{
               rank: t.leaderboardPage.rank,

@@ -250,6 +250,8 @@
     };
     scope: {
       allPersonas: string;
+      /** A scoped list the persona + window emptied (distinct from "not served" and "none yet"). */
+      emptyInScope: string;
       personaLabel: string;
       compare: string;
       dateRange: {
@@ -263,7 +265,8 @@
     home: {
       /** Mission Control's annunciator wall (desktop parity, 2026-10). */
       mission: {
-        windowNote: string;
+        /** The header's statement of the scope window the readings cover, per window. */
+        windowNote: { last24h: string; last7d: string; last30d: string; last90d: string; custom: string };
         hint: string;
         wallLabel: string;
         /** {label} = the dimension's label. */
@@ -2389,6 +2392,7 @@ export const en: CoreTranslations = {
     },
     scope: {
       allPersonas: 'All personas',
+      emptyInScope: 'Nothing in this window. Try a wider window or all personas.',
       personaLabel: 'Persona filter',
       compare: 'Compare',
       dateRange: {
@@ -2401,7 +2405,13 @@ export const en: CoreTranslations = {
     },
     home: {
       mission: {
-        windowNote: 'Readings cover the last 14 days',
+        windowNote: {
+          last24h: 'Readings cover the last 24 hours',
+          last7d: 'Readings cover the last 7 days',
+          last30d: 'Readings cover the last 30 days',
+          last90d: 'Readings cover the last 90 days',
+          custom: 'Readings cover the chosen dates',
+        },
         hint: 'Press 1 to 8 to open a dimension, Esc to return',
         wallLabel: 'Fleet dimensions',
         openDimension: 'Open {label}',

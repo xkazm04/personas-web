@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Table2, GitFork, Brain } from "lucide-react";
 import GradientText from "@/components/GradientText";
 import DashboardErrorBanner from "@/components/dashboard/DashboardErrorBanner";
+import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { KNOWLEDGE_VIEW_KEY } from "@/lib/constants";
 import { useTranslation } from "@/i18n/useTranslation";
 // The Graph tab's shell (top bar + frame) is light and ships with the view so
@@ -39,7 +40,8 @@ function isViewVariant(value: string | null): value is ViewVariant {
 
 export default function KnowledgeGraphPage() {
   const { t } = useTranslation();
-  const { patterns, memories, loading, memoriesLoading, error, retry } = useKnowledgeData();
+  // Rows in the scope bar's persona + window (useKnowledgeData).
+  const { patterns, memories, scopeEmpty, loading, memoriesLoading, error, retry } = useKnowledgeData();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   // T2 placeholders only on a first load with nothing held (a retry keeps the
@@ -158,12 +160,19 @@ export default function KnowledgeGraphPage() {
       >
         {/* Each variant paints its own T1 chrome at once and holds its T2
             placeholder while a cold load is pending (see each component). */}
-        {activeVariant === "dense-table" && (
+        {/* A list the scope emptied says so instead of the variant's own "none yet". */}
+        {activeVariant === "memories" ? (
+          scopeEmpty.memories ? (
+            <ScopeEmpty />
+          ) : (
+            <MemoriesView memories={memories} pending={memoriesPending} settle={memoriesSettle} />
+          )
+        ) : scopeEmpty.patterns ? (
+          <ScopeEmpty />
+        ) : activeVariant === "dense-table" ? (
           <KnowledgeDenseTable patterns={patterns} pending={pending} settle={settle} />
-        )}
-        {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} pending={pending} />}
-        {activeVariant === "memories" && (
-          <MemoriesView memories={memories} pending={memoriesPending} settle={memoriesSettle} />
+        ) : (
+          <KnowledgeClusterGraph patterns={patterns} pending={pending} />
         )}
       </div>
     </div>
