@@ -112,14 +112,27 @@ function refetchReviews() {
 }
 
 /**
- * The demo desktop wrote its fixtures: re-read what the rows, the review queue
- * and the open chat show, and tell the readers outside the stores (the
+ * Re-read what the demo desktop has learned (a committed review verdict
+ * writes a memory). Written into the SWR cache directly, not just revalidated:
+ * Knowledge is usually a hidden view then, with no mounted reader to refetch.
+ */
+function refreshKnowledgeMemories() {
+  void Promise.all([import("swr"), import("@/lib/mockApi"), import("@/lib/knowledgeMemories")]).then(
+    ([{ mutate }, { getKnowledgeMemories }, { KNOWLEDGE_MEMORIES_KEY }]) =>
+      mutate(KNOWLEDGE_MEMORIES_KEY, getKnowledgeMemories(), { revalidate: false }),
+  );
+}
+
+/**
+ * The demo desktop wrote its fixtures: re-read what the rows, the review queue,
+ * the open chat and Knowledge show, and tell the readers outside the stores (the
  * Personas stage's crew, `fleet-monitor/world/crewBridge.ts`).
  */
 function onDemoFixtureChange() {
   refetchExecutions();
   refetchReviews();
   refreshChat();
+  refreshKnowledgeMemories();
   notifyDemoFixtureChange();
 }
 

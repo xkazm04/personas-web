@@ -18,6 +18,7 @@ import {
   type CostAnomaly,
 } from "./observabilitySeries";
 import type { HealthIssue } from "./types";
+import type { LearnedMemoryRow } from "./commands/reviewLearning";
 import type { SyncedNote } from "./notes/notesModel";
 import type { ChatMessage, ChatSession } from "./chat/chatModel";
 
@@ -575,6 +576,14 @@ export const MOCK_MEMORIES: MemoryItem[] = (() => {
   }
   return items;
 })();
+
+/**
+ * Persona memories the scripted desktop learned this session, newest first:
+ * one per review verdict it committed (mockCommandPlane, the desktop's
+ * `flip_status` learning loop, src/lib/commands/reviewLearning.ts). Rows are
+ * shaped like the synced `synced_memories` rows real mode reads.
+ */
+export const MOCK_LEARNED_MEMORIES: LearnedMemoryRow[] = [];
 
 // ── Leaderboard scores ──────────────────────────────────────────────
 // Composite score + 5-axis metrics profile per persona for radar chart.

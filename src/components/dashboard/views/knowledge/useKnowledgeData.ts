@@ -3,21 +3,20 @@
 import { useEffect, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 
+import { useDemoOnlySWR } from "@/hooks/useDemoOnlySWR";
 import { useAuthStore } from "@/stores/authStore";
 import { api } from "@/lib/api";
+import { KNOWLEDGE_MEMORIES_KEY, memoryItemFromSynced } from "@/lib/knowledgeMemories";
+import { getKnowledgeMemories } from "@/lib/mockApi";
 import {
   getSyncedKnowledgePatterns,
   getSyncedMemories,
   type SyncedKnowledgePattern,
-  type SyncedMemory,
 } from "@/lib/supabaseApi";
 import {
   MOCK_KNOWLEDGE_PATTERNS,
-  MOCK_MEMORIES,
   type KnowledgePattern,
-  type MemoryAction,
   type MemoryItem,
-  type MemoryStatus,
 } from "@/lib/mock-dashboard-data";
 
 const KNOWLEDGE_TYPES: KnowledgePattern["knowledgeType"][] = [
@@ -28,26 +27,11 @@ const KNOWLEDGE_TYPES: KnowledgePattern["knowledgeType"][] = [
   "data_flow",
 ];
 
-const MEMORY_TYPES: MemoryAction["type"][] = [
-  "throttle",
-  "schedule",
-  "alert",
-  "config",
-  "routing",
-];
-
 /** Coerce an arbitrary synced knowledge_type token into the web display union. */
 function normalizeKnowledgeType(raw: string): KnowledgePattern["knowledgeType"] {
   return (KNOWLEDGE_TYPES as string[]).includes(raw)
     ? (raw as KnowledgePattern["knowledgeType"])
     : "tool_sequence";
-}
-
-/** Coerce a synced memory category into the web display memory-action union. */
-function normalizeMemoryType(raw: string | null): MemoryAction["type"] {
-  return raw && (MEMORY_TYPES as string[]).includes(raw)
-    ? (raw as MemoryAction["type"])
-    : "config";
 }
 
 function mapSyncedPattern(
@@ -76,41 +60,24 @@ function mapSyncedPattern(
   };
 }
 
-function mapSyncedMemory(m: SyncedMemory, personaName: string): MemoryItem {
-  // importance is the desktop's 0..N weight; map onto the 1-10 display score.
-  const score = Math.max(1, Math.min(10, Math.round(m.importance ?? 5)));
-  return {
-    id: m.id,
-    type: normalizeMemoryType(m.category),
-    title: m.title,
-    description: m.content,
-    persona: personaName,
-    score,
-    // No accept/archive workflow is synced; treat every synced memory as active.
-    status: "active" as MemoryStatus,
-    // usageCount / lastUsed aren't tracked in the sync projection — leave them
-    // undefined so the card omits them rather than reporting a fabricated 0.
-    usageCount: undefined,
-    acceptedAt: m.createdAt,
-    lastUsed: undefined,
-    // Conflict detection is a desktop-only concept; never flag synced memories.
-    hasConflict: false,
-    sourceExecutionId: m.sourceExecutionId,
-  };
-}
-
 export interface KnowledgeData {
   patterns: KnowledgePattern[];
   memories: MemoryItem[];
+  /** The patterns (and, in real mode, the memories) are loading. */
   loading: boolean;
+  /** The demo's separate memories read is in flight (real mode loads them with the patterns, under `loading`). */
+  memoriesLoading: boolean;
   error: string | null;
   retry: () => void;
 }
 
 /**
- * Knowledge module data source. Dev/demo → the static mock fixtures (unchanged
- * behavior). Real/supabase mode → the synced knowledge patterns + memories,
- * mapped into the web display shapes with persona names resolved via the API.
+ * Knowledge module data source. Demo → the static pattern fixtures plus the
+ * memories read (`mockApi.getKnowledgeMemories`: what the scripted desktop
+ * learned from this session's review verdicts, newest first, then the seeded
+ * set; the command store refreshes it when the desktop writes). Real/supabase
+ * mode → the synced knowledge patterns + memories, mapped into the web display
+ * shapes with persona names resolved via the API.
  */
 export function useKnowledgeData(): KnowledgeData {
   const isDemo = useAuthStore((s) => s.isDemo);
@@ -118,7 +85,7 @@ export function useKnowledgeData(): KnowledgeData {
 
   // isDemo can flip mid-session, and a real→demo switch must replace the
   // previous account's patterns/memories instead of leaving them on screen.
-  // That's done by DERIVING the demo fixtures during render — only the fetched
+  // That's done by DERIVING the demo data during render — only the fetched
   // half is state. Re-seeding from the effect instead cost an extra render pass
   // before paint and still showed one frame of the previous account's rows.
   const [fetchedPatterns, setFetchedPatterns] = useState<KnowledgePattern[]>([]);
@@ -126,9 +93,11 @@ export function useKnowledgeData(): KnowledgeData {
   const [fetchLoading, setFetchLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  // Keyed only in demo (null key otherwise, so real mode never runs it).
+  const demoMemories = useDemoOnlySWR(KNOWLEDGE_MEMORIES_KEY, getKnowledgeMemories);
 
   useEffect(() => {
-    // Demo mode has nothing to fetch; the mock fixtures are derived below.
+    // Demo mode has nothing to fetch here; its data is derived below.
     if (useMock) return;
 
     let cancelled = false;
@@ -149,7 +118,7 @@ export function useKnowledgeData(): KnowledgeData {
         );
         setFetchedMemories(
           syncedMemories.map((m) =>
-            mapSyncedMemory(m, nameById.get(m.personaId) ?? m.personaId),
+            memoryItemFromSynced(m, nameById.get(m.personaId) ?? m.personaId),
           ),
         );
         setFetchError(null);
@@ -170,9 +139,17 @@ export function useKnowledgeData(): KnowledgeData {
   }, [useMock, reloadKey]);
 
   const patterns = useMock ? MOCK_KNOWLEDGE_PATTERNS : fetchedPatterns;
-  const memories = useMock ? MOCK_MEMORIES : fetchedMemories;
+  const memories = useMock ? (demoMemories.data ?? []) : fetchedMemories;
   const loading = useMock ? false : fetchLoading;
-  const error = useMock ? null : fetchError;
+  const memoriesLoading = useMock && demoMemories.data === undefined && !demoMemories.error;
+  const error = useMock ? demoMemories.error : fetchError;
 
-  return { patterns, memories, loading, error, retry: () => setReloadKey((k) => k + 1) };
+  return {
+    patterns,
+    memories,
+    loading,
+    memoriesLoading,
+    error,
+    retry: useMock ? demoMemories.retry : () => setReloadKey((k) => k + 1),
+  };
 }

@@ -39,7 +39,7 @@ function isViewVariant(value: string | null): value is ViewVariant {
 
 export default function KnowledgeGraphPage() {
   const { t } = useTranslation();
-  const { patterns, memories, loading, error, retry } = useKnowledgeData();
+  const { patterns, memories, loading, memoriesLoading, error, retry } = useKnowledgeData();
   const [activeVariant, setActiveVariant] = useState<ViewVariant>("dense-table");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   // T2 placeholders only on a first load with nothing held (a retry keeps the
@@ -48,6 +48,12 @@ export default function KnowledgeGraphPage() {
   const [coldStart] = useState(loading);
   const pending = loading && patterns.length === 0 && memories.length === 0;
   const settle = coldStart && !pending;
+  // Memories are their own read in demo (what the desktop learned this
+  // session), so their tab holds its reservation until they arrive rather
+  // than saying "no memories".
+  const [memoriesColdStart] = useState(memoriesLoading);
+  const memoriesPending = pending || (memoriesLoading && memories.length === 0);
+  const memoriesSettle = (coldStart || memoriesColdStart) && !memoriesPending;
 
   // Restore the persisted view on mount. Navigation remounts this page, which
   // would otherwise reset the switcher to "dense-table" on every visit.
@@ -148,7 +154,7 @@ export default function KnowledgeGraphPage() {
         role="tabpanel"
         id={`knowledge-panel-${activeVariant}`}
         aria-labelledby={`knowledge-tab-${activeVariant}`}
-        aria-busy={loading}
+        aria-busy={loading || (activeVariant === "memories" && memoriesLoading)}
       >
         {/* Each variant paints its own T1 chrome at once and holds its T2
             placeholder while a cold load is pending (see each component). */}
@@ -156,7 +162,9 @@ export default function KnowledgeGraphPage() {
           <KnowledgeDenseTable patterns={patterns} pending={pending} settle={settle} />
         )}
         {activeVariant === "cluster-graph" && <KnowledgeClusterGraph patterns={patterns} pending={pending} />}
-        {activeVariant === "memories" && <MemoriesView memories={memories} pending={pending} settle={settle} />}
+        {activeVariant === "memories" && (
+          <MemoriesView memories={memories} pending={memoriesPending} settle={memoriesSettle} />
+        )}
       </div>
     </div>
   );

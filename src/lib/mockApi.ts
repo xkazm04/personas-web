@@ -32,8 +32,12 @@ import {
   type DirectorPortfolio,
   type DirectorVerdict,
   type HealthCheckSection,
+  MOCK_LEARNED_MEMORIES,
+  MOCK_MEMORIES,
+  type MemoryItem,
   type ValueRollup,
 } from "./mock-dashboard-data";
+import { memoryItemFromSynced } from "./knowledgeMemories";
 import { ApiError, type ApiClient, type CommandAck } from "./api";
 import { currentDemoThreads, DEMO_THREAD_KEYS } from "./demoThreads";
 import { correlate, DEMO_CORRELATION_WINDOW_MS, demoSignals, type Incident } from "./incidentCorrelate";
@@ -542,6 +546,22 @@ export const DEMO_THREAD_SNAPSHOTS: Record<(typeof DEMO_THREAD_KEYS)[keyof typeo
   [DEMO_THREAD_KEYS.observability]: observabilitySnapshot,
   [DEMO_THREAD_KEYS.healthIssues]: healthIssuesSnapshot,
 };
+
+/**
+ * Knowledge > Memories for the demo: what the scripted desktop learned from
+ * this session's review verdicts (MOCK_LEARNED_MEMORIES, newest first), then
+ * the seeded set. Learned rows are desktop persona-memory rows and are read
+ * through the same mapper real mode uses for synced rows. Demo-only standalone
+ * fetcher; the command store refreshes its SWR key when the desktop writes.
+ */
+export async function getKnowledgeMemories(): Promise<MemoryItem[]> {
+  await delay(150);
+  const nameById = new Map(MOCK_PERSONAS.map((p) => [p.id, p.name]));
+  return [
+    ...MOCK_LEARNED_MEMORIES.map((m) => memoryItemFromSynced(m, nameById.get(m.personaId) ?? m.personaId)),
+    ...MOCK_MEMORIES.map((m) => ({ ...m })),
+  ];
+}
 
 /**
  * Director coaching snapshot for /dashboard/director: portfolio scorecard,

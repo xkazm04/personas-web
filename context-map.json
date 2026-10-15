@@ -1135,7 +1135,8 @@
             "src/components/dashboard/views/knowledge/memories-view/MemoryCard.tsx",
             "src/components/dashboard/views/knowledge/memories-view/ScoreDots.tsx",
             "src/components/dashboard/views/knowledge/memories-view/memoryViewConfig.ts",
-            "src/components/dashboard/views/knowledge/useKnowledgeData.ts"
+            "src/components/dashboard/views/knowledge/useKnowledgeData.ts",
+            "src/lib/knowledgeMemories.ts"
           ],
           "target": null,
           "apiRoutes": []
@@ -1175,6 +1176,7 @@
             "src/lib/review-voice-data.ts",
             "src/lib/review-voice.ts",
             "src/stores/reviewStore.ts",
+            "src/stores/reviewStore.learning.test.ts",
             "src/stores/reviewVoiceStore.ts",
             "src/lib/review-ledger.ts",
             "src/lib/review-ledger.test.ts",
@@ -1223,6 +1225,8 @@
             "src/lib/commands/liveCommandPlane.ts",
             "src/lib/commands/mockCommandPlane.test.ts",
             "src/lib/commands/mockCommandPlane.ts",
+            "src/lib/commands/reviewLearning.ts",
+            "src/lib/commands/reviewLearning.desktopParity.test.ts",
             "src/lib/commands/pairing.test.ts",
             "src/lib/commands/pairing.ts",
             "src/lib/commands/personaCommands.ts",
