@@ -60,7 +60,8 @@ function walk(dir: string, out: string[] = []): string[] {
     if (entry.isDirectory()) {
       if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
       walk(full, out);
-    } else if (/\.(ts|tsx)$/.test(entry.name)) {
+    } else if (/\.(ts|tsx|json)$/.test(entry.name)) {
+      // JSON fixtures carry data records too (the Board's fleet.json agents).
       out.push(full);
     }
   }
@@ -68,16 +69,16 @@ function walk(dir: string, out: string[] = []): string[] {
 }
 
 /**
- * Every source file except the tour script itself and this spec — otherwise the
- * selector literals in `tour-script.ts` would satisfy their own contract and the
- * gate would pass on a repo with zero anchors left in it.
+ * Every source file except the tour script itself and the specs — otherwise the
+ * selector literals in `tour-script.ts` (or a test quoting one) would satisfy
+ * their own contract and the gate would pass on a repo with zero anchors left.
  */
 const SOURCES: { rel: string; text: string }[] = walk(SRC_ROOT)
   .map((file) => ({
     rel: path.relative(REPO_ROOT, file).replaceAll("\\", "/"),
     text: readFileSync(file, "utf8"),
   }))
-  .filter(({ rel }) => rel !== TOUR_SCRIPT && rel !== SELF);
+  .filter(({ rel }) => rel !== TOUR_SCRIPT && rel !== SELF && !rel.endsWith(".test.ts"));
 
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&");
 
@@ -155,14 +156,18 @@ function parse(selector: string): { attr: string; value: string } {
  * 2. **Data-driven** — the attribute is bound to an expression
  *    (`data-card-id={card.id}`). The property the binding ends in (`id`) is
  *    read off the binding itself, then the value must exist as that property in
- *    a data literal (`id: "credential-vault"`). So deleting the card from
- *    `vision-grid/data.ts` still fails this gate, which is the case that
- *    matters.
+ *    a data literal (`id: "credential-vault"`, or `"id": "p094"` in a JSON
+ *    fixture), or, for an `id`, as a record key or a member of an `as const`
+ *    id tuple. So deleting the card from `vision-grid/data.ts` still fails
+ *    this gate, which is the case that matters.
+ *
+ * `carriers` are the files whose elements carry the attribute.
  */
-function resolve(attr: string, value: string): { ok: boolean; how: string } {
+function resolve(attr: string, value: string): { ok: boolean; how: string; carriers: string[] } {
   const literal = new RegExp(`${escape(attr)}\\s*=\\s*\\{?\\s*(["'])${escape(value)}\\1`);
   const hit = SOURCES.find((s) => literal.test(s.text));
-  if (hit) return { ok: true, how: `literal in ${hit.rel}` };
+  if (hit) return { ok: true, how: `literal in ${hit.rel}`, carriers: [hit.rel] };
+  const found = (how: string) => ({ ok: true, how, carriers: [...carriers] });
 
   const binding = new RegExp(`${escape(attr)}\\s*=\\s*\\{([^}]+)\\}`, "g");
   const props = new Set<string>();
@@ -175,14 +180,14 @@ function resolve(attr: string, value: string): { ok: boolean; how: string } {
     }
   }
   if (props.size === 0) {
-    return { ok: false, how: `no element in src/ carries a "${attr}" attribute at all` };
+    return { ok: false, how: `no element in src/ carries a "${attr}" attribute at all`, carriers: [] };
   }
   for (const prop of props) {
-    const dataLiteral = new RegExp(`\\b${escape(prop)}\\s*:\\s*(["'])${escape(value)}\\1`);
+    const dataLiteral = new RegExp(`\\b${escape(prop)}["']?\\s*:\\s*(["'])${escape(value)}\\1`);
     const source = SOURCES.find((s) => dataLiteral.test(s.text));
     if (source) {
       const carrier = [...carriers][0];
-      return { ok: true, how: `data-driven via ${carrier} → ${prop}: "${value}" in ${source.rel}` };
+      return found(`data-driven via ${carrier} → ${prop}: "${value}" in ${source.rel}`);
     }
   }
   // Record-keyed data: `{ [id]: ... }` built with `Object.keys(...).map((id) => ({ id, ... }))`
@@ -192,10 +197,19 @@ function resolve(attr: string, value: string): { ok: boolean; how: string } {
     const recordKey = new RegExp(`^\\s*${escape(value)}\\s*:\\s*\\{`, "m");
     const source = SOURCES.find((s) => recordKey.test(s.text));
     if (source) {
-      return { ok: true, how: `data-driven via ${[...carriers][0]} → record key "${value}" in ${source.rel}` };
+      return found(`data-driven via ${[...carriers][0]} → record key "${value}" in ${source.rel}`);
+    }
+    // An id tuple: `export const DIMENSION_IDS = ["outcomes", ...] as const`
+    // (Mission Control's wall cells, `data-mission-dim={dim.id}`).
+    const member = new RegExp(`(["'])${escape(value)}\\1`);
+    for (const s of SOURCES) {
+      for (const m of s.text.matchAll(/=\s*\[([^\]]*)\]\s*as const/g)) {
+        if (member.test(m[1])) return found(`data-driven via ${[...carriers][0]} → id tuple member "${value}" in ${s.rel}`);
+      }
     }
   }
   return {
+    carriers: [...carriers],
     ok: false,
     how:
       `"${attr}" is bound dynamically (${[...carriers].join(", ")}) but no data record defines ` +
@@ -274,5 +288,58 @@ describe("tour anchor manifest", () => {
           : "Every defined anchor is referenced."),
     );
     expect(defined.size).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * The dashboard tour, rebuilt as an operator's shift (S2). Its home step used
+ * to aim at the old cockpit's regions through a compatibility map carried over
+ * onto Mission Control's wall cells (`TOUR_ANCHORS` in views/home/index.tsx),
+ * while its recorded narration described the removed layout. Both are retired:
+ * no old cockpit name may come back, as an aim or as an anchor.
+ */
+const OLD_COCKPIT_ANCHORS = [
+  "dashboard-vitals",
+  "dashboard-fleet",
+  "dashboard-intelligence",
+  "dashboard-activity",
+  "dashboard-heatmap",
+  "dashboard-instruments",
+];
+
+describe("dashboard tour anchors", () => {
+  const dashboardRefs = TOURS_BY_ID.dashboard.flatMap((step) => refsForStep("dashboard", step));
+
+  it("aims at no old cockpit anchor, and no source defines one", () => {
+    const aimed = ALL_REFS.map((r) => r.selector).filter((s) => OLD_COCKPIT_ANCHORS.some((a) => s.includes(`"${a}"`)));
+    expect(aimed).toEqual([]);
+    const defined = SOURCES.filter((s) =>
+      OLD_COCKPIT_ANCHORS.some((a) => new RegExp(`(tourTarget|data-tour-diagram)\\s*[:=]\\s*\\{?\\s*["']${a}["']`).test(s.text)),
+    ).map((s) => s.rel);
+    expect(defined).toEqual([]);
+    const home = SOURCES.find((s) => s.rel === "src/components/dashboard/views/home/index.tsx");
+    expect(home?.text).not.toMatch(/TOUR_ANCHORS/);
+  });
+
+  it("every anchor the dashboard tour aims at is carried by a dashboard view", () => {
+    expect(dashboardRefs.length).toBeGreaterThanOrEqual(8);
+    for (const ref of dashboardRefs) {
+      const { attr, value } = parse(ref.selector);
+      const { ok, how, carriers } = resolve(attr, value);
+      expect(ok, `${ref.selector} (${ref.step}): ${how}`).toBe(true);
+      expect(
+        carriers.some((c) => c.startsWith("src/components/dashboard/")),
+        `${ref.selector} (${ref.step}) is carried by ${carriers.join(", ")}, not a dashboard view`,
+      ).toBe(true);
+    }
+  });
+
+  it("starts on the Board and visits Mission Control, Health and Reviews", () => {
+    expect(TOURS_BY_ID.dashboard.map((s) => s.route)).toEqual([
+      "/dashboard/personas",
+      "/dashboard/home",
+      "/dashboard/health",
+      "/dashboard/reviews",
+    ]);
   });
 });

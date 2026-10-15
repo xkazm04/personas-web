@@ -3,6 +3,7 @@ import { mutate } from "swr";
 import { useResolvedCausesStore } from "@/stores/resolvedCausesStore";
 import type { HealthActionKind } from "./mock-dashboard-data";
 import { DEMO_THREAD_SNAPSHOTS } from "./mockApi";
+import { emitTourSignal } from "./tourSignals";
 
 /**
  * The demo's one write to an incident thread: fix its cause, or undo the fix.
@@ -20,6 +21,7 @@ import { DEMO_THREAD_SNAPSHOTS } from "./mockApi";
 export function fixCause(causeKey: string, kind: HealthActionKind, at: string): void {
   useResolvedCausesStore.getState().settle(causeKey, kind, at);
   writeThreadReads();
+  emitTourSignal({ kind: "causeFixed", causeKey });
 }
 
 /** Reopens the thread: the outage is back on every route, as a reload would bring it. */

@@ -8,6 +8,7 @@ import AuthProvider from "@/components/AuthProvider";
 import SyncedRealtimeProvider from "@/components/dashboard/SyncedRealtimeProvider";
 import ViewOutlet from "@/components/dashboard/spa/ViewOutlet";
 import { viewIdFromPath, viewTraits } from "@/components/dashboard/spa/views";
+import TourAutostart from "@/components/tour/TourAutostart";
 import TourOverlay from "@/components/tour/TourOverlay";
 import { TourProvider } from "@/contexts/TourContext";
 
@@ -32,6 +33,8 @@ export default function DashboardLayout({
         {/* TourProvider lives here (not on a page) so the guided dashboard tour
             keeps its state and narration across tab navigation. */}
         <TourProvider>
+          {/* `?tour=1` (from /demo) starts the dashboard tour on whichever view it lands. */}
+          <TourAutostart tourId="dashboard" />
           {/* Live dashboard updates from the desktop sync writer (supabase mode). */}
           <SyncedRealtimeProvider />
           <div className="dash-canvas relative z-0 flex min-h-screen flex-col">

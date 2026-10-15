@@ -121,7 +121,7 @@ function HealthCheckRow({
       ? blastRadius(item.id, blastInputs.usage, INTEGRATION_PREFIXES, blastInputs.breaches)
       : null;
   return (
-    <div ref={ref} className={`rounded-lg px-2 py-1.5 ${focused ? "ring-2 ring-brand-cyan/50" : ""}`}>
+    <div ref={ref} data-health-check={item.id} className={`rounded-lg px-2 py-1.5 ${focused ? "ring-2 ring-brand-cyan/50" : ""}`}>
       <div className="flex items-center gap-2.5">
         <span
           className={`h-2 w-2 flex-shrink-0 rounded-full ${statusStyle[item.status].dot}`}
@@ -139,6 +139,7 @@ function HealthCheckRow({
         {item.action && (
           <button
             type="button"
+            data-health-action={item.id}
             onClick={() => onAction(item)}
             className="flex-shrink-0 rounded-lg border border-glass-hover bg-white/[0.03] px-2.5 py-1 text-sm font-medium text-muted transition-colors hover:bg-white/[0.06] hover:text-foreground focus-ring focus-visible:ring-offset-0"
           >

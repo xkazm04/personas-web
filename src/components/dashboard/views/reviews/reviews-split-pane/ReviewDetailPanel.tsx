@@ -171,12 +171,12 @@ function ReviewResolveActions({ disabled, onResolve }: { disabled: boolean; onRe
   const { t } = useTranslation();
   return (
     <div className="flex-shrink-0 border-t border-glass px-4 py-3 flex items-center gap-2">
-      <button onClick={() => onResolve("approved")} disabled={disabled} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60">
+      <button onClick={() => onResolve("approved")} disabled={disabled} data-review-decide="approved" className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 transition-all hover:bg-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60">
         <Check className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.approve}
         <kbd className="ml-1 rounded border border-emerald-500/20 bg-emerald-500/5 px-1 py-px text-sm">A</kbd>
       </button>
-      <button onClick={() => onResolve("rejected")} disabled={disabled} className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-60">
+      <button onClick={() => onResolve("rejected")} disabled={disabled} data-review-decide="rejected" className="flex-1 flex items-center justify-center gap-1.5 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition-all hover:bg-red-500/20 disabled:cursor-not-allowed disabled:opacity-60">
         <X className="h-3.5 w-3.5" />
         {t.reviewsPage.focus.reject}
         <kbd className="ml-1 rounded border border-red-500/20 bg-red-500/5 px-1 py-px text-sm">R</kbd>

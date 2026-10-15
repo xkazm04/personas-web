@@ -97,11 +97,9 @@ const NARRATION_ORDER = [
   "features4",
   "features5",
   "features6",
-  // /dashboard — one recording per page. The home clip is one continuous
-  // track; the spotlight sweeps across its sections in time with it.
-  "dashboardHome",
-  "dashboardExecutions",
-  "dashboardEvents",
+  // /dashboard — only Reviews is recorded. The Board, Mission Control and
+  // Health steps run silent with captions (tour-script.ts): record them here
+  // once their screens settle, and set the step's `audioSrc`.
   "dashboardReviews",
 ];
 

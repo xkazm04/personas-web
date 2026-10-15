@@ -1643,10 +1643,15 @@
     features4: string;
     features5: string;
     features6: string;
-    dashboardHome: string;
-    dashboardExecutions: string;
-    dashboardEvents: string;
     dashboardReviews: string;
+    dashboardBoard: string;
+    dashboardMission: string;
+    dashboardHealth: string;
+    dashboardReviewsTask: string;
+    showMe: string;
+    keepLooking: string;
+    recapCounts: string;
+    recapRun: string;
     roadmap1: string;
     roadmap2: string;
     roadmap3: string;
@@ -3732,10 +3737,15 @@ export const en: CoreTranslations = {
     features4: 'And you never lose sight of any of it. Every execution, message, event, and memory streams live through one observability deck — sparklines, costs, and status, all in real time. Full transparency, zero setup.',
     features5: 'Great agents are rarely right the first time, so the Lab is where you refine them. Chat with a persona to coach it, pit two versions against each other in the arena, evolve it across generations, or score it on the dimensions that matter. Every improvement you keep is versioned and reversible.',
     features6: 'Personas ships with six purpose-built plugins, each a self-contained workspace your agents can drive. Take Dev Tools: it turns a persona into a coding teammate that runs tasks, reads the output, and iterates. Switch a tab and you meet another specialist — all sharing the same credentials and memory.',
-    dashboardHome: 'Welcome to mission control — your whole fleet on one screen. Up top, the vitals: success rate, runs in flight, active agents, open alerts, and reviews waiting on you. Below that, the optimizer surfaces one high-leverage fix at a time — right now, a routing change that trims cost without touching quality. The two panels beneath track each agent\'s health and the new memories they\'ve learned and want to promote. Then the live picture: every execution as it lands on the left, fourteen days of traffic and errors on the right. The heatmap shows runs per agent, day by day, and the bottom row rounds it out — your top performers, the next scheduled routines, and every credential rotation. One page, the entire operation.',
-    dashboardExecutions: 'Every run the fleet has made lives here, newest first. The table shows the persona, status, duration, cost, and when it started — filter down to just the failures, or the ones still running. Click any row and the full execution opens: a metrics strip, any error explanation, and the live output streaming line by line, exactly as the agent produced it.',
-    dashboardEvents: 'Agents don\'t work in isolation — they react to events. This is the event bus: every signal flowing through the system, from schedules and webhooks to messages between agents. Each row shows the event type, its source, status, and how long ago it fired. Failed events can be retried in place, and related events chain together so you can follow a single cascade end to end.',
     dashboardReviews: 'Some decisions need a human. When an agent hits something it shouldn\'t decide alone, it pauses and routes the call here. Each item carries the persona, the context, and the action it\'s proposing — approve it, reject it, or skip for later, by click or by keyboard. Nothing risky ships without your sign-off, and the queue keeps the rest of the fleet moving while you decide.',
+    dashboardBoard: 'This is your fleet on one board: every agent, lit when it needs you. Open one and send it a command; the board changes once the machine has done it.',
+    dashboardMission: 'Mission Control sums up the fleet\'s health in eight lamps, lit only when one needs you. Open a lit lamp to see the evidence behind it.',
+    dashboardHealth: 'Slack\'s webhook is down, and the outage reaches agents, SLAs, and incidents. Configure it once, and every page that shows the outage settles.',
+    dashboardReviewsTask: 'Your move: approve or reject the review on screen. The tour ends once your verdict commits.',
+    showMe: 'Show me',
+    keepLooking: 'Keep looking',
+    recapCounts: 'Commands landed: {commands} · Verdicts committed: {verdicts}',
+    recapRun: 'Opened: the run your verdict was about.',
     roadmap1: 'Here is where we are now: each phase on the roadmap is graded by status as it ships.',
     roadmap2: 'What comes next is up to you — vote on the features you want most, and the top ideas shape what we build.',
     roadmap3: 'And here is everything already shipped — every release laid out in order, newest first.',

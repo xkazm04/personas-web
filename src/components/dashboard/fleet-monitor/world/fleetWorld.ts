@@ -1,4 +1,5 @@
 import { createStore, type StoreApi } from "zustand/vanilla";
+import { emitTourSignal } from "@/lib/tourSignals";
 import { initSim, simReducer, type SimAction, type SimState } from "../board/sim";
 import {
   ACK_MS,
@@ -80,6 +81,8 @@ export function createFleetWorld(scale = 99): FleetWorld {
     if (action) {
       const after = store.getState().sim;
       listeners.forEach((l) => l({ spec, before, after }));
+      // The guided tour's `command` signal: only a command the machine applied.
+      emitTourSignal({ kind: "command", verb: spec.verb, agentId: spec.agentId });
     }
   };
 

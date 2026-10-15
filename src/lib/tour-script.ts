@@ -12,7 +12,14 @@
  * ElevenLabs-generated narration is committed under `/public/tour/` and the
  * engine switches auto-advance from the dwell timer to the audio `ended`
  * event.
+ *
+ * A step the visitor *does* rather than watches carries `advanceOn`: it
+ * completes on a typed signal of the visitor's own action
+ * (`lib/tourSignals.ts`), its `actions` become the "Show me" demonstration, and
+ * the dwell timer is only the fallback (`lib/tour-progress.ts`).
  */
+
+import type { TourSignal } from "./tourSignals";
 
 export type TourNarrationKey =
   | "step1"
@@ -26,13 +33,16 @@ export type TourNarrationKey =
   | "features4"
   | "features5"
   | "features6"
-  | "dashboardHome"
-  | "dashboardExecutions"
-  | "dashboardEvents"
+  | "dashboardBoard"
+  | "dashboardMission"
+  | "dashboardHealth"
   | "dashboardReviews"
   | "roadmap1"
   | "roadmap2"
   | "roadmap3";
+
+/** Key into `t.tour` for a step's "your move" line, shown under its narration. */
+export type TourTaskKey = "dashboardReviewsTask";
 
 /**
  * A timed side effect fired while a step is on screen — used to drive a
@@ -100,6 +110,22 @@ export interface TourStep {
   actions?: TourAction[];
   /** Pre-generated narration audio. Undefined until the final build phase. */
   audioSrc?: string;
+  /**
+   * The visitor's action that completes this step. While set, the step's
+   * `actions` do not run on the clock: they are the demonstration the visitor
+   * plays with "Show me". Without a match the dwell timer still advances the
+   * step (unless `waitForSignal`).
+   */
+  advanceOn?: (signal: TourSignal) => boolean;
+  /**
+   * Only `advanceOn` (or the visitor's own Next, Keep looking or exit) ends this
+   * step: no dwell fallback, and its clip ending does not advance it.
+   */
+  waitForSignal?: boolean;
+  /** Where the visitor's action leads once it completes the step (an href), or null. */
+  followSignal?: (signal: TourSignal) => string | null;
+  /** Key into `t.tour` for a "your move" line under the narration. */
+  task?: TourTaskKey;
 }
 
 /**
@@ -114,6 +140,16 @@ export function clickTarget(selector: string): void {
   // trigger targets are SVG <g> nodes (no reliable .click()), and a bubbling
   // event still reaches React's delegated onClick handler either way.
   el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+}
+
+/**
+ * Move keyboard focus to the first element matching `selector`, if present:
+ * "Show me" on a step whose action is the visitor's own decision points at the
+ * control rather than pressing it.
+ */
+export function focusTarget(selector: string): void {
+  if (typeof document === "undefined") return;
+  document.querySelector<HTMLElement>(selector)?.focus();
 }
 
 // `INTRO_AUDIO_SRC` lives in `@/lib/tour-audio` — TourProvider mounts on every
@@ -286,55 +322,76 @@ export const FEATURES_TOUR_STEPS: TourStep[] = [
   },
 ];
 
-// /dashboard — one recording per page. The home clip is a single ~46s track
-// whose spotlight sweeps the six home regions in time with the narration; each
-// dashboard view (Executions, Events, Reviews) is then its own step on
-// its own route, navigated to in turn. `dwellMs` is only the audio-error
-// fallback here — auto-advance is driven by each clip's `ended` event. No
-// bridge: Reviews is the end of the journey.
+/** Where a committed verdict leads: the run the review was about (`?focus=` opens its detail). */
+export function verdictRunHref(signal: TourSignal): string | null {
+  if (signal.kind !== "verdict" || !signal.executionId) return null;
+  return `/dashboard/executions?focus=${encodeURIComponent(signal.executionId)}`;
+}
+
+// /dashboard — an operator's first shift, done rather than watched. It starts
+// on the Board, where `/demo` lands, and each step completes on the visitor's
+// own action (a typed signal, lib/tourSignals.ts); "Show me" plays the step's
+// actions instead, and the dwell is the fallback. The Board, Mission Control
+// and Health steps are silent with captions (their screens have no recorded
+// narration); the Reviews clip still describes its screen, so it plays. The
+// last step waits for the visitor's verdict to commit (its undo window closed),
+// then opens that review's run; "Keep looking" ends the tour without one. No
+// call to action (owner, 2026-10-06: the demo is a tour, not a sign-up funnel).
 export const DASHBOARD_TOUR_STEPS: TourStep[] = [
+  // 1. Board: send any agent a command and watch the board change when the
+  //    machine has done it. "Show me" resumes Security Scanner, a crew agent
+  //    (lib/demoCrew.ts) that starts switched off, so the act carries to the
+  //    synced pages too.
   {
-    id: "home",
-    route: "/dashboard/home",
-    scrollTarget: '[data-tour-diagram="dashboard-vitals"]',
-    spotlightTarget: '[data-tour-diagram="dashboard-vitals"]',
-    spotlightSequence: [
-      { atMs: 10800, target: '[data-tour-diagram="dashboard-fleet"]' },
-      { atMs: 19300, target: '[data-tour-diagram="dashboard-intelligence"]' },
-      { atMs: 26000, target: '[data-tour-diagram="dashboard-activity"]' },
-      { atMs: 33800, target: '[data-tour-diagram="dashboard-heatmap"]' },
-      { atMs: 37200, target: '[data-tour-diagram="dashboard-instruments"]' },
+    id: "board",
+    route: "/dashboard/personas",
+    scrollTarget: '[data-tour-diagram="fleet-stage"]',
+    spotlightTarget: '[data-tour-diagram="fleet-stage"]',
+    narration: "dashboardBoard",
+    dwellMs: 45000,
+    advanceOn: (s) => s.kind === "command" && s.agentId !== null,
+    actions: [
+      { atMs: 0, run: () => clickTarget('[data-tile="p094"]') },
+      { atMs: 1200, run: () => clickTarget('[data-ctl="resume"]') },
     ],
-    narration: "dashboardHome",
-    dwellMs: 48000,
-    audioSrc: "/tour/dashboardHome.mp3",
   },
+  // 2. Mission Control: open a lamp to see the evidence behind it.
   {
-    id: "executions",
-    route: "/dashboard/executions",
-    scrollTarget: '[data-tour-diagram="dashboard-executions"]',
-    spotlightTarget: '[data-tour-diagram="dashboard-executions"]',
-    narration: "dashboardExecutions",
-    dwellMs: 22000,
-    audioSrc: "/tour/dashboardExecutions.mp3",
+    id: "mission",
+    route: "/dashboard/home",
+    scrollTarget: '[data-tour-diagram="mission-wall"]',
+    spotlightTarget: '[data-tour-diagram="mission-wall"]',
+    narration: "dashboardMission",
+    dwellMs: 30000,
+    advanceOn: (s) => s.kind === "view" && s.view === "home" && s.focus !== null,
+    actions: [{ atMs: 0, run: () => clickTarget('[data-mission-dim="queue"]') }],
   },
+  // 3. Health: fix the Slack outage once; its whole incident thread settles.
   {
-    id: "events",
-    route: "/dashboard/events",
-    scrollTarget: '[data-tour-diagram="dashboard-events"]',
-    spotlightTarget: '[data-tour-diagram="dashboard-events"]',
-    narration: "dashboardEvents",
-    dwellMs: 26000,
-    audioSrc: "/tour/dashboardEvents.mp3",
+    id: "health",
+    route: "/dashboard/health",
+    scrollTarget: '[data-health-check="in_slack"]',
+    spotlightTarget: '[data-health-check="in_slack"]',
+    narration: "dashboardHealth",
+    dwellMs: 35000,
+    advanceOn: (s) => s.kind === "causeFixed" && s.causeKey === "slack-circuit-break",
+    actions: [{ atMs: 0, run: () => clickTarget('[data-health-action="in_slack"]') }],
   },
+  // 4. Reviews: the visitor's own verdict ends the tour. "Show me" only moves
+  //    focus to Approve; the decision stays theirs.
   {
     id: "reviews",
     route: "/dashboard/reviews",
     scrollTarget: '[data-tour-diagram="dashboard-reviews"]',
     spotlightTarget: '[data-tour-diagram="dashboard-reviews"]',
     narration: "dashboardReviews",
+    task: "dashboardReviewsTask",
     dwellMs: 24000,
     audioSrc: "/tour/dashboardReviews.mp3",
+    waitForSignal: true,
+    advanceOn: (s) => s.kind === "verdict",
+    followSignal: verdictRunHref,
+    actions: [{ atMs: 0, run: () => focusTarget('[data-review-decide="approved"]') }],
   },
 ];
 

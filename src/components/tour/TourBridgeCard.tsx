@@ -35,6 +35,7 @@ export default function TourBridgeCard() {
       ref={panelRef}
       role="dialog"
       aria-modal="true"
+      data-tour-card
       aria-label={prompt}
       initial={{ opacity: 0, y: 24, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}

@@ -106,6 +106,7 @@ Rules the table enforces: a disjoint arm while a window is open **commits the op
 - **Realtime / voice** — `emitNewReview` is driven by realtime sync and the Settings "Preview" button; the voice toggle lives in `t.settingsPage.notifications.voice`.
 - **i18n** — namespaces `t.reviewsPage.*` (focus, parseError, undo, sla, resolved/resolvedBy, resolver, autoApprovedNote, bulkProcessing, severity), `t.dashboardUi.*` (most labels, `status.*` for the filter pills and the progress bar's failed count), `t.executionsPage.all` (the "All" pill), `t.eventsPage.unknownAgent`, `t.dashboard.reviews` (nav label), `t.guide…dashboardReviews` (product description), `t.memoriesPage.conflicts.*` (BatchReviewModal).
 - **Telemetry** — Sentry warnings on escalation-policy validation failures and voice errors.
+- **Guided tour, last step** — when the ledger's window commits (the 5 s undo has elapsed, or a flush / newer arm committed it), `reviewStore` emits a `verdict` signal per id with the row's `executionId` (`src/lib/tourSignals.ts`); an undone window never signals. The tour's Reviews step waits for that signal (no dwell, and the `dashboardReviews.mp3` clip ending does not advance it), then opens `/dashboard/executions?focus=<executionId>` under a recap. The split pane's Approve / Reject carry `data-review-decide`; the tour's "Show me" only focuses Approve, never decides.
 
 ### Loading tiers
 

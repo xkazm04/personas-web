@@ -429,3 +429,136 @@ test.describe("Guided tour — dialog focus trap", () => {
     await expect(page.getByRole("button", { name: LAUNCH })).toBeFocused();
   });
 });
+
+/**
+ * The dashboard tour you do, not watch (S2). `/demo?tour=1` lands on the
+ * Board; each step completes on the visitor's own action (or "Show me", or
+ * its dwell); the spotlight cutout is click-through while the page around it
+ * is fenced; the last step waits for the visitor's verdict to commit (the
+ * 5 s undo window), then opens that review's run with a recap. No CTA.
+ *
+ * Engine: `src/contexts/TourContext.tsx`, `src/lib/tour-progress.ts`
+ * (unit-tested with fake timers in `tour-progress.test.ts`).
+ */
+test.describe("Guided tour — dashboard (do, not watch)", () => {
+  const LAUNCH = "Take the tour";
+  const BOARD = "your fleet on one board";
+  const MISSION = "eight lamps";
+  const HEALTH = "webhook is down";
+  const TASK = "Your move";
+  /** Narration clips never finish here, so only signals, dwell and buttons move the tour. */
+  const muteNarration = (page: import("@playwright/test").Page) =>
+    page.route("**/tour/*.mp3", (route) => route.abort());
+
+  test("/demo?tour=1 lands on the Board with the tour on its first step", async ({ page }) => {
+    await page.goto("/demo?tour=1");
+    await expect(page).toHaveURL(/\/dashboard\/personas/);
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText(BOARD);
+    await expect(page.locator('[data-tour-diagram="fleet-stage"]')).toHaveAttribute("data-tour-active", "true");
+    await page.screenshot({ path: "test-results/tour/20-dashboard-board.png" });
+  });
+
+  test("the cutout is click-through and the page around it is fenced", async ({ page }) => {
+    await page.goto("/demo?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText(BOARD);
+    await expect(page.locator("[data-tour-fence]")).toHaveCount(4);
+    // A tile inside the spotlit Board takes a real click: its agent opens.
+    await page.locator('[data-tile="p094"]').click();
+    await expect(page.locator('[data-ctl="resume"]')).toBeVisible();
+    // The dashboard navigation sits outside the cutout, under the fence.
+    const nav = page.getByRole("navigation").first();
+    await expect(nav).toBeVisible();
+    const box = await nav.boundingBox();
+    if (box) {
+      const hit = await page.evaluate(
+        ([x, y]) => document.elementFromPoint(x, y)?.hasAttribute("data-tour-fence") ?? false,
+        [box.x + box.width / 2, box.y + Math.min(20, box.height / 2)],
+      );
+      expect(hit).toBe(true);
+    }
+  });
+
+  test("the Board step advances on the visitor's own command", async ({ page }) => {
+    await page.goto("/demo?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await expect(caption).toContainText(BOARD);
+    await page.locator('[data-tile="p094"]').click();
+    await page.locator('[data-ctl="resume"]').click();
+    // The command lands (~1.2 s), then a 3 s beat, then Mission Control.
+    await expect(caption).toContainText(MISSION, { timeout: 10_000 });
+    await expect(page).toHaveURL(/\/dashboard\/home/);
+    // Real Mission Control anchors only: no old cockpit names on the wall.
+    await expect(page.locator('[data-tour-diagram="mission-wall"]')).toHaveCount(1);
+    for (const old of ["dashboard-vitals", "dashboard-fleet", "dashboard-intelligence", "dashboard-activity", "dashboard-heatmap", "dashboard-instruments"]) {
+      await expect(page.locator(`[data-tour-diagram="${old}"]`)).toHaveCount(0);
+    }
+  });
+
+  test("Show me plays the step's demonstration and the tour moves on", async ({ page }) => {
+    await page.goto("/demo?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await caption.getByRole("button", { name: "Next step" }).click();
+    await expect(caption).toContainText(MISSION);
+    await caption.getByRole("button", { name: "Show me" }).click();
+    await expect(page).toHaveURL(/\/dashboard\/home\?dim=queue/);
+    await expect(caption).toContainText(HEALTH, { timeout: 10_000 });
+  });
+
+  test("the review step waits for a committed verdict, then opens its run with a recap", async ({ page }) => {
+    test.setTimeout(90_000);
+    await muteNarration(page);
+    await page.goto("/demo?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    // Board: send one command, so the recap has something to count.
+    await page.locator('[data-tile="p094"]').click();
+    await page.locator('[data-ctl="resume"]').click();
+    await expect(caption).toContainText(MISSION, { timeout: 10_000 });
+    for (let i = 0; i < 2; i++) await caption.getByRole("button", { name: "Next step" }).click();
+    await expect(caption).toContainText(TASK);
+    await expect(caption.getByRole("button", { name: "Keep looking" })).toBeVisible();
+
+    // No verdict: neither the (failed) clip nor the dwell moves it on.
+    await page.waitForTimeout(30_000);
+    await expect(caption).toContainText(TASK);
+
+    await page.locator('[data-review-decide="approved"]').click();
+    // Inside the 5 s undo window the tour stays put...
+    await page.waitForTimeout(3_000);
+    await expect(caption).toContainText(TASK);
+    // ...and within 1 s of the commit it opens the run behind the verdict.
+    await expect(page).toHaveURL(/\/dashboard\/executions\?focus=/, { timeout: 4_000 });
+    await expect(caption).toBeHidden();
+    const recap = page.getByRole("status").filter({ hasText: "Verdicts committed" });
+    await expect(recap).toContainText("Commands landed: 1");
+    await expect(recap).toContainText("Verdicts committed: 1");
+    await page.screenshot({ path: "test-results/tour/21-dashboard-recap.png" });
+  });
+
+  test("an undo inside the window leaves the tour on the review step", async ({ page }) => {
+    test.setTimeout(60_000);
+    await muteNarration(page);
+    await page.goto("/demo?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await caption.getByRole("button", { name: "4 / 4" }).click();
+    await expect(caption).toContainText(TASK);
+    await page.locator('[data-review-decide="approved"]').click();
+    await page.getByRole("button", { name: /Undo/ }).first().click();
+    await page.waitForTimeout(7_000);
+    await expect(page).toHaveURL(/\/dashboard\/reviews/);
+    await expect(caption).toContainText(TASK);
+  });
+
+  test("Keep looking ends the tour on the queue with no verdict", async ({ page }) => {
+    await muteNarration(page);
+    await page.goto("/demo?tour=1");
+    const caption = page.getByRole("dialog", { name: LAUNCH });
+    await caption.getByRole("button", { name: "4 / 4" }).click();
+    await expect(caption).toContainText(TASK);
+    await caption.getByRole("button", { name: "Keep looking" }).click();
+    await expect(caption).toBeHidden();
+    await expect(page).toHaveURL(/\/dashboard\/reviews/);
+    await expect(page.getByText("Verdicts committed")).toHaveCount(0);
+  });
+});

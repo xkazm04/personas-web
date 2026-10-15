@@ -48,7 +48,7 @@ On the desktop plane the review list is not served (`reviewStore.listNotServed`)
 
 ## Integration points
 - Rendered by the dashboard SPA (`spa/viewRegistry.tsx`), kept alive across view switches.
-- Guided tour: the wall carries `dashboard-vitals`; cells carry `dashboard-activity` (Outcomes), `dashboard-heatmap` (Agents), `dashboard-intelligence` (Waiting on you), `dashboard-fleet` (Self-healing), `dashboard-instruments` (Instruments) via `TOUR_ANCHORS`.
+- Guided tour (step 2 of the dashboard tour, `src/lib/tour-script.ts`): the wall carries `data-tour-diagram="mission-wall"`, and cells are aimed by their own `data-mission-dim` (WallCell). The step completes when the visitor opens a lamp (`navigateDashboard` emits a `view` signal with the `?dim=`); "Show me" opens *Waiting on you*. The old cockpit anchor map (`TOUR_ANCHORS`) is gone and `tour-anchors.test.ts` forbids its names. The header's launcher no longer autostarts: `?tour=1` starts the tour from the dashboard layout (`TourAutostart`), on the Board.
 - Desktop reference: `personas/src/features/overview/sub_missionControl/variants/annunciator-wall/` and `variants/shared/readings.ts`.
 
 ### Loading tiers
@@ -61,7 +61,7 @@ Per [loading-orchestration](loading-orchestration.md).
 - **Placeholders** — the spinners in `TrafficErrorsCard` (`:18`), `ExecutionHeatmapCard` (`:17`), `TopPerformersCard` (`:60`), `UpcomingRoutinesCard` (`:44`) and `StatusTicker` are now empty height reservations (`aria-busy`) of the same size.
 
 ## Conventions & gotchas
-- **The tour's home narration (`public/tour/dashboardHome.mp3`) was recorded against the old cockpit** (vitals, fleet card, instruments bay). Its spotlights now land on the closest wall cells, but the words describe the previous layout until the clip is re-recorded.
+- **The tour's Mission Control step is silent with a caption** (`t.tour.dashboardMission`). The old home narration (`dashboardHome.mp3`, recorded against the removed cockpit) was retired with its key on 2026-10-15; record a new clip only against this wall, then set the step's `audioSrc`.
 - The desktop wall has its own 7/30/90-day switch and persona filter; the web wall does not yet (no view honours `dashboardFilterStore` for real).
 - "Fixes held" (the desktop's healing hold rate) has no web source; Self-healing shows auto-fixed counts instead.
 - Trace bars are decorative (`aria-hidden`); the figure and evidence line carry the reading.

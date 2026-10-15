@@ -29,6 +29,7 @@ import {
 import { AUTO_APPROVE_NOTE, RESOLVED_BY_REVIEWER, RESOLVED_BY_SYSTEM } from "@/lib/review-display";
 import { DEFAULT_ESCALATION_POLICY, escalationDue, validateEscalationPolicy } from "@/lib/review-sla";
 import { reviewCommandOutcome } from "@/lib/commands/reviewDecide";
+import { emitTourSignal } from "@/lib/tourSignals";
 
 export { DEFAULT_ESCALATION_POLICY };
 
@@ -376,6 +377,12 @@ export const useReviewStore = create<ReviewState>((set, get) => {
         windowTimer = null;
       }
     } else {
+      // The undo window has closed: these verdicts are the operator's now. The
+      // guided tour's `verdict` signal fires here, never for an undone window.
+      for (const id of e.batch.ids) {
+        const executionId = get().baseReviews.find((r) => r.id === id)?.executionId || null;
+        emitTourSignal({ kind: "verdict", reviewId: id, verdict: e.batch.verdict, executionId });
+      }
       void commit(e.batch);
     }
   }

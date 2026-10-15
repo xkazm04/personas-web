@@ -34,15 +34,6 @@ const WINDOW_NOTE_KEY: Record<DateRangePreset, "last24h" | "last7d" | "last30d" 
   custom: "custom",
 };
 
-/** The guided tour's spotlight targets, carried over from the old cockpit regions. */
-const TOUR_ANCHORS: Partial<Record<DimensionId, { tourTarget: string }>> = {
-  outcomes: { tourTarget: "dashboard-activity" },
-  agents: { tourTarget: "dashboard-heatmap" },
-  queue: { tourTarget: "dashboard-intelligence" },
-  recovery: { tourTarget: "dashboard-fleet" },
-  instruments: { tourTarget: "dashboard-instruments" },
-};
-
 /**
  * Mission Control, in sync with the desktop app's annunciator wall: eight
  * dimensions of fleet health, each a lamp, a figure and one line of
@@ -79,7 +70,8 @@ export default function MissionControlView() {
             {greeting}, {displayName} · {copy.windowNote[WINDOW_NOTE_KEY[window]]}
           </p>
         </div>
-        <TourLauncher tourId="dashboard" />
+        {/* `?tour=1` autostarts from the dashboard layout (TourAutostart), not here. */}
+        <TourLauncher tourId="dashboard" autostart={false} />
       </header>
 
       {open ? (
@@ -100,14 +92,10 @@ export default function MissionControlView() {
         </WallDetail>
       ) : (
         <>
-          <ul aria-label={copy.wallLabel} data-tour-diagram="dashboard-vitals" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {/* The tour spotlights the wall; its cells are aimed by `data-mission-dim` (WallCell). */}
+          <ul aria-label={copy.wallLabel} data-tour-diagram="mission-wall" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {dims.map((dim, index) => (
-              <li
-                key={dim.id}
-                data-tour-diagram={TOUR_ANCHORS[dim.id]?.tourTarget}
-                className={`${ARRIVE} flex`}
-                style={arriveAt(index)}
-              >
+              <li key={dim.id} className={`${ARRIVE} flex`} style={arriveAt(index)}>
                 <WallCell dim={dim} onOpen={() => navigateDashboard(hrefFor(dim.id))} />
               </li>
             ))}

@@ -59,6 +59,7 @@ Follows [loading-orchestration](loading-orchestration.md).
 - **Dashboard shell** — nav entry in `src/components/dashboard/DashboardNavigation.tsx` (`navItemDefs`, `HeartPulse` icon) with a `healthAlertCount` badge in `getBadge` (a selector over the session projection). Not in `SCOPED_ROUTE_PREFIXES` (no persona scoping).
 - **Shared primitives** — `GlowCard`, `GradientText`, and `ExecuteToast` (reused from the agents surface for the demo-action toast). Status ramp matches the dashboard standard (emerald/amber/rose/cyan).
 - **i18n** — nav label `t.dashboard.health` + the `t.healthPage` namespace (`src/i18n/en.ts`), hand-translated into all 13 non-en locales.
+- **Guided tour, step 3** — each check row carries `data-health-check={item.id}` and its action button `data-health-action={item.id}`; the tour spotlights the Slack row (`in_slack`) and completes when `fixCause` emits its `causeFixed` signal for `slack-circuit-break` (`src/lib/demoCauseFix.ts` → `src/lib/tourSignals.ts`). "Show me" presses Configure. If the visitor already fixed the outage, the row is settled and the step's dwell (35 s) moves on.
 
 ## Conventions & gotchas
 - **Demo-only:** all checks are mock fixtures; `getSystemHealth` never probes a real host, and a real tenant never sees them (live-unavailable empty state). Install/Configure only change in-session UI state (the row settles to ok, or the whole incident thread settles for a `causeKey` check) and show a toast - no call leaves the page. A fix is session-only: a reload restores the outage. Drills / `?drill=` seeking are not built.

@@ -126,6 +126,7 @@ function PersonasStage() {
 
       <section
         id="fleet-stage"
+        data-tour-diagram="fleet-stage"
         role="tabpanel"
         aria-labelledby={`fleet-view-${view}`}
         className="relative min-h-0 flex-1 overflow-hidden bg-background"

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { useTranslation } from "@/i18n/useTranslation";
+import { demoEntryTarget } from "@/lib/demoEntry";
 import { useAuthStore } from "@/stores/authStore";
 
 /**
@@ -26,13 +27,10 @@ export default function DemoEntryPage() {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
-    // Forward any query (notably `?tour=1` from the /features bridge) so the
-    // dashboard's TourLauncher can autostart on arrival.
-    // The demo opens on Personas, the dashboard's main view; the guided tour
-    // starts from Mission Control, where its launcher lives.
-    const search = window.location.search;
-    const view = new URLSearchParams(search).has("tour") ? "home" : "personas";
-    const target = `/dashboard/${view}${search}`;
+    // The demo opens on Personas (the Board), the dashboard's main view, and
+    // forwards any query: `?tour=1` from the /features bridge starts the guided
+    // tour there, on its first step (lib/demoEntry.ts).
+    const target = demoEntryTarget(window.location.search);
     try {
       enterDemo();
       router.replace(target);
