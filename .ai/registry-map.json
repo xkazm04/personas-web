@@ -4200,7 +4200,11 @@
           "revision": 6,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/how-lazy.tsx:16 Every lazy /how stage shows the same pulsing title-and-block silhouette immediately, with no warm-path delay.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:62a9a7fc993ea8b5",
+          "evaluatedRevision": 6
         },
         {
           "subject": "canvas-graph",
@@ -8331,7 +8335,11 @@
           "revision": 6,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/DesktopSidebar.tsx:58 When a grouped section has any child count, the rail shows only an aria-hidden color dot, so that badge grade has no text equivalent.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:62a9a7fc993ea8b5",
+          "evaluatedRevision": 6
         },
         {
           "subject": "realtime-events",
@@ -8530,7 +8538,11 @@
           "revision": 6,
           "changedAt": "2026-09-23",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/loading.tsx:22 Route transitions replace the page, navbar included, with an immediate full-area spinner, so the frame does not stay put and there is no warm-path delay.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:62a9a7fc993ea8b5",
+          "evaluatedRevision": 6
         },
         {
           "subject": "lazy-section-addressability",

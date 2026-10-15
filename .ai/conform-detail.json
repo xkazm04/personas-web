@@ -3141,6 +3141,130 @@
         }
       ],
       "registryProposal": "Clarify in upstream-status-normalization that native EventSource sets readyState to CLOSED without retrying on non-200 handshake statuses per the W3C/HTML SSE specification; the infinite reconnect storm against 5xx is driven specifically by application-level onerror handlers (such as useEventStream) scheduling manual reconnect loops rather than the browser's built-in EventSource mechanism."
+    },
+    "Platform Foundation: Shell, UI & Motion/Layout, Navigation & Page Shell/app-shell": {
+      "context": "Layout, Navigation & Page Shell",
+      "subject": "app-shell",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:45:00.344Z",
+      "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+      "techniques": [
+        {
+          "technique": "navigation-model",
+          "verdict": "deviation",
+          "evidence": "src/components/navbar/DesktopNav.tsx:67 Desktop hard-codes /dashboard outside useRoutes, the only list MobilePanel renders, and still special-cases /how which that list does not contain."
+        },
+        {
+          "technique": "nav-hierarchy",
+          "verdict": "deviation",
+          "evidence": "src/components/navbar/DesktopNav.tsx:64 That desktop-only cluster holds the dashboard link; the mobile panel rebuilds Download from useRoutes and never that destination. The off-canvas menu does close from pathname."
+        },
+        {
+          "technique": "entitlement-gating",
+          "verdict": "deviation",
+          "evidence": "src/components/Navbar.tsx:55 Platform policy is applied in the click handler. The control always renders as Download, so a platform that cannot download looks enabled until the click opens the waitlist."
+        },
+        {
+          "technique": "badge-and-attention",
+          "verdict": "not-applicable",
+          "evidence": "src/components/navbar/useRoutes.ts:14 Nav entries are label and href only. Searched badge, unread, and count under src/components/navbar and Navbar.tsx and found no nav badge."
+        },
+        {
+          "technique": "shell-hosted-services",
+          "verdict": "deviation",
+          "evidence": "src/components/PageTransition.tsx:45 Non-dashboard pathnames are distinct remount keys. Navbar and PageShell's TourProvider are rendered inside that keyed children tree, while CookieConsent and the trackers sit in the root layout outside it."
+        },
+        {
+          "technique": "lazy-section-loading",
+          "verdict": "deviation",
+          "evidence": "src/app/loading.tsx:19 The segment fallback is an immediate centered spinner with no navbar and no delay. PageTransition also replays its enter animation on every distinct pathname key."
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/app-shell": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "app-shell",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:45:00.344Z",
+      "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+      "techniques": [
+        {
+          "technique": "navigation-model",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:94 The current view comes from the pathname, parent highlight is section.views.includes(current), and DashLink writes history through navigateDashboard. Unknown segments fail isDashboardViewId."
+        },
+        {
+          "technique": "nav-hierarchy",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/DesktopSidebar.tsx:17 The second level is the active section's panel; group captions are non-link labels. There is no user collapse control. The phone bar flattens leaves and keeps the rest under More."
+        },
+        {
+          "technique": "entitlement-gating",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:48 Every registry section is rendered. Searched entitlement, featureFlag, requiresPlan, isLocked, canAccess, and upsell in the dashboard nav; the review gate is device reachability, not a hidden or locked entry."
+        },
+        {
+          "technique": "badge-and-attention",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:105 Demo message, incident, and health badges are constants, so they never clear. Review and execution counts are store derivations. The overview parent marker is an aria-hidden dot, numeric badges render with no 99+ cap, and MobileMoreMenu is not given getBadge."
+        },
+        {
+          "technique": "shell-hosted-services",
+          "verdict": "conformant",
+          "evidence": "src/app/dashboard/layout.tsx:36 The realtime worker is mounted beside ViewOutlet, renders nothing, and useSyncedRealtime removes the channel and timers on cleanup. Sign-out calls clearUserScopedCaches. Socket failure sets eventStore connectionStatus, which is not the sidebar health chip."
+        },
+        {
+          "technique": "lazy-section-loading",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/AuthGuard.tsx:37 Until auth resolves, the shell is replaced by a skeleton that includes a fake sidebar. After that, each view is its own dynamic chunk, ViewGap is shapeless with a 160ms ghost delay, hover and focus call preloadView, and keep-alive is capped at 4."
+        }
+      ],
+      "registryProposal": "The shell-paints-first rule never says whether an unresolved session check may withhold the frame. AuthGuard skeletons the whole dashboard, including a fake nav, until identity resolves; if that is forbidden, the technique should say so."
+    },
+    "Content & Informational Pages/How It Works & Changelog/app-shell": {
+      "context": "How It Works & Changelog",
+      "subject": "app-shell",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:45:00.344Z",
+      "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+      "techniques": [
+        {
+          "technique": "navigation-model",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/how-manifesto/index.tsx:27 The parent StageSection on /how also sets id manifesto, and the same hashes are hand-listed again in scrollMapItems and STOP_HREFS."
+        },
+        {
+          "technique": "nav-hierarchy",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/how-role-path/Stop.tsx:49 The role route is an in-page sequence of hash jumps. It does not add a shell nav level; the changelog timeline is a content section."
+        },
+        {
+          "technique": "entitlement-gating",
+          "verdict": "not-applicable",
+          "evidence": "src/app/how/page.tsx:69 All six stages render for every viewer. Role lenses are aria-pressed content tints. Searched badge, entitlement, and locked in the how and changelog files and found no section gate."
+        },
+        {
+          "technique": "badge-and-attention",
+          "verdict": "not-applicable",
+          "evidence": "src/app/how/page.tsx:47 In-page entries are label and href only. No count, predicate, or clearing rule appears in these files."
+        },
+        {
+          "technique": "shell-hosted-services",
+          "verdict": "not-applicable",
+          "evidence": "src/app/how/layout.tsx:23 The how layout mounts no resident. Session hosts are not decided in these files."
+        },
+        {
+          "technique": "lazy-section-loading",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/LazySection.tsx:48 next/dynamic shows StageSkeleton at once for every lazy stage. The skeleton is a generic pulse, not a delayed empty hold, and a chunk failure has no boundary of its own on the page."
+        }
+      ]
     }
   }
 }
