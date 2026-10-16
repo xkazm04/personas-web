@@ -7312,10 +7312,10 @@
           "changedAt": "2026-09-25",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "Retry publishes a NEW event (eventStore.ts:170-177); the original stays failed, so each click adds a duplicate and the dead-letter lane never drains.",
-          "evaluatedAt": "2026-08-23",
-          "evaluatedAgainst": "sha256:1117665ec59c1168",
-          "stale": true
+          "evidence": "src/stores/eventStore.ts:410 Discard sends only a status change without collecting an operator reason, leaving the required explanation for abandoning delivery unrecorded.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:1023ff3ecf23d679",
+          "evaluatedRevision": 8
         },
         {
           "subject": "correlated-exchange-over-broadcast",

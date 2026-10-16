@@ -1,0 +1,53 @@
+{
+ "schema": "conform-run/1",
+ "worker": "138d0f37-941a-44ef-9af8-c7596bb3cf2a",
+ "subject": "delivery-guarantees",
+ "evaluatedAt": "2026-10-16T23:19:56.917148+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Event Bus & Stream Monitoring",
+   "subject": "delivery-guarantees",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/stores/eventStore.ts:410 Discard sends only a status change without collecting an operator reason, leaving the required explanation for abandoning delivery unrecorded.",
+   "techniques": [
+    {
+     "technique": "dead-letter-design",
+     "verdict": "deviation",
+     "evidence": "src/stores/eventStore.ts:410 The discard workflow supplies no operator reason, although the standard requires a recorded human verdict with why."
+    },
+    {
+     "technique": "non-delivery-ledgers",
+     "verdict": "deviation",
+     "evidence": "src/lib/personaEventWire.ts:67 The event projection retains nullable free-text explanations without a closed skip-reason token or replayability field; the expanded row displays that prose."
+    },
+    {
+     "technique": "retry-escalation",
+     "verdict": "deviation",
+     "evidence": "src/stores/eventStore.ts:377 Operator redrive increments the shared automatic/manual retry counter instead of resetting the attempt campaign as the standard requires."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T23:19:56.917148+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "delivery-guarantees"
+   ],
+   "techniques": [
+    "dead-letter-design",
+    "non-delivery-ledgers",
+    "retry-escalation"
+   ],
+   "deviations": 1,
+   "context": "Event Bus & Stream Monitoring",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

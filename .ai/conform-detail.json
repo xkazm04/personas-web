@@ -4139,6 +4139,41 @@
           "evidence": "src/lib/mockData.ts:39 Provides a deterministic Lehmer PRNG so jittered mock figures remain stable across reloads and tabs."
         }
       ]
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/delivery-guarantees": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "delivery-guarantees",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T23:19:56.917Z",
+      "worker": "138d0f37-941a-44ef-9af8-c7596bb3cf2a",
+      "techniques": [
+        {
+          "technique": "dead-letter-design",
+          "verdict": "deviation",
+          "evidence": "src/stores/eventStore.ts:410 The discard workflow supplies no operator reason, although the standard requires a recorded human verdict with why."
+        },
+        {
+          "technique": "non-delivery-ledgers",
+          "verdict": "deviation",
+          "evidence": "src/lib/personaEventWire.ts:67 The event projection retains nullable free-text explanations without a closed skip-reason token or replayability field; the expanded row displays that prose."
+        },
+        {
+          "technique": "retry-escalation",
+          "verdict": "deviation",
+          "evidence": "src/stores/eventStore.ts:377 Operator redrive increments the shared automatic/manual retry counter instead of resetting the attempt campaign as the standard requires."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "Retry publishes a NEW event (eventStore.ts:170-177); the original stays failed, so each click adds a duplicate and the dead-letter lane never drains.",
+          "evaluatedAt": "2026-08-23",
+          "worker": null,
+          "reason": "replaced by 138d0f37-941a-44ef-9af8-c7596bb3cf2a"
+        }
+      ]
     }
   }
 }
