@@ -253,28 +253,48 @@
       "subject": "guided-tours",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T22:59:13.055Z",
+      "worker": "df031895-867d-4f0e-a300-01881869ded9",
       "techniques": [
-        {
-          "technique": "anchor-contracts",
-          "verdict": "deviation",
-          "evidence": "declared [data-tour-diagram] ids + live geometry derivation (TourSpotlight.tsx:100-143) are solid, but no generated/verified manifest gate catches a vanished anchor at build/test time"
-        },
-        {
-          "technique": "missing-anchor-degradation",
-          "verdict": "conformant",
-          "evidence": "TourSpotlight.tsx:62-80 retries every 200ms for lazy targets; tick() at 103-137 simply skips rendering when width/height are 0, never stranding the overlay"
-        },
         {
           "technique": "action-driven-advancement",
           "verdict": "deviation",
-          "evidence": "src/contexts/TourContext.tsx:147-152 (dwell timer) and useTourAudio (audio ended) are the only advance triggers; the tour never waits for a real product signal"
+          "evidence": "src/lib/tour-progress.ts:65 Board, mission, and health declare advanceOn but not waitForSignal and have no audioSrc, so dwellMs still completes them; only the reviews step waits for the real signal."
+        },
+        {
+          "technique": "anchor-contracts",
+          "verdict": "conformant",
+          "evidence": "src/lib/tour-anchors.test.ts:248 The test derives selectors from the live step objects and fails when src/ does not host that attribute; the spotlight re-queries the selector every animation frame rather than caching the element."
+        },
+        {
+          "technique": "missing-anchor-degradation",
+          "verdict": "deviation",
+          "evidence": "src/components/tour/TourSpotlight.tsx:37 Every unresolved step takes this one path after 3000ms; TourStep has no per-step skip or re-center field, and the breadcrumb records only waitedMs."
+        },
+        {
+          "technique": "narration-and-pacing",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAudio.ts:170 A step clip's ended event schedules advancement, and an audio error does the same after dwellMs; captions do exist as text and playback is paused on cleanup."
+        },
+        {
+          "technique": "overlay-precedence",
+          "verdict": "deviation",
+          "evidence": "src/components/tour/TourCaptionCard.tsx:45 Tab is trapped in the caption on every step, including steps that ask the visitor to use the spotlit control; the tour paints at z-[80]/z-[90] and Escape always exits it."
         },
         {
           "technique": "tour-lifecycle",
-          "verdict": "conformant",
-          "evidence": "e2e/tour.spec.ts:190-198 confirms the seen flag persists to localStorage; TourContext.tsx bridge/resume (lines 120-131) and exit (96-101) cover completion/lifecycle"
+          "verdict": "deviation",
+          "evidence": "src/hooks/useTourAutostart.ts:7 Step ids are stable strings, but stepIndex is React state, start() begins at 0, and the only stored tour flag means started, not resumed, completed, or declined."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/lib/tour-script.ts:66-105 declares stable [data-tour-diagram] anchors and src/components/tour/TourSpotlight.tsx:82-143 derives spotlight geometry live via rAF with retry for lazy-hydrated targets — solid anchor-contracts realization — but no generated/verified anchor manifest gate exists (only manual e2e coverage in e2e/tour.spec.ts), and src/contexts/TourContext.tsx:147-152 advances purely on a dwell timer or audio `ended` event: action-driven-advancement (completion on a real user action) is unrealized — the tour instead auto-drives clicks on the product itself (tour-script.ts:165-227) rather than waiting for the visitor to act.",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by df031895-867d-4f0e-a300-01881869ded9"
         }
       ]
     },

@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "df031895-867d-4f0e-a300-01881869ded9",
+ "subject": "guided-tours",
+ "evaluatedAt": "2026-10-16T22:59:13.055194+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Guided Product Tour",
+   "subject": "guided-tours",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/contexts/TourContext.tsx:170 Most steps advance because the narration clip ended or the dwell timer fired, so the tour moves while the visitor watches unless that step sets waitForSignal.",
+   "techniques": [
+    {
+     "technique": "action-driven-advancement",
+     "verdict": "deviation",
+     "evidence": "src/lib/tour-progress.ts:65 Board, mission, and health declare advanceOn but not waitForSignal and have no audioSrc, so dwellMs still completes them; only the reviews step waits for the real signal."
+    },
+    {
+     "technique": "anchor-contracts",
+     "verdict": "conformant",
+     "evidence": "src/lib/tour-anchors.test.ts:248 The test derives selectors from the live step objects and fails when src/ does not host that attribute; the spotlight re-queries the selector every animation frame rather than caching the element."
+    },
+    {
+     "technique": "missing-anchor-degradation",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/TourSpotlight.tsx:37 Every unresolved step takes this one path after 3000ms; TourStep has no per-step skip or re-center field, and the breadcrumb records only waitedMs."
+    },
+    {
+     "technique": "narration-and-pacing",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useTourAudio.ts:170 A step clip's ended event schedules advancement, and an audio error does the same after dwellMs; captions do exist as text and playback is paused on cleanup."
+    },
+    {
+     "technique": "overlay-precedence",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/TourCaptionCard.tsx:45 Tab is trapped in the caption on every step, including steps that ask the visitor to use the spotlit control; the tour paints at z-[80]/z-[90] and Escape always exits it."
+    },
+    {
+     "technique": "tour-lifecycle",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useTourAutostart.ts:7 Step ids are stable strings, but stepIndex is React state, start() begins at 0, and the only stored tour flag means started, not resumed, completed, or declined."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T22:59:13.055194+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "guided-tours"
+   ],
+   "techniques": [
+    "action-driven-advancement",
+    "anchor-contracts",
+    "missing-anchor-degradation",
+    "narration-and-pacing",
+    "overlay-precedence",
+    "tour-lifecycle"
+   ],
+   "deviations": 1,
+   "context": "Guided Product Tour",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

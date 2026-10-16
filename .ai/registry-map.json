@@ -824,10 +824,10 @@
           "changedAt": "2026-09-02",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/lib/tour-script.ts:66-105 declares stable [data-tour-diagram] anchors and src/components/tour/TourSpotlight.tsx:82-143 derives spotlight geometry live via rAF with retry for lazy-hydrated targets — solid anchor-contracts realization — but no generated/verified anchor manifest gate exists (only manual e2e coverage in e2e/tour.spec.ts), and src/contexts/TourContext.tsx:147-152 advances purely on a dwell timer or audio `ended` event: action-driven-advancement (completion on a real user action) is unrealized — the tour instead auto-drives clicks on the product itself (tour-script.ts:165-227) rather than waiting for the visitor to act.",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256:129da98305726aef",
-          "stale": true
+          "evidence": "src/contexts/TourContext.tsx:170 Most steps advance because the narration clip ended or the dwell timer fired, so the tour moves while the visitor watches unless that step sets waitForSignal.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:6f44ad03ebd5bd19",
+          "evaluatedRevision": 4
         },
         {
           "subject": "voice-io",
