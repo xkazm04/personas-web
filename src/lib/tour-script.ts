@@ -126,6 +126,14 @@ export interface TourStep {
   followSignal?: (signal: TourSignal) => string | null;
   /** Key into `t.tour` for a "your move" line under the narration. */
   task?: TourTaskKey;
+  /**
+   * Dock the caption card to the bottom inline-start corner on wide viewports
+   * (lg and up) instead of centring it, and let the cutout run to the bottom
+   * margin. For a step whose control sits low in a large anchor: centred, the
+   * card and the cutout's bottom clearance would cover the very control the
+   * step asks the visitor to use.
+   */
+  captionDock?: "start";
 }
 
 /**
@@ -378,7 +386,8 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
     actions: [{ atMs: 0, run: () => clickTarget('[data-health-action="in_slack"]') }],
   },
   // 4. Reviews: the visitor's own verdict ends the tour. "Show me" only moves
-  //    focus to Approve; the decision stays theirs.
+  //    focus to Approve; the decision stays theirs. Approve and Reject sit at
+  //    the foot of the detail pane, so the card docks beside the queue.
   {
     id: "reviews",
     route: "/dashboard/reviews",
@@ -386,6 +395,7 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
     spotlightTarget: '[data-tour-diagram="dashboard-reviews"]',
     narration: "dashboardReviews",
     task: "dashboardReviewsTask",
+    captionDock: "start",
     dwellMs: 24000,
     audioSrc: "/tour/dashboardReviews.mp3",
     waitForSignal: true,

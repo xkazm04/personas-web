@@ -12,6 +12,10 @@ const PADDING = 22;
 const MARGIN = 44;
 /** Extra bottom clearance so the cutout never runs under the caption card. */
 const BOTTOM_GAP = 150;
+/** From here up (Tailwind `lg`) a docked caption card sits beside the cutout, not under it. */
+const DOCK_MIN_VW = 1024;
+/** Bottom gap when the card is docked: the anchor's controls may sit at the viewport's foot. */
+const DOCKED_BOTTOM_GAP = 8;
 /** Step-to-step tween duration. */
 const TWEEN_MS = 600;
 /** Anchor wait before the missed-anchor policy fires (covers lazy hydration). */
@@ -55,7 +59,8 @@ const ANCHOR_TIMEOUT_MS = 3000;
  * Escape still exits; its "Show me" is the keyboard way to the target.
  */
 export default function TourSpotlight() {
-  const { active, activeSpotlight } = useTour();
+  const { active, activeSpotlight, steps, stepIndex } = useTour();
+  const docked = steps[stepIndex]?.captionDock !== undefined;
   const cutoutRef = useRef<HTMLDivElement>(null);
   const blockersRef = useRef<(HTMLDivElement | null)[]>([null, null, null, null]);
   const prevTargetRef = useRef<string | null>(activeSpotlight);
@@ -114,7 +119,8 @@ export default function TourSpotlight() {
           // Narrow viewports get tighter margins so the frame doesn't crush
           // the visible content area.
           const m = vw < 480 ? 18 : MARGIN;
-          const bg = vw < 480 ? 180 : BOTTOM_GAP;
+          // A docked card (TourStep.captionDock) leaves the bottom edge free.
+          const bg = vw < 480 ? 180 : docked && vw >= DOCK_MIN_VW ? DOCKED_BOTTOM_GAP : BOTTOM_GAP;
           const cl = clamp(left - PADDING, m, vw - m);
           const ct = clamp(top - PADDING, m, vh - m);
           const cr = clamp(right + PADDING, m, vw - m);
@@ -142,7 +148,7 @@ export default function TourSpotlight() {
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [active, activeSpotlight, prefersReducedMotion]);
+  }, [active, activeSpotlight, docked, prefersReducedMotion]);
 
   return (
     <motion.div

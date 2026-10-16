@@ -450,6 +450,12 @@ test.describe("Guided tour — dashboard (do, not watch)", () => {
   const muteNarration = (page: import("@playwright/test").Page) =>
     page.route("**/tour/*.mp3", (route) => route.abort());
 
+  // A first visit also shows the cookie banner along the bottom edge, over the
+  // Reviews step's Approve; the visitor answers it first, so these tests start answered.
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem("personas-cookie-consent", "essential"));
+  });
+
   test("/demo?tour=1 lands on the Board with the tour on its first step", async ({ page }) => {
     await page.goto("/demo?tour=1");
     await expect(page).toHaveURL(/\/dashboard\/personas/);

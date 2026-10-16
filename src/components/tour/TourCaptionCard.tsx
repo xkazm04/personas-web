@@ -61,7 +61,7 @@ export default function TourCaptionCard() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 24 }}
       transition={transition}
-      className="fixed inset-x-0 bottom-6 z-[90] mx-auto flex w-[min(94vw,36rem)] flex-col gap-4 rounded-2xl border border-glass-hover bg-surface/95 p-5 shadow-2xl backdrop-blur-md"
+      className={`fixed start-0 end-0 bottom-6 z-[90] mx-auto ${step.captionDock === "start" ? "lg:start-6 lg:end-auto lg:mx-0" : ""} flex w-[min(94vw,36rem)] flex-col gap-4 rounded-2xl border border-glass-hover bg-surface/95 p-5 shadow-2xl backdrop-blur-md`}
     >
       {/* Companion + narration — announced to assistive tech as it changes. */}
       <div className="flex items-start gap-3">
