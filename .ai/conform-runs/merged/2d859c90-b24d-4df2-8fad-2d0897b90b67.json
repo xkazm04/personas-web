@@ -1,0 +1,65 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2d859c90-b24d-4df2-8fad-2d0897b90b67",
+ "subject": "authoring-block-vocabulary",
+ "evaluatedAt": "2026-10-16T21:15:26.498808+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "authoring-block-vocabulary",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "scripts/check-guide-content.mjs:160 Locale parity compares only block types, allowing changed item counts and semantic labels to pass despite the required structural invariance.",
+   "techniques": [
+    {
+     "technique": "blocks-as-machine-readable-source",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/blocks/StepWizard.tsx:33 Shared parsing is realized, but StepWizard renders raw strings while page.tsx:34 strips inline markup for JSON-LD; real steps contain links and backticks, so machine text differs from visible text."
+    },
+    {
+     "technique": "closed-directive-set",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/guide-markdown/parseGuide.ts:183 Unknown directives are dropped with gated diagnostics, but feature blocks accept arbitrary authored color attributes, passed into FeatureHighlight's inline styles; the standard explicitly rejects appearance pass-through."
+    },
+    {
+     "technique": "enum-guarded-block-payloads",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/guide-markdown/parseGuide.ts:261 The guard is case-insensitive, but its literals duplicate CalloutVariant, standalone directive entries, and both renderer style tables; those tables use Record<string, ...> rather than deriving exhaustiveness from one shared enumeration."
+    },
+    {
+     "technique": "per-block-line-grammar",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/guide-markdown/parseGuide.ts:193 Separate block grammars exist, but checklist continuation prose becomes a new item instead of folding into the preceding item; an in-memory probe confirmed two items and zero diagnostics after wrapping one item."
+    },
+    {
+     "technique": "vocabulary-as-translation-invariant",
+     "verdict": "deviation",
+     "evidence": "scripts/check-guide-content.mjs:180 The gate reads actual locale bodies, but compares only node-type sequences and permits baselined divergence; removing a step or changing warning to info leaves that comparison unchanged, and separate fidelity tests cover outlines and link targets rather than item counts and enum positions."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T21:15:26.498808+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "authoring-block-vocabulary"
+   ],
+   "techniques": [
+    "blocks-as-machine-readable-source",
+    "closed-directive-set",
+    "enum-guarded-block-payloads",
+    "per-block-line-grammar",
+    "vocabulary-as-translation-invariant"
+   ],
+   "deviations": 1,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

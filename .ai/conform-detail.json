@@ -353,28 +353,43 @@
       "subject": "authoring-block-vocabulary",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T21:15:26.498Z",
+      "worker": "2d859c90-b24d-4df2-8fad-2d0897b90b67",
       "techniques": [
         {
-          "technique": "closed-directive-set",
-          "verdict": "conformant",
-          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:20-38 (single dispatch, `return null` for unknown blockType), parseBlocks.tsx:125-136 (silent drop when parsed is null)"
+          "technique": "blocks-as-machine-readable-source",
+          "verdict": "deviation",
+          "evidence": "src/components/guide/blocks/StepWizard.tsx:33 Shared parsing is realized, but StepWizard renders raw strings while page.tsx:34 strips inline markup for JSON-LD; real steps contain links and backticks, so machine text differs from visible text."
         },
         {
-          "technique": "per-block-line-grammar",
-          "verdict": "conformant",
-          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:40-196 — parseSteps/parseKeys/parseCompare/parseDiagram/etc., each a small line-oriented grammar"
+          "technique": "closed-directive-set",
+          "verdict": "deviation",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:183 Unknown directives are dropped with gated diagnostics, but feature blocks accept arbitrary authored color attributes, passed into FeatureHighlight's inline styles; the standard explicitly rejects appearance pass-through."
         },
         {
           "technique": "enum-guarded-block-payloads",
-          "verdict": "conformant",
-          "evidence": "src/components/guide/blocks/Callout.tsx:16-56 CALLOUT_STYLES lookup with `?? CALLOUT_STYLES.info` fallback; parser guard at parseCustomBlock.tsx:33"
+          "verdict": "deviation",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:261 The guard is case-insensitive, but its literals duplicate CalloutVariant, standalone directive entries, and both renderer style tables; those tables use Record<string, ...> rather than deriving exhaustiveness from one shared enumeration."
+        },
+        {
+          "technique": "per-block-line-grammar",
+          "verdict": "deviation",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:193 Separate block grammars exist, but checklist continuation prose becomes a new item instead of folding into the preceding item; an in-memory probe confirmed two items and zero diagnostics after wrapping one item."
         },
         {
           "technique": "vocabulary-as-translation-invariant",
           "verdict": "deviation",
-          "evidence": "src/data/guide/locales/ holds 13 locale directories (getLocalized.ts:1-120) with no test or gate comparing parsed block structure between English and translated bodies"
+          "evidence": "scripts/check-guide-content.mjs:180 The gate reads actual locale bodies, but compares only node-type sequences and permits baselined divergence; removing a step or changing warning to info leaves that comparison unchanged, and separate fidelity tests cover outlines and link targets rather than item counts and enum positions."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:20-38 is a textbook closed-directive-set: one dispatch over an enumerated block-type list, `return null` for anything else, and parseBlocks.tsx:133-135 only emits when non-null; each block type gets its own tiny line grammar (parseCustomBlock.tsx:40-196) and Callout.tsx:16-56 enum-guards its label styling with a named fallback (`?? CALLOUT_STYLES.info`) — but the 13-locale corpus under src/data/guide/locales/ (getLocalized.ts:1-120) has no structural-equivalence check comparing translated block structure against the English source; a translator could break a directive/separator and nothing would catch it before publish (currently low-risk since the locale switcher is dormant per getLocalized.ts:6-8).",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by 2d859c90-b24d-4df2-8fad-2d0897b90b67"
         }
       ]
     },

@@ -3777,10 +3777,10 @@
           "changedAt": "2026-10-14",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/components/guide/guide-markdown/parseCustomBlock.tsx:20-38 is a textbook closed-directive-set: one dispatch over an enumerated block-type list, `return null` for anything else, and parseBlocks.tsx:133-135 only emits when non-null; each block type gets its own tiny line grammar (parseCustomBlock.tsx:40-196) and Callout.tsx:16-56 enum-guards its label styling with a named fallback (`?? CALLOUT_STYLES.info`) — but the 13-locale corpus under src/data/guide/locales/ (getLocalized.ts:1-120) has no structural-equivalence check comparing translated block structure against the English source; a translator could break a directive/separator and nothing would catch it before publish (currently low-risk since the locale switcher is dormant per getLocalized.ts:6-8).",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256-b2:56958110621cdb65",
-          "stale": true
+          "evidence": "scripts/check-guide-content.mjs:160 Locale parity compares only block types, allowing changed item counts and semantic labels to pass despite the required structural invariance.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:2a061e427ef67238",
+          "evaluatedRevision": 2
         },
         {
           "subject": "chat-transcript",
