@@ -1,0 +1,27 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c9721e64-35d6-4bfc-8eba-a3c92e70f20e",
+ "subject": "companion-runtime",
+ "evaluatedAt": "2026-10-16T21:43:59.676154+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "companion-runtime",
+   "context": "Why Agents & Use Cases",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "companion-runtime",
+   "context": "Messages & Settings",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "companion-runtime",
+   "context": "Internationalization (14 locales)",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": []
+}
