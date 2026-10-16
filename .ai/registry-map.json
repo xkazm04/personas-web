@@ -9397,7 +9397,11 @@
           "revision": 4,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/mockApi.ts:462 The mock API exports standalone fetchers outside the ApiClient interface that callers import directly rather than dispatching through the api proxy, violating interface completeness and allowing consumers to bypass runtime dispatch.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
+          "evaluatedRevision": 4
         }
       ],
       "governance": "governed"

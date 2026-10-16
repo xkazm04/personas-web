@@ -4052,6 +4052,73 @@
         }
       ],
       "registryProposal": "read-models-and-projections describes a stored read model with a named recomputation. An in-memory index rebuilt from compiled content modules on first use is not classified."
+    },
+    "Agent Operations Dashboard/Agents (Personas) Management/demo-data-plane": {
+      "context": "Agents (Personas) Management",
+      "subject": "demo-data-plane",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T22:26:34.523Z",
+      "techniques": [
+        {
+          "technique": "fake-surface-honesty-contract",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:102 Displays an action-provoking suggestion badge count derived from mock data on real tenant dashboards without gating on the demo session."
+        },
+        {
+          "technique": "one-interface-many-planes",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 Directly imports mock data fixtures instead of consuming data through the unified ApiClient interface."
+        },
+        {
+          "technique": "runtime-dispatch-not-build-flag",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 Statically binds to mock data rather than dynamically selecting a plane from live session state per call."
+        }
+      ],
+      "withdrawn": {
+        "worker": "f92d3ef9-b41e-41d8-957e-c60fccc33dea",
+        "state": "deviation",
+        "at": "2026-10-16T22:26:54.629413+00:00",
+        "reason": "reviewer (sonnet): MemoryActionsPanel's only caller, DimDetail.tsx, renders it inside `{isDemo && ...}` (line 89), so mock suggestion counts cannot reach a real tenant. The claim that they leak is contradicted by the code."
+      }
+    },
+    "Infrastructure & Telemetry/Orchestrator API Client & Mock Data/demo-data-plane": {
+      "context": "Orchestrator API Client & Mock Data",
+      "subject": "demo-data-plane",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T22:26:34.523Z",
+      "worker": "f92d3ef9-b41e-41d8-957e-c60fccc33dea",
+      "techniques": [
+        {
+          "technique": "one-interface-many-planes",
+          "verdict": "deviation",
+          "evidence": "src/lib/mockApi.ts:462 Exports standalone mock fetchers directly imported by surfaces instead of implementing them on the shared ApiClient interface."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "deviation",
+          "evidence": "src/lib/mockApi.ts:174 Mutates global in-memory fixture arrays directly upon deletion instead of maintaining an isolated per-session copy."
+        },
+        {
+          "technique": "runtime-dispatch-not-build-flag",
+          "verdict": "conformant",
+          "evidence": "src/lib/api.ts:448 Resolves the active data plane dynamically on each property access from live session state in the auth store."
+        },
+        {
+          "technique": "fixture-self-consistency",
+          "verdict": "conformant",
+          "evidence": "src/lib/mock-dashboard-data.ts:34 Projects the dashboard fleet roster directly from MOCK_PERSONAS so all mock surfaces share the canonical root entities."
+        },
+        {
+          "technique": "seeded-determinism",
+          "verdict": "conformant",
+          "evidence": "src/lib/mockData.ts:39 Provides a deterministic Lehmer PRNG so jittered mock figures remain stable across reloads and tabs."
+        }
+      ]
     }
   }
 }

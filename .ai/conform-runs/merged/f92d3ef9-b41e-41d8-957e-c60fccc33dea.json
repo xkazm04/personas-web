@@ -1,0 +1,92 @@
+{
+  "schema": "conform-run/1",
+  "worker": "f92d3ef9-b41e-41d8-957e-c60fccc33dea",
+  "subject": "demo-data-plane",
+  "evaluatedAt": "2026-10-16T22:26:34.523569+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [
+    {
+      "context": "Orchestrator API Client & Mock Data",
+      "subject": "demo-data-plane",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/lib/mockApi.ts:462 The mock API exports standalone fetchers outside the ApiClient interface that callers import directly rather than dispatching through the api proxy, violating interface completeness and allowing consumers to bypass runtime dispatch.",
+      "techniques": [
+        {
+          "technique": "one-interface-many-planes",
+          "verdict": "deviation",
+          "evidence": "src/lib/mockApi.ts:462 Exports standalone mock fetchers directly imported by surfaces instead of implementing them on the shared ApiClient interface."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "deviation",
+          "evidence": "src/lib/mockApi.ts:174 Mutates global in-memory fixture arrays directly upon deletion instead of maintaining an isolated per-session copy."
+        },
+        {
+          "technique": "runtime-dispatch-not-build-flag",
+          "verdict": "conformant",
+          "evidence": "src/lib/api.ts:448 Resolves the active data plane dynamically on each property access from live session state in the auth store."
+        },
+        {
+          "technique": "fixture-self-consistency",
+          "verdict": "conformant",
+          "evidence": "src/lib/mock-dashboard-data.ts:34 Projects the dashboard fleet roster directly from MOCK_PERSONAS so all mock surfaces share the canonical root entities."
+        },
+        {
+          "technique": "seeded-determinism",
+          "verdict": "conformant",
+          "evidence": "src/lib/mockData.ts:39 Provides a deterministic Lehmer PRNG so jittered mock figures remain stable across reloads and tabs."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "demo-data-plane",
+      "context": "Section Preview & Demo Harness",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "demo-data-plane",
+      "context": "Agents (Personas) Management",
+      "reason": "withdrawn after review: reviewer (sonnet): MemoryActionsPanel's only caller, DimDetail.tsx, renders it inside `{isDemo && ...}` (line 89), so mock suggestion counts cannot reach a real tenant. The claim that they leak is contradicted by the code."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-16T22:26:34.523569+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "demo-data-plane"
+      ],
+      "techniques": [
+        "fake-surface-honesty-contract",
+        "one-interface-many-planes",
+        "runtime-dispatch-not-build-flag"
+      ],
+      "deviations": 1,
+      "context": "Agents (Personas) Management",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    },
+    {
+      "ts": "2026-10-16T22:26:34.523569+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "demo-data-plane"
+      ],
+      "techniques": [
+        "fixture-self-consistency",
+        "network-faithful-mocks",
+        "one-interface-many-planes",
+        "runtime-dispatch-not-build-flag",
+        "seeded-determinism"
+      ],
+      "deviations": 1,
+      "context": "Orchestrator API Client & Mock Data",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}
