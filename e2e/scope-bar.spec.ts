@@ -62,10 +62,10 @@ test.describe("Scope bar", () => {
     await goClient(page, "/dashboard/leaderboard");
     await expect(leaderboardRows(page)).toHaveCount(99);
 
-    // After: Incident Responder, last 24 hours.
-    await choose(page, "Incident Responder", "24h");
-    await expect(leaderboardRows(page)).toHaveCount(1);
+    // After: Incident Responder, last 24 hours, chosen on Executions (Leaderboard
+    // offers the persona only: it ranks the fleet's standings, which have no window).
     await goClient(page, "/dashboard/executions");
+    await choose(page, "Incident Responder", "24h");
     const dayRuns = await scopedRuns(page);
     expect(dayRuns).toBeGreaterThan(0);
     expect(dayRuns).toBeLessThan(weekRuns);
@@ -73,6 +73,8 @@ test.describe("Scope bar", () => {
     for (const row of await executionRows(page).all()) await expect(row).toContainText("Incident Responder");
     await goClient(page, "/dashboard/reviews");
     await expect(reviewRows(page)).toHaveCount(1);
+    await goClient(page, "/dashboard/leaderboard");
+    await expect(leaderboardRows(page)).toHaveCount(1);
     await goClient(page, "/dashboard/home");
     await expect(page.getByText("Readings cover the last 24 hours")).toBeVisible();
 
@@ -100,18 +102,27 @@ test.describe("Scope bar", () => {
     await expect(page.getByText("Nothing in this window")).toHaveCount(0);
   });
 
-  test("a reload keeps the selection", async ({ page }) => {
+  test("the selection is stored across a reload; entering the demo starts from the default", async ({ page }) => {
     await enterDemo(page);
     await goClient(page, "/dashboard/executions");
     await choose(page, "Incident Responder", "24h");
     expect(await scopedRuns(page)).toBeGreaterThan(0);
+    const readStored = () => page.evaluate(() => JSON.parse(localStorage.getItem("dashboard-filter-state") ?? "{}"));
+    const chosen = await readStored();
+    expect(chosen).toMatchObject({ dateRange: "24h" });
+    expect(chosen.personaId).toEqual(expect.any(String));
 
+    // A reload keeps it in storage (a signed-in user's dashboard hydrates from it)...
     await page.reload();
+    expect(await readStored()).toEqual(chosen);
+
+    // ...but the demo session is in memory, so a reload needs /demo again, and
+    // entering the demo clears user-scoped state (authStore.enterDemo), the scope
+    // included: All personas, 7 days.
     await enterDemo(page);
     await goClient(page, "/dashboard/executions");
-    await expect(page.getByRole("button", { name: "Persona filter" })).toContainText("Incident Responder");
-    await expect(page.getByRole("button", { name: "24h", exact: true })).toHaveAttribute("aria-pressed", "true");
-    for (const row of (await executionRows(page).all()).slice(0, 20)) await expect(row).toContainText("Incident Responder");
+    await expect(page.getByRole("button", { name: "Persona filter" })).toContainText("All personas");
+    await expect(page.getByRole("button", { name: "7d", exact: true })).toHaveAttribute("aria-pressed", "true");
   });
 
   test("Observability renders one Compare control, on the store's flag", async ({ page }) => {

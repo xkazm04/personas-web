@@ -86,7 +86,8 @@ test.describe("one crew on the stage (demo)", () => {
     await page.locator('[data-tile="p001"]').click();
     await page.locator('[data-ctl="pause"]').click();
     await page.keyboard.press("Escape");
-    await page.keyboard.press("e");
+    // The log is still open from before the trip to Executions (a second "e" would close it).
+    await expect(log).toBeVisible();
     await page.getByRole("radio", { name: /Your decisions/ }).click();
     await expect(log.locator("li").filter({ hasText: "IR01" }).first()).toBeVisible(SETTLE);
     await expect(log.locator("li").filter({ hasText: "IR01" }).locator("[data-synced-link]")).toHaveCount(0);

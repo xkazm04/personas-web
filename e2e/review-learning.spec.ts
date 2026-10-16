@@ -30,9 +30,13 @@ test.describe("Review verdict -> learned memory", () => {
     await goClient(page, "/dashboard/reviews");
 
     await page.getByRole("button", { name: new RegExp(escapeRegExp(TITLE)) }).first().click();
+    // The queue opens on its first review; wait for the detail to switch before typing the note.
+    await expect(page.locator("pre").filter({ hasText: TITLE })).toBeVisible();
     const approve = page.getByRole("button", { name: new RegExp(`^${escapeRegExp(en.reviewsPage.focus.approve)}(\\s|$)`) });
     await expect(approve).toHaveCount(1);
-    await page.getByRole("textbox").first().fill("Canary first");
+    const notes = page.getByPlaceholder(en.dashboardUi.notesPlaceholder);
+    await notes.fill("Canary first");
+    await expect(notes).toHaveValue("Canary first");
     await approve.click();
 
     // The undo window commits at 5 s; the scripted desktop answers 2 s later.
