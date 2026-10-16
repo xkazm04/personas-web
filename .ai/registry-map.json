@@ -5743,10 +5743,10 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/dashboard/knowledge/MemoriesView.tsx and KnowledgeDenseTable.tsx display per-persona runtime learned patterns (KnowledgePattern: successCount/failureCount/confidence/avgCostUsd) and memory-conflict resolution for one agent fleet — this is agent runtime memory, not a shared, multi-consumer repository with lanes, a write path, or a catalog-as-sync-key. knowledge-registry's precondition (an organizational registry consumed by many codebases and tools) does not hold; likely a lexical match on \"knowledge\" rather than a real governance relationship — flagged as a coverage question.",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256:9c9f691ae63896a8",
-          "stale": true
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:149 This module displays runtime patterns from fixtures or Supabase; searches for registry, catalog, contributor, and digest found no context hits, while repository hits concerned separate tooling and catalogs, so the shared knowledge repository precondition does not hold.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:08227ed9be7fc676",
+          "evaluatedRevision": 11
         },
         {
           "subject": "markdown-vault",

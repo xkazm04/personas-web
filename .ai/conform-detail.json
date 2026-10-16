@@ -358,13 +358,53 @@
       "subject": "knowledge-registry",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "evaluatedAt": "2026-10-16",
+      "evaluatedTs": "2026-10-16T23:45:19.478Z",
+      "worker": "0a1eabbc-10c3-4ae5-9e91-ec679debd845",
       "techniques": [
+        {
+          "technique": "catalog-as-sync-key",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:124 Synced rows become persona-specific display patterns; this context does not compare copies of published registry items."
+        },
+        {
+          "technique": "consumer-overlays",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:173 The table is a presentation of the page's patterns, with no shared registry declaration or second registry consumer."
+        },
+        {
+          "technique": "deterministic-seeding",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:105 Demo memories are application data reads; no registry creation proposal or repository seeding occurs here."
+        },
         {
           "technique": "lane-contracts",
           "verdict": "not-applicable",
-          "evidence": "no multi-lane, multi-consumer repository structure exists; this is a single dashboard's data views"
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:39 Knowledge types filter runtime pattern rows; they do not define repository lanes with specifications and gates."
+        },
+        {
+          "technique": "per-contributor-aggregation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:60 This aggregates runtime success counts for display, rather than files contributed by registry installations."
+        },
+        {
+          "technique": "propose-then-adopt",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:95 Acceptance updates the component's resolved-memory IDs; it is not adoption of a repository contribution through merge."
+        },
+        {
+          "technique": "verification-is-contributed",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:63 Evidence links identify runtime executions, rather than contributing verification counts about published registry claims."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/knowledge/MemoriesView.tsx and KnowledgeDenseTable.tsx display per-persona runtime learned patterns (KnowledgePattern: successCount/failureCount/confidence/avgCostUsd) and memory-conflict resolution for one agent fleet — this is agent runtime memory, not a shared, multi-consumer repository with lanes, a write path, or a catalog-as-sync-key. knowledge-registry's precondition (an organizational registry consumed by many codebases and tools) does not hold; likely a lexical match on \"knowledge\" rather than a real governance relationship — flagged as a coverage question.",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by 0a1eabbc-10c3-4ae5-9e91-ec679debd845"
         }
       ]
     },

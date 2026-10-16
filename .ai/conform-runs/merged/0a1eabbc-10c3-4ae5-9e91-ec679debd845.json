@@ -1,0 +1,83 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0a1eabbc-10c3-4ae5-9e91-ec679debd845",
+ "subject": "knowledge-registry",
+ "evaluatedAt": "2026-10-16T23:45:19.478979+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Knowledge Base",
+   "subject": "knowledge-registry",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:149 This module displays runtime patterns from fixtures or Supabase; searches for registry, catalog, contributor, and digest found no context hits, while repository hits concerned separate tooling and catalogs, so the shared knowledge repository precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "catalog-as-sync-key",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:124 Synced rows become persona-specific display patterns; this context does not compare copies of published registry items."
+    },
+    {
+     "technique": "consumer-overlays",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/index.tsx:173 The table is a presentation of the page's patterns, with no shared registry declaration or second registry consumer."
+    },
+    {
+     "technique": "deterministic-seeding",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:105 Demo memories are application data reads; no registry creation proposal or repository seeding occurs here."
+    },
+    {
+     "technique": "lane-contracts",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:39 Knowledge types filter runtime pattern rows; they do not define repository lanes with specifications and gates."
+    },
+    {
+     "technique": "per-contributor-aggregation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:60 This aggregates runtime success counts for display, rather than files contributed by registry installations."
+    },
+    {
+     "technique": "propose-then-adopt",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:95 Acceptance updates the component's resolved-memory IDs; it is not adoption of a repository contribution through merge."
+    },
+    {
+     "technique": "verification-is-contributed",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:63 Evidence links identify runtime executions, rather than contributing verification counts about published registry claims."
+    }
+   ],
+   "absenceTerms": [
+    "registry",
+    "catalog",
+    "contributor",
+    "digest"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T23:45:19.478979+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "knowledge-registry"
+   ],
+   "techniques": [
+    "catalog-as-sync-key",
+    "consumer-overlays",
+    "deterministic-seeding",
+    "lane-contracts",
+    "per-contributor-aggregation",
+    "propose-then-adopt",
+    "verification-is-contributed"
+   ],
+   "deviations": 0,
+   "context": "Knowledge Base",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
