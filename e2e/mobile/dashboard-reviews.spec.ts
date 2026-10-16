@@ -46,6 +46,7 @@ test.describe("phone Reviews (demo)", () => {
     await expect(pendingCards(page).first()).toBeVisible();
     const before = await pendingCards(page).count();
     expect(before).toBeGreaterThanOrEqual(2);
+    const decidedIds: string[] = [];
 
     for (const [i, verdict] of [
       [0, "approve"],
@@ -53,6 +54,7 @@ test.describe("phone Reviews (demo)", () => {
     ] as const) {
       const card = pendingCards(page).first();
       const id = (await card.getAttribute("data-review-card"))!;
+      decidedIds.push(id);
       if (verdict === "reject") {
         await card.getByRole("button", { name: "Add a note" }).click();
         await card.locator("textarea[data-review-note]").fill("Not this week.");
@@ -73,8 +75,13 @@ test.describe("phone Reviews (demo)", () => {
     }
 
     // The next poll reads the verdicts back from the demo data: still decided.
+    // (Counted by id: the demo's realtime scenario delivers a new review at
+    // 20 s, so the pending count may rise again; lib/demoRealtime.ts.)
     await page.waitForTimeout(16_000);
-    await expect(pendingCards(page)).toHaveCount(before - 2);
+    for (const id of decidedIds) {
+      await expect(page.locator(`[data-reviews-pending] [data-review-card="${id}"]`)).toHaveCount(0);
+      await expect(page.locator(`[data-decided-card="${id}"]`)).toHaveCount(1);
+    }
   });
 
   test("Undo inside the window keeps the review pending and sends nothing", async ({ page }) => {

@@ -9,6 +9,11 @@ import { test, expect, type Page } from "@playwright/test";
  * 10 s); `?desktop=offline|never` turns it off or away. Demo mode is
  * in-memory, so every test enters through /demo, which forwards its query to
  * the dashboard, and starts from the unchanged fixtures.
+ *
+ * The crew's rows come from the demo world (src/lib/demoWorld/crew.ts): PR
+ * Review Agent, Incident Responder and Customer Feedback Analyzer each have a
+ * run in flight, Security Scanner is paused, and Daily Standup Digest's last
+ * run failed (the Slack outage), so Standup is the one with nothing running.
  */
 
 test.beforeEach(async ({ page }) => {
@@ -125,7 +130,8 @@ test.describe("phone Personas (demo)", () => {
 
   test("Activity lists the persona's runs, newest first; Chat is the other tab (dashboard-chat.spec.ts)", async ({ page }) => {
     await openDemo(page);
-    const { sheet, runs } = await openActivity(page, "PR Review Agent");
+    // Incident Responder's recent runs hold all three outcomes (success rate 0.83, one in flight).
+    const { sheet, runs } = await openActivity(page, "Incident Responder");
     expect(await runs.count()).toBeGreaterThanOrEqual(3);
     const statuses = await runs.evaluateAll((els) => els.map((el) => el.getAttribute("data-run-status")));
     expect(statuses).toEqual(expect.arrayContaining(["running", "failed", "completed"]));
@@ -138,10 +144,11 @@ test.describe("phone Personas (demo)", () => {
     const name = "Daily Standup Digest";
     await openDemo(page);
     const { state, chip } = rowOf(page, name);
-    await expect(state).toHaveAttribute("data-persona-state", "idle");
+    // Nothing in flight: its last run failed in the Slack outage. A good run settles it.
+    await expect(state).toHaveAttribute("data-persona-state", "failed");
     const { runs } = await openActivity(page, name);
     await expect(runs.first()).toBeVisible();
-    const before = await runs.count();
+    const newestBefore = await runs.first().getAttribute("data-activity-run");
     await closeSheet(page);
 
     await runFromPhone(page, name, "Summarize the pull requests merged yesterday");
@@ -151,15 +158,16 @@ test.describe("phone Personas (demo)", () => {
     await expect(state).toHaveText("Running");
     await expect(state).toHaveAttribute("data-persona-state", "idle", { timeout: 15_000 });
 
+    // The list holds the newest ten, so the new run shows as the newest, not as one more.
     const after = await openActivity(page, name);
-    await expect(after.runs).toHaveCount(before + 1);
+    await expect(after.runs.first()).not.toHaveAttribute("data-activity-run", newestBefore!);
     await expect(after.runs.first()).toHaveAttribute("data-run-status", "completed");
     await expect(after.runs.first()).toContainText(/Took /);
     await expect(after.runs.first()).toContainText(/Cost \$/);
   });
 
   test("Cancel run during a run: the run ends cancelled and the row goes Idle", async ({ page }) => {
-    const name = "Customer Feedback Analyzer";
+    const name = "Daily Standup Digest";
     await openDemo(page);
     const { state, chip } = rowOf(page, name);
     // No run, no Cancel.
@@ -168,7 +176,7 @@ test.describe("phone Personas (demo)", () => {
     await expect(page.getByRole("dialog", { name }).getByRole("button", { name: "Cancel run" })).toHaveCount(0);
     await closeSheet(page);
 
-    await runFromPhone(page, name, "Group this week's feedback by theme");
+    await runFromPhone(page, name, "Post this morning's digest again");
     await expect(state).toHaveAttribute("data-persona-state", "running", { timeout: 5_000 });
     await expect(chip).toHaveText("Done");
 
