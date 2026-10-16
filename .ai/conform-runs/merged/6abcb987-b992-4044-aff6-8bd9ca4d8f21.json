@@ -1,0 +1,210 @@
+{
+ "schema": "conform-run/1",
+ "worker": "6abcb987-b992-4044-aff6-8bd9ca4d8f21",
+ "subject": "data-access",
+ "evaluatedAt": "2026-10-16T22:14:29.171762+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "data-access",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/data/guide/getLocalized.ts:80 A locale is resolved by dynamically importing a compiled TypeScript module, and a search of scripts/i18n, src/components/guide, and src/data/guide found no unitOfWork, beginTransaction, queryBuilder, mapRow, or INSERT INTO.",
+   "techniques": [
+    {
+     "technique": "query-construction",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/getLocalized.ts:98 The read is a module import specifier, not store query text."
+    },
+    {
+     "technique": "operator-defined-tables",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/categories.ts:3 Categories are a source constant; adding one is a release, which is the case this technique declines."
+    },
+    {
+     "technique": "localized-record-identity",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/locales/ar/content/getting-started.ts:1 Translations are developer-shipped source maps keyed by topic id, not user-authored store rows with a group id."
+    },
+    {
+     "technique": "repo-testing",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/getLocalized.test.ts:61 The suite loads locale modules and checks serving policy; it does not stand up a store engine."
+    }
+   ],
+   "absenceTerms": [
+    "unitOfWork",
+    "beginTransaction",
+    "queryBuilder",
+    "mapRow",
+    "INSERT INTO"
+   ],
+   "registryProposal": "localized-record-identity is specified as table rows (group id, per-language address uniqueness). A module-per-locale catalog with a required language argument and an announced whole-unit fallback has no stated verdict when the articles are source files developers ship."
+  },
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "data-access",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/api.ts:405 listNotes is a required ApiClient method that returns an empty array on the orchestrator plane, which has no notes endpoint, so unsupported and a user with no notes are the same success.",
+   "techniques": [
+    {
+     "technique": "capability-declared-in-the-type",
+     "verdict": "deviation",
+     "evidence": "src/lib/api.ts:405 Four planes share ApiClient. realApi stubs notes and chat lists as []; sendChatMessage throws ApiError 501. Neither is a typed refusal naming capability and implementation. mockApi.listNotes returns fixture notes."
+    },
+    {
+     "technique": "batching-and-n-plus-one",
+     "verdict": "deviation",
+     "evidence": "src/lib/api.ts:306 listAllSubscriptions loads /api/personas once, then one subscriptions request per persona inside personas.map. mockApi.listAllSubscriptions flats its map in one step."
+    },
+    {
+     "technique": "row-mapping",
+     "verdict": "deviation",
+     "evidence": "src/lib/api.ts:118 orchestratorFetch returns parsed JSON as T. No mapper and no corrupt-payload policy at this seam."
+    },
+    {
+     "technique": "layering-rules",
+     "verdict": "deviation",
+     "evidence": "src/lib/api.ts:317 The client calls Sentry from the read path and imports useAuthStore, instead of a hook injected from above."
+    },
+    {
+     "technique": "query-construction",
+     "verdict": "conformant",
+     "evidence": "src/lib/api.ts:75 Filter values are bound with URLSearchParams. The proxy percent-encodes path segments (route.ts upstreamUrl) and proxy.test.ts pins that."
+    },
+    {
+     "technique": "read-models-and-projections",
+     "verdict": "conformant",
+     "evidence": "src/lib/api.ts:376 getObservabilityMetrics asks the observability endpoint for one tier. No write accepts that payload in these files."
+    },
+    {
+     "technique": "sequence-token-write-ordering",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/api.ts:428 One data plane is selected for the process. A single call does not span stores with different durability."
+    },
+    {
+     "technique": "existence-authority-written-last",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:108 The proxy performs one upstream fetch. These files do not write a second store beside it."
+    },
+    {
+     "technique": "operator-defined-tables",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/api.ts:149 The surface is a fixed method list. No runtime DDL in these files."
+    },
+    {
+     "technique": "localized-record-identity",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/api.ts:206 Reads I opened take no language. These are not per-language records."
+    },
+    {
+     "technique": "repo-testing",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/orchestrator/proxy.test.ts:162 The suite stubs fetch to assert proxy header and path rules. It is not a repository test against a store engine."
+    }
+   ],
+   "registryProposal": "The subject is written for a store that speaks a query language. This client is an HTTP facade over orchestrator, Supabase, desktop, and demo planes. Empty stubs and per-parent loops match the techniques; whether res.json() as T is the row-mapping seam is not stated."
+  },
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "data-access",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/data/guide/content/index.ts:13 English guide bodies are a compiled string map, the search index is an in-memory build of that map, and a search of src/data/guide found no unitOfWork, beginTransaction, queryBuilder, mapRow, or INSERT INTO.",
+   "techniques": [
+    {
+     "technique": "query-construction",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/content/getting-started.ts:1 A topic body is a source string constant. No store query text in these files."
+    },
+    {
+     "technique": "operator-defined-tables",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/categories.ts:3 The catalog is a source array. Shape changes ship in a release."
+    },
+    {
+     "technique": "localized-record-identity",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/content/index.ts:1 This context's index imports English category modules only. No language column or group id."
+    },
+    {
+     "technique": "read-models-and-projections",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/guide-body-index.ts:37 The search index is a process cache derived from GUIDE_CONTENT, not a stored projection beside a store."
+    }
+   ],
+   "absenceTerms": [
+    "unitOfWork",
+    "beginTransaction",
+    "queryBuilder",
+    "mapRow",
+    "INSERT INTO"
+   ],
+   "registryProposal": "read-models-and-projections describes a stored read model with a named recomputation. An in-memory index rebuilt from compiled content modules on first use is not classified."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-16T22:14:29.171762+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "data-access"
+   ],
+   "techniques": [
+    "localized-record-identity",
+    "operator-defined-tables",
+    "query-construction",
+    "repo-testing"
+   ],
+   "deviations": 0,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-16T22:14:29.171762+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "data-access"
+   ],
+   "techniques": [
+    "batching-and-n-plus-one",
+    "capability-declared-in-the-type",
+    "existence-authority-written-last",
+    "layering-rules",
+    "localized-record-identity",
+    "operator-defined-tables",
+    "query-construction",
+    "read-models-and-projections",
+    "repo-testing",
+    "row-mapping",
+    "sequence-token-write-ordering"
+   ],
+   "deviations": 1,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-16T22:14:29.171762+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "data-access"
+   ],
+   "techniques": [
+    "localized-record-identity",
+    "operator-defined-tables",
+    "query-construction",
+    "read-models-and-projections"
+   ],
+   "deviations": 0,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}

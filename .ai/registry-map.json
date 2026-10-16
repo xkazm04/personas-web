@@ -3448,7 +3448,11 @@
           "revision": 18,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/data/guide/getLocalized.ts:80 A locale is resolved by dynamically importing a compiled TypeScript module, and a search of scripts/i18n, src/components/guide, and src/data/guide found no unitOfWork, beginTransaction, queryBuilder, mapRow, or INSERT INTO.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:2dba94be6400dea1",
+          "evaluatedRevision": 19
         },
         {
           "subject": "quality-gates",
@@ -3705,7 +3709,11 @@
           "revision": 18,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/data/guide/content/index.ts:13 English guide bodies are a compiled string map, the search index is an in-memory build of that map, and a search of src/data/guide found no unitOfWork, beginTransaction, queryBuilder, mapRow, or INSERT INTO.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:2dba94be6400dea1",
+          "evaluatedRevision": 19
         },
         {
           "subject": "test-harness",
@@ -9262,7 +9270,11 @@
           "revision": 18,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/api.ts:405 listNotes is a required ApiClient method that returns an empty array on the orchestrator plane, which has no notes endpoint, so unsupported and a user with no notes are the same success.",
+          "evaluatedAt": "2026-10-16",
+          "evaluatedAgainst": "sha256-b2:2dba94be6400dea1",
+          "evaluatedRevision": 19
         },
         {
           "subject": "client-fetch-cache",
