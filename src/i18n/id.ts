@@ -1546,7 +1546,7 @@ export const id: LocaleTranslations = {
       done: "Selesai: {task}",
       needHeading: "Yang Anda butuhkan",
       setupHeading: "Cara menyiapkan",
-      secretField: "Rahasia",
+      secretField: "Rahasia", // pragma: allowlist secret
       optionalField: "Opsional",
       docsLink: "Dokumentasi resmi",
       outboundOnly: "Hanya keluar: Personas dapat mengirim ke {label} tetapi tidak dapat membaca darinya.",

@@ -1969,11 +1969,11 @@ export const MOCK_ATHENA_LEDGER: AthenaLedgerTotals = {
 
 // ── Rotation Overview (credential rotation status) ──────────────────
 export const MOCK_CREDENTIAL_ROTATIONS: CredentialRotation[] = [
-  { id: "cr_github", secret: "GITHUB_OAUTH_TOKEN", hasPolicy: true, enabled: true, anomaly: false, overdue: false, nextRotation: "12d", intervalDays: 90 },
-  { id: "cr_slack", secret: "SLACK_WEBHOOK_URL", hasPolicy: true, enabled: true, anomaly: true, overdue: false, nextRotation: "3d", intervalDays: 30 },
-  { id: "cr_openai", secret: "OPENAI_API_KEY", hasPolicy: true, enabled: false, anomaly: false, overdue: false, nextRotation: "21d", intervalDays: 90 },
-  { id: "cr_stripe", secret: "STRIPE_SECRET_KEY", hasPolicy: false, enabled: false, anomaly: false, overdue: false, nextRotation: "—", intervalDays: 0 },
-  { id: "cr_gcal", secret: "GCAL_REFRESH_TOKEN", hasPolicy: true, enabled: false, anomaly: false, overdue: true, nextRotation: "—", intervalDays: 60 },
+  { id: "cr_github", secret: "GITHUB_OAUTH_TOKEN", hasPolicy: true, enabled: true, anomaly: false, overdue: false, nextRotation: "12d", intervalDays: 90 }, // pragma: allowlist secret
+  { id: "cr_slack", secret: "SLACK_WEBHOOK_URL", hasPolicy: true, enabled: true, anomaly: true, overdue: false, nextRotation: "3d", intervalDays: 30 }, // pragma: allowlist secret
+  { id: "cr_openai", secret: "OPENAI_API_KEY", hasPolicy: true, enabled: false, anomaly: false, overdue: false, nextRotation: "21d", intervalDays: 90 }, // pragma: allowlist secret
+  { id: "cr_stripe", secret: "STRIPE_SECRET_KEY", hasPolicy: false, enabled: false, anomaly: false, overdue: false, nextRotation: "—", intervalDays: 0 }, // pragma: allowlist secret
+  { id: "cr_gcal", secret: "GCAL_REFRESH_TOKEN", hasPolicy: true, enabled: false, anomaly: false, overdue: true, nextRotation: "—", intervalDays: 60 }, // pragma: allowlist secret
 ];
 
 

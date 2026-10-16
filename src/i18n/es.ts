@@ -1546,7 +1546,7 @@ export const es: LocaleTranslations = {
       done: "Hecho: {task}",
       needHeading: "Lo que necesitar\u00e1s",
       setupHeading: "Config\u00faralo",
-      secretField: "Secreto",
+      secretField: "Secreto", // pragma: allowlist secret
       optionalField: "Opcional",
       docsLink: "Documentaci\u00f3n oficial",
       outboundOnly: "Solo saliente: Personas puede enviar a {label}, pero no leer de \u00e9l.",

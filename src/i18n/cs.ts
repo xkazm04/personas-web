@@ -1546,7 +1546,7 @@ export const cs: LocaleTranslations = {
       done: "Hotovo: {task}",
       needHeading: "Co budete pot\u0159ebovat",
       setupHeading: "Nastaven\u00ed",
-      secretField: "Tajn\u00e9",
+      secretField: "Tajn\u00e9", // pragma: allowlist secret
       optionalField: "Voliteln\u00e9",
       docsLink: "Ofici\u00e1ln\u00ed dokumentace",
       outboundOnly: "Pouze odchoz\u00ed: Personas m\u016f\u017ee do {label} odes\u00edlat, ale nem\u016f\u017ee z n\u011bj \u010d\u00edst.",

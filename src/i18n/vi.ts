@@ -1546,7 +1546,7 @@ export const vi: LocaleTranslations = {
       done: "Xong: {task}",
       needHeading: "B\u1ea1n s\u1ebd c\u1ea7n",
       setupHeading: "C\u00e1ch thi\u1ebft l\u1eadp",
-      secretField: "B\u00ed m\u1eadt",
+      secretField: "B\u00ed m\u1eadt", // pragma: allowlist secret
       optionalField: "T\u00f9y ch\u1ecdn",
       docsLink: "T\u00e0i li\u1ec7u ch\u00ednh th\u1ee9c",
       outboundOnly: "Ch\u1ec9 g\u1eedi \u0111i: Personas c\u00f3 th\u1ec3 g\u1eedi t\u1edbi {label} nh\u01b0ng kh\u00f4ng th\u1ec3 \u0111\u1ecdc t\u1eeb \u0111\u00f3.",

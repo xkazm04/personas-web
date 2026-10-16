@@ -1546,7 +1546,7 @@ export const de: LocaleTranslations = {
       done: "Erledigt: {task}",
       needHeading: "Das brauchen Sie",
       setupHeading: "Einrichten",
-      secretField: "Geheim",
+      secretField: "Geheim", // pragma: allowlist secret
       optionalField: "Optional",
       docsLink: "Offizielle Dokumentation",
       outboundOnly: "Nur ausgehend: Personas kann an {label} senden, aber nicht daraus lesen.",

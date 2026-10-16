@@ -8,7 +8,11 @@ name: security scan
 #            once a run comes back clean or its findings are suppressed inline.
 #   secrets  detect-secrets over the files this push or PR changed. BLOCKING:
 #            a new secret fails the job. Scanning only the diff keeps old,
-#            already-triaged history from red-lining every run.
+#            already-triaged history from red-lining every run. Generated
+#            files that are nothing but content hashes and commit SHAs (the
+#            i18n ledger, the context and registry maps, tiger run records)
+#            are excluded; a false positive in hand-written code takes an
+#            inline `pragma: allowlist secret`.
 #   sbom     `npm sbom` (CycloneDX) from the lockfile, kept as a build artifact.
 #
 # Only actions this repo already pins by commit SHA are used (see ci.yml for how
@@ -58,7 +62,7 @@ jobs:
           fi
           git diff --name-only --diff-filter=ACMR -z "$BASE_SHA" HEAD \
             | xargs -0 -r pipx run --spec detect-secrets==1.5.0 detect-secrets-hook \
-                --exclude-files '((^|/)package-lock\.json|\.(png|jpe?g|gif|webp|avif|ico|svg|mp3|mp4|webm|woff2?|ttf|pdf))$'
+                --exclude-files '((^|/)package-lock\.json|^docs/i18n/ui-ledger\.json|^context-map\.json|^\.ai/registry-map\.json|^tiger/hunts/[^/]+/run\.json|\.(png|jpe?g|gif|webp|avif|ico|svg|mp3|mp4|webm|woff2?|ttf|pdf))$'
 
   sbom:
     name: sbom (cyclonedx)

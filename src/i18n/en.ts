@@ -3446,7 +3446,7 @@ export const en: CoreTranslations = {
     done: 'Done: {task}',
     needHeading: "What you'll need",
     setupHeading: 'Set it up',
-    secretField: 'Secret',
+    secretField: 'Secret', // pragma: allowlist secret
     optionalField: 'Optional',
     docsLink: 'Official docs',
     outboundOnly: 'Outbound only: Personas can send to {label} but cannot read from it.',
