@@ -1,0 +1,22 @@
+{
+ "schema": "conform-run/1",
+ "worker": "56f5fed4-f5ca-445c-87ae-a5e6223766d2",
+ "subject": "supply-chain",
+ "evaluatedAt": "2026-10-17T02:43:39.865504+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "supply-chain",
+   "context": "Agent Lab & Plugin Ecosystem",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "supply-chain",
+   "context": "Notes (Goal Board)",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": []
+}
