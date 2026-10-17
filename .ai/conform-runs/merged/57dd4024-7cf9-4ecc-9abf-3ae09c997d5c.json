@@ -1,0 +1,27 @@
+{
+ "schema": "conform-run/1",
+ "worker": "57dd4024-7cf9-4ecc-9abf-3ae09c997d5c",
+ "subject": "terminal-multiplexing",
+ "evaluatedAt": "2026-10-17T22:05:19.222639+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "terminal-multiplexing",
+   "context": "Orchestration & Platform Visualizers",
+   "reason": "The context implements marketing visualization and playback machine for orchestration triggers (AgentLens, DetailPanel, RingArt, RingNodes, geometry, playback.ts); it contains no pseudo-terminals, terminal emulators, or session multiplexing machinery. Preconditions for terminal-multiplexing do not hold, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  },
+  {
+   "subject": "terminal-multiplexing",
+   "context": "Shared UI Primitives & Illustrations",
+   "reason": "The context contains shared visual styling components, cards, SVG icons, and illustrations including static decorative window chrome (TerminalChrome.tsx) and an SVG graphic (TerminalIllustration.tsx), with no interactive terminal emulation or multiplexer state. Preconditions for terminal-multiplexing do not hold, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  },
+  {
+   "subject": "terminal-multiplexing",
+   "context": "Supabase Client",
+   "reason": "The context manages Supabase client connections, database schema migrations, and sync reachability / controller stores for web-to-desktop synchronization; it does not spawn, manage, or multiplex terminal sessions or pseudo-terminals. Preconditions for terminal-multiplexing do not hold, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  }
+ ],
+ "consults": []
+}
