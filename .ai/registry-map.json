@@ -2008,7 +2008,11 @@
           "revision": 1,
           "changedAt": "2026-09-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/design-blueprint/Parts.tsx:19 The sheet keeps every glyph mounted and only moves ink, and a search of this context for useVirtualizer, overscan, renderUnit, leadingEdge, and trailingEdge found no render-unit window, so the document runtime decides which elements exist.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:df020f172eb32893",
+          "evaluatedRevision": 1
         },
         {
           "subject": "multi-provider-gateway-plane",
@@ -8211,7 +8215,11 @@
           "revision": 1,
           "changedAt": "2026-09-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/LazyMount.tsx:8 The only existence gate delays hydration of a section chunk and then leaves it mounted, and a search for useVirtualizer, overscan, renderUnit, leadingEdge, and trailingEdge found no render-unit window, so this context does not own a mount pipeline.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:df020f172eb32893",
+          "evaluatedRevision": 1
         },
         {
           "subject": "agent-memory",

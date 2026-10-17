@@ -1,0 +1,144 @@
+{
+ "schema": "conform-run/1",
+ "worker": "bbbd1452-d8f9-47ac-9835-5ebc72556829",
+ "subject": "render-mount-pipeline",
+ "evaluatedAt": "2026-10-17T02:14:10.875140+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Memory Layers & Multi-Provider AI",
+   "subject": "render-mount-pipeline",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/design-blueprint/Parts.tsx:19 The sheet keeps every glyph mounted and only moves ink, and a search of this context for useVirtualizer, overscan, renderUnit, leadingEdge, and trailingEdge found no render-unit window, so the document runtime decides which elements exist.",
+   "techniques": [
+    {
+     "technique": "blueprint-then-mount",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/TestRun.tsx:88 Keyframe samples are applied to an SVG circle that stays mounted; they are not render units with content type and binders."
+    },
+    {
+     "technique": "edge-sorted-incremental-mount",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/index.tsx:70 The sheet is one clipped fixed-aspect drawing, so nothing scrolls a tree of units."
+    },
+    {
+     "technique": "mount-binders-versus-attach-binders",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/Callout.tsx:96 A control that is not yet offered stays mounted and is silenced with pointer-events; hosts are never detached with content still bound."
+    },
+    {
+     "technique": "mount-references-across-features",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/shared/useBuildClock.ts:30 One intersection ratio arms the whole sheet; no second feature holds a per-unit mount reference."
+    },
+    {
+     "technique": "preempt-and-continue-shared-computation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/shared/useBuildClock.ts:46 The timeline advances on a main-thread timeout; a search found no worker or shared layout to preempt."
+    },
+    {
+     "technique": "recycle-by-content-type",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/design-blueprint/TestRun.tsx:82 Each token is a React element keyed by kind, and nothing pools host objects by content type."
+    }
+   ],
+   "absenceTerms": [
+    "useVirtualizer",
+    "overscan",
+    "renderUnit",
+    "leadingEdge",
+    "trailingEdge"
+   ]
+  },
+  {
+   "context": "Animation & Motion System",
+   "subject": "render-mount-pipeline",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/LazyMount.tsx:8 The only existence gate delays hydration of a section chunk and then leaves it mounted, and a search for useVirtualizer, overscan, renderUnit, leadingEdge, and trailingEdge found no render-unit window, so this context does not own a mount pipeline.",
+   "techniques": [
+    {
+     "technique": "blueprint-then-mount",
+     "verdict": "not-applicable",
+     "evidence": "src/components/FloatingParticles.tsx:80 Particles are paint on one canvas, so no layout pass is choosing which nodes become host objects."
+    },
+    {
+     "technique": "edge-sorted-incremental-mount",
+     "verdict": "not-applicable",
+     "evidence": "src/components/particle-host/particleHostRegistry.ts:77 An off-screen layer skips paint for the frame and stays registered; scroll does not acquire or release render units."
+    },
+    {
+     "technique": "mount-binders-versus-attach-binders",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useAnimationPause.ts:66 Leaving the viewport pauses a CSS animation on an element that remains mounted; there are no mount-clock and attach-clock binders."
+    },
+    {
+     "technique": "mount-references-across-features",
+     "verdict": "not-applicable",
+     "evidence": "src/components/ScrollMap.tsx:24 Scroll-to brings a gated section into view by scrolling its wrapper; it does not keep an off-screen element mounted against the gate."
+    },
+    {
+     "technique": "preempt-and-continue-shared-computation",
+     "verdict": "not-applicable",
+     "evidence": "src/contexts/QualityContext.tsx:139 Idle time only starts main-thread frame sampling; a search found no background layout for the frame thread to continue."
+    },
+    {
+     "technique": "recycle-by-content-type",
+     "verdict": "not-applicable",
+     "evidence": "src/components/FloatingParticles.tsx:37 Particles are a fixed data array sliced by quality tier, not host objects taken from a content-type pool."
+    }
+   ],
+   "absenceTerms": [
+    "useVirtualizer",
+    "overscan",
+    "renderUnit",
+    "leadingEdge",
+    "trailingEdge"
+   ],
+   "registryProposal": "The golden path trigger that code decides which elements exist also matches a mount-once section hydration gate and an immediate-mode canvas, while every technique assumes a render-unit blueprint; a boundary sentence excluding chunk hydration and paint culling would close that reading."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T02:14:10.875140+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "render-mount-pipeline"
+   ],
+   "techniques": [
+    "blueprint-then-mount",
+    "edge-sorted-incremental-mount",
+    "mount-binders-versus-attach-binders",
+    "mount-references-across-features",
+    "preempt-and-continue-shared-computation",
+    "recycle-by-content-type"
+   ],
+   "deviations": 0,
+   "context": "Memory Layers & Multi-Provider AI",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-17T02:14:10.875140+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "render-mount-pipeline"
+   ],
+   "techniques": [
+    "blueprint-then-mount",
+    "edge-sorted-incremental-mount",
+    "mount-binders-versus-attach-binders",
+    "mount-references-across-features",
+    "preempt-and-continue-shared-computation",
+    "recycle-by-content-type"
+   ],
+   "deviations": 0,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}
