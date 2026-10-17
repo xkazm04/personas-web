@@ -368,18 +368,54 @@
       "subject": "templates-scaffolding",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T21:03:29.108Z",
+      "worker": "1a6cc0fd-aabf-4311-a4b1-509c084cb6e8",
       "techniques": [
         {
           "technique": "adoption-lifecycle",
           "verdict": "not-applicable",
-          "evidence": "TemplateDetail.tsx:88-102 hands off to `personas://template/<id>` — no interview or instantiation happens in this repo"
+          "evidence": "src/app/templates/[id]/TemplateDetail.tsx:84 The primary action opens installation guidance; it does not start an interview or commit an adoption."
         },
         {
           "technique": "catalog-curation",
-          "verdict": "conformant",
-          "evidence": "src/lib/template-queries.ts:9-19 asserts (throws at module load) on duplicate template ids — a real, if minimal, admission-bar check"
+          "verdict": "not-applicable",
+          "evidence": "src/lib/templates.ts:1910 This catalog lists static reference snippets, outside the standard's stated precondition of parameterized artifacts that the product instantiates."
+        },
+        {
+          "technique": "instance-upgrade",
+          "verdict": "not-applicable",
+          "evidence": "src/i18n/en.ts:3431 The user builds a separate agent manually; this context owns neither an adopted instance nor an upgrade offer."
+        },
+        {
+          "technique": "integrity-and-provenance",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/[id]/template-detail/TemplateJsonLd.tsx:15 The published artifact is reference source code; this context does not admit or adopt executable template packages or display an integrity verdict."
+        },
+        {
+          "technique": "readiness-prerequisites",
+          "verdict": "not-applicable",
+          "evidence": "src/i18n/en.ts:3435 There is no browser-side adoption commit against a live environment for a readiness gate to protect."
+        },
+        {
+          "technique": "template-anatomy",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/[id]/TemplateDetail.tsx:108 The view presents fixed configuration text; searches and the opened catalog model reveal no parameter surface or answer mapping."
+        },
+        {
+          "technique": "template-portability",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/[id]/TemplateDetail.tsx:65 The operation exports reference text unchanged; it does not transplant bindings or triggers into an adopting environment."
+        }
+      ],
+      "registryProposal": "Clarify whether catalog-curation and payload-portability rules independently cover static reference galleries that offer copying but no parameterization or instantiation.",
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/lib/templates.ts:18-32 defines AgentTemplate as static hardcoded metadata + a fixed YAML `config` string with no parameter/dimension model; src/app/templates/[id]/TemplateDetail.tsx:63-102 offers only copy-to-clipboard and a `personas://` deep link that hands off adoption to a separate desktop app. This repo owns browse+preview only — the interview, adoption transaction, readiness-prerequisites check, integrity manifest, and portability rewriting that templates-scaffolding governs have no home here; they belong (if they exist) to the desktop app this page links out to.",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by 1a6cc0fd-aabf-4311-a4b1-509c084cb6e8"
         }
       ]
     },

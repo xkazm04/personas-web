@@ -1,0 +1,83 @@
+{
+ "schema": "conform-run/1",
+ "worker": "1a6cc0fd-aabf-4311-a4b1-509c084cb6e8",
+ "subject": "templates-scaffolding",
+ "evaluatedAt": "2026-10-17T21:03:29.108155+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Templates Gallery & Detail",
+   "subject": "templates-scaffolding",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/templates/layout.tsx:10 Searches found no interview, prerequisite, or provenance handling in this context or its catalog helpers; this surface publishes reference configurations for manual setup rather than parameterizing and instantiating live instances.",
+   "techniques": [
+    {
+     "technique": "adoption-lifecycle",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/TemplateDetail.tsx:84 The primary action opens installation guidance; it does not start an interview or commit an adoption."
+    },
+    {
+     "technique": "catalog-curation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/templates.ts:1910 This catalog lists static reference snippets, outside the standard's stated precondition of parameterized artifacts that the product instantiates."
+    },
+    {
+     "technique": "instance-upgrade",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/en.ts:3431 The user builds a separate agent manually; this context owns neither an adopted instance nor an upgrade offer."
+    },
+    {
+     "technique": "integrity-and-provenance",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/template-detail/TemplateJsonLd.tsx:15 The published artifact is reference source code; this context does not admit or adopt executable template packages or display an integrity verdict."
+    },
+    {
+     "technique": "readiness-prerequisites",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/en.ts:3435 There is no browser-side adoption commit against a live environment for a readiness gate to protect."
+    },
+    {
+     "technique": "template-anatomy",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/TemplateDetail.tsx:108 The view presents fixed configuration text; searches and the opened catalog model reveal no parameter surface or answer mapping."
+    },
+    {
+     "technique": "template-portability",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/TemplateDetail.tsx:65 The operation exports reference text unchanged; it does not transplant bindings or triggers into an adopting environment."
+    }
+   ],
+   "absenceTerms": [
+    "interview",
+    "prerequisite",
+    "provenance"
+   ],
+   "registryProposal": "Clarify whether catalog-curation and payload-portability rules independently cover static reference galleries that offer copying but no parameterization or instantiation."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T21:03:29.108155+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "templates-scaffolding"
+   ],
+   "techniques": [
+    "adoption-lifecycle",
+    "catalog-curation",
+    "instance-upgrade",
+    "integrity-and-provenance",
+    "readiness-prerequisites",
+    "template-anatomy",
+    "template-portability"
+   ],
+   "deviations": 0,
+   "context": "Templates Gallery & Detail",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

@@ -5345,10 +5345,10 @@
           "changedAt": "2026-09-23",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/lib/templates.ts:18-32 defines AgentTemplate as static hardcoded metadata + a fixed YAML `config` string with no parameter/dimension model; src/app/templates/[id]/TemplateDetail.tsx:63-102 offers only copy-to-clipboard and a `personas://` deep link that hands off adoption to a separate desktop app. This repo owns browse+preview only — the interview, adoption transaction, readiness-prerequisites check, integrity manifest, and portability rewriting that templates-scaffolding governs have no home here; they belong (if they exist) to the desktop app this page links out to.",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256:5b5300db8b9ce628",
-          "stale": true
+          "evidence": "src/app/templates/layout.tsx:10 Searches found no interview, prerequisite, or provenance handling in this context or its catalog helpers; this surface publishes reference configurations for manual setup rather than parameterizing and instantiating live instances.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:3dd9549b75f4f998",
+          "evaluatedRevision": 3
         },
         {
           "subject": "generated-workflow-candidates",
