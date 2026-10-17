@@ -1,0 +1,106 @@
+{
+  "schema": "conform-run/1",
+  "worker": "bbee4b8c-c38b-478a-8a48-07d58efd4073",
+  "subject": "test-input-generation",
+  "evaluatedAt": "2026-10-17T22:26:40.460882+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "Feature Voting & Comments",
+      "subject": "test-input-generation",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/app/api/feature-comments/route.ts:58 The comment validator has explicit rejection boundaries, but located route tests stop at an invalid feature ID and provide no text, author, or parent boundary cases, accepted POST control, or rejection-state checks.",
+      "techniques": [
+        {
+          "technique": "generator-bounds-the-space",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:65 This located route harness supplies a fixed request rather than randomized structured inputs."
+        },
+        {
+          "technique": "liveness-needs-a-quiet-period",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:163 This test checks bounded refusal under load, not recovery after injected faults or a progress guarantee."
+        },
+        {
+          "technique": "negative-space-generation",
+          "verdict": "deviation",
+          "evidence": "src/lib/threatModelControls.test.ts:83 This case reaches only feature-ID rejection; searches found no route cases perturbing valid comments at text/author limits or parent relationships, accepted POST controls, or post-rejection state assertions."
+        },
+        {
+          "technique": "seed-is-not-a-reproduction",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/validation.test.ts:45 The voter-ID boundary input is constructed directly and survives generator changes without a seed."
+        },
+        {
+          "technique": "stage-ordered-fuzz-targets",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:171 The located route tests execute fixed allowlist cases; no multi-stage fuzzing campaign was located to split or triage."
+        },
+        {
+          "technique": "swarm-feature-sampling",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:149 Cases are deterministically expanded from a table, without a randomized operation distribution to vary."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "test-input-generation",
+      "context": "Why Agents & Use Cases",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "test-input-generation",
+      "context": "Self-Healing & Trigger Automation",
+      "reason": "withdrawn after review: reviewer (sonnet): The not-applicable anchor, cases.ts:4, is a comment about the desktop app's remedies and doesn't show that the precondition (code that needs generated test inputs) is absent. The no-tests claim rests only on a grep for describe(, expect( and fast-check, and the techniques cite pieces of the illustra"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-17T22:26:40.460882+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-input-generation"
+      ],
+      "techniques": [
+        "exhaustive-when-bounded",
+        "field-captured-operation-traces",
+        "generator-bounds-the-space",
+        "inside-out-invariants",
+        "liveness-needs-a-quiet-period",
+        "model-based-oracle",
+        "negative-space-generation",
+        "proof-cost-follows-the-circuit",
+        "seed-is-not-a-reproduction",
+        "stage-ordered-fuzz-targets",
+        "swarm-feature-sampling"
+      ],
+      "deviations": 0,
+      "context": "Self-Healing & Trigger Automation",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-17T22:26:40.460882+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "test-input-generation"
+      ],
+      "techniques": [
+        "generator-bounds-the-space",
+        "liveness-needs-a-quiet-period",
+        "negative-space-generation",
+        "seed-is-not-a-reproduction",
+        "stage-ordered-fuzz-targets",
+        "swarm-feature-sampling"
+      ],
+      "deviations": 1,
+      "context": "Feature Voting & Comments",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

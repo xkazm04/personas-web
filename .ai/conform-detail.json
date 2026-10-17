@@ -4740,6 +4740,118 @@
         }
       ],
       "registryProposal": "The golden path trigger that code decides which elements exist also matches a mount-once section hydration gate and an immediate-mode canvas, while every technique assumes a render-unit blueprint; a boundary sentence excluding chunk hydration and paint culling would close that reading."
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/test-input-generation": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "test-input-generation",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T22:26:40.460Z",
+      "techniques": [
+        {
+          "technique": "exhaustive-when-bounded",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:63 This bounds an animation loop, not a test-input space."
+        },
+        {
+          "technique": "field-captured-operation-traces",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/RunLog.tsx:65 RunLog displays supplied text; it does not capture model operations for replay."
+        },
+        {
+          "technique": "generator-bounds-the-space",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:17 These are fixed illustration scenarios, with no randomized test generator located."
+        },
+        {
+          "technique": "inside-out-invariants",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:62 Chip appearance is derived from the supplied phase rather than independently maintained subsystem state."
+        },
+        {
+          "technique": "liveness-needs-a-quiet-period",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:27 A timer advances the illustration; this does not exercise recovery or measure progress after injected faults."
+        },
+        {
+          "technique": "model-based-oracle",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:36 The displayed error comes from scripted copy, not a tested result requiring an oracle."
+        },
+        {
+          "technique": "negative-space-generation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:49 Failure names select artwork; they are not malformed inputs submitted to a validator."
+        },
+        {
+          "technique": "proof-cost-follows-the-circuit",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:33 The circuit here is SVG artwork, with no solver-backed check under consideration in the inspected implementation."
+        },
+        {
+          "technique": "seed-is-not-a-reproduction",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:24 The initial value is a display position, not a seed retained to reproduce a generated failure."
+        },
+        {
+          "technique": "stage-ordered-fuzz-targets",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/Stepper.tsx:7 These stages are displayed labels rather than independently executable pipeline stages being fuzzed."
+        },
+        {
+          "technique": "swarm-feature-sampling",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:76 A visitor selects a scripted case; no randomized operation distribution is involved."
+        }
+      ],
+      "withdrawn": {
+        "worker": "bbee4b8c-c38b-478a-8a48-07d58efd4073",
+        "state": "not-applicable",
+        "at": "2026-10-17T22:27:02.894494+00:00",
+        "reason": "reviewer (sonnet): The not-applicable anchor, cases.ts:4, is a comment about the desktop app's remedies and doesn't show that the precondition (code that needs generated test inputs) is absent. The no-tests claim rests only on a grep for describe(, expect( and fast-check, and the techniques cite pieces of the illustra"
+      }
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/test-input-generation": {
+      "context": "Feature Voting & Comments",
+      "subject": "test-input-generation",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T22:26:40.460Z",
+      "worker": "bbee4b8c-c38b-478a-8a48-07d58efd4073",
+      "techniques": [
+        {
+          "technique": "generator-bounds-the-space",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:65 This located route harness supplies a fixed request rather than randomized structured inputs."
+        },
+        {
+          "technique": "liveness-needs-a-quiet-period",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:163 This test checks bounded refusal under load, not recovery after injected faults or a progress guarantee."
+        },
+        {
+          "technique": "negative-space-generation",
+          "verdict": "deviation",
+          "evidence": "src/lib/threatModelControls.test.ts:83 This case reaches only feature-ID rejection; searches found no route cases perturbing valid comments at text/author limits or parent relationships, accepted POST controls, or post-rejection state assertions."
+        },
+        {
+          "technique": "seed-is-not-a-reproduction",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/validation.test.ts:45 The voter-ID boundary input is constructed directly and survives generator changes without a seed."
+        },
+        {
+          "technique": "stage-ordered-fuzz-targets",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:171 The located route tests execute fixed allowlist cases; no multi-stage fuzzing campaign was located to split or triage."
+        },
+        {
+          "technique": "swarm-feature-sampling",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/threatModelControls.test.ts:149 Cases are deterministically expanded from a table, without a randomized operation distribution to vary."
+        }
+      ]
     }
   }
 }

@@ -5156,7 +5156,11 @@
           "revision": 9,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/api/feature-comments/route.ts:58 The comment validator has explicit rejection boundaries, but located route tests stop at an invalid feature ID and provide no text, author, or parent boundary cases, accepted POST control, or rejection-state checks.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:d5ab12a92aba67c4",
+          "evaluatedRevision": 10
         },
         {
           "subject": "test-harness",
