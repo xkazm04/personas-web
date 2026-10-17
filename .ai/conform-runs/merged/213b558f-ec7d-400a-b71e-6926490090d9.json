@@ -1,0 +1,99 @@
+{
+ "schema": "conform-run/1",
+ "worker": "213b558f-ec7d-400a-b71e-6926490090d9",
+ "subject": "page-load-pipeline",
+ "evaluatedAt": "2026-10-17T01:30:13.071824+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Layout, Navigation & Page Shell",
+   "subject": "page-load-pipeline",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/PageTransition.tsx:56 The root route wrapper starts transparent, making visible first content depend on hydration and its entrance animation for visitors without reduced motion.",
+   "techniques": [
+    {
+     "technique": "layout-stability-by-reservation",
+     "verdict": "conformant",
+     "evidence": "src/components/CookieConsent.tsx:98 The consent banner appears after mount as a fixed overlay, avoiding insertion into document flow."
+    },
+    {
+     "technique": "priority-is-declared-not-hoped",
+     "verdict": "deviation",
+     "evidence": "src/components/NavbarLogoGlyph.tsx:49 The shared 56-by-56 navbar logo unconditionally requests priority across routes, contrary to the rule against prioritizing a shared image unless it is every route's largest element."
+    },
+    {
+     "technique": "script-cost-is-main-thread-time",
+     "verdict": "deviation",
+     "evidence": "src/lib/animations.ts:121 PageTransition applies this initial variant around route content; its CSS visibility override is restricted to reduced motion, leaving ordinary first paint hidden until script reveals it."
+    }
+   ]
+  },
+  {
+   "context": "Internationalization (14 locales)",
+   "subject": "page-load-pipeline",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/stores/i18nStore.ts:60 Reachable non-Latin locales load swap fonts without metric-matched fallbacks, leaving late font reflow unmitigated.",
+   "techniques": [
+    {
+     "technique": "font-loading-discipline",
+     "verdict": "deviation",
+     "evidence": "src/styles/tokens.css:107 The loader selects display=swap, while Arabic falls back through the Latin/system stack; repository searches found no font metric override declarations matching that fallback to Noto."
+    },
+    {
+     "technique": "layout-stability-by-reservation",
+     "verdict": "conformant",
+     "evidence": "src/components/LocaleOffer.tsx:65 The asynchronously populated language offer uses a fixed overlay, so its arrival does not displace page content."
+    },
+    {
+     "technique": "script-cost-is-main-thread-time",
+     "verdict": "conformant",
+     "evidence": "src/components/LocaleOfferMount.tsx:9 The optional language offer has a separate dynamic import, and the mount returns null when no additional locale is reachable."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "page-load-pipeline",
+   "context": "Localized Guide Content (14 locales)",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-17T01:30:13.071824+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "page-load-pipeline"
+   ],
+   "techniques": [
+    "layout-stability-by-reservation",
+    "priority-is-declared-not-hoped",
+    "script-cost-is-main-thread-time"
+   ],
+   "deviations": 1,
+   "context": "Layout, Navigation & Page Shell",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-17T01:30:13.071824+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "page-load-pipeline"
+   ],
+   "techniques": [
+    "font-loading-discipline",
+    "layout-stability-by-reservation",
+    "script-cost-is-main-thread-time"
+   ],
+   "deviations": 1,
+   "context": "Internationalization (14 locales)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

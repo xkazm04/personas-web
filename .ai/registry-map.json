@@ -8638,7 +8638,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/PageTransition.tsx:56 The root route wrapper starts transparent, making visible first content depend on hydration and its entrance animation for visitors without reduced motion.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:f51109a4fa17ac48",
+          "evaluatedRevision": 3
         },
         {
           "subject": "native-shell-integration",
@@ -9895,7 +9899,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/stores/i18nStore.ts:60 Reachable non-Latin locales load swap fonts without metric-matched fallbacks, leaving late font reflow unmitigated.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:f51109a4fa17ac48",
+          "evaluatedRevision": 3
         },
         {
           "subject": "concurrency-guards",
