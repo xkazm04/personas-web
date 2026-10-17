@@ -1,0 +1,187 @@
+{
+ "schema": "conform-run/1",
+ "worker": "a34885b4-30b6-42c9-9186-18fcaa3f3ef2",
+ "subject": "plan-entitlements",
+ "evaluatedAt": "2026-10-17T01:48:24.010044+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Features Overview & Pricing",
+   "subject": "plan-entitlements",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/pricing/index.tsx:18 Searches found no entitlement, tierId, or paywall references in this context, whose pricing section offers every Personas feature free rather than defining paid access.",
+   "techniques": [
+    {
+     "technique": "capability-gate-predicates",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/pending/pricingSection.ts:30 The context advertises universally free Personas features; it implements no plan gate or upgrade prompt."
+    },
+    {
+     "technique": "deployment-mode-short-circuit",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/murmuration-hero/shared/HeroCtas.tsx:37 The referenced DOWNLOAD_PLAN resolves installer availability, not commercial deployment modes or capability access."
+    },
+    {
+     "technique": "entitlement-lifecycle-revocation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/pricing/BillArt.tsx:56 The illustration describes an external subscription; this context grants or revokes no subscription entitlement."
+    },
+    {
+     "technique": "id-vs-label-split",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/pending/pricingSection.ts:39 This is explanatory copy naming third-party plans, not a Personas tier identifier or persisted tenant reference."
+    },
+    {
+     "technique": "inherited-tier-not-cloned-tier",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/pricing/index.tsx:19 No Personas commercial agreement, negotiated price, or derived customer tier is implemented here."
+    },
+    {
+     "technique": "live-catalog-edit-is-a-lifecycle-event",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/pricing/index.tsx:29 The section reads static explanatory copy; it has no subscribed tier catalog or catalog-edit operation."
+    },
+    {
+     "technique": "price-book-authority",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/pending/pricingSection.ts:34 The only numeric price describes the free app; no charged Personas price or numerical Anthropic price is mirrored."
+    },
+    {
+     "technique": "provider-publishes-state-not-decision",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/pricing/index.tsx:48 This consumer renders an illustration, not an entitlement read contract for another product."
+    },
+    {
+     "technique": "subtractive-entitlement",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/pending/pricingSection.ts:40 The illustrated flow has no inherited Personas subscription capabilities or customer-specific removal layer."
+    },
+    {
+     "technique": "tier-model-single-source",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/pending/pricingSection.ts:31 Despite its pricing name, this surface explains a free app and external billing rather than presenting a Personas tier set."
+    }
+   ],
+   "absenceTerms": [
+    "entitlement",
+    "tierId",
+    "paywall"
+   ]
+  },
+  {
+   "context": "Self-Healing & Trigger Automation",
+   "subject": "plan-entitlements",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/i18n/pending/featuresSections.ts:408 Searches found no entitlement, tierId, or paywall references in this context, which animates operational failure scenarios rather than deciding access purchased through a plan.",
+   "techniques": [
+    {
+     "technique": "capability-gate-predicates",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:15 The loop gate checks motion preference and visibility, not paid capability access."
+    },
+    {
+     "technique": "deployment-mode-short-circuit",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:26 This illustration uses the motion gate; it has no commercial deployment-mode gate to short-circuit."
+    },
+    {
+     "technique": "entitlement-lifecycle-revocation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:10 Login expiry is a connector credential failure, not subscription expiry or entitlement revocation."
+    },
+    {
+     "technique": "id-vs-label-split",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:31 These labels identify illustrated tools and a model, not commercial tiers."
+    },
+    {
+     "technique": "inherited-tier-not-cloned-tier",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:49 The selectable variants are failure scenarios; no negotiated customer agreement or derived tier exists here."
+    },
+    {
+     "technique": "live-catalog-edit-is-a-lifecycle-event",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:27 The changing state is an animation step, not an edit to subscribed plan capabilities."
+    },
+    {
+     "technique": "price-book-authority",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:38 This constructs repair and retry copy; the context renders no commercial price or charging promise."
+    },
+    {
+     "technique": "provider-publishes-state-not-decision",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:33 The board renders SVG artwork, not an entitlement service contract."
+    },
+    {
+     "technique": "subtractive-entitlement",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:33 Escalation follows the illustrated error category; it does not remove an inherited subscription capability."
+    },
+    {
+     "technique": "tier-model-single-source",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:15 The declared vocabulary models operational failures, not product tiers."
+    }
+   ],
+   "absenceTerms": [
+    "entitlement",
+    "tierId",
+    "paywall"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T01:48:24.010044+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "plan-entitlements"
+   ],
+   "techniques": [
+    "capability-gate-predicates",
+    "deployment-mode-short-circuit",
+    "entitlement-lifecycle-revocation",
+    "id-vs-label-split",
+    "inherited-tier-not-cloned-tier",
+    "live-catalog-edit-is-a-lifecycle-event",
+    "price-book-authority",
+    "provider-publishes-state-not-decision",
+    "subtractive-entitlement",
+    "tier-model-single-source"
+   ],
+   "deviations": 0,
+   "context": "Features Overview & Pricing",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-17T01:48:24.010044+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "plan-entitlements"
+   ],
+   "techniques": [
+    "capability-gate-predicates",
+    "deployment-mode-short-circuit",
+    "entitlement-lifecycle-revocation",
+    "id-vs-label-split",
+    "inherited-tier-not-cloned-tier",
+    "live-catalog-edit-is-a-lifecycle-event",
+    "price-book-authority",
+    "provider-publishes-state-not-decision",
+    "subtractive-entitlement",
+    "tier-model-single-source"
+   ],
+   "deviations": 0,
+   "context": "Self-Healing & Trigger Automation",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

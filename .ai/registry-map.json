@@ -1317,7 +1317,11 @@
           "revision": 7,
           "changedAt": "2026-09-18",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/pricing/index.tsx:18 Searches found no entitlement, tierId, or paywall references in this context, whose pricing section offers every Personas feature free rather than defining paid access.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:58f21c0561a86e45",
+          "evaluatedRevision": 7
         },
         {
           "subject": "prompt-assembly",
@@ -2194,7 +2198,11 @@
           "revision": 7,
           "changedAt": "2026-09-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/i18n/pending/featuresSections.ts:408 Searches found no entitlement, tierId, or paywall references in this context, which animates operational failure scenarios rather than deciding access purchased through a plan.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:58f21c0561a86e45",
+          "evaluatedRevision": 7
         },
         {
           "subject": "test-input-generation",
