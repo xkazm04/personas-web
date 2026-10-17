@@ -1,0 +1,161 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d26100ca-877b-4486-aba2-6b0398d35189",
+ "subject": "agent-chaining",
+ "evaluatedAt": "2026-10-17T23:46:54.909886+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "agent-chaining",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:117 Searches found no chain identity, handoff, or subscription constructs in this context; its route relays an existing execution's output rather than continuing an event-wired agent chain.",
+   "techniques": [
+    {
+     "technique": "chain-identity-and-rollup",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:138 The table identifies individual executions; it does not determine membership in a chain."
+    },
+    {
+     "technique": "cycle-and-depth-guards",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/buildExecutionColumns.tsx:108 The execution action cancels an existing run; this context admits no downstream handoffs requiring cycle or depth guards."
+    },
+    {
+     "technique": "graph-to-wiring-translation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/index.tsx:137 The surface receives execution rows rather than an authored graph requiring subscription reconciliation."
+    },
+    {
+     "technique": "grounding-over-deliberation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/MarkdownReport.tsx:40 Report code is rendered as text; this context selects no verification or review steps in an agent chain."
+    },
+    {
+     "technique": "handoff-figures-carry-their-population",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionDetailModal.tsx:37 The arithmetic combines token fields from the selected execution, not figures received across an agent handoff."
+    },
+    {
+     "technique": "handoff-payload-contracts",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:122 Output lines are displayed to the visitor rather than packaged as input for another agent."
+    },
+    {
+     "technique": "run-conditions",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:53 Status conditions filter displayed executions; they do not evaluate whether a chain edge fires."
+    },
+    {
+     "technique": "stop-reason-ledgers",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionDetailModal.tsx:95 The modal displays an execution error, without making a chain continuation or termination decision."
+    }
+   ],
+   "absenceTerms": [
+    "chainId",
+    "chain_id"
+   ]
+  },
+  {
+   "context": "Agent Execution Timeline Race",
+   "subject": "agent-chaining",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-race/index.tsx:25 Searches found no chain identity, handoff, or subscription constructs in this context; the timeline advances scripted animation scenarios rather than event-wired agent executions.",
+   "techniques": [
+    {
+     "technique": "chain-identity-and-rollup",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/shared/motion.ts:59 This key identifies scenario playback, not executions belonging to an agent chain."
+    },
+    {
+     "technique": "cycle-and-depth-guards",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/shared/motion.ts:95 The repeating cycle changes the animation scenario; it does not spawn agent work."
+    },
+    {
+     "technique": "graph-to-wiring-translation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/Movers.tsx:48 Drawn legs become SVG geometry, not emitter and listener wiring."
+    },
+    {
+     "technique": "grounding-over-deliberation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/shared/Frame.tsx:14 Scenario content comes from authored copy; no confidence-raising agent step is selected or executed."
+    },
+    {
+     "technique": "handoff-figures-carry-their-population",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/shared/Frame.tsx:53 This division converts drawing coordinates to layout percentages, without consuming an agent-produced figure."
+    },
+    {
+     "technique": "handoff-payload-contracts",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/Phone.tsx:103 Steps receive presentation text and animation progress rather than agent handoff envelopes."
+    },
+    {
+     "technique": "run-conditions",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/shared/motion.ts:92 These conditions govern automatic animation playback, not continuation on an agent's terminal outcome."
+    },
+    {
+     "technique": "stop-reason-ledgers",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-race/shared/motion.ts:91 Done denotes the animation's resolved frame, including reduced motion, rather than a chain's recorded stop disposition."
+    }
+   ],
+   "absenceTerms": [
+    "chainId",
+    "chain_id"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T23:46:54.909886+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-chaining"
+   ],
+   "techniques": [
+    "chain-identity-and-rollup",
+    "cycle-and-depth-guards",
+    "graph-to-wiring-translation",
+    "grounding-over-deliberation",
+    "handoff-figures-carry-their-population",
+    "handoff-payload-contracts",
+    "run-conditions",
+    "stop-reason-ledgers"
+   ],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-17T23:46:54.909886+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-chaining"
+   ],
+   "techniques": [
+    "chain-identity-and-rollup",
+    "cycle-and-depth-guards",
+    "graph-to-wiring-translation",
+    "grounding-over-deliberation",
+    "handoff-figures-carry-their-population",
+    "handoff-payload-contracts",
+    "run-conditions",
+    "stop-reason-ledgers"
+   ],
+   "deviations": 0,
+   "context": "Agent Execution Timeline Race",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

@@ -4924,6 +4924,57 @@
           "evidence": "src/components/feature-sections/lab/ledger.ts:15 The Lab state module is driven locally through a reducer; no browser-daemon listener or tunnel surface was found."
         }
       ]
+    },
+    "Interactive Demos & Playground/Agent Execution Timeline Race/agent-chaining": {
+      "context": "Agent Execution Timeline Race",
+      "subject": "agent-chaining",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T23:46:54.909Z",
+      "worker": "d26100ca-877b-4486-aba2-6b0398d35189",
+      "techniques": [
+        {
+          "technique": "chain-identity-and-rollup",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/motion.ts:59 This key identifies scenario playback, not executions belonging to an agent chain."
+        },
+        {
+          "technique": "cycle-and-depth-guards",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/motion.ts:95 The repeating cycle changes the animation scenario; it does not spawn agent work."
+        },
+        {
+          "technique": "graph-to-wiring-translation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/Movers.tsx:48 Drawn legs become SVG geometry, not emitter and listener wiring."
+        },
+        {
+          "technique": "grounding-over-deliberation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/Frame.tsx:14 Scenario content comes from authored copy; no confidence-raising agent step is selected or executed."
+        },
+        {
+          "technique": "handoff-figures-carry-their-population",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/Frame.tsx:53 This division converts drawing coordinates to layout percentages, without consuming an agent-produced figure."
+        },
+        {
+          "technique": "handoff-payload-contracts",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/Phone.tsx:103 Steps receive presentation text and animation progress rather than agent handoff envelopes."
+        },
+        {
+          "technique": "run-conditions",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/motion.ts:92 These conditions govern automatic animation playback, not continuation on an agent's terminal outcome."
+        },
+        {
+          "technique": "stop-reason-ledgers",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/motion.ts:91 Done denotes the animation's resolved frame, including reduced motion, rather than a chain's recorded stop disposition."
+        }
+      ]
     }
   }
 }

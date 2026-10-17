@@ -3134,7 +3134,11 @@
           "revision": 12,
           "changedAt": "2026-09-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/agents-race/index.tsx:25 Searches found no chain identity, handoff, or subscription constructs in this context; the timeline advances scripted animation scenarios rather than event-wired agent executions.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:596d59ae9fc2d310",
+          "evaluatedRevision": 12
         },
         {
           "subject": "fleet-orchestration",
