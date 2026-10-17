@@ -8083,11 +8083,11 @@
           "revision": 10,
           "changedAt": "2026-09-24",
           "confidence": "strong",
-          "state": "conformant",
-          "evidence": "src/lib/animations.ts:1-159 is a centrally-owned, documented preset/easing vocabulary with an enforced ESLint gating rule (custom-animation/require-animation-gating) and a written content-bearing-degradation litmus test; src/components/particle-host/particleHostRegistry.ts:56-218 is one shared rAF engine (IntersectionObserver-gated, canvas-based, compositor-friendly) satisfying performance-discipline; src/components/CinematicBreather.tsx:22-58 (TypewriterLine) renders resolved text under reduced motion rather than a blank state — the exact past failure the file's own comment (animations.ts:44-47) names as fixed.",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256:89022fde06571042",
-          "stale": true
+          "state": "deviation",
+          "evidence": "src/hooks/useAnimatedNumber.ts:32 The number animation updates React state on every frame, violating the requirement that frame values bypass reactive rendering.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:8d9b3eabe2f3b534",
+          "evaluatedRevision": 10
         },
         {
           "subject": "narrative-scroll-surface",

@@ -1,0 +1,89 @@
+{
+ "schema": "conform-run/1",
+ "worker": "beaabb69-4d2c-42a8-a7ef-e8190ec80f53",
+ "subject": "motion",
+ "evaluatedAt": "2026-10-17T01:09:11.204322+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Animation & Motion System",
+   "subject": "motion",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/hooks/useAnimatedNumber.ts:32 The number animation updates React state on every frame, violating the requirement that frame values bypass reactive rendering.",
+   "techniques": [
+    {
+     "technique": "content-bearing-degradation",
+     "verdict": "conformant",
+     "evidence": "src/hooks/useAnimatedNumber.ts:20 When reduction is detected, number updates resolve directly to the target; initial state also starts at the target rather than zero."
+    },
+    {
+     "technique": "continuity-across-change",
+     "verdict": "conformant",
+     "evidence": "src/components/ScrollMap.tsx:53 Active-section changes update properties on the existing buttons keyed by item.href, preserving their DOM identity and focus."
+    },
+    {
+     "technique": "engine-selection",
+     "verdict": "conformant",
+     "evidence": "src/components/ParticleHost.tsx:31 Continuous particle rendering uses an application-owned registry with explicit mounting, cancellation, and reduced-motion gating."
+    },
+    {
+     "technique": "loop-pause-governance",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useAutoCycle.ts:93 Changing isPaused clears this interval and resuming schedules a full interval; remaining run time is not banked across transient pauses."
+    },
+    {
+     "technique": "performance-discipline",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useAnimatedNumber.ts:32 The private requestAnimationFrame callback writes React state every frame; additionally, the particle registry measures host geometry inside its frame loop."
+    },
+    {
+     "technique": "preset-vocabulary",
+     "verdict": "deviation",
+     "evidence": "src/lib/animations.ts:132 The shared revealFromBelow preset embeds its own duration and easing instead of referencing duration classes and easing roles, and declares no reduced variant."
+    },
+    {
+     "technique": "reduced-motion-mechanics",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useAnimatedNumber.ts:11 This hook bypasses the live, engine-independent useStillMotion resolver; the installed Framer hook samples useState without subscribing, so preference changes do not update this animation."
+    },
+    {
+     "technique": "taste-budgets",
+     "verdict": "deviation",
+     "evidence": "src/components/FloatingParticles.tsx:63 Decorative particles travel 40 pixels peak to peak, exceeding the standard's few-pixel ambient bound; the amplitude is also local rather than a centrally owned budget."
+    },
+    {
+     "technique": "unprompted-motion-lifecycle",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useAutoCycle.ts:92 Cycle position advances by counted interval callbacks rather than elapsed time, the cadence failure explicitly identified by the technique."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T01:09:11.204322+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "motion"
+   ],
+   "techniques": [
+    "content-bearing-degradation",
+    "continuity-across-change",
+    "engine-selection",
+    "loop-pause-governance",
+    "performance-discipline",
+    "preset-vocabulary",
+    "reduced-motion-mechanics",
+    "taste-budgets",
+    "unprompted-motion-lifecycle"
+   ],
+   "deviations": 1,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
