@@ -1,0 +1,22 @@
+{
+ "schema": "conform-run/1",
+ "worker": "08f65c11-5916-4aa7-ad59-ea32bbb59a2b",
+ "subject": "admission-queue",
+ "evaluatedAt": "2026-10-17T23:02:04.360750+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "admission-queue",
+   "context": "Dashboard Home Overview",
+   "reason": "The context consists of dashboard UI presentation components and hooks (RecentActivityCard, ApprovedWorkCard, ExecutionHeatmapCard, FleetSessionsStrip, StatusTicker, TopPerformersCard, TrafficErrorsCard, TriagePane, UpcomingRoutinesCard, VaultChangesCard); ApprovedWorkCard explicitly documents that dispatching only marks rows locally in component state with no orchestrator behind it (ApprovedWorkCard.tsx:19), and TriagePane displays human triage items (which belongs to triage-queues, not admission-queue). It contains no backend work execution engine, server pool, or admission queue. Preconditions for admission-queue do not hold, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  },
+  {
+   "subject": "admission-queue",
+   "context": "Visual Flow Composer & Playground Page",
+   "reason": "The context comprises marketing interactive playground components and a simulated terminal (TerminalSim.tsx:136) that emits mock log lines via setTimeout, along with an interactive SVG flow diagram editor (FlowComposer.tsx) featuring a decorative SVG element labeled 'EVENT QUEUE' (EventQueueBar.tsx:36) which is a website sketch rather than an execution queue (FlowCTA.tsx:12). It contains no backend execution system, server worker pool, or work admission queue. Preconditions for admission-queue do not hold, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  }
+ ],
+ "consults": []
+}
