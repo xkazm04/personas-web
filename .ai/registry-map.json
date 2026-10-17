@@ -6943,7 +6943,11 @@
           "revision": 10,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/supabaseApi.ts:876 The fallback leaderboard publishes zero movement when no prior-period measurement exists, making unavailable change indistinguishable from measured stability.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:b702c58e785c6c51",
+          "evaluatedRevision": 11
         },
         {
           "subject": "translation-quality-measurement",
@@ -7260,7 +7264,11 @@
           "revision": 10,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceMetricsGrid.tsx:40 Unavailable metrics render as a numeric success rate of 0.0%, allowing a failed initial fetch to resemble measured failure.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:b702c58e785c6c51",
+          "evaluatedRevision": 11
         },
         {
           "subject": "eval-harness",
@@ -7589,7 +7597,11 @@
           "revision": 10,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/home/mission/DimDetail.tsx:136 The ticker receives zero for failed or unmeasured outcomes and for an absent ready-state rate, destroying distinctions preserved upstream.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:b702c58e785c6c51",
+          "evaluatedRevision": 11
         },
         {
           "subject": "admission-queue",

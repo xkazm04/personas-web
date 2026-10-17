@@ -4319,6 +4319,104 @@
         }
       ],
       "registryProposal": "external-anchor-vs-internal-id forbids one string for the published hash and the section id; /how shares them on purpose and breaks the tie by document order, and the technique states no such exception."
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/measurement-honesty": {
+      "context": "Observability Charts & SLA",
+      "subject": "measurement-honesty",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T00:49:12.831Z",
+      "worker": "8289aae1-adda-4061-870d-e77138df598e",
+      "techniques": [
+        {
+          "technique": "incomplete-not-verdict",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/performance-view/useLatencyData.ts:89 A failed latency fetch is logged without exposing an error outcome; the consumer interprets the unchanged empty points as no executions."
+        },
+        {
+          "technique": "lower-bound-disclosure",
+          "verdict": "deviation",
+          "evidence": "src/lib/supabaseApi.ts:510 Usage analytics aggregate this capped collection into ordinary invocation totals without disclosing the cap or a lower bound."
+        },
+        {
+          "technique": "minimum-sample-floors",
+          "verdict": "deviation",
+          "evidence": "src/lib/supabaseApi.ts:481 Any positive execution count produces a percentage; there is no minimum-sample refusal before its decimal display."
+        },
+        {
+          "technique": "noise-band-and-hysteresis",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/MetricCard.tsx:65 Observability period trends receive arrows whenever supplied, without a measured noise-band gate on the announcement."
+        },
+        {
+          "technique": "unmeasurable-vs-zero",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceMetricsGrid.tsx:40 Null metrics and an absent success-rate field are coerced into measured-looking zero."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/measurement-honesty": {
+      "context": "Dashboard Home Overview",
+      "subject": "measurement-honesty",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T00:49:12.831Z",
+      "worker": "8289aae1-adda-4061-870d-e77138df598e",
+      "techniques": [
+        {
+          "technique": "incomplete-not-verdict",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:112 The capped execution listing becomes weekly heatmap data without checking whether the collection covers the week."
+        },
+        {
+          "technique": "lower-bound-disclosure",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:102 Weekly activity counts derive from at most 2,000 executions, but the heatmap does not disclose that its counts can understate activity."
+        },
+        {
+          "technique": "minimum-sample-floors",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/mission/readings.ts:162 A single finished execution produces a fleet-success percentage rather than an insufficient-data outcome."
+        },
+        {
+          "technique": "unmeasurable-vs-zero",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/mission/DimDetail.tsx:136 Failed, unmeasured, and null-rate outcomes become zero before reaching the ticker's percentage formatter."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Leaderboard & Rankings/measurement-honesty": {
+      "context": "Leaderboard & Rankings",
+      "subject": "measurement-honesty",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-17",
+      "evaluatedTs": "2026-10-17T00:49:12.831Z",
+      "worker": "8289aae1-adda-4061-870d-e77138df598e",
+      "techniques": [
+        {
+          "technique": "incomplete-not-verdict",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:72 A failed retry retains previously fetched rows in ranked; the page displays those rankings alongside an error rather than withholding the verdict."
+        },
+        {
+          "technique": "minimum-sample-floors",
+          "verdict": "deviation",
+          "evidence": "src/lib/standings.ts:159 One-run personas receive reliability scores and rankings; MIN_RUNS gates only the delta, not these derived rates."
+        },
+        {
+          "technique": "renormalize-over-present",
+          "verdict": "deviation",
+          "evidence": "scripts/setup-sync-db.sql:701 The leaderboard's duration aggregate converts an entirely absent duration sample into zero instead of preserving absence."
+        },
+        {
+          "technique": "unmeasurable-vs-zero",
+          "verdict": "deviation",
+          "evidence": "src/lib/supabaseApi.ts:876 The no-snapshot fallback publishes delta zero and a flat trend despite having no prior-period measurement."
+        }
+      ]
     }
   }
 }
