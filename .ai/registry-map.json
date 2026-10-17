@@ -4192,7 +4192,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/how/page.tsx:60 The published hash, the stage wrapper, and the lazy section share one id, and the page depends on document order to pick the wrapper, with no second namespace or alias.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:7932d7ba8929c786",
+          "evaluatedRevision": 2
         },
         {
           "subject": "data-plane-transport-selection",
@@ -8602,7 +8606,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:47 The mobile section list smooth-scrolls once only when the hash is already an element id, and otherwise does nothing, so a jump never waits for a lazy section or follows a wrapper alias.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:7932d7ba8929c786",
+          "evaluatedRevision": 2
         },
         {
           "subject": "page-load-pipeline",
@@ -9927,7 +9935,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/i18n/localeRelease.ts:2 These modules decide which locales ship and render a language offer; data-scroll-anchor, findAnchorGaps, and ARRIVAL_BUDGET_MS are absent under src/i18n, src/components, and src/stores, and scrollMap in the catalogs is only the translated landmark label.",
+          "evaluatedAt": "2026-10-17",
+          "evaluatedAgainst": "sha256-b2:7932d7ba8929c786",
+          "evaluatedRevision": 2
         },
         {
           "subject": "companion-runtime",

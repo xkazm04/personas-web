@@ -1,0 +1,170 @@
+{
+ "schema": "conform-run/1",
+ "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+ "subject": "lazy-section-addressability",
+ "evaluatedAt": "2026-10-17T00:29:41.193752+00:00",
+ "provider": "grok",
+ "model": "grok-4.7",
+ "pairs": [
+  {
+   "context": "Layout, Navigation & Page Shell",
+   "subject": "lazy-section-addressability",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/MobilePageTOC.tsx:47 The mobile section list smooth-scrolls once only when the hash is already an element id, and otherwise does nothing, so a jump never waits for a lazy section or follows a wrapper alias.",
+   "techniques": [
+    {
+     "technique": "always-present-anchor-wrappers",
+     "verdict": "not-applicable",
+     "evidence": "src/components/InfoPageLayout.tsx:43 This layout forwards the page's own sections; these files do not code-split or viewport-mount an addressable section."
+    },
+    {
+     "technique": "anchor-coverage-guard",
+     "verdict": "conformant",
+     "evidence": "src/hooks/useAnchorCoverageGuard.ts:8 PageShell runs this after first paint, dev-only, both directions, console.warn, no production throw."
+    },
+    {
+     "technique": "external-anchor-vs-internal-id",
+     "verdict": "deviation",
+     "evidence": "src/components/MobilePageTOC.tsx:46 The published href is resolved as a raw element id, so a data-scroll-anchor alias is invisible to this consumer."
+    },
+    {
+     "technique": "scroll-to-hydrate-then-retry",
+     "verdict": "deviation",
+     "evidence": "src/components/MobilePageTOC.tsx:47 One-shot smooth scroll, no retry budget, no cancel, no reduced-motion instant path."
+    },
+    {
+     "technique": "ssr-gating-decision-tree",
+     "verdict": "not-applicable",
+     "evidence": "src/components/Navbar.tsx:13 The only client-only split here is the closed-until-click waitlist modal, not a page section."
+    }
+   ],
+   "registryProposal": "The React application for scroll-to-hydrate-then-retry still describes ScrollMap as a one-shot getElementById and says no cold hash handler exists; current ScrollMap calls startArrival, and the home page mounts useHashArrival."
+  },
+  {
+   "context": "Internationalization (14 locales)",
+   "subject": "lazy-section-addressability",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/i18n/localeRelease.ts:2 These modules decide which locales ship and render a language offer; data-scroll-anchor, findAnchorGaps, and ARRIVAL_BUDGET_MS are absent under src/i18n, src/components, and src/stores, and scrollMap in the catalogs is only the translated landmark label.",
+   "techniques": [
+    {
+     "technique": "always-present-anchor-wrappers",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LocaleOffer.tsx:65 The offer is a fixed banner, not a section in a long page."
+    },
+    {
+     "technique": "anchor-coverage-guard",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/localeRelease.ts:2 No declared page-location vocabulary in this module."
+    },
+    {
+     "technique": "external-anchor-vs-internal-id",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/en.ts:3704 scrollMap here is copy for the page-nav landmark, not a list of section addresses."
+    },
+    {
+     "technique": "scroll-to-hydrate-then-retry",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LanguageSwitcher.tsx:39 The control changes locale; it does not jump to a section."
+    },
+    {
+     "technique": "ssr-gating-decision-tree",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LocaleOfferMount.tsx:6 Client-only is a browser-language card gated on locale release, not a long-page section."
+    }
+   ],
+   "absenceTerms": [
+    "data-scroll-anchor",
+    "findAnchorGaps",
+    "ARRIVAL_BUDGET_MS"
+   ]
+  },
+  {
+   "context": "How It Works & Changelog",
+   "subject": "lazy-section-addressability",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/how/page.tsx:60 The published hash, the stage wrapper, and the lazy section share one id, and the page depends on document order to pick the wrapper, with no second namespace or alias.",
+   "techniques": [
+    {
+     "technique": "always-present-anchor-wrappers",
+     "verdict": "conformant",
+     "evidence": "src/app/how/page.tsx:57 The page renders the stage id around each lazy chunk; the chunk skeleton uses data-stage=fill so the slot has a stage height before the chunk loads."
+    },
+    {
+     "technique": "external-anchor-vs-internal-id",
+     "verdict": "deviation",
+     "evidence": "src/app/how/page.tsx:60 One string is both the deep link and the inner section id; the inner event-bus, for-you, and manifesto wrappers repeat it."
+    },
+    {
+     "technique": "scroll-to-hydrate-then-retry",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/how-role-path/roles.ts:28 In-page jumps are fragment links to StageSection ids the page renders up front, so there is no unmounted inner target to retry."
+    },
+    {
+     "technique": "ssr-gating-decision-tree",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-lazy.tsx:27 The event-bus export, and the three demos under it, skip pre-rendering; the file comment only explains reserving one stage of skeleton, not which tree exception allows client-only."
+    }
+   ],
+   "registryProposal": "external-anchor-vs-internal-id forbids one string for the published hash and the section id; /how shares them on purpose and breaks the tie by document order, and the technique states no such exception."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T00:29:41.193752+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "lazy-section-addressability"
+   ],
+   "techniques": [
+    "always-present-anchor-wrappers",
+    "anchor-coverage-guard",
+    "external-anchor-vs-internal-id",
+    "scroll-to-hydrate-then-retry",
+    "ssr-gating-decision-tree"
+   ],
+   "deviations": 1,
+   "context": "Layout, Navigation & Page Shell",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-17T00:29:41.193752+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "lazy-section-addressability"
+   ],
+   "techniques": [
+    "always-present-anchor-wrappers",
+    "anchor-coverage-guard",
+    "external-anchor-vs-internal-id",
+    "scroll-to-hydrate-then-retry",
+    "ssr-gating-decision-tree"
+   ],
+   "deviations": 0,
+   "context": "Internationalization (14 locales)",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  },
+  {
+   "ts": "2026-10-17T00:29:41.193752+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "lazy-section-addressability"
+   ],
+   "techniques": [
+    "always-present-anchor-wrappers",
+    "external-anchor-vs-internal-id",
+    "scroll-to-hydrate-then-retry",
+    "ssr-gating-decision-tree"
+   ],
+   "deviations": 1,
+   "context": "How It Works & Changelog",
+   "via": "curator-multi:grok",
+   "model": "grok-4.7"
+  }
+ ]
+}
