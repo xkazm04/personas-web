@@ -1,0 +1,127 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f7ce1e9e-fdf0-4da7-acfc-0ed22c33c78f",
+ "subject": "agent-browser-control",
+ "evaluatedAt": "2026-10-17T23:27:14.452690+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "agent-browser-control",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/commands/envelope.ts:15 Context searches found no daemon, puppeteer or connectOverCDP usage, and the command contract exposes persona-management operations rather than an agent-driven browser.",
+   "techniques": [
+    {
+     "technique": "agent-actionable-errors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/ExecuteToast.tsx:10 This is feedback for manual persona execution, not browser-driver errors returned to an agent."
+    },
+    {
+     "technique": "effect-classed-commands",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/commands/envelope.ts:15 The closed command vocabulary manages personas and conversations; it contains no browser-driving commands."
+    },
+    {
+     "technique": "persistent-browser-daemon",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/commands/personaCommands.ts:36 Commands target a persona and its device through the command store, without launching or maintaining an agent browser."
+    },
+    {
+     "technique": "references-over-selectors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/subscriptions-panel/SubscriptionCard.tsx:30 The UI updates subscription records by identifiers; it does not resolve browser elements for agent actions."
+    },
+    {
+     "technique": "socket-scoped-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/commands/controllerPlane.ts:51 Controller pairing uses a Supabase record, not a remotely forwarded browser-daemon listener."
+    }
+   ],
+   "absenceTerms": [
+    "daemon",
+    "puppeteer",
+    "connectOverCDP"
+   ]
+  },
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "agent-browser-control",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/index.tsx:24 Context searches found no daemon, puppeteer or connectOverCDP usage, while the Lab implements local version state and scripted displays rather than browser control for an agent.",
+   "techniques": [
+    {
+     "technique": "agent-actionable-errors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/experiment.ts:75 This failure concerns lookup of local experiment data, not a failed browser command surfaced to an agent."
+    },
+    {
+     "technique": "effect-classed-commands",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/index.tsx:24 The dispatch surface is a React version-ledger reducer, not an agent browser-command registry."
+    },
+    {
+     "technique": "persistent-browser-daemon",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 Chat playback iterates a fixed message script and schedules local updates; it has no browser process or login session to preserve."
+    },
+    {
+     "technique": "references-over-selectors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/components/TabSwitcher.tsx:33 The application handles its own tab clicks directly rather than naming arbitrary page elements for an agent."
+    },
+    {
+     "technique": "socket-scoped-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/ledger.ts:15 The Lab state module is driven locally through a reducer; no browser-daemon listener or tunnel surface was found."
+    }
+   ],
+   "absenceTerms": [
+    "daemon",
+    "puppeteer",
+    "connectOverCDP"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-17T23:27:14.452690+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-browser-control"
+   ],
+   "techniques": [
+    "agent-actionable-errors",
+    "effect-classed-commands",
+    "persistent-browser-daemon",
+    "references-over-selectors",
+    "socket-scoped-surface"
+   ],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-17T23:27:14.452690+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-browser-control"
+   ],
+   "techniques": [
+    "agent-actionable-errors",
+    "effect-classed-commands",
+    "persistent-browser-daemon",
+    "references-over-selectors",
+    "socket-scoped-surface"
+   ],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
