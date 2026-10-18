@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
+import { UPSTREAM_TIMEOUT_MS } from "@/app/api/orchestrator/upstreamDeadline";
 import { GET } from "./route";
 
 const ENV: Record<string, string | undefined> = {
@@ -13,6 +14,7 @@ const ENV: Record<string, string | undefined> = {
 describe("/api/events/stream", () => {
   const saved: Record<string, string | undefined> = {};
   let upstream: { url: string; init?: RequestInit }[];
+  let hangUpstream: boolean;
 
   beforeEach(() => {
     for (const [k, v] of Object.entries(ENV)) {
@@ -21,6 +23,7 @@ describe("/api/events/stream", () => {
       else process.env[k] = v;
     }
     upstream = [];
+    hangUpstream = false;
     vi.stubGlobal(
       "fetch",
       vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -30,6 +33,12 @@ describe("/api/events/stream", () => {
           return new Response("{}", { status: auth.startsWith("Bearer live-") ? 200 : 401 });
         }
         upstream.push({ url, init });
+        if (hangUpstream) {
+          // An orchestrator that never sends headers: settles only on abort.
+          return new Promise<Response>((_, reject) => {
+            init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), { once: true });
+          });
+        }
         return new Response("data: hello\n\n", { headers: { "Content-Type": "text/event-stream" } });
       }),
     );
@@ -108,6 +117,34 @@ describe("/api/events/stream", () => {
       expect(upstream[0].init?.headers).not.toHaveProperty("Authorization");
     } finally {
       delete process.env.NEXT_PUBLIC_TEAM_API_KEY;
+    }
+  });
+
+  it("answers 504 upstream_timeout when the orchestrator never sends headers", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      hangUpstream = true;
+      const pending = get({ "X-User-Token": "live-ev-hang" });
+      await vi.waitFor(() => expect(upstream).toHaveLength(1));
+      await vi.advanceTimersByTimeAsync(UPSTREAM_TIMEOUT_MS);
+      const res = await pending;
+      expect(res.status).toBe(504);
+      expect(await res.json()).toEqual({ error: "upstream_timeout" });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("drops the deadline once the stream is open, so a live stream is never cut", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout", "setInterval", "clearInterval"] });
+    try {
+      const res = await get({ "X-User-Token": "live-ev-open" });
+      expect(res.status).toBe(200);
+      await vi.advanceTimersByTimeAsync(UPSTREAM_TIMEOUT_MS * 2);
+      expect(upstream[0].init?.signal?.aborted).toBe(false);
+      await res.body?.cancel();
+    } finally {
+      vi.useRealTimers();
     }
   });
 });

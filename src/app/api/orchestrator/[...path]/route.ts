@@ -4,6 +4,7 @@ import {
   validateOrchestratorUrl,
 } from "@/lib/orchestrator-config";
 import { matchDesktopShape } from "../desktopShapes";
+import { upstreamDeadline, upstreamTimeoutResponse } from "../upstreamDeadline";
 import { verifySession } from "../userSession";
 
 /**
@@ -103,23 +104,30 @@ async function proxy(req: NextRequest, path: string[]): Promise<Response> {
   const hasBody = req.method !== "GET" && req.method !== "HEAD";
   const body = hasBody ? await req.text() : undefined;
 
+  // The deadline covers the body read too: a relay answers only once the
+  // whole body is in.
+  const deadline = upstreamDeadline(req.signal);
   let upstream: Response;
+  let respBody: string;
   try {
     upstream = await fetch(url.toString(), {
       method: req.method,
       headers,
       body: body || undefined,
-      signal: req.signal,
+      signal: deadline.signal,
     });
+    respBody = await upstream.text();
   } catch (err) {
+    if (deadline.timedOut()) return upstreamTimeoutResponse();
     if ((err as { name?: string } | null)?.name === "AbortError") {
       return new Response(null, { status: 499 });
     }
     // Never surface the orchestrator hostname to the client.
     return Response.json({ error: "upstream_unreachable" }, { status: 502 });
+  } finally {
+    deadline.clear();
   }
 
-  const respBody = await upstream.text();
   // Response() throws on a status outside 200-599 (some fetch impls yield 0).
   const safeStatus =
     upstream.status >= 200 && upstream.status < 600 ? upstream.status : 502;

@@ -17,11 +17,11 @@
         { "name": "path", "in": "path", "required": true, "description": "Catch-all upstream path, relayed to the orchestrator host. Traversal or an origin change is refused as bad_path.", "schema": { "type": "string" } },
         { "$ref": "#/components/parameters/UserToken" }
       ],
-      "get": { "tags": ["orchestrator"], "summary": "Relay a GET to the orchestrator", "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
-      "post": { "tags": ["orchestrator"], "summary": "Relay a POST to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
-      "put": { "tags": ["orchestrator"], "summary": "Relay a PUT to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
-      "delete": { "tags": ["orchestrator"], "summary": "Relay a DELETE to the orchestrator", "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } },
-      "patch": { "tags": ["orchestrator"], "summary": "Relay a PATCH to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" } } }
+      "get": { "tags": ["orchestrator"], "summary": "Relay a GET to the orchestrator", "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" }, "504": { "$ref": "#/components/responses/UpstreamTimeout" } } },
+      "post": { "tags": ["orchestrator"], "summary": "Relay a POST to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" }, "504": { "$ref": "#/components/responses/UpstreamTimeout" } } },
+      "put": { "tags": ["orchestrator"], "summary": "Relay a PUT to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" }, "504": { "$ref": "#/components/responses/UpstreamTimeout" } } },
+      "delete": { "tags": ["orchestrator"], "summary": "Relay a DELETE to the orchestrator", "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" }, "504": { "$ref": "#/components/responses/UpstreamTimeout" } } },
+      "patch": { "tags": ["orchestrator"], "summary": "Relay a PATCH to the orchestrator", "requestBody": { "$ref": "#/components/requestBodies/JsonRelay" }, "responses": { "2XX": { "$ref": "#/components/responses/RelayOk" }, "400": { "$ref": "#/components/responses/BadPath" }, "401": { "$ref": "#/components/responses/Unauthenticated" }, "499": { "$ref": "#/components/responses/ClientClosed" }, "501": { "$ref": "#/components/responses/NotOnDesktop" }, "502": { "$ref": "#/components/responses/UpstreamUnreachable" }, "503": { "$ref": "#/components/responses/Unavailable" }, "504": { "$ref": "#/components/responses/UpstreamTimeout" } } }
     },
     "/api/events/stream": {
       "get": {
@@ -34,7 +34,8 @@
           "499": { "description": "Client closed the connection before the upstream answered." },
           "501": { "$ref": "#/components/responses/NotOnDesktop" },
           "502": { "description": "Upstream unreachable." },
-          "503": { "$ref": "#/components/responses/Unavailable" }
+          "503": { "$ref": "#/components/responses/Unavailable" },
+          "504": { "$ref": "#/components/responses/UpstreamTimeout" }
         }
       }
     },
@@ -53,7 +54,8 @@
           "499": { "description": "Client closed the connection before the upstream answered." },
           "501": { "$ref": "#/components/responses/NotOnDesktop" },
           "502": { "description": "Upstream unreachable." },
-          "503": { "$ref": "#/components/responses/Unavailable" }
+          "503": { "$ref": "#/components/responses/Unavailable" },
+          "504": { "$ref": "#/components/responses/UpstreamTimeout" }
         }
       }
     },
@@ -278,7 +280,8 @@
       "Unavailable": { "description": "Orchestrator not configured or auth backend unreachable (orchestrator_not_configured, auth_unavailable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "orchestrator_not_configured" } } } },
       "RelayOk": { "description": "Upstream JSON answer, served with nosniff and a sandbox CSP." },
       "ClientClosed": { "description": "Client closed the connection before the upstream answered." },
-      "UpstreamUnreachable": { "description": "Upstream unreachable (upstream_unreachable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "upstream_unreachable" } } } }
+      "UpstreamUnreachable": { "description": "Upstream unreachable (upstream_unreachable).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "upstream_unreachable" } } } },
+      "UpstreamTimeout": { "description": "The orchestrator did not answer within UPSTREAM_TIMEOUT_MS (src/app/api/orchestrator/upstreamDeadline.ts); a stream relay waits only for its headers (upstream_timeout).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "upstream_timeout" } } } }
     }
   }
 }
