@@ -37,9 +37,10 @@ function hasSupabase(): boolean {
   return hasSupabaseEnv();
 }
 
+/** The service-role client, or the 503 `store_unavailable` refusal (src/lib/supabase-admin.ts). */
 async function getSupabaseClient() {
-  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
-  return getSupabaseAdmin();
+  const { getSupabaseAdminOrRefusal } = await import("@/lib/supabase-admin");
+  return getSupabaseAdminOrRefusal();
 }
 
 /** Returns the 429 to send, or `null` to serve the request. */
@@ -71,6 +72,7 @@ function normalizeAuthor(value: unknown): string | null {
 export async function GET() {
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
     const { data, error } = await sb
       .from("feature_comments")
       .select("id, feature_id, parent_id, author, text, created_at")
@@ -139,6 +141,7 @@ export async function POST(req: NextRequest) {
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
     // The thread model is one level deep. Reject a reply whose parent is itself
     // a reply (or doesn't exist), so stored comments can never exceed the
     // renderable depth and vanish. UUID shape alone isn't enough.

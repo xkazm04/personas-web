@@ -45,9 +45,10 @@ function hasSupabase(): boolean {
   return hasSupabaseEnv();
 }
 
+/** The service-role client, or the 503 `store_unavailable` refusal (src/lib/supabase-admin.ts). */
 async function getSupabaseClient() {
-  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
-  return getSupabaseAdmin();
+  const { getSupabaseAdminOrRefusal } = await import("@/lib/supabase-admin");
+  return getSupabaseAdminOrRefusal();
 }
 
 /** Returns the 429 to send, or `null` to serve the request. */
@@ -73,6 +74,7 @@ function totalsFromRows(rows: Array<{ feature_id: string; weight: number }>) {
 export async function GET() {
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
     const { data, error } = await sb
       .from("feature_boosts")
       .select("feature_id, weight");
@@ -128,6 +130,7 @@ export async function POST(req: NextRequest) {
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
     // Upsert on (feature_id, voter_id): one boost per voter per feature.
     // Re-boosting replaces the prior tier instead of stacking a new row.
     const { error } = await sb.from("feature_boosts").upsert(

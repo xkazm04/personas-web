@@ -61,9 +61,12 @@ Two failures answer without a table row because they have no error body:
 
 With no Supabase env, nothing errors. Roadmap voting reads and writes through the file
 store in `src/app/api/votes/storage.ts`. A missing `SUPABASE_SERVICE_ROLE_KEY` alone makes
-`src/lib/supabase-admin.ts` fall back to the anon client and log one warning. The fallback
-only works while the permissive legacy RLS is in place. Treat that warning as a
-configuration gap, not an outage.
+`src/lib/supabase-admin.ts` fall back to the anon client and log one warning in dev and on
+a preview deployment. The fallback only works while the permissive legacy RLS is in place.
+Treat that warning as a configuration gap, not an outage. A production deployment
+(`VERCEL_ENV=production`, or `NODE_ENV=production` off Vercel) does not fall back: the
+votes, comments and boosts routes answer 503 `store_unavailable` and one Sentry event
+(`reason: service-role-missing`) names the gap. Set the key to recover.
 
 ## Known weak spot: the live event feed never streams today
 

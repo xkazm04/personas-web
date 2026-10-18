@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
 
     const [votesResult, shippedResult] = await Promise.all([
       // `email` is deliberately NOT selected: it must never leave the server
@@ -112,6 +113,7 @@ export async function POST(req: NextRequest) {
   // --- Supabase path (production) ---
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
 
     const { data: existing, error: lookupError } = await sb
       .from("feature_votes")

@@ -78,7 +78,8 @@
             },
             "example": { "counts": { "macos": 42, "dashboard": 17, "enterprise": 5 }, "userVotes": ["macos"], "shipped": [] } } }
           },
-          "500": { "$ref": "#/components/responses/ServerError" }
+          "500": { "$ref": "#/components/responses/ServerError" },
+          "503": { "$ref": "#/components/responses/StoreUnavailable" }
         }
       },
       "post": {
@@ -94,7 +95,8 @@
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
-          "500": { "$ref": "#/components/responses/ServerError" }
+          "500": { "$ref": "#/components/responses/ServerError" },
+          "503": { "$ref": "#/components/responses/StoreUnavailable" }
         }
       }
     },
@@ -104,7 +106,8 @@
         "summary": "Boost totals per feature",
         "responses": {
           "200": { "description": "Summed boost weight per feature id.", "content": { "application/json": { "schema": { "type": "object", "required": ["totals"], "properties": { "totals": { "type": "object", "additionalProperties": { "type": "integer" } } } }, "example": { "totals": { "macos": 40, "enterprise": 15 } } } } },
-          "500": { "$ref": "#/components/responses/ServerError" }
+          "500": { "$ref": "#/components/responses/ServerError" },
+          "503": { "$ref": "#/components/responses/StoreUnavailable" }
         }
       },
       "post": {
@@ -125,7 +128,8 @@
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
-          "500": { "$ref": "#/components/responses/ServerError" }
+          "500": { "$ref": "#/components/responses/ServerError" },
+          "503": { "$ref": "#/components/responses/StoreUnavailable" }
         }
       }
     },
@@ -138,7 +142,8 @@
             { "id": "0b9f1c2e-4a7d-4e1b-9c3a-5d6e7f8a9b0c", "featureId": "dashboard", "parentId": null, "author": "Ada", "text": "Would love a dark theme here.", "timestamp": 1760313600000 },
             { "id": "6c1d2e3f-8a9b-4c0d-8e1f-2a3b4c5d6e7f", "featureId": "dashboard", "parentId": "0b9f1c2e-4a7d-4e1b-9c3a-5d6e7f8a9b0c", "author": "Lin", "text": "+1, especially for the charts.", "timestamp": 1760317200000 }
           ] } } } },
-          "500": { "$ref": "#/components/responses/ServerError" }
+          "500": { "$ref": "#/components/responses/ServerError" },
+          "503": { "$ref": "#/components/responses/StoreUnavailable" }
         }
       },
       "post": {
@@ -159,7 +164,8 @@
           "400": { "$ref": "#/components/responses/Invalid" },
           "413": { "$ref": "#/components/responses/TooLarge" },
           "429": { "$ref": "#/components/responses/RateLimited" },
-          "500": { "$ref": "#/components/responses/ServerError" }
+          "500": { "$ref": "#/components/responses/ServerError" },
+          "503": { "$ref": "#/components/responses/StoreUnavailable" }
         }
       }
     },
@@ -273,6 +279,7 @@
       "CodedError": { "description": "Refusal with a stable machine code.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CodedError" }, "example": { "error": "Invalid email format", "code": "invalid_email" } } } },
       "TooLarge": { "description": "Body over the route's byte limit.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "Payload too large" } } } },
       "RateLimited": { "description": "Per-IP in-memory rate limit hit." },
+      "StoreUnavailable": { "description": "A production deployment has no SUPABASE_SERVICE_ROLE_KEY, so the store refuses rather than write through the anon role (src/lib/supabase-admin.ts).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CodedError" }, "example": { "error": "The store is temporarily unavailable", "code": "store_unavailable" } } } },
       "ServerError": { "description": "Store read or write failed.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "Failed to record vote" } } } },
       "BadPath": { "description": "Path refused before relay (bad_path).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "bad_path" } } } },
       "Unauthenticated": { "description": "X-User-Token missing or not a live session (unauthenticated).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": "unauthenticated" } } } },
