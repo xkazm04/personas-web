@@ -1,0 +1,141 @@
+{
+ "schema": "conform-run/1",
+ "worker": "bf7c7573-7e96-40bf-920f-f18dc6dfdaf1",
+ "subject": "engine-binding-surface",
+ "evaluatedAt": "2026-10-18T21:16:50.178584+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "engine-binding-surface",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:13 The inspected context implements browser controls and release-plan presentation, while context-directory and repository searches for PhantomData, thread_local, downcast, and destructor found no matches or foreign-runtime binding requiring these techniques.",
+   "techniques": [
+    {
+     "technique": "address-sensitive-construction",
+     "verdict": "not-applicable",
+     "evidence": "src/components/PrimaryCTA.tsx:72 The component renders a browser anchor; it does not allocate a structure whose address a foreign constructor records."
+    },
+    {
+     "technique": "ask-the-authority-not-the-shadow",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:17 This cached value controls a release badge, not permission to access a foreign heap or runtime."
+    },
+    {
+     "technique": "capability-deferred-release",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:19 Cleanup cancels a browser timer; no movable foreign owner requires release under a thread or lock capability."
+    },
+    {
+     "technique": "hierarchy-as-three-relations",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:13 Platform records derive presentation fields from application data; they do not reproduce a foreign class hierarchy."
+    },
+    {
+     "technique": "phantom-capability-parameter",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/FAQ.tsx:36 The state gates an accordion's visibility, not operations requiring entry into a foreign region."
+    },
+    {
+     "technique": "pre-resolve-what-the-engine-cannot-await",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/DownloadCTA.tsx:30 The modal uses asynchronous module loading; no synchronous foreign-engine resource callback requires acquisition ahead of evaluation."
+    }
+   ],
+   "absenceTerms": [
+    "PhantomData",
+    "thread_local",
+    "downcast",
+    "destructor"
+   ]
+  },
+  {
+   "context": "Internationalization (14 locales)",
+   "subject": "engine-binding-surface",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/LocaleOffer.tsx:48 The inspected context loads literal translation catalogs through promises and implements locale selection, while context-directory and repository searches for PhantomData, thread_local, downcast, and destructor found no matches or foreign-runtime binding requiring these techniques.",
+   "techniques": [
+    {
+     "technique": "address-sensitive-construction",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LanguageSwitcher.tsx:41 Selection passes a language string to application state; no foreign constructor retains host storage addresses."
+    },
+    {
+     "technique": "ask-the-authority-not-the-shadow",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LocaleOffer.tsx:14 Browser language preferences guide an optional UI offer and do not authorize safety-critical foreign-runtime operations."
+    },
+    {
+     "technique": "capability-deferred-release",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LocaleOffer.tsx:55 Effect cleanup prevents a stale promise continuation from updating the offer; it does not release a capability-gated foreign resource."
+    },
+    {
+     "technique": "hierarchy-as-three-relations",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/localeRelease.ts:90 The code filters language metadata, with no foreign inheritance, layout reinterpretation, or handle conversion."
+    },
+    {
+     "technique": "phantom-capability-parameter",
+     "verdict": "not-applicable",
+     "evidence": "src/i18n/localeRelease.ts:85 Reachability is application release policy, not a foreign-region capability that must be minted by entry."
+    },
+    {
+     "technique": "pre-resolve-what-the-engine-cannot-await",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LocaleOffer.tsx:48 Locale loading directly supports promise continuations; no synchronous foreign engine requests asynchronously acquired resources."
+    }
+   ],
+   "absenceTerms": [
+    "PhantomData",
+    "thread_local",
+    "downcast",
+    "destructor"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-18T21:16:50.178584+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "engine-binding-surface"
+   ],
+   "techniques": [
+    "address-sensitive-construction",
+    "ask-the-authority-not-the-shadow",
+    "capability-deferred-release",
+    "hierarchy-as-three-relations",
+    "phantom-capability-parameter",
+    "pre-resolve-what-the-engine-cannot-await"
+   ],
+   "deviations": 0,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-18T21:16:50.178584+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "engine-binding-surface"
+   ],
+   "techniques": [
+    "address-sensitive-construction",
+    "ask-the-authority-not-the-shadow",
+    "capability-deferred-release",
+    "hierarchy-as-three-relations",
+    "phantom-capability-parameter",
+    "pre-resolve-what-the-engine-cannot-await"
+   ],
+   "deviations": 0,
+   "context": "Internationalization (14 locales)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

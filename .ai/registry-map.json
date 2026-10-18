@@ -965,7 +965,11 @@
           "revision": 2,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:13 The inspected context implements browser controls and release-plan presentation, while context-directory and repository searches for PhantomData, thread_local, downcast, and destructor found no matches or foreign-runtime binding requiring these techniques.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:823cd55ac89d000b",
+          "evaluatedRevision": 2
         },
         {
           "subject": "agent-runtime-assembly",
@@ -9991,7 +9995,11 @@
           "revision": 2,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/LocaleOffer.tsx:48 The inspected context loads literal translation catalogs through promises and implements locale selection, while context-directory and repository searches for PhantomData, thread_local, downcast, and destructor found no matches or foreign-runtime binding requiring these techniques.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:823cd55ac89d000b",
+          "evaluatedRevision": 2
         },
         {
           "subject": "lazy-section-addressability",
