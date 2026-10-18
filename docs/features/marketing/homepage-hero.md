@@ -2,7 +2,7 @@
 > The public homepage entry point: the "Hive" hero (honeycomb floor of agents) and the lazy-loaded section orchestration beneath it · **Route:** `/` · **Status:** Live
 
 ## What it does
-`/` is the marketing homepage. Above the fold is the **Hive** hero: a centred poster headline, "One event in. **A whole team on it.**", with a one-line subhead and three calls to action (Download, View on GitHub, and the guided-tour launcher). The lower half of the viewport is a honeycomb floor of AI agents seen in perspective, stretching to a lit horizon. Events ("Invoice in", "New lead", "Build failed") fall onto it as drops of light, ripple out, and hand off cell to cell along a team until the finished work rises as a light pillar ("Booked", "Qualified", "Fixed"). A slow light sweeps the floor, idle cells twinkle, and the pointer tilts the whole hive. There is no stat row, version badge or illustration card any more.
+`/` is the marketing homepage. Above the fold is the **Hive** hero: a centred poster headline, "One event in. **A whole team on it.**", with a one-line subhead and two calls to action (Download and the guided-tour launcher; GitHub is in the footer). The lower half of the viewport is a honeycomb floor of AI agents seen in perspective, stretching to a lit horizon. Events ("Invoice in", "New lead", "Build failed") fall onto it as drops of light, ripple out, and hand off cell to cell along a team until the finished work rises as a light pillar ("Booked", "Qualified", "Fixed"). A slow light sweeps the floor, idle cells twinkle, and the pointer tilts the whole hive. There is no stat row, version badge or illustration card any more.
 
 Below the hero, the rest of the page is a sequence of marketing sections (use-cases, playground, get-started, orchestration hub, vision, download CTA), each wrapped in a `StageSection` glow whose from/to gradients carry the colour hand-off. On desktop every section is one viewport high (the stage system, `src/styles/stage.css`) and the page snaps between them with `scroll-snap-type: y proximity`. Most are **lazy-loaded** and many **deferred** until you scroll near them. The page also injects two **JSON-LD** blocks (Organization, SoftwareApplication) for SEO. (The Team Canvas, Companion, Compare/pricing and FAQ stages, and with them the FAQPage JSON-LD, were removed on 2026-10-18: FAQ structured data without a visible FAQ violates search guidelines.)
 
@@ -17,7 +17,7 @@ Below the hero, the rest of the page is a sequence of marketing sections (use-ca
 
 **Reduced motion** is a composed still frame in `hive.module.css` (`@media (prefers-reduced-motion: reduce)`, line 234): loops off, all three teams caught mid-work with both chips visible.
 
-**CTAs (`shared/HeroCtas.tsx`).** Download (`PrimaryCTA`, href `ctaHref(DOWNLOAD_PLAN)`, click reports `trackDownloadClick(DOWNLOAD_PLAN, "hero", detectPlatformKey())`), View on GitHub, and `<TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />`. The home hero renders it `align="center" trust={false}` (the trust line, `t.hero.trustLine`, is off). Labels are `t.hero.downloadCta` / `t.hero.viewOnGithub`.
+**CTAs (`shared/HeroCtas.tsx`).** Download (`PrimaryCTA`, href `ctaHref(DOWNLOAD_PLAN)`, click reports `trackDownloadClick(DOWNLOAD_PLAN, "hero", detectPlatformKey())`) and `<TourLauncher tourId="home" bridgeHref="/features?tour=1" intro />`. View on GitHub left the home hero on 2026-10-18 (three CTAs in three styles gave no single next step and stacked into the phone fold); the footer's `FooterBrand` keeps the GitHub link, and the `/features` hero's own `HeroCtas` copy still shows it. The home hero renders it `align="center" trust={false}` (the trust line, `t.hero.trustLine`, is off). Labels are `t.hero.downloadCta` (`t.hero.viewOnGithub` is now read only by the `/features` hero).
 
 **JSON-LD.** `homeJsonLd.ts` exports two static objects serialized through `safeJsonLd()` (`@/lib/seo`).
 
@@ -31,7 +31,7 @@ Below the hero, the rest of the page is a sequence of marketing sections (use-ca
 | `src/components/sections/hero-hive/hive-geometry.ts` | Plane units, `LATTICE_PATH`, `SCENARIOS`, `TWINKLES`, `cellCenter`/`hexPoints`/`pct` |
 | `src/components/sections/hero-hive/hive.module.css` | Perspective, every keyframe loop, off-screen/hidden pausing, reduced-motion still |
 | `src/components/sections/hero-hive/shared/HeroShell.tsx` | `data-stage-hero` section + pause-registry registration |
-| `src/components/sections/hero-hive/shared/HeroCtas.tsx` | Download / GitHub / tour launcher (placement `"hero"`) |
+| `src/components/sections/hero-hive/shared/HeroCtas.tsx` | Download / tour launcher (placement `"hero"`) |
 | `src/styles/stage.css` | `[data-stage-hero]` and `[data-lazy-placeholder]` rules |
 | `src/components/sections/LazySection.tsx`, `lazy.tsx` | `createLazySection()` factory, `Lazy*` exports, custom skeletons |
 
@@ -47,7 +47,7 @@ Below the hero, the rest of the page is a sequence of marketing sections (use-ca
 - **`useAnimationPause` registry** — pauses the hero's CSS loops off-screen via `.animations-paused` (`globals.css:779`).
 - **`TourLauncher`** — `tourId="home"`, bridges to `/features?tour=1`.
 - **`HeroCtas` is mirrored** by `feature-sections/murmuration-hero/shared/HeroCtas.tsx` for `/features` (see features-overview); `release.test.ts` source-scans `hero-hive/shared/HeroCtas.tsx` so it cannot read `NEXT_PUBLIC_DOWNLOAD_URL` itself.
-- **Env:** `NEXT_PUBLIC_GITHUB_URL` (fallback `https://github.com/personas-ai`) read in `HeroCtas`; the download URL only via `src/lib/release.ts`.
+- **Env:** `NEXT_PUBLIC_GITHUB_URL` (fallback `https://github.com/personas-ai`) is no longer read by the home hero (the `/features` hero's `HeroCtas` reads it); the download URL only via `src/lib/release.ts`.
 
 ## Conventions & gotchas
 - **Replaced on 2026-10-05** by the winner of the landing review ("Hive"). The previous hero (`HeroClient`, command-center illustration, stat row, ambient illustration, 3D-tilt card) is in git history.
