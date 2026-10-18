@@ -85,6 +85,8 @@ export function useNavState() {
   const pathname = usePathname();
   const current = viewIdFromPath(pathname);
   const health = useSystemStore((s) => s.health);
+  // False until the first health poll settles (ok or not): the nav says "checking", not "disconnected".
+  const healthChecked = useSystemStore((s) => s.healthChecked);
   const pendingReviewCount = useReviewStore((s) => s.pendingReviewCount);
   // Subscribe to the pre-aggregated count; the nav re-renders only when the
   // count itself changes, not on every unrelated execution-list mutation.
@@ -120,7 +122,7 @@ export function useNavState() {
     return section.views.some((view) => getBadge(view) !== null) ? "dot" : null;
   };
 
-  return { current, isConnected, health, isViewActive, isSectionActive, getBadge, getSectionBadge };
+  return { current, isConnected, isChecking: !healthChecked, health, isViewActive, isSectionActive, getBadge, getSectionBadge };
 }
 
 export default function DashboardNavigation() {
