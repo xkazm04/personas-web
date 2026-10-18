@@ -1569,6 +1569,9 @@ export const fr: LocaleTranslations = {
       addCommentPlaceholder: "Ajouter un commentaire...",
       writeReplyPlaceholder: "\u00c9crire une r\u00e9ponse...",
       sendCommentAria: "Envoyer le commentaire",
+      voteFailed: "Votre vote n\u2019a pas \u00e9t\u00e9 pris en compte. R\u00e9essayez.",
+      commentFailed: "Votre commentaire n\u2019a pas \u00e9t\u00e9 publi\u00e9. Il est de retour dans le champ ci-dessous.",
+      boostFailed: "Votre boost n\u2019a pas \u00e9t\u00e9 pris en compte. R\u00e9essayez.",
       summary: {
         totalVotes: "{count} votes au total",
         commentOne: "{count} commentaire",

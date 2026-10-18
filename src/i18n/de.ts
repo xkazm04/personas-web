@@ -1569,6 +1569,9 @@ export const de: LocaleTranslations = {
       addCommentPlaceholder: "Kommentar hinzuf\u00fcgen...",
       writeReplyPlaceholder: "Antwort schreiben...",
       sendCommentAria: "Kommentar senden",
+      voteFailed: "Ihre Stimme wurde nicht gez\u00e4hlt. Versuchen Sie es erneut.",
+      commentFailed: "Ihr Kommentar wurde nicht gepostet. Er steht wieder im Feld unten.",
+      boostFailed: "Ihr Boost wurde nicht \u00fcbernommen. Versuchen Sie es erneut.",
       summary: {
         totalVotes: "{count} Stimmen insgesamt",
         commentOne: "{count} Kommentar",

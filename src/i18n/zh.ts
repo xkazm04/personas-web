@@ -1569,6 +1569,9 @@ export const zh: LocaleTranslations = {
       addCommentPlaceholder: "\u6dfb\u52a0\u8bc4\u8bba...",
       writeReplyPlaceholder: "\u5199\u4e0b\u56de\u590d...",
       sendCommentAria: "\u53d1\u9001\u8bc4\u8bba",
+      voteFailed: "\u6295\u7968\u672a\u6210\u529f\uff0c\u8bf7\u91cd\u8bd5\u3002",
+      commentFailed: "\u8bc4\u8bba\u672a\u80fd\u53d1\u5e03\uff0c\u5185\u5bb9\u5df2\u653e\u56de\u4e0b\u65b9\u8f93\u5165\u6846\u3002",
+      boostFailed: "\u52a9\u529b\u672a\u6210\u529f\uff0c\u8bf7\u91cd\u8bd5\u3002",
       summary: {
         totalVotes: "\u5171 {count} \u7968",
         commentOne: "{count} \u6761\u8bc4\u8bba",

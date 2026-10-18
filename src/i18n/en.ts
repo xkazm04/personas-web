@@ -1439,6 +1439,9 @@
     addCommentPlaceholder: string;
     writeReplyPlaceholder: string;
     sendCommentAria: string;
+    voteFailed: string;
+    commentFailed: string;
+    boostFailed: string;
     summary: {
       totalVotes: string;
       commentOne: string;
@@ -3446,6 +3449,9 @@ export const en: CoreTranslations = {
     addCommentPlaceholder: 'Add a comment...',
     writeReplyPlaceholder: 'Write a reply...',
     sendCommentAria: 'Send comment',
+    voteFailed: "Your vote didn't go through. Try again.",
+    commentFailed: "Your comment didn't post. It's back in the box below.",
+    boostFailed: "Your boost didn't go through. Try again.",
     summary: {
       totalVotes: '{count} total votes',
       commentOne: '{count} comment',

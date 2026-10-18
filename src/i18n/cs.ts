@@ -1569,6 +1569,9 @@ export const cs: LocaleTranslations = {
       addCommentPlaceholder: "P\u0159idat koment\u00e1\u0159...",
       writeReplyPlaceholder: "Napsat odpov\u011b\u010f...",
       sendCommentAria: "Odeslat koment\u00e1\u0159",
+      voteFailed: "V\u00e1\u0161 hlas se nezapo\u010d\u00edtal. Zkuste to znovu.",
+      commentFailed: "Koment\u00e1\u0159 se nepoda\u0159ilo odeslat. Vr\u00e1tili jsme ho do pole n\u00ed\u017ee.",
+      boostFailed: "V\u00e1\u0161 boost se nezapo\u010d\u00edtal. Zkuste to znovu.",
       summary: {
         totalVotes: "{count} hlas\u016f celkem",
         commentOne: "{count} koment\u00e1\u0159",

@@ -1569,6 +1569,9 @@ export const vi: LocaleTranslations = {
       addCommentPlaceholder: "Th\u00eam b\u00ecnh lu\u1eadn...",
       writeReplyPlaceholder: "Vi\u1ebft c\u00e2u tr\u1ea3 l\u1eddi...",
       sendCommentAria: "G\u1eedi b\u00ecnh lu\u1eadn",
+      voteFailed: "Phi\u1ebfu b\u1ea7u c\u1ee7a b\u1ea1n ch\u01b0a \u0111\u01b0\u1ee3c ghi nh\u1eadn. H\u00e3y th\u1eed l\u1ea1i.",
+      commentFailed: "B\u00ecnh lu\u1eadn c\u1ee7a b\u1ea1n ch\u01b0a \u0111\u01b0\u1ee3c \u0111\u0103ng. N\u1ed9i dung \u0111\u00e3 \u0111\u01b0\u1ee3c \u0111\u01b0a l\u1ea1i v\u00e0o \u00f4 b\u00ean d\u01b0\u1edbi.",
+      boostFailed: "L\u01b0\u1ee3t \u1ee7ng h\u1ed9 c\u1ee7a b\u1ea1n ch\u01b0a \u0111\u01b0\u1ee3c ghi nh\u1eadn. H\u00e3y th\u1eed l\u1ea1i.",
       summary: {
         totalVotes: "T\u1ed5ng c\u1ed9ng {count} phi\u1ebfu b\u1ea7u",
         commentOne: "{count} b\u00ecnh lu\u1eadn",

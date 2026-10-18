@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import type { Comment } from "../local-types";
+import type { Comment, WriteFailure } from "../local-types";
 import CommentThread from "./CommentThread";
 
 /** The collapsible discussion under a feature card. */
@@ -14,6 +14,7 @@ export default function FeatureCommentsPanel({
   onAddComment,
   heading,
   rgba,
+  restore,
 }: {
   open: boolean;
   featureId: string;
@@ -21,6 +22,8 @@ export default function FeatureCommentsPanel({
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   heading: string;
   rgba: (alpha: number) => string;
+  /** A refused comment to hand back to its input. */
+  restore?: WriteFailure;
 }) {
   const reduced = useStillMotion();
 
@@ -50,6 +53,7 @@ export default function FeatureCommentsPanel({
               comments={comments}
               onAddComment={onAddComment}
               accentRgba={rgba}
+              restore={restore}
             />
           </div>
         </motion.div>

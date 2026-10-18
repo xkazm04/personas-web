@@ -1569,6 +1569,9 @@ export const id: LocaleTranslations = {
       addCommentPlaceholder: "Tambahkan komentar...",
       writeReplyPlaceholder: "Tulis balasan...",
       sendCommentAria: "Kirim komentar",
+      voteFailed: "Suara Anda tidak tercatat. Coba lagi.",
+      commentFailed: "Komentar Anda tidak terkirim. Teksnya sudah dikembalikan ke kotak di bawah.",
+      boostFailed: "Boost Anda tidak tercatat. Coba lagi.",
       summary: {
         totalVotes: "{count} total suara",
         commentOne: "{count} komentar",

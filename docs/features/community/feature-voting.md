@@ -4,7 +4,7 @@
 ## What it does
 A homepage section (`#vote`) where visitors shape the roadmap without signing in:
 
-- **Vote / unvote** — one tap toggles an upvote on a roadmap feature (`macos`, `dashboard`, `enterprise`). Internationalization (`i18n`) was removed from the votable set and from every `ALLOWED_FEATURES` allowlist on 2026-10-05: the desktop app ships 14 UI locales, so the feature is done (roadmap phase 6 is `completed` and `public/roadmap/v1.json` item 4 is `completed`). Votes already stored under `i18n` stay in the database but are no longer shown. The count updates optimistically and rolls back on API failure. Displayed count = a marketing **seed** (`feature.votes`) + the live API count.
+- **Vote / unvote** — one tap toggles an upvote on a roadmap feature (`macos`, `dashboard`, `enterprise`). Internationalization (`i18n`) was removed from the votable set and from every `ALLOWED_FEATURES` allowlist on 2026-10-05: the desktop app ships 14 UI locales, so the feature is done (roadmap phase 6 is `completed` and `public/roadmap/v1.json` item 4 is `completed`). Votes already stored under `i18n` stay in the database but are no longer shown. The count updates optimistically and rolls back on API failure; a refused vote, comment or boost is recorded per feature (`failures`, a `WriteFailure` from `local-types.ts`) and the card shows a `role=alert` line (`featureVoting.voteFailed` / `commentFailed` / `boostFailed`). A refused comment's text goes back into the input it came from (the reply box reopens for a reply), and the next attempt on that feature clears the notice. Displayed count = a marketing **seed** (`feature.votes`) + the live API count.
 - **Boost** — if a Ko-fi username is configured, each card shows a rocket button opening `$5 / $15 / $25` tiers. Clicking a tier optimistically adds the tier weight to the feature's boost total and opens the Ko-fi page in a new tab. Each voter contributes **one boost per feature** (re-boosting replaces the prior tier, not stacks).
 - **Comment threads** — per-feature, collapsible discussion with one level of replies. Author is an auto-generated anonymous handle (e.g. `SwiftFox`). Comments post optimistically.
 - **Custom requests** — a free-text box ("Something else in mind?") posts a suggestion (max 1000 chars) with inline success/error/rate-limit feedback.
@@ -25,7 +25,7 @@ Each feature renders a `FeatureVoteCard` (`components/FeatureVoteCard.tsx:16`). 
 | File | Role |
 | --- | --- |
 | `src/components/sections/feature-voting/index.tsx` | Section shell: sorts features by live votes and renders header, grid, request form and summary |
-| `src/components/sections/feature-voting/useFeatureVotingState.ts` | Load-on-mount, optimistic vote/boost/comment handlers, Sentry rollback |
+| `src/components/sections/feature-voting/useFeatureVotingState.ts` | Load-on-mount, optimistic vote/boost/comment handlers, Sentry rollback, per-feature `failures` for the card's notice |
 | `src/components/sections/feature-voting/data.ts` | Feature seed data, accent tokens, voterId/author minting, all `apiFetch` API helpers, `formatTimeAgo` |
 | `src/components/sections/feature-voting/local-types.ts` | `Feature`, `Comment`, `AccentToken`, `LoadState` types |
 | `src/components/sections/feature-voting/components/FeatureVotingGrid.tsx` | Renders the card grid (1 column, 2 from `sm`, 3 from `lg`; an odd last card spans both columns of the 2-column row so none sits alone), or `SkeletonCard` placeholders in the same grid while `loadState === "loading"`; self-drives its `whileInView` reveal |

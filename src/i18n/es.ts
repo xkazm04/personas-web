@@ -1569,6 +1569,9 @@ export const es: LocaleTranslations = {
       addCommentPlaceholder: "A\u00f1adir un comentario...",
       writeReplyPlaceholder: "Escribir una respuesta...",
       sendCommentAria: "Enviar comentario",
+      voteFailed: "Tu voto no se registr\u00f3. Int\u00e9ntalo de nuevo.",
+      commentFailed: "Tu comentario no se public\u00f3. Lo hemos devuelto al cuadro de abajo.",
+      boostFailed: "Tu impulso no se registr\u00f3. Int\u00e9ntalo de nuevo.",
       summary: {
         totalVotes: "{count} votos en total",
         commentOne: "{count} comentario",

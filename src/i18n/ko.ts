@@ -1569,6 +1569,9 @@ export const ko: LocaleTranslations = {
       addCommentPlaceholder: "\ub313\uae00 \ucd94\uac00...",
       writeReplyPlaceholder: "\ub2f5\uae00 \uc791\uc131...",
       sendCommentAria: "\ub313\uae00 \ubcf4\ub0b4\uae30",
+      voteFailed: "\ud22c\ud45c\uac00 \ubc18\uc601\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \ub2e4\uc2dc \uc2dc\ub3c4\ud574 \uc8fc\uc138\uc694.",
+      commentFailed: "\ub313\uae00\uc774 \uac8c\uc2dc\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \uc544\ub798 \uc785\ub825\ub780\uc5d0 \ub2e4\uc2dc \ub123\uc5b4 \ub450\uc5c8\uc2b5\ub2c8\ub2e4.",
+      boostFailed: "\ubd80\uc2a4\ud2b8\uac00 \ubc18\uc601\ub418\uc9c0 \uc54a\uc558\uc2b5\ub2c8\ub2e4. \ub2e4\uc2dc \uc2dc\ub3c4\ud574 \uc8fc\uc138\uc694.",
       summary: {
         totalVotes: "\ucd1d {count}\ud45c",
         commentOne: "\ub313\uae00 {count}\uac1c",

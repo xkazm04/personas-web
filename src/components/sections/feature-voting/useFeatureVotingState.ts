@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
 import { trackFeatureComment } from "@/lib/analytics";
 import { useAbortableEffect } from "@/hooks/useAbortableEffect";
-import type { Comment, LoadState } from "./local-types";
+import type { Comment, LoadState, WriteFailure } from "./local-types";
 import {
   fetchBoostTotals,
   fetchComments,
@@ -19,7 +19,8 @@ import {
 /**
  * Votes, comments and boosts for the feature-voting section: load-on-mount
  * from the three community routes, then optimistic handlers that roll back
- * (and report through the Sentry scrubber) when the API refuses.
+ * (and report through the Sentry scrubber) when the API refuses, and record
+ * the refusal in `failures` so the card can tell the visitor.
  */
 export function useFeatureVotingState() {
   const [votedIds, setVotedIds] = useState<Set<string>>(new Set());
@@ -29,6 +30,22 @@ export function useFeatureVotingState() {
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const voterIdRef = useRef<string>("");
   const boostInFlightRef = useRef<Set<string>>(new Set());
+  const [failures, setFailures] = useState<Record<string, WriteFailure>>({});
+  const failureSeqRef = useRef(0);
+  const fail = useCallback((featureId: string, failure: Omit<WriteFailure, "seq">) => {
+    failureSeqRef.current += 1;
+    const seq = failureSeqRef.current;
+    setFailures((prev) => ({ ...prev, [featureId]: { ...failure, seq } }));
+  }, []);
+  // A new attempt on a feature retires the notice its last failure left.
+  const clearFailure = useCallback((featureId: string) => {
+    setFailures((prev) => {
+      if (!(featureId in prev)) return prev;
+      const next = { ...prev };
+      delete next[featureId];
+      return next;
+    });
+  }, []);
 
   useAbortableEffect((signal) => {
     if (!voterIdRef.current) {
@@ -64,6 +81,7 @@ export function useFeatureVotingState() {
 
   const handleToggleVote = useCallback(
     (featureId: string, voted: boolean) => {
+      clearFailure(featureId);
       setVotedIds((prev) => {
         const next = new Set(prev);
         if (voted) next.add(featureId);
@@ -91,13 +109,15 @@ export function useFeatureVotingState() {
           ...prev,
           [featureId]: Math.max(0, (prev[featureId] ?? 0) + (voted ? -1 : 1)),
         }));
+        fail(featureId, { kind: "vote" });
       });
     },
-    [],
+    [clearFailure, fail],
   );
 
   const handleAddComment = useCallback(
     (featureId: string, text: string, parentId: string | null) => {
+      clearFailure(featureId);
       const author = getOrCreateAuthor();
       trackFeatureComment(featureId, parentId ? "reply" : "add");
 
@@ -123,11 +143,12 @@ export function useFeatureVotingState() {
           captureExceptionScrubbed(err, {
             tags: { component: "FeatureVoting", action: "addComment" },
           });
-          // Roll back the optimistic insert.
+          // Roll back the optimistic insert, and hand the text back to its input.
           setComments((prev) => prev.filter((c) => c.id !== optimisticId));
+          fail(featureId, { kind: "comment", text, parentId });
         });
     },
-    [],
+    [clearFailure, fail],
   );
 
   const handleBoost = useCallback((featureId: string, weight: number) => {
@@ -135,6 +156,7 @@ export function useFeatureVotingState() {
     // whose boost is still in flight so a double-click can't double-apply.
     if (boostInFlightRef.current.has(featureId)) return;
     boostInFlightRef.current.add(featureId);
+    clearFailure(featureId);
 
     setBoostTotals((prev) => ({
       ...prev,
@@ -169,11 +191,12 @@ export function useFeatureVotingState() {
           ...prev,
           [featureId]: Math.max(0, (prev[featureId] ?? 0) - weight),
         }));
+        fail(featureId, { kind: "boost" });
       })
       .finally(() => {
         boostInFlightRef.current.delete(featureId);
       });
-  }, []);
+  }, [clearFailure, fail]);
 
   return {
     votedIds,
@@ -181,6 +204,7 @@ export function useFeatureVotingState() {
     boostTotals,
     voteCounts,
     loadState,
+    failures,
     handleToggleVote,
     handleAddComment,
     handleBoost,
