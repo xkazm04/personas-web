@@ -103,7 +103,7 @@ export function ExecutionOutput({
       <div className="relative mt-2">
         <div
           ref={scrollRef}
-          className="relative max-h-80 overflow-auto rounded-xl border border-glass-hover bg-background p-4 font-mono text-sm leading-relaxed text-slate-300 shadow-inner"
+          className="relative max-h-80 overflow-auto rounded-xl border border-glass-hover bg-background p-4 font-mono text-sm leading-relaxed text-foreground shadow-inner"
         >
           <div className="absolute left-0 top-0 flex w-full items-center gap-1.5 bg-white/[0.02] px-3 py-2 border-b border-glass">
             <div className="h-2 w-2 rounded-full bg-red-500/80" />
@@ -120,8 +120,8 @@ export function ExecutionOutput({
             ) : (
               <div className="space-y-1">
                 {output.map((line, index) => (
-                  <div key={index} className="whitespace-pre-wrap break-all text-emerald-400/90">
-                    <span className="mr-2 text-white/60 select-none">{">"}</span>
+                  <div key={index} className="whitespace-pre-wrap break-all text-foreground">
+                    <span className="mr-2 text-muted-dark select-none">{">"}</span>
                     {line}
                   </div>
                 ))}
