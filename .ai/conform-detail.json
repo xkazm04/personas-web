@@ -5447,6 +5447,63 @@
         "at": "2026-10-18T21:39:47.533363+00:00",
         "reason": "reviewer (sonnet): The cited page.tsx:22 contains a spaced em dash (U+2014), not the spaced hyphen the evidence describes, so the quoted claim doesn't match the line."
       }
+    },
+    "Theming, i18n & Shared Utilities/Internationalization (14 locales)/i18n": {
+      "context": "Internationalization (14 locales)",
+      "subject": "i18n",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T21:54:57.654Z",
+      "worker": "4b5badae-0077-44b9-b10c-9d66a52d5bfb",
+      "techniques": [
+        {
+          "technique": "catalog-architecture",
+          "verdict": "deviation",
+          "evidence": "src/i18n/en.ts:2017 The source catalog conforms to a separately maintained interface; the required source-derived type generation and section regeneration are absent from the inspected build scripts."
+        },
+        {
+          "technique": "completeness-gates",
+          "verdict": "deviation",
+          "evidence": "src/i18n/de.ts:375 This rendered FAQ question remains identical to English while coverage reports 100% and the ledger passes; identical values are tolerated through a nonzero ratchet rather than blocked."
+        },
+        {
+          "technique": "encoding-corruption-ratchet",
+          "verdict": "conformant",
+          "evidence": "scripts/check-i18n-encoding.mjs:168 The checker implements per-file ceilings, tightening reminders, nonempty-input assertions, and a hard-zero shipping lane; its read-only run passed, subject to the escaped-content blind spot described below."
+        },
+        {
+          "technique": "incomplete-bundle-kill-switch",
+          "verdict": "conformant",
+          "evidence": "src/stores/i18nStore.ts:117 The shared per-locale release predicate filters switcher options, rejects withheld setter requests, and normalizes withheld or unknown persisted values to English."
+        },
+        {
+          "technique": "interpolation-and-plurals",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/feature-voting/components/FeatureVotingSummary.tsx:58 Plural selection uses a fixed singular-versus-other comparison, so the shared catalog cannot express locale-specific categories such as Czech few or Arabic two and many."
+        },
+        {
+          "technique": "locale-runtime",
+          "verdict": "deviation",
+          "evidence": "src/i18n/useTranslation.ts:17 The server snapshot is explicitly English and locale activation occurs in useEffect; persisted-locale sections do not finish a bounded preload before the initial render."
+        },
+        {
+          "technique": "script-aware-presentation",
+          "verdict": "deviation",
+          "evidence": "src/styles/typography.css:97 Arabic headings receive negative tracking despite the connected-script rule requiring natural spacing; typography overrides also enumerate languages instead of resolving a script."
+        },
+        {
+          "technique": "string-extraction-enforcement",
+          "verdict": "deviation",
+          "evidence": "scripts/i18n/check.mjs:17 The extraction detector is explicitly advisory and omitted from the aggregate gate, so new hardcoded display strings are not blocked."
+        },
+        {
+          "technique": "token-label-separation",
+          "verdict": "conformant",
+          "evidence": "src/components/LanguageSwitcher.tsx:47 Locale IDs remain the selection and persistence tokens while the adjacent rendering uses endonym labels; changing a label does not change locale identity."
+        }
+      ],
+      "registryProposal": "Clarify that Unicode escapes protect intact text from subsequent encoding damage but can preserve existing corruption: src/i18n/cs.ts:31 contains security: \"Bezpe\\u00c4\\u0164nost\", which evaluates to \"BezpeÄŤnost\" while the raw encoding checker passes; require an additional scan of evaluated catalog strings for this case."
     }
   }
 }

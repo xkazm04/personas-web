@@ -9907,7 +9907,11 @@
           "revision": 7,
           "changedAt": "2026-09-06",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/i18n/useTranslation.ts:20 For reachable non-English locales, activation starts after mount against an English hydration snapshot, allowing an English flash before the selected catalog loads.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:13f1a2698a82c874",
+          "evaluatedRevision": 7
         },
         {
           "subject": "translation-quality-measurement",
