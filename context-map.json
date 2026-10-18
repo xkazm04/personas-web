@@ -177,6 +177,7 @@
             "src/components/feature-sections/security-vault/nestedVaultParts.tsx",
             "src/components/feature-sections/observe-record/FleetCables.tsx",
             "src/components/feature-sections/observe-record/Statement.tsx",
+            "src/components/feature-sections/observe-record/PhoneRecord.tsx",
             "src/components/feature-sections/observe-record/Tape.tsx",
             "src/components/feature-sections/observe-record/index.tsx",
             "src/components/feature-sections/observe-record/log.ts",

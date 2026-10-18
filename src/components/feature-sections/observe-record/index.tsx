@@ -11,6 +11,8 @@ import Statement from "./Statement";
 import Tape from "./Tape";
 import { H, REST_S, W } from "./log";
 import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
+import { useWide } from "@/components/sections/growth-dial/shared/useWide";
+import PhoneRecord from "./PhoneRecord";
 
 /**
  * See everything, miss nothing - "On the record" (winner of the 2026-10-06 /features review): observability
@@ -19,24 +21,30 @@ import { featuresSectionsCopy } from "@/i18n/pending/featuresSections";
  * it cost - and failures, recoveries and your sign-offs are stamped on as they
  * come out, while the day's statement keeps the totals. Pick an agent to isolate
  * its lines. The printer stops off-screen, in a hidden tab and under reduced
- * motion (which rests on a full tape with every stamp in view).
+ * motion (which rests on a full tape with every stamp in view). Below the
+ * desktop stage (64rem) the art stacks instead (PhoneRecord).
  */
 export default function ObservabilityDeck() {
   const c = featuresSectionsCopy.observe.v3;
   const ref = useRef<HTMLDivElement>(null);
   const clock = useClock(ref, REST_S);
   const [agent, setAgent] = useState<number | null>(null);
+  const wide = useWide();
 
   return (
     <SectionWrapper fit="fill" id="observe">
       <motion.div variants={fadeUp}>
         <Intro lede={c.lede} />
       </motion.div>
-      <ArtBox w={W} h={H} boxRef={ref}>
-        <FleetCables clock={clock} agent={agent} onPick={setAgent} label={c.artLabel} />
-        <Tape clock={clock} agent={agent} />
-        <Statement clock={clock} agent={agent} />
-      </ArtBox>
+      {wide ? (
+        <ArtBox w={W} h={H} boxRef={ref}>
+          <FleetCables clock={clock} agent={agent} onPick={setAgent} label={c.artLabel} />
+          <Tape clock={clock} agent={agent} />
+          <Statement clock={clock} agent={agent} />
+        </ArtBox>
+      ) : (
+        <PhoneRecord clock={clock} agent={agent} onPick={setAgent} boxRef={ref} />
+      )}
     </SectionWrapper>
   );
 }
