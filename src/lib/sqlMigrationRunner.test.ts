@@ -39,7 +39,7 @@ describe("apply-sql-migration", () => {
   });
 
   it("masks the password in the logged connection string", () => {
-    expect(redact("postgresql://postgres.abc:s3cret@pooler.supabase.com:6543/postgres")).toBe(
+    expect(redact("postgresql://postgres.abc:s3cret@pooler.supabase.com:6543/postgres")).toBe( // pragma: allowlist secret
       "postgresql://postgres.abc:***@pooler.supabase.com:6543/postgres",
     );
   });

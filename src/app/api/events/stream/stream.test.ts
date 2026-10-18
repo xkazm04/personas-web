@@ -5,7 +5,7 @@ import { GET } from "./route";
 
 const ENV: Record<string, string | undefined> = {
   NEXT_PUBLIC_ORCHESTRATOR_URL: "https://orch.test",
-  TEAM_API_KEY: "team-secret",
+  TEAM_API_KEY: "team-secret", // pragma: allowlist secret
   NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",
   NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
   ORCHESTRATOR_TARGET: undefined,
@@ -109,7 +109,7 @@ describe("/api/events/stream", () => {
 
   it("sends no Authorization header when only the legacy NEXT_PUBLIC_TEAM_API_KEY is set", async () => {
     delete process.env.TEAM_API_KEY;
-    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret";
+    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret"; // pragma: allowlist secret
     try {
       const res = await get({ "X-User-Token": "live-ev-legacy" });
       expect(res.status).toBe(200);

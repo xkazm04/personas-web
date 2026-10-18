@@ -19,7 +19,7 @@ describe("createSessionVerifier", () => {
     expect(await verify("jwt-1")).toBe("verified");
     const [url, init] = fetchImpl.mock.calls[0];
     expect(url).toBe("https://ref.supabase.co/auth/v1/user");
-    expect(init?.headers).toEqual({ apikey: "anon-key", Authorization: "Bearer jwt-1" });
+    expect(init?.headers).toEqual({ apikey: "anon-key", Authorization: "Bearer jwt-1" }); // pragma: allowlist secret
   });
 
   it("refuses a missing or oversized token without a network call", async () => {
@@ -67,7 +67,7 @@ describe("createSessionVerifier", () => {
 describe("orchestrator proxy", () => {
   const ENV = {
     NEXT_PUBLIC_ORCHESTRATOR_URL: "https://orch.test",
-    TEAM_API_KEY: "team-secret",
+    TEAM_API_KEY: "team-secret", // pragma: allowlist secret
     NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",
     NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
   };
@@ -140,7 +140,7 @@ describe("orchestrator proxy", () => {
 
   it("sends no Authorization header when only the legacy NEXT_PUBLIC_TEAM_API_KEY is set", async () => {
     delete process.env.TEAM_API_KEY;
-    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret";
+    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret"; // pragma: allowlist secret
     try {
       const res = await call(GET, ["personas"], { "X-User-Token": "live-user-legacy" });
       expect(res.status).toBe(200);
