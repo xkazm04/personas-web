@@ -1,0 +1,62 @@
+{
+  "schema": "conform-run/1",
+  "worker": "756c9151-528a-4928-b126-850bdf7792d1",
+  "subject": "english",
+  "evaluatedAt": "2026-10-18T21:39:15.060315+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "english",
+      "context": "Internationalization (14 locales)",
+      "reason": "withdrawn after review: reviewer (sonnet): I found no declared US variant for the English catalog in the i18n files or the language switcher. Line 2589 is `cancelled: \"Cancelled\"`, which the verdict's own mix of UK and US spellings doesn't settle, since the same file uses \"cancelled\" at lines 3175 and 3191."
+    },
+    {
+      "subject": "english",
+      "context": "Features Overview & Pricing",
+      "reason": "withdrawn after review: reviewer (sonnet): The cited page.tsx:22 contains a spaced em dash (U+2014), not the spaced hyphen the evidence describes, so the quoted claim doesn't match the line."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-18T21:39:15.060315+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "english"
+      ],
+      "techniques": [
+        "false-friends-and-collocations",
+        "generated-prose-patterns",
+        "interference-constructions",
+        "register-and-voice",
+        "typography-and-capitalization",
+        "ui-and-landing-microcopy",
+        "variant-and-locale-conventions"
+      ],
+      "deviations": 1,
+      "context": "Internationalization (14 locales)",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-18T21:39:15.060315+00:00",
+      "bundle": "localization",
+      "subjects": [
+        "english"
+      ],
+      "techniques": [
+        "false-friends-and-collocations",
+        "generated-prose-patterns",
+        "interference-constructions",
+        "register-and-voice",
+        "typography-and-capitalization",
+        "ui-and-landing-microcopy"
+      ],
+      "deviations": 1,
+      "context": "Features Overview & Pricing",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}
