@@ -17,7 +17,7 @@
  ],
  "ratchet": {
   "stale": 0,
-  "pending": 30251,
+  "pending": 30537,
   "identical": 1278
  },
  "pending": {
@@ -27,7 +27,7 @@
   "featuresSections": 353,
   "getStartedSection": 29,
   "howSections": 243,
-  "labSection": 59,
+  "labSection": 81,
   "landingSections": 77,
   "memorySection": 8,
   "mobile": 197,

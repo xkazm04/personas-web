@@ -95,7 +95,7 @@ Status legend: ✅ written · ⬜ planned
 | --- | --- |
 | ✅ [observability-deck](product-showcase/observability-deck.md) | "On the record" printer tape + day's statement |
 | ✅ [security-vault](product-showcase/security-vault.md) | Nested-vault security illustration |
-| ✅ [agent-lab](product-showcase/agent-lab.md) | Arena / chat / eval / evolution tabs |
+| ✅ [agent-lab](product-showcase/agent-lab.md) | Chat / arena / evolution / eval as four channels of one bench instrument |
 | ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plug-in bay: Dev Tools, Brain, Drive, Twin cartridges |
 | ✅ [memory-layers](product-showcase/memory-layers.md) | "Growth rings" memory illustration |
 | ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Lit model router (Claude vs Ollama) |

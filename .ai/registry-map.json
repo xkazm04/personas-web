@@ -1710,17 +1710,17 @@
       "group": "Product Feature Showcase",
       "paths": [
         "src/components/feature-sections/Lab.tsx",
-        "src/components/feature-sections/lab/components/ArenaTab.tsx",
-        "src/components/feature-sections/lab/components/ChatTab.tsx",
-        "src/components/feature-sections/lab/components/EvalTab.tsx",
-        "src/components/feature-sections/lab/components/EvolutionTab.tsx",
-        "src/components/feature-sections/lab/components/TabBackdrop.tsx",
-        "src/components/feature-sections/lab/components/TabSwitcher.tsx",
-        "src/components/feature-sections/lab/components/VersionRail.tsx",
-        "src/components/feature-sections/lab/data.ts",
-        "src/components/feature-sections/lab/genome.test.ts",
-        "src/components/feature-sections/lab/genome.ts",
-        "src/components/feature-sections/lab/index.tsx"
+        "src/components/feature-sections/lab/bench/arena/ArenaBench.tsx",
+        "src/components/feature-sections/lab/bench/arena/ArenaScope.tsx",
+        "src/components/feature-sections/lab/bench/arena/RoundStrip.tsx",
+        "src/components/feature-sections/lab/bench/arena/arena.ts",
+        "src/components/feature-sections/lab/bench/chat/ChatBench.tsx",
+        "src/components/feature-sections/lab/bench/chat/ChatLog.tsx",
+        "src/components/feature-sections/lab/bench/chat/ChatScope.tsx",
+        "src/components/feature-sections/lab/bench/chat/signal.ts",
+        "src/components/feature-sections/lab/bench/eval/EvalBench.tsx",
+        "src/components/feature-sections/lab/bench/eval/Meter.tsx",
+        "src/components/feature-sections/lab/bench/evolution/EvolutionBench.tsx"
       ],
       "subjects": [
         {
