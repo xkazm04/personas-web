@@ -75,9 +75,11 @@ export async function GET() {
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
     if (sb instanceof Response) return sb;
+    // Summed in the database (scripts/harden-voting-rls.sql): one row per
+    // feature, so the read does not grow with boosters or hit the row cap.
     const { data, error } = await sb
-      .from("feature_boosts")
-      .select("feature_id, weight");
+      .from("feature_boost_totals")
+      .select("feature_id, total");
 
     if (error) {
       return NextResponse.json(
@@ -86,7 +88,9 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ totals: totalsFromRows(data ?? []) });
+    const totals: Record<string, number> = {};
+    for (const row of data ?? []) totals[row.feature_id] = row.total;
+    return NextResponse.json({ totals });
   }
 
   const data = await readJsonFile<FSBoosts>("boosts.json", { entries: [] });

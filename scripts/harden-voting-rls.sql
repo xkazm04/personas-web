@@ -32,6 +32,18 @@ create or replace view public.feature_vote_counts
 
 grant select on public.feature_vote_counts to anon;
 
+-- Per-feature boost totals, summed in the database. GET /api/feature-boosts
+-- reads this instead of every feature_boosts row, so the read is bounded by
+-- the number of features and is not truncated by PostgREST's max-rows cap.
+-- The route uses the service-role client; anon gets nothing here.
+create or replace view public.feature_boost_totals
+  with (security_invoker = true) as
+  select feature_id, sum(weight)::int as total
+  from public.feature_boosts
+  group by feature_id;
+
+grant select on public.feature_boost_totals to service_role;
+
 -- If any client code still needs anon SELECT on the base table, restrict it to
 -- non-PII columns via column privileges instead of a row policy. By default we
 -- grant nothing on the base table to anon (server uses service-role):
