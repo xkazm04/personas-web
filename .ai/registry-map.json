@@ -7438,7 +7438,11 @@
           "revision": 6,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/events/index.tsx:49 The page publishes a literal event name through an unrestricted string contract while visualization and subscription forms maintain separate vocabularies, allowing silent naming drift.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:a0685592373df03f",
+          "evaluatedRevision": 6
         },
         {
           "subject": "client-state",
@@ -8483,7 +8487,11 @@
           "revision": 6,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/hooks/useSyncedRealtime.ts:168 The shell applies controller payloads without a reconciliation read on change or reconnect, so missed updates can leave the controller phase stale.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:a0685592373df03f",
+          "evaluatedRevision": 6
         },
         {
           "subject": "fleet-orchestration",

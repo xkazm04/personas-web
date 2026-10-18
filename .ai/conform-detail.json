@@ -5643,6 +5643,88 @@
           "evidence": "next.config.ts:76 src/lib/release.ts:134-144 explicitly derives SITE_VERSION from the website package, while the desktop installer is selected independently through NEXT_PUBLIC_DOWNLOAD_URL."
         }
       ]
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/realtime-events": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "realtime-events",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T22:46:34.557Z",
+      "worker": "f1d54d80-8fac-4948-9fb6-2253921dbf48",
+      "techniques": [
+        {
+          "technique": "capacity-packed-subscription-pool",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useEventStream.ts:115 This transport opens one SSE feed without topic allocation or a provider subscription pool."
+        },
+        {
+          "technique": "change-data-capture",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:57 This context consumes an upstream stream; storage capture and transaction publication belong to the external producer."
+        },
+        {
+          "technique": "coalescing-and-batching",
+          "verdict": "deviation",
+          "evidence": "src/stores/eventStore.ts:339 Each distinct SSE message immediately invokes appendEvent and its own Zustand mutation; bursts have no consumer-side batch or timed flush."
+        },
+        {
+          "technique": "event-registry",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/events/index.tsx:49 The publisher mints a literal name; CreateEventInput accepts string names and string payloads, and the visualization and subscription form define independent event lists."
+        },
+        {
+          "technique": "outbound-fan-out",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:132 This is the interactive backend-to-browser relay, rather than delivery to external notification subscriptions requiring durable watermarks."
+        },
+        {
+          "technique": "push-vs-refetch-reconciliation",
+          "verdict": "deviation",
+          "evidence": "src/stores/eventStore.ts:300 Concurrent fetches apply returned rows without fetch generations or a dirty retry; an older read completing last can overwrite newer status unless a local write is currently protected."
+        },
+        {
+          "technique": "subscription-lifecycle",
+          "verdict": "conformant",
+          "evidence": "src/hooks/useEventStream.ts:159 The page owns one stream across tabs; cleanup marks the attempt disposed, closes EventSource even during connection setup, clears reconnect and polling timers, and removes the visibility listener."
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/realtime-events": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "realtime-events",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T22:46:34.557Z",
+      "worker": "f1d54d80-8fac-4948-9fb6-2253921dbf48",
+      "techniques": [
+        {
+          "technique": "change-data-capture",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/syncedRealtimeBindings.ts:44 The shell subscribes to hosted Postgres changes; it does not own the storage hook, commit staging, or capture channel."
+        },
+        {
+          "technique": "coalescing-and-batching",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useSyncedRealtime.ts:124 Every table change resets its sole 400ms refetch timer, so sustained arrivals can postpone application indefinitely instead of flushing at perceptual cadence."
+        },
+        {
+          "technique": "outbound-fan-out",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useSyncedRealtime.ts:176 This shell owns incoming realtime subscriptions and local announcements, rather than external notification delivery with durable subscription progress."
+        },
+        {
+          "technique": "push-vs-refetch-reconciliation",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useSyncedRealtime.ts:168 Controller state follows pushed rows after its initial read; this callback and reconnect handling trigger no authoritative controller reload."
+        },
+        {
+          "technique": "subscription-lifecycle",
+          "verdict": "deviation",
+          "evidence": "src/lib/review-voice.ts:80 The shell-mounted review announcer uses a bus that dispatches over its live subscriber Set instead of the required snapshot, allowing registration changes to alter an in-progress delivery."
+        }
+      ]
     }
   }
 }
