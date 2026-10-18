@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f5aa5296-817f-4802-bc8e-de61f584eec3",
+ "subject": "correlated-exchange-over-broadcast",
+ "evaluatedAt": "2026-10-18T01:10:40.479045+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "correlated-exchange-over-broadcast",
+   "context": "Event Bus & Stream Monitoring",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": []
+}
