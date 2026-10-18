@@ -15,3 +15,16 @@ export function rateLimit(ip: string): NextResponse | null {
     windowMs: 60_000,
   });
 }
+
+/**
+ * The GET's budget. A bucket of its own, so reading the counts never spends
+ * the caller's voting budget.
+ */
+export function rateLimitRead(ip: string): NextResponse | null {
+  return rateLimitGuard({
+    namespace: "votes-read",
+    key: ip,
+    limit: 60,
+    windowMs: 60_000,
+  });
+}

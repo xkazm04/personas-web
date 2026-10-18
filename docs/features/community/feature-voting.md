@@ -39,11 +39,11 @@ Each feature renders a `FeatureVoteCard` (`components/FeatureVoteCard.tsx:16`). 
 | `src/components/sections/feature-voting/components/CustomFeatureRequest.tsx` | Live feature-request box (full error handling + Ko-fi sponsor link) |
 | `src/components/sections/feature-voting/components/FeatureVotingHeader.tsx` | Section heading |
 | `src/components/sections/feature-voting/components/FeatureVotingSummary.tsx` | Totals footer line |
-| `src/app/api/votes/route.ts` | GET counts/userVotes/shipped; POST toggle vote / save email |
+| `src/app/api/votes/route.ts` | GET counts (one `head: true` count per allowed feature, so right past PostgREST's 1000-row cap), the caller's own votes and shipped, 60/min/IP in its own `votes-read` bucket; POST toggle vote / save email (20/min/IP) |
 | `src/app/api/votes/storage.ts` | Vote + shipped storage abstraction, `ALLOWED_FEATURES` |
 | `src/app/api/votes/rate-limit.ts` | Votes rate-limit wrapper (20/min/IP) |
 | `src/app/api/feature-requests/route.ts` | POST custom request (10/min/IP, ≤1000 chars) |
-| `src/app/api/feature-comments/route.ts` | GET all comments; POST comment/reply (30/min/IP) |
+| `src/app/api/feature-comments/route.ts` | GET the newest 500 comments, oldest first (60/min/IP, `feature-comments-read` bucket); POST comment/reply (30/min/IP) |
 | `src/app/api/feature-boosts/route.ts` | GET boost totals; POST upsert boost — one row per voter, tier-pinned (30/min/IP) |
 
 ## Data & state
