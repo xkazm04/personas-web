@@ -3547,7 +3547,11 @@
           "revision": 4,
           "changedAt": "2026-09-20",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/guide/TranslationNotice.tsx:31 With a preview locale enabled, the translation toggle triggers asynchronous resolution without showing busy feedback or disabling the control.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:c71d22c8deba8577",
+          "evaluatedRevision": 4
         },
         {
           "subject": "repository-landing-document",
@@ -3643,7 +3647,11 @@
           "revision": 4,
           "changedAt": "2026-09-20",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/guide/SearchCombobox.tsx:65 Search can announce no results before body search completes and can render a failed index load as an empty result.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:c71d22c8deba8577",
+          "evaluatedRevision": 4
         },
         {
           "subject": "companion-identity",

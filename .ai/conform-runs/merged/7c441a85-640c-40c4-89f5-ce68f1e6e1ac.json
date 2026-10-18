@@ -1,0 +1,117 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7c441a85-640c-40c4-89f5-ce68f1e6e1ac",
+ "subject": "async-ui-states",
+ "evaluatedAt": "2026-10-18T00:05:49.938385+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "async-ui-states",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/guide/TranslationNotice.tsx:31 With a preview locale enabled, the translation toggle triggers asynchronous resolution without showing busy feedback or disabling the control.",
+   "techniques": [
+    {
+     "technique": "action-busy-states",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/TranslationNotice.tsx:31 TopicView connects this toggle to asynchronous resolveTopicUnit through its preference effect, but the button has no spinner, disabled state, synchronous disarm, or busy announcement."
+    },
+    {
+     "technique": "arrival-choreography",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/TranslationNotice.tsx:15 The notice deliberately uses a static rendering; there is no content entrance cascade to guard."
+    },
+    {
+     "technique": "empty-state-design",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/getLocalized.ts:134 Missing localization falls back to the supplied English article rather than rendering an empty dataset state."
+    },
+    {
+     "technique": "failure-states",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/getLocalized.ts:153 Locale loaders catch import failures and return null, so a failed chunk becomes this ordinary absence result with English content and no failure admission, retry, or telemetry."
+    }
+   ]
+  },
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "async-ui-states",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/guide/SearchCombobox.tsx:65 Search can announce no results before body search completes and can render a failed index load as an empty result.",
+   "techniques": [
+    {
+     "technique": "action-busy-states",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/SearchCombobox.tsx:80 Search starts from text changes rather than a pressed submission control; disabling typing would not implement this technique."
+    },
+    {
+     "technique": "empty-state-design",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/SearchCombobox.tsx:65 The live-region branch checks open state, result count, and query length, but ignores isPending, announcing emptiness during debounce and lazy index loading."
+    },
+    {
+     "technique": "failure-states",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/search-combobox/useGuideSearch.ts:52 The index-import catch silently restores synchronous matches and clears pending; zero matches become ordinary no-results without error feedback, retry, or reporting."
+    },
+    {
+     "technique": "placeholder-design",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/search-combobox/SearchResultsPopover.tsx:59 The loading results surface uses a centered spinner rather than a delayed, geometry-matched content placeholder."
+    },
+    {
+     "technique": "state-model",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/search-combobox/useGuideSearch.ts:53 Import rejection clears the manually maintained pending flag without retaining an error state, allowing failed loading to transition directly into empty success."
+    },
+    {
+     "technique": "windowing-vs-identifying-keys",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/search-combobox/useGuideSearch.ts:77 Changing the identifying search query retains previous results during debounce, and a zero-match synchronous search leaves them visible until body search completes."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-18T00:05:49.938385+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "async-ui-states"
+   ],
+   "techniques": [
+    "action-busy-states",
+    "arrival-choreography",
+    "empty-state-design",
+    "failure-states"
+   ],
+   "deviations": 1,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-18T00:05:49.938385+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "async-ui-states"
+   ],
+   "techniques": [
+    "action-busy-states",
+    "empty-state-design",
+    "failure-states",
+    "placeholder-design",
+    "state-model",
+    "windowing-vs-identifying-keys"
+   ],
+   "deviations": 1,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
