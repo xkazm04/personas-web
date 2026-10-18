@@ -1465,12 +1465,7 @@ export const zh: LocaleTranslations = {
       gradient: "\u8def\u7ebf\u56fe",
       description: "Personas \u7684\u6bcf\u4e2a\u9886\u57df\u4eca\u5929\u7684\u8fdb\u5c55 \u2014 \u5b8c\u6210\u5ea6\u4ece\u5de6\u5230\u53f3\u5448\u73b0\uff0c\u800c\u975e\u81ea\u4e0a\u800c\u4e0b\u7684\u627f\u8bfa\u3002",
       progress: {
-        phasesComplete: "\u5df2\u5b8c\u6210 {total} \u4e2a\u9636\u6bb5\u4e2d\u7684 {completed} \u4e2a",
-        noneDone: "\u5c1a\u65e0\u5df2\u5b8c\u6210\u7684\u9636\u6bb5",
-        firstDone: "\u9636\u6bb5 1 \u5df2\u5b8c\u6210",
-        rangeDone: "\u9636\u6bb5 1-{count} \u5df2\u5b8c\u6210",
-        toGoOne: "\u8fd8\u5269 {count} \u4e2a\u9636\u6bb5",
-        toGoOther: "\u8fd8\u5269 {count} \u4e2a\u9636\u6bb5"
+        phasesComplete: "\u5df2\u5b8c\u6210 {total} \u4e2a\u9636\u6bb5\u4e2d\u7684 {completed} \u4e2a"
       },
       areas: {
         i18n: {

@@ -1360,11 +1360,6 @@
     description: string;
     progress: {
       phasesComplete: string;
-      noneDone: string;
-      firstDone: string;
-      rangeDone: string;
-      toGoOne: string;
-      toGoOther: string;
     };
     areas: {
       i18n: { title: string; caption: string };
@@ -3352,11 +3347,6 @@ export const en: CoreTranslations = {
     description: 'Where each area of Personas stands today — fulfillment left to right, not promises top to bottom.',
     progress: {
       phasesComplete: '{completed} of {total} phases complete',
-      noneDone: 'No phases done yet',
-      firstDone: 'Phase 1 done',
-      rangeDone: 'Phases 1-{count} done',
-      toGoOne: '{count} phase to go',
-      toGoOther: '{count} phases to go',
     },
     areas: {
       i18n: { title: 'Internationalization', caption: '{count} locales, hand-translated — each flag develops with coverage' },

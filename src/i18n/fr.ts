@@ -1465,12 +1465,7 @@ export const fr: LocaleTranslations = {
       gradient: "produit",
       description: "O\u00f9 en est chaque domaine de Personas aujourd'hui \u2014 l'accomplissement de gauche \u00e0 droite, pas des promesses de haut en bas.",
       progress: {
-        phasesComplete: "{completed} phases sur {total} termin\u00e9es",
-        noneDone: "Aucune phase termin\u00e9e pour l\u2019instant",
-        firstDone: "Phase 1 termin\u00e9e",
-        rangeDone: "Phases 1-{count} termin\u00e9es",
-        toGoOne: "Encore {count} phase",
-        toGoOther: "Encore {count} phases"
+        phasesComplete: "{completed} phases sur {total} termin\u00e9es"
       },
       areas: {
         i18n: {

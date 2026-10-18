@@ -1465,12 +1465,7 @@ export const cs: LocaleTranslations = {
       gradient: "produktu",
       description: "Kde se dnes nach\u00e1z\u00ed ka\u017ed\u00e1 oblast Personas \u2014 pln\u011bn\u00ed zleva doprava, ne sliby shora dol\u016f.",
       progress: {
-        phasesComplete: "Dokon\u010deno {completed} z {total} f\u00e1z\u00ed",
-        noneDone: "Zat\u00edm \u017e\u00e1dn\u00e9 f\u00e1ze dokon\u010deny",
-        firstDone: "F\u00e1ze 1 dokon\u010dena",
-        rangeDone: "F\u00e1ze 1-{count} dokon\u010deny",
-        toGoOne: "zb\u00fdv\u00e1 {count} f\u00e1ze",
-        toGoOther: "zb\u00fdv\u00e1 {count} f\u00e1z\u00ed"
+        phasesComplete: "Dokon\u010deno {completed} z {total} f\u00e1z\u00ed"
       },
       areas: {
         i18n: {

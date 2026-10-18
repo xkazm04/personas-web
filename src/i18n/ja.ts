@@ -1465,12 +1465,7 @@ export const ja: LocaleTranslations = {
       gradient: "\u30ed\u30fc\u30c9\u30de\u30c3\u30d7",
       description: "Personas \u306e\u5404\u9818\u57df\u304c\u4eca\u3069\u3053\u306b\u3042\u308b\u304b \u2014 \u4e0a\u304b\u3089\u4e0b\u3078\u306e\u7d04\u675f\u3067\u306f\u306a\u304f\u3001\u5de6\u304b\u3089\u53f3\u3078\u306e\u9054\u6210\u5ea6\u3067\u3059\u3002",
       progress: {
-        phasesComplete: "{total} \u30d5\u30a7\u30fc\u30ba\u4e2d {completed} \u30d5\u30a7\u30fc\u30ba\u5b8c\u4e86",
-        noneDone: "\u5b8c\u4e86\u3057\u305f\u30d5\u30a7\u30fc\u30ba\u306f\u307e\u3060\u3042\u308a\u307e\u305b\u3093",
-        firstDone: "\u30d5\u30a7\u30fc\u30ba 1 \u5b8c\u4e86",
-        rangeDone: "\u30d5\u30a7\u30fc\u30ba 1-{count} \u5b8c\u4e86",
-        toGoOne: "\u6b8b\u308a {count} \u30d5\u30a7\u30fc\u30ba",
-        toGoOther: "\u6b8b\u308a {count} \u30d5\u30a7\u30fc\u30ba"
+        phasesComplete: "{total} \u30d5\u30a7\u30fc\u30ba\u4e2d {completed} \u30d5\u30a7\u30fc\u30ba\u5b8c\u4e86"
       },
       areas: {
         i18n: {

@@ -1465,12 +1465,7 @@ export const es: LocaleTranslations = {
       gradient: "producto",
       description: "D\u00f3nde se encuentra hoy cada \u00e1rea de Personas: cumplimiento de izquierda a derecha, no promesas de arriba abajo.",
       progress: {
-        phasesComplete: "{completed} de {total} fases completadas",
-        noneDone: "A\u00fan no hay fases completadas",
-        firstDone: "Fase 1 completada",
-        rangeDone: "Fases 1-{count} completadas",
-        toGoOne: "Queda {count} fase",
-        toGoOther: "Quedan {count} fases"
+        phasesComplete: "{completed} de {total} fases completadas"
       },
       areas: {
         i18n: {

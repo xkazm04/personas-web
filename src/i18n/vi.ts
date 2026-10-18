@@ -1465,12 +1465,7 @@ export const vi: LocaleTranslations = {
       gradient: "S\u1ea3n ph\u1ea9m",
       description: "M\u1ed7i l\u0129nh v\u1ef1c c\u1ee7a Personas \u0111ang \u1edf \u0111\u00e2u h\u00f4m nay \u2014 m\u1ee9c ho\u00e0n th\u00e0nh t\u1eeb tr\u00e1i sang ph\u1ea3i, kh\u00f4ng ph\u1ea3i l\u1eddi h\u1ee9a t\u1eeb tr\u00ean xu\u1ed1ng d\u01b0\u1edbi.",
       progress: {
-        phasesComplete: "Ho\u00e0n th\u00e0nh {completed} tr\u00ean {total} giai \u0111o\u1ea1n",
-        noneDone: "Ch\u01b0a c\u00f3 giai \u0111o\u1ea1n n\u00e0o ho\u00e0n th\u00e0nh",
-        firstDone: "Ho\u00e0n th\u00e0nh giai \u0111o\u1ea1n 1",
-        rangeDone: "Ho\u00e0n th\u00e0nh giai \u0111o\u1ea1n 1-{count}",
-        toGoOne: "C\u00f2n {count} giai \u0111o\u1ea1n",
-        toGoOther: "C\u00f2n {count} giai \u0111o\u1ea1n"
+        phasesComplete: "Ho\u00e0n th\u00e0nh {completed} tr\u00ean {total} giai \u0111o\u1ea1n"
       },
       areas: {
         i18n: {

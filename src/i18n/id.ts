@@ -1465,12 +1465,7 @@ export const id: LocaleTranslations = {
       gradient: "Produk",
       description: "Di mana setiap area Personas berada hari ini \u2014 pemenuhan dari kiri ke kanan, bukan janji dari atas ke bawah.",
       progress: {
-        phasesComplete: "{completed} dari {total} fase selesai",
-        noneDone: "Belum ada fase yang selesai",
-        firstDone: "Fase 1 selesai",
-        rangeDone: "Fase 1-{count} selesai",
-        toGoOne: "{count} fase lagi",
-        toGoOther: "{count} fase lagi"
+        phasesComplete: "{completed} dari {total} fase selesai"
       },
       areas: {
         i18n: {

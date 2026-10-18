@@ -1465,12 +1465,7 @@ export const ko: LocaleTranslations = {
       gradient: "\ub85c\ub4dc\ub9f5",
       description: "Personas\uc758 \uac01 \uc601\uc5ed\uc774 \uc624\ub298 \uc5b4\ub514\uc5d0 \uc788\ub294\uc9c0 \u2014 \uc704\uc5d0\uc11c \uc544\ub798\ub85c\uc758 \uc57d\uc18d\uc774 \uc544\ub2c8\ub77c \uc67c\ucabd\uc5d0\uc11c \uc624\ub978\ucabd\uc73c\ub85c\uc758 \uc644\uc131\ub3c4\uc785\ub2c8\ub2e4.",
       progress: {
-        phasesComplete: "{total}\uac1c \ub2e8\uacc4 \uc911 {completed}\uac1c \uc644\ub8cc",
-        noneDone: "\uc544\uc9c1 \uc644\ub8cc\ub41c \ub2e8\uacc4\uac00 \uc5c6\uc2b5\ub2c8\ub2e4",
-        firstDone: "1\ub2e8\uacc4 \uc644\ub8cc",
-        rangeDone: "1-{count}\ub2e8\uacc4 \uc644\ub8cc",
-        toGoOne: "{count}\uac1c \ub2e8\uacc4 \ub0a8\uc74c",
-        toGoOther: "{count}\uac1c \ub2e8\uacc4 \ub0a8\uc74c"
+        phasesComplete: "{total}\uac1c \ub2e8\uacc4 \uc911 {completed}\uac1c \uc644\ub8cc"
       },
       areas: {
         i18n: {

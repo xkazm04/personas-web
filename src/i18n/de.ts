@@ -1465,12 +1465,7 @@ export const de: LocaleTranslations = {
       gradient: "Roadmap",
       description: "Wo jeder Bereich von Personas heute steht \u2014 Fortschritt von links nach rechts, keine Versprechen von oben nach unten.",
       progress: {
-        phasesComplete: "{completed} von {total} Phasen abgeschlossen",
-        noneDone: "Noch keine Phasen abgeschlossen",
-        firstDone: "Phase 1 abgeschlossen",
-        rangeDone: "Phasen 1-{count} abgeschlossen",
-        toGoOne: "Noch {count} Phase",
-        toGoOther: "Noch {count} Phasen"
+        phasesComplete: "{completed} von {total} Phasen abgeschlossen"
       },
       areas: {
         i18n: {
