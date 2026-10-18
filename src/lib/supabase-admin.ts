@@ -4,6 +4,7 @@ import type { NextResponse } from "next/server";
 import { getOptionalEnv, isProductionDeploy } from "@/lib/server/env";
 import { apiError } from "@/lib/server/request";
 import { captureExceptionScrubbed } from "@/lib/sentry-pii";
+import { SUPABASE_FETCH_TIMEOUT_MS, timedFetch } from "@/lib/supabase";
 
 /**
  * Server-only Supabase client for API routes that read/write PII-bearing or
@@ -40,6 +41,7 @@ export async function getSupabaseAdmin(): Promise<SupabaseClient> {
   if (url && serviceKey) {
     _admin = createClient(url, serviceKey, {
       auth: { persistSession: false, autoRefreshToken: false },
+      global: { fetch: timedFetch(SUPABASE_FETCH_TIMEOUT_MS) },
     });
     return _admin;
   }
