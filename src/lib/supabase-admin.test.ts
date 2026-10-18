@@ -11,7 +11,11 @@ const capture = vi.fn();
 const anonClient = { anon: true };
 
 vi.mock("@/lib/sentry-pii", () => ({ captureExceptionScrubbed: capture }));
-vi.mock("@/lib/supabase", () => ({ getSupabase: () => anonClient }));
+vi.mock("@/lib/supabase", () => ({
+  getSupabase: () => anonClient,
+  SUPABASE_FETCH_TIMEOUT_MS: 10_000,
+  timedFetch: () => fetch,
+}));
 
 const PUBLIC = {
   NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",

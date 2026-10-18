@@ -5,6 +5,7 @@ const from = vi.fn();
 vi.mock("@/lib/server/env", () => ({ hasSupabaseEnv: () => true }));
 vi.mock("@/lib/supabase-admin", () => ({
   getSupabaseAdmin: () => ({ from }),
+  getSupabaseAdminOrRefusal: () => ({ from }),
 }));
 
 import { GET } from "./route";
