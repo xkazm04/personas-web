@@ -1,6 +1,5 @@
 import { SITE_URL } from "@/lib/seo";
 import { CONNECTOR_FEATURE_LINE, SOFTWARE_DESCRIPTION } from "@/lib/public-claims";
-import { en } from "@/i18n/en";
 
 export const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -35,26 +34,4 @@ export const softwareJsonLd = {
     "Real-time event bus and observability dashboard",
     "Local-first architecture: agents run on your machine",
   ],
-};
-
-export const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  /**
-   * Derived from the same `faqSection.questions` the visible FAQ renders
-   * (`src/components/sections/FAQ.tsx` -> `t.faqSection.questions`), so the
-   * two can no longer drift - the hand-copied version here had already gone
-   * stale against several answers. The `en` locale is read directly because
-   * structured data is crawled at the canonical (English) URL and must be a
-   * plain server-side constant, while the rendered FAQ keeps translating
-   * through `useTranslation()` across all 14 locales.
-   */
-  mainEntity: en.faqSection.questions.map(({ q, a }) => ({
-    "@type": "Question",
-    name: q,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: a,
-    },
-  })),
 };

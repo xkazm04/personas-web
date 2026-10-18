@@ -130,7 +130,7 @@ trigger-wheel entrance · `healing-circuit` freezes with no static fallback fram
 
 | ID | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
-| E-01 | Med | `homeJsonLd.ts` FAQ advertises "Starter/Pro/Team" cloud tiers; `softwareJsonLd` lists only Claude+Ollama; org `url`/`logo` hardcoded `personas.ai`. | org `url`/`logo` → `SITE_URL` **done** (`c…`); pricing-tier + provider-list text left pending product ground-truth (the cloud tiers may be real roadmap plans). | 🟡 |
+| E-01 | Med | `homeJsonLd.ts` FAQ advertised "Starter/Pro/Team" cloud tiers (the FAQPage block was removed with the landing FAQ, 2026-10-18); `softwareJsonLd` lists only Claude+Ollama; org `url`/`logo` hardcoded `personas.ai`. | org `url`/`logo` → `SITE_URL` **done** (`c…`); pricing-tier + provider-list text left pending product ground-truth (the cloud tiers may be real roadmap plans). | 🟡 |
 | E-02 | Med | `robots.ts` only blocked `/dashboard/` + `/api/`; `/todo`, `/demo`, `/preview/*`, `/m/*` were crawlable & absent from sitemap. | **Done** — now disallows `/m/`, `/preview`, `/demo`, `/todo` too (`robots.ts:13`). | 🟢 |
 | E-03 | Low | `/templates/[id]` (+ `/security`, `/legal`, `/playground`, blog/guide index) ship no OG image; no `twitter-image` anywhere. | Add `opengraph-image.tsx` where it matters. | 🔴 |
 | E-04 | Low | `TriggerSystem` mounts only on `/todo`, not `/features` — feature absent from live IA. | Decide: ship on `/features` or document as cut. | 🔴 |
@@ -147,7 +147,7 @@ trigger-wheel entrance · `healing-circuit` freezes with no static fallback fram
 | ID | Sev | Finding | Fix | Status |
 |---|---|---|---|---|
 | F-01 | Med | Blog: `generateStaticParams` + 404 `SUGGESTED_POSTS` skipped the future-date filter (staged posts directly reachable). *(Index filter already existed; JS `Array.sort` is stable so tie-order is deterministic — those parts were over-reported.)* | **Done** — added `isPublished()` to `blog.ts`; applied to static params, the `[slug]` page + metadata (404 staged posts), and 404 suggestions. | 🟢 |
-| F-02 | Low | FAQ illustrations map by array index; `warnOnFaqIllustrationDrift` only count-checks (non-prod) → reorder silently desyncs SVG↔copy. | Key illustrations by id. | 🔴 |
+| F-02 | Low | FAQ illustrations map by array index; `warnOnFaqIllustrationDrift` only count-checks (non-prod) → reorder silently desyncs SVG↔copy. | **Moot** — the landing FAQ and its illustrations were removed on 2026-10-18. | ⚪ |
 | F-03 | Low | Guide `topics.ts` stale section-count comments (say 10, are 8/7/11); testing-module id↔title divergence. | Refresh comments / ids. | 🔴 |
 | F-04 | Low | Templates near-dup ids (`stripe-`/`finance-` invoice-reconciler, revenue-alert) pass the guard but dup search/JSON-LD; `triggerIcons` duplicated across 2 config files. | Dedup. | 🔴 |
 | F-05 | Low | Legal "Last updated: April 2026" hardcoded separately from `POLICY_META` → can drift. | **Done** — all 3 policies now render `POLICY_META[id].formattedUpdate` (the previously-unused field). | 🟢 |

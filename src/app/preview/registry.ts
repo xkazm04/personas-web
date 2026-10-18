@@ -16,7 +16,7 @@ function ServerRenderedSlot() {
  *
  * Live sections are DERIVED, not listed: every `Lazy*` export of the tables the
  * public pages load (/, /how, /athena) is previewable under its kebab-cased
- * name (`LazyTeamCanvas` -> `/preview/team-canvas`), rendering the very
+ * name (`LazyOrchestrationHub` -> `/preview/orchestration-hub`), rendering the very
  * component production mounts - same skeleton, same `ssr` flag. Export a new
  * `Lazy*` section and it appears here; `registry.test.ts` pins that.
  *

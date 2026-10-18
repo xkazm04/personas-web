@@ -898,15 +898,13 @@
         "src/components/LandingHashArrival.tsx",
         "src/components/PrimaryCTA.tsx",
         "src/components/sections/DownloadCTA.tsx",
-        "src/components/sections/FAQ.tsx",
         "src/components/sections/Footer.tsx",
         "src/components/sections/download-cta/DownloadStepGrid.tsx",
         "src/components/sections/download-cta/DownloadTrustSignals.tsx",
         "src/components/sections/download-cta/PlatformPills.tsx",
         "src/components/sections/download-cta/downloadCtaTypes.ts",
         "src/components/sections/download-cta/useDownloadPlatforms.ts",
-        "src/components/sections/download-cta/useFreshRelease.ts",
-        "src/components/sections/faq/FAQDiscordCTA.tsx"
+        "src/components/sections/download-cta/useFreshRelease.ts"
       ],
       "subjects": [
         {
@@ -1113,13 +1111,6 @@
       "name": "Why Agents & Use Cases",
       "group": "Marketing & Landing",
       "paths": [
-        "src/components/sections/companion/AthenaOrb.tsx",
-        "src/components/sections/companion/data.ts",
-        "src/components/sections/companion/index.tsx",
-        "src/components/sections/team-canvas/index.tsx",
-        "src/components/sections/team-canvas/variants/AssemblyLine.tsx",
-        "src/components/sections/team-canvas/variants/kpiData.ts",
-        "src/components/sections/team-canvas/variants/kpiPrimitives.tsx",
         "src/components/sections/use-cases/PersonaHand.tsx",
         "src/components/sections/use-cases/Reel.tsx",
         "src/components/sections/use-cases/components/ConnectorIcon.tsx",
@@ -1296,11 +1287,7 @@
         "src/components/feature-sections/murmuration-hero/shared/HeroShell.tsx",
         "src/components/feature-sections/murmuration-hero/swarm-draw.ts",
         "src/components/feature-sections/murmuration-hero/swarm.ts",
-        "src/components/feature-sections/murmuration-hero/useSwarm.ts",
-        "src/components/sections/pricing/BillArt.tsx",
-        "src/components/sections/pricing/BillParts.tsx",
-        "src/components/sections/pricing/billGeometry.ts",
-        "src/components/sections/pricing/index.tsx"
+        "src/components/feature-sections/murmuration-hero/useSwarm.ts"
       ],
       "subjects": [
         {
@@ -8077,8 +8064,7 @@
         "src/contexts/SectionObserverContext.tsx",
         "src/contexts/reducedMotionHydration.test.ts",
         "src/hooks/useAnimatedNumber.ts",
-        "src/hooks/useAnimationPause.ts",
-        "src/hooks/useAutoCycle.ts"
+        "src/hooks/useAnimationPause.ts"
       ],
       "subjects": [
         {
@@ -8314,11 +8300,7 @@
         "src/components/SVGFocusRing.tsx",
         "src/components/TerminalChrome.tsx",
         "src/components/icons/brand-icons.tsx",
-        "src/components/illustrations/AgentGridIllustration.tsx",
         "src/components/illustrations/HealthyShieldIllustration.tsx",
-        "src/components/illustrations/PricingIllustration.tsx",
-        "src/components/illustrations/ShieldIllustration.tsx",
-        "src/components/illustrations/TerminalIllustration.tsx",
         "src/components/primitives/BrandCard.tsx"
       ],
       "subjects": [

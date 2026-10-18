@@ -14,7 +14,7 @@
  * A MODULE is a first-level directory under one of MODULE_ROOTS, which is the
  * grain `context-map.json` partitions the components by. It counts as indexed
  * when some doc under docs/features/ names its path in backticks
- * (`src/components/sections/faq/`), with or without the trailing slash, or names
+ * (`src/components/sections/get-started/`), with or without the trailing slash, or names
  * a file inside it.
  *
  * Output: a summary line ending in `= <pct>%`; unindexed modules on stderr (or

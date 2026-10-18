@@ -34,88 +34,6 @@ export const vi: LocaleTranslations = {
       pricing: "B\u1ea3ng gi\u00e1",
       menu: "Menu"
     },
-    compareSection: {
-      heading: "M\u1ecdi th\u1ee9 \u0111\u1ec1u",
-      headingGradient: "mi\u1ec5n ph\u00ed",
-      description: "\u1ee8ng d\u1ee5ng desktop v\u00e0 m\u1ecdi t\u00ednh n\u0103ng b\u00ean d\u01b0\u1edbi \u0111\u1ec1u mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n: m\u1ed9t n\u1ec1n t\u1ea3ng agent ho\u00e0n ch\u1ec9nh ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
-      offerBadges: [
-        "Mi\u1ec5n ph\u00ed v\u0129nh vi\u1ec5n",
-        "T\u1ef1 l\u01b0u tr\u1eef",
-        "M\u00e3 ngu\u1ed3n m\u1edf"
-      ],
-      offerBody: "Personas ch\u1ea1y tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n.",
-      ctaLabel: "B\u1eaft \u0111\u1ea7u mi\u1ec5n ph\u00ed",
-      readGuide: "\u0110\u1ecdc h\u01b0\u1edbng d\u1eabn",
-      groups: {
-        "agents-prompts": {
-          title: "T\u00e1c nh\u00e2n & Prompt",
-          tagline: "T\u1eadp trung v\u00e0o ng\u01b0\u1eddi d\u00f9ng",
-          concepts: [
-            "T\u1ea1o persona b\u1eb1ng ng\u00f4n ng\u1eef t\u1ef1 nhi\u00ean",
-            "H\u01a1n 40 m\u1eabu s\u1eb5n d\u00f9ng",
-            "BYOM \u2014 Claude ho\u1eb7c Ollama c\u1ee5c b\u1ed9",
-            "Ch\u1ebf \u0111\u1ed9 prompt c\u00f3 c\u1ea5u tr\u00fac + \u0111\u01a1n gi\u1ea3n",
-            "B\u1ed9 nh\u1edb t\u00e1c nh\u00e2n b\u1ec1n v\u1eefng"
-          ]
-        },
-        triggers: {
-          title: "\u0110i\u1ec1u ph\u1ed1i",
-          tagline: "M\u1ecdi c\u00e1ch \u0111\u1ec3 kh\u1edfi \u0111\u1ed9ng m\u1ed9t t\u00e1c nh\u00e2n",
-          concepts: [
-            "L\u1ecbch tr\u00ecnh (cron)",
-            "\u0110i\u1ec3m cu\u1ed1i webhook",
-            "Theo d\u00f5i t\u1ec7p",
-            "Gi\u00e1m s\u00e1t b\u1ed9 nh\u1edb t\u1ea1m",
-            "Tr\u00ecnh k\u00edch ho\u1ea1t chu\u1ed7i / s\u1ef1 ki\u1ec7n",
-            "\u0110i\u1ec1u ki\u1ec7n t\u1ed5ng h\u1ee3p"
-          ]
-        },
-        pipelines: {
-          title: "Pipeline & Nh\u00f3m",
-          tagline: "C\u1ed9ng t\u00e1c t\u00e1c nh\u00e2n tr\u1ef1c quan",
-          concepts: [
-            "Canvas nh\u00f3m tr\u1ef1c quan",
-            "K\u1ebft n\u1ed1i lu\u1ed3ng d\u1eef li\u1ec7u",
-            "Bus s\u1ef1 ki\u1ec7n tr\u1ef1c ti\u1ebfp",
-            "Th\u1ef1c thi t\u1ef1 ph\u1ee5c h\u1ed3i",
-            "Ph\u00e1t l\u1ea1i pipeline + du h\u00e0nh th\u1eddi gian"
-          ]
-        },
-        credentials: {
-          title: "Th\u00f4ng tin x\u00e1c th\u1ef1c & B\u1ea3o m\u1eadt",
-          tagline: "Th\u00f4ng tin b\u00ed m\u1eadt c\u1ee7a b\u1ea1n lu\u00f4n \u1edf tr\u00ean m\u00e1y c\u1ee7a b\u1ea1n",
-          concepts: [
-            "Kho AES-256-GCM",
-            "Keyring g\u1ed1c c\u1ee7a h\u1ec7 \u0111i\u1ec1u h\u00e0nh",
-            "OAuth h\u1ed7 tr\u1ee3 b\u1edfi AI",
-            "T\u1ef1 \u0111\u1ed9ng l\u00e0m m\u1edbi token",
-            "\u01afu ti\u00ean c\u1ee5c b\u1ed9, ch\u1ec9 telemetry \u1ea9n danh"
-          ]
-        },
-        monitoring: {
-          title: "Gi\u00e1m s\u00e1t",
-          tagline: "Xem, t\u00ednh chi ph\u00ed v\u00e0 ki\u1ec3m so\u00e1t m\u1ecdi l\u01b0\u1ee3t ch\u1ea1y",
-          concepts: [
-            "B\u1ea3ng \u0111i\u1ec1u khi\u1ec3n kh\u1ea3 n\u0103ng quan s\u00e1t tr\u1ef1c ti\u1ebfp",
-            "Truy v\u1ebft span theo t\u1eebng l\u1ea7n ch\u1ea1y",
-            "Ph\u00e2n b\u1ed5 chi ph\u00ed theo t\u1eebng model",
-            "H\u00e0ng \u0111\u1ee3i ki\u1ec3m duy\u1ec7t c\u1ee7a con ng\u01b0\u1eddi",
-            "C\u1ea3nh b\u00e1o ng\u00e2n s\u00e1ch + th\u1ef1c thi"
-          ]
-        },
-        testing: {
-          title: "Ph\u00f2ng th\u1eed nghi\u1ec7m",
-          tagline: "Ti\u1ebfn h\u00f3a t\u1ef1 \u0111\u1ed9ng",
-          concepts: [
-            "\u0110\u1ea5u tr\u01b0\u1eddng cho th\u1eed nghi\u1ec7m A/B",
-            "Qu\u1ea3n l\u00fd phi\u00ean b\u1ea3n prompt + so s\u00e1nh kh\u00e1c bi\u1ec7t",
-            "Ch\u1ea5m \u0111i\u1ec3m \u0111\u1ed9 ph\u00f9 h\u1ee3p",
-            "Chu k\u1ef3 lai t\u1ea1o",
-            "H\u1ed9p c\u00e1t c\u00f4ng c\u1ee5 gi\u1ea3 l\u1eadp"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "AI agent l\u00e0m vi\u1ec7c cho b\u1ea1n",
       motto: "C\u00e1c t\u00e1c nh\u00e2n AI t\u1ef1 \u0111\u1ed9ng h\u00f3a c\u00f4ng vi\u1ec7c c\u1ee7a b\u1ea1n, \u0111\u1ec3 b\u1ea1n t\u1eadp trung v\u00e0o nh\u1eefng \u0111i\u1ec1u quan tr\u1ecdng nh\u1ea5t.",
@@ -352,24 +270,8 @@ export const vi: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "C\u00e2u h\u1ecfi",
-      headingGradient: "th\u01b0\u1eddng g\u1eb7p",
-      subtitle: "M\u1ecdi \u0111i\u1ec1u b\u1ea1n c\u1ea7n bi\u1ebft \u0111\u1ec3 b\u1eaft \u0111\u1ea7u v\u1edbi Personas.",
-      stillQuestions: "V\u1eabn c\u00f2n c\u00e2u h\u1ecfi?",
-      joinDiscord: "Tham gia Discord",
       discordSubtitle: "Tham gia c\u1ed9ng \u0111\u1ed3ng Discord c\u1ee7a ch\u00fang t\u00f4i \u0111\u1ec3 \u0111\u01b0\u1ee3c tr\u1ee3 gi\u00fap v\u00e0 th\u1ea3o lu\u1eadn.",
 
-      shieldLabels: {
-
-        piiStripped: "\u0110\u00e3 x\u00f3a PII",
-
-        noReplays: "Kh\u00f4ng ghi l\u1ea1i phi\u00ean",
-
-        localOnly: "Ch\u1ec9 c\u1ee5c b\u1ed9",
-
-        yourData: "D\u1eef li\u1ec7u c\u1ee7a b\u1ea1n",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

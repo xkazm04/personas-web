@@ -34,88 +34,6 @@ export const id: LocaleTranslations = {
       pricing: "Harga",
       menu: "Menu"
     },
-    compareSection: {
-      heading: "Semuanya",
-      headingGradient: "gratis",
-      description: "Aplikasi desktop dan setiap kemampuan di bawah ini gratis selamanya: platform agen lengkap yang berjalan di mesin Anda.",
-      offerBadges: [
-        "Gratis selamanya",
-        "Self-hosted",
-        "Open source"
-      ],
-      offerBody: "Personas berjalan di mesin Anda.",
-      ctaLabel: "Mulai gratis",
-      readGuide: "Baca panduan",
-      groups: {
-        "agents-prompts": {
-          title: "Agen & Prompt",
-          tagline: "Berfokus pada pengguna",
-          concepts: [
-            "Pembuatan persona dalam bahasa alami",
-            "40+ templat yang dapat diadopsi",
-            "BYOM \u2014 Claude atau Ollama lokal",
-            "Mode prompt terstruktur + sederhana",
-            "Memori agen persisten"
-          ]
-        },
-        triggers: {
-          title: "Orkestrasi",
-          tagline: "Setiap cara untuk memulai agen",
-          concepts: [
-            "Jadwal (cron)",
-            "Endpoint webhook",
-            "Pemantau berkas",
-            "Pemantau papan klip",
-            "Pemicu rantai / peristiwa",
-            "Kondisi gabungan"
-          ]
-        },
-        pipelines: {
-          title: "Pipeline & Tim",
-          tagline: "Kolaborasi agen secara visual",
-          concepts: [
-            "Kanvas tim visual",
-            "Koneksi aliran data",
-            "Bus peristiwa langsung",
-            "Eksekusi yang memperbaiki diri",
-            "Pemutaran ulang pipeline + perjalanan waktu"
-          ]
-        },
-        credentials: {
-          title: "Kredensial & Keamanan",
-          tagline: "Rahasia Anda tetap di mesin Anda",
-          concepts: [
-            "Brankas AES-256-GCM",
-            "Keyring asli OS",
-            "OAuth dengan bantuan AI",
-            "Penyegaran token otomatis",
-            "Mengutamakan lokal, hanya telemetri anonim"
-          ]
-        },
-        monitoring: {
-          title: "Pemantauan",
-          tagline: "Lihat, hitung biaya, dan kendalikan setiap proses",
-          concepts: [
-            "Dasbor observabilitas langsung",
-            "Pelacakan span per eksekusi",
-            "Atribusi biaya per model",
-            "Antrean tinjauan manusia",
-            "Peringatan anggaran + penegakan"
-          ]
-        },
-        testing: {
-          title: "Lab Pengujian",
-          tagline: "Evolusi otomatis",
-          concepts: [
-            "Arena untuk pengujian A/B",
-            "Pembuatan versi prompt + diff",
-            "Penilaian kebugaran",
-            "Siklus pembiakan",
-            "Kotak pasir alat tiruan"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "Agen AI yang bekerja untuk Anda",
       motto: "Agen AI yang mengotomatiskan pekerjaan Anda, sehingga Anda bisa fokus pada hal yang paling penting.",
@@ -352,24 +270,8 @@ export const id: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "Pertanyaan",
-      headingGradient: "yang sering diajukan",
-      subtitle: "Semua yang perlu Anda ketahui tentang memulai dengan Personas.",
-      stillQuestions: "Masih punya pertanyaan?",
-      joinDiscord: "Gabung Discord",
       discordSubtitle: "Bergabunglah dengan komunitas Discord kami untuk bantuan dan diskusi.",
 
-      shieldLabels: {
-
-        piiStripped: "PII dihapus",
-
-        noReplays: "Tanpa replay",
-
-        localOnly: "Hanya lokal",
-
-        yourData: "Data Anda",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

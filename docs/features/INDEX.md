@@ -85,9 +85,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels (retired section; kept as history) |
 | ✅ [use-cases](marketing/use-cases.md) | "Slot reels": six needs spin through real connectors onto the persona card |
 | ✅ [features-overview](marketing/features-overview.md) | `/features` "Murmuration" swarm hero + features cluster + vision layer stack |
-| ✅ [pricing](marketing/pricing.md) | Pricing tier cards |
 | ✅ [get-started](marketing/get-started.md) | "Your day, its day" 24-hour dial + download CTA |
-| ✅ [faq](marketing/faq.md) | FAQ accordion |
 | ✅ [footer](marketing/footer.md) | Footer + primary CTA |
 | ✅ [guided-tour](marketing/guided-tour.md) | Athena guided product tour |
 

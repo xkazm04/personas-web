@@ -34,88 +34,6 @@ export const fr: LocaleTranslations = {
       pricing: "Tarifs",
       menu: "Menu"
     },
-    compareSection: {
-      heading: "Tout est",
-      headingGradient: "gratuit",
-      description: "L'application de bureau et toutes les fonctionnalit\u00e9s ci-dessous sont gratuites pour toujours\u00a0: une plateforme d'agents compl\u00e8te qui tourne sur votre machine.",
-      offerBadges: [
-        "Gratuit \u00e0 vie",
-        "Auto-h\u00e9berg\u00e9",
-        "Open source"
-      ],
-      offerBody: "Personas fonctionne sur votre machine.",
-      ctaLabel: "Commencer gratuitement",
-      readGuide: "Lire le guide",
-      groups: {
-        "agents-prompts": {
-          title: "Agents et Prompts",
-          tagline: "Centr\u00e9 sur les utilisateurs",
-          concepts: [
-            "Cr\u00e9ation de personas en langage naturel",
-            "40+ mod\u00e8les adoptables",
-            "BYOM \u2014 Claude ou Ollama en local",
-            "Modes de prompt structur\u00e9s et simples",
-            "M\u00e9moire d'agent persistante"
-          ]
-        },
-        triggers: {
-          title: "Orchestration",
-          tagline: "Toutes les fa\u00e7ons de d\u00e9marrer un agent",
-          concepts: [
-            "Planification (cron)",
-            "Points de terminaison webhook",
-            "Surveillance de fichiers",
-            "Moniteur de presse-papiers",
-            "D\u00e9clencheur en cha\u00eene / par \u00e9v\u00e9nement",
-            "Conditions composites"
-          ]
-        },
-        pipelines: {
-          title: "Pipelines et \u00c9quipes",
-          tagline: "Collaboration agentique visuelle",
-          concepts: [
-            "Canevas d'\u00e9quipe visuel",
-            "Connexions de flux de donn\u00e9es",
-            "Bus d'\u00e9v\u00e9nements en direct",
-            "Ex\u00e9cution auto-r\u00e9paratrice",
-            "Relecture de pipeline + voyage dans le temps"
-          ]
-        },
-        credentials: {
-          title: "Identifiants et S\u00e9curit\u00e9",
-          tagline: "Vos secrets restent sur votre machine",
-          concepts: [
-            "Coffre AES-256-GCM",
-            "Trousseau natif du syst\u00e8me",
-            "OAuth assist\u00e9 par IA",
-            "Renouvellement automatique des jetons",
-            "Local d'abord, t\u00e9l\u00e9m\u00e9trie anonyme uniquement"
-          ]
-        },
-        monitoring: {
-          title: "Surveillance",
-          tagline: "Voir, chiffrer et contr\u00f4ler chaque ex\u00e9cution",
-          concepts: [
-            "Tableau de bord d'observabilit\u00e9 en direct",
-            "Tra\u00e7age des spans par ex\u00e9cution",
-            "Attribution des co\u00fbts par mod\u00e8le",
-            "Files d'attente de revue humaine",
-            "Alertes de budget + application"
-          ]
-        },
-        testing: {
-          title: "Labo de test",
-          tagline: "\u00c9volution automatis\u00e9e",
-          concepts: [
-            "Ar\u00e8ne pour tests A/B",
-            "Versionnage de prompts + diffs",
-            "Notation de fitness",
-            "Cycles de reproduction",
-            "Bacs \u00e0 sable d'outils simul\u00e9s"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "Des agents IA qui travaillent pour vous",
       motto: "Des agents IA qui automatisent votre travail, pour que vous puissiez vous concentrer sur l\u2019essentiel.",
@@ -352,24 +270,8 @@ export const fr: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "Questions",
-      headingGradient: "fr\u00e9quentes",
-      subtitle: "Tout ce que vous devez savoir pour d\u00e9marrer avec Personas.",
-      stillQuestions: "Encore des questions ?",
-      joinDiscord: "Rejoindre Discord",
       discordSubtitle: "Rejoignez notre communaut\u00e9 Discord pour de l'aide et des discussions.",
 
-      shieldLabels: {
-
-        piiStripped: "PII supprim\u00e9es",
-
-        noReplays: "Aucun replay",
-
-        localOnly: "Local uniquement",
-
-        yourData: "Vos donn\u00e9es",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

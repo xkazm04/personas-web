@@ -4,7 +4,7 @@ import { HOME_WRAPPER_ALIASES } from "./home-manifest";
 /* ── The home page's address space ──────────────────────────────────
  *
  * `LANDING_SECTIONS` declares the ids a visitor can be sent to (`/#download`,
- * `/#faq`, ...). Most of those sections are `ssr: false` and viewport-gated
+ * `/#private`, ...). Most of those sections are `ssr: false` and viewport-gated
  * (`<LazyMount>`), so the id does not exist at first paint: the browser's
  * one-shot fragment scroll and Next's layout-router both drop a hash with no
  * DOM node, and the visitor lands at the top of the hero. Each stage therefore
@@ -59,7 +59,6 @@ const INNER_IDS: Readonly<Record<string, string>> = {
  *  carries none and is found by the heading that labels it instead. */
 const LABELLED_INNER: Readonly<Record<string, string>> = {
   "get-started": "get-started-heading",
-  pricing: "compare-heading",
 };
 
 const DECLARED = new Set(LANDING_SECTIONS.map((s) => s.id));

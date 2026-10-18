@@ -1,7 +1,7 @@
 # Why Agents
 > A homepage persuasion section that stages an auto-cycling "duel" — a brittle deterministic Workflow panel vs. a reasoning Personas Agent panel — across five hard scenarios. · **Route:** none (formerly `/`) · **Status:** Retired
 
-> **Retired 2026-06-14 (`be0b395`).** `src/components/sections/why-agents/` no longer exists and nothing renders this section; the rest of this doc is a historical record. `useAutoCycle`, described below, lives on and has since changed: it reads `useStillMotion` instead of framer's `useReducedMotion`, pauses in a hidden tab for every caller, and also pauses off screen when given an optional `ref` (see [Animation & motion](../platform/animation-motion.md)).
+> **Retired 2026-06-14 (`be0b395`).** `src/components/sections/why-agents/` no longer exists and nothing renders this section; the rest of this doc is a historical record. `useAutoCycle`, described below, outlived it until 2026-10-18, when its last callers (the landing Companion and Team Canvas sections) were removed and the hook was deleted.
 
 ## What it does
 

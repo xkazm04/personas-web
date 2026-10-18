@@ -34,88 +34,6 @@ export const zh: LocaleTranslations = {
       pricing: "\u4ef7\u683c",
       menu: "\u83dc\u5355"
     },
-    compareSection: {
-      heading: "\u4e00\u5207\u90fd",
-      headingGradient: "\u514d\u8d39",
-      description: "\u684c\u9762\u5e94\u7528\u53ca\u4e0b\u65b9\u7684\u6bcf\u9879\u529f\u80fd\u6c38\u4e45\u514d\u8d39\uff1a\u4e00\u4e2a\u5728\u4f60\u7684\u673a\u5668\u4e0a\u8fd0\u884c\u7684\u5b8c\u6574\u667a\u80fd\u4f53\u5e73\u53f0\u3002",
-      offerBadges: [
-        "\u6c38\u4e45\u514d\u8d39",
-        "\u81ea\u6258\u7ba1",
-        "\u5f00\u6e90"
-      ],
-      offerBody: "Personas \u8fd0\u884c\u5728\u4f60\u81ea\u5df1\u7684\u8bbe\u5907\u4e0a\u3002",
-      ctaLabel: "\u514d\u8d39\u5f00\u59cb\u4f7f\u7528",
-      readGuide: "\u9605\u8bfb\u6307\u5357",
-      groups: {
-        "agents-prompts": {
-          title: "\u667a\u80fd\u4f53\u4e0e\u63d0\u793a\u8bcd",
-          tagline: "\u4ee5\u7528\u6237\u4e3a\u4e2d\u5fc3",
-          concepts: [
-            "\u7528\u81ea\u7136\u8bed\u8a00\u521b\u4f5c\u89d2\u8272",
-            "40+ \u53ef\u91c7\u7528\u7684\u6a21\u677f",
-            "BYOM\u2014\u2014Claude \u6216\u672c\u5730 Ollama",
-            "\u7ed3\u6784\u5316\uff0b\u7b80\u5355\u63d0\u793a\u8bcd\u6a21\u5f0f",
-            "\u6301\u4e45\u7684\u667a\u80fd\u4f53\u8bb0\u5fc6"
-          ]
-        },
-        triggers: {
-          title: "\u7f16\u6392",
-          tagline: "\u542f\u52a8\u667a\u80fd\u4f53\u7684\u6bcf\u4e00\u79cd\u65b9\u5f0f",
-          concepts: [
-            "\u5b9a\u65f6\uff08cron\uff09",
-            "Webhook \u7aef\u70b9",
-            "\u6587\u4ef6\u76d1\u89c6\u5668",
-            "\u526a\u8d34\u677f\u76d1\u89c6\u5668",
-            "\u94fe\u5f0f\uff0f\u4e8b\u4ef6\u89e6\u53d1\u5668",
-            "\u590d\u5408\u6761\u4ef6"
-          ]
-        },
-        pipelines: {
-          title: "\u6d41\u6c34\u7ebf\u4e0e\u56e2\u961f",
-          tagline: "\u53ef\u89c6\u5316\u7684\u667a\u80fd\u4f53\u534f\u4f5c",
-          concepts: [
-            "\u53ef\u89c6\u5316\u56e2\u961f\u753b\u5e03",
-            "\u6570\u636e\u6d41\u8fde\u63a5",
-            "\u5b9e\u65f6\u4e8b\u4ef6\u603b\u7ebf",
-            "\u81ea\u6108\u5f0f\u6267\u884c",
-            "\u6d41\u6c34\u7ebf\u56de\u653e\uff0b\u65f6\u95f4\u65c5\u884c"
-          ]
-        },
-        credentials: {
-          title: "\u51ed\u636e\u4e0e\u5b89\u5168",
-          tagline: "\u4f60\u7684\u5bc6\u94a5\u7559\u5728\u4f60\u7684\u673a\u5668\u4e0a",
-          concepts: [
-            "AES-256-GCM \u4fdd\u9669\u5e93",
-            "\u64cd\u4f5c\u7cfb\u7edf\u539f\u751f\u5bc6\u94a5\u4e32",
-            "AI \u8f85\u52a9\u7684 OAuth",
-            "\u81ea\u52a8\u5237\u65b0\u4ee4\u724c",
-            "\u672c\u5730\u4f18\u5148\uff0c\u4ec5\u533f\u540d\u9065\u6d4b"
-          ]
-        },
-        monitoring: {
-          title: "\u76d1\u63a7",
-          tagline: "\u67e5\u770b\u3001\u8ba1\u8d39\u5e76\u638c\u63a7\u6bcf\u6b21\u8fd0\u884c",
-          concepts: [
-            "\u5b9e\u65f6\u53ef\u89c2\u6d4b\u6027\u4eea\u8868\u677f",
-            "\u6bcf\u6b21\u6267\u884c\u7684\u8de8\u5ea6\u8ffd\u8e2a",
-            "\u6309\u6a21\u578b\u5f52\u56e0\u6210\u672c",
-            "\u4eba\u5de5\u5ba1\u6838\u961f\u5217",
-            "\u9884\u7b97\u544a\u8b66\uff0b\u5f3a\u5236\u6267\u884c"
-          ]
-        },
-        testing: {
-          title: "\u6d4b\u8bd5\u5b9e\u9a8c\u5ba4",
-          tagline: "\u81ea\u52a8\u5316\u8fdb\u5316",
-          concepts: [
-            "A/B \u6d4b\u8bd5\u7ade\u6280\u573a",
-            "\u63d0\u793a\u8bcd\u7248\u672c\u7ba1\u7406\uff0b\u5dee\u5f02\u5bf9\u6bd4",
-            "\u9002\u5e94\u5ea6\u8bc4\u5206",
-            "\u7e41\u80b2\u5468\u671f",
-            "\u6a21\u62df\u5de5\u5177\u6c99\u76d2"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "\u4e3a\u60a8\u5de5\u4f5c\u7684 AI \u667a\u80fd\u4f53",
       motto: "AI \u667a\u80fd\u4f53\u81ea\u52a8\u5316\u60a8\u7684\u5de5\u4f5c\uff0c\u8ba9\u60a8\u4e13\u6ce8\u4e8e\u6700\u91cd\u8981\u7684\u4e8b\u60c5\u3002",
@@ -352,24 +270,8 @@ export const zh: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "\u5e38\u89c1",
-      headingGradient: "\u95ee\u9898",
-      subtitle: "\u5173\u4e8e\u5f00\u59cb\u4f7f\u7528 Personas \u60a8\u9700\u8981\u4e86\u89e3\u7684\u4e00\u5207\u3002",
-      stillQuestions: "\u8fd8\u6709\u95ee\u9898\uff1f",
-      joinDiscord: "\u52a0\u5165 Discord",
       discordSubtitle: "\u52a0\u5165\u6211\u4eec\u7684 Discord \u793e\u533a\u83b7\u53d6\u5e2e\u52a9\u548c\u8ba8\u8bba\u3002",
 
-      shieldLabels: {
-
-        piiStripped: "\u5df2\u79fb\u9664\u4e2a\u4eba\u4fe1\u606f",
-
-        noReplays: "\u65e0\u4f1a\u8bdd\u56de\u653e",
-
-        localOnly: "\u4ec5\u9650\u672c\u5730",
-
-        yourData: "\u4f60\u7684\u6570\u636e",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

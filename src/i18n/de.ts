@@ -34,88 +34,6 @@ export const de: LocaleTranslations = {
       pricing: "Preise",
       menu: "Men\u00fc"
     },
-    compareSection: {
-      heading: "Alles ist",
-      headingGradient: "kostenlos",
-      description: "Die Desktop-App und jede Funktion unten bleiben f\u00fcr immer kostenlos: eine vollst\u00e4ndige Agentenplattform, die auf deinem Rechner l\u00e4uft.",
-      offerBadges: [
-        "F\u00fcr immer kostenlos",
-        "Selbst gehostet",
-        "Open Source"
-      ],
-      offerBody: "Personas l\u00e4uft auf Ihrem eigenen Rechner.",
-      ctaLabel: "Kostenlos loslegen",
-      readGuide: "Anleitung lesen",
-      groups: {
-        "agents-prompts": {
-          title: "Agenten & Prompts",
-          tagline: "Auf Nutzer ausgerichtet",
-          concepts: [
-            "Persona-Erstellung in nat\u00fcrlicher Sprache",
-            "40+ \u00fcbernehmbare Vorlagen",
-            "BYOM \u2013 Claude oder lokales Ollama",
-            "Strukturierte + einfache Prompt-Modi",
-            "Dauerhafter Agentenspeicher"
-          ]
-        },
-        triggers: {
-          title: "Orchestrierung",
-          tagline: "Jeder Weg, einen Agenten zu starten",
-          concepts: [
-            "Zeitplan (Cron)",
-            "Webhook-Endpunkte",
-            "Datei\u00fcberwachung",
-            "Zwischenablage-Monitor",
-            "Ketten-/Ereignis-Trigger",
-            "Zusammengesetzte Bedingungen"
-          ]
-        },
-        pipelines: {
-          title: "Pipelines & Teams",
-          tagline: "Visuelle agentische Zusammenarbeit",
-          concepts: [
-            "Visuelle Team-Leinwand",
-            "Datenfluss-Verbindungen",
-            "Live-Ereignisbus",
-            "Selbstheilende Ausf\u00fchrung",
-            "Pipeline-Wiedergabe + Zeitreise"
-          ]
-        },
-        credentials: {
-          title: "Zugangsdaten & Sicherheit",
-          tagline: "Deine Geheimnisse bleiben auf deinem Rechner",
-          concepts: [
-            "AES-256-GCM-Tresor",
-            "OS-eigener Schl\u00fcsselbund",
-            "KI-gest\u00fctztes OAuth",
-            "Automatische Token-Erneuerung",
-            "Lokal zuerst, nur anonyme Telemetrie"
-          ]
-        },
-        monitoring: {
-          title: "\u00dcberwachung",
-          tagline: "Jeden Lauf sehen, kalkulieren und steuern",
-          concepts: [
-            "Live-Observability-Dashboard",
-            "Span-Tracing pro Ausf\u00fchrung",
-            "Kostenzuordnung pro Modell",
-            "Warteschlangen f\u00fcr menschliche Pr\u00fcfung",
-            "Budget-Warnungen + Durchsetzung"
-          ]
-        },
-        testing: {
-          title: "Test-Labor",
-          tagline: "Automatisierte Evolution",
-          concepts: [
-            "Arena f\u00fcr A/B-Tests",
-            "Prompt-Versionierung + Diffs",
-            "Fitness-Bewertung",
-            "Zucht-Zyklen",
-            "Mock-Tool-Sandboxes"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "KI-Agenten, die f\u00fcr Sie arbeiten",
       motto: "KI-Agenten, die Ihre Arbeit automatisieren, damit Sie sich auf das Wichtigste konzentrieren k\u00f6nnen.",
@@ -352,24 +270,8 @@ export const de: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "H\u00e4ufig",
-      headingGradient: "gestellte Fragen",
-      subtitle: "Alles, was Sie \u00fcber den Einstieg mit Personas wissen m\u00fcssen.",
-      stillQuestions: "Noch Fragen?",
-      joinDiscord: "Discord beitreten",
       discordSubtitle: "Treten Sie unserer Discord-Community f\u00fcr Hilfe und Diskussion bei.",
 
-      shieldLabels: {
-
-        piiStripped: "PII entfernt",
-
-        noReplays: "Keine Replays",
-
-        localOnly: "Nur lokal",
-
-        yourData: "Ihre Daten",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

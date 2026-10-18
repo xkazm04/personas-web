@@ -57,7 +57,7 @@ not introduce any of these, and must report any English unit that still carries 
 | Set | Names as written | State |
 | --- | --- | --- |
 | A | Local / Cloud / Enterprise, with feature rows "Everything in Free" and "Everything in Pro" | **Removed** from `src/i18n/*.ts` (`pricing.*` except `comingSoon`, which the waitlist modal renders) |
-| B | Starter, Pro, Team ("Cloud plans (Starter, Pro, Team)"; "Pro and Team plans") | **Removed** from the FAQ in all 14 locales; the FAQ JSON-LD follows `en.faqSection` |
+| B | Starter, Pro, Team ("Cloud plans (Starter, Pro, Team)"; "Pro and Team plans") | **Removed** from the FAQ in all 14 locales; the FAQ JSON-LD followed `en.faqSection` until both the landing FAQ and its JSON-LD were removed (2026-10-18) |
 | C | Starter, Team, Builder ("Builder tier", "Team / Builder tier") | **Removed** from the guide bodies in English and all 13 locales |
 | D | Cloud execution, cloud orchestrator, BYOI, cloud deploy | **Removed:** seven guide topics, the FAQ BYOI and local-vs-cloud answers, the features card, the terminal demo step, the roadmap bar, blog and changelog passages |
 

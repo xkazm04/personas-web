@@ -34,88 +34,6 @@ export const es: LocaleTranslations = {
       pricing: "Precios",
       menu: "Men\u00fa"
     },
-    compareSection: {
-      heading: "Todo es",
-      headingGradient: "gratis",
-      description: "La aplicaci\u00f3n de escritorio y todas las funciones siguientes son gratuitas para siempre: una plataforma de agentes completa que se ejecuta en tu m\u00e1quina.",
-      offerBadges: [
-        "Gratis para siempre",
-        "Autoalojado",
-        "C\u00f3digo abierto"
-      ],
-      offerBody: "Personas se ejecuta en tu m\u00e1quina.",
-      ctaLabel: "Empieza gratis",
-      readGuide: "Leer la gu\u00eda",
-      groups: {
-        "agents-prompts": {
-          title: "Agentes y Prompts",
-          tagline: "Centrado en los usuarios",
-          concepts: [
-            "Creaci\u00f3n de personas en lenguaje natural",
-            "40+ plantillas adoptables",
-            "BYOM: Claude u Ollama local",
-            "Modos de prompt estructurado + simple",
-            "Memoria de agente persistente"
-          ]
-        },
-        triggers: {
-          title: "Orquestaci\u00f3n",
-          tagline: "Todas las formas de iniciar un agente",
-          concepts: [
-            "Programaci\u00f3n (cron)",
-            "Endpoints de webhook",
-            "Vigilante de archivos",
-            "Monitor del portapapeles",
-            "Disparador en cadena / por evento",
-            "Condiciones compuestas"
-          ]
-        },
-        pipelines: {
-          title: "Pipelines y Equipos",
-          tagline: "Colaboraci\u00f3n ag\u00e9ntica visual",
-          concepts: [
-            "Lienzo de equipo visual",
-            "Conexiones de flujo de datos",
-            "Bus de eventos en vivo",
-            "Ejecuci\u00f3n con autorreparaci\u00f3n",
-            "Repetici\u00f3n de pipeline + viaje en el tiempo"
-          ]
-        },
-        credentials: {
-          title: "Credenciales y Seguridad",
-          tagline: "Tus secretos permanecen en tu m\u00e1quina",
-          concepts: [
-            "B\u00f3veda AES-256-GCM",
-            "Llavero nativo del SO",
-            "OAuth asistido por IA",
-            "Renovaci\u00f3n autom\u00e1tica de tokens",
-            "Local primero, solo telemetr\u00eda an\u00f3nima"
-          ]
-        },
-        monitoring: {
-          title: "Monitorizaci\u00f3n",
-          tagline: "Ver, costear y controlar cada ejecuci\u00f3n",
-          concepts: [
-            "Panel de observabilidad en vivo",
-            "Trazado de spans por ejecuci\u00f3n",
-            "Atribuci\u00f3n de costes por modelo",
-            "Colas de revisi\u00f3n humana",
-            "Alertas de presupuesto + aplicaci\u00f3n"
-          ]
-        },
-        testing: {
-          title: "Laboratorio de pruebas",
-          tagline: "Evoluci\u00f3n automatizada",
-          concepts: [
-            "Arena para pruebas A/B",
-            "Versionado de prompts + diffs",
-            "Puntuaci\u00f3n de aptitud",
-            "Ciclos de cr\u00eda",
-            "Entornos aislados de herramientas simuladas"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "Agentes de IA que trabajan para ti",
       motto: "Agentes de IA que automatizan tu trabajo, para que puedas enfocarte en lo que m\u00e1s importa.",
@@ -352,24 +270,8 @@ export const es: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "Preguntas",
-      headingGradient: "frecuentes",
-      subtitle: "Todo lo que necesitas saber para comenzar con Personas.",
-      stillQuestions: "\u00bfA\u00fan tienes preguntas?",
-      joinDiscord: "Unirse a Discord",
       discordSubtitle: "\u00danete a nuestra comunidad de Discord para obtener ayuda y participar en discusiones.",
 
-      shieldLabels: {
-
-        piiStripped: "PII eliminada",
-
-        noReplays: "Sin repeticiones",
-
-        localOnly: "Solo local",
-
-        yourData: "Tus datos",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",

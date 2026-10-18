@@ -81,6 +81,5 @@ Guide links (both sections) route through `openGuideLink(guideHref(ref))` (`@/li
 - **Semantic tokens, with documented exceptions.** Sections use `text-muted`, `text-muted-dark`, `border-glass(-hover)`, `text-brand-cyan`, `var(--background)` etc. Brand-colored accents are intentionally driven by `BRAND_VAR`/`tint` inline styles rather than utility classes (per the established SVG-motion brand pattern).
 
 ## Related docs
-- [Pricing](pricing.md)
 - [Product feature showcase index](../INDEX.md)
 - [Feature index](../INDEX.md)
