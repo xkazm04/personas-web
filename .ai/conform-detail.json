@@ -5134,6 +5134,113 @@
         "at": "2026-10-18T00:25:16.819836+00:00",
         "reason": "reviewer (sonnet): The flow-composer code the verdict cites is outside this context. None of the listed how/changelog/how-manifesto/how-role-path files import it; only sections/event-hub/index.tsx and FlowComposer.tsx reference it. The code claims are accurate, but the verdict is about a different context."
       }
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/conversation-orchestration": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "conversation-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T00:35:04.827Z",
+      "worker": "8a4eae3e-cac3-4161-8af2-eb08c5cd7081",
+      "techniques": [
+        {
+          "technique": "layered-avatar-state-machine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/AgentLens.tsx:48 The section renders a decorative screenshot lens, not a permanently visible conversational companion."
+        },
+        {
+          "technique": "model-proposed-quick-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/RingNodes.tsx:37 These buttons select authored trigger examples; they are not model-proposed messages."
+        },
+        {
+          "technique": "narration-promote-on-finish",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/playback.ts:122 Playback cycles catalog entries rather than settling conversational turns with ephemeral narration."
+        },
+        {
+          "technique": "progress-beat-grammar",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/shared/useHubPlayback.ts:71 Observable timer ticks drive the demonstration; there is no long model generation needing self-reported progress."
+        },
+        {
+          "technique": "recall-transparency",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:115 Displayed examples come from catalog data and translated copy, not recalled user memories."
+        },
+        {
+          "technique": "show-dont-tell-walkthrough",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:45 The diagram exposes an authored-tour target rather than initiating guidance from a conversational turn."
+        },
+        {
+          "technique": "structured-visual-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/DetailPanel.tsx:75 The panel displays authored product descriptions, not structures composed as a model's answer."
+        },
+        {
+          "technique": "two-surface-doctrine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:55 The lens belongs to the trigger visualizer's playback, not an ambient companion paired with a full conversation."
+        }
+      ]
+    },
+    "Marketing & Landing/Guided Product Tour/conversation-orchestration": {
+      "context": "Guided Product Tour",
+      "subject": "conversation-orchestration",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T00:35:04.827Z",
+      "techniques": [
+        {
+          "technique": "layered-avatar-state-machine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourOverlay.tsx:24 The caption and its avatar mount during tour stepping; the technique expressly excludes companions confined to their own panel."
+        },
+        {
+          "technique": "model-proposed-quick-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourBridgeCard.tsx:51 This authored tour-continuation control is not a model-proposed reply chip."
+        },
+        {
+          "technique": "narration-promote-on-finish",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useTourAudio.ts:102 Narration plays configured audio assets rather than accumulating live conversational beats for promotion."
+        },
+        {
+          "technique": "progress-beat-grammar",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourCaptionCard.tsx:79 Captions resolve authored translation keys; no model reports its progress here."
+        },
+        {
+          "technique": "recall-transparency",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourLauncher.tsx:75 The persisted seen flag controls onboarding presentation, not user-memory grounding for an answer."
+        },
+        {
+          "technique": "show-dont-tell-walkthrough",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourIntroCard.tsx:25 This is the onboarding tour that the standard explicitly distinguishes from a turn-invoked, non-dimming companion walkthrough."
+        },
+        {
+          "technique": "structured-visual-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourCaptionCard.tsx:82 The surface renders authored instructional tasks, not model-composed comparative answers."
+        },
+        {
+          "technique": "two-surface-doctrine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourOverlay.tsx:19 The surfaces are phases of one transient tour, not ambient and full-conversation renderings of companion state."
+        }
+      ],
+      "withdrawn": {
+        "worker": "8a4eae3e-cac3-4161-8af2-eb08c5cd7081",
+        "state": "not-applicable",
+        "at": "2026-10-18T00:35:24.953212+00:00",
+        "reason": "reviewer (sonnet): The tour does have a companion (AthenaCompanion, mounted in TourCaptionCard and TourIntroCard with audio-reactive narration), and the claim that the technique excludes it rests on technique text I could not check in code; the anchor TourLauncher.tsx:94 only shows the start handler, so it is incident"
+      }
     }
   }
 }

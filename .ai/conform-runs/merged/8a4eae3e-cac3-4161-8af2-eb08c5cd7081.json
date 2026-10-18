@@ -1,0 +1,115 @@
+{
+  "schema": "conform-run/1",
+  "worker": "8a4eae3e-cac3-4161-8af2-eb08c5cd7081",
+  "subject": "conversation-orchestration",
+  "evaluatedAt": "2026-10-18T00:35:04.827342+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [
+    {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "conversation-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/sections/orchestration-hub/shared/useHubPlayback.ts:54 The hub initializes playback over an authored trigger catalog, and searches found no transcript, recall, or quickReplies matches in its directory, so resident-companion conversation orchestration is not exercised here.",
+      "techniques": [
+        {
+          "technique": "layered-avatar-state-machine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/AgentLens.tsx:48 The section renders a decorative screenshot lens, not a permanently visible conversational companion."
+        },
+        {
+          "technique": "model-proposed-quick-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/RingNodes.tsx:37 These buttons select authored trigger examples; they are not model-proposed messages."
+        },
+        {
+          "technique": "narration-promote-on-finish",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/playback.ts:122 Playback cycles catalog entries rather than settling conversational turns with ephemeral narration."
+        },
+        {
+          "technique": "progress-beat-grammar",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/shared/useHubPlayback.ts:71 Observable timer ticks drive the demonstration; there is no long model generation needing self-reported progress."
+        },
+        {
+          "technique": "recall-transparency",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:115 Displayed examples come from catalog data and translated copy, not recalled user memories."
+        },
+        {
+          "technique": "show-dont-tell-walkthrough",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:45 The diagram exposes an authored-tour target rather than initiating guidance from a conversational turn."
+        },
+        {
+          "technique": "structured-visual-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/DetailPanel.tsx:75 The panel displays authored product descriptions, not structures composed as a model's answer."
+        },
+        {
+          "technique": "two-surface-doctrine",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:55 The lens belongs to the trigger visualizer's playback, not an ambient companion paired with a full conversation."
+        }
+      ],
+      "absenceTerms": [
+        "transcript",
+        "recall",
+        "quickReplies"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "conversation-orchestration",
+      "context": "Guided Product Tour",
+      "reason": "withdrawn after review: reviewer (sonnet): The tour does have a companion (AthenaCompanion, mounted in TourCaptionCard and TourIntroCard with audio-reactive narration), and the claim that the technique excludes it rests on technique text I could not check in code; the anchor TourLauncher.tsx:94 only shows the start handler, so it is incident"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-18T00:35:04.827342+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "conversation-orchestration"
+      ],
+      "techniques": [
+        "layered-avatar-state-machine",
+        "model-proposed-quick-replies",
+        "narration-promote-on-finish",
+        "progress-beat-grammar",
+        "recall-transparency",
+        "show-dont-tell-walkthrough",
+        "structured-visual-replies",
+        "two-surface-doctrine"
+      ],
+      "deviations": 0,
+      "context": "Orchestration & Platform Visualizers",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    },
+    {
+      "ts": "2026-10-18T00:35:04.827342+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "conversation-orchestration"
+      ],
+      "techniques": [
+        "layered-avatar-state-machine",
+        "model-proposed-quick-replies",
+        "narration-promote-on-finish",
+        "progress-beat-grammar",
+        "recall-transparency",
+        "show-dont-tell-walkthrough",
+        "structured-visual-replies",
+        "two-surface-doctrine"
+      ],
+      "deviations": 0,
+      "context": "Guided Product Tour",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

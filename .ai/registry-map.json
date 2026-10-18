@@ -2724,7 +2724,11 @@
           "revision": 6,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/shared/useHubPlayback.ts:54 The hub initializes playback over an authored trigger catalog, and searches found no transcript, recall, or quickReplies matches in its directory, so resident-companion conversation orchestration is not exercised here.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:f3ecee1630629b34",
+          "evaluatedRevision": 6
         },
         {
           "subject": "scale-investment-timing",
