@@ -8057,7 +8057,11 @@
           "revision": 10,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/mobile-landing/clock/DialFixed.tsx:36 The mobile dial face calculates SVG text badge width from character count with an arbitrary multiplier rather than enforcing a declared surface render budget against actual font geometry.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:f00a2dbd4e8fdce1",
+          "evaluatedRevision": 10
         },
         {
           "subject": "test-harness",

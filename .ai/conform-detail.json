@@ -5241,6 +5241,33 @@
         "at": "2026-10-18T00:35:24.953212+00:00",
         "reason": "reviewer (sonnet): The tour does have a companion (AthenaCompanion, mounted in TourCaptionCard and TourIntroCard with audio-reactive narration), and the claim that the technique excludes it rests on technique text I could not check in code; the anchor TourLauncher.tsx:94 only shows the start handler, so it is incident"
       }
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/copy-quality-gates": {
+      "context": "Mobile App Shell & Views",
+      "subject": "copy-quality-gates",
+      "bundle": "localization",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T00:55:05.172Z",
+      "worker": "569de62a-b394-4018-849e-cf201d60859a",
+      "techniques": [
+        {
+          "technique": "length-and-render-budgets",
+          "verdict": "deviation",
+          "evidence": "src/components/mobile-landing/clock/DialFixed.tsx:36 Price node badge width is approximated using an inline character-length heuristic rather than validating against a declared surface render budget with real font metrics."
+        },
+        {
+          "technique": "copy-contract-before-drafting",
+          "verdict": "deviation",
+          "evidence": "src/app/m2/page.tsx:8 The /m2 mobile landing copy was drafted from design contest variants rather than from an established copy contract declaring surface registers, exemplars, and a fact sheet."
+        },
+        {
+          "technique": "reviewer-calibration-and-sampling",
+          "verdict": "deviation",
+          "evidence": "src/components/mobile-landing/clock/ClockLanding.tsx:28 This money page was accepted on a single owner verdict from a contest entry without formal reviewer calibration or role separation (variant-native editor, money-page sign-off)."
+        }
+      ],
+      "registryProposal": "The standard assumes product and landing copy is authored through a centralized copy contract and translation catalog, but modern reactive components (such as SVG interactive dials) frequently embed dynamic sizing heuristics directly in presentation code without surface render budget definitions."
     }
   }
 }
