@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { useTour } from "@/contexts/TourContext";
 import { INTRO_START_DELAY_MS } from "@/hooks/useTourAudio";
@@ -29,7 +30,21 @@ export default function AthenaCompanion({
 }) {
   const { audioAnalyser, atIntro, playing, volume } = useTour();
   const prefersReducedMotion = useStillMotion();
+  const hidden = usePageVisibility();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // The idle loop is ambient motion: hold it on its current frame (the poster
+  // before it has played) under reduced motion and while the tab is hidden.
+  // The element stays mounted either way, so the markup never depends on the
+  // preference.
+  const holdVideo = prefersReducedMotion || hidden;
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (holdVideo) video.pause();
+    else void video.play().catch(() => {});
+  }, [holdVideo]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -105,11 +120,12 @@ export default function AthenaCompanion({
       aria-hidden="true"
     >
       <video
+        ref={videoRef}
         src="/athena/athena_idle_loop.mp4"
         poster="/athena/athena_baseline.jpg"
         muted
-        loop
-        autoPlay
+        loop={!prefersReducedMotion}
+        autoPlay={!holdVideo}
         playsInline
         preload="auto"
         className="absolute inset-0 h-full w-full object-cover"
