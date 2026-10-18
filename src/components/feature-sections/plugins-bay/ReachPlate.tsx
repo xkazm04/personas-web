@@ -20,7 +20,7 @@ export default function ReachPlate() {
           {fillTemplate(copy.more, { count: (CONNECTOR_COUNT - SHOWN.length).toLocaleString(language) })}
         </span>
       </div>
-      <ul className="grid grid-cols-6 gap-2">
+      <ul className="grid grid-cols-6 gap-2 sm:grid-cols-12 lg:grid-cols-6">
         {SHOWN.map((tool) => (
           <li
             key={tool.id}
