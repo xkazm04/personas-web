@@ -1,11 +1,13 @@
 -- ============================================================================
 -- Harden feature-voting RLS + add the waitlist table
 --
--- Companion to scripts/setup-voting-db.sql. Apply this AFTER setting
--- SUPABASE_SERVICE_ROLE_KEY in the deployment env, because it removes the
--- anon role's ability to read PII and mutate votes directly — server routes
--- now use the service-role client (src/lib/supabase-admin.ts), which bypasses
--- RLS, so the API keeps working while direct anon REST access is closed.
+-- Companion to scripts/setup-voting-db.sql: `npm run db:migrate` applies it
+-- right after that file, so a re-run never re-opens what this closes. Apply
+-- it AFTER setting SUPABASE_SERVICE_ROLE_KEY in the deployment env, because
+-- it removes the anon role's ability to read PII and mutate votes directly —
+-- server routes now use the service-role client (src/lib/supabase-admin.ts),
+-- which bypasses RLS, so the API keeps working while direct anon REST access
+-- is closed.
 --
 -- Fixes:
 --   docs/harness/ambiguity-ui-scan-2026-07-16/supabase-client.md #1 (PII/RLS)
@@ -35,10 +37,11 @@ grant select on public.feature_vote_counts to anon;
 -- grant nothing on the base table to anon (server uses service-role):
 revoke all on public.feature_votes from anon;
 
--- ── 2. feature_comments / feature_boosts: drop anon insert (server-only) ────
+-- ── 2. feature_comments / feature_boosts: drop anon writes (server-only) ────
 -- Comments/boosts are written by the API with the service-role client now.
 drop policy if exists "anon insert feature_comments" on public.feature_comments;
 drop policy if exists "anon insert feature_boosts"   on public.feature_boosts;
+drop policy if exists "anon update feature_boosts"   on public.feature_boosts;
 -- Keep anon SELECT on comments (they're public, non-PII) if the UI reads them
 -- directly; otherwise revoke as above. Left in place here intentionally.
 

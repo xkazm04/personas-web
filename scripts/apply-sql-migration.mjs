@@ -71,8 +71,23 @@ export function migrationSqlPath(name) {
   return join(here, `setup-${name}-db.sql`);
 }
 
+/**
+ * The files a migration applies, in order: its setup file, then each `then` file
+ * (a plain `scripts/<file>.sql` name), so a hardening step that must follow the
+ * setup cannot be skipped by a re-run that applies the setup alone.
+ */
+export function migrationSqlPaths(name, then = []) {
+  const followUps = then.map((file) => {
+    if (!/^[a-z][a-z0-9-]*\.sql$/.test(file)) {
+      throw new Error(`Not a migration file: ${JSON.stringify(file)} (expected e.g. "harden-voting-rls.sql").`);
+    }
+    return join(here, file);
+  });
+  return [migrationSqlPath(name), ...followUps];
+}
+
 /** Load .env then .env.local (the precedence Next.js uses), connect, and apply the named migration. */
-export async function runMigrationCli({ name, label = "Migration" }) {
+export async function runMigrationCli({ name, label = "Migration", then = [] }) {
   loadDotEnv(join(root, ".env"));
   loadDotEnv(join(root, ".env.local"));
 
@@ -83,8 +98,8 @@ export async function runMigrationCli({ name, label = "Migration" }) {
   }
 
   try {
-    const sqlPath = migrationSqlPath(name);
-    const sql = readFileSync(sqlPath, "utf8");
+    const sqlPaths = migrationSqlPaths(name, then);
+    const sqls = sqlPaths.map((sqlPath) => readFileSync(sqlPath, "utf8"));
     const { default: pg } = await import("pg");
     const client = new pg.Client({
       connectionString,
@@ -94,10 +109,13 @@ export async function runMigrationCli({ name, label = "Migration" }) {
       // connections through the transaction pooler.
       ssl: { rejectUnauthorized: false },
     });
-    console.log(`Connecting to ${redact(connectionString)}\nApplying ${sqlPath} ...`);
+    console.log(`Connecting to ${redact(connectionString)}`);
     await client.connect();
     try {
-      await client.query(sql);
+      for (const [i, sqlPath] of sqlPaths.entries()) {
+        console.log(`Applying ${sqlPath} ...`);
+        await client.query(sqls[i]);
+      }
       console.log(`${label} applied.`);
     } finally {
       await client.end();

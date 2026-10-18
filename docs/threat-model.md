@@ -97,8 +97,10 @@ without a row.
 - Routes reach it only through `getSupabaseAdmin()`, imported dynamically inside
   the handler.
 - Known weak point: without the key, the admin client silently becomes the anon
-  client. Until `scripts/harden-voting-rls.sql` has run, voting tables are
-  writable and voter emails are readable with the public anon key.
+  client. `npm run db:migrate` applies `scripts/harden-voting-rls.sql` after the
+  setup file, so the anon role has no write on the voting tables and no read of
+  voter emails, and that fallback's writes then fail. A database that last ran an
+  older setup file stays open until the migration is re-run.
 
 ## Paired-device trust (PHASE2)
 

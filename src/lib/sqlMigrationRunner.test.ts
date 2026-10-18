@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadDotEnv, migrationSqlPath, parseDotEnv, redact } from "../../scripts/apply-sql-migration.mjs";
+import { loadDotEnv, migrationSqlPath, migrationSqlPaths, parseDotEnv, redact } from "../../scripts/apply-sql-migration.mjs";
 
 /**
  * Pins scripts/apply-sql-migration.mjs as the one connect-and-apply path for
@@ -54,6 +54,18 @@ describe("apply-sql-migration", () => {
 
   it("refuses a name that is not a plain migration name", () => {
     for (const bad of ["../voting", "Voting", "", "sync.sql"]) expect(() => migrationSqlPath(bad)).toThrow();
+  });
+
+  it("applies the follow-up files after the setup file, and refuses a follow-up that is not a plain .sql name", () => {
+    const files = migrationSqlPaths("voting", ["harden-voting-rls.sql"]).map((p) => path.basename(p));
+    expect(files).toEqual(["setup-voting-db.sql", "harden-voting-rls.sql"]);
+    for (const bad of ["../x.sql", "harden.SQL", "harden"]) expect(() => migrationSqlPaths("voting", [bad])).toThrow();
+  });
+
+  it("db:migrate applies the voting hardening, so a re-run cannot re-open anon writes", () => {
+    const text = fs.readFileSync(path.join(ROOT, "scripts/run-voting-migration.mjs"), "utf8");
+    expect(text).toMatch(/then:\s*\["harden-voting-rls\.sql"\]/);
+    expect(fs.existsSync(path.join(ROOT, "scripts/harden-voting-rls.sql"))).toBe(true);
   });
 
   it.each(WRAPPERS)("%s delegates to the shared runner and opens no client of its own", (rel) => {
