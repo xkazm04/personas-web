@@ -32,6 +32,8 @@ interface TopStripProps {
 }
 
 const PILES = ["needs", "working", "resting", "off"] as const;
+/** The legend's toggles: "needs" is the verdict's own toggle, never repeated beside it. */
+const LEGEND_PILES = PILES.filter((p) => p !== "needs");
 const crumbBtn = "rounded px-1 text-muted-dark underline decoration-dashed underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-foreground";
 const kbd = "rounded border border-glass-hover px-1.5 font-mono";
 
@@ -77,6 +79,13 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, foc
   const verdict = c.needs ? plural(c.needs, copy.top.needsOne, copy.top.needsMany) : copy.top.allClear;
   // Below the fleet level the way back needs the room: the pile legend yields.
   const deep = !!(nav.teamOpen || nav.agentOpen);
+  const needsOn = focus.piles.includes("needs");
+  const verdictText = (
+    <>
+      <span className="text-2xl font-bold leading-none tabular-nums" style={{ color: c.needs ? ATTENTION_COLOR[c.critical ? "critical" : "needs"] : ATTENTION_COLOR.working }}>{c.needs}</span>
+      <span className="text-sm font-semibold text-foreground">{verdict}</span>
+    </>
+  );
 
   return (
     <>
@@ -95,10 +104,21 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, foc
           })}
         </div>
       )}
-      <div className="flex shrink-0 items-baseline gap-2">
-        <span className="text-2xl font-bold leading-none tabular-nums" style={{ color: c.needs ? ATTENTION_COLOR[c.critical ? "critical" : "needs"] : ATTENTION_COLOR.working }}>{c.needs}</span>
-        <span className="text-sm font-semibold text-foreground">{verdict}</span>
-      </div>
+      {/* The verdict is the strip's one "need you" count: at the fleet level it is also the needs pile's toggle,
+          so the legend beside it carries only the other three piles. */}
+      {deep ? (
+        <div className="flex shrink-0 items-baseline gap-2">{verdictText}</div>
+      ) : (
+        <button
+          type="button"
+          aria-pressed={needsOn}
+          title={fill(copy.find.pileHint, { pile: piles.needs })}
+          onClick={() => onFocus(togglePile(focus, "needs"))}
+          className={`-mx-2 flex shrink-0 items-baseline gap-2 rounded-lg px-2 py-0.5 transition-colors focus-visible:outline-2 focus-visible:outline-foreground ${needsOn ? "bg-foreground/10 shadow-[inset_0_0_0_1px_var(--border-glass-hover)]" : "hover:bg-foreground/5"}`}
+        >
+          {verdictText}
+        </button>
+      )}
       <div className="flex min-w-0 items-center gap-3">
         {/* At the fleet level the pile toggles carry the mix; the bar stands in below that and on small screens. */}
         <div role="img" aria-label={PILES.map((p) => `${c[p]} ${piles[p]}`).join(", ")} className={`h-2 w-[clamp(72px,9vw,180px)] shrink-0 gap-0.5 overflow-hidden rounded-full ${deep ? "flex" : "flex lg:hidden"}`}>
@@ -106,7 +126,7 @@ export default function TopStrip({ counts: c, scope, simMs, copy, nav, host, foc
         </div>
         {!deep && (
           <div role="group" aria-label={copy.find.pilesLabel} className="hidden items-center gap-0.5 whitespace-nowrap text-xs tabular-nums lg:flex">
-            {PILES.map((p) => {
+            {LEGEND_PILES.map((p) => {
               const on = focus.piles.includes(p);
               return (
                 <button
