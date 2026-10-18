@@ -59,7 +59,7 @@ export function WaitlistSuccessPanel({
         <span className="shrink-0 rounded-md bg-brand-purple/15 px-1.5 py-0.5 text-xs font-medium text-brand-purple">{platformLabel}</span>
       </div>
       <WaitlistNextSteps status={status} platformLabel={platformLabel} earlyBeta={earlyBeta} labels={labels} />
-      <button onClick={onClose} className="mt-5 w-full rounded-full border border-glass-hover bg-white/[0.02] px-4 py-2.5 text-base font-medium text-muted transition-colors hover:border-glass-strong hover:text-foreground">
+      <button onClick={onClose} data-waitlist-settled-focus className="mt-5 w-full rounded-full border border-glass-hover bg-white/[0.02] px-4 py-2.5 text-base font-medium text-muted transition-colors hover:border-glass-strong hover:text-foreground">
         {labels.close}
       </button>
       <button onClick={onShare} className="mt-2 group relative flex w-full items-center justify-center gap-2 rounded-full bg-white/[0.04] px-4 py-2.5 text-base font-medium text-brand-cyan transition-colors hover:bg-white/[0.08]">
