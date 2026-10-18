@@ -2,10 +2,6 @@
 
 import { useCallback, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Inbox, Radio } from "lucide-react";
-import EmptyState from "@/components/dashboard/EmptyState";
-import DesktopUnsupportedNote from "@/components/dashboard/views/personas/phone/DesktopUnsupportedNote";
-import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useScopedEvents } from "@/components/dashboard/views/events/useScopedEvents";
 import { fadeUp } from "@/lib/animations";
 import type { PersonaEvent } from "@/lib/types";
@@ -18,9 +14,9 @@ import { usePersonaStore } from "@/stores/personaStore";
 import { EventExpandedContent } from "./events-list-panel/EventExpandedContent";
 import { EventsBulkRetryBar } from "./events-list-panel/EventsBulkRetryBar";
 import { EventsFiltersToolbar } from "./events-list-panel/EventsFiltersToolbar";
+import { EventsListEmpty } from "./events-list-panel/EventsListEmpty";
 import { EventsTriageToasts } from "./events-list-panel/EventsTriageToasts";
 import { DataTable, buildEventColumns } from "./events-list-panel/EventsListColumns";
-import type { EventPanelLabels } from "./events-list-panel/eventPanelTypes";
 
 const INITIAL_VISIBLE_EVENTS = 200;
 const EVENTS_LOAD_STEP = 200;
@@ -34,7 +30,6 @@ export default function EventsListPanel() {
   // inside its undo window, and the lane drains the moment a verdict is armed.
   const events = useMemo(() => overlayEventVerdicts(storeEvents, ledger), [storeEvents, ledger]);
   const eventsLoading = useEventStore((s) => s.eventsLoading);
-  const listNotServed = useEventStore((s) => s.listNotServed);
   const decide = useEventStore((s) => s.decide);
   const replayingIds = useEventStore((s) => s.replayingIds);
   const discardingIds = useEventStore((s) => s.discardingIds);
@@ -139,7 +134,7 @@ export default function EventsListPanel() {
         labels={t}
       />
       <motion.div variants={fadeUp}>
-        <DataTable<PersonaEvent> columns={columns} data={visibleEvents} keyExtractor={(event) => event.id} expandable={(event) => <EventExpandedContent event={event} />} rowClassName={rowClassName} emptyState={listNotServed && allEvents.length === 0 ? <DesktopUnsupportedNote /> : scopeEmpty ? <ScopeEmpty /> : <EventsEmptyState filter={filter} hasActiveFilters={hasActiveFilters} labels={t} />} />
+        <DataTable<PersonaEvent> columns={columns} data={visibleEvents} keyExtractor={(event) => event.id} expandable={(event) => <EventExpandedContent event={event} />} rowClassName={rowClassName} emptyState={<EventsListEmpty heldEvents={allEvents.length} scopeEmpty={scopeEmpty} filter={filter} hasActiveFilters={hasActiveFilters} labels={t} />} />
       </motion.div>
       {filtered.length > visibleEvents.length && (
         <motion.div variants={fadeUp} className="mt-3 flex items-center justify-center">
@@ -165,17 +160,4 @@ function useEventCounts(events: PersonaEvent[]) {
     }
     return counts;
   }, [events]);
-}
-
-function EventsEmptyState({ filter, hasActiveFilters, labels }: { filter: string; hasActiveFilters: boolean; labels: EventPanelLabels }) {
-  if (filter === "dead_letter") {
-    return <EmptyState icon={Inbox} title={labels.eventsPage.noDeadLetters} description={labels.eventsPage.noDeadLettersDescription} />;
-  }
-  return (
-    <EmptyState
-      icon={Radio}
-      title={hasActiveFilters ? labels.eventsPage.noMatchingEvents : labels.eventsPage.noEvents}
-      description={hasActiveFilters ? labels.eventsPage.noMatchingEventsDescription : labels.eventsPage.noEventsDescription}
-    />
-  );
 }

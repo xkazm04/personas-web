@@ -1259,6 +1259,8 @@ export const de: LocaleTranslations = {
       noEvents: "Keine Ereignisse",
       noMatchingEventsDescription: "Passen Sie Suche oder Filter an",
       noEventsDescription: "Ereignisse erscheinen hier, wenn Agenten Trigger und Abonnements verarbeiten",
+      loadFailed: "Ereignisse konnten nicht geladen werden",
+      loadFailedDescription: "Die Ereignisliste wurde nicht geladen. Eine leere Liste hei\u00dft hier also nicht, dass nichts passiert ist.",
       loadMore: "Weitere Ereignisse laden",
       failedEventSelected: "fehlgeschlagenes Ereignis ausgew?hlt",
       failedEventsSelected: "fehlgeschlagene Ereignisse ausgew?hlt",

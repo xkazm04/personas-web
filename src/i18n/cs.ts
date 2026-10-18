@@ -1259,6 +1259,8 @@ export const cs: LocaleTranslations = {
       noEvents: "??dn? ud?losti",
       noMatchingEventsDescription: "Zkuste upravit hled?n? nebo filtry",
       noEventsDescription: "Ud?losti se zobraz?, jakmile agenti zpracuj? spou?t??e a odb?ry",
+      loadFailed: "Ud\u00e1losti se nepoda\u0159ilo na\u010d\u00edst",
+      loadFailedDescription: "Seznam ud\u00e1lost\u00ed se nena\u010detl, tak\u017ee pr\u00e1zdn\u00fd seznam neznamen\u00e1, \u017ee se nic nestalo.",
       loadMore: "Na??st dal?? ud?losti",
       failedEventSelected: "vybran? ne?sp??n? ud?lost",
       failedEventsSelected: "vybran?ch ne?sp??n?ch ud?lost?",

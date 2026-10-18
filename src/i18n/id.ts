@@ -1259,6 +1259,8 @@ export const id: LocaleTranslations = {
       noEvents: "Tidak ada event",
       noMatchingEventsDescription: "Coba sesuaikan pencarian atau filter Anda",
       noEventsDescription: "Event akan muncul di sini saat agen memproses pemicu dan langganan",
+      loadFailed: "Event tidak dapat dimuat",
+      loadFailedDescription: "Daftar event tidak termuat, jadi daftar kosong di sini tidak berarti tidak ada yang terjadi.",
       loadMore: "Muat lebih banyak event",
       failedEventSelected: "event gagal dipilih",
       failedEventsSelected: "event gagal dipilih",

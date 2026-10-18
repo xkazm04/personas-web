@@ -1075,6 +1075,8 @@
     noEvents: string;
     noMatchingEventsDescription: string;
     noEventsDescription: string;
+    loadFailed: string;
+    loadFailedDescription: string;
     loadMore: string;
     failedEventSelected: string;
     failedEventsSelected: string;
@@ -3136,6 +3138,8 @@ export const en: CoreTranslations = {
     noEvents: 'No events',
     noMatchingEventsDescription: 'Try adjusting your search or filters',
     noEventsDescription: 'Events will appear here as agents process triggers and subscriptions',
+    loadFailed: "Couldn't load events",
+    loadFailedDescription: "The event list didn't load, so an empty list here doesn't mean nothing happened.",
     loadMore: 'Load more events',
     failedEventSelected: 'failed event selected',
     failedEventsSelected: 'failed events selected',

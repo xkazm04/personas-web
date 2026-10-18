@@ -1259,6 +1259,8 @@ export const vi: LocaleTranslations = {
       noEvents: "Kh\u00f4ng c\u00f3 s\u1ef1 ki\u1ec7n",
       noMatchingEventsDescription: "H\u00e3y th\u1eed \u0111i\u1ec1u ch\u1ec9nh t\u00ecm ki\u1ebfm ho\u1eb7c b\u1ed9 l\u1ecdc c\u1ee7a b\u1ea1n",
       noEventsDescription: "C\u00e1c s\u1ef1 ki\u1ec7n s\u1ebd xu\u1ea5t hi\u1ec7n t\u1ea1i \u0111\u00e2y khi agent x\u1eed l\u00fd tr\u00ecnh k\u00edch ho\u1ea1t v\u00e0 \u0111\u0103ng k\u00fd",
+      loadFailed: "Kh\u00f4ng th\u1ec3 t\u1ea3i s\u1ef1 ki\u1ec7n",
+      loadFailedDescription: "Danh s\u00e1ch s\u1ef1 ki\u1ec7n ch\u01b0a t\u1ea3i \u0111\u01b0\u1ee3c, n\u00ean danh s\u00e1ch tr\u1ed1ng \u1edf \u0111\u00e2y kh\u00f4ng c\u00f3 ngh\u0129a l\u00e0 ch\u01b0a c\u00f3 g\u00ec x\u1ea3y ra.",
       loadMore: "T\u1ea3i th\u00eam s\u1ef1 ki\u1ec7n",
       failedEventSelected: "s\u1ef1 ki\u1ec7n th\u1ea5t b\u1ea1i \u0111\u01b0\u1ee3c ch\u1ecdn",
       failedEventsSelected: "s\u1ef1 ki\u1ec7n th\u1ea5t b\u1ea1i \u0111\u01b0\u1ee3c ch\u1ecdn",

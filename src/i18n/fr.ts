@@ -1259,6 +1259,8 @@ export const fr: LocaleTranslations = {
       noEvents: "Aucun ?v?nement",
       noMatchingEventsDescription: "Essayez d?ajuster votre recherche ou vos filtres",
       noEventsDescription: "Les ?v?nements appara?tront ici lorsque les agents traiteront les d?clencheurs et abonnements",
+      loadFailed: "Impossible de charger les \u00e9v\u00e9nements",
+      loadFailedDescription: "La liste des \u00e9v\u00e9nements n\u2019a pas \u00e9t\u00e9 charg\u00e9e : une liste vide ici ne signifie pas que rien ne s\u2019est pass\u00e9.",
       loadMore: "Charger plus d??v?nements",
       failedEventSelected: "?v?nement ?chou? s?lectionn?",
       failedEventsSelected: "?v?nements ?chou?s s?lectionn?s",

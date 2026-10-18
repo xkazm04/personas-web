@@ -1587,6 +1587,7 @@
             "src/components/dashboard/events-list-panel/EventExpandedContent.tsx",
             "src/components/dashboard/events-list-panel/EventTypeBadge.tsx",
             "src/components/dashboard/events-list-panel/EventsBulkRetryBar.tsx",
+            "src/components/dashboard/events-list-panel/EventsListEmpty.tsx",
             "src/components/dashboard/events-list-panel/EventsFiltersToolbar.tsx",
             "src/components/dashboard/events-list-panel/EventsListColumns.tsx",
             "src/components/dashboard/events-list-panel/EventsTriageToasts.tsx",

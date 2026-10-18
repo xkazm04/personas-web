@@ -1259,6 +1259,8 @@ export const es: LocaleTranslations = {
       noEvents: "No hay eventos",
       noMatchingEventsDescription: "Prueba a ajustar la b?squeda o los filtros",
       noEventsDescription: "Los eventos aparecer?n aqu? cuando los agentes procesen disparadores y suscripciones",
+      loadFailed: "No se pudieron cargar los eventos",
+      loadFailedDescription: "La lista de eventos no se carg\u00f3, as\u00ed que una lista vac\u00eda aqu\u00ed no significa que no haya pasado nada.",
       loadMore: "Cargar m?s eventos",
       failedEventSelected: "evento fallido seleccionado",
       failedEventsSelected: "eventos fallidos seleccionados",
