@@ -83,15 +83,6 @@ export default function TemplateDetail({ templateId }: { templateId: string }) {
   // template ids are not in its catalog, so the CTA routes straight to install.
   const openInstall = useCallback(() => setShowFallback(true), []);
 
-  useEffect(() => {
-    if (!showFallback) return;
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setShowFallback(false);
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [showFallback]);
-
   return (
     <>
       <TemplateJsonLd template={template} />

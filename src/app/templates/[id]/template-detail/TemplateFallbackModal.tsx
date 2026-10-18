@@ -1,7 +1,9 @@
+import { useId } from "react";
 import Link from "next/link";
 import { Copy, Download, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
+import { useDialogFocusTrap } from "@/hooks/useDialogFocusTrap";
 import { useTranslation } from "@/i18n/useTranslation";
 
 interface TemplateFallbackModalProps {
@@ -12,6 +14,10 @@ interface TemplateFallbackModalProps {
 
 export function TemplateFallbackModal({ open, onClose, onCopy }: TemplateFallbackModalProps) {
   const { t } = useTranslation();
+  const titleId = useId();
+  // Focus moves into the dialog on open, Tab cycles inside it, Escape closes
+  // it, and focus returns to the CTA that opened it.
+  const panelRef = useDialogFocusTrap(open, onClose, { initialFocusSelector: "[data-dialog-initial]" });
 
   return (
     <AnimatePresence>
@@ -19,6 +25,10 @@ export function TemplateFallbackModal({ open, onClose, onCopy }: TemplateFallbac
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }} className="fixed inset-0 z-[60] flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
@@ -33,10 +43,10 @@ export function TemplateFallbackModal({ open, onClose, onCopy }: TemplateFallbac
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-brand-purple/20 bg-brand-purple/10">
                 <Download className="h-7 w-7 text-brand-purple" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">{t.templatesPage.installTitle}</h3>
+              <h3 id={titleId} className="text-lg font-semibold text-foreground">{t.templatesPage.installTitle}</h3>
               <p className="text-sm leading-relaxed text-muted-dark">{t.templatesPage.installDescription}</p>
               <div className="mt-1 flex w-full flex-col gap-2">
-                <Link href="/#download" onClick={onClose} className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-purple px-5 py-2.5 text-base font-medium text-white transition-colors hover:bg-brand-purple/80">
+                <Link href="/#download" onClick={onClose} data-dialog-initial className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-purple px-5 py-2.5 text-base font-medium text-white transition-colors hover:bg-brand-purple/80">
                   <Download className="h-4 w-4" /> {t.hero.downloadForWindows}
                 </Link>
                 <button
