@@ -1,0 +1,22 @@
+{
+ "schema": "conform-run/1",
+ "worker": "78213c7e-f885-4e2d-9e9b-c4cbae06e1bc",
+ "subject": "standards-layered-runtime",
+ "evaluatedAt": "2026-10-18T23:19:13.345208+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "standards-layered-runtime",
+   "context": "Feature Voting & Comments",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "standards-layered-runtime",
+   "context": "Orchestrator API Client & Mock Data",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": []
+}
