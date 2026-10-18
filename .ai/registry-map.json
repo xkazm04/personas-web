@@ -6777,7 +6777,11 @@
           "revision": 5,
           "changedAt": "2026-09-24",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:53 Status filters operate on the newest 50 non-demo executions without disclosing that window, so older matching runs can appear absent.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:395e660a5e607abe",
+          "evaluatedRevision": 6
         },
         {
           "subject": "agent-runtime-assembly",
@@ -7771,7 +7775,11 @@
           "revision": 5,
           "changedAt": "2026-09-24",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx:58 Facet counts tally the unfiltered incident collection regardless of other active dimensions, so they describe neither the current selection nor disjunctive facet counts.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:395e660a5e607abe",
+          "evaluatedRevision": 6
         },
         {
           "subject": "agent-memory",

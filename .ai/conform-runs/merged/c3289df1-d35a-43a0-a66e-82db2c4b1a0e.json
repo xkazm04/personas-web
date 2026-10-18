@@ -1,0 +1,141 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c3289df1-d35a-43a0-a66e-82db2c4b1a0e",
+ "subject": "search",
+ "evaluatedAt": "2026-10-18T23:08:08.855456+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "search",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:53 Status filters operate on the newest 50 non-demo executions without disclosing that window, so older matching runs can appear absent.",
+   "techniques": [
+    {
+     "technique": "command-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionsFilters.tsx:29 The controls select status facets rather than fuzzy-match commands or destinations."
+    },
+    {
+     "technique": "faceting-and-filters",
+     "verdict": "deviation",
+     "evidence": "src/stores/executionStore.ts:109 The view fetches without status or scope predicates, then filters this capped collection locally; its toolbar and empty state do not disclose the 50-run window."
+    },
+    {
+     "technique": "full-text-indexing",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:52 This is categorical filtering of execution records, without a searchable text corpus or tokenizer."
+    },
+    {
+     "technique": "query-parsing",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionsFilters.tsx:30 Users select predefined status keys; there is no raw text query requiring translation or normalization."
+    },
+    {
+     "technique": "ranking-and-excerpts",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:57 The surface pages an existing filtered list rather than presenting relevance-ranked text matches and excerpts."
+    },
+    {
+     "technique": "saved-views",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:30 The status selection is current component state, not a named, durable saved predicate."
+    },
+    {
+     "technique": "typed-filter-language",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:14 The application supplies the predicate; users do not author expressions or operators."
+    }
+   ]
+  },
+  {
+   "context": "Incidents Inbox",
+   "subject": "search",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx:58 Facet counts tally the unfiltered incident collection regardless of other active dimensions, so they describe neither the current selection nor disjunctive facet counts.",
+   "techniques": [
+    {
+     "technique": "command-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx:102 These are canonical source-facet choices rather than searchable commands or destinations."
+    },
+    {
+     "technique": "faceting-and-filters",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx:59 Status and severity counts iterate every supplied incident and depend only on incidents, ignoring selections in the other facets."
+    },
+    {
+     "technique": "full-text-indexing",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/incidentFormat.ts:93 Persona membership uses exact equality; this context does not search document text."
+    },
+    {
+     "technique": "query-parsing",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/incidentFormat.ts:90 The predicate consumes a selected status value rather than raw user search text."
+    },
+    {
+     "technique": "ranking-and-excerpts",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/incidentFormat.ts:95 This is an operational triage ordering, without relevance-ranked text results or matched excerpts."
+    },
+    {
+     "technique": "saved-views",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/incidentsFilterStore.ts:89 Persistence stores the current filter/group state under one key; no named saved-view artifact is exposed."
+    },
+    {
+     "technique": "typed-filter-language",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/incidentFormat.ts:91 Users choose severity values for a fixed predicate rather than author a filter program."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-18T23:08:08.855456+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "search"
+   ],
+   "techniques": [
+    "command-surface",
+    "faceting-and-filters",
+    "full-text-indexing",
+    "query-parsing",
+    "ranking-and-excerpts",
+    "saved-views",
+    "typed-filter-language"
+   ],
+   "deviations": 1,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-18T23:08:08.855456+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "search"
+   ],
+   "techniques": [
+    "command-surface",
+    "faceting-and-filters",
+    "full-text-indexing",
+    "query-parsing",
+    "ranking-and-excerpts",
+    "saved-views",
+    "typed-filter-language"
+   ],
+   "deviations": 1,
+   "context": "Incidents Inbox",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
