@@ -629,6 +629,8 @@ export const fr: LocaleTranslations = {
       selected: "s\u00e9lectionn\u00e9(s)",
       selectReviewsBulk: "S\u00e9lectionner des r\u00e9visions pour des actions group\u00e9es",
       noReviewsInFilter: "Aucune r\u00e9vision dans ce filtre",
+      reviewsLoadFailed: "Impossible de charger la file des r\u00e9visions.",
+      reviewsRefreshFailed: "\u00c9chec de l'actualisation. Affichage des derni\u00e8res r\u00e9visions charg\u00e9es.",
       refreshing: "Actualisation...",
       rejectSelectedTitle: "Rejeter les r\u00e9visions s\u00e9lectionn\u00e9es ?",
       rejectSelectedBody: "Cela rejettera les revues s\u00e9lectionn\u00e9es ({count}). Vous aurez 5 secondes pour annuler cette action.",

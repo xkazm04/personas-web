@@ -629,6 +629,8 @@ export const vi: LocaleTranslations = {
       selected: "\u0111\u00e3 ch\u1ecdn",
       selectReviewsBulk: "Ch\u1ecdn \u0111\u00e1nh gi\u00e1 \u0111\u1ec3 th\u1ef1c hi\u1ec7n h\u00e0ng lo\u1ea1t",
       noReviewsInFilter: "Kh\u00f4ng c\u00f3 \u0111\u00e1nh gi\u00e1 n\u00e0o trong b\u1ed9 l\u1ecdc n\u00e0y",
+      reviewsLoadFailed: "Kh\u00f4ng th\u1ec3 t\u1ea3i h\u00e0ng \u0111\u1ee3i \u0111\u00e1nh gi\u00e1.",
+      reviewsRefreshFailed: "Kh\u00f4ng th\u1ec3 l\u00e0m m\u1edbi. \u0110ang hi\u1ec3n th\u1ecb c\u00e1c \u0111\u00e1nh gi\u00e1 \u0111\u00e3 t\u1ea3i g\u1ea7n nh\u1ea5t.",
       refreshing: "\u0110ang l\u00e0m m\u1edbi...",
       rejectSelectedTitle: "T\u1eeb ch\u1ed1i c\u00e1c \u0111\u00e1nh gi\u00e1 \u0111\u00e3 ch\u1ecdn?",
       rejectSelectedBody: "Thao t\u00e1c n\u00e0y s\u1ebd t\u1eeb ch\u1ed1i c\u00e1c b\u1ea3n duy\u1ec7t \u0111\u00e3 ch\u1ecdn ({count}). B\u1ea1n s\u1ebd c\u00f3 5 gi\u00e2y \u0111\u1ec3 ho\u00e0n t\u00e1c.",

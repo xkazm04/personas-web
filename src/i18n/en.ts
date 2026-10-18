@@ -432,6 +432,8 @@
     selected: string;
     selectReviewsBulk: string;
     noReviewsInFilter: string;
+    reviewsLoadFailed: string;
+    reviewsRefreshFailed: string;
     refreshing: string;
     rejectSelectedTitle: string;
     rejectSelectedBody: string;
@@ -2504,6 +2506,8 @@ export const en: CoreTranslations = {
     selected: "selected",
     selectReviewsBulk: "Select reviews for bulk actions",
     noReviewsInFilter: "No reviews in this filter",
+    reviewsLoadFailed: "Couldn't load the review queue.",
+    reviewsRefreshFailed: "Couldn't refresh. Showing the last loaded reviews.",
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject the selected reviews ({count}). You will have 5 seconds to undo this action.",

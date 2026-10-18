@@ -1,6 +1,7 @@
 import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { ManualReviewItem } from "@/lib/types";
+import { ReviewsLoadFailed } from "../ReviewsLoadFailed";
 import { ReviewRow } from "./ReviewRow";
 
 /** First-load ghost rows (stable keys; never real data). */
@@ -11,6 +12,7 @@ export function ReviewList({
   now,
   waiting = false,
   scopeEmpty = false,
+  failed = false,
   filtered,
   selectedId,
   selectedIds,
@@ -23,6 +25,8 @@ export function ReviewList({
   waiting?: boolean;
   /** The scope bar's persona + window emptied a queue that has reviews. */
   scopeEmpty?: boolean;
+  /** The list read failed and no review is held: "could not load", never "none". */
+  failed?: boolean;
   filtered: ManualReviewItem[];
   selectedId: string | null;
   selectedIds: Set<string>;
@@ -47,6 +51,8 @@ export function ReviewList({
             ))}
           </div>
         </div>
+      ) : failed ? (
+        <ReviewsLoadFailed />
       ) : filtered.length === 0 && scopeEmpty ? (
         <ScopeEmpty compact />
       ) : filtered.length === 0 ? (

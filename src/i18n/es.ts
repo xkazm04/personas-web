@@ -629,6 +629,8 @@ export const es: LocaleTranslations = {
       selected: "seleccionado",
       selectReviewsBulk: "Selecciona revisiones para acciones masivas",
       noReviewsInFilter: "No hay revisiones en este filtro",
+      reviewsLoadFailed: "No se pudo cargar la cola de revisiones.",
+      reviewsRefreshFailed: "No se pudo actualizar. Se muestran las \u00faltimas revisiones cargadas.",
       refreshing: "Actualizando...",
       rejectSelectedTitle: "\u00bfRechazar las revisiones seleccionadas?",
       rejectSelectedBody: "Esto rechazar\u00e1 las revisiones seleccionadas ({count}). Tendr\u00e1s 5 segundos para deshacer esta acci\u00f3n.",

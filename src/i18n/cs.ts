@@ -629,6 +629,8 @@ export const cs: LocaleTranslations = {
       selected: "vybr\u00e1no",
       selectReviewsBulk: "Vybrat revize pro hromadn\u00e9 akce",
       noReviewsInFilter: "V tomto filtru nejsou \u017e\u00e1dn\u00e9 revize",
+      reviewsLoadFailed: "Frontu reviz\u00ed se nepoda\u0159ilo na\u010d\u00edst.",
+      reviewsRefreshFailed: "Obnoven\u00ed se nezda\u0159ilo. Zobrazuj\u00ed se naposledy na\u010dten\u00e9 revize.",
       refreshing: "Obnovuje se...",
       rejectSelectedTitle: "Zam\u00edtnout vybran\u00e9 revize?",
       rejectSelectedBody: "T\u00edmto zam\u00edtnete vybran\u00e9 revize ({count}). Na vr\u00e1cen\u00ed akce budete m\u00edt 5 sekund.",

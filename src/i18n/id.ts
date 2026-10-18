@@ -629,6 +629,8 @@ export const id: LocaleTranslations = {
       selected: "dipilih",
       selectReviewsBulk: "Pilih tinjauan untuk tindakan massal",
       noReviewsInFilter: "Tidak ada tinjauan dalam filter ini",
+      reviewsLoadFailed: "Antrean tinjauan tidak dapat dimuat.",
+      reviewsRefreshFailed: "Gagal menyegarkan. Menampilkan tinjauan yang terakhir dimuat.",
       refreshing: "Menyegarkan...",
       rejectSelectedTitle: "Tolak tinjauan yang dipilih?",
       rejectSelectedBody: "Ini akan menolak tinjauan yang dipilih ({count}). Anda memiliki 5 detik untuk membatalkan tindakan ini.",

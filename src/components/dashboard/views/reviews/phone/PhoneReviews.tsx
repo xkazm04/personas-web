@@ -21,6 +21,7 @@ import { useScopedReviews } from "../useScopedReviews";
 import ScopeEmpty from "@/components/dashboard/scope/ScopeEmpty";
 import EscalationFailureNotice from "../EscalationFailureNotice";
 import PhoneReviewCard, { splitReviewContent } from "./PhoneReviewCard";
+import { ReviewsLoadFailed } from "../ReviewsLoadFailed";
 
 /** How many of this visit's verdicts stay listed under "Decided here". */
 const DECIDED_SHOWN = 8;
@@ -51,6 +52,7 @@ export default function PhoneReviews() {
   const policy = useReviewStore((s) => s.escalationPolicy);
   const reviewCommands = useReviewStore((s) => s.reviewCommands);
   const fetchReviews = useReviewStore((s) => s.fetchReviews);
+  const reviewsError = useReviewStore((s) => s.reviewsError);
   const inflight = useCommandStore((s) => s.inflight);
   const now = useReviewClock();
   // This visit's verdicts, newest first (set by the tap, never by an effect).
@@ -116,6 +118,8 @@ export default function PhoneReviews() {
             ))}
           </ul>
         </div>
+      ) : reviewsError && reviews.length === 0 ? (
+        <ReviewsLoadFailed />
       ) : scopeEmpty ? (
         <ScopeEmpty compact />
       ) : pending.length === 0 ? (

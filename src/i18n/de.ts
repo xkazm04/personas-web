@@ -629,6 +629,8 @@ export const de: LocaleTranslations = {
       selected: "ausgew\u00e4hlt",
       selectReviewsBulk: "Reviews f\u00fcr Sammelaktionen ausw\u00e4hlen",
       noReviewsInFilter: "Keine Reviews in diesem Filter",
+      reviewsLoadFailed: "Die Review-Warteschlange konnte nicht geladen werden.",
+      reviewsRefreshFailed: "Aktualisierung fehlgeschlagen. Es werden die zuletzt geladenen Reviews angezeigt.",
       refreshing: "Wird aktualisiert...",
       rejectSelectedTitle: "Ausgew\u00e4hlte Reviews ablehnen?",
       rejectSelectedBody: "Dadurch werden die ausgew\u00e4hlten Reviews ({count}) abgelehnt. Sie haben 5 Sekunden Zeit, um diese Aktion r\u00fcckg\u00e4ngig zu machen.",

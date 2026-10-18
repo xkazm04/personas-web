@@ -291,6 +291,8 @@ interface ReviewState {
   reviewsLoading: boolean;
   /** The plane answered 501 not_on_desktop to the list read: an empty list means "not served", not "no reviews". */
   listNotServed: boolean;
+  /** The last list read failed (anything but 501): an empty list means "could not load", not "no reviews". */
+  reviewsError: boolean;
   pendingReviewCount: number;
   ledger: LedgerState;
   /** Reviewer-note drafts keyed by review id; every verdict path carries them. */
@@ -444,6 +446,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
     baseReviews: [],
     reviewsLoading: false,
     listNotServed: false,
+    reviewsError: false,
     pendingReviewCount: 0,
     ledger: IDLE_LEDGER,
     drafts: {},
@@ -471,12 +474,16 @@ export const useReviewStore = create<ReviewState>((set, get) => {
         if (seq === reviewFetchSeq) {
           set((s) => {
             const fresh = reconcileConfirmed(reviews, s.confirmed, Date.now());
-            return { ...derive(fresh.rows, s.ledger), confirmed: fresh.confirmed, listNotServed: false };
+            return { ...derive(fresh.rows, s.ledger), confirmed: fresh.confirmed, listNotServed: false, reviewsError: false };
           });
         }
       } catch (err) {
-        // 501 means this plane does not serve the list; any other failure leaves stale.
-        if (seq === reviewFetchSeq && err instanceof ApiError && err.status === 501) set({ listNotServed: true });
+        // 501 means this plane does not serve the list; any other failure keeps
+        // the rows it had (stale) and says so through reviewsError.
+        if (seq === reviewFetchSeq) {
+          if (err instanceof ApiError && err.status === 501) set({ listNotServed: true });
+          else set({ reviewsError: true });
+        }
       } finally {
         if (seq === reviewFetchSeq) {
           set({ reviewsLoading: false });
@@ -537,6 +544,7 @@ export const useReviewStore = create<ReviewState>((set, get) => {
         ...derive([], get().ledger),
         reviewsLoading: false,
         listNotServed: false,
+        reviewsError: false,
         drafts: {},
         lastResult: null,
         refusal: null,
