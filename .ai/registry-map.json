@@ -5886,7 +5886,11 @@
           "revision": 6,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx:39 Every graph node enters the page's tab order, violating the standard's single-entry focus model.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:98dcec8d04236b95",
+          "evaluatedRevision": 6
         },
         {
           "subject": "settings",

@@ -5047,6 +5047,93 @@
           "evidence": "src/components/guide/search-combobox/useGuideSearch.ts:77 Changing the identifying search query retains previous results during debounce, and a zero-match synchronous search leaves them visible until body search completes."
         }
       ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/canvas-graph": {
+      "context": "Knowledge Base",
+      "subject": "canvas-graph",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T00:24:04.358Z",
+      "worker": "a401ecba-36fc-4e08-9faf-dc0a0554e61e",
+      "techniques": [
+        {
+          "technique": "canvas-accessibility",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx:39 Each node is a tab stop rather than participating in roving focus."
+        },
+        {
+          "technique": "direct-manipulation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx:47 Nodes support click activation only; no node movement, connection gesture, panning, or marquee competes with the click."
+        },
+        {
+          "technique": "edge-management",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx:43 Line endpoints use node centers directly, while node radii are computed separately in KnowledgeGraphNode; shared boundary-anchor geometry is missing."
+        },
+        {
+          "technique": "graph-layout",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts:34 Placement depends on collection order and size, so adding or removing a member repositions existing nodes."
+        },
+        {
+          "technique": "render-budget",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterCanvas.tsx:74 Hover renders recreate the callback passed to every node, violating the stable-callback requirement; KnowledgeGraphNode also lacks memoization."
+        },
+        {
+          "technique": "viewport-transform",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx:32 Positions are drawn directly in native SVG pixel coordinates; selection uses element targets without reading pointer coordinates, and no camera or inverse conversion is implemented."
+        }
+      ]
+    },
+    "Content & Informational Pages/How It Works & Changelog/canvas-graph": {
+      "context": "How It Works & Changelog",
+      "subject": "canvas-graph",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T00:24:04.358Z",
+      "techniques": [
+        {
+          "technique": "canvas-accessibility",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/components/FlowNodes.tsx:38 Every node is independently tabbable, with additional tab stops for node removal and wire removal; keyboard movement is also absent."
+        },
+        {
+          "technique": "direct-manipulation",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:111 Pointer movement updates model state without first crossing a screen-space threshold; dragging is not kept provisional until completion."
+        },
+        {
+          "technique": "edge-management",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/components/FlowWires.tsx:27 Wire identity is the endpoint pair rather than an independent durable edge ID."
+        },
+        {
+          "technique": "graph-layout",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:132 New nodes clamp to x=92 without collision resolution, so repeated additions on the same side overlap."
+        },
+        {
+          "technique": "render-budget",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/index.tsx:141 Each composer render recreates interaction callbacks, and each drag update renders the entire node map without per-node memoization."
+        },
+        {
+          "technique": "viewport-transform",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:97 The handwritten inverse clamps coordinates although forward rendering uses node.x directly, so the mapping cannot round-trip rendered coordinates outside 8–92."
+        }
+      ],
+      "withdrawn": {
+        "worker": "a401ecba-36fc-4e08-9faf-dc0a0554e61e",
+        "state": "deviation",
+        "at": "2026-10-18T00:25:16.819836+00:00",
+        "reason": "reviewer (sonnet): The flow-composer code the verdict cites is outside this context. None of the listed how/changelog/how-manifesto/how-role-path files import it; only sections/event-hub/index.tsx and FlowComposer.tsx reference it. The code claims are accurate, but the verdict is about a different context."
+      }
     }
   }
 }
