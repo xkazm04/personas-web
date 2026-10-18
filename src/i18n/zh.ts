@@ -93,6 +93,8 @@ export const zh: LocaleTranslations = {
       edit: "\u7f16\u8f91",
       search: "\u641c\u7d22",
       noResults: "\u672a\u627e\u5230\u7ed3\u679c",
+      sectionLoadFailed: "\u6b64\u90e8\u5206\u672a\u80fd\u52a0\u8f7d\u3002",
+      reload: "\u91cd\u65b0\u52a0\u8f7d",
       signOut: "\u9000\u51fa\u767b\u5f55",
       signingOut: "\u6b63\u5728\u9000\u51fa\u767b\u5f55\u2026",
       signIn: "\u767b\u5f55",

@@ -93,6 +93,8 @@ export const vi: LocaleTranslations = {
       edit: "S\u1eeda",
       search: "T\u00ecm ki\u1ebfm",
       noResults: "Kh\u00f4ng t\u00ecm th\u1ea5y k\u1ebft qu\u1ea3",
+      sectionLoadFailed: "Ph\u1ea7n n\u00e0y ch\u01b0a t\u1ea3i \u0111\u01b0\u1ee3c.",
+      reload: "T\u1ea3i l\u1ea1i",
       signOut: "\u0110\u0103ng xu\u1ea5t",
       signingOut: "\u0110ang \u0111\u0103ng xu\u1ea5t\u2026",
       signIn: "\u0110\u0103ng nh\u1eadp",

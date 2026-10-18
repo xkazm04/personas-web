@@ -93,6 +93,8 @@ export const id: LocaleTranslations = {
       edit: "Edit",
       search: "Cari",
       noResults: "Tidak ada hasil ditemukan",
+      sectionLoadFailed: "Bagian ini tidak termuat.",
+      reload: "Muat ulang",
       signOut: "Keluar",
       signingOut: "Sedang keluar\u2026",
       signIn: "Masuk",

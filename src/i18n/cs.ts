@@ -93,6 +93,8 @@ export const cs: LocaleTranslations = {
       edit: "Upravit",
       search: "Hledat",
       noResults: "Nebyly nalezeny \u017e\u00e1dn\u00e9 v\u00fdsledky",
+      sectionLoadFailed: "Tato sekce se nena\u010detla.",
+      reload: "Na\u010d\u00edst znovu",
       signOut: "Odhl\u00e1sit se",
       signingOut: "Odhla\u0161ov\u00e1n\u00ed\u2026",
       signIn: "P\u0159ihl\u00e1sit se",

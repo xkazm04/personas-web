@@ -91,6 +91,8 @@
     edit: string;
     search: string;
     noResults: string;
+    sectionLoadFailed: string;
+    reload: string;
     signOut: string;
     signingOut: string;
     signIn: string;
@@ -2088,6 +2090,8 @@ export const en: CoreTranslations = {
     edit: 'Edit',
     search: 'Search',
     noResults: 'No results found',
+    sectionLoadFailed: "This section didn't load.",
+    reload: 'Reload',
     signOut: 'Sign out',
     signingOut: 'Signing out…',
     signIn: 'Sign in',

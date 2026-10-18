@@ -143,6 +143,7 @@
           "filePaths": [
             "src/app/homeJsonLd.ts",
             "src/app/page.tsx",
+            "src/components/sections/SectionErrorBoundary.tsx",
             "src/components/sections/LazySection.tsx",
             "src/components/sections/hero-hive/HiveFloor.tsx",
             "src/components/sections/hero-hive/hive-geometry.ts",

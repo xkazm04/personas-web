@@ -93,6 +93,8 @@ export const ko: LocaleTranslations = {
       edit: "\ud3b8\uc9d1",
       search: "\uac80\uc0c9",
       noResults: "\uacb0\uacfc\ub97c \ucc3e\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
+      sectionLoadFailed: "\uc774 \uc139\uc158\uc744 \ubd88\ub7ec\uc624\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.",
+      reload: "\uc0c8\ub85c \uace0\uce68",
       signOut: "\ub85c\uadf8\uc544\uc6c3",
       signingOut: "\ub85c\uadf8\uc544\uc6c3 \uc911\u2026",
       signIn: "\ub85c\uadf8\uc778",

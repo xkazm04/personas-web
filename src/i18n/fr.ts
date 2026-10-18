@@ -93,6 +93,8 @@ export const fr: LocaleTranslations = {
       edit: "Modifier",
       search: "Rechercher",
       noResults: "Aucun r\u00e9sultat trouv\u00e9",
+      sectionLoadFailed: "Cette section ne s\u2019est pas charg\u00e9e.",
+      reload: "Recharger",
       signOut: "Se d\u00e9connecter",
       signingOut: "D\u00e9connexion en cours\u2026",
       signIn: "Se connecter",
