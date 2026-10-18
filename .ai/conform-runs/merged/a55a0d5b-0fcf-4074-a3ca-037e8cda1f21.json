@@ -1,0 +1,75 @@
+{
+ "schema": "conform-run/1",
+ "worker": "a55a0d5b-0fcf-4074-a3ca-037e8cda1f21",
+ "subject": "release-pipeline",
+ "evaluatedAt": "2026-10-18T22:25:16.945439+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "How It Works & Changelog",
+   "subject": "release-pipeline",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/changelog-timeline/index.tsx:9 The timeline renders the separately maintained RELEASES array while generated output remains disconnected, so its public release notes do not satisfy the generated-changelog requirement.",
+   "techniques": [
+    {
+     "technique": "changelog-generation",
+     "verdict": "deviation",
+     "evidence": "scripts/compile-changelog.mjs:15 The timeline maps RELEASES from src/data/changelog.ts; the compiler explicitly confirms that its generated output is not connected to that array."
+    }
+   ]
+  },
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "release-pipeline",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/DownloadCTA.tsx:93 The desktop download badge displays the website package version independently of the installer URL, so its displayed identity is not tied to the artifact being offered.",
+   "techniques": [
+    {
+     "technique": "changelog-generation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/DownloadCTA.tsx:37 This context consumes changelog metadata for badge freshness; it does not produce or display release-note entries."
+    },
+    {
+     "technique": "version-single-truth",
+     "verdict": "deviation",
+     "evidence": "next.config.ts:76 src/lib/release.ts:134-144 explicitly derives SITE_VERSION from the website package, while the desktop installer is selected independently through NEXT_PUBLIC_DOWNLOAD_URL."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-18T22:25:16.945439+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "release-pipeline"
+   ],
+   "techniques": [
+    "changelog-generation"
+   ],
+   "deviations": 1,
+   "context": "How It Works & Changelog",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-18T22:25:16.945439+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "release-pipeline"
+   ],
+   "techniques": [
+    "changelog-generation",
+    "version-single-truth"
+   ],
+   "deviations": 1,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

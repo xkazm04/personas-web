@@ -1036,7 +1036,11 @@
           "revision": 11,
           "changedAt": "2026-09-20",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/DownloadCTA.tsx:93 The desktop download badge displays the website package version independently of the installer URL, so its displayed identity is not tied to the artifact being offered.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:faf052699c35ced4",
+          "evaluatedRevision": 11
         },
         {
           "subject": "native-guest-interop",
@@ -4167,7 +4171,11 @@
           "revision": 11,
           "changedAt": "2026-09-20",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/changelog-timeline/index.tsx:9 The timeline renders the separately maintained RELEASES array while generated output remains disconnected, so its public release notes do not satisfy the generated-changelog requirement.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:faf052699c35ced4",
+          "evaluatedRevision": 11
         },
         {
           "subject": "narrative-scroll-surface",

@@ -5606,6 +5606,43 @@
           "evidence": "src/components/sections/agents-race/data.ts:10 The animation has a fixed duration rather than measured verification wait and run times."
         }
       ]
+    },
+    "Content & Informational Pages/How It Works & Changelog/release-pipeline": {
+      "context": "How It Works & Changelog",
+      "subject": "release-pipeline",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T22:25:16.945Z",
+      "worker": "a55a0d5b-0fcf-4074-a3ca-037e8cda1f21",
+      "techniques": [
+        {
+          "technique": "changelog-generation",
+          "verdict": "deviation",
+          "evidence": "scripts/compile-changelog.mjs:15 The timeline maps RELEASES from src/data/changelog.ts; the compiler explicitly confirms that its generated output is not connected to that array."
+        }
+      ]
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/release-pipeline": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "release-pipeline",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T22:25:16.945Z",
+      "worker": "a55a0d5b-0fcf-4074-a3ca-037e8cda1f21",
+      "techniques": [
+        {
+          "technique": "changelog-generation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:37 This context consumes changelog metadata for badge freshness; it does not produce or display release-note entries."
+        },
+        {
+          "technique": "version-single-truth",
+          "verdict": "deviation",
+          "evidence": "next.config.ts:76 src/lib/release.ts:134-144 explicitly derives SITE_VERSION from the website package, while the desktop installer is selected independently through NEXT_PUBLIC_DOWNLOAD_URL."
+        }
+      ]
     }
   }
 }
