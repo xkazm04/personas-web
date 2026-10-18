@@ -5504,6 +5504,108 @@
         }
       ],
       "registryProposal": "Clarify that Unicode escapes protect intact text from subsequent encoding damage but can preserve existing corruption: src/i18n/cs.ts:31 contains security: \"Bezpe\\u00c4\\u0164nost\", which evaluates to \"BezpeÄŤnost\" while the raw encoding checker passes; require an additional scan of evaluated catalog strings for this case."
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/machine-paced-delivery": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "machine-paced-delivery",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T22:10:17.274Z",
+      "worker": "4b3d72d1-0025-44f7-b31f-f338b040c4ad",
+      "techniques": [
+        {
+          "technique": "agent-readable-build-outcomes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/ChatWindow.tsx:106 The displayed outcome describes the animated conversation, not a build checker result."
+        },
+        {
+          "technique": "human-gate-capacity",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/Outcome.tsx:8 The human-facing result concerns customer satisfaction; this context implements no merge-review gate."
+        },
+        {
+          "technique": "mutating-local-gates",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/useStoryClock.ts:55 The periodic operation updates playback state and does not execute a filesystem fixer."
+        },
+        {
+          "technique": "pre-authorship-verification",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/ScenarioBar.tsx:25 The interaction selects an animation scenario; no commit or verification lifecycle exists here."
+        },
+        {
+          "technique": "proposal-not-push",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:39 Agent activity is predefined presentation data, not autonomous code changes requiring proposals."
+        },
+        {
+          "technique": "scoped-delivery-access-for-agents",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/index.tsx:47 The agent window receives display data and playback properties, with no delivery access capability."
+        },
+        {
+          "technique": "stake-before-merit",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/CustomerFork.tsx:33 This renders a customer message; it does not admit externally authored contributions."
+        },
+        {
+          "technique": "verification-throughput-as-constraint",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/ClockSpine.tsx:6 The timing scale represents story playback, not verification queue or execution measurements."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Agent Execution Timeline Race/machine-paced-delivery": {
+      "context": "Agent Execution Timeline Race",
+      "subject": "machine-paced-delivery",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T22:10:17.274Z",
+      "worker": "4b3d72d1-0025-44f7-b31f-f338b040c4ad",
+      "techniques": [
+        {
+          "technique": "agent-readable-build-outcomes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/Labels.tsx:38 Results come from scenario copy, not a checker diagnosing build failures."
+        },
+        {
+          "technique": "human-gate-capacity",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/Frame.tsx:66 The context explicitly presents designed art and implements no human merge-review queue."
+        },
+        {
+          "technique": "mutating-local-gates",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/motion.ts:72 The execution loop animates a browser motion value; it is not a local fixing gate."
+        },
+        {
+          "technique": "pre-authorship-verification",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/index.tsx:34 The control replays the illustration and does not initiate a pre-commit check."
+        },
+        {
+          "technique": "proposal-not-push",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/Movers.tsx:71 The agent route consists of rendered geometric legs, not authored fixes or repository proposals."
+        },
+        {
+          "technique": "scoped-delivery-access-for-agents",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/Scene.tsx:16 The scene draws an SVG illustration and exposes no delivery-system tool or credential grant."
+        },
+        {
+          "technique": "stake-before-merit",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/shared/Frame.tsx:112 Visitors select predefined scenarios; this is not an external contribution admission surface."
+        },
+        {
+          "technique": "verification-throughput-as-constraint",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-race/data.ts:10 The animation has a fixed duration rather than measured verification wait and run times."
+        }
+      ]
     }
   }
 }

@@ -3061,7 +3061,11 @@
           "revision": 9,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/agents-race/index.tsx:25 Searches for build, verification, commit and deploy found no matches in this context and delivery infrastructure elsewhere in the repository; the race plays predefined illustrations on a fixed clock rather than executing software delivery.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:7c45f5d81cc35bf6",
+          "evaluatedRevision": 9
         },
         {
           "subject": "agent-memory",
@@ -3368,7 +3372,11 @@
           "revision": 9,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:38 Searches for build, verification, commit and deploy found no matches in this context and delivery infrastructure elsewhere in the repository; this module supplies predefined animation events rather than machine-authored software delivery.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:7c45f5d81cc35bf6",
+          "evaluatedRevision": 9
         }
       ],
       "governance": "governed"
