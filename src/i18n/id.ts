@@ -32,6 +32,9 @@ export const id: LocaleTranslations = {
       blog: "Blog",
       changelog: "Catatan perubahan",
       pricing: "Harga",
+      openMenu: "Buka menu",
+      closeMenu: "Tutup menu",
+      navigationMenu: "Menu navigasi",
       menu: "Menu"
     },
     footer: {

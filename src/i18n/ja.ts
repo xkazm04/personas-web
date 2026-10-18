@@ -32,6 +32,9 @@ export const ja: LocaleTranslations = {
       blog: "\u30d6\u30ed\u30b0",
       changelog: "\u66f4\u65b0\u5c65\u6b74",
       pricing: "\u6599\u91d1",
+      openMenu: "\u30e1\u30cb\u30e5\u30fc\u3092\u958b\u304f",
+      closeMenu: "\u30e1\u30cb\u30e5\u30fc\u3092\u9589\u3058\u308b",
+      navigationMenu: "\u30ca\u30d3\u30b2\u30fc\u30b7\u30e7\u30f3\u30e1\u30cb\u30e5\u30fc",
       menu: "\u30e1\u30cb\u30e5\u30fc"
     },
     footer: {

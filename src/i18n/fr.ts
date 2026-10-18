@@ -32,6 +32,9 @@ export const fr: LocaleTranslations = {
       blog: "Blog",
       changelog: "Journal des modifications",
       pricing: "Tarifs",
+      openMenu: "Ouvrir le menu",
+      closeMenu: "Fermer le menu",
+      navigationMenu: "Menu de navigation",
       menu: "Menu"
     },
     footer: {

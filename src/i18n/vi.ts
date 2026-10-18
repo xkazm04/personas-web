@@ -32,6 +32,9 @@ export const vi: LocaleTranslations = {
       blog: "Blog",
       changelog: "Nh\u1eadt k\u00fd thay \u0111\u1ed5i",
       pricing: "B\u1ea3ng gi\u00e1",
+      openMenu: "M\u1edf menu",
+      closeMenu: "\u0110\u00f3ng menu",
+      navigationMenu: "Menu \u0111i\u1ec1u h\u01b0\u1edbng",
       menu: "Menu"
     },
     footer: {

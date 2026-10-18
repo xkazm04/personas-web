@@ -32,6 +32,9 @@ export const bn: LocaleTranslations = {
       blog: "\u09ac\u09cd\u09b2\u0997",
       changelog: "\u099a\u09c7\u099e\u09cd\u099c\u09b2\u0997",
       pricing: "\u09ae\u09c2\u09b2\u09cd\u09af",
+      openMenu: "\u09ae\u09c7\u09a8\u09c1 \u0996\u09c1\u09b2\u09c1\u09a8",
+      closeMenu: "\u09ae\u09c7\u09a8\u09c1 \u09ac\u09a8\u09cd\u09a7 \u0995\u09b0\u09c1\u09a8",
+      navigationMenu: "\u09a8\u09c7\u09ad\u09bf\u0997\u09c7\u09b6\u09a8 \u09ae\u09c7\u09a8\u09c1",
       menu: "\u09ae\u09c7\u09a8\u09c1"
     },
     footer: {

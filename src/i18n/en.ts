@@ -31,6 +31,9 @@
     changelog: string;
     pricing: string;
     menu: string;
+    openMenu: string;
+    closeMenu: string;
+    navigationMenu: string;
   };
   footer: {
     tagline: string;
@@ -2019,6 +2022,9 @@ export const en: CoreTranslations = {
     changelog: 'Changelog',
     pricing: 'Pricing',
     menu: 'Menu',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    navigationMenu: 'Navigation menu',
   },
   footer: {
     tagline: 'AI agents that work for you',

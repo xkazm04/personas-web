@@ -32,6 +32,9 @@ export const zh: LocaleTranslations = {
       blog: "\u535a\u5ba2",
       changelog: "\u66f4\u65b0\u65e5\u5fd7",
       pricing: "\u4ef7\u683c",
+      openMenu: "\u6253\u5f00\u83dc\u5355",
+      closeMenu: "\u5173\u95ed\u83dc\u5355",
+      navigationMenu: "\u5bfc\u822a\u83dc\u5355",
       menu: "\u83dc\u5355"
     },
     footer: {

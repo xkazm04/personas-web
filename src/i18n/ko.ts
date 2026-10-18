@@ -32,6 +32,9 @@ export const ko: LocaleTranslations = {
       blog: "\ube14\ub85c\uadf8",
       changelog: "\ubcc0\uacbd \uc774\ub825",
       pricing: "\uc694\uae08\uc81c",
+      openMenu: "\uba54\ub274 \uc5f4\uae30",
+      closeMenu: "\uba54\ub274 \ub2eb\uae30",
+      navigationMenu: "\ud0d0\uc0c9 \uba54\ub274",
       menu: "\uba54\ub274"
     },
     footer: {

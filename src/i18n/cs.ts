@@ -32,6 +32,9 @@ export const cs: LocaleTranslations = {
       blog: "Blog",
       changelog: "Seznam zm\u011bn",
       pricing: "Cen\u00edk",
+      openMenu: "Otev\u0159\u00edt menu",
+      closeMenu: "Zav\u0159\u00edt menu",
+      navigationMenu: "Naviga\u010dn\u00ed menu",
       menu: "Menu"
     },
     footer: {
