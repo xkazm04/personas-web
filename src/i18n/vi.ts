@@ -1116,6 +1116,8 @@ export const vi: LocaleTranslations = {
       noIssuesDetected: "Kh?ng ph?t hi?n v?n ?? tr?n c?c d?ch v? ???c gi?m s?t",
       noSeverityIssues: "Kh?ng c? v?n ?? m?c {severity}",
       toolInvocations: "L??t g?i c?ng c?",
+      nothingInWindow: "Kh\u00f4ng c\u00f3 d\u1eef li\u1ec7u n\u00e0o \u0111\u01b0\u1ee3c ghi nh\u1eadn trong kho\u1ea3ng th\u1eddi gian n\u00e0y",
+      chartLoadFailed: "Kh\u00f4ng th\u1ec3 t\u1ea3i d\u1eef li\u1ec7u n\u00e0y",
       distribution: "Ph?n b?",
       usageOverTime: "M?c d?ng theo th?i gian",
       last14Days: "14 ng?y qua",

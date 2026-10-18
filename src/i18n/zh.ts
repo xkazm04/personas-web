@@ -1116,6 +1116,8 @@ export const zh: LocaleTranslations = {
       noIssuesDetected: "???????????",
       noSeverityIssues: "?? {severity} ???????",
       toolInvocations: "????",
+      nothingInWindow: "\u6b64\u65f6\u95f4\u8303\u56f4\u5185\u6ca1\u6709\u8bb0\u5f55",
+      chartLoadFailed: "\u65e0\u6cd5\u52a0\u8f7d\u6b64\u6570\u636e",
       distribution: "??",
       usageOverTime: "????",
       last14Days: "?? 14 ?",

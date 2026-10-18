@@ -1116,6 +1116,8 @@ export const id: LocaleTranslations = {
       noIssuesDetected: "Tidak ada masalah terdeteksi di layanan yang dipantau",
       noSeverityIssues: "Tidak ada masalah tingkat {severity}",
       toolInvocations: "Pemanggilan alat",
+      nothingInWindow: "Tidak ada yang tercatat dalam rentang ini",
+      chartLoadFailed: "Data ini tidak dapat dimuat",
       distribution: "Distribusi",
       usageOverTime: "Penggunaan dari waktu ke waktu",
       last14Days: "14 hari terakhir",

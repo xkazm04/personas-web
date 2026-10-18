@@ -1116,6 +1116,8 @@ export const ko: LocaleTranslations = {
       noIssuesDetected: "???? ????? ??? ???? ?????",
       noSeverityIssues: "{severity} ??? ?? ??",
       toolInvocations: "?? ??",
+      nothingInWindow: "\uc774 \uae30\uac04\uc5d0 \uae30\ub85d\ub41c \ub0b4\uc6a9\uc774 \uc5c6\uc2b5\ub2c8\ub2e4",
+      chartLoadFailed: "\uc774 \ub370\uc774\ud130\ub97c \ubd88\ub7ec\uc624\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4",
       distribution: "??",
       usageOverTime: "??? ???",
       last14Days: "?? 14?",

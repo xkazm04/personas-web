@@ -1116,6 +1116,8 @@ export const cs: LocaleTranslations = {
       noIssuesDetected: "Ve sledovan?ch slu?b?ch nebyly zji?t?ny probl?my",
       noSeverityIssues: "??dn? probl?my z?va?nosti {severity}",
       toolInvocations: "Vol?n? n?stroj?",
+      nothingInWindow: "V tomto obdob\u00ed nebylo nic zaznamen\u00e1no",
+      chartLoadFailed: "Tato data se nepoda\u0159ilo na\u010d\u00edst",
       distribution: "Rozlo?en?",
       usageOverTime: "Vyu?it? v ?ase",
       last14Days: "Posledn?ch 14 dn?",

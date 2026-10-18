@@ -1116,6 +1116,8 @@ export const de: LocaleTranslations = {
       noIssuesDetected: "Keine Probleme in ?berwachten Diensten erkannt",
       noSeverityIssues: "Keine Probleme mit Schweregrad {severity}",
       toolInvocations: "Tool-Aufrufe",
+      nothingInWindow: "In diesem Zeitraum wurde nichts erfasst",
+      chartLoadFailed: "Diese Daten konnten nicht geladen werden",
       distribution: "Verteilung",
       usageOverTime: "Nutzung im Zeitverlauf",
       last14Days: "Letzte 14 Tage",

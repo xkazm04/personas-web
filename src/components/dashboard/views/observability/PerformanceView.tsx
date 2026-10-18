@@ -138,6 +138,7 @@ export default function PerformanceView() {
         costPrevious={overlays.costPrevious}
         execPrevious={overlays.execPrevious}
         annotations={overlays.annotations}
+        failed={Boolean(errorMsg) && !data}
         labels={t.observabilityPage}
       />
       <PerformanceLatencyCard labels={t.observabilityPage} />

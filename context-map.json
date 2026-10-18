@@ -1497,6 +1497,7 @@
             "src/components/dashboard/AthenaUsageChart.tsx",
             "src/components/dashboard/views/observability/ActivityMetricsView.tsx",
             "src/components/dashboard/views/observability/PerformanceView.tsx",
+            "src/components/dashboard/views/observability/ChartEmptyNote.tsx",
             "src/components/dashboard/views/observability/UsageView.tsx",
             "src/components/dashboard/views/observability/activity-view/AthenaActionMixCard.tsx",
             "src/components/dashboard/views/observability/activity-view/AthenaSpendLane.tsx",

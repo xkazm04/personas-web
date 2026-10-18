@@ -929,6 +929,8 @@
     noIssuesDetected: string;
     noSeverityIssues: string;
     toolInvocations: string;
+    nothingInWindow: string;
+    chartLoadFailed: string;
     distribution: string;
     usageOverTime: string;
     last14Days: string;
@@ -2995,6 +2997,8 @@ export const en: CoreTranslations = {
     noIssuesDetected: 'No issues detected across monitored services',
     noSeverityIssues: 'No {severity} severity issues',
     toolInvocations: 'Tool Invocations',
+    nothingInWindow: 'Nothing recorded in this window',
+    chartLoadFailed: "Couldn't load this data",
     distribution: 'Distribution',
     usageOverTime: 'Usage Over Time',
     last14Days: 'Last 14 days',

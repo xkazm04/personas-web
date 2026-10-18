@@ -1116,6 +1116,8 @@ export const es: LocaleTranslations = {
       noIssuesDetected: "No se detectaron problemas en los servicios monitorizados",
       noSeverityIssues: "Sin problemas de severidad {severity}",
       toolInvocations: "Invocaciones de herramientas",
+      nothingInWindow: "No se registr\u00f3 nada en este periodo",
+      chartLoadFailed: "No se pudieron cargar estos datos",
       distribution: "Distribuci?n",
       usageOverTime: "Uso en el tiempo",
       last14Days: "?ltimos 14 d?as",

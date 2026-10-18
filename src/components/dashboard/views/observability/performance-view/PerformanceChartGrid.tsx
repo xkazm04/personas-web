@@ -7,6 +7,7 @@ import { fadeUp } from "@/lib/animations";
 import type { ChartAnnotation } from "@/lib/mock-dashboard-data";
 import type { ComparePoint } from "@/components/dashboard/CostChartWithCompare";
 import type { ObservabilityLabels } from "./performanceViewTypes";
+import { ChartEmptyNote } from "../ChartEmptyNote";
 
 /** Both charts render a 240px ResponsiveContainer. */
 const CHART_HEIGHT = 240;
@@ -31,6 +32,7 @@ export function PerformanceChartGrid({
   costPrevious = [],
   execPrevious = [],
   annotations = [],
+  failed = false,
   labels,
 }: {
   costChartData: { date: string; Cost: number }[];
@@ -41,21 +43,36 @@ export function PerformanceChartGrid({
   costPrevious?: ComparePoint[];
   execPrevious?: ComparePoint[];
   annotations?: ChartAnnotation[];
+  /** The read failed with nothing held: the slots say so instead of "nothing in this window". */
+  failed?: boolean;
   labels: ObservabilityLabels;
 }) {
+  // No run in the window: both charts would draw axes around a flat zero. Cost
+  // without a run is not a measured zero either, so it shares the predicate.
+  const noRuns = execChartData.every((d) => d.Successes + d.Failures === 0);
+  const costEmpty = noRuns && costChartData.every((d) => d.Cost === 0);
+  const emptyText = failed ? labels.chartLoadFailed : labels.nothingInWindow;
   return (
     <div className={`${ARRIVE} grid gap-6 lg:grid-cols-2 mb-8`} style={arriveAt(3)}>
       <GlowCard accent="cyan" variants={fadeUp} className="p-5">
         <ChartTitle icon={<DollarSign className="h-4 w-4 text-brand-cyan" />} title={labels.costOverTime} compareEnabled={compareEnabled} compareLabel={labels.previousPeriod} />
-        <Deferred minHeight={CHART_HEIGHT} order={0} preload={loadCostChart}>
-          <CostChartWithCompare data={costChartData} compare={compareEnabled} previousSeries={costPrevious} annotations={annotations} />
-        </Deferred>
+        {costEmpty ? (
+          <ChartEmptyNote height={CHART_HEIGHT} text={emptyText} />
+        ) : (
+          <Deferred minHeight={CHART_HEIGHT} order={0} preload={loadCostChart}>
+            <CostChartWithCompare data={costChartData} compare={compareEnabled} previousSeries={costPrevious} annotations={annotations} />
+          </Deferred>
+        )}
       </GlowCard>
       <GlowCard accent="emerald" variants={fadeUp} className="p-5">
         <ChartTitle icon={<Activity className="h-4 w-4 text-emerald-400" />} title={labels.executionHealth} compareEnabled={compareEnabled} compareLabel={labels.previousPeriod} />
-        <Deferred minHeight={CHART_HEIGHT} order={1} preload={loadExecChart}>
-          <ExecChartWithCompare data={execChartData} compare={compareEnabled} previousSeries={execPrevious} annotations={annotations} />
-        </Deferred>
+        {noRuns ? (
+          <ChartEmptyNote height={CHART_HEIGHT} text={emptyText} />
+        ) : (
+          <Deferred minHeight={CHART_HEIGHT} order={1} preload={loadExecChart}>
+            <ExecChartWithCompare data={execChartData} compare={compareEnabled} previousSeries={execPrevious} annotations={annotations} />
+          </Deferred>
+        )}
       </GlowCard>
     </div>
   );
