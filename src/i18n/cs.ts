@@ -34,88 +34,6 @@ export const cs: LocaleTranslations = {
       pricing: "Cen\u00edk",
       menu: "Menu"
     },
-    compareSection: {
-      heading: "V\u0161echno je",
-      headingGradient: "zdarma",
-      description: "Desktopov\u00e1 aplikace a v\u0161echny funkce n\u00ed\u017ee jsou nav\u017edy zdarma: kompletn\u00ed platforma pro agenty b\u011b\u017e\u00edc\u00ed na va\u0161em po\u010d\u00edta\u010di.",
-      offerBadges: [
-        "Nav\u017edy zdarma",
-        "Self-hosted",
-        "Open source"
-      ],
-      offerBody: "Personas b\u011b\u017e\u00ed na va\u0161em po\u010d\u00edta\u010di.",
-      ctaLabel: "Za\u010d\u00edt zdarma",
-      readGuide: "P\u0159e\u010d\u00edst pr\u016fvodce",
-      groups: {
-        "agents-prompts": {
-          title: "Agenti a Prompty",
-          tagline: "Zam\u011b\u0159eno na u\u017eivatele",
-          concepts: [
-            "Tvorba person v p\u0159irozen\u00e9m jazyce",
-            "40+ p\u0159evzateln\u00fdch \u0161ablon",
-            "BYOM \u2014 Claude nebo lok\u00e1ln\u00ed Ollama",
-            "Strukturovan\u00fd i jednoduch\u00fd re\u017eim prompt\u016f",
-            "Trval\u00e1 pam\u011b\u0165 agenta"
-          ]
-        },
-        triggers: {
-          title: "Orchestrace",
-          tagline: "Ka\u017ed\u00fd zp\u016fsob, jak agent m\u016f\u017ee za\u010d\u00edt",
-          concepts: [
-            "Pl\u00e1nov\u00e1n\u00ed (cron)",
-            "Webhook endpointy",
-            "Sledov\u00e1n\u00ed soubor\u016f",
-            "Monitor schr\u00e1nky",
-            "\u0158et\u011bzov\u00fd / ud\u00e1lostn\u00ed trigger",
-            "Kombinovan\u00e9 podm\u00ednky"
-          ]
-        },
-        pipelines: {
-          title: "Pipeline a T\u00fdmy",
-          tagline: "Vizu\u00e1ln\u00ed agentov\u00e1 spolupr\u00e1ce",
-          concepts: [
-            "Vizu\u00e1ln\u00ed pl\u00e1tno t\u00fdmu",
-            "Propojen\u00ed datov\u00fdch tok\u016f",
-            "\u017div\u00e1 sb\u011brnice ud\u00e1lost\u00ed",
-            "Samoopravn\u00e9 spou\u0161t\u011bn\u00ed",
-            "P\u0159ehr\u00e1v\u00e1n\u00ed pipeline + \u010dasov\u00e9 cestov\u00e1n\u00ed"
-          ]
-        },
-        credentials: {
-          title: "P\u0159ihla\u0161ovac\u00ed \u00fadaje a zabezpe\u010den\u00ed",
-          tagline: "Va\u0161e tajn\u00e9 \u00fadaje z\u016fst\u00e1vaj\u00ed na va\u0161em po\u010d\u00edta\u010di",
-          concepts: [
-            "Trezor AES-256-GCM",
-            "Nativn\u00ed kl\u00ed\u010denka OS",
-            "OAuth s podporou AI",
-            "Automatick\u00e1 obnova token\u016f",
-            "Local-first, jen anonymn\u00ed telemetrie"
-          ]
-        },
-        monitoring: {
-          title: "Monitorov\u00e1n\u00ed",
-          tagline: "Sledujte, oce\u0148te a \u0159i\u010fte ka\u017ed\u00fd b\u011bh",
-          concepts: [
-            "\u017div\u00fd dashboard observability",
-            "Sledov\u00e1n\u00ed rozsah\u016f (span) pro ka\u017ed\u00e9 spu\u0161t\u011bn\u00ed",
-            "P\u0159i\u0159azen\u00ed n\u00e1klad\u016f podle modelu",
-            "Fronty lidsk\u00e9ho p\u0159ezkumu",
-            "Rozpo\u010dtov\u00e1 upozorn\u011bn\u00ed a vynucen\u00ed"
-          ]
-        },
-        testing: {
-          title: "Testovac\u00ed laborato\u0159",
-          tagline: "Automatizovan\u00e1 evoluce",
-          concepts: [
-            "Ar\u00e9na pro A/B testy",
-            "Verzov\u00e1n\u00ed prompt\u016f + rozd\u00edly",
-            "Hodnocen\u00ed v\u00fdkonnosti (fitness)",
-            "Cykly k\u0159\u00ed\u017een\u00ed",
-            "Sandboxy se simulovan\u00fdmi n\u00e1stroji"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "AI agenti, kte\u0159\u00ed pracuj\u00ed pro v\u00e1s",
       motto: "AI agenti, kte\u0159\u00ed automatizuj\u00ed va\u0161i pr\u00e1ci, abyste se mohli soust\u0159edit na to nejd\u016fle\u017eit\u011bj\u0161\u00ed.",
@@ -352,24 +270,8 @@ export const cs: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "\u010casto",
-      headingGradient: "dotazovan\u00e9",
-      subtitle: "V\u0161e, co pot\u0159ebujete v\u011bd\u011bt o za\u010d\u00e1tc\u00edch s Personas.",
-      stillQuestions: "St\u00e1le m\u00e1te ot\u00e1zky?",
-      joinDiscord: "P\u0159ipojte se na Discord",
       discordSubtitle: "P\u0159ipojte se k na\u0161\u00ed komunit\u011b na Discordu pro pomoc a diskuzi.",
 
-      shieldLabels: {
-
-        piiStripped: "Bez osobn\u00edch \u00fadaj\u016f",
-
-        noReplays: "Bez z\u00e1znam\u016f relac\u00ed",
-
-        localOnly: "Pouze lok\u00e1ln\u011b",
-
-        yourData: "Va\u0161e data",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",
@@ -1563,12 +1465,7 @@ export const cs: LocaleTranslations = {
       gradient: "produktu",
       description: "Kde se dnes nach\u00e1z\u00ed ka\u017ed\u00e1 oblast Personas \u2014 pln\u011bn\u00ed zleva doprava, ne sliby shora dol\u016f.",
       progress: {
-        phasesComplete: "Dokon\u010deno {completed} z {total} f\u00e1z\u00ed",
-        noneDone: "Zat\u00edm \u017e\u00e1dn\u00e9 f\u00e1ze dokon\u010deny",
-        firstDone: "F\u00e1ze 1 dokon\u010dena",
-        rangeDone: "F\u00e1ze 1-{count} dokon\u010deny",
-        toGoOne: "zb\u00fdv\u00e1 {count} f\u00e1ze",
-        toGoOther: "zb\u00fdv\u00e1 {count} f\u00e1z\u00ed"
+        phasesComplete: "Dokon\u010deno {completed} z {total} f\u00e1z\u00ed"
       },
       areas: {
         i18n: {

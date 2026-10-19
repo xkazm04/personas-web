@@ -7,12 +7,9 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { staggerContainer } from "@/lib/animations";
 import type { LabTab } from "./types";
 import TabSwitcher from "./components/TabSwitcher";
-import ChatTab from "./components/ChatTab";
-import ArenaTab from "./components/ArenaTab";
-import EvolutionTab from "./components/EvolutionTab";
-import EvalTab from "./components/EvalTab";
 import VersionRail from "./components/VersionRail";
-import { arenaContenders, initialLedger, ledgerReducer } from "./ledger";
+import Bench from "./bench";
+import { initialLedger, ledgerReducer } from "./ledger";
 import { labSectionCopy } from "@/i18n/pending/labSection";
 
 export default function Lab() {
@@ -40,7 +37,7 @@ export default function Lab() {
         />
       </motion.div>
 
-      {/* Tour anchor wraps the switcher + the active variant so the spotlight
+      {/* Tour anchor wraps the switcher + the active bench channel so the spotlight
           highlights both the buttons and the diagram together. On the desktop
           stage (styles/stage.css) the slot below the switcher takes the height
           left after the intro, and holds the panel and the rail side by side:
@@ -63,17 +60,7 @@ export default function Lab() {
             transition={{ duration: 0.35 }}
             className="mt-6 mx-auto max-w-4xl stage:m-0 stage:h-full stage:min-h-0 stage:max-w-none"
           >
-            {active === "chat" && (
-              <ChatTab
-                liveId={ledger.liveId}
-                onActivate={(id) => dispatch({ type: "activate", id })}
-              />
-            )}
-            {active === "arena" && (
-              <ArenaTab contenders={arenaContenders(ledger)} liveId={ledger.liveId} />
-            )}
-            {active === "evolution" && <EvolutionTab />}
-            {active === "eval" && <EvalTab />}
+            <Bench active={active} ledger={ledger} dispatch={dispatch} />
           </motion.div>
 
           <div className="mx-auto max-w-4xl stage:m-0 stage:h-full stage:min-h-0 stage:max-w-none">

@@ -38,6 +38,6 @@ describe("HOME_STAGES", () => {
 
   it("derives aliases only for wrappers that differ from their anchor", () => {
     expect(HOME_WRAPPER_ALIASES).toMatchObject({ tools: "personas", "download-section": "download", vision: "private" });
-    expect(HOME_WRAPPER_ALIASES).not.toHaveProperty("pricing");
+    expect(HOME_WRAPPER_ALIASES).not.toHaveProperty("get-started");
   });
 });

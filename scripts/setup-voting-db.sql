@@ -3,8 +3,12 @@
 -- ---------------------------------------------------------------------
 -- Run once in the Supabase SQL editor for the project that backs
 -- NEXT_PUBLIC_SUPABASE_URL. The /api/votes, /api/feature-comments, and
--- /api/feature-boosts routes read & write these tables with the anon
--- key, so the RLS policies below permit anonymous read + insert.
+-- /api/feature-boosts routes read & write these tables with the
+-- service-role client (src/lib/supabase-admin.ts), which bypasses RLS, so
+-- the anon role gets no write policy on feature_votes or feature_boosts and
+-- no access at all to feature_votes (it holds the legacy voter email).
+-- `npm run db:migrate` applies scripts/harden-voting-rls.sql right after
+-- this file. Set SUPABASE_SERVICE_ROLE_KEY before running it.
 -- =====================================================================
 
 -- ── feature_votes (one row per voter per feature) ─────────────────────
@@ -79,26 +83,21 @@ create table if not exists public.shipped_features (
   shipped_at timestamptz not null default now()
 );
 
--- ── RLS — anon role gets read + insert; updates/deletes go through the
---    API and are scoped by voter_id at the application layer. ─────────
+-- ── RLS — anon role reads public, non-PII rows; writes go through the
+--    API's service-role client (harden-voting-rls.sql drops the comment
+--    insert below as well). ──────────────────────────────────────────────
 alter table public.feature_votes enable row level security;
 alter table public.feature_comments enable row level security;
 alter table public.feature_boosts enable row level security;
 alter table public.shipped_features enable row level security;
 
--- feature_votes — anon can read + insert + delete + update (API gates by voter_id).
+-- feature_votes — no anon policy: the table holds the voter email, and the API
+-- reads and writes it with the service-role client. The drops close an install
+-- created by an earlier version of this file.
 drop policy if exists "anon read feature_votes" on public.feature_votes;
 drop policy if exists "anon insert feature_votes" on public.feature_votes;
 drop policy if exists "anon update feature_votes" on public.feature_votes;
 drop policy if exists "anon delete feature_votes" on public.feature_votes;
-create policy "anon read feature_votes" on public.feature_votes
-  for select using (true);
-create policy "anon insert feature_votes" on public.feature_votes
-  for insert with check (true);
-create policy "anon update feature_votes" on public.feature_votes
-  for update using (true) with check (true);
-create policy "anon delete feature_votes" on public.feature_votes
-  for delete using (true);
 
 -- feature_comments — anon can read + insert (no deletes from public).
 drop policy if exists "anon read feature_comments" on public.feature_comments;
@@ -108,18 +107,14 @@ create policy "anon read feature_comments" on public.feature_comments
 create policy "anon insert feature_comments" on public.feature_comments
   for insert with check (true);
 
--- feature_boosts — anon can read + insert + update. The update policy is
--- required for the route's upsert: on conflict it UPDATEs the voter's existing
--- row (replacing the tier); without it the on-conflict path is denied by RLS.
+-- feature_boosts — anon can read (boost totals, no PII). Writes are the API's
+-- service-role upsert, which RLS does not apply to; an anon insert or update
+-- policy would let anyone set any boost row to any weight over PostgREST.
 drop policy if exists "anon read feature_boosts" on public.feature_boosts;
 drop policy if exists "anon insert feature_boosts" on public.feature_boosts;
 drop policy if exists "anon update feature_boosts" on public.feature_boosts;
 create policy "anon read feature_boosts" on public.feature_boosts
   for select using (true);
-create policy "anon insert feature_boosts" on public.feature_boosts
-  for insert with check (true);
-create policy "anon update feature_boosts" on public.feature_boosts
-  for update using (true) with check (true);
 
 -- shipped_features — read-only from the public site.
 drop policy if exists "anon read shipped_features" on public.shipped_features;

@@ -34,6 +34,7 @@ roadmap voting only.
 | Supabase env missing or Auth not answering | `src/app/api/orchestrator/[...path]/route.ts` | 503 | `auth_unavailable` | Live dashboard calls fail until Auth answers again | Same as above |
 | Orchestrator unreachable (DNS, refused, TLS) | `src/app/api/events/stream/route.ts` | 502 | `upstream_unreachable` | Feed shows "reconnecting"; reconnects back off from 1 s to 30 s while polling continues | Orchestrator health from the server's network; the hostname is never in the body, so read server logs |
 | Orchestrator unreachable (DNS, refused, TLS) | `src/app/api/orchestrator/[...path]/route.ts` | 502 | `upstream_unreachable` | Live dashboard calls fail with `ApiError` status 502 | Same as above |
+| Orchestrator accepts the connection but does not answer within 12 s (`UPSTREAM_TIMEOUT_MS`, `src/app/api/orchestrator/upstreamDeadline.ts`) | `src/app/api/orchestrator/[...path]/route.ts`, `src/app/api/events/stream/route.ts`, `src/app/api/executions/[id]/stream/route.ts` | 504 | `upstream_timeout` | Live dashboard calls fail with `ApiError` status 504 before the browser's own 15 s abort; the feed reconnects as for a 502. A stream relay waits only for the headers, so an open stream is never cut | Orchestrator latency from the server's network |
 | Deployment pointed at the desktop (`ORCHESTRATOR_TARGET=desktop`) | `src/app/api/events/stream/route.ts` | 501 | `not_on_desktop` | No live feed; polling only | Expected: the desktop serves no stream |
 | Supabase configured but the votes read fails | `src/app/api/votes/route.ts` | 500 | `Failed to read votes` | Roadmap voting keeps its seed counts and shows no live totals | Supabase status; RLS still allows the read |
 
@@ -60,9 +61,12 @@ Two failures answer without a table row because they have no error body:
 
 With no Supabase env, nothing errors. Roadmap voting reads and writes through the file
 store in `src/app/api/votes/storage.ts`. A missing `SUPABASE_SERVICE_ROLE_KEY` alone makes
-`src/lib/supabase-admin.ts` fall back to the anon client and log one warning. The fallback
-only works while the permissive legacy RLS is in place. Treat that warning as a
-configuration gap, not an outage.
+`src/lib/supabase-admin.ts` fall back to the anon client and log one warning in dev and on
+a preview deployment. The fallback only works while the permissive legacy RLS is in place.
+Treat that warning as a configuration gap, not an outage. A production deployment
+(`VERCEL_ENV=production`, or `NODE_ENV=production` off Vercel) does not fall back: the
+votes, comments and boosts routes answer 503 `store_unavailable` and one Sentry event
+(`reason: service-role-missing`) names the gap. Set the key to recover.
 
 ## Known weak spot: the live event feed never streams today
 

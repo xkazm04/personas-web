@@ -174,7 +174,6 @@ describe("one authority (source scans)", () => {
     for (const rel of [
       "src/components/sections/DownloadCTA.tsx",
       "src/components/sections/hero-hive/shared/HeroCtas.tsx",
-      "src/components/sections/pricing/index.tsx",
       "src/components/Navbar.tsx",
     ]) {
       expect(read(rel), rel).toMatch(/import\s*\{[^}]*\bDOWNLOAD_PLAN\b[^}]*\}\s*from\s*["']@\/lib\/release["']/);

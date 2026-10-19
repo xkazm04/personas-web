@@ -32,23 +32,6 @@
     pricing: string;
     menu: string;
   };
-  compareSection: {
-    heading: string;
-    headingGradient: string;
-    description: string;
-    offerBadges: string[];
-    offerBody: string;
-    ctaLabel: string;
-    readGuide: string;
-    groups: {
-      "agents-prompts": { title: string; tagline: string; concepts: string[] };
-      triggers: { title: string; tagline: string; concepts: string[] };
-      pipelines: { title: string; tagline: string; concepts: string[] };
-      credentials: { title: string; tagline: string; concepts: string[] };
-      monitoring: { title: string; tagline: string; concepts: string[] };
-      testing: { title: string; tagline: string; concepts: string[] };
-    };
-  };
   footer: {
     tagline: string;
     motto: string;
@@ -141,13 +124,7 @@
     figma: { name: string; cases: { title: string; desc: string }[] };
   };
   faqSection: {
-    heading: string;
-    headingGradient: string;
-    subtitle: string;
-    stillQuestions: string;
-    joinDiscord: string;
     discordSubtitle: string;
-    shieldLabels: { piiStripped: string; noReplays: string; localOnly: string; yourData: string };
     questions: { q: string; a: string }[];
   };
   downloadSection: {
@@ -1383,11 +1360,6 @@
     description: string;
     progress: {
       phasesComplete: string;
-      noneDone: string;
-      firstDone: string;
-      rangeDone: string;
-      toGoOne: string;
-      toGoOther: string;
     };
     areas: {
       i18n: { title: string; caption: string };
@@ -2048,84 +2020,6 @@ export const en: CoreTranslations = {
     pricing: 'Pricing',
     menu: 'Menu',
   },
-  compareSection: {
-    heading: 'Everything is',
-    headingGradient: 'free',
-    description: 'The desktop app and every capability below ship free forever: a complete agent platform running on your machine.',
-    offerBadges: ['Free forever', 'Self-hosted', 'Open source'],
-    offerBody: 'Personas runs on your machine.',
-    ctaLabel: 'Get started free',
-    readGuide: 'Read the guide',
-    groups: {
-      'agents-prompts': {
-        title: 'Agents & Prompts',
-        tagline: 'Focused on users',
-        concepts: [
-          'Natural-language persona authoring',
-          '40+ adoptable templates',
-          'BYOM — Claude or local Ollama',
-          'Structured + simple prompt modes',
-          'Persistent agent memory',
-        ],
-      },
-      triggers: {
-        title: 'Orchestration',
-        tagline: 'Every way an agent can start',
-        concepts: [
-          'Schedule (cron)',
-          'Webhook endpoints',
-          'File watcher',
-          'Clipboard monitor',
-          'Chain / event trigger',
-          'Composite conditions',
-        ],
-      },
-      pipelines: {
-        title: 'Pipelines & Teams',
-        tagline: 'Visual agentic collaboration',
-        concepts: [
-          'Visual team canvas',
-          'Data-flow connections',
-          'Live event bus',
-          'Self-healing execution',
-          'Pipeline replay + time travel',
-        ],
-      },
-      credentials: {
-        title: 'Credentials & Security',
-        tagline: 'Your secrets stay on your machine',
-        concepts: [
-          'AES-256-GCM vault',
-          'OS-native keyring',
-          'AI-assisted OAuth',
-          'Automatic token refresh',
-          'Local-first, anonymous telemetry only',
-        ],
-      },
-      monitoring: {
-        title: 'Monitoring',
-        tagline: 'See, cost, and control every run',
-        concepts: [
-          'Live observability dashboard',
-          'Span tracing per execution',
-          'Per-model cost attribution',
-          'Human review queues',
-          'Budget alerts + enforcement',
-        ],
-      },
-      testing: {
-        title: 'Testing Lab',
-        tagline: 'Automated evolution',
-        concepts: [
-          'Arena for A/B tests',
-          'Prompt versioning + diffs',
-          'Fitness scoring',
-          'Breeding cycles',
-          'Mock tool sandboxes',
-        ],
-      },
-    },
-  },
   footer: {
     tagline: 'AI agents that work for you',
     motto: 'AI agents that automate your work.',
@@ -2281,18 +2175,7 @@ export const en: CoreTranslations = {
     },
   },
   faqSection: {
-    heading: 'Frequently',
-    headingGradient: 'asked',
-    subtitle: 'Everything you need to know about getting started with Personas.',
-    stillQuestions: 'Still have questions?',
-    joinDiscord: 'Join Discord',
     discordSubtitle: 'Join our Discord community for help and discussion.',
-    shieldLabels: {
-      piiStripped: 'PII stripped',
-      noReplays: 'No replays',
-      localOnly: 'Local only',
-      yourData: 'Your data',
-    },
     questions: [
       {
         q: 'What is Claude Code and why do I need it?',
@@ -3464,11 +3347,6 @@ export const en: CoreTranslations = {
     description: 'Where each area of Personas stands today — fulfillment left to right, not promises top to bottom.',
     progress: {
       phasesComplete: '{completed} of {total} phases complete',
-      noneDone: 'No phases done yet',
-      firstDone: 'Phase 1 done',
-      rangeDone: 'Phases 1-{count} done',
-      toGoOne: '{count} phase to go',
-      toGoOther: '{count} phases to go',
     },
     areas: {
       i18n: { title: 'Internationalization', caption: '{count} locales, hand-translated — each flag develops with coverage' },

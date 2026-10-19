@@ -898,15 +898,13 @@
         "src/components/LandingHashArrival.tsx",
         "src/components/PrimaryCTA.tsx",
         "src/components/sections/DownloadCTA.tsx",
-        "src/components/sections/FAQ.tsx",
         "src/components/sections/Footer.tsx",
         "src/components/sections/download-cta/DownloadStepGrid.tsx",
         "src/components/sections/download-cta/DownloadTrustSignals.tsx",
         "src/components/sections/download-cta/PlatformPills.tsx",
         "src/components/sections/download-cta/downloadCtaTypes.ts",
         "src/components/sections/download-cta/useDownloadPlatforms.ts",
-        "src/components/sections/download-cta/useFreshRelease.ts",
-        "src/components/sections/faq/FAQDiscordCTA.tsx"
+        "src/components/sections/download-cta/useFreshRelease.ts"
       ],
       "subjects": [
         {
@@ -1121,13 +1119,6 @@
       "name": "Why Agents & Use Cases",
       "group": "Marketing & Landing",
       "paths": [
-        "src/components/sections/companion/AthenaOrb.tsx",
-        "src/components/sections/companion/data.ts",
-        "src/components/sections/companion/index.tsx",
-        "src/components/sections/team-canvas/index.tsx",
-        "src/components/sections/team-canvas/variants/AssemblyLine.tsx",
-        "src/components/sections/team-canvas/variants/kpiData.ts",
-        "src/components/sections/team-canvas/variants/kpiPrimitives.tsx",
         "src/components/sections/use-cases/PersonaHand.tsx",
         "src/components/sections/use-cases/Reel.tsx",
         "src/components/sections/use-cases/components/ConnectorIcon.tsx",
@@ -1304,11 +1295,7 @@
         "src/components/feature-sections/murmuration-hero/shared/HeroShell.tsx",
         "src/components/feature-sections/murmuration-hero/swarm-draw.ts",
         "src/components/feature-sections/murmuration-hero/swarm.ts",
-        "src/components/feature-sections/murmuration-hero/useSwarm.ts",
-        "src/components/sections/pricing/BillArt.tsx",
-        "src/components/sections/pricing/BillParts.tsx",
-        "src/components/sections/pricing/billGeometry.ts",
-        "src/components/sections/pricing/index.tsx"
+        "src/components/feature-sections/murmuration-hero/useSwarm.ts"
       ],
       "subjects": [
         {
@@ -1735,17 +1722,17 @@
       "group": "Product Feature Showcase",
       "paths": [
         "src/components/feature-sections/Lab.tsx",
-        "src/components/feature-sections/lab/components/ArenaTab.tsx",
-        "src/components/feature-sections/lab/components/ChatTab.tsx",
-        "src/components/feature-sections/lab/components/EvalTab.tsx",
-        "src/components/feature-sections/lab/components/EvolutionTab.tsx",
-        "src/components/feature-sections/lab/components/TabBackdrop.tsx",
-        "src/components/feature-sections/lab/components/TabSwitcher.tsx",
-        "src/components/feature-sections/lab/components/VersionRail.tsx",
-        "src/components/feature-sections/lab/data.ts",
-        "src/components/feature-sections/lab/genome.test.ts",
-        "src/components/feature-sections/lab/genome.ts",
-        "src/components/feature-sections/lab/index.tsx"
+        "src/components/feature-sections/lab/bench/arena/ArenaBench.tsx",
+        "src/components/feature-sections/lab/bench/arena/ArenaScope.tsx",
+        "src/components/feature-sections/lab/bench/arena/RoundStrip.tsx",
+        "src/components/feature-sections/lab/bench/arena/arena.ts",
+        "src/components/feature-sections/lab/bench/chat/ChatBench.tsx",
+        "src/components/feature-sections/lab/bench/chat/ChatLog.tsx",
+        "src/components/feature-sections/lab/bench/chat/ChatScope.tsx",
+        "src/components/feature-sections/lab/bench/chat/signal.ts",
+        "src/components/feature-sections/lab/bench/eval/EvalBench.tsx",
+        "src/components/feature-sections/lab/bench/eval/Meter.tsx",
+        "src/components/feature-sections/lab/bench/evolution/EvolutionBench.tsx"
       ],
       "subjects": [
         {
@@ -8157,8 +8144,7 @@
         "src/contexts/SectionObserverContext.tsx",
         "src/contexts/reducedMotionHydration.test.ts",
         "src/hooks/useAnimatedNumber.ts",
-        "src/hooks/useAnimationPause.ts",
-        "src/hooks/useAutoCycle.ts"
+        "src/hooks/useAnimationPause.ts"
       ],
       "subjects": [
         {
@@ -8394,11 +8380,7 @@
         "src/components/SVGFocusRing.tsx",
         "src/components/TerminalChrome.tsx",
         "src/components/icons/brand-icons.tsx",
-        "src/components/illustrations/AgentGridIllustration.tsx",
         "src/components/illustrations/HealthyShieldIllustration.tsx",
-        "src/components/illustrations/PricingIllustration.tsx",
-        "src/components/illustrations/ShieldIllustration.tsx",
-        "src/components/illustrations/TerminalIllustration.tsx",
         "src/components/primitives/BrandCard.tsx"
       ],
       "subjects": [

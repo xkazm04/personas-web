@@ -39,7 +39,6 @@ CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`)
 | `src/hooks/useIsVisible.ts` | tab-foregrounded AND element-in-view, for gating SWR polling |
 | `src/lib/motion/loop-gate.ts` | Pure loop-gate contract: `LOOP_DECIDERS`, `resolveLoop`, `resolveTicker` (data feeds: preference abstains), `loopTransition` (the one place `repeat: Infinity` is written for the visualizers) |
 | `src/hooks/useLoopGate.ts` | `useLoopGate(ref, { userStopped, rootMargin })` -> `{ run, tick, still, vetoedBy }` from `useStillMotion` + `usePageVisibility` + `useIsVisible`; `useSvgTimelineGate` pauses a SMIL timeline on `run` |
-| `src/hooks/useAutoCycle.ts` | Interval-driven active index; pauses on reduced motion (`useStillMotion`), an external flag, a hidden tab, and - when given an optional `ref` - while that element is off screen (`useIsVisible`); `pauseFor` for touch |
 | `src/hooks/useAnimatedNumber.ts`, `src/hooks/useTweenedNumber.ts` | rAF eased number tweens; snap to target on reduced-motion |
 | `src/hooks/useIsMobile.ts`, `src/hooks/useMaxScrollHeight.ts` | `matchMedia` mobile flag; ResizeObserver max-height measurement |
 | `src/lib/animations.ts` | Framer `Variants` library, transition presets, ease curve, stagger helpers, and the gating contract comment |
@@ -69,7 +68,7 @@ CSS-only / cheap components (`AmbientOrbs`, `ParallaxAccents`, `TopoBackground`)
   - `useAnimationPause` defers observer setup with `setTimeout(setup, 0)` **specifically to avoid corrupting React hydration** — moving it synchronous re-introduces the "tree hydrated but attributes didn't match" warning (`useAnimationPause.ts:90-98`).
   - `useMaxScrollHeight` defers ResizeObserver `setState` through `setTimeout(0)` to break the "ResizeObserver loop completed with undelivered notifications" feedback path; keep the bail-out-if-unchanged guard.
   - Both compositors capture observer refs at mount and compare identity in cleanup (`useCanvasCompositor.ts:209-250`) so an interleaved sibling teardown doesn't synthesize-then-leak a fresh observer. Preserve that pattern if you touch the cleanup.
-- **React 19 purity:** number-tween and auto-cycle hooks use the prev-state pattern instead of `setState`-in-effect for prop-change resets (`useAutoCycle.ts:66-71`), and impure values are cached — follow suit. Don't call `Math.random()`/`Date.now()` in render or `useMemo`.
+- **React 19 purity:** number-tween hooks use the prev-state pattern instead of `setState`-in-effect for prop-change resets, and impure values are cached — follow suit. Don't call `Math.random()`/`Date.now()` in render or `useMemo`.
 - **Tier scaling lives in the component**, not the context: keep `Record<QualityTier, number>` count tables (`FloatingParticles.tsx:11`, `ParallaxAccents.tsx:7`, `how-manifesto/Ambience.tsx`) and let `low` mean 0/static where appropriate.
 - **`useAnimatedNumber` has a stale-`current` caveat:** its effect reads `current` from closure with an exhaustive-deps disable; it works for monotonic count-ups but isn't a general spring.
 - All animated decoration is `aria-hidden`/`pointer-events-none`; preserve that when adding layers.

@@ -22,7 +22,7 @@
     "check:bundle": "node scripts/check-bundle-budget.mjs",
     "check:field": "node scripts/check-field-budget.mjs",
     "start": "next start",
-    "lint": "eslint --max-warnings 9",
+    "lint": "eslint --max-warnings 5",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",

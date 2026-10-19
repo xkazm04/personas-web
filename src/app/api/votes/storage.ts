@@ -40,11 +40,15 @@ export function hasSupabase(): boolean {
   return hasSupabaseEnv();
 }
 
+/**
+ * Service-role client (server-only) so feature_votes RLS can be locked down
+ * and voter emails aren't readable by anyone with the public anon key. On a
+ * production deployment without that key this is the 503 `store_unavailable`
+ * refusal to send instead (src/lib/supabase-admin.ts).
+ */
 export async function getSupabaseClient() {
-  // Service-role client (server-only) so feature_votes RLS can be locked down
-  // and voter emails aren't readable by anyone with the public anon key.
-  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
-  return getSupabaseAdmin();
+  const { getSupabaseAdminOrRefusal } = await import("@/lib/supabase-admin");
+  return getSupabaseAdminOrRefusal();
 }
 
 /* ── Filesystem fallback ───────────────────────────────────────────── */

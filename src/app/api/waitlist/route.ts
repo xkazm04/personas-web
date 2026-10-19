@@ -16,8 +16,9 @@
  *    unset                    | any      | set                       | file
  *
  *    Why the service-role key (and not the anon key) is the switch:
- *    `getSupabaseAdmin()` prefers the service-role client but silently falls
- *    back to the anon client when the key is missing, and
+ *    `getSupabaseAdmin()` prefers the service-role client but falls back to
+ *    the anon client when the key is missing (dev and preview; production
+ *    refuses with AdminUnavailableError), and
  *    scripts/harden-voting-rls.sql does
  *    `revoke all on public.waitlist_entries from anon`. So a URL+anon-only
  *    deployment used to route every insert into a client that has no grants —

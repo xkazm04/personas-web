@@ -1,4 +1,8 @@
 import { NextRequest } from "next/server";
+import {
+  upstreamDeadline,
+  upstreamTimeoutResponse,
+} from "@/app/api/orchestrator/upstreamDeadline";
 import { verifySession } from "@/app/api/orchestrator/userSession";
 import {
   OrchestratorConfigError,
@@ -68,13 +72,17 @@ export async function GET(
   };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
+  // The deadline holds only until the upstream headers arrive, so it bounds a
+  // hung orchestrator without ever cutting a live stream.
+  const deadline = upstreamDeadline(req.signal);
   let upstream: Response;
   try {
     upstream = await fetch(streamUrl.toString(), {
       headers,
-      signal: req.signal,
+      signal: deadline.signal,
     });
   } catch (err) {
+    if (deadline.timedOut()) return upstreamTimeoutResponse();
     // Client disconnected mid-flight (most often during EventSource
     // reconnect storms) — return 499 with no body. Don't pollute Sentry
     // with the AbortError; the client already knows it aborted.
@@ -94,6 +102,8 @@ export async function GET(
         headers: { "Content-Type": "application/json" },
       },
     );
+  } finally {
+    deadline.clear();
   }
 
   // Normalize the upstream status before forwarding. The Response

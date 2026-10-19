@@ -34,88 +34,6 @@ export const ko: LocaleTranslations = {
       pricing: "\uc694\uae08\uc81c",
       menu: "\uba54\ub274"
     },
-    compareSection: {
-      heading: "\ubaa8\ub4e0 \uac83\uc774",
-      headingGradient: "\ubb34\ub8cc",
-      description: "\ub370\uc2a4\ud06c\ud1b1 \uc571\uacfc \uc544\ub798\uc758 \ubaa8\ub4e0 \uae30\ub2a5\uc740 \uc601\uc6d0\ud788 \ubb34\ub8cc\uc785\ub2c8\ub2e4. \ub2f9\uc2e0\uc758 \uae30\uae30\uc5d0\uc11c \uc2e4\ud589\ub418\ub294 \uc644\uc804\ud55c \uc5d0\uc774\uc804\ud2b8 \ud50c\ub7ab\ud3fc\uc785\ub2c8\ub2e4.",
-      offerBadges: [
-        "\uc601\uad6c \ubb34\ub8cc",
-        "\uc790\uccb4 \ud638\uc2a4\ud305",
-        "\uc624\ud508\uc18c\uc2a4"
-      ],
-      offerBody: "Personas\ub294 \uc0ac\uc6a9\uc790\uc758 \uae30\uae30\uc5d0\uc11c \uc2e4\ud589\ub429\ub2c8\ub2e4.",
-      ctaLabel: "\ubb34\ub8cc\ub85c \uc2dc\uc791\ud558\uae30",
-      readGuide: "\uac00\uc774\ub4dc \uc77d\uae30",
-      groups: {
-        "agents-prompts": {
-          title: "\uc5d0\uc774\uc804\ud2b8 & \ud504\ub86c\ud504\ud2b8",
-          tagline: "\uc0ac\uc6a9\uc790 \uc911\uc2ec",
-          concepts: [
-            "\uc790\uc5f0\uc5b4 \ud398\ub974\uc18c\ub098 \uc791\uc131",
-            "40\uac1c \uc774\uc0c1\uc758 \ucc44\ud0dd \uac00\ub2a5\ud55c \ud15c\ud50c\ub9bf",
-            "BYOM \u2014 Claude \ub610\ub294 \ub85c\uceec Ollama",
-            "\uad6c\uc870\ud654 + \uac04\ub2e8 \ud504\ub86c\ud504\ud2b8 \ubaa8\ub4dc",
-            "\uc9c0\uc18d\uc801\uc778 \uc5d0\uc774\uc804\ud2b8 \uba54\ubaa8\ub9ac"
-          ]
-        },
-        triggers: {
-          title: "\uc624\ucf00\uc2a4\ud2b8\ub808\uc774\uc158",
-          tagline: "\uc5d0\uc774\uc804\ud2b8\ub97c \uc2dc\uc791\ud558\ub294 \ubaa8\ub4e0 \ubc29\ubc95",
-          concepts: [
-            "\uc2a4\ucf00\uc904(cron)",
-            "Webhook \uc5d4\ub4dc\ud3ec\uc778\ud2b8",
-            "\ud30c\uc77c \uac10\uc2dc\uae30",
-            "\ud074\ub9bd\ubcf4\ub4dc \ubaa8\ub2c8\ud130",
-            "\uccb4\uc778 / \uc774\ubca4\ud2b8 \ud2b8\ub9ac\uac70",
-            "\ubcf5\ud569 \uc870\uac74"
-          ]
-        },
-        pipelines: {
-          title: "\ud30c\uc774\ud504\ub77c\uc778 & \ud300",
-          tagline: "\uc2dc\uac01\uc801 \uc5d0\uc774\uc804\ud2b8 \ud611\uc5c5",
-          concepts: [
-            "\uc2dc\uac01\uc801 \ud300 \uce94\ubc84\uc2a4",
-            "\ub370\uc774\ud130 \ud750\ub984 \uc5f0\uacb0",
-            "\uc2e4\uc2dc\uac04 \uc774\ubca4\ud2b8 \ubc84\uc2a4",
-            "\uc790\uac00 \uce58\uc720 \uc2e4\ud589",
-            "\ud30c\uc774\ud504\ub77c\uc778 \uc7ac\uc0dd + \uc2dc\uac04 \uc5ec\ud589"
-          ]
-        },
-        credentials: {
-          title: "\uc790\uaca9 \uc99d\uba85 & \ubcf4\uc548",
-          tagline: "\ube44\ubc00\uc740 \ub2f9\uc2e0\uc758 \uae30\uae30\uc5d0 \uba38\ubb45\ub2c8\ub2e4",
-          concepts: [
-            "AES-256-GCM \ubcfc\ud2b8",
-            "OS \ub124\uc774\ud2f0\ube0c \ud0a4\ub9c1",
-            "AI \uc9c0\uc6d0 OAuth",
-            "\uc790\ub3d9 \ud1a0\ud070 \uac31\uc2e0",
-            "\ub85c\uceec \uc6b0\uc120, \uc775\uba85 \ud154\ub808\uba54\ud2b8\ub9ac\ub9cc"
-          ]
-        },
-        monitoring: {
-          title: "\ubaa8\ub2c8\ud130\ub9c1",
-          tagline: "\ubaa8\ub4e0 \uc2e4\ud589\uc744 \ubcf4\uace0, \ube44\uc6a9\uc744 \uc0b0\uc815\ud558\uace0, \uc81c\uc5b4",
-          concepts: [
-            "\uc2e4\uc2dc\uac04 \uad00\uce21 \uac00\ub2a5\uc131 \ub300\uc2dc\ubcf4\ub4dc",
-            "\uc2e4\ud589\ubcc4 \uc2a4\ud32c \ucd94\uc801",
-            "\ubaa8\ub378\ubcc4 \ube44\uc6a9 \uadc0\uc18d",
-            "\uc0ac\ub78c \uac80\ud1a0 \ub300\uae30\uc5f4",
-            "\uc608\uc0b0 \uc54c\ub9bc + \uc9d1\ud589"
-          ]
-        },
-        testing: {
-          title: "\ud14c\uc2a4\ud2b8 \ub7a9",
-          tagline: "\uc790\ub3d9\ud654\ub41c \uc9c4\ud654",
-          concepts: [
-            "A/B \ud14c\uc2a4\ud2b8 \uc544\ub808\ub098",
-            "\ud504\ub86c\ud504\ud2b8 \ubc84\uc804 \uad00\ub9ac + \ucc28\uc774",
-            "\uc801\ud569\ub3c4 \uc810\uc218",
-            "\uad50\ubc30 \uc8fc\uae30",
-            "\ubaa8\uc758 \ub3c4\uad6c \uc0cc\ub4dc\ubc15\uc2a4"
-          ]
-        }
-      }
-    },
     footer: {
       tagline: "\ub2f9\uc2e0\uc744 \uc704\ud574 \uc77c\ud558\ub294 AI \uc5d0\uc774\uc804\ud2b8",
       motto: "\uc5c5\ubb34\ub97c \uc790\ub3d9\ud654\ud558\ub294 AI \uc5d0\uc774\uc804\ud2b8\ub85c \uac00\uc7a5 \uc911\uc694\ud55c \uc77c\uc5d0 \uc9d1\uc911\ud558\uc138\uc694.",
@@ -352,24 +270,8 @@ export const ko: LocaleTranslations = {
       }
     },
     faqSection: {
-      heading: "\uc790\uc8fc",
-      headingGradient: "\ubb3b\ub294 \uc9c8\ubb38",
-      subtitle: "Personas\ub97c \uc2dc\uc791\ud558\ub294 \ub370 \ud544\uc694\ud55c \ubaa8\ub4e0 \uac83.",
-      stillQuestions: "\uc544\uc9c1 \uad81\uae08\ud55c \uc810\uc774 \uc788\uc73c\uc2e0\uac00\uc694?",
-      joinDiscord: "Discord \ucc38\uc5ec",
       discordSubtitle: "\ub3c4\uc6c0\uacfc \ud1a0\ub860\uc744 \uc704\ud574 Discord \ucee4\ubba4\ub2c8\ud2f0\uc5d0 \ucc38\uc5ec\ud558\uc138\uc694.",
 
-      shieldLabels: {
-
-        piiStripped: "PII \uc81c\uac70\ub428",
-
-        noReplays: "\ub9ac\ud50c\ub808\uc774 \uc5c6\uc74c",
-
-        localOnly: "\ub85c\uceec \uc804\uc6a9",
-
-        yourData: "\ub0b4 \ub370\uc774\ud130",
-
-      },
       questions: [
         {
           q: "What is Claude Code and why do I need it?",
@@ -1563,12 +1465,7 @@ export const ko: LocaleTranslations = {
       gradient: "\ub85c\ub4dc\ub9f5",
       description: "Personas\uc758 \uac01 \uc601\uc5ed\uc774 \uc624\ub298 \uc5b4\ub514\uc5d0 \uc788\ub294\uc9c0 \u2014 \uc704\uc5d0\uc11c \uc544\ub798\ub85c\uc758 \uc57d\uc18d\uc774 \uc544\ub2c8\ub77c \uc67c\ucabd\uc5d0\uc11c \uc624\ub978\ucabd\uc73c\ub85c\uc758 \uc644\uc131\ub3c4\uc785\ub2c8\ub2e4.",
       progress: {
-        phasesComplete: "{total}\uac1c \ub2e8\uacc4 \uc911 {completed}\uac1c \uc644\ub8cc",
-        noneDone: "\uc544\uc9c1 \uc644\ub8cc\ub41c \ub2e8\uacc4\uac00 \uc5c6\uc2b5\ub2c8\ub2e4",
-        firstDone: "1\ub2e8\uacc4 \uc644\ub8cc",
-        rangeDone: "1-{count}\ub2e8\uacc4 \uc644\ub8cc",
-        toGoOne: "{count}\uac1c \ub2e8\uacc4 \ub0a8\uc74c",
-        toGoOther: "{count}\uac1c \ub2e8\uacc4 \ub0a8\uc74c"
+        phasesComplete: "{total}\uac1c \ub2e8\uacc4 \uc911 {completed}\uac1c \uc644\ub8cc"
       },
       areas: {
         i18n: {

@@ -21,7 +21,7 @@ Three independent primitives, composed by the API routes:
 | `src/lib/server/rate-limit.ts` | `isRateLimited` — in-memory fixed-window per-`namespace:key` counter with self-cleaning buckets |
 | `src/app/api/votes/rate-limit.ts` | Votes-specific wrapper: `namespace:"votes"`, 20 req / 60s per IP |
 | `src/app/api/votes/storage.ts` | Vote/shipped storage abstraction; `readVotes`/`writeVotes` delegate to the JSON store |
-| `src/app/api/votes/route.ts` | Consumer: GET counts, POST toggle; wraps FS branch in `withWriteLock("votes", …)` |
+| `src/app/api/votes/route.ts` | Consumer: GET counts (`rateLimitRead`, namespace `votes-read`), POST toggle (`rateLimit`, namespace `votes`); wraps FS branch in `withWriteLock("votes", …)` |
 | `src/lib/server/request.ts` | `getClientIp` (trust-ordered IP resolution) feeding the rate-limit key |
 
 ## Data & state

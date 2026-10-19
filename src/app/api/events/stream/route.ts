@@ -1,4 +1,8 @@
 import { NextRequest } from "next/server";
+import {
+  upstreamDeadline,
+  upstreamTimeoutResponse,
+} from "@/app/api/orchestrator/upstreamDeadline";
 import { verifySession } from "@/app/api/orchestrator/userSession";
 import {
   OrchestratorConfigError,
@@ -52,13 +56,17 @@ export async function GET(req: NextRequest) {
   };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
+  // The deadline holds only until the upstream headers arrive, so it bounds a
+  // hung orchestrator without ever cutting a live stream.
+  const deadline = upstreamDeadline(req.signal);
   let upstream: Response;
   try {
     upstream = await fetch(streamUrl.toString(), {
       headers,
-      signal: req.signal,
+      signal: deadline.signal,
     });
   } catch (err) {
+    if (deadline.timedOut()) return upstreamTimeoutResponse();
     // Client disconnected mid-flight (most often during reconnect storms)
     // — not a real failure, don't bother the client with a body it can't
     // parse and don't pollute Sentry with non-actionable noise.
@@ -78,6 +86,8 @@ export async function GET(req: NextRequest) {
         headers: { "Content-Type": "application/json" },
       },
     );
+  } finally {
+    deadline.clear();
   }
 
   if (!upstream.ok || !upstream.body) {

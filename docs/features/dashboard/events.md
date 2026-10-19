@@ -65,6 +65,9 @@ the session is a later choice. When the request is allowed, the route wraps the
 upstream body in a `ReadableStream` that injects a `: keep-alive` SSE comment every
 25s so idle connections survive load-balancer/CDN idle timeouts. It maps AbortError
 to 499, upstream-unreachable to a structured `{ error: "upstream_unreachable" }` 502,
+an orchestrator that sends no headers within `UPSTREAM_TIMEOUT_MS` (12 s,
+`src/app/api/orchestrator/upstreamDeadline.ts`) to 504 `upstream_timeout` (the deadline
+is dropped once the stream opens),
 and clamps out-of-range upstream statuses to 502 to avoid `Response` `RangeError`. It
 never leaks the orchestrator hostname.
 

@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import * as proxyRoute from "./[...path]/route";
 import { GET, POST } from "./[...path]/route";
 import { DESKTOP_SHAPES } from "./desktopShapes";
+import { UPSTREAM_TIMEOUT_MS } from "./upstreamDeadline";
 import { createSessionVerifier, VERIFIED_TTL_MS } from "./userSession";
 
 const AUTH = { url: "https://ref.supabase.co/", anonKey: "anon-key" };
@@ -18,7 +19,7 @@ describe("createSessionVerifier", () => {
     expect(await verify("jwt-1")).toBe("verified");
     const [url, init] = fetchImpl.mock.calls[0];
     expect(url).toBe("https://ref.supabase.co/auth/v1/user");
-    expect(init?.headers).toEqual({ apikey: "anon-key", Authorization: "Bearer jwt-1" });
+    expect(init?.headers).toEqual({ apikey: "anon-key", Authorization: "Bearer jwt-1" }); // pragma: allowlist secret
   });
 
   it("refuses a missing or oversized token without a network call", async () => {
@@ -66,13 +67,13 @@ describe("createSessionVerifier", () => {
 describe("orchestrator proxy", () => {
   const ENV = {
     NEXT_PUBLIC_ORCHESTRATOR_URL: "https://orch.test",
-    TEAM_API_KEY: "team-secret",
+    TEAM_API_KEY: "team-secret", // pragma: allowlist secret
     NEXT_PUBLIC_SUPABASE_URL: "https://ref.supabase.co",
     NEXT_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
   };
   const saved: Record<string, string | undefined> = {};
   let upstream: { url: string; init?: RequestInit }[];
-  let upstreamReply: () => Response;
+  let upstreamReply: (init?: RequestInit) => Response | Promise<Response>;
 
   beforeEach(() => {
     for (const [k, v] of Object.entries(ENV)) {
@@ -90,7 +91,7 @@ describe("orchestrator proxy", () => {
           return new Response("{}", { status: auth.startsWith("Bearer live-") ? 200 : 401 });
         }
         upstream.push({ url, init });
-        return upstreamReply();
+        return upstreamReply(init);
       }),
     );
   });
@@ -139,7 +140,7 @@ describe("orchestrator proxy", () => {
 
   it("sends no Authorization header when only the legacy NEXT_PUBLIC_TEAM_API_KEY is set", async () => {
     delete process.env.TEAM_API_KEY;
-    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret";
+    process.env.NEXT_PUBLIC_TEAM_API_KEY = "legacy-secret"; // pragma: allowlist secret
     try {
       const res = await call(GET, ["personas"], { "X-User-Token": "live-user-legacy" });
       expect(res.status).toBe(200);
@@ -176,6 +177,42 @@ describe("orchestrator proxy", () => {
       expect(res.headers.get("Content-Security-Policy")).toContain("sandbox");
       expect(await res.text()).toBe("<script>alert(document.domain)</script>");
     }
+  });
+
+  /** An orchestrator that never answers: the fetch settles only on abort. */
+  const hang = (init?: RequestInit) =>
+    new Promise<Response>((_, reject) => {
+      init?.signal?.addEventListener("abort", () => reject(init.signal?.reason), { once: true });
+    });
+
+  it("answers 504 upstream_timeout when the orchestrator never answers", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      upstreamReply = hang;
+      const pending = call(GET, ["personas"], { "X-User-Token": "live-user-6" });
+      await vi.waitFor(() => expect(upstream).toHaveLength(1));
+      await vi.advanceTimersByTimeAsync(UPSTREAM_TIMEOUT_MS);
+      const res = await pending;
+      expect(res.status).toBe(504);
+      expect(await res.json()).toEqual({ error: "upstream_timeout" });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("still answers a client disconnect with 499, not the timeout", async () => {
+    upstreamReply = hang;
+    const client = new AbortController();
+    const pending = GET(
+      new NextRequest("https://personas.so/api/orchestrator/personas", {
+        headers: { "X-User-Token": "live-user-7" },
+        signal: client.signal,
+      }),
+      { params: Promise.resolve({ path: ["personas"] }) },
+    );
+    await vi.waitFor(() => expect(upstream).toHaveLength(1));
+    client.abort();
+    expect((await pending).status).toBe(499);
   });
 
   it("passes JSON types through, and labels an untyped body JSON as before", async () => {

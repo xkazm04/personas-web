@@ -1,6 +1,6 @@
 /**
  * The Evolution tab's genome tree, read as data rather than painted by rule of
- * thumb. Pure TS, no React: `EvolutionTab.tsx` projects everything it draws —
+ * thumb. Pure TS, no React: the Evolution bench (`bench/evolution/`) projects everything it draws —
  * the amber lineage, each node's legend colour and the header figures — from
  * these functions, so the picture, the legend and the numbers cannot disagree.
  *

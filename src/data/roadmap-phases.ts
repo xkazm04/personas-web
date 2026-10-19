@@ -77,6 +77,5 @@ export const phaseCardData: PhaseCardData[] = [
 // Derived progress from phaseCardData — single source of truth
 export const completedCount = phaseCardData.filter((p) => p.completed).length;
 export const totalPhases = phaseCardData.length;
-export const remainingCount = totalPhases - completedCount;
 export const progressPercent = Math.round((completedCount / totalPhases) * 100);
 export const progressWidth = `${progressPercent}%`;

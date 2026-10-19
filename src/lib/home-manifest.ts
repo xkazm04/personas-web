@@ -39,12 +39,8 @@ export const HOME_STAGES: readonly HomeStage[] = [
   { slug: "playground-split",  glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "playground",  anchorId: "concepts",    gate: true },
   { slug: "get-started",       glow: "emerald", fromColor: "cyan",    toColor: "emerald", anchorId: "get-started", gate: true },
   { slug: "orchestration-hub", glow: "cyan",    fromColor: "emerald", toColor: "cyan",    wrapperId: "pipelines",   anchorId: "triggers",    gate: true },
-  { slug: "team-canvas",       glow: "purple",  fromColor: "cyan",    toColor: "purple",  anchorId: "team-canvas", gate: true },
-  { slug: "companion",         glow: "purple",  fromColor: "purple",  toColor: "purple",  anchorId: "companion",   gate: true },
-  { slug: "vision",            glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "vision",      anchorId: "private" },
-  { slug: "pricing",           glow: "purple",  fromColor: "purple",  toColor: "purple",  wrapperId: "pricing",     anchorId: "pricing" },
-  { slug: "faq",               glow: "cyan",    fromColor: "purple",  toColor: "cyan",    anchorId: "faq" },
-  { slug: "download-cta",      glow: "cyan",    fromColor: "cyan",                          wrapperId: "download-section", anchorId: "download", gate: true },
+  { slug: "vision",            glow: "purple",  fromColor: "cyan",    toColor: "purple",  wrapperId: "vision",      anchorId: "private" },
+  { slug: "download-cta",      glow: "cyan",    fromColor: "purple",                        wrapperId: "download-section", anchorId: "download", gate: true },
 ];
 
 /** Stage rows by preview slug. */

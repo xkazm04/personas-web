@@ -85,9 +85,7 @@ Status legend: ✅ written · ⬜ planned
 | ✅ [why-agents](marketing/why-agents.md) | Agent-vs-workflow scenario duels (retired section; kept as history) |
 | ✅ [use-cases](marketing/use-cases.md) | "Slot reels": six needs spin through real connectors onto the persona card |
 | ✅ [features-overview](marketing/features-overview.md) | `/features` "Murmuration" swarm hero + features cluster + vision layer stack |
-| ✅ [pricing](marketing/pricing.md) | Pricing tier cards |
 | ✅ [get-started](marketing/get-started.md) | "Your day, its day" 24-hour dial + download CTA |
-| ✅ [faq](marketing/faq.md) | FAQ accordion |
 | ✅ [footer](marketing/footer.md) | Footer + primary CTA |
 | ✅ [guided-tour](marketing/guided-tour.md) | Athena guided product tour |
 
@@ -97,7 +95,7 @@ Status legend: ✅ written · ⬜ planned
 | --- | --- |
 | ✅ [observability-deck](product-showcase/observability-deck.md) | "On the record" printer tape + day's statement |
 | ✅ [security-vault](product-showcase/security-vault.md) | Nested-vault security illustration |
-| ✅ [agent-lab](product-showcase/agent-lab.md) | Arena / chat / eval / evolution tabs |
+| ✅ [agent-lab](product-showcase/agent-lab.md) | Chat / arena / evolution / eval as four channels of one bench instrument |
 | ✅ [plugin-ecosystem](product-showcase/plugin-ecosystem.md) | Plug-in bay: Dev Tools, Brain, Drive, Twin cartridges |
 | ✅ [memory-layers](product-showcase/memory-layers.md) | "Growth rings" memory illustration |
 | ✅ [multi-provider-ai](product-showcase/multi-provider-ai.md) | Lit model router (Claude vs Ollama) |

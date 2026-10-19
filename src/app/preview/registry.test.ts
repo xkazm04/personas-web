@@ -59,7 +59,7 @@ describe("/preview registry is derived from the live lazy-section tables", () =>
     );
     const names = tables.flatMap((t) => Object.keys(t));
     // The homepage sections the old hand list missed are part of the scan.
-    expect(names).toEqual(expect.arrayContaining(["LazyCompanion", "LazyTeamCanvas", "LazyEventBusShowcase"]));
+    expect(names).toEqual(expect.arrayContaining(["LazyGetStarted", "LazyOrchestrationHub", "LazyEventBusShowcase"]));
     const registry = buildPreviewRegistry(tables, {});
     expect(new Set(registry.values())).toEqual(new Set(names));
   });

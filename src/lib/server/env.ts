@@ -39,3 +39,14 @@ export function hasSupabaseServiceRole(): boolean {
     getOptionalEnv("SUPABASE_SERVICE_ROLE_KEY")
   );
 }
+
+/**
+ * True on a production deployment. On Vercel that is `VERCEL_ENV=production`
+ * only: a preview deployment also runs with `NODE_ENV=production`, and keeps
+ * the dev-time fallbacks. Elsewhere it is `NODE_ENV=production`.
+ */
+export function isProductionDeploy(): boolean {
+  const vercel = getOptionalEnv("VERCEL_ENV");
+  if (vercel) return vercel === "production";
+  return process.env.NODE_ENV === "production";
+}

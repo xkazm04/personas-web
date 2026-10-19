@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isValidVoterId } from "@/lib/validation";
 import { withWriteLock } from "@/lib/fileLock";
 import { getClientIp, parseJsonBody } from "@/lib/server/request";
-import { rateLimit } from "./rate-limit";
+import { rateLimit, rateLimitRead } from "./rate-limit";
 import {
   ALLOWED_FEATURES,
   hasSupabase,
@@ -24,22 +24,41 @@ import {
 /* ── GET — vote counts per feature + user's votes + shipped features ── */
 
 export async function GET(req: NextRequest) {
+  const refusal = rateLimitRead(getClientIp(req));
+  if (refusal) return refusal;
+
   const voterId = req.nextUrl.searchParams.get("voterId") ?? "";
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
 
-    const [votesResult, shippedResult] = await Promise.all([
+    // Counted in the database, one `head: true` count per allowed feature,
+    // and only the caller's own rows read. Selecting every row and counting
+    // here cost a full table transfer per request, and past PostgREST's
+    // 1000-row cap the counts were silently wrong.
+    const features = [...ALLOWED_FEATURES];
+    const [countResults, ownResult, shippedResult] = await Promise.all([
+      Promise.all(
+        features.map((featureId) =>
+          sb
+            .from("feature_votes")
+            .select("*", { count: "exact", head: true })
+            .eq("feature_id", featureId),
+        ),
+      ),
       // `email` is deliberately NOT selected: it must never leave the server
       // keyed off a client-suppliable voterId (which also travels in the GET
       // query string and lands in logs). Email is write-only here.
-      sb.from("feature_votes").select("feature_id, voter_id"),
+      isValidVoterId(voterId)
+        ? sb.from("feature_votes").select("feature_id").eq("voter_id", voterId)
+        : Promise.resolve({ data: [] as { feature_id: string }[], error: null }),
       sb
         .from("shipped_features")
         .select("feature_id, changelog, link, shipped_at"),
     ]);
 
-    if (votesResult.error) {
+    if (ownResult.error || countResults.some((r) => r.error)) {
       return NextResponse.json(
         { error: "Failed to read votes" },
         { status: 500 },
@@ -48,16 +67,14 @@ export async function GET(req: NextRequest) {
 
     // Vote counts reflect real engagement only. The client-side features
     // array in FeatureVoting.tsx holds seed display values shown until the
-    // API responds, added on top of the real counts from this endpoint.
+    // API responds, added on top of the real counts from this endpoint. A
+    // feature with no votes has no key, as before.
     const counts: Record<string, number> = {};
-    const userVotes: string[] = [];
-
-    for (const row of votesResult.data ?? []) {
-      counts[row.feature_id] = (counts[row.feature_id] || 0) + 1;
-      if (row.voter_id === voterId) {
-        userVotes.push(row.feature_id);
-      }
-    }
+    features.forEach((featureId, i) => {
+      const count = countResults[i].count ?? 0;
+      if (count > 0) counts[featureId] = count;
+    });
+    const userVotes = (ownResult.data ?? []).map((row) => row.feature_id);
 
     const shipped: ShippedEntry[] = shippedResult.data ?? [];
 
@@ -112,6 +129,7 @@ export async function POST(req: NextRequest) {
   // --- Supabase path (production) ---
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
 
     const { data: existing, error: lookupError } = await sb
       .from("feature_votes")

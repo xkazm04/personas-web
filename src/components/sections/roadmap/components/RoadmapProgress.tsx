@@ -2,14 +2,12 @@
 
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { Circle, CheckCircle2 } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { BRAND_VAR, tint } from "@/lib/brand-theme";
 import { useTranslation } from "@/i18n/useTranslation";
 import {
   completedCount,
   totalPhases,
-  remainingCount,
   progressPercent,
   progressWidth,
 } from "@/data/roadmap-phases";
@@ -23,21 +21,12 @@ export default function RoadmapProgress() {
   const p = t.roadmapSection.progress;
   // All counts/percentages flow from phaseCardData (single source of truth)
   // — flipping a `completed` flag now updates the public progress copy in
-  // lockstep with the phase grid. Only the label text is localized; the
-  // pluralization/special-case branches are ported faithfully.
+  // lockstep with the phase grid. Only the label text is localized. One label,
+  // one percentage, one bar: the "phases 1-n done / n to go" row that restated
+  // them under the bar was removed on 2026-10-18.
   const phasesCompleteLabel = p.phasesComplete
     .replace("{completed}", String(completedCount))
     .replace("{total}", String(totalPhases));
-  const phasesDoneLabel =
-    completedCount === 0
-      ? p.noneDone
-      : completedCount === 1
-        ? p.firstDone
-        : p.rangeDone.replace("{count}", String(completedCount));
-  const phasesRemainingLabel = (remainingCount === 1 ? p.toGoOne : p.toGoOther).replace(
-    "{count}",
-    String(remainingCount),
-  );
 
   return (
     <motion.div data-tour-diagram="roadmap-progress" variants={fadeUp} className="mt-10 mx-auto max-w-2xl">
@@ -98,16 +87,6 @@ export default function RoadmapProgress() {
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
         />
-      </div>
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-base font-mono text-muted font-medium">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4" style={{ color: BRAND_VAR.emerald, filter: `drop-shadow(0 0 5px ${tint("emerald", 60)})` }} />
-          <span>{phasesDoneLabel}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Circle className="h-4 w-4 text-muted" />
-          <span>{phasesRemainingLabel}</span>
-        </div>
       </div>
     </motion.div>
   );

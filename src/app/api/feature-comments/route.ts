@@ -17,6 +17,9 @@ import { rateLimitGuard } from "@/lib/server/rate-limit";
 // paste normalization differences between client and server) aren't rejected.
 const MAX_TEXT_LEN = 300;
 const MAX_AUTHOR_LEN = 64;
+// The GET serves the newest MAX_COMMENTS, oldest first, so its cost no longer
+// grows with the table (and stays under PostgREST's 1000-row cap).
+const MAX_COMMENTS = 500;
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -37,9 +40,10 @@ function hasSupabase(): boolean {
   return hasSupabaseEnv();
 }
 
+/** The service-role client, or the 503 `store_unavailable` refusal (src/lib/supabase-admin.ts). */
 async function getSupabaseClient() {
-  const { getSupabaseAdmin } = await import("@/lib/supabase-admin");
-  return getSupabaseAdmin();
+  const { getSupabaseAdminOrRefusal } = await import("@/lib/supabase-admin");
+  return getSupabaseAdminOrRefusal();
 }
 
 /** Returns the 429 to send, or `null` to serve the request. */
@@ -48,6 +52,16 @@ function rateLimit(ip: string): NextResponse | null {
     namespace: "feature-comments",
     key: ip,
     limit: 30,
+    windowMs: 60_000,
+  });
+}
+
+/** The GET's budget, in a bucket of its own so reads never spend the POST's. */
+function rateLimitRead(ip: string): NextResponse | null {
+  return rateLimitGuard({
+    namespace: "feature-comments-read",
+    key: ip,
+    limit: 60,
     windowMs: 60_000,
   });
 }
@@ -66,15 +80,20 @@ function normalizeAuthor(value: unknown): string | null {
   return trimmed;
 }
 
-/* ── GET — all comments across features ─────────────────────────────── */
+/* ── GET — the newest comments across features, oldest first ────────── */
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const refusal = rateLimitRead(getClientIp(req));
+  if (refusal) return refusal;
+
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
     const { data, error } = await sb
       .from("feature_comments")
       .select("id, feature_id, parent_id, author, text, created_at")
-      .order("created_at", { ascending: true });
+      .order("created_at", { ascending: false })
+      .limit(MAX_COMMENTS);
 
     if (error) {
       return NextResponse.json(
@@ -83,7 +102,7 @@ export async function GET() {
       );
     }
 
-    const comments: CommentRow[] = (data ?? []).map((row) => ({
+    const comments: CommentRow[] = (data ?? []).reverse().map((row) => ({
       id: row.id,
       featureId: row.feature_id,
       parentId: row.parent_id,
@@ -96,7 +115,7 @@ export async function GET() {
   }
 
   const data = await readJsonFile<FSComments>("comments.json", { entries: [] });
-  return NextResponse.json({ comments: data.entries });
+  return NextResponse.json({ comments: data.entries.slice(-MAX_COMMENTS) });
 }
 
 /* ── POST — add a comment ───────────────────────────────────────────── */
@@ -139,6 +158,7 @@ export async function POST(req: NextRequest) {
 
   if (hasSupabase()) {
     const sb = await getSupabaseClient();
+    if (sb instanceof Response) return sb;
     // The thread model is one level deep. Reject a reply whose parent is itself
     // a reply (or doesn't exist), so stored comments can never exceed the
     // renderable depth and vanish. UUID shape alone isn't enough.

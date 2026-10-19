@@ -10,8 +10,7 @@
 
 /**
    * /features Lab. {version} is a version id (v4.2) or an arena side (A/B);
-   * {gen} a generation number; {dimensions}/{runs} are counts. The applied
-   * diffs in the chat are config text and stay in code.
+   * {gen} a generation number; {dimensions}/{runs} are counts.
    */
 export interface LabSectionCopy {
   heading: string;
@@ -24,11 +23,6 @@ export interface LabSectionCopy {
     eval: { label: string; blurb: string };
   };
   chat: {
-    title: string;
-    applying: string;
-    synced: string;
-    appliedDiff: string;
-    placeholder: string;
     replay: string;
     messages: {
       tooManyUrgent: string;
@@ -39,17 +33,10 @@ export interface LabSectionCopy {
     };
   };
   arena: {
-    title: string;
     round: string;
     input: string;
     version: string;
-    win: string;
-    lose: string;
     winsAria: string;
-    losesAria: string;
-    fitnessScore: string;
-    fighting: string;
-    roundComplete: string;
     inputs: {
       prodBug: string;
       declineMeeting: string;
@@ -59,7 +46,6 @@ export interface LabSectionCopy {
     };
   };
   evolution: {
-    title: string;
     gen: string;
     best: string;
     lineage: string;
@@ -67,13 +53,10 @@ export interface LabSectionCopy {
     bestLineage: string;
     alive: string;
     culled: string;
-    breed: string;
   };
   eval: {
-    title: string;
     avg: string;
     deltaVsBaseline: string;
-    current: string;
     baseline: string;
     footer: string;
     dimensions: {
@@ -83,6 +66,55 @@ export interface LabSectionCopy {
       latency: string;
       cost: string;
       safety: string;
+    };
+  };
+  /** The bench (lab/bench/): the instrument vocabulary its four channels
+   *  add. {n} is a count or channel number; {version} a ledger version id;
+   *  {gen} a generation; {lo}/{hi}/{value} are figures. */
+  bench: {
+    channel: string;
+    stylised: string;
+    chat: {
+      title: string;
+      measured: string;
+      target: string;
+      targetBand: string;
+      axis: string;
+      before: string;
+      after: string;
+      deltaPts: string;
+      log: string;
+      roles: { user: string; assistant: string; diff: string };
+      adjust: string;
+      tuning: string;
+      inBand: string;
+      screenLabel: string;
+    };
+    arena: {
+      title: string;
+      source: string;
+      margin: string;
+      tally: string;
+      acquiring: string;
+      locked: string;
+      roundCell: string;
+      roundShort: string;
+      screenLabel: string;
+    };
+    evolution: {
+      title: string;
+      sweep: string;
+      resweep: string;
+      envelope: string;
+      cursor: string;
+      screenLabel: string;
+    };
+    eval: {
+      title: string;
+      reading: string;
+      needle: string;
+      refMark: string;
+      screenLabel: string;
     };
   };
 }
@@ -98,11 +130,6 @@ export const labSectionCopy: LabSectionCopy = {
     eval: { label: 'Eval', blurb: 'Score personas across 6 dimensions' },
   },
   chat: {
-    title: 'Refinement chat',
-    applying: 'applying changes',
-    synced: 'synced',
-    appliedDiff: 'applied diff',
-    placeholder: 'Tell the agent what to change…',
     replay: 'replay',
     messages: {
       tooManyUrgent: 'The triage agent is labeling too many emails as urgent. Dial it back.',
@@ -113,17 +140,10 @@ export const labSectionCopy: LabSectionCopy = {
     },
   },
   arena: {
-    title: 'Prompt arena',
     round: 'Round',
     input: 'Input',
     version: 'Version {version}',
-    win: 'win',
-    lose: 'lose',
     winsAria: 'Version {version} wins this round',
-    losesAria: 'Version {version} loses this round',
-    fitnessScore: 'fitness score',
-    fighting: 'fighting…',
-    roundComplete: 'round complete',
     inputs: {
       prodBug: 'Urgent bug in prod: draft status update',
       declineMeeting: 'Politely decline a meeting',
@@ -133,7 +153,6 @@ export const labSectionCopy: LabSectionCopy = {
     },
   },
   evolution: {
-    title: 'Genome tree',
     gen: 'Gen',
     best: 'Best',
     lineage: 'Lineage',
@@ -141,13 +160,10 @@ export const labSectionCopy: LabSectionCopy = {
     bestLineage: 'best lineage',
     alive: 'alive',
     culled: 'culled',
-    breed: 'breed next gen',
   },
   eval: {
-    title: 'Eval radar',
     avg: 'Avg',
     deltaVsBaseline: 'Δ vs baseline',
-    current: 'current',
     baseline: 'baseline',
     footer: '{dimensions} dimensions · {runs} sample runs',
     dimensions: {
@@ -157,6 +173,56 @@ export const labSectionCopy: LabSectionCopy = {
       latency: 'Latency',
       cost: 'Cost',
       safety: 'Safety',
+    },
+  },
+  bench: {
+    channel: "CH{n}",
+    stylised: "bench readout",
+    chat: {
+      title: "Signal tuner",
+      measured: "Measured",
+      target: "Target",
+      targetBand: "{lo}–{hi}%",
+      axis: "% flagged urgent · last 48h, hourly",
+      before: "before",
+      after: "after",
+      deltaPts: "Δ {value} pts",
+      log: "Operator log",
+      roles: { user: "You", assistant: "Agent", diff: "Adjust" },
+      adjust: "ADJ {n}",
+      tuning: "tuning",
+      inBand: "in band",
+      screenLabel:
+        "Urgent-flag rate over the last 48 hours: 31% before the refinement, 9.2% after it, inside the 8–12% target band.",
+    },
+    arena: {
+      title: "Dual-channel compare",
+      source: "Source",
+      margin: "Margin",
+      tally: "Tally",
+      acquiring: "acquiring",
+      locked: "locked",
+      roundCell: "Show round {n}",
+      roundShort: "R{n}",
+      screenLabel:
+        "Each version's six dimension scores for the current input, drawn as two traces. The higher mean wins the round.",
+    },
+    evolution: {
+      title: "Fitness strip chart",
+      sweep: "sweeping",
+      resweep: "re-sweep",
+      envelope: "envelope",
+      cursor: "G{gen} · top {value}",
+      screenLabel:
+        "Fitness of every version by generation. The amber line is the best version's ancestry; the band spans the weakest to the fittest of each generation.",
+    },
+    eval: {
+      title: "Meter bank",
+      reading: "Reading",
+      needle: "{version} live",
+      refMark: "reference mark",
+      screenLabel:
+        "Six meters, one per scored dimension. Each needle is the live version's score; the tick on each dial is the reference version's score.",
     },
   },
 };

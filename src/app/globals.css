@@ -76,11 +76,25 @@ canvas {
 }
 
 html {
+  /* A solid canvas under body's per-theme gradient. Every theme sets body's
+     `background` shorthand to a gradient, which resets its colour to
+     transparent; propagated to the canvas, that left the root with no solid
+     colour, and Chrome paints tiles it has not rasterised yet (a fast scroll
+     across the heavy stage sections) in the base background - white. With a
+     colour here, body's gradient stops propagating and paints its own box. */
+  background-color: var(--background);
+  color-scheme: light;
   scroll-behavior: smooth;
   /* framer-motion's useScroll({ target }) measures targets relative to the
      scroll container (document.scrollingElement = this element) and warns if
      it is position: static. */
   position: relative;
+}
+
+/* Dark themes carry `.dark` (layout.tsx's pre-paint script, themeStore): the
+   browser's own base background and scrollbars follow it. */
+html.dark {
+  color-scheme: dark;
 }
 
 ::selection {

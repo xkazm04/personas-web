@@ -8,9 +8,9 @@ import { downloadPlan } from "./release";
 /**
  * Every "Download" CTA reports its click through the one tracker, with the
  * same `download_click` shape plus a `placement`, so the funnel can tell the
- * hero, the pricing offer and the download section apart. Before this, only
- * DownloadCTA called `trackDownloadClick`; the hero and pricing buttons - the
- * two most-seen download CTAs - fired nothing.
+ * hero, the features hero and the download section apart. Before this, only
+ * DownloadCTA called `trackDownloadClick`; the hero buttons - the most-seen
+ * download CTAs - fired nothing.
  */
 
 const count = vi.fn();
@@ -31,9 +31,9 @@ describe("downloadClickAttributes", () => {
   });
 
   it("with no installer the CTA leads to the waitlist, reported for the visitor's own platform", () => {
-    expect(downloadClickAttributes(WAITLIST, "pricing", "linux")).toEqual({
+    expect(downloadClickAttributes(WAITLIST, "features-hero", "linux")).toEqual({
       platform: "linux",
-      placement: "pricing",
+      placement: "features-hero",
       outcome: "waitlist",
     });
   });
@@ -65,9 +65,9 @@ describe("trackDownloadClick", () => {
   afterEach(() => vi.unstubAllGlobals());
 
   it("emits download_click with the placement", () => {
-    trackDownloadClick(LIVE, "pricing", "windows");
+    trackDownloadClick(LIVE, "features-hero", "windows");
     expect(count).toHaveBeenCalledWith("download_click", 1, {
-      attributes: { platform: "windows", placement: "pricing", outcome: "installer" },
+      attributes: { platform: "windows", placement: "features-hero", outcome: "installer" },
     });
   });
 });
@@ -79,7 +79,6 @@ describe("every download CTA reports its placement", () => {
   it.each([
     ["src/components/sections/hero-hive/shared/HeroCtas.tsx", "hero"],
     ["src/components/feature-sections/murmuration-hero/shared/HeroCtas.tsx", "features-hero"],
-    ["src/components/sections/pricing/index.tsx", "pricing"],
     ["src/components/sections/DownloadCTA.tsx", "download-cta"],
   ])("%s calls trackDownloadClick with placement %s", (rel, placement) => {
     expect(read(rel)).toMatch(new RegExp(`trackDownloadClick\\(DOWNLOAD_PLAN,\\s*"${placement}"`));

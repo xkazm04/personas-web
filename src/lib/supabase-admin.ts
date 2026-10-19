@@ -1,6 +1,10 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getOptionalEnv } from "@/lib/server/env";
+import type { NextResponse } from "next/server";
+import { getOptionalEnv, isProductionDeploy } from "@/lib/server/env";
+import { apiError } from "@/lib/server/request";
+import { captureExceptionScrubbed } from "@/lib/sentry-pii";
+import { SUPABASE_FETCH_TIMEOUT_MS, timedFetch } from "@/lib/supabase";
 
 /**
  * Server-only Supabase client for API routes that read/write PII-bearing or
@@ -9,12 +13,24 @@ import { getOptionalEnv } from "@/lib/server/env";
  * Prefers the SERVICE-ROLE key so those tables' RLS can be locked down to
  * anon-read-counts-only (see scripts/harden-voting-rls.sql). When the
  * service-role key is not configured it falls back to the public anon client
- * so existing deployments keep working — but that fallback only holds while
- * the permissive legacy RLS is still in place. NEVER import this from client
- * code (the "server-only" guard will fail the build if you do).
+ * in dev and preview, so those keep working, but that fallback only holds
+ * while the permissive legacy RLS is still in place. A production deployment
+ * without the key fails closed instead (`AdminUnavailableError`): its writes
+ * would otherwise run through the anon role, which needs exactly the RLS that
+ * leaves voter emails readable by anyone. NEVER import this from client code
+ * (the "server-only" guard will fail the build if you do).
  */
 let _admin: SupabaseClient | null = null;
 let _warnedFallback = false;
+let _reportedUnavailable = false;
+
+/** Production has no service-role key: the store refuses rather than degrade. */
+export class AdminUnavailableError extends Error {
+  constructor() {
+    super("SUPABASE_SERVICE_ROLE_KEY is not set on a production deployment");
+    this.name = "AdminUnavailableError";
+  }
+}
 
 export async function getSupabaseAdmin(): Promise<SupabaseClient> {
   if (_admin) return _admin;
@@ -25,21 +41,53 @@ export async function getSupabaseAdmin(): Promise<SupabaseClient> {
   if (url && serviceKey) {
     _admin = createClient(url, serviceKey, {
       auth: { persistSession: false, autoRefreshToken: false },
+      global: { fetch: timedFetch(SUPABASE_FETCH_TIMEOUT_MS) },
     });
     return _admin;
   }
 
-  // Fallback: no service-role key yet. Reuse the anon client so votes/waitlist
-  // keep functioning during migration, but warn once so the gap is visible.
+  if (isProductionDeploy()) {
+    const err = new AdminUnavailableError();
+    // Once per process, so the misconfiguration shows in Sentry, not only in
+    // logs, without one event per request.
+    if (!_reportedUnavailable) {
+      _reportedUnavailable = true;
+      captureExceptionScrubbed(err, {
+        tags: { scope: "supabase-admin", reason: "service-role-missing" },
+      });
+    }
+    throw err;
+  }
+
+  // Fallback (dev, preview): no service-role key yet. Reuse the anon client so
+  // votes/waitlist keep functioning during migration, but warn once so the gap
+  // is visible.
   if (!_warnedFallback) {
     _warnedFallback = true;
     console.warn(
       "[supabase-admin] SUPABASE_SERVICE_ROLE_KEY not set — falling back to the " +
         "anon client. Server writes run with the public role, so feature_votes " +
         "RLS must stay permissive and voter emails remain readable by anyone. " +
-        "Set SUPABASE_SERVICE_ROLE_KEY and run scripts/harden-voting-rls.sql to close this.",
+        "Set SUPABASE_SERVICE_ROLE_KEY and run scripts/harden-voting-rls.sql to close this. " +
+        "A production deployment refuses instead of falling back.",
     );
   }
   const { getSupabase } = await import("@/lib/supabase");
   return getSupabase();
+}
+
+/**
+ * `getSupabaseAdmin()` for a route handler: the client, or the 503
+ * `store_unavailable` refusal to send when production has no service-role key.
+ * Any other error still throws.
+ */
+export async function getSupabaseAdminOrRefusal(): Promise<SupabaseClient | NextResponse> {
+  try {
+    return await getSupabaseAdmin();
+  } catch (err) {
+    if (err instanceof AdminUnavailableError) {
+      return apiError("The store is temporarily unavailable", "store_unavailable", 503);
+    }
+    throw err;
+  }
 }
