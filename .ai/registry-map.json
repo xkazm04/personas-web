@@ -5705,7 +5705,11 @@
           "revision": 4,
           "changedAt": "2026-10-01",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:20 NotificationsCard provides notification configuration without an OS escalation preference matrix, without unified severity mapping, and without durable ledger integration.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:81b073072d283dda",
+          "evaluatedRevision": 4
         },
         {
           "subject": "client-fetch-cache",
@@ -6159,7 +6163,11 @@
           "revision": 4,
           "changedAt": "2026-10-01",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/ReviewsSplitPane.tsx:149 ReviewsSplitPane mounts toast notifications without pause on hover/focus, without a durable notification ledger, and with auto-dismissing actionable error alerts.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:81b073072d283dda",
+          "evaluatedRevision": 4
         }
       ],
       "governance": "governed"

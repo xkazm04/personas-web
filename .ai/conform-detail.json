@@ -6016,6 +6016,78 @@
           "evidence": "scripts/setup-sync-db.sql:623 The owner_all policy permits every operation for the same authenticated role used by desktop and browser clients; together with the mutation grants, it fails to enforce the declared read-only replica."
         }
       ]
+    },
+    "Agent Operations Dashboard/Manual Review Queue/toasts-notifications": {
+      "context": "Manual Review Queue",
+      "subject": "toasts-notifications",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T07:39:15.923Z",
+      "worker": "c5757339-01b5-4405-87d4-df9dbd55927f",
+      "techniques": [
+        {
+          "technique": "actionable-toasts",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/ReviewsSplitPane.tsx:153 Passes a retry action to BulkResultToast, which auto-dismisses after 10s and lacks hover/focus pause to protect the action window."
+        },
+        {
+          "technique": "queue-discipline",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/ReviewsFocusFlow.tsx:157 Mounts undo toasts directly without a managing queue, max-visible limits, coalescing, or attention-based dwell pausing."
+        },
+        {
+          "technique": "durable-notification-ledger",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/ReviewsSplitPane.tsx:151 Bulk review action failures are rendered strictly from transient state without a durable notification ledger or unread badge."
+        },
+        {
+          "technique": "announcement-accessibility",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/index.tsx:88 Mounts ad-hoc inline alert role elements when failures happen rather than writing into a pre-existing persistent live announcement region."
+        },
+        {
+          "technique": "severity-taxonomy",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/reviews-focus-flow/focusSeverityConfig.ts:5 Configures visual tokens for review entity severity without mapping to dwell, dismissibility, ledger record, or announcement politeness."
+        },
+        {
+          "technique": "os-escalation",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/ReviewsSplitPane.tsx:50 Executes interval-based escalation checks without OS notification integration, platform permission lifecycle, or deep-linking."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/toasts-notifications": {
+      "context": "Messages & Settings",
+      "subject": "toasts-notifications",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T07:39:15.923Z",
+      "worker": "c5757339-01b5-4405-87d4-df9dbd55927f",
+      "techniques": [
+        {
+          "technique": "os-escalation",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:102 Provides a single boolean toggle for escalation rather than a per-event channel preference matrix ({in-app, OS}) with explicit permission handling."
+        },
+        {
+          "technique": "severity-taxonomy",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:58 Uses an ad-hoc 4-level alert severity set (critical, high, medium, low) instead of deriving from the standard closed five-level taxonomy."
+        },
+        {
+          "technique": "durable-notification-ledger",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:57 Maintains read state in ephemeral component memory without durable ledger persistence, reapers, or shared identity with the toast tier."
+        },
+        {
+          "technique": "announcement-accessibility",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:38 Uses audio speech synthesis playback for review alerts rather than accessible ARIA live regions with severity-mapped politeness."
+        }
+      ]
     }
   }
 }
