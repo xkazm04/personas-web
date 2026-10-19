@@ -5939,6 +5939,83 @@
         "at": "2026-10-18T23:43:15.494030+00:00",
         "reason": "reviewer (sonnet): The viewer polls through useExecutionPolling and never uses the SSE route. The steering claim is anchored at route.ts:59, which is a path-validation line and so incidental. I also did not check that the cancel and freeze claim holds, since ExecutionDetailModal was not opened."
       }
+    },
+    "Product Feature Showcase/Observability Deck & Security Vault/sync-replication": {
+      "context": "Observability Deck & Security Vault",
+      "subject": "sync-replication",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T07:05:43.085Z",
+      "worker": "553a3870-5713-4bbe-a156-84d248406f8e",
+      "techniques": [
+        {
+          "technique": "change-tracking-and-cursors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/shared/motion.ts:62 Progress drives a visual animation, not a durable transfer cursor."
+        },
+        {
+          "technique": "conflict-detection-and-policy",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/index.tsx:28 Interactive state selects an illustrated agent; there are no independently edited record copies."
+        },
+        {
+          "technique": "in-flight-is-per-connection",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/Tape.tsx:63 The tape renders fixed local lines rather than transmitting pending batches."
+        },
+        {
+          "technique": "projection-security",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/security-vault/nestedVaultParts.tsx:26 The encryption reference is an illustration label; this module does not project secret-bearing records."
+        },
+        {
+          "technique": "sync-observability",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/Statement.tsx:14 Displayed statistics start from scripted constants rather than sync-loop outcomes."
+        },
+        {
+          "technique": "tombstone-propagation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/log.ts:88 The looping log computes synthetic totals; it has no durable record deletion to propagate."
+        },
+        {
+          "technique": "topology-declaration",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/feature-lazy.tsx:36 This entry loads the presentation module, whose inspected implementation contains illustrations rather than replicated streams."
+        }
+      ]
+    },
+    "Infrastructure & Telemetry/Supabase Client/sync-replication": {
+      "context": "Supabase Client",
+      "subject": "sync-replication",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T07:05:43.085Z",
+      "worker": "553a3870-5713-4bbe-a156-84d248406f8e",
+      "techniques": [
+        {
+          "technique": "in-flight-is-per-connection",
+          "verdict": "not-applicable",
+          "evidence": "src/stores/deviceStore.ts:42 This in-flight state coalesces concurrent reads; the inspected client does not implement a socket-based replicated-batch outbox."
+        },
+        {
+          "technique": "projection-security",
+          "verdict": "deviation",
+          "evidence": "docs/decisions/2026-10-07-accepted-risk-execution-text-synced-raw.md:11 The governing local decision explicitly records an unredacted execution-text replication path bypassing chat opt-out; the inspected schema and desktopRows mapper retain these text fields unchanged, and accepted risk does not satisfy the standard."
+        },
+        {
+          "technique": "sync-observability",
+          "verdict": "deviation",
+          "evidence": "src/lib/supabaseApi.ts:382 Health depends only on recent device heartbeats, without per-stream cursor/tail, lag, successful settlement, or last-error evidence; a reachable desktop can therefore mask stalled replication."
+        },
+        {
+          "technique": "topology-declaration",
+          "verdict": "deviation",
+          "evidence": "scripts/setup-sync-db.sql:623 The owner_all policy permits every operation for the same authenticated role used by desktop and browser clients; together with the mutation grants, it fails to enforce the declared read-only replica."
+        }
+      ]
     }
   }
 }

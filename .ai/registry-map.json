@@ -1698,7 +1698,11 @@
           "revision": 10,
           "changedAt": "2026-10-08",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/log.ts:56 Context and repository searches found scripted illustration data here and actual sync machinery elsewhere; this context's \"synced\" entry is a fixed display fixture, with no replicated-record lifecycle.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:2d5b609198b79d34",
+          "evaluatedRevision": 10
         },
         {
           "subject": "eval-harness",
@@ -9013,7 +9017,11 @@
           "revision": 10,
           "changedAt": "2026-10-08",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "scripts/setup-sync-db.sql:642 The schema grants authenticated browser sessions mutations on the declared read-mirror tables, so the replica's read-only topology is not structurally enforced.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:2d5b609198b79d34",
+          "evaluatedRevision": 10
         },
         {
           "subject": "stream-proxy-hop",
