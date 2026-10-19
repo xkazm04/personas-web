@@ -6088,6 +6088,47 @@
           "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:38 Uses audio speech synthesis playback for review alerts rather than accessible ARIA live regions with severity-mapped politeness."
         }
       ]
+    },
+    "Connectors & Templates/Connectors Catalog/connector-catalog": {
+      "context": "Connectors Catalog",
+      "subject": "connector-catalog",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T08:56:46.048Z",
+      "techniques": [
+        {
+          "technique": "adapter-normalization",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/connector-modal/terminalScript.ts:33 The gallery reads static records and its terminal simulates activity; searches found no provider-response adapter in this context."
+        },
+        {
+          "technique": "catalog-as-data",
+          "verdict": "deviation",
+          "evidence": "src/lib/tool-catalogue.ts:22 This independently authored GitHub record uses #8b5cf6; src/data/connectors.ts:344 declares #1F2937 for GitHub, demonstrating divergent presentation authorities."
+        },
+        {
+          "technique": "matching-and-ranking",
+          "verdict": "conformant",
+          "evidence": "src/app/connections/page.tsx:28 URL references resolve by exact machine name and misses remain null; substring search only filters cards for explicit human selection."
+        },
+        {
+          "technique": "schema-driven-forms",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/connector-modal/components/SetupDetails.tsx:45 Declared fields render as explanatory list items, without credential inputs or saving; the catalog directs actual setup to the desktop app."
+        },
+        {
+          "technique": "shipped-vs-operator-ownership",
+          "verdict": "not-applicable",
+          "evidence": "scripts/generate-connectors.mjs:417 Refresh regenerates a checked-in source file; searches found no operator-editable installed connector store or startup upsert in this context."
+        }
+      ],
+      "withdrawn": {
+        "worker": "b6eb036f-af33-4818-83af-ed11708509de",
+        "state": "deviation",
+        "at": "2026-10-19T08:57:14.559101+00:00",
+        "reason": "reviewer (sonnet): The two GitHub colors are real (tool-catalogue.ts:22 #8b5cf6, connectors.ts:344 #1F2937), but tool-catalogue is only imported by event-hub files (LanesView, LanesPhone, PhoneHub, telemetry) and not by the connections page, so it is a different surface's registry, and I found no single-authority requ"
+      }
     }
   }
 }
