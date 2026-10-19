@@ -6129,6 +6129,48 @@
         "at": "2026-10-19T08:57:14.559101+00:00",
         "reason": "reviewer (sonnet): The two GitHub colors are real (tool-catalogue.ts:22 #8b5cf6, connectors.ts:344 #1F2937), but tool-catalogue is only imported by event-hub files (LanesView, LanesPhone, PhoneHub, telemetry) and not by the connections page, so it is a different surface's registry, and I found no single-authority requ"
       }
+    },
+    "Product Feature Showcase/Observability Deck & Security Vault/credential-vault": {
+      "context": "Observability Deck & Security Vault",
+      "subject": "credential-vault",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T21:06:44.426Z",
+      "worker": "c3cb7fe0-cfed-4e7a-97a0-74bc9aed5240",
+      "techniques": [
+        {
+          "technique": "acquisition",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/security-vault/NestedVaultArt.tsx:14 The only key entry is a timed icon drop, not a grant, capture, or validated paste."
+        },
+        {
+          "technique": "brokered-egress",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/index.tsx:17 Callers are drawn agents feeding a printer; none submits a credentialed call."
+        },
+        {
+          "technique": "encryption-at-rest",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/security-vault/nestedVaultParts.tsx:26 AES-256-GCM is an engraved ring label, not a seal of a stored value."
+        },
+        {
+          "technique": "health-probing",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/Tape.tsx:10 The tape records stylised run time, tool, action, and cost, not credential probe verdicts."
+        },
+        {
+          "technique": "rotation-and-remediation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/SecurityVault.tsx:79 The rotate control replays the seal animation."
+        },
+        {
+          "technique": "token-refresh-lifecycle",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/observe-record/shared/motion.ts:48 The only clock accumulates display counts and spend, not a proof's expiry."
+        }
+      ],
+      "registryProposal": "The golden path's out-of-scope list does not name a decorative depiction that engraves a cipher or keychain label without retaining a secret, so a picture of AES-256-GCM can be mistaken for an unrealized seal."
     }
   }
 }
