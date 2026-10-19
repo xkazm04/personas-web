@@ -1,0 +1,37 @@
+{
+  "schema": "conform-run/1",
+  "worker": "97deb17a-c120-4dbd-882e-72f0e691594a",
+  "subject": "data-viz",
+  "evaluatedAt": "2026-10-19T21:37:46.332739+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "data-viz",
+      "context": "Observability Charts & SLA",
+      "reason": "withdrawn after review: reviewer (sonnet): The main evidence, Sparkline.tsx:38, is accurately quoted. But Sparkline.tsx is not one of this context's files, and none of the 12 context files import it. Only PerformanceMetricsGrid.tsx, useSparklines.ts, MetricCard.tsx and the director views use it, and none of those are in this context. The ver"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-19T21:37:46.332739+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "data-viz"
+      ],
+      "techniques": [
+        "chart-loading-economics",
+        "empty-and-degraded-chart-states",
+        "encoding-vocabulary",
+        "metric-identity",
+        "micro-visualizations",
+        "scale-and-axis-design"
+      ],
+      "deviations": 1,
+      "context": "Observability Charts & SLA",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}

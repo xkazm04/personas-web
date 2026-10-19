@@ -6171,6 +6171,52 @@
         }
       ],
       "registryProposal": "The golden path's out-of-scope list does not name a decorative depiction that engraves a cipher or keychain label without retaining a secret, so a picture of AES-256-GCM can be mistaken for an unrealized seal."
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/data-viz": {
+      "context": "Observability Charts & SLA",
+      "subject": "data-viz",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T21:37:46.332Z",
+      "techniques": [
+        {
+          "technique": "chart-loading-economics",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceChartGrid.tsx:51 Individual dashboard charts are mounted without isolated error boundaries, coupling sibling instruments to unhandled rendering failures."
+        },
+        {
+          "technique": "empty-and-degraded-chart-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/activity-view/AthenaSpendLane.tsx:94 Clamps the ratio bar to a 2% minimum width, drawing a hairline of fill when the measured value is zero instead of relying on the unfilled track."
+        },
+        {
+          "technique": "encoding-vocabulary",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/UsageView.tsx:43 Assigns series color from the sorted index with a modulo wrap rather than binding color to the tool's stable identity, causing colors to shift after reordering."
+        },
+        {
+          "technique": "metric-identity",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:38 The display card implements its own arithmetic for value delivered rate and cost per value rather than consuming a centrally defined canonical metric."
+        },
+        {
+          "technique": "micro-visualizations",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/Sparkline.tsx:27 Allows two data points to render as a full trend line instead of requiring a minimum bucket history before drawing trend geometry."
+        },
+        {
+          "technique": "scale-and-axis-design",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/Sparkline.tsx:38 Derives the scale floor directly from the observed sample's minimum, causing sub-noise variations to render at full box height."
+        }
+      ],
+      "withdrawn": {
+        "worker": "97deb17a-c120-4dbd-882e-72f0e691594a",
+        "state": "deviation",
+        "at": "2026-10-19T21:38:11.612012+00:00",
+        "reason": "reviewer (sonnet): The main evidence, Sparkline.tsx:38, is accurately quoted. But Sparkline.tsx is not one of this context's files, and none of the 12 context files import it. Only PerformanceMetricsGrid.tsx, useSparklines.ts, MetricCard.tsx and the director views use it, and none of those are in this context. The ver"
+      }
     }
   }
 }
