@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,10 +7,11 @@ import { fileURLToPath } from "node:url";
  * Pins the full Playwright suite on PRs (.github/workflows/e2e-full-sharded.yml).
  *
  * The workflow only runs on GitHub, so this spec holds what a local run can see.
- * It fails when the job loses its PR trigger or its read-only token, when the
- * shard matrix and the `--shard` denominator disagree (a shard of the suite would
- * silently never run), when a spec list or project filter turns it back into a
- * subset, when the per-shard budget or the duration upload goes, and when an
+ * It fails when the job loses its PR trigger or its read-only token, when a spec
+ * file under e2e/ is in no shard group (it would silently never run on a PR) or in
+ * two, when a group names a file that no longer exists, when a project or grep
+ * filter turns it back into a subset, when the per-shard budget or the duration
+ * upload goes, and when an
  * action is used that no other workflow already pins to the same commit SHA.
  * Rationale: docs/testing/e2e-smoke-tier.md § Full suite on PRs.
  */
@@ -20,12 +21,27 @@ const read = (rel: string) => readFileSync(path.join(ROOT, rel), "utf8").replace
 
 const WORKFLOW = read(".github/workflows/e2e-full-sharded.yml");
 const PINNING_WORKFLOWS = [".github/workflows/ci.yml", ".github/workflows/e2e-smoke.yml"];
-const SHARDS = 4;
+const SHARDS = 5;
 const BUDGET_MINUTES = 8;
 
 /** `uses:` values, comment included (`owner/action@sha # vX`). */
 function usesLines(text: string): string[] {
   return Array.from(text.matchAll(/^\s*-?\s*uses:\s*(.+?)\s*$/gm), (m) => m[1]);
+}
+
+/** Every `*.spec.ts` under `dir`, as posix paths relative to the repo root. */
+function specFiles(dir: string): string[] {
+  return readdirSync(path.join(ROOT, dir), { withFileTypes: true })
+    .flatMap((e) => (e.isDirectory() ? specFiles(`${dir}/${e.name}`) : e.name.endsWith(".spec.ts") ? [`${dir}/${e.name}`] : []))
+    .sort();
+}
+
+/** The `include` entries of the shard matrix: shard number and its spec files. */
+function groups(): { shard: number; specs: string[] }[] {
+  return Array.from(WORKFLOW.matchAll(/^ {10}- shard: (\d+)\n {12}specs: (.+)$/gm), (m) => ({
+    shard: Number(m[1]),
+    specs: m[2].trim().split(/\s+/),
+  }));
 }
 
 const RUN = /^ +- run: npx playwright test(.*)$/m.exec(WORKFLOW)?.[1] ?? "";
@@ -45,22 +61,29 @@ describe(".github/workflows/e2e-full-sharded.yml", () => {
     expect(WORKFLOW).toMatch(/^permissions:\n {2}contents: read$/m);
   });
 
-  it(`splits the suite into ${SHARDS} shards that all run`, () => {
-    const matrix = /^ {8}shard: \[([\d, ]+)\]$/m.exec(WORKFLOW);
-    expect(matrix).not.toBeNull();
-    const shards = matrix![1].split(",").map((s) => Number(s.trim()));
-    expect(shards).toEqual(Array.from({ length: SHARDS }, (_, i) => i + 1));
-    expect(RUN).toContain(`--shard=\${{ matrix.shard }}/${SHARDS}`);
-    expect(playwrightArgs()).toContain(`--shard=N/${SHARDS}`);
+  it(`splits the suite into ${SHARDS} shard groups, each with its own spec list`, () => {
+    expect(groups().map((g) => g.shard)).toEqual(Array.from({ length: SHARDS }, (_, i) => i + 1));
+    for (const g of groups()) expect(g.specs.length, `shard ${g.shard} has no specs`).toBeGreaterThan(0);
+    expect(RUN).toContain("${{ matrix.specs }}");
+    expect(WORKFLOW).toContain(`shard \${{ matrix.shard }}/${SHARDS}`);
     expect(WORKFLOW).toContain("fail-fast: false");
   });
 
-  it("runs the whole suite: no spec list, no project or grep filter", () => {
+  it("puts every spec file under e2e/ in exactly one group, and names no file that is gone", () => {
+    const onDisk = specFiles("e2e");
+    const listed = groups().flatMap((g) => g.specs);
+    const dupes = listed.filter((f, i) => listed.indexOf(f) !== i);
+    expect(dupes, "in more than one group").toEqual([]);
+    expect(onDisk.filter((f) => !listed.includes(f)), "in no group, so never run on a PR").toEqual([]);
+    expect(listed.filter((f) => !onDisk.includes(f)), "listed but missing on disk").toEqual([]);
+  });
+
+  it("runs the whole suite: only spec paths and long options, no project or grep filter", () => {
     const args = playwrightArgs();
     expect(args.length).toBeGreaterThan(0);
     for (const arg of args) {
-      expect(arg.startsWith("--"), `${arg} narrows the suite`).toBe(true);
-      expect(arg, "a filter makes this a subset of the nightly suite").not.toMatch(/^--(project|grep|grep-invert|last-failed|only-changed)\b/);
+      expect(arg.startsWith("--") || arg === "N", `${arg} narrows the suite`).toBe(true);
+      expect(arg, "a filter makes this a subset of the nightly suite").not.toMatch(/^--(project|grep|grep-invert|last-failed|only-changed|shard)\b/);
     }
   });
 
