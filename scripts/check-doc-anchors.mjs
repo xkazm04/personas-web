@@ -71,7 +71,6 @@ const livingDocs = [
   ...LIVING_DIRS.flatMap((d) => walkMd(d)),
   ...LIVING_FILES.filter((f) => fs.existsSync(path.join(repoRoot, f))),
 ].sort();
-const isLiving = (rel) => livingDocs.includes(rel);
 
 /** Split `path:12-40` / `path#L12` / `path:fnName` into { file, line }. */
 function splitAnchor(raw) {
