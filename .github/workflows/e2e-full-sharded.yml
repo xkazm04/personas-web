@@ -1,12 +1,20 @@
 name: e2e full (sharded)
 
-# The whole Playwright suite on every PR, split four ways. ci.yml `e2e` runs the
+# The whole Playwright suite on every PR, split five ways. ci.yml `e2e` runs the
 # same suite nightly as one serial job of about 10 minutes (playwright.config.ts:
 # workers 1, fullyParallel false, and the webServer rebuilds the app). That length
 # is why it was nightly-only, and why a UI regression could merge and surface the
 # next morning. e2e-smoke.yml keeps four high-risk specs on the PR; this job adds
-# the rest without adding wall-clock time: each shard builds once and runs a
-# quarter of the spec files, so a PR waits for the slowest shard, not the sum.
+# the rest without adding wall-clock time: each shard builds once and runs its own
+# group of spec files, so a PR waits for the slowest shard, not the sum.
+#
+# The groups are listed by hand, weighted by the per-spec durations of real runs.
+# `--shard=N/M` was tried first and cannot balance this suite: Playwright cuts the
+# ordered list of spec files by test COUNT, and locale-matrix.spec.ts alone is 156
+# fast tests, so one shard got 238 tests, one got none, and shard 4 (tour plus the
+# phone specs, 6 of 8 minutes of tests) was cancelled at the 8-minute budget.
+# src/lib/e2eShardedTier.test.ts fails when a spec file is in no group or in two,
+# so a new spec cannot silently go unrun; put it in the lightest group.
 #
 # Budget: `timeout-minutes` below, per shard. If a shard outgrows it the job fails,
 # and the answer is to add a shard or speed the slow spec up, not to raise the
@@ -29,13 +37,28 @@ concurrency:
 
 jobs:
   e2e-shard:
-    name: playwright full suite, shard ${{ matrix.shard }}/4
+    name: playwright full suite, shard ${{ matrix.shard }}/5
     runs-on: ubuntu-latest
     timeout-minutes: 8
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        include:
+          # tour is the longest single spec (about 165 s).
+          - shard: 1
+            specs: e2e/tour.spec.ts e2e/templates.spec.ts
+          # stage-fit is the second longest (about 125 s).
+          - shard: 2
+            specs: e2e/stage-fit.spec.ts e2e/orchestration-hub.spec.ts e2e/roadmap.spec.ts
+          # The phone project (iPhone 13 viewport), first half.
+          - shard: 3
+            specs: e2e/mobile/dashboard-reviews.spec.ts e2e/mobile/dashboard-personas.spec.ts e2e/mobile/dashboard-chat.spec.ts e2e/mobile/dashboard-notes.spec.ts e2e/mobile/baseline.spec.ts
+          # The phone project, second half, plus the CSP sweep and the larger desktop specs.
+          - shard: 4
+            specs: e2e/mobile/m2-landing.spec.ts e2e/mobile/m-landing.spec.ts e2e/csp.spec.ts e2e/crew-sync.spec.ts e2e/guide.spec.ts e2e/fleet-board.spec.ts
+          # Everything else on desktop.
+          - shard: 5
+            specs: e2e/blog.spec.ts e2e/cause-fix.spec.ts e2e/connections.spec.ts e2e/cookie-consent.spec.ts e2e/dashboard-demo.spec.ts e2e/dashboard-notes.spec.ts e2e/degraded-dependencies.spec.ts e2e/execution-focus.spec.ts e2e/landing-hash-arrival.spec.ts e2e/legal.spec.ts e2e/locale-matrix.spec.ts e2e/metric-drill.spec.ts e2e/playground.spec.ts e2e/reduced-motion-hydration.spec.ts e2e/reduced-motion.spec.ts e2e/review-learning.spec.ts e2e/review-undo.spec.ts e2e/scope-bar.spec.ts e2e/smoke.spec.ts
     env:
       PLAYWRIGHT_JSON_OUTPUT_NAME: playwright-report/durations-${{ matrix.shard }}.json
     steps:
@@ -46,7 +69,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --shard=${{ matrix.shard }}/4 --reporter=list,json
+      - run: npx playwright test ${{ matrix.specs }} --reporter=list,json
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
