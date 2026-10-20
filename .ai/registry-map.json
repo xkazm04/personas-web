@@ -4847,7 +4847,11 @@
           "revision": 2,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/server/json-file-store.ts:76 The inspected persistence path serializes request-driven updates rather than coordinating declarative resource owners, and searches of the context and repository found no finalizers, ownerReferences, managedFields, or AdmissionReview.",
+          "evaluatedAt": "2026-10-20",
+          "evaluatedAgainst": "sha256-b2:d17485a3a3a8ddea",
+          "evaluatedRevision": 2
         },
         {
           "subject": "rate-limiting",

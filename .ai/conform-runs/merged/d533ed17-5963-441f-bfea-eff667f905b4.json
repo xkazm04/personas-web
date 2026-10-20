@@ -1,0 +1,65 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d533ed17-5963-441f-bfea-eff667f905b4",
+ "subject": "declarative-resource-lifecycle",
+ "evaluatedAt": "2026-10-20T21:35:35.777016+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Server-Side Vote Persistence",
+   "subject": "declarative-resource-lifecycle",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/server/json-file-store.ts:76 The inspected persistence path serializes request-driven updates rather than coordinating declarative resource owners, and searches of the context and repository found no finalizers, ownerReferences, managedFields, or AdmissionReview.",
+   "techniques": [
+    {
+     "technique": "deletion-blocked-until-dependents-confirm",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/route.ts:190 Vote removal deletes an entry and persists the collection; the inspected flow creates no external dependent requiring cleanup confirmation."
+    },
+    {
+     "technique": "ownership-edges-that-enqueue-the-parent",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/route.ts:90 Feature references group votes into response counts; they do not route dependent changes to a parent's desired-state reconciliation."
+    },
+    {
+     "technique": "per-field-write-ownership",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/route.ts:182 The inspected writer implements one serialized vote-toggle protocol, rather than independent processes asserting ownership of different fields."
+    },
+    {
+     "technique": "synchronous-gate-before-persistence",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:101 This guard admits requests by capacity, which the technique explicitly distinguishes from a store-registered gate judging write content; no uncontrolled-writer policy requirement was found."
+    }
+   ],
+   "absenceTerms": [
+    "finalizers",
+    "ownerReferences",
+    "managedFields",
+    "AdmissionReview"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-20T21:35:35.777016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "declarative-resource-lifecycle"
+   ],
+   "techniques": [
+    "deletion-blocked-until-dependents-confirm",
+    "ownership-edges-that-enqueue-the-parent",
+    "per-field-write-ownership",
+    "synchronous-gate-before-persistence"
+   ],
+   "deviations": 0,
+   "context": "Server-Side Vote Persistence",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
