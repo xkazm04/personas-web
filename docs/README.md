@@ -50,6 +50,8 @@ of the files above that govern the folder and states no rule of its own.
   trailers that say who wrote a change.
 - [agents/roles/README.md](agents/roles/README.md): versioned role specs for the tasks
   agent lanes repeat, each held to its merged exemplars by a golden spec.
+- [runbooks/README.md](runbooks/README.md): runbooks for the tasks an agent session does
+  again and again, with the exact commands.
 
 ## History and backlogs
 
