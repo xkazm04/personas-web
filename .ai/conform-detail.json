@@ -6217,6 +6217,52 @@
         "at": "2026-10-19T21:38:11.612012+00:00",
         "reason": "reviewer (sonnet): The main evidence, Sparkline.tsx:38, is accurately quoted. But Sparkline.tsx is not one of this context's files, and none of the 12 context files import it. Only PerformanceMetricsGrid.tsx, useSparklines.ts, MetricCard.tsx and the director views use it, and none of those are in this context. The ver"
       }
+    },
+    "Agent Operations Dashboard/Knowledge Base/declarative-object-graph-configs": {
+      "context": "Knowledge Base",
+      "subject": "declarative-object-graph-configs",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-20",
+      "evaluatedTs": "2026-10-20T21:21:32.818Z",
+      "techniques": [
+        {
+          "technique": "directive-key-namespace",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx:62 Code explicitly supplies component props; no generic instantiator mixes loader directives with constructor arguments."
+        },
+        {
+          "technique": "escape-hatch-expressions",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterLabels.tsx:19 Display arithmetic runs directly in TypeScript; no evaluated configuration-expression format was found."
+        },
+        {
+          "technique": "merge-vs-override-marking",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:68 Persona colors are projected from fleet data; no configuration-file layering or command-line composition was found."
+        },
+        {
+          "technique": "reference-resolution-with-cycle-detection",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx:34 Graph identifiers look up display coordinates, without recursively constructing objects from configuration references."
+        },
+        {
+          "technique": "sigil-grammar-over-schema",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx:38 Configuration keys select display labels directly; no string-prefix reference grammar was found."
+        },
+        {
+          "technique": "textual-macro-prepass",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterCanvas.tsx:51 Ordinary TypeScript computes graph layout from data; no configuration-fragment splicing or relative configuration-id prepass was found."
+        }
+      ],
+      "withdrawn": {
+        "worker": "dcb8cb2a-1086-4715-8c34-6441c0d654b6",
+        "state": "not-applicable",
+        "at": "2026-10-20T21:21:44.783873+00:00",
+        "reason": "reviewer (sonnet): The main anchor, index.tsx:173, is just closing JSX (`</div>`/`);`) and shows nothing about loader directives or config resolution, so it is incidental. The technique anchors are real code, but they only show ordinary component code and a static config map, not that a declarative object-graph config"
+      }
     }
   }
 }

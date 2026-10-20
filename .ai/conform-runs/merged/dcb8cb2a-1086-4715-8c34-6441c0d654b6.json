@@ -1,0 +1,37 @@
+{
+  "schema": "conform-run/1",
+  "worker": "dcb8cb2a-1086-4715-8c34-6441c0d654b6",
+  "subject": "declarative-object-graph-configs",
+  "evaluatedAt": "2026-10-20T21:21:32.818810+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "declarative-object-graph-configs",
+      "context": "Knowledge Base",
+      "reason": "withdrawn after review: reviewer (sonnet): The main anchor, index.tsx:173, is just closing JSX (`</div>`/`);`) and shows nothing about loader directives or config resolution, so it is incidental. The technique anchors are real code, but they only show ordinary component code and a static config map, not that a declarative object-graph config"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-20T21:21:32.818810+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "declarative-object-graph-configs"
+      ],
+      "techniques": [
+        "directive-key-namespace",
+        "escape-hatch-expressions",
+        "merge-vs-override-marking",
+        "reference-resolution-with-cycle-detection",
+        "sigil-grammar-over-schema",
+        "textual-macro-prepass"
+      ],
+      "deviations": 0,
+      "context": "Knowledge Base",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}
