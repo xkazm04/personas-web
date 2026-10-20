@@ -29,7 +29,7 @@ import ts from "typescript";
 import { writeFileAtomic } from "./atomic-write.mjs";
 
 /** Desktop commit the corpus is compiled from. */
-export const DESKTOP_COMMIT = "3797ab21735cc3280a302daea412b52ef87544b2";
+export const DESKTOP_COMMIT = "3797ab21735cc3280a302daea412b52ef87544b2"; // pragma: allowlist secret (a git commit sha)
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "src", "data", "use-case-corpus.json");
 const DESKTOP = resolve(process.env.PERSONAS_DESKTOP_REPO ?? join(ROOT, "..", "personas"));
