@@ -1669,7 +1669,11 @@
           "revision": 4,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/security-vault/nestedVaultParts.tsx:7 The security half is an SVG illustration of concentric seals and the observe half is a stylised agent tape; a search of this context for ciphertext, refreshToken, nonce, revocation, and masterKey found no stored secret, seal, or lease, so the vault's retain-and-use precondition does not hold.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:1c57e44b947c96ef",
+          "evaluatedRevision": 4
         },
         {
           "subject": "sync-replication",
