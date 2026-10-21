@@ -6687,6 +6687,47 @@
           "evidence": "src/lib/analytics.ts:155 Feature comments are product interactions; this context neither counts approving code reviews nor reads branch protection."
         }
       ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/edge-queue-policy": {
+      "context": "Messages & Settings",
+      "subject": "edge-queue-policy",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T23:59:21.864Z",
+      "worker": "16132bd8-12d1-4ea7-a0a5-4f69e396317c",
+      "techniques": [
+        {
+          "technique": "control-channel-headroom",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/review-voice.ts:82 The settings preview's notification bus invokes listeners directly; it does not admit lifecycle and data messages into a shared bounded channel."
+        },
+        {
+          "technique": "drop-accounting",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:70 The message source selects mock or fetched thread snapshots, rather than receiving a standing signal whose queue deliberately drops messages."
+        },
+        {
+          "technique": "eviction-priority-classes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:75 The displayed message limit selects a page from retained data; it does not evict classes of traffic from a bounded channel."
+        },
+        {
+          "technique": "in-band-flush",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:52 Cancellation suppresses a completed request's stale result; there is no queued continuing output requiring admission-time interruption."
+        },
+        {
+          "technique": "least-recently-used-input-fairness",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/arrival/Deferred.tsx:24 The modal's arrival queue schedules a one-time mount callback, rather than selecting messages across continuing typed inputs."
+        },
+        {
+          "technique": "per-edge-depth-and-policy",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:53 A completed fetch replaces the thread snapshot; no declared standing channel needs a per-edge depth or overflow policy."
+        }
+      ]
     }
   }
 }

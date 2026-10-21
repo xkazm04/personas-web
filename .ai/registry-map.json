@@ -5907,7 +5907,11 @@
           "revision": 1,
           "changedAt": "2026-09-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 Context and repository searches found no standing signal edge here: messages use fetched snapshots, queue references concern rendering or status display, and backpressure/drop-oldest appeared only in unrelated repository documentation.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:b3e96fa159f5a35a",
+          "evaluatedRevision": 1
         }
       ],
       "governance": "governed"
