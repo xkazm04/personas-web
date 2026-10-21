@@ -6631,6 +6631,62 @@
           "evidence": "src/lib/server/rate-limit.ts:45 Bucket maintenance removes expired counters; it derives no corpus graph or centrality ranking."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/delivery-analytics": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "delivery-analytics",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T23:31:49.274Z",
+      "worker": "082c006e-f56f-4ba3-a185-72a258f58d18",
+      "techniques": [
+        {
+          "technique": "attribution-channels",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:116 Attributes describe visitor download clicks, not which producer authored a code change."
+        },
+        {
+          "technique": "batch-size-thresholds",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:48 The threshold bounds queued telemetry events; this context does not measure code-change size."
+        },
+        {
+          "technique": "delivery-metric-denominators",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:24 The module emits event counts without defining delivery rates or delivery trends."
+        },
+        {
+          "technique": "line-volume-confounded-with-edit-grammar",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:85 Measured distributions concern browser performance, not producer-reported code volume."
+        },
+        {
+          "technique": "off-platform-signal-detection",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:16 Telemetry availability depends on visitor consent; no delivery-practice inference is computed."
+        },
+        {
+          "technique": "path-class-confounded-with-size",
+          "verdict": "not-applicable",
+          "evidence": "src/components/PageViewTracker.tsx:17 Paths identify visited application routes, not risk classes used to route code review."
+        },
+        {
+          "technique": "post-landing-repair-density",
+          "verdict": "not-applicable",
+          "evidence": "src/instrumentation.ts:26 Runtime request-error capture does not measure post-landing repair history or rank features for release."
+        },
+        {
+          "technique": "revert-linkage",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:144 Undo refers to a product vote, not a commit revert or change-failure signal."
+        },
+        {
+          "technique": "review-coverage-rate",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:155 Feature comments are product interactions; this context neither counts approving code reviews nor reads branch protection."
+        }
+      ]
     }
   }
 }

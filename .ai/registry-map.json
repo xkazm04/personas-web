@@ -9686,7 +9686,11 @@
           "revision": 5,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/analytics.ts:69 The context instruments product usage and runtime errors; searches found no delivery-metric identifiers in these files, so the standard's change-history measurement precondition does not hold.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:e43700f2d197398b",
+          "evaluatedRevision": 5
         }
       ],
       "governance": "governed"
