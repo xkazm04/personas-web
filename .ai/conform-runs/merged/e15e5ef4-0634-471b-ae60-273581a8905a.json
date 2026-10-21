@@ -1,0 +1,223 @@
+{
+ "schema": "conform-run/1",
+ "worker": "e15e5ef4-0634-471b-ae60-273581a8905a",
+ "subject": "retrieval",
+ "evaluatedAt": "2026-10-21T23:10:01.326767+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Shared Types, Utilities & Hooks",
+   "subject": "retrieval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/highlight-match.tsx:103 Searches for retrieval, embedder, rerank, and bm25 found no matches in the context directories; these helpers manage UI behavior and render highlighting rather than retrieve ranked corpus items.",
+   "techniques": [
+    {
+     "technique": "chunking-and-indexing",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:13 These segments mark substrings for display, not persistent retrievable chunks."
+    },
+    {
+     "technique": "embedding-lifecycle",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:47 The matching helper computes edit distance between strings; it stores no embeddings."
+    },
+    {
+     "technique": "hybrid-lane-fusion",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:97 This selects a highlighting algorithm, not a fusion of candidate lists."
+    },
+    {
+     "technique": "named-period-vote",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/format.ts:69 Relative time is formatted for display; no question period is parsed or used for ranking."
+    },
+    {
+     "technique": "padded-slots-are-misses",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:100 The renderer consumes text segments, not fixed-width nearest-neighbor identifiers."
+    },
+    {
+     "technique": "query-decomposition-before-the-lanes",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:36 Whitespace tokenization supports highlighting, with no abstraction tiers or lane dispatch."
+    },
+    {
+     "technique": "ranking-budgets",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:101 Unmatched text remains rendered; this is not admission into a bounded retrieval slice."
+    },
+    {
+     "technique": "relationship-proximity-lane",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:50 The set records matching token positions, not neighbors reached through corpus relations."
+    },
+    {
+     "technique": "relevance-floors",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:48 The edit-distance threshold controls highlighting inside supplied text, not retrieval admission."
+    },
+    {
+     "technique": "retrieval-evaluation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:55 The hit flags are display annotations, not relevance judgments or ranking metrics."
+    },
+    {
+     "technique": "retrieval-triggering",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useDemoOnlySWR.ts:12 This gates a mock fetch by demo-session status, not a corpus lookup by grounding need."
+    },
+    {
+     "technique": "second-pass-rescoring",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/highlight-match.tsx:93 The supplied match type chooses presentation; no fused candidate pool is rescored."
+    },
+    {
+     "technique": "structural-centrality-lane",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/constants.ts:23 This derives navigation membership from flags, not relevance from a corpus reference graph."
+    }
+   ],
+   "absenceTerms": [
+    "embedder",
+    "rerank",
+    "bm25"
+   ]
+  },
+  {
+   "context": "Server-Side Vote Persistence",
+   "subject": "retrieval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/server/json-file-store.ts:28 Searches for retrieval, embedder, rerank, and bm25 found no matches in the context directories; these modules read whole JSON values, serialize writes, and limit requests without corpus retrieval.",
+   "techniques": [
+    {
+     "technique": "chunking-and-indexing",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:47 The store serializes a complete value rather than ingesting chunks into retrieval indexes."
+    },
+    {
+     "technique": "embedding-lifecycle",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:78 Updates transform stored JSON values; no embedding derivation or model migration exists here."
+    },
+    {
+     "technique": "hybrid-lane-fusion",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/fileLock.ts:44 The promise chain serializes callbacks, not candidate lists from matchers."
+    },
+    {
+     "technique": "named-period-vote",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:94 The time window determines rate-limit reset, not a period requested in a corpus query."
+    },
+    {
+     "technique": "padded-slots-are-misses",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:16 Reads obtain file contents, not padded nearest-neighbor result slots."
+    },
+    {
+     "technique": "query-decomposition-before-the-lanes",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:10 The lookup input is a filename, with no query abstraction tiers or lane policy."
+    },
+    {
+     "technique": "ranking-budgets",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:101 This limit controls request admission, not allocation of a ranked result budget."
+    },
+    {
+     "technique": "relationship-proximity-lane",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/fileLock.ts:43 The keyed lookup finds a pending lock chain, not related corpus items."
+    },
+    {
+     "technique": "relevance-floors",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:20 The fallback represents an absent file, not candidates rejected for weak relevance."
+    },
+    {
+     "technique": "retrieval-evaluation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:99 The counter measures requests; these modules have no retrieval ranking to evaluate."
+    },
+    {
+     "technique": "retrieval-triggering",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:126 This guard decides whether a request may proceed, not whether it needs corpus grounding."
+    },
+    {
+     "technique": "second-pass-rescoring",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/json-file-store.ts:79 The update path persists the transformed value without a candidate-ranking stage."
+    },
+    {
+     "technique": "structural-centrality-lane",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/rate-limit.ts:45 Bucket maintenance removes expired counters; it derives no corpus graph or centrality ranking."
+    }
+   ],
+   "absenceTerms": [
+    "embedder",
+    "rerank",
+    "bm25"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-21T23:10:01.326767+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "retrieval"
+   ],
+   "techniques": [
+    "chunking-and-indexing",
+    "embedding-lifecycle",
+    "hybrid-lane-fusion",
+    "named-period-vote",
+    "padded-slots-are-misses",
+    "query-decomposition-before-the-lanes",
+    "ranking-budgets",
+    "relationship-proximity-lane",
+    "relevance-floors",
+    "retrieval-evaluation",
+    "retrieval-triggering",
+    "second-pass-rescoring",
+    "structural-centrality-lane"
+   ],
+   "deviations": 0,
+   "context": "Shared Types, Utilities & Hooks",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-21T23:10:01.326767+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "retrieval"
+   ],
+   "techniques": [
+    "chunking-and-indexing",
+    "embedding-lifecycle",
+    "hybrid-lane-fusion",
+    "named-period-vote",
+    "padded-slots-are-misses",
+    "query-decomposition-before-the-lanes",
+    "ranking-budgets",
+    "relationship-proximity-lane",
+    "relevance-floors",
+    "retrieval-evaluation",
+    "retrieval-triggering",
+    "second-pass-rescoring",
+    "structural-centrality-lane"
+   ],
+   "deviations": 0,
+   "context": "Server-Side Vote Persistence",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

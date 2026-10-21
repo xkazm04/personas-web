@@ -4979,7 +4979,11 @@
           "revision": 19,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/server/json-file-store.ts:28 Searches for retrieval, embedder, rerank, and bm25 found no matches in the context directories; these modules read whole JSON values, serialize writes, and limit requests without corpus retrieval.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:a49d27f889212d3f",
+          "evaluatedRevision": 19
         },
         {
           "subject": "settings",
@@ -10169,7 +10173,11 @@
           "revision": 19,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/highlight-match.tsx:103 Searches for retrieval, embedder, rerank, and bm25 found no matches in the context directories; these helpers manage UI behavior and render highlighting rather than retrieve ranked corpus items.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:a49d27f889212d3f",
+          "evaluatedRevision": 19
         },
         {
           "subject": "agent-runtime-assembly",
