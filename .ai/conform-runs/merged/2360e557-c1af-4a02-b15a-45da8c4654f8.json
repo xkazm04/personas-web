@@ -1,0 +1,106 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2360e557-c1af-4a02-b15a-45da8c4654f8",
+ "subject": "talking-avatar",
+ "evaluatedAt": "2026-10-21T21:34:56.053976+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "Guided Product Tour",
+   "subject": "talking-avatar",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/tour/AthenaCompanion.tsx:86 Athena Companion drives the avatar mouth opening directly from low-mid band audio frequency energy on an unthrottled requestAnimationFrame loop, deviating from speech-timed viseme mapping and mirrored face signaling.",
+   "techniques": [
+    {
+     "technique": "face-signal-across-surfaces",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:95 The canvas animation runs an unthrottled continuous rAF loop without settling at rest or pausing off-screen, and multiple surfaces each compute their own independent loops."
+    },
+    {
+     "technique": "motion-route-selection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:108 The companion uses a looping pre-rendered video with an overlay rather than selecting between layered rig, neural, or hybrid routes."
+    },
+    {
+     "technique": "neural-motion-retargeting",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:55 No neural audio-to-motion model or latent retargeting is present; animation is driven directly by browser Web Audio analyser frequency data."
+    },
+    {
+     "technique": "paced-realtime-measurement",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourCaptionCard.tsx:68 Narration and companion rendering are client-side UI components without a neural model generation pipeline requiring paced realtime lag benchmarking."
+    },
+    {
+     "technique": "per-sentence-face-sidecar",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:30 The companion reads audio analysis directly in-process from React context, with no neural inference or out-of-process sidecar required."
+    },
+    {
+     "technique": "procedural-presence-motion",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:62 Presence motion is limited to a single periodic sine wave breath, omitting layered noise drift, blinks, saccades, text gestures, and resting settlement."
+    },
+    {
+     "technique": "rig-parameter-contract",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:51 Motion extraction and 2D canvas drawing are tightly coupled inside an internal component loop rather than adhering to a versioned parameter vector with a pure draw interface."
+    },
+    {
+     "technique": "single-image-layer-decomposition",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:109 The avatar relies on a video loop rather than decomposing a single portrait into drivable deformation layers."
+    },
+    {
+     "technique": "viseme-drive",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:86 The mouth height is modulated directly by low-mid band audio frequency amplitude without viseme mapping, speech timing, or closure protection."
+    }
+   ],
+   "registryProposal": "When an avatar in a web product tour combines a pre-rendered looping video asset with an audio-reactive canvas overlay (rather than a static still or neural model), the standard should explicitly classify this hybrid composite tier under motion-route-selection and clarify whether loudness-only mouth dilation on a video base is permissible or treated strictly as viseme-drive deviation."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "talking-avatar",
+   "context": "Memory Layers & Multi-Provider AI",
+   "reason": "The context implements an interactive SVG agent design blueprint and architecture visualizer (Band.tsx, Sheet.tsx, Parts.tsx, TestRun.tsx); it contains no companion avatar, talking head, voice/audio pipeline, or speech animation. The talking-avatar subject does not apply, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  },
+  {
+   "subject": "talking-avatar",
+   "context": "Animation & Motion System",
+   "reason": "The context provides a general-purpose CSS animation pause observer, background particle compositor, and hydration hooks (useAnimationPause.ts, ParticleHost.tsx, useCanvasCompositor.ts); it contains no talking avatar, companion face, or speech-synchronized animation. The talking-avatar subject does not apply, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  },
+  {
+   "subject": "talking-avatar",
+   "context": "SEO & Social Metadata",
+   "reason": "The context consists of static metadata, OpenGraph image generation templates, sitemap, robots.txt, and manifest (opengraph-image.tsx, sitemap.ts, robots.ts); it contains no avatar, speech, or companion presence. The talking-avatar subject does not apply, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-21T21:34:56.053976+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "talking-avatar"
+   ],
+   "techniques": [
+    "face-signal-across-surfaces",
+    "motion-route-selection",
+    "neural-motion-retargeting",
+    "paced-realtime-measurement",
+    "per-sentence-face-sidecar",
+    "procedural-presence-motion",
+    "rig-parameter-contract",
+    "single-image-layer-decomposition",
+    "viseme-drive"
+   ],
+   "deviations": 1,
+   "context": "Guided Product Tour",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

@@ -898,7 +898,11 @@
           "revision": 3,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/tour/AthenaCompanion.tsx:86 Athena Companion drives the avatar mouth opening directly from low-mid band audio frequency energy on an unthrottled requestAnimationFrame loop, deviating from speech-timed viseme mapping and mirrored face signaling.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:f96c1d7ea0398677",
+          "evaluatedRevision": 3
         },
         {
           "subject": "native-shell-integration",
