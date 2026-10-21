@@ -8175,7 +8175,11 @@
           "revision": 2,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel consumes demo health snapshots and projects application state, while context and repository searches found no HostHooks, JobExecutor or ModuleLoader implementing an embedded language engine's contract.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:08d3fea13f40733a",
+          "evaluatedRevision": 2
         },
         {
           "subject": "background-jobs",
@@ -8404,7 +8408,11 @@
           "revision": 2,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:62 The context implements browser views and scroll animation, and context and repository searches found no HostHooks, JobExecutor or ModuleLoader implementing an embedded language engine's contract.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:08d3fea13f40733a",
+          "evaluatedRevision": 2
         },
         {
           "subject": "table",

@@ -6294,6 +6294,88 @@
           "evidence": "src/lib/server/rate-limit.ts:101 This guard admits requests by capacity, which the technique explicitly distinguishes from a store-registered gate judging write content; no uncontrolled-writer policy requirement was found."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/engine-host-contract": {
+      "context": "Mobile App Shell & Views",
+      "subject": "engine-host-contract",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T21:08:32.242Z",
+      "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+      "techniques": [
+        {
+          "technique": "contained-async-module-loader",
+          "verdict": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:2 The page imports its React view normally; no guest-module loader interface was found."
+        },
+        {
+          "technique": "idle-aware-job-loop",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/ClockLanding.tsx:56 Animation uses browser timers rather than draining an embedded engine's job queues."
+        },
+        {
+          "technique": "monotonic-and-wall-clock-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:167 This measures animation progress; it does not implement clocks exposed to an embedded language engine."
+        },
+        {
+          "technique": "null-and-blocking-executors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/Dial.tsx:40 The component consumes the browser's video-play promise; it ships no engine job executors."
+        },
+        {
+          "technique": "spec-mirrored-hook-surface",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/Chrome.tsx:11 This is a UI navigation callback, not an override of a language specification's host operation."
+        },
+        {
+          "technique": "untraceable-jobs-as-roots",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/CardLayer.tsx:34 The browser retains this focus callback; the context defines no guest heap, tracing collector or external job-root representation."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/System Health Panel/engine-host-contract": {
+      "context": "System Health Panel",
+      "subject": "engine-host-contract",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T21:08:32.242Z",
+      "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+      "techniques": [
+        {
+          "technique": "contained-async-module-loader",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The hook imports an application mock fetcher; it exposes no guest-module resolution or loading seam."
+        },
+        {
+          "technique": "idle-aware-job-loop",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/demoCauseFix.ts:36 This updates SWR caches rather than scheduling or draining language-engine jobs."
+        },
+        {
+          "technique": "monotonic-and-wall-clock-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/index.tsx:71 Civil time records a demo incident fix; no embedded-engine timer or clock interface is implemented."
+        },
+        {
+          "technique": "null-and-blocking-executors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:22 Health actions synchronously record UI resolutions, not engine jobs requiring an executor default."
+        },
+        {
+          "technique": "spec-mirrored-hook-surface",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:38 The extension point is a health-row UI callback, not a language-specification host hook."
+        },
+        {
+          "technique": "untraceable-jobs-as-roots",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/settleThread.ts:146 This constructs an application-data projection; there is no guest tracing heap or host-held engine job whose captures require rooting."
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,139 @@
+{
+ "schema": "conform-run/1",
+ "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+ "subject": "engine-host-contract",
+ "evaluatedAt": "2026-10-21T21:08:32.242977+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "engine-host-contract",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:62 The context implements browser views and scroll animation, and context and repository searches found no HostHooks, JobExecutor or ModuleLoader implementing an embedded language engine's contract.",
+   "techniques": [
+    {
+     "technique": "contained-async-module-loader",
+     "verdict": "not-applicable",
+     "evidence": "src/app/m2/page.tsx:2 The page imports its React view normally; no guest-module loader interface was found."
+    },
+    {
+     "technique": "idle-aware-job-loop",
+     "verdict": "not-applicable",
+     "evidence": "src/components/mobile-landing/clock/ClockLanding.tsx:56 Animation uses browser timers rather than draining an embedded engine's job queues."
+    },
+    {
+     "technique": "monotonic-and-wall-clock-split",
+     "verdict": "not-applicable",
+     "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:167 This measures animation progress; it does not implement clocks exposed to an embedded language engine."
+    },
+    {
+     "technique": "null-and-blocking-executors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/mobile-landing/clock/Dial.tsx:40 The component consumes the browser's video-play promise; it ships no engine job executors."
+    },
+    {
+     "technique": "spec-mirrored-hook-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/components/mobile-landing/clock/Chrome.tsx:11 This is a UI navigation callback, not an override of a language specification's host operation."
+    },
+    {
+     "technique": "untraceable-jobs-as-roots",
+     "verdict": "not-applicable",
+     "evidence": "src/components/mobile-landing/clock/CardLayer.tsx:34 The browser retains this focus callback; the context defines no guest heap, tracing collector or external job-root representation."
+    }
+   ],
+   "absenceTerms": [
+    "HostHooks",
+    "JobExecutor",
+    "ModuleLoader"
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "engine-host-contract",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel consumes demo health snapshots and projects application state, while context and repository searches found no HostHooks, JobExecutor or ModuleLoader implementing an embedded language engine's contract.",
+   "techniques": [
+    {
+     "technique": "contained-async-module-loader",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The hook imports an application mock fetcher; it exposes no guest-module resolution or loading seam."
+    },
+    {
+     "technique": "idle-aware-job-loop",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/demoCauseFix.ts:36 This updates SWR caches rather than scheduling or draining language-engine jobs."
+    },
+    {
+     "technique": "monotonic-and-wall-clock-split",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/health/index.tsx:71 Civil time records a demo incident fix; no embedded-engine timer or clock interface is implemented."
+    },
+    {
+     "technique": "null-and-blocking-executors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:22 Health actions synchronously record UI resolutions, not engine jobs requiring an executor default."
+    },
+    {
+     "technique": "spec-mirrored-hook-surface",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:38 The extension point is a health-row UI callback, not a language-specification host hook."
+    },
+    {
+     "technique": "untraceable-jobs-as-roots",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/settleThread.ts:146 This constructs an application-data projection; there is no guest tracing heap or host-held engine job whose captures require rooting."
+    }
+   ],
+   "absenceTerms": [
+    "HostHooks",
+    "JobExecutor",
+    "ModuleLoader"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-21T21:08:32.242977+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "engine-host-contract"
+   ],
+   "techniques": [
+    "contained-async-module-loader",
+    "idle-aware-job-loop",
+    "monotonic-and-wall-clock-split",
+    "null-and-blocking-executors",
+    "spec-mirrored-hook-surface",
+    "untraceable-jobs-as-roots"
+   ],
+   "deviations": 0,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-21T21:08:32.242977+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "engine-host-contract"
+   ],
+   "techniques": [
+    "contained-async-module-loader",
+    "idle-aware-job-loop",
+    "monotonic-and-wall-clock-split",
+    "null-and-blocking-executors",
+    "spec-mirrored-hook-surface",
+    "untraceable-jobs-as-roots"
+   ],
+   "deviations": 0,
+   "context": "System Health Panel",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
