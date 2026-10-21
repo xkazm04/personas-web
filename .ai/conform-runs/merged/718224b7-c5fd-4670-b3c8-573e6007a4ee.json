@@ -1,0 +1,83 @@
+{
+ "schema": "conform-run/1",
+ "worker": "718224b7-c5fd-4670-b3c8-573e6007a4ee",
+ "subject": "optional-dependency-degradation",
+ "evaluatedAt": "2026-10-21T22:28:33.540317+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Supabase Client",
+   "subject": "optional-dependency-degradation",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/supabase.ts:41 Missing configuration produces a generic error, preventing callers from reliably distinguishing an absent dependency from other failures.",
+   "techniques": [
+    {
+     "technique": "absent-degrades-malformed-fails-fast",
+     "verdict": "deviation",
+     "evidence": "src/lib/supabase.ts:43 Present values reach client construction at first use without application shape or placeholder validation; the inspected startup validator checks only the orchestrator URL."
+    },
+    {
+     "technique": "capability-honest-refusal",
+     "verdict": "deviation",
+     "evidence": "src/lib/supabaseApi.ts:539 The preceding comment says duration is not captured, yet the adapter reports a definite zero; the adjacent successRate similarly reports 1 without a captured success metric."
+    },
+    {
+     "technique": "guarded-singleton-accessor",
+     "verdict": "deviation",
+     "evidence": "src/lib/supabase.ts:41 Construction is lazy and successful instances are cached, but absence has no distinguishable error type or code and the message does not name the variables."
+    },
+    {
+     "technique": "misconfiguration-never-reaches-a-fallback",
+     "verdict": "deviation",
+     "evidence": "src/lib/api.ts:449 An unrecognized NEXT_PUBLIC_DATA_SOURCE value selects the default orchestrator backend; repository searches found equality checks but no rejection of unknown values."
+    },
+    {
+     "technique": "per-variable-blast-radius",
+     "verdict": "deviation",
+     "evidence": ".env.example:11 The Supabase group documents voting provisioning but omits the sync mirror surfaces and their setup-sync-db.sql companion step."
+    },
+    {
+     "technique": "probe-the-grant-not-the-config",
+     "verdict": "deviation",
+     "evidence": "src/lib/supabaseApi.ts:112 The shared query wrapper maps all Supabase rejections to status 500 rather than preserving a distinct permission-denial classification."
+    },
+    {
+     "technique": "refusal-is-not-failure",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/supabase-admin.ts:86 This wrapper calls a fixed dependency accessor, not a caller-registered validator or policy extension."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "optional-dependency-degradation",
+   "context": "System Health Panel",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-21T22:28:33.540317+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "optional-dependency-degradation"
+   ],
+   "techniques": [
+    "absent-degrades-malformed-fails-fast",
+    "capability-honest-refusal",
+    "guarded-singleton-accessor",
+    "misconfiguration-never-reaches-a-fallback",
+    "per-variable-blast-radius",
+    "probe-the-grant-not-the-config",
+    "refusal-is-not-failure"
+   ],
+   "deviations": 1,
+   "context": "Supabase Client",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
