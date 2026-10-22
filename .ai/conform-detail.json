@@ -6728,6 +6728,62 @@
           "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:53 A completed fetch replaces the thread snapshot; no declared standing channel needs a per-edge depth or overflow policy."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/error-handling": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "error-handling",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T00:18:13.061Z",
+      "worker": "d0aa0047-2451-4fa7-b947-a6b7a17f2842",
+      "techniques": [
+        {
+          "technique": "cancellation-attribution",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:40 These files dispatch telemetry and configure reporting; the scoped search found no cancellation initiator or cancellation classification."
+        },
+        {
+          "technique": "containment-boundary-restores-state",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sentry-pii.ts:663 This boundary handles telemetry payload sanitization, rather than a mutation of user documents, sessions, or transactional application state."
+        },
+        {
+          "technique": "crash-capture",
+          "verdict": "deviation",
+          "evidence": "src/lib/sentry-pii.ts:514 Payload sanitization excludes denylisted keys and retains other keys, whereas the standard requires an allowlist of reportable fields."
+        },
+        {
+          "technique": "error-doors",
+          "verdict": "deviation",
+          "evidence": "src/lib/analytics.ts:16 The analytics door reads storage before entering either protected SDK call, so a storage exception escapes into its click-handler or route-effect caller."
+        },
+        {
+          "technique": "exit-contract-is-a-taxonomy-projection",
+          "verdict": "not-applicable",
+          "evidence": "src/instrumentation.ts:26 The context exports framework reporting hooks and browser tracking helpers; the scoped search found no process exit-status contract."
+        },
+        {
+          "technique": "parse-failure-keeps-identity",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sentry-pii.ts:520 This traversal sanitizes telemetry fields rather than decoding independently meaningful items from an externally owned collection."
+        },
+        {
+          "technique": "reclassification-is-not-repair",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sentry-pii.ts:674 Scrubber failure is explicitly represented as a reachable diagnostic; the scoped search found no declared never-fires failure class or reclassification repair."
+        },
+        {
+          "technique": "structured-propagation",
+          "verdict": "deviation",
+          "evidence": "src/lib/sentry-pii.ts:741 Only the sanitized message, stack, and name are copied; the original cause chain and structured own properties are lost."
+        },
+        {
+          "technique": "user-facing-mapping",
+          "verdict": "not-applicable",
+          "evidence": "src/components/CookieSettingsButton.tsx:19 The scoped UI renders a cookie-settings label; these files do not own a user-facing failure-message mapping."
+        }
+      ]
     }
   }
 }

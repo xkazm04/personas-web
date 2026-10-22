@@ -9659,7 +9659,11 @@
           "revision": 17,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/sentry-pii.ts:741 The capture wrapper replaces structured errors with plain Errors, discarding causes and custom classification fields before telemetry receives them.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:d811928687fd4faf",
+          "evaluatedRevision": 17
         },
         {
           "subject": "stream-proxy-hop",
