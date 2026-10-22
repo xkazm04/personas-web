@@ -1,0 +1,39 @@
+{
+  "schema": "conform-run/1",
+  "worker": "d8bb3004-d3c0-438f-bf57-07b445976129",
+  "subject": "import-normalization",
+  "evaluatedAt": "2026-10-22T02:03:35.383425+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "import-normalization",
+      "context": "Shared Types, Utilities & Hooks",
+      "reason": "withdrawn after review: reviewer (sonnet): I found no foreign-format ingestion in the files I opened, so the claim is plausible. But the primary anchor (useDemoOnlySWR.ts:16) is the demoOnlyKey ternary, which doesn't show an import pipeline is absent, and the technique anchors are equally incidental. The absence search used only the identifi"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-22T02:03:35.383425+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "import-normalization"
+      ],
+      "techniques": [
+        "adapter-capability-tables",
+        "durable-intermediate-representation",
+        "format-detection",
+        "import-validation",
+        "intermediate-representation",
+        "lossy-conversion-disclosure",
+        "overlay-merge-absence-semantics",
+        "review-before-commit"
+      ],
+      "deviations": 0,
+      "context": "Shared Types, Utilities & Hooks",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}
