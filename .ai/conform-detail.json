@@ -6784,6 +6784,38 @@
           "evidence": "src/components/CookieSettingsButton.tsx:19 The scoped UI renders a cookie-settings label; these files do not own a user-facing failure-message mapping."
         }
       ]
+    },
+    "Content & Informational Pages/Blog/feed": {
+      "context": "Blog",
+      "subject": "feed",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T00:38:47.232Z",
+      "worker": "60f2efde-91ab-4a27-8657-36cce7dc41ec",
+      "techniques": [
+        {
+          "technique": "event-clustering",
+          "verdict": "not-applicable",
+          "evidence": "src/app/blog/page.tsx:178 Rows represent independently authored articles; the inspected source has no repetitive producer-event runs requiring clustering."
+        },
+        {
+          "technique": "feed-retention",
+          "verdict": "deviation",
+          "evidence": "src/app/blog/feed.xml/route.ts:21 The feed includes every published article without an age bound, count bound, or declared window over an archive; searches found no Blog retention declaration or reaper."
+        },
+        {
+          "technique": "live-prepend",
+          "verdict": "not-applicable",
+          "evidence": "src/app/blog/page.tsx:37 The index samples publication visibility once at mount and filters imported static articles; no live arrivals prepend into the reading viewport."
+        },
+        {
+          "technique": "reverse-chronology-semantics",
+          "verdict": "deviation",
+          "evidence": "src/app/blog/page.tsx:51 Both index and RSS sort solely by publication date despite existing same-day articles; neither comparator breaks ties using the unique slug."
+        }
+      ],
+      "registryProposal": "Clarify applicability and ownership of reader-position and retention requirements for publication RSS endpoints backed by a static article archive."
     }
   }
 }

@@ -1,0 +1,60 @@
+{
+ "schema": "conform-run/1",
+ "worker": "60f2efde-91ab-4a27-8657-36cce7dc41ec",
+ "subject": "feed",
+ "evaluatedAt": "2026-10-22T00:38:47.232349+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Blog",
+   "subject": "feed",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/blog/feed.xml/route.ts:22 Date-only ordering leaves same-day publications ordered by source-array position rather than stable identity, allowing editorial array changes to reorder existing entries.",
+   "techniques": [
+    {
+     "technique": "event-clustering",
+     "verdict": "not-applicable",
+     "evidence": "src/app/blog/page.tsx:178 Rows represent independently authored articles; the inspected source has no repetitive producer-event runs requiring clustering."
+    },
+    {
+     "technique": "feed-retention",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/feed.xml/route.ts:21 The feed includes every published article without an age bound, count bound, or declared window over an archive; searches found no Blog retention declaration or reaper."
+    },
+    {
+     "technique": "live-prepend",
+     "verdict": "not-applicable",
+     "evidence": "src/app/blog/page.tsx:37 The index samples publication visibility once at mount and filters imported static articles; no live arrivals prepend into the reading viewport."
+    },
+    {
+     "technique": "reverse-chronology-semantics",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/page.tsx:51 Both index and RSS sort solely by publication date despite existing same-day articles; neither comparator breaks ties using the unique slug."
+    }
+   ],
+   "registryProposal": "Clarify applicability and ownership of reader-position and retention requirements for publication RSS endpoints backed by a static article archive."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T00:38:47.232349+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "feed"
+   ],
+   "techniques": [
+    "event-clustering",
+    "feed-retention",
+    "live-prepend",
+    "reverse-chronology-semantics"
+   ],
+   "deviations": 1,
+   "context": "Blog",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
