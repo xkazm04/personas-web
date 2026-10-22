@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f1dcacb0-5929-496c-9430-52ce62ca32fe",
+ "subject": "pipeline-dag",
+ "evaluatedAt": "2026-10-22T21:29:10.450494+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "pipeline-dag",
+   "context": "Split & Pipeline Playground",
+   "reason": "The context consists of client-side marketing landing page components (PlaygroundSplit, CameraStage, Script, WorldNode, Minimap, LowerThird) and hooks (useMindRun) that stage a camera-dolly visual simulation of an agent's workflow across 6 pre-scripted beats ('parse', 'select', 'tools', 'execute', 'verify', 'result') driven by Framer Motion and a virtual run clock (shared/useMindRun.ts:24, index.tsx:20). Its node statuses are strictly presentation states ('pending' | 'active' | 'done', types.ts:41) and edges are static SVG lines connecting consecutive beat columns (world.ts:48). It contains no backend work-execution engine, no user-authored topology, no authoring-time graph validation, no durable execution state machine, no restart recovery, no conditional edge evaluator, no external adapter boundaries, and no plan shape metrics. Preconditions for pipeline-dag do not hold, and per seat instructions prohibiting 'not-applicable', this context is declined."
+  }
+ ],
+ "consults": []
+}
