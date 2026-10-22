@@ -1,0 +1,37 @@
+{
+  "schema": "conform-run/1",
+  "worker": "f99dbb25-6551-4047-9749-f05afb16cae5",
+  "subject": "native-guest-interop",
+  "evaluatedAt": "2026-10-22T04:23:27.619167+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "native-guest-interop",
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "reason": "withdrawn after review: reviewer (sonnet): The primary anchor, PrimaryCTA.tsx:72, is only an `<a href onClick>` JSX line. It doesn't show that a host–guest boundary is absent, and the zero-hit search is a negative result that the anchor doesn't prove. The technique anchors I opened (useDownloadPlatforms.ts:13, DownloadCTA.tsx:30, Footer.tsx:"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-22T04:23:27.619167+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "native-guest-interop"
+      ],
+      "techniques": [
+        "aligned-native-data-cell",
+        "async-native-as-promise",
+        "class-from-impl-with-borrow-warning",
+        "copy-closure-safe-api",
+        "explicit-lossy-conversion",
+        "typed-downcast-access"
+      ],
+      "deviations": 0,
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

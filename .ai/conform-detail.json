@@ -7250,6 +7250,52 @@
           "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts:4 This vocabulary describes leaderboard dimensions, not model-call classes."
         }
       ]
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/native-guest-interop": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "native-guest-interop",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T04:23:27.619Z",
+      "techniques": [
+        {
+          "technique": "aligned-native-data-cell",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:13 Platform data consists of ordinary JavaScript objects; inspection and searches found no host payload cell or erased collector header."
+        },
+        {
+          "technique": "async-native-as-promise",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:30 Asynchronous component loading uses JavaScript imports, with no host future converted into a guest promise."
+        },
+        {
+          "technique": "class-from-impl-with-borrow-warning",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/Footer.tsx:18 The context composes React components; no host implementation is exposed as a guest class with runtime payload borrowing."
+        },
+        {
+          "technique": "copy-closure-safe-api",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/PlatformPills.tsx:31 This closure is a JavaScript event handler capturing JavaScript data, without a native closure environment hidden from a guest collector."
+        },
+        {
+          "technique": "explicit-lossy-conversion",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:11 Release-date parsing stays within JavaScript; no guest-to-host numeric-width or string conversion trait is implemented."
+        },
+        {
+          "technique": "typed-downcast-access",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:44 State is held directly in React with TypeScript types, without recovering erased host payloads or accessing a runtime type-keyed host-state map."
+        }
+      ],
+      "withdrawn": {
+        "worker": "f99dbb25-6551-4047-9749-f05afb16cae5",
+        "state": "not-applicable",
+        "at": "2026-10-22T04:23:48.717749+00:00",
+        "reason": "reviewer (sonnet): The primary anchor, PrimaryCTA.tsx:72, is only an `<a href onClick>` JSX line. It doesn't show that a host–guest boundary is absent, and the zero-hit search is a negative result that the anchor doesn't prove. The technique anchors I opened (useDownloadPlatforms.ts:13, DownloadCTA.tsx:30, Footer.tsx:"
+      }
     }
   }
 }
