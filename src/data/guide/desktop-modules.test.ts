@@ -36,3 +36,31 @@ describe("TOPIC_MODULE_MAP coverage", () => {
     }
   });
 });
+
+describe("TOPIC_MODULE_MAP breadcrumb against the mirror", () => {
+  // The Agents editor tabs sit under an "Editor" breadcrumb segment that the
+  // desktop shows as a tab strip, not as a sidebar node, so the mirror has no
+  // child labelled "Editor". It is the one documented virtual segment.
+  const VIRTUAL_SEGMENTS: Record<string, string> = { agents: "Editor" };
+
+  it("starts every path at the label of its moduleId", () => {
+    const labels = new Map(DESKTOP_MODULES.map((m) => [m.id, m.label]));
+    const wrong = Object.entries(TOPIC_MODULE_MAP)
+      .filter(([, ref]) => ref.path[0] !== labels.get(ref.moduleId))
+      .map(([id, ref]) => `${id}: ${ref.moduleId} vs ${ref.path[0]}`);
+    expect(wrong, `Paths whose first segment is not their module label: ${wrong.join("; ")}`).toEqual([]);
+  });
+
+  it("resolves the segment after the module (past a documented virtual one) to a mirror child label", () => {
+    const byId = new Map(DESKTOP_MODULES.map((m) => [m.id, m]));
+    const unresolved: string[] = [];
+    for (const [id, ref] of Object.entries(TOPIC_MODULE_MAP)) {
+      const children = byId.get(ref.moduleId)?.children;
+      if (!children?.length) continue;
+      let rest = ref.path.slice(1);
+      if (rest[0] && rest[0] === VIRTUAL_SEGMENTS[ref.moduleId]) rest = rest.slice(1);
+      if (rest.length && !children.some((c) => c.label === rest[0])) unresolved.push(`${id}: ${ref.path.join(" > ")}`);
+    }
+    expect(unresolved, `Paths naming a child the mirror does not have: ${unresolved.join("; ")}`).toEqual([]);
+  });
+});

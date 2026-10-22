@@ -5,6 +5,9 @@
 // Source of truth on the desktop side (verify against these on sync):
 //   src/lib/navigation/registry.ts            (Level-1 rail sections)
 //   src/features/shared/chrome/sidebar/sidebarData.ts (Level-2/3 items)
+//   src/lib/types/types.ts                    (EditorTab: the Agents editor tabs; the
+//                                              "Editor" path segment is virtual, see
+//                                              desktop-modules.test.ts)
 // The desktop guide-sync skill reads and may update this file — keep the
 // module/child id shape and the TOPIC_MODULE_MAP export intact.
 // ────────────────────────────────────────────────────────────────────
