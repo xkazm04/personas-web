@@ -6061,7 +6061,11 @@
           "revision": 3,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts:6 A pattern with no attempts produces a displayed 0% success rate, conflating an undefined rate with measured failure.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:1905deb541d7de9d",
+          "evaluatedRevision": 3
         },
         {
           "subject": "canvas-graph",

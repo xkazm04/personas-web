@@ -1,0 +1,53 @@
+{
+ "schema": "conform-run/1",
+ "worker": "915451d7-7e85-46f4-af76-e0ee2ea3eb2a",
+ "subject": "metrics-rollups",
+ "evaluatedAt": "2026-10-22T03:48:43.559744+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Knowledge Base",
+   "subject": "metrics-rollups",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts:6 A pattern with no attempts produces a displayed 0% success rate, conflating an undefined rate with measured failure.",
+   "techniques": [
+    {
+     "technique": "aggregate-honesty",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/knowledge/knowledge-dense-table/knowledgeDenseFormat.ts:25 Zero attempts must produce an explicit no-value; this helper instead supplies zero to the table's percentage formatter."
+    },
+    {
+     "technique": "bucketing-strategy",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:55 The temporal control implements elapsed-day replay of memory cards, rather than a queried metric bucket series."
+    },
+    {
+     "technique": "period-comparison",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:63 The inspected views display current pattern statistics without previous-period values or growth deltas."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T03:48:43.559744+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "metrics-rollups"
+   ],
+   "techniques": [
+    "aggregate-honesty",
+    "bucketing-strategy",
+    "period-comparison"
+   ],
+   "deviations": 1,
+   "context": "Knowledge Base",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

@@ -7148,6 +7148,32 @@
           "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:32 A selected case reads predefined presentation copy, with no submitted work crossing a configuration boundary."
         }
       ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/metrics-rollups": {
+      "context": "Knowledge Base",
+      "subject": "metrics-rollups",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T03:48:43.559Z",
+      "worker": "915451d7-7e85-46f4-af76-e0ee2ea3eb2a",
+      "techniques": [
+        {
+          "technique": "aggregate-honesty",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-dense-table/knowledgeDenseFormat.ts:25 Zero attempts must produce an explicit no-value; this helper instead supplies zero to the table's percentage formatter."
+        },
+        {
+          "technique": "bucketing-strategy",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:55 The temporal control implements elapsed-day replay of memory cards, rather than a queried metric bucket series."
+        },
+        {
+          "technique": "period-comparison",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:63 The inspected views display current pattern statistics without previous-period values or growth deltas."
+        }
+      ]
     }
   }
 }
