@@ -1,0 +1,77 @@
+{
+ "schema": "conform-run/1",
+ "worker": "89e5d9b0-954b-4aaf-aa40-97e5b96e4d39",
+ "subject": "generated-workflow-candidates",
+ "evaluatedAt": "2026-10-22T00:57:37.753621+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Templates Gallery & Detail",
+   "subject": "generated-workflow-candidates",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/templates/layout.tsx:10 The context displays reference configurations for human setup, and searches of its directory and the repository found no hyperparameter, data_stats, per_partition, or fill_record matches indicating the subject's dataset-to-trained-candidates workflow.",
+   "techniques": [
+    {
+     "technique": "candidates-as-ordinary-artifacts",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/TemplateDetail.tsx:65 The action copies an existing reference configuration; it does not generate a runnable training candidate."
+    },
+    {
+     "technique": "score-keyed-candidate-selection",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/template-queries.ts:35 Related templates are filtered by category and then sliced, without training scores or validation partitions."
+    },
+    {
+     "technique": "search-as-candidate-mutation",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/page.tsx:48 Gallery search matches catalog text; it does not choose hyperparameters or mutate candidates."
+    },
+    {
+     "technique": "stage-level-result-caching",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/YamlHighlighter.tsx:144 The inspected memoization caches syntax highlighting, with no analyze-generate-train-select runner to resume."
+    },
+    {
+     "technique": "template-filling-with-provenance",
+     "verdict": "not-applicable",
+     "evidence": "src/app/templates/[id]/TemplateDetail.tsx:108 The existing configuration passes directly to the display component without measurement-derived substitutions."
+    },
+    {
+     "technique": "two-tier-data-statistics",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/template-queries.ts:22 Detail data comes from a static catalog lookup; there is no dataset analysis stage supplying template decisions."
+    }
+   ],
+   "absenceTerms": [
+    "hyperparameter",
+    "data_stats",
+    "per_partition",
+    "fill_record"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T00:57:37.753621+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "generated-workflow-candidates"
+   ],
+   "techniques": [
+    "candidates-as-ordinary-artifacts",
+    "score-keyed-candidate-selection",
+    "search-as-candidate-mutation",
+    "stage-level-result-caching",
+    "template-filling-with-provenance",
+    "two-tier-data-statistics"
+   ],
+   "deviations": 0,
+   "context": "Templates Gallery & Detail",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

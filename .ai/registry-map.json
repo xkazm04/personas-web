@@ -5530,7 +5530,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/templates/layout.tsx:10 The context displays reference configurations for human setup, and searches of its directory and the repository found no hyperparameter, data_stats, per_partition, or fill_record matches indicating the subject's dataset-to-trained-candidates workflow.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:a8a570eae3950671",
+          "evaluatedRevision": 2
         },
         {
           "subject": "prompt-assembly",

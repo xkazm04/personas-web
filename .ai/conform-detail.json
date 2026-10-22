@@ -6816,6 +6816,47 @@
         }
       ],
       "registryProposal": "Clarify applicability and ownership of reader-position and retention requirements for publication RSS endpoints backed by a static article archive."
+    },
+    "Connectors & Templates/Templates Gallery & Detail/generated-workflow-candidates": {
+      "context": "Templates Gallery & Detail",
+      "subject": "generated-workflow-candidates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T00:57:37.753Z",
+      "worker": "89e5d9b0-954b-4aaf-aa40-97e5b96e4d39",
+      "techniques": [
+        {
+          "technique": "candidates-as-ordinary-artifacts",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/[id]/TemplateDetail.tsx:65 The action copies an existing reference configuration; it does not generate a runnable training candidate."
+        },
+        {
+          "technique": "score-keyed-candidate-selection",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/template-queries.ts:35 Related templates are filtered by category and then sliced, without training scores or validation partitions."
+        },
+        {
+          "technique": "search-as-candidate-mutation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/page.tsx:48 Gallery search matches catalog text; it does not choose hyperparameters or mutate candidates."
+        },
+        {
+          "technique": "stage-level-result-caching",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/[id]/YamlHighlighter.tsx:144 The inspected memoization caches syntax highlighting, with no analyze-generate-train-select runner to resume."
+        },
+        {
+          "technique": "template-filling-with-provenance",
+          "verdict": "not-applicable",
+          "evidence": "src/app/templates/[id]/TemplateDetail.tsx:108 The existing configuration passes directly to the display component without measurement-derived substitutions."
+        },
+        {
+          "technique": "two-tier-data-statistics",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/template-queries.ts:22 Detail data comes from a static catalog lookup; there is no dataset analysis stage supplying template decisions."
+        }
+      ]
     }
   }
 }
