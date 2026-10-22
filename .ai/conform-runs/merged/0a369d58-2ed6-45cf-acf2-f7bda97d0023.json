@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0a369d58-2ed6-45cf-acf2-f7bda97d0023",
+ "subject": "hash-pinned-translation-pipeline",
+ "evaluatedAt": "2026-10-22T01:20:13.582576+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "hash-pinned-translation-pipeline",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "scripts/i18n/emit-guide-status.mjs:68 The emitter suppresses an unpinned translation's missing status when English is unchanged, causing the runtime to claim freshness without the required provenance.",
+   "techniques": [
+    {
+     "technique": "drift-classification",
+     "verdict": "deviation",
+     "evidence": "scripts/i18n/emit-guide-status.mjs:68 Although the classifier labels unpinned translations missing, this consumer removes that finding; getLocalized.ts:165 then labels the translation fresh."
+    },
+    {
+     "technique": "emitter-detector-hash-parity",
+     "verdict": "conformant",
+     "evidence": "scripts/i18n/check-guide-translations.mjs:89 Both paths use shared extraction and hash helpers, and the CLI refuses mismatched hashes or population sizes; a read-only comparison found no mismatches across 109 current topics."
+    },
+    {
+     "technique": "hash-scope-choice",
+     "verdict": "deviation",
+     "evidence": "scripts/i18n/guide-source.mjs:74 The scope includes translated title, description and body, but stored digests are bare hexadecimal without the required algorithm prefix or scope version."
+    },
+    {
+     "technique": "shape-sync-is-not-content-sync",
+     "verdict": "deviation",
+     "evidence": ".github/workflows/ci.yml:71 CI runs structural guide checks while explicitly excluding translation freshness; validating the generated status table does not fail merely because translations remain stale."
+    },
+    {
+     "technique": "source-hash-provenance",
+     "verdict": "deviation",
+     "evidence": "scripts/i18n/translate-guide-subagent-prompt.md:233 The translator copies opaque hashes into a final metadata pass, contrary to tooling writing provenance alongside each translated unit."
+    },
+    {
+     "technique": "translation-fan-out-sizing",
+     "verdict": "deviation",
+     "evidence": "scripts/i18n/guide-drift.mjs:602 The independent work order provides locale topic counts and diffs, but does not aggregate source volume per locale and verdict; lengths in the separate hash manifest are not a scoped translation budget."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T01:20:13.582576+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hash-pinned-translation-pipeline"
+   ],
+   "techniques": [
+    "drift-classification",
+    "emitter-detector-hash-parity",
+    "hash-scope-choice",
+    "shape-sync-is-not-content-sync",
+    "source-hash-provenance",
+    "translation-fan-out-sizing"
+   ],
+   "deviations": 1,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

@@ -3509,7 +3509,11 @@
           "revision": 2,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "scripts/i18n/emit-guide-status.mjs:68 The emitter suppresses an unpinned translation's missing status when English is unchanged, causing the runtime to claim freshness without the required provenance.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:5fb570c0ab07039a",
+          "evaluatedRevision": 2
         },
         {
           "subject": "docs-sync",
