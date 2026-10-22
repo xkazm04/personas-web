@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
+import type { CalloutVariant } from "../guide-markdown/parseGuide";
 import {
   Lightbulb,
   AlertTriangle,
@@ -14,7 +15,7 @@ import {
  */
 
 const CALLOUT_STYLES: Record<
-  string,
+  CalloutVariant,
   { icon: LucideIcon; border: string; bg: string; iconColor: string; label: string }
 > = {
   tip: {
@@ -48,12 +49,12 @@ const CALLOUT_STYLES: Record<
 };
 
 interface CalloutProps {
-  type: string;
+  type: CalloutVariant;
   children: ReactNode;
 }
 
 export function Callout({ type, children }: CalloutProps) {
-  const style = CALLOUT_STYLES[type] ?? CALLOUT_STYLES.info;
+  const style = CALLOUT_STYLES[type];
   const Icon = style.icon;
   const labelId = useId();
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
+import type { CalloutVariant } from "../guide-markdown/parseGuide";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -10,7 +11,7 @@ import {
 } from "lucide-react";
 
 interface StackItem {
-  type: string;
+  type: CalloutVariant;
   node: ReactNode;
 }
 
@@ -19,7 +20,7 @@ interface CalloutStackProps {
 }
 
 const STACK_STYLES: Record<
-  string,
+  CalloutVariant,
   { icon: LucideIcon; iconColor: string; railColor: string; label: string }
 > = {
   tip: {
@@ -53,7 +54,7 @@ export function CalloutStack({ items }: CalloutStackProps) {
   return (
     <div className="my-5 overflow-hidden rounded-xl border border-glass bg-white/[0.02] backdrop-blur-sm">
       {items.map((item, index) => {
-        const style = STACK_STYLES[item.type] ?? STACK_STYLES.info;
+        const style = STACK_STYLES[item.type];
         const Icon = style.icon;
         return (
           <div

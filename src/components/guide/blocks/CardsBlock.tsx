@@ -1,9 +1,10 @@
 "use client";
 
 import { type ReactNode } from "react";
+import type { CardStatus } from "../guide-markdown/parseGuide";
 
 export interface CardItem {
-  status: "available" | "roadmap" | "disabled";
+  status: CardStatus;
   title: string;
   description: ReactNode;
   imageBase?: string;

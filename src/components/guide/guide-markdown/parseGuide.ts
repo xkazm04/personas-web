@@ -35,9 +35,29 @@ export interface GuideDiagnostic {
   directive?: string;
 }
 
+/**
+ * The closed label sets that sit inside guide directives. One declaration each:
+ * the item grammars below, the type unions and the renderers' style tables all
+ * derive from these tuples, so a label added here is a compile error until every
+ * table covers it, and the grammar accepts it with no second edit.
+ */
+export const CALLOUT_VARIANTS = ["tip", "warning", "info", "success"] as const;
+export type CalloutVariant = (typeof CALLOUT_VARIANTS)[number];
+
+export const CARD_STATUSES = ["available", "roadmap", "disabled"] as const;
+export type CardStatus = (typeof CARD_STATUSES)[number];
+
+/** `[label] rest` with the label position admitting only the given literals. */
+function labelledLine(labels: readonly string[], rest: string): RegExp {
+  return new RegExp(`^\\[(${labels.join("|")})\\]\\s*${rest}$`, "i");
+}
+
+/** Item grammars for the two labelled blocks; the label position admits only the declared sets. */
+const CALLOUT_LINE = labelledLine(CALLOUT_VARIANTS, "(.*)");
+const CARD_LINE = labelledLine(CARD_STATUSES, "(.+)");
+
 export interface GuideStep { title: string; body: string }
-export interface GuideCard { status: "available" | "roadmap" | "disabled"; title: string; description: string; imageBase?: string }
-export type CalloutVariant = "tip" | "warning" | "info" | "success";
+export interface GuideCard { status: CardStatus; title: string; description: string; imageBase?: string }
 
 type At = { line: number };
 export type GuideNode =
@@ -258,7 +278,7 @@ const GRAMMAR: Record<string, Grammar> = {
     body.forEach((line, i) => {
       const trimmed = line.trim();
       if (!trimmed) return;
-      const m = trimmed.match(/^\[(tip|warning|info|success)\]\s*(.*)$/i);
+      const m = trimmed.match(CALLOUT_LINE);
       if (m) items.push({ variant: m[1].toLowerCase() as CalloutVariant, text: m[2] });
       else if (items.length > 0) items[items.length - 1].text = appendTo(items[items.length - 1].text, trimmed);
       else ignore(i);
@@ -270,10 +290,10 @@ const GRAMMAR: Record<string, Grammar> = {
     body.forEach((line, i) => {
       const trimmed = line.trim();
       if (!trimmed) return;
-      const m = trimmed.match(/^\[(available|roadmap|disabled)\]\s*(.+)$/i);
+      const m = trimmed.match(CARD_LINE);
       const [title, description, imageBase] = m ? m[2].split("|").map((p) => p.trim()) : [];
       if (!m || !title) return ignore(i);
-      items.push({ status: m[1].toLowerCase() as GuideCard["status"], title, description: description ?? "", ...(imageBase ? { imageBase } : {}) });
+      items.push({ status: m[1].toLowerCase() as CardStatus, title, description: description ?? "", ...(imageBase ? { imageBase } : {}) });
     });
     return nonEmpty(items, { type: "cards", items });
   },
