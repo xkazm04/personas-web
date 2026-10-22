@@ -1,0 +1,76 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d386eb75-22d4-469c-b982-0f816024f94b",
+ "subject": "node-boot-and-declarative-bootstrap",
+ "evaluatedAt": "2026-10-22T04:37:46.542048+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "node-boot-and-declarative-bootstrap",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/index.tsx:21 The context initializes a React version ledger for visual demonstrations, and searches for bootstrap, unseal, and SIGHUP found no context hits, so the stateful-node startup precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "config-objects-are-api-immutable",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/ledger.ts:75 Activation updates demonstration version statuses in reducer state; these are not host-acting devices created through configuration and an API."
+    },
+    {
+     "technique": "once-only-bootstrap-with-marker",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/index.tsx:21 Initialization creates component state, without durable first-start detection or privileged provisioning effects."
+    },
+    {
+     "technique": "ordered-boot-dag",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/bench/parts/useBenchClock.ts:23 The bench sequence advances an animation counter rather than constructing a stateful node's storage, listeners, and serving dependencies."
+    },
+    {
+     "technique": "reload-partition",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/types.ts:19 The apparent configuration changes are scripted display text, not process configuration keys applied through reload or restart."
+    },
+    {
+     "technique": "request-chain-not-dsl",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/bench/chat/ChatLog.tsx:68 Scripted diffs are rendered as text rather than executed as bootstrap requests or stored workflows."
+    },
+    {
+     "technique": "seal-before-storage-plugins",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/plugins-bay/PluginWindow.tsx:16 The related plugin showcase maps plugin names to imported React scenes; it does not load sealing providers from a storage-backed catalog."
+    }
+   ],
+   "absenceTerms": [
+    "bootstrap",
+    "unseal",
+    "SIGHUP"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T04:37:46.542048+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "node-boot-and-declarative-bootstrap"
+   ],
+   "techniques": [
+    "config-objects-are-api-immutable",
+    "once-only-bootstrap-with-marker",
+    "ordered-boot-dag",
+    "reload-partition",
+    "request-chain-not-dsl",
+    "seal-before-storage-plugins"
+   ],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

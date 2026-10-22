@@ -1933,7 +1933,11 @@
           "revision": 3,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:21 The context initializes a React version ledger for visual demonstrations, and searches for bootstrap, unseal, and SIGHUP found no context hits, so the stateful-node startup precondition does not hold.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:1c83f54ea0028875",
+          "evaluatedRevision": 3
         },
         {
           "subject": "agent-instruction-files",

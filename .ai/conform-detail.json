@@ -7296,6 +7296,47 @@
         "at": "2026-10-22T04:23:48.717749+00:00",
         "reason": "reviewer (sonnet): The primary anchor, PrimaryCTA.tsx:72, is only an `<a href onClick>` JSX line. It doesn't show that a host–guest boundary is absent, and the zero-hit search is a negative result that the anchor doesn't prove. The technique anchors I opened (useDownloadPlatforms.ts:13, DownloadCTA.tsx:30, Footer.tsx:"
       }
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/node-boot-and-declarative-bootstrap": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "node-boot-and-declarative-bootstrap",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T04:37:46.542Z",
+      "worker": "d386eb75-22d4-469c-b982-0f816024f94b",
+      "techniques": [
+        {
+          "technique": "config-objects-are-api-immutable",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/ledger.ts:75 Activation updates demonstration version statuses in reducer state; these are not host-acting devices created through configuration and an API."
+        },
+        {
+          "technique": "once-only-bootstrap-with-marker",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:21 Initialization creates component state, without durable first-start detection or privileged provisioning effects."
+        },
+        {
+          "technique": "ordered-boot-dag",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/bench/parts/useBenchClock.ts:23 The bench sequence advances an animation counter rather than constructing a stateful node's storage, listeners, and serving dependencies."
+        },
+        {
+          "technique": "reload-partition",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/types.ts:19 The apparent configuration changes are scripted display text, not process configuration keys applied through reload or restart."
+        },
+        {
+          "technique": "request-chain-not-dsl",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/bench/chat/ChatLog.tsx:68 Scripted diffs are rendered as text rather than executed as bootstrap requests or stored workflows."
+        },
+        {
+          "technique": "seal-before-storage-plugins",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/plugins-bay/PluginWindow.tsx:16 The related plugin showcase maps plugin names to imported React scenes; it does not load sealing providers from a storage-backed catalog."
+        }
+      ]
     }
   }
 }
