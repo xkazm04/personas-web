@@ -39,6 +39,7 @@ interface HoverState {
 export function DevInspector() {
   const [mode, setMode] = useState<Mode>("off");
   const [hover, setHover] = useState<HoverState | null>(null);
+  const [unstamped, setUnstamped] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [copyOk, setCopyOk] = useState(true);
   const mounted = useIsClient();
@@ -105,8 +106,10 @@ export function DevInspector() {
       const chain = buildChain(e.target as Element | null);
       if (chain.length === 0 || !chain[0]) {
         setHover(null);
+        setUnstamped(true);
         return;
       }
+      setUnstamped(false);
       const di = pickDefaultIndex(chain);
       setHover({
         chain,
@@ -136,6 +139,7 @@ export function DevInspector() {
       document.removeEventListener("mousemove", onMove, true);
       document.removeEventListener("contextmenu", onContextMenu, true);
       setHover(null);
+      setUnstamped(false);
     };
   }, [mode, doCopy]);
 
@@ -176,6 +180,7 @@ export function DevInspector() {
         copied={copied}
         copyOk={copyOk}
         mappingOn={mappingOn}
+        unstamped={unstamped}
         crumbs={crumbs}
         defaultLoc={defaultLoc}
         onCopy={doCopy}

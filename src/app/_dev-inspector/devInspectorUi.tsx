@@ -89,6 +89,7 @@ export function InspectorHud({
   copied,
   copyOk,
   mappingOn,
+  unstamped,
   crumbs,
   defaultLoc,
   onCopy,
@@ -96,6 +97,8 @@ export function InspectorHud({
   copied: string | null;
   copyOk: boolean;
   mappingOn: boolean;
+  /** Mapped document, pointer on an element with no stamped ancestor. */
+  unstamped: boolean;
   crumbs: LocEntry[];
   defaultLoc: string | null;
   onCopy: (loc: string) => void;
@@ -127,6 +130,11 @@ export function InspectorHud({
             onCopy={onCopy}
           />
         ))
+      ) : unstamped ? (
+        <div style={{ color: "#fcd34d", lineHeight: 1.6 }}>
+          No source for this element or any ancestor (library or skipped module). Move to a
+          neighbouring component.
+        </div>
       ) : (
         <div style={{ color: "#9ca3af" }}>Hover a component…</div>
       )}
