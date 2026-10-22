@@ -242,6 +242,7 @@ function classifyTopic(topic) {
     title: topic.title,
     shots,
     contentReviewedAt: topic.coverage?.contentReviewedAt ?? null,
+    reviewDerived: topic.coverage?.reviewBasis === "history-backfill",
     // Display only — drift is measured from contentReviewedAt, never from this.
     appVersion: topic.coverage?.appVersion ?? null,
     contentStale,
@@ -392,7 +393,8 @@ const localeCoverage = totalExpected === 0 ? 0 : (totalPresent / totalExpected) 
 const topicCoverage = topics.length === 0 ? 0 : (withRecipe.length / topics.length) * 100;
 
 const staleContent = classified.filter((c) => c.contentStale);
-const reviewedEver = classified.filter((c) => c.contentReviewedAt);
+const reviewedEver = classified.filter((c) => c.contentReviewedAt && !c.reviewDerived);
+const reviewDerived = classified.filter((c) => c.contentReviewedAt && c.reviewDerived);
 const contentCoverage =
   topics.length === 0 ? 0 : (reviewedEver.length / topics.length) * 100;
 
@@ -453,6 +455,8 @@ if (asJson) {
           topicCoveragePct: topicCoverage,
           localeCoveragePct: localeCoverage,
           contentReviewCoveragePct: contentCoverage,
+          contentReviewedByHuman: reviewedEver.length,
+          contentReviewDerivedFromHistory: reviewDerived.length,
           stalenessThresholdDays: STALENESS_DAYS,
         },
         // Which of the numbers above can fail this run, and which are FYI.
@@ -512,7 +516,7 @@ if (asJson) {
   console.log(
     `Locale completeness:    ${totalPresent}/${totalExpected}  ${bar(localeCoverage)}  ${gateTag(enforcement.screenshotLocaleCoverage)}`,
   );
-  console.log(`Content reviewed:       ${reviewedEver.length}/${topics.length}  ${bar(contentCoverage)}`);
+  console.log(`Content reviewed:       ${reviewedEver.length}/${topics.length}  ${bar(contentCoverage)}  (human reviews; ${reviewDerived.length} dates backfilled from history, not counted)`);
   console.log();
   console.log(`Per-locale (recipes only):`);
   for (const [loc, s] of Object.entries(perLocale)) {

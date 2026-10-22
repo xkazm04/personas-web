@@ -11,6 +11,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["getting-started", "install", "setup", "download", "windows", "claude-code", "roadmap"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -25,6 +26,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/creating-your-first-agent.yaml",
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -39,6 +41,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/understanding-the-interface.yaml",
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -52,6 +55,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["getting-started", "agent", "basics", "introduction", "concept"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -65,6 +69,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["getting-started", "run", "execute", "automation", "first-run"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -80,6 +85,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     coverage: {
       screenshotRecipe: "tools/guide-screenshots/recipes/choosing-your-ai-provider.yaml",
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -93,6 +99,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["getting-started", "requirements", "hardware", "compatibility", "performance"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -106,6 +113,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["getting-started", "help", "support", "discord", "community", "documentation"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/", "src/features/onboarding/", "src/lib/navigation/"],
     },
@@ -121,6 +129,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/templates/", "src/features/recipes/"],
     },
@@ -135,6 +144,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/templates/"],
     },
@@ -149,6 +159,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/recipes/"],
     },
@@ -163,6 +174,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/", "src/lib/constants/uiModes.ts"],
     },
@@ -178,6 +190,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "create", "new-agent", "setup", "configuration"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -191,6 +204,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "prompts", "writing", "instructions", "best-practices"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -204,6 +218,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "simple-mode", "structured-mode", "prompt-editor"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -217,6 +232,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "structured-prompt", "sections", "identity", "instructions"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -230,6 +246,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "settings", "limits", "timeout", "budget", "concurrency"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -243,6 +260,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "tools", "capabilities", "permissions", "assign"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -256,6 +274,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "version-history", "snapshots", "rollback", "undo"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -269,6 +288,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "compare", "diff", "versions", "changes"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -282,6 +302,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "clone", "duplicate", "copy", "experiment"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -295,6 +316,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "groups", "organization", "folders", "labels"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -308,6 +330,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "disable", "archive", "pause", "remove"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -321,6 +344,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["agents-prompts", "health", "status", "indicators", "diagnostics"],
     coverage: {
       contentReviewedAt: "2026-05-16",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/"],
     },
@@ -336,6 +360,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "automation", "basics", "overview", "start"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -349,6 +374,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "manual", "on-demand", "button", "run"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -362,6 +388,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "schedule", "cron", "recurring", "timer", "daily"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/schedules/"],
     },
@@ -375,6 +402,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "webhook", "external", "api", "integration"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -388,6 +416,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "clipboard", "copy", "paste", "monitor", "text"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -401,6 +430,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "file-watcher", "folder", "files", "automatic"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -414,6 +444,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "chain", "sequence", "pipeline", "workflow"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -427,6 +458,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "events", "listener", "real-time", "reactive"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -440,6 +472,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "multiple", "combine", "advanced", "flexibility"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -453,6 +486,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["triggers", "testing", "debugging", "simulate", "verify"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/triggers/", "src/features/agents/sub_settings/"],
     },
@@ -468,6 +502,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "security", "encryption", "privacy", "safety"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -481,6 +516,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "add", "api-key", "password", "store"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -494,6 +530,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "health-check", "validation", "expiry", "status"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -507,6 +544,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "auto-browser", "automatic", "discovery", "setup"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -520,6 +558,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "usage", "tracking", "agents", "dependencies"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -533,6 +572,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "refresh", "expired", "token", "renew"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -546,6 +586,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["credentials", "connectors", "integrations", "catalog", "services"],
     coverage: {
       contentReviewedAt: "2026-05-17",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/vault/"],
     },
@@ -561,6 +602,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "assignments", "goals", "orchestration", "delegation"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -574,6 +616,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "teams", "memory", "goals", "orchestration", "oversight"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -587,6 +630,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "multi-agent", "workflow", "basics", "overview"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -600,6 +644,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "canvas", "visual-editor", "drag-and-drop", "design"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -613,6 +658,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "add-agent", "canvas", "configure", "placement"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -626,6 +672,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "connections", "data-flow", "wiring", "output-input"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -639,6 +686,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "execution", "run", "real-time", "workflow"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -652,6 +700,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "conditional", "routing", "branching", "logic"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -665,6 +714,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "team", "roles", "members", "collaboration"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -678,6 +728,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "history", "logs", "past-runs", "review"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -691,6 +742,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "templates", "pre-built", "starter", "quickstart"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/templates/"],
     },
@@ -704,6 +756,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["pipelines", "debugging", "troubleshooting", "errors", "fix"],
     coverage: {
       contentReviewedAt: "2026-05-29",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -719,6 +772,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "reliability", "quality", "basics", "introduction"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -732,6 +786,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "testing-lab", "overview", "arena", "ab-test", "matrix", "eval"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -745,6 +800,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "arena", "measure", "model-comparison", "evaluate"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -758,6 +814,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "comparison", "versions", "baseline", "optimization"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -771,6 +828,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "improve", "athena", "iteration", "prompts"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -784,6 +842,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "grid", "ratings", "versions", "models"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -797,6 +856,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "rating", "scoring", "voting", "feedback"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -810,6 +870,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "genome", "evolution", "breeding", "optimization"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -823,6 +884,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "breeding", "cycle", "generations", "run"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -836,6 +898,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "adopt", "promote", "production", "upgrade"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -849,6 +912,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "fitness", "scoring", "metrics", "performance"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -862,6 +926,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["testing", "history", "trends", "progress", "charts"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/agents/sub_lab/", "src/features/agents/components/matrix/"],
     },
@@ -877,6 +942,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "basics", "learning", "experience", "overview"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -890,6 +956,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "categories", "types", "facts", "insights", "knowledge"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -903,6 +970,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "importance", "ranking", "priority", "levels"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -916,6 +984,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "search", "find", "query", "lookup"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -929,6 +998,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "create", "manual", "teach", "add"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -942,6 +1012,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "tiers", "core", "active", "working", "archive"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -955,6 +1026,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "execution", "context", "recall", "decisions"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -968,6 +1040,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "review", "clean", "maintain", "accuracy"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -981,6 +1054,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "export", "import", "backup", "transfer"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -994,6 +1068,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["memories", "best-practices", "tips", "guidelines", "optimization"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_memories/", "src/features/overview/sub_patterns/"],
     },
@@ -1009,6 +1084,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "dashboard", "overview", "activity", "command-center"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1022,6 +1098,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "director", "coaching", "verdict", "quality", "review"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_director/"],
     },
@@ -1035,6 +1112,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "logs", "execution", "records", "details"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1048,6 +1126,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "real-time", "live", "activity", "feed"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1061,6 +1140,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "cost", "per-agent", "spending", "budget"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1074,6 +1154,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "cost", "per-model", "providers", "comparison"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1087,6 +1168,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "success-rate", "reliability", "metrics", "performance"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1100,6 +1182,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "tracing", "steps", "path", "debugging"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1113,6 +1196,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "trends", "charts", "performance", "analytics"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1126,6 +1210,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "budget", "limits", "caps", "spending-control"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1139,6 +1224,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["monitoring", "anomaly", "alerts", "unusual", "detection"],
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/"],
     },
@@ -1154,6 +1240,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -1168,6 +1255,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/teams/"],
     },
@@ -1182,6 +1270,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_director/"],
     },
@@ -1196,6 +1285,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/overview/sub_director/"],
     },
@@ -1211,6 +1301,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["deployment", "github", "actions", "ci-cd", "integration"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/cloud/"],
     },
@@ -1224,6 +1315,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["deployment", "gitlab", "ci-cd", "yaml", "integration"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/cloud/"],
     },
@@ -1237,6 +1329,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["deployment", "n8n", "workflow", "automation", "integration"],
     coverage: {
       contentReviewedAt: "2026-06-10",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/templates/"],
     },
@@ -1252,6 +1345,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "errors", "messages", "fix", "solutions"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/", "src/features/overview/sub_health/"],
     },
@@ -1265,6 +1359,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "unresponsive", "frozen", "stuck", "diagnose"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/", "src/features/overview/sub_health/"],
     },
@@ -1278,6 +1373,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "credentials", "authentication", "permissions", "access"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/", "src/features/overview/sub_health/"],
     },
@@ -1291,6 +1387,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "triggers", "not-firing", "debugging", "diagnose"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/", "src/features/overview/sub_health/"],
     },
@@ -1304,6 +1401,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "self-healing", "recovery", "automatic", "resilience"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/", "src/features/overview/sub_health/"],
     },
@@ -1317,6 +1415,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "health", "diagnostics", "system-check", "status"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/home/"],
     },
@@ -1330,6 +1429,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "logs", "debugging", "files", "details"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/"],
     },
@@ -1343,6 +1443,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     tags: ["troubleshooting", "reset", "defaults", "settings", "safe"],
     coverage: {
       contentReviewedAt: "2026-04-12",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/settings/"],
     },
@@ -1359,6 +1460,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "simple",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1373,6 +1475,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "simple",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1387,6 +1490,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1401,6 +1505,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1415,6 +1520,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "both",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1429,6 +1535,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "simple",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1443,6 +1550,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },
@@ -1457,6 +1565,7 @@ export const GUIDE_TOPICS: GuideTopic[] = [
     mode: "power",
     coverage: {
       contentReviewedAt: "2026-06-14",
+      reviewBasis: "history-backfill",
       appVersion: "1.1.0",
       watchedFiles: ["src/features/plugins/companion/"],
     },

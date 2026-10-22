@@ -52,6 +52,13 @@ export interface TopicCoverage {
   /** ISO timestamp when the content was last reviewed for accuracy. */
   contentReviewedAt?: string;
   /**
+   * Absent = a human read the topic against the app on that date. `"history-backfill"`
+   * = the date was derived from the content file's git history and nobody
+   * reviewed the topic; it still bounds drift queries (a lower bound on
+   * staleness) but is never counted as reviewed.
+   */
+  reviewBasis?: "history-backfill";
+  /**
    * Semver of the desktop app the topic was last verified against.
    * Recorded for humans reading the metadata; the drift detector never
    * queries it — see `watchedFiles`.
