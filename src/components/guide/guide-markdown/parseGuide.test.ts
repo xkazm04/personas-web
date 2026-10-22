@@ -142,3 +142,24 @@ describe("parseGuide - HowTo emission states what the reader sees", () => {
     expect(leaks).toEqual([]);
   }, 60_000);
 });
+
+describe("parseGuide - a continuation line that wears an item marker is a mistyped item, not prose", () => {
+  const folded = (block: string[]) => parseGuide(md(...block)).diagnostics.filter((d) => d.kind === "ignored-line").length;
+
+  it("callout-stack: a mistyped label is reported, not folded into the item above", () => {
+    const { doc, diagnostics } = parseGuide(md(":::callout-stack", "[tip] Back up first.", "[warnning] Keys are not recoverable.", ":::"));
+    expect(diagnostics.map((d) => d.kind)).toEqual(["ignored-line"]);
+    expect(ofType(doc, "callout-stack")[0].items.map((i) => i.text)).toEqual(["Back up first."]);
+  });
+
+  it("steps: an unbolded numbered line is reported, not folded into the step above", () => {
+    const { doc, diagnostics } = parseGuide(md(":::steps", "1. **Open** the vault", "2. Add a key", ":::"));
+    expect(diagnostics.map((d) => d.kind)).toEqual(["ignored-line"]);
+    expect(stepsOf(doc)).toEqual([{ title: "Open", body: "the vault" }]);
+  });
+
+  it("genuine continuations still fold, including a line that opens with a markdown link", () => {
+    expect(folded([":::callout-stack", "[tip] Read", "[the docs](https://x.dev) first.", "and then relax.", ":::"])).toBe(0);
+    expect(folded([":::steps", "1. **Open**", "the vault, then", "[see this](https://x.dev).", ":::"])).toBe(0);
+  });
+});

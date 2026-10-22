@@ -128,6 +128,10 @@ const STEP = new RegExp(`^\\d+\\.\\s+\\*\\*(.+?)\\*\\*\\s*(?:${DASH}\\s*)?(.*)$`
 const KEY = new RegExp(`^(.+?)\\s*${DASH}\\s+(.+)$`);
 const SUB_HEADING = /^###?\s+(.+)$/;
 const RULE = /^---+$/;
+// A continuation line that opens like an item (`[warnning] x`, `2. x`) is a mistyped item: folding it
+// into the item above would print the marker as prose and report nothing. A `[text](url)` link is prose.
+const LABEL_SHAPED = /^\[[A-Za-z][\w-]*\](?!\()/;
+const NUMBER_SHAPED = /^\d+\.\s/;
 const appendTo = (text: string, line: string) => `${text}${text ? " " : ""}${line}`;
 const nonEmpty = <T>(items: T[], payload: Payload): Payload | null => (items.length > 0 ? payload : null);
 
@@ -144,7 +148,7 @@ const GRAMMAR: Record<string, Grammar> = {
     body.forEach((line, i) => {
       const m = line.match(STEP);
       if (m) steps.push({ title: m[1], body: m[2] });
-      else if (line.trim() && steps.length > 0) steps[steps.length - 1].body = appendTo(steps[steps.length - 1].body, line.trim());
+      else if (line.trim() && steps.length > 0 && !NUMBER_SHAPED.test(line.trim())) steps[steps.length - 1].body = appendTo(steps[steps.length - 1].body, line.trim());
       else if (line.trim()) ignore(i);
     });
     return nonEmpty(steps, { type: "steps", steps });
@@ -280,7 +284,7 @@ const GRAMMAR: Record<string, Grammar> = {
       if (!trimmed) return;
       const m = trimmed.match(CALLOUT_LINE);
       if (m) items.push({ variant: m[1].toLowerCase() as CalloutVariant, text: m[2] });
-      else if (items.length > 0) items[items.length - 1].text = appendTo(items[items.length - 1].text, trimmed);
+      else if (items.length > 0 && !LABEL_SHAPED.test(trimmed)) items[items.length - 1].text = appendTo(items[items.length - 1].text, trimmed);
       else ignore(i);
     });
     return nonEmpty(items, { type: "callout-stack", items });
