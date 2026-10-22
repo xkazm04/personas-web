@@ -1,0 +1,38 @@
+{
+  "schema": "conform-run/1",
+  "worker": "82e27dda-1062-4085-af5c-5d34119e6f08",
+  "subject": "issuance-policy-ladder",
+  "evaluatedAt": "2026-10-22T02:37:11.945520+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "issuance-policy-ladder",
+      "context": "How It Works & Changelog",
+      "reason": "withdrawn after review: reviewer (sonnet): The context is probably free of issuance code (my grep of src/app/how, changelog-timeline and the how-* sections found no issu/allow_any/notAfter/credential/ttl/expir terms), but the anchors are incidental: index.tsx:16 is a doc-comment line, Typewriter.tsx:58 is an animation delay, Stop.tsx:49 is a"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-22T02:37:11.945520+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "issuance-policy-ladder"
+      ],
+      "techniques": [
+        "bounds-as-modes",
+        "explicit-forbid-beats-allow-any",
+        "float-references-resolve-at-use",
+        "program-role-returns-the-artifact",
+        "require-one-constraint",
+        "stamped-instants-name-their-clock",
+        "verbatim-is-a-separate-privilege"
+      ],
+      "deviations": 0,
+      "context": "How It Works & Changelog",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}
