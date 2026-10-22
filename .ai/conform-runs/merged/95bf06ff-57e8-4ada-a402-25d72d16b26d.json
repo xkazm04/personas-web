@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "95bf06ff-57e8-4ada-a402-25d72d16b26d",
+ "subject": "health-checks",
+ "evaluatedAt": "2026-10-22T01:43:21.335061+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "System Health Panel",
+   "subject": "health-checks",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:66 The demo marks a check healthy after recording an action without verifying recovery, so its success indication does not meet the remediation standard.",
+   "techniques": [
+    {
+     "technique": "check-scheduling",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The traced fetcher reads demo snapshots; mounting this hook does not launch dependency checks, and there is no operational check cadence to judge here."
+    },
+    {
+     "technique": "health-rollup",
+     "verdict": "deviation",
+     "evidence": "src/lib/healthFormat.ts:44 The section summary uses worst-of and exposes member rows, but its aggregation vocabulary cannot represent undetermined members or report their coverage."
+    },
+    {
+     "technique": "probe-caching",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useDemoOnlySWR.ts:20 SWR caches static demonstration data, not observed dependency verdicts; operational probe TTL and freshness requirements have no target here."
+    },
+    {
+     "technique": "probe-design",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/mockApi.ts:532 The health source projects fixtures rather than interacting with dependencies, so probe depth, deadlines and cancellation are not exercised."
+    },
+    {
+     "technique": "remediation-affordances",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:66 Configure/install affordances exist, but completing the simulated action directly produces green and removes the button without a confirming check."
+    },
+    {
+     "technique": "three-state-outcomes",
+     "verdict": "deviation",
+     "evidence": "src/lib/mock-dashboard-data.ts:1446 The check model provides severity labels rather than distinct verified, failed and unverifiable outcomes with state-specific evidence; info is used for unconfigured or disabled integrations."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T01:43:21.335061+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "health-checks"
+   ],
+   "techniques": [
+    "check-scheduling",
+    "health-rollup",
+    "probe-caching",
+    "probe-design",
+    "remediation-affordances",
+    "three-state-outcomes"
+   ],
+   "deviations": 1,
+   "context": "System Health Panel",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

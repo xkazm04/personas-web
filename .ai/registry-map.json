@@ -8139,7 +8139,11 @@
           "revision": 11,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:66 The demo marks a check healthy after recording an action without verifying recovery, so its success indication does not meet the remediation standard.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:9254e4fb7feef6b1",
+          "evaluatedRevision": 11
         },
         {
           "subject": "optional-dependency-degradation",
