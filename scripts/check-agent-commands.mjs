@@ -100,8 +100,9 @@ function main() {
   const docs = Object.fromEntries(
     docPaths.filter((p) => fs.existsSync(path.join(root, p))).map((p) => [p, read(p)]),
   );
+  const workflowDir = ".github/workflows";
   const workflows = Object.fromEntries(
-    readDir(".github/workflows", ".yml").map((p) => [p, read(p)]),
+    readDir(workflowDir, ".yml").map((p) => [p, read(p)]),
   );
   const { scripts = {} } = JSON.parse(read("package.json"));
   const problems = findDrift({
@@ -111,6 +112,10 @@ function main() {
     workflows,
     fileExists: (rel) => fs.existsSync(path.join(root, rel)),
   });
+  // An absent directory is a moved path, not an empty lane: passing over it checks no workflow at all.
+  if (!fs.existsSync(path.join(root, workflowDir))) {
+    problems.push(`${workflowDir}: directory not found, so no workflow was checked`);
+  }
   if (problems.length) {
     console.error(`check-agent-commands: ${problems.length} drift finding(s)`);
     for (const p of problems) console.error(`  - ${p}`);

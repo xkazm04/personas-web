@@ -1,6 +1,11 @@
 // node --test scripts/check-agent-commands.test.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import {
   extractNodeScriptPaths,
   extractNpmRunNames,
@@ -85,4 +90,25 @@ test("the canonical doc is what CI steps are held against, not any doc", () => {
     workflows: { "ci.yml": "- run: npm run lint" },
   });
   assert.deepEqual(problems, ["ci.yml: runs `npm run lint`, which CLAUDE.md does not list"]);
+});
+
+test("main: a moved workflow directory fails, an existing empty one passes", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cac-"));
+  fs.mkdirSync(path.join(dir, ".claude"));
+  fs.writeFileSync(path.join(dir, ".claude/CLAUDE.md"), "Run `npm run lint`.\n");
+  fs.writeFileSync(path.join(dir, "package.json"), JSON.stringify({ scripts: { lint: "x" } }));
+  const run = () =>
+    spawnSync(process.execPath, [fileURLToPath(new URL("./check-agent-commands.mjs", import.meta.url))], {
+      cwd: dir,
+      encoding: "utf8",
+    });
+  try {
+    const missing = run();
+    assert.equal(missing.status, 1);
+    assert.match(missing.stderr, /directory not found/);
+    fs.mkdirSync(path.join(dir, ".github/workflows"), { recursive: true });
+    assert.equal(run().status, 0);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 });
