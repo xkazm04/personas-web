@@ -52,6 +52,9 @@ jobs:
       # column- and nullability-faithful projection of scripts/setup-sync-db.sql.
       - run: npm run check:sync-rows
       - run: node --test scripts/check-sync-rows.test.mjs
+      # DevInspector opt-in gates: the loader is a no-op and never loads the Babel toolchain
+      # without DEV_INSPECT=1, and config, loader and script spell the flag once.
+      - run: node --test scripts/dev-inspector/gate.test.mjs
       # Gate: a topic listed in GUIDE_TOPICS but absent from its category's
       # content module 404s while still shipping SEO tags. Bidirectional, so a
       # partial parse fails loudly in both directions rather than passing thin.
