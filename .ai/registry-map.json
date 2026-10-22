@@ -7219,7 +7219,11 @@
           "revision": 21,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:51 The context loads and displays persona standings; context searches found no model-routing operations, and repository searches plus tracing both data sources confirmed leaderboard aggregation rather than model invocation.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:5484901d8df95b15",
+          "evaluatedRevision": 21
         },
         {
           "subject": "translation-quality-measurement",

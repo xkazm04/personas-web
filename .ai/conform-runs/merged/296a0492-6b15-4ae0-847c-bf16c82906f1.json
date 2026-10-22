@@ -1,0 +1,119 @@
+{
+ "schema": "conform-run/1",
+ "worker": "296a0492-6b15-4ae0-847c-bf16c82906f1",
+ "subject": "model-routing",
+ "evaluatedAt": "2026-10-22T04:07:00.815529+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Leaderboard & Rankings",
+   "subject": "model-routing",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:51 The context loads and displays persona standings; context searches found no model-routing operations, and repository searches plus tracing both data sources confirmed leaderboard aggregation rather than model invocation.",
+   "techniques": [
+    {
+     "technique": "admission-is-not-a-tier",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:30 This consumes aggregate leaderboard data; it admits no substitute model endpoint."
+    },
+    {
+     "technique": "cache-continuity",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/index.tsx:40 Selection chooses a displayed persona, without changing a conversation's serving model."
+    },
+    {
+     "technique": "candidate-ranking",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts:24 This orders personas for display, not eligible endpoints for serving a model call."
+    },
+    {
+     "technique": "capability-floors",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardPodium.tsx:99 The score controls a visual gauge; it does not enforce model capability eligibility."
+    },
+    {
+     "technique": "consumer-overrides",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardTable.tsx:54 The consumer changes table sorting, without pinning a provider, model, or tier."
+    },
+    {
+     "technique": "effort-calibration",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts:15 The dimension selects a recorded score, not a reasoning-effort setting."
+    },
+    {
+     "technique": "failover-horizon",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/LeaderboardRadarChart.tsx:48 This renders supplied chart data; there is no model-response stream or substitution horizon."
+    },
+    {
+     "technique": "failover-path-liveness",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:85 Retry reloads leaderboard data through the existing effect, without exercising model failover."
+    },
+    {
+     "technique": "model-identity",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardSort.ts:15 Identity keys persona ranks, not logical model groups or provider endpoints."
+    },
+    {
+     "technique": "policy-governance",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardTable.tsx:108 The table reports persona scores rather than routing decisions or policy changes."
+    },
+    {
+     "technique": "quality-axis-separation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/standings.ts:165 The traced leaderboard dependency supplies an operational quality proxy, but it does not feed model-candidate routing; this is not evidence of quality-axis conformance."
+    },
+    {
+     "technique": "routing-policy",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/RankDimensionTabs.tsx:60 The control changes the displayed ranking dimension, not which providers a call may use."
+    },
+    {
+     "technique": "turn-classification",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts:4 This vocabulary describes leaderboard dimensions, not model-call classes."
+    }
+   ],
+   "absenceTerms": [
+    "reasoning_effort",
+    "reasoningEffort",
+    "generateText",
+    "streamText"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T04:07:00.815529+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "model-routing"
+   ],
+   "techniques": [
+    "admission-is-not-a-tier",
+    "cache-continuity",
+    "candidate-ranking",
+    "capability-floors",
+    "consumer-overrides",
+    "effort-calibration",
+    "failover-horizon",
+    "failover-path-liveness",
+    "model-identity",
+    "policy-governance",
+    "quality-axis-separation",
+    "routing-policy",
+    "turn-classification"
+   ],
+   "deviations": 0,
+   "context": "Leaderboard & Rankings",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
