@@ -1,6 +1,7 @@
 // node --test scripts/i18n/identical-values-lib.test.mjs
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import vm from "node:vm";
 import {
   auditLocale,
   classifyNonTranslatable,
@@ -89,4 +90,29 @@ test("identicalInEveryLocale intersects the per-locale identical keys", () => {
     cs: { identical: ["c", "b", "z"] },
   };
   assert.deepEqual(identicalInEveryLocale(results), ["b", "c"]);
+});
+
+// The locale loader (load-locale.mjs) evaluates each locale in vm.runInNewContext, so
+// every tree this module walks in production was built in ANOTHER realm: its objects
+// and arrays carry that realm's prototypes, not ours. The literals in the tests above
+// are all from this realm, so a realm-naive check (instanceof, a prototype-identity
+// "plain object" test) would pass them and silently drop every real locale leaf.
+test("collectLeaves reads a tree built in another realm, as the locale loader returns it", () => {
+  const foreign = vm.runInNewContext(
+    '({ nav: { home: "Home", items: ["One", "Two"] }, hero: { title: "Hi" } })',
+  );
+  // The second realm is real: its intrinsics are not ours, and its array is still an array.
+  assert.notEqual(Object.getPrototypeOf(foreign), Object.prototype);
+  assert.ok(!(foreign.nav.items instanceof Array));
+  assert.ok(Array.isArray(foreign.nav.items));
+
+  assert.deepEqual(
+    [...collectLeaves(foreign)],
+    [
+      ["nav.home", "Home"],
+      ["nav.items.0", "One"],
+      ["nav.items.1", "Two"],
+      ["hero.title", "Hi"],
+    ],
+  );
 });
