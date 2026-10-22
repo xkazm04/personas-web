@@ -1,0 +1,100 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c05fd2d2-ce73-4b07-8f39-921ac6525efa",
+ "subject": "job-coordination",
+ "evaluatedAt": "2026-10-22T03:05:37.657439+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Self-Healing & Trigger Automation",
+   "subject": "job-coordination",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:27 The context advances a local illustration counter rather than durable jobs; searches found no checkpoint, executor, or idempot identifiers in its directories, while repository matches belonged to other contexts.",
+   "techniques": [
+    {
+     "technique": "in-flight-is-a-position",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:67 Phases select graphical effects; no non-idempotent operation is dispatched or recovered."
+    },
+    {
+     "technique": "job-observability",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:36 The displayed log is assembled from predefined illustration copy, rather than live job records."
+    },
+    {
+     "technique": "job-state-machines",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:30 The phase is an animation index, with no durable job status or competing verdict writers."
+    },
+    {
+     "technique": "lease-renewal",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:15 Running controls animation according to motion preference and visibility; it does not represent executor ownership."
+    },
+    {
+     "technique": "liveness-proof-reclaim",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:28 The local timer is cleared on effect cleanup; no surviving ownership record requires reclamation."
+    },
+    {
+     "technique": "no-unrestorable-state-at-a-suspension-point",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/Trace.tsx:46 The timed changes animate SVG particles and do not straddle effects that transfer or destroy durable value."
+    },
+    {
+     "technique": "no-wall-clock-in-the-advance-contract",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:62 These durations schedule illustration frames; there is no call advancing durable work under a time budget."
+    },
+    {
+     "technique": "step-position-and-resumability",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:24 Position exists solely as component state for a restartable illustration, with no job effects to checkpoint."
+    },
+    {
+     "technique": "terminal-state-recovery",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:46 Visitors directly select illustration phases; the displayed endpoints are not terminal verdicts on durable jobs."
+    },
+    {
+     "technique": "terms-travel-permission-does-not",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:32 A selected case reads predefined presentation copy, with no submitted work crossing a configuration boundary."
+    }
+   ],
+   "absenceTerms": [
+    "checkpoint",
+    "executor",
+    "idempot"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T03:05:37.657439+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "job-coordination"
+   ],
+   "techniques": [
+    "in-flight-is-a-position",
+    "job-observability",
+    "job-state-machines",
+    "lease-renewal",
+    "liveness-proof-reclaim",
+    "no-unrestorable-state-at-a-suspension-point",
+    "no-wall-clock-in-the-advance-contract",
+    "step-position-and-resumability",
+    "terminal-state-recovery",
+    "terms-travel-permission-does-not"
+   ],
+   "deviations": 0,
+   "context": "Self-Healing & Trigger Automation",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

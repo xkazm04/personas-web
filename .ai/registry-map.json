@@ -2348,7 +2348,11 @@
           "revision": 17,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:27 The context advances a local illustration counter rather than durable jobs; searches found no checkpoint, executor, or idempot identifiers in its directories, while repository matches belonged to other contexts.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:68f09609d1498e88",
+          "evaluatedRevision": 17
         },
         {
           "subject": "retry-backoff",

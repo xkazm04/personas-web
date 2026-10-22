@@ -7087,6 +7087,67 @@
         "at": "2026-10-22T02:37:30.379469+00:00",
         "reason": "reviewer (sonnet): The context is probably free of issuance code (my grep of src/app/how, changelog-timeline and the how-* sections found no issu/allow_any/notAfter/credential/ttl/expir terms), but the anchors are incidental: index.tsx:16 is a doc-comment line, Typewriter.tsx:58 is an animation delay, Stop.tsx:49 is a"
       }
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/job-coordination": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "job-coordination",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T03:05:37.657Z",
+      "worker": "c05fd2d2-ce73-4b07-8f39-921ac6525efa",
+      "techniques": [
+        {
+          "technique": "in-flight-is-a-position",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:67 Phases select graphical effects; no non-idempotent operation is dispatched or recovered."
+        },
+        {
+          "technique": "job-observability",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:36 The displayed log is assembled from predefined illustration copy, rather than live job records."
+        },
+        {
+          "technique": "job-state-machines",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:30 The phase is an animation index, with no durable job status or competing verdict writers."
+        },
+        {
+          "technique": "lease-renewal",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:15 Running controls animation according to motion preference and visibility; it does not represent executor ownership."
+        },
+        {
+          "technique": "liveness-proof-reclaim",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:28 The local timer is cleared on effect cleanup; no surviving ownership record requires reclamation."
+        },
+        {
+          "technique": "no-unrestorable-state-at-a-suspension-point",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/Trace.tsx:46 The timed changes animate SVG particles and do not straddle effects that transfer or destroy durable value."
+        },
+        {
+          "technique": "no-wall-clock-in-the-advance-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:62 These durations schedule illustration frames; there is no call advancing durable work under a time budget."
+        },
+        {
+          "technique": "step-position-and-resumability",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:24 Position exists solely as component state for a restartable illustration, with no job effects to checkpoint."
+        },
+        {
+          "technique": "terminal-state-recovery",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:46 Visitors directly select illustration phases; the displayed endpoints are not terminal verdicts on durable jobs."
+        },
+        {
+          "technique": "terms-travel-permission-does-not",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:32 A selected case reads predefined presentation copy, with no submitted work crossing a configuration boundary."
+        }
+      ]
     }
   }
 }
