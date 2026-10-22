@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f2ff3de7-667b-4488-8761-bbecd2ac270a",
+ "subject": "outbound-notifications",
+ "evaluatedAt": "2026-10-22T21:12:24.522419+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "outbound-notifications",
+   "context": "Messages & Settings",
+   "reason": "The context consists of in-app dashboard message browsing components (ThreadRow, MessagesPage, MessageRow, MessagesPagination, MessageRowGhosts, ThreadDetailModal, useMessagesData) and settings UI panels (SettingsHeader, SettingsPage, ModelProvidersCard, NotificationsCard, ArriveCell) which manage client-side preferences (such as in-app alert severity filters, weekly digest toggle in settingsStore, and Web Speech API announcements). It contains no outbound notification dispatch pipeline, channel adapter traits, external webhook/chat destinations, sink health tracking, or subscription matching. In-app delivery is explicitly out of scope for the outbound-notifications subject ('In-app delivery is not this subject'), and per seat instructions prohibiting 'not-applicable', this context is declined."
+  }
+ ],
+ "consults": []
+}
