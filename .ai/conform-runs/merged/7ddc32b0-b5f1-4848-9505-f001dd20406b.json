@@ -1,0 +1,77 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7ddc32b0-b5f1-4848-9505-f001dd20406b",
+ "subject": "index-free-random-access",
+ "evaluatedAt": "2026-10-22T02:20:39.115755+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "index-free-random-access",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/guide-body-index.ts:37 Context and repository searches found no byteOffset, recordBoundary, readSync or bisect matches, while guide search indexes complete imported Markdown strings in memory, so random access into a large seekable artifact is outside this context.",
+   "techniques": [
+    {
+     "technique": "conservation-sweep-over-a-partition-parameter",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/guide-body-index.ts:28 Entries derive directly from parsed sections; this is not a heuristic artifact partitioner with unknowable boundary outputs."
+    },
+    {
+     "technique": "framing-recovery-by-hypothesis-rejection",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/guide-body-index.ts:25 Section extraction receives the complete topic string, rather than entering an escaped record stream at an arbitrary byte."
+    },
+    {
+     "technique": "reversible-encoding-buys-tail-recovery",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/guide-search.ts:190 Search excerpts slice existing in-memory text; this context neither chooses a record escape scheme nor recovers an appended artifact's tail."
+    },
+    {
+     "technique": "segment-then-parallelize",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/guide-body-index.ts:24 Index construction iterates topic objects sequentially, without parallel reading of one large artifact."
+    },
+    {
+     "technique": "sorted-data-as-a-read-only-index",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/guide-search.ts:215 Queries use substring matching across section text, not lookup on an artifact's existing ordering key."
+    },
+    {
+     "technique": "structure-derived-read-budget",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/guide-markdown/extractHeadings.ts:12 The parser processes the supplied complete document; there is no speculative recovery branch requiring a sampled byte budget."
+    }
+   ],
+   "absenceTerms": [
+    "byteOffset",
+    "recordBoundary",
+    "readSync",
+    "bisect"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T02:20:39.115755+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "index-free-random-access"
+   ],
+   "techniques": [
+    "conservation-sweep-over-a-partition-parameter",
+    "framing-recovery-by-hypothesis-rejection",
+    "reversible-encoding-buys-tail-recovery",
+    "segment-then-parallelize",
+    "sorted-data-as-a-read-only-index",
+    "structure-derived-read-budget"
+   ],
+   "deviations": 0,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

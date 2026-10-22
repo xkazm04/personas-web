@@ -3821,7 +3821,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/guide-body-index.ts:37 Context and repository searches found no byteOffset, recordBoundary, readSync or bisect matches, while guide search indexes complete imported Markdown strings in memory, so random access into a large seekable artifact is outside this context.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:95ffb5e82166138c",
+          "evaluatedRevision": 2
         },
         {
           "subject": "docs-content-model",

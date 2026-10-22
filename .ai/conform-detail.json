@@ -6995,6 +6995,47 @@
         "at": "2026-10-22T02:03:53.660775+00:00",
         "reason": "reviewer (sonnet): I found no foreign-format ingestion in the files I opened, so the claim is plausible. But the primary anchor (useDemoOnlySWR.ts:16) is the demoOnlyKey ternary, which doesn't show an import pipeline is absent, and the technique anchors are equally incidental. The absence search used only the identifi"
       }
+    },
+    "Product Documentation (Guide)/Guide Data, Content & Search Index/index-free-random-access": {
+      "context": "Guide Data, Content & Search Index",
+      "subject": "index-free-random-access",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T02:20:39.115Z",
+      "worker": "7ddc32b0-b5f1-4848-9505-f001dd20406b",
+      "techniques": [
+        {
+          "technique": "conservation-sweep-over-a-partition-parameter",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/guide-body-index.ts:28 Entries derive directly from parsed sections; this is not a heuristic artifact partitioner with unknowable boundary outputs."
+        },
+        {
+          "technique": "framing-recovery-by-hypothesis-rejection",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/guide-body-index.ts:25 Section extraction receives the complete topic string, rather than entering an escaped record stream at an arbitrary byte."
+        },
+        {
+          "technique": "reversible-encoding-buys-tail-recovery",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/guide-search.ts:190 Search excerpts slice existing in-memory text; this context neither chooses a record escape scheme nor recovers an appended artifact's tail."
+        },
+        {
+          "technique": "segment-then-parallelize",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/guide-body-index.ts:24 Index construction iterates topic objects sequentially, without parallel reading of one large artifact."
+        },
+        {
+          "technique": "sorted-data-as-a-read-only-index",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/guide-search.ts:215 Queries use substring matching across section text, not lookup on an artifact's existing ordering key."
+        },
+        {
+          "technique": "structure-derived-read-budget",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/guide-markdown/extractHeadings.ts:12 The parser processes the supplied complete document; there is no speculative recovery branch requiring a sampled byte budget."
+        }
+      ]
     }
   }
 }
