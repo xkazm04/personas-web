@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7a4a50a2-88b1-433c-aef4-978a4e56454b",
+ "subject": "metric-surface-contract",
+ "evaluatedAt": "2026-10-22T03:28:41.622267+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "metric-surface-contract",
+   "context": "Observability Charts & SLA",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": []
+}
