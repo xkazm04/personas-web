@@ -91,7 +91,7 @@ export function ExecutionDetailModal({
           {execution.errorMessage && (
             <div className="mb-5 flex items-start gap-3 rounded-xl border border-rose-500/30 bg-rose-500/[0.06] p-4">
               <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-rose-400" />
-              <p className="text-sm leading-relaxed text-rose-200/90">
+              <p className="text-sm leading-relaxed text-foreground">
                 {execution.errorMessage}
               </p>
             </div>

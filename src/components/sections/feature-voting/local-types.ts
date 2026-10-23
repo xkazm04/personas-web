@@ -32,3 +32,16 @@ export interface AccentToken {
  *   claim "Live" over what is effectively dead/seed-only data.
  */
 export type LoadState = "loading" | "live" | "degraded";
+
+/**
+ * A vote, comment or boost the API refused, after its optimistic update was
+ * rolled back. Kept per feature so the card can say so; `seq` is new for every
+ * failure, so a repeat of the same failure still re-offers a comment draft.
+ */
+export interface WriteFailure {
+  kind: "vote" | "comment" | "boost";
+  seq: number;
+  /** A failed comment's text and thread, handed back to its input. */
+  text?: string;
+  parentId?: string | null;
+}

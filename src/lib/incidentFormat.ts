@@ -95,6 +95,33 @@ export function applyIncidentFilters(
     .sort(bySeverityThenRecency);
 }
 
+export interface IncidentFacetCounts {
+  status: Record<string, number>;
+  severity: Record<string, number>;
+  source: Record<string, number>;
+}
+
+/**
+ * Pill counts for the status / severity / source facets, by the disjunctive
+ * convention: each facet's counts apply every OTHER active filter but not its
+ * own, so a count is the number of rows a click on that pill would show.
+ * `all` is the row count with that facet unselected.
+ */
+export function incidentFacetCounts(
+  incidents: AuditIncident[],
+  filters: IncidentFilters,
+): IncidentFacetCounts {
+  const count = (
+    facet: "status" | "severity" | "source",
+  ): Record<string, number> => {
+    const rows = applyIncidentFilters(incidents, { ...filters, [facet]: "all" });
+    const out: Record<string, number> = { all: rows.length };
+    for (const r of rows) out[r[facet]] = (out[r[facet]] ?? 0) + 1;
+    return out;
+  };
+  return { status: count("status"), severity: count("severity"), source: count("source") };
+}
+
 export interface IncidentGroup {
   /** Raw group value — resolved to a display label in the UI. */
   key: string;

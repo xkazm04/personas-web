@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { ToolMark, frame } from "./shared/Stage";
@@ -31,7 +32,7 @@ function TapeLine({ j, copy, clock, dim }: { j: number; copy: number; clock: Mot
       <span className="h-[1.3em] w-[3px] shrink-0 rounded-full" style={{ backgroundColor: brand }} />
       <motion.span className="w-[3.1em] shrink-0 font-mono text-foreground/70" style={{ fontSize: "max(12px, 0.85em)" }}>{time}</motion.span>
       <ToolMark icon={line.tool} className="h-[1.05em] w-[1.05em] shrink-0 text-foreground/85" />
-      <span className="min-w-0 flex-1 whitespace-nowrap text-foreground">{c.lines[line.key]}</span>
+      <span className="min-w-0 flex-1 truncate text-foreground">{c.lines[line.key]}</span>
       <span className="font-mono tabular-nums text-foreground/85">${line.cost.toFixed(2)}</span>
       {line.stamp && (
         <motion.span
@@ -45,11 +46,12 @@ function TapeLine({ j, copy, clock, dim }: { j: number; copy: number; clock: Mot
   );
 }
 
-export default function Tape({ clock, agent }: { clock: MotionValue<number>; agent: number | null }) {
+/** `box` replaces the tape's place in the wide art (the phone layout gives it a box of its own). */
+export default function Tape({ clock, agent, box }: { clock: MotionValue<number>; agent: number | null; box?: CSSProperties }) {
   const y = useTransform(clock, (s) => `${(-paperPos(s) * LH * 100) / TAPE.h}%`);
   const fade = "linear-gradient(to bottom, transparent 0%, black 22%)";
   return (
-    <div className="overflow-hidden" style={{ ...place(TAPE.x, 0, TAPE.w + TAPE.margin, TAPE.h), ...fs(16, 14), maskImage: fade, WebkitMaskImage: fade }}>
+    <div className="overflow-hidden" style={{ ...(box ?? { ...place(TAPE.x, 0, TAPE.w + TAPE.margin, TAPE.h), ...fs(16, 14) }), maskImage: fade, WebkitMaskImage: fade }}>
       <div
         className="absolute inset-y-0 left-0 border-x border-glass"
         style={{

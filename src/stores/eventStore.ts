@@ -126,6 +126,10 @@ interface EventState {
   eventsLoading: boolean;
   /** The plane answered 501 not_on_desktop to the list read: an empty list means "not served", not "no events". */
   listNotServed: boolean;
+  /** The first list read has settled (ok or not): before it, an empty list means "not read yet". */
+  eventsSettled: boolean;
+  /** The last list read failed (anything but 501): an empty list means "could not read", not "no events". */
+  eventsError: boolean;
   connectionStatus: ConnectionStatus;
   setConnectionStatus: (status: ConnectionStatus) => void;
   fetchEvents: () => Promise<void>;
@@ -276,6 +280,8 @@ export const useEventStore = create<EventState>((set, get) => {
   eventIds: new Set(),
   eventsLoading: false,
   listNotServed: false,
+  eventsSettled: false,
+  eventsError: false,
   connectionStatus: "polling" as ConnectionStatus,
   setConnectionStatus: (status) => set({ connectionStatus: status }),
   fetchEvents: async () => {
@@ -311,13 +317,16 @@ export const useEventStore = create<EventState>((set, get) => {
           events: merged,
           eventIds: new Set(merged.map((e) => e.id)),
           listNotServed: false,
+          eventsError: false,
         };
       });
     } catch (err) {
-      // 501 means this plane does not serve the list; any other failure leaves stale.
+      // 501 means this plane does not serve the list; any other failure keeps
+      // the rows it had (stale) and says so through eventsError.
       if (err instanceof ApiError && err.status === 501) set({ listNotServed: true });
+      else set({ eventsError: true });
     } finally {
-      set({ eventsLoading: false });
+      set({ eventsLoading: false, eventsSettled: true });
     }
   },
   appendEvent: (event) => {
@@ -485,6 +494,8 @@ export const useEventStore = create<EventState>((set, get) => {
       eventIds: new Set(),
       eventsLoading: false,
       listNotServed: false,
+      eventsSettled: false,
+      eventsError: false,
       replayingIds: new Set(),
       discardingIds: new Set(),
       subscriptions: [],

@@ -49,7 +49,7 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
               transition={{ duration: 0.25, ease: EASE_CURVE }}
               role="dialog"
               aria-modal="true"
-              aria-label="Navigation menu"
+              aria-label={t.nav.navigationMenu}
               className="fixed top-0 right-0 z-50 flex h-dvh w-[min(20rem,calc(100vw-1rem))] flex-col border-l border-glass bg-background pb-safe shadow-2xl lg:hidden"
             >
               <div className="flex items-center justify-between px-5 py-4 border-b border-glass">
@@ -59,7 +59,7 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
                 <button
                   onClick={onClose}
                   className="flex items-center justify-center min-w-11 min-h-11 rounded-lg text-muted hover:text-foreground hover:bg-white/5 transition-colors focus-ring"
-                  aria-label="Close menu"
+                  aria-label={t.nav.closeMenu}
                 >
                   <X className="h-4.5 w-4.5" />
                 </button>
@@ -84,6 +84,7 @@ const MobilePanel = forwardRef<HTMLDivElement, MobilePanelProps>(
                         {isActive && (
                           <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan/70" />
                         )}
+                        {route.icon && <route.icon className="h-4 w-4 text-muted" />}
                         <span>{route.label}</span>
                       </div>
                     </Link>

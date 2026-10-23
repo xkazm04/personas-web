@@ -7,7 +7,7 @@
 import { useEffect } from "react";
 import type { ShareState, WaitlistStatus } from "./waitlistUtils";
 
-export function useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, previousFocusRef }: { open: boolean; onClose: () => void; fetchCount: (signal: AbortSignal) => Promise<void>; modalRef: React.RefObject<HTMLDivElement | null>; previousFocusRef: React.RefObject<HTMLElement | null> }) {
+export function useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, previousFocusRef, settled }: { open: boolean; onClose: () => void; fetchCount: (signal: AbortSignal) => Promise<void>; modalRef: React.RefObject<HTMLDivElement | null>; previousFocusRef: React.RefObject<HTMLElement | null>; settled: boolean }) {
   useEffect(() => {
     if (!open) {
       previousFocusRef.current?.focus();
@@ -29,6 +29,14 @@ export function useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, p
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose, modalRef]);
+
+  // The form swaps for the success panel on a settled signup, unmounting the
+  // submit button that held focus. Hand focus to the panel's primary control
+  // so it stays inside the dialog instead of dropping to <body>.
+  useEffect(() => {
+    if (!open || !settled) return;
+    modalRef.current?.querySelector<HTMLElement>("[data-waitlist-settled-focus]")?.focus();
+  }, [open, settled, modalRef]);
 }
 
 function trapFocus(event: KeyboardEvent, modal: HTMLDivElement) {
@@ -36,7 +44,11 @@ function trapFocus(event: KeyboardEvent, modal: HTMLDivElement) {
   if (focusable.length === 0) return;
   const first = focusable[0]!;
   const last = focusable[focusable.length - 1]!;
-  if (event.shiftKey && document.activeElement === first) {
+  // Focus outside the dialog (dropped to <body> by an unmount): pull it back in.
+  if (!modal.contains(document.activeElement)) {
+    event.preventDefault();
+    (event.shiftKey ? last : first).focus();
+  } else if (event.shiftKey && document.activeElement === first) {
     event.preventDefault();
     last.focus();
   } else if (!event.shiftKey && document.activeElement === last) {

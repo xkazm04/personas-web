@@ -3,11 +3,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
-import { ChevronUp, MessageCircle } from "lucide-react";
+import { AlertCircle, ChevronUp, MessageCircle } from "lucide-react";
 import { fadeUp } from "@/lib/animations";
 import { trackFeatureVote } from "@/lib/analytics";
 import { useTranslation } from "@/i18n/useTranslation";
-import type { Comment, Feature } from "../local-types";
+import type { Comment, Feature, WriteFailure } from "../local-types";
 import { localAccentTokens } from "../data";
 import FeatureCommentsPanel from "./FeatureCommentsPanel";
 import FeatureVoteIllustration from "./FeatureVoteIllustration";
@@ -23,6 +23,7 @@ export default function FeatureVoteCard({
   boostCount,
   onBoost,
   showBoostUI,
+  failure,
 }: {
   feature: Feature;
   /** Live vote count from /api/votes for this feature (excludes the marketing seed). */
@@ -34,6 +35,8 @@ export default function FeatureVoteCard({
   boostCount: number;
   onBoost: (featureId: string, tier: number) => void;
   showBoostUI: boolean;
+  /** The last vote/comment/boost the API refused for this feature, already rolled back. */
+  failure?: WriteFailure;
 }) {
   const reduced = useStillMotion();
   const { t } = useTranslation();
@@ -50,6 +53,12 @@ export default function FeatureVoteCard({
   if (initialVoted !== prevInitialVoted) {
     setPrevInitialVoted(initialVoted);
     setVoted(initialVoted);
+  }
+  // A refused comment comes back to its input, so open the discussion it lives in.
+  const [seenFailure, setSeenFailure] = useState(failure?.seq);
+  if (failure?.seq !== seenFailure) {
+    setSeenFailure(failure?.seq);
+    if (failure?.kind === "comment") setShowComments(true);
   }
 
   // apiCount already reflects every voter currently in the DB, including
@@ -162,8 +171,16 @@ export default function FeatureVoteCard({
           )}
         </div>
 
+        {failure && (
+          <p role="alert" className="mx-4 mb-3 flex items-center gap-1.5 text-sm font-mono tracking-wide text-brand-amber/80">
+            <AlertCircle aria-hidden className="h-3.5 w-3.5 shrink-0" />
+            {vt[failure.kind === "vote" ? "voteFailed" : failure.kind === "comment" ? "commentFailed" : "boostFailed"]}
+          </p>
+        )}
+
         <FeatureCommentsPanel
           open={showComments}
+          restore={failure?.kind === "comment" ? failure : undefined}
           featureId={feature.id}
           comments={comments}
           onAddComment={onAddComment}

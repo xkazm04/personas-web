@@ -29,8 +29,8 @@ export default function UsageView() {
   });
   const errorMsg = error instanceof Error ? error.message : error ? String(error) : null;
   // One data source in every mode: `api` routes to mockApi in demo (whose
-  // usage analytics are never empty) and to the live plane otherwise; an empty
-  // live dataset renders the empty charts honestly.
+  // usage analytics are never empty) and to the live plane otherwise. A chart
+  // with nothing to plot shows a typed note in its slot, never empty axes.
   const toolUsage = useMemo(() => data?.toolUsage ?? [], [data]);
   const toolUsageOverTime = useMemo(() => data?.toolUsageOverTime ?? [], [data]);
   const toolUsageByPersona = useMemo(() => data?.toolUsageByPersona ?? [], [data]);
@@ -124,6 +124,7 @@ export default function UsageView() {
 
   // The desktop plane does not serve this read: say so instead of an error over empty charts.
   if (isNotServed(error) && !data) return <DesktopUnsupportedNote />;
+  const emptyText = errorMsg && !data ? t.observabilityPage.chartLoadFailed : t.observabilityPage.nothingInWindow;
 
   return (
     <div>
@@ -140,6 +141,7 @@ export default function UsageView() {
         pieData={pieData}
         totalInvocations={totalInvocations}
         insight={insight}
+        emptyText={emptyText}
       />
 
       <UsageOverTimeCard
@@ -149,12 +151,14 @@ export default function UsageView() {
           usageOverTime: t.observabilityPage.usageOverTime,
           last14Days: t.observabilityPage.last14Days,
         }}
+        emptyText={emptyText}
       />
 
       <UsageByPersonaCard
         personaBarData={personaBarData}
         allToolNames={allToolNames}
         title={t.observabilityPage.toolUsageByAgent}
+        emptyText={emptyText}
       />
     </div>
   );

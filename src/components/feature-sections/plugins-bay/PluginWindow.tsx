@@ -70,7 +70,7 @@ export default function PluginWindow({
           <span
             key={p.key}
             aria-hidden="true"
-            className="absolute left-0 h-[30px] w-[6px] -translate-y-1/2 rounded-r-md transition-[background,box-shadow] duration-300"
+            className="absolute left-0 hidden h-[30px] w-[6px] -translate-y-1/2 rounded-r-md transition-[background,box-shadow] duration-300 lg:block"
             style={{
               top: i * (CARTRIDGE_H + CARTRIDGE_GAP) + CARTRIDGE_H / 2,
               background: p.key === plugin.key ? BRAND_VAR[p.brand] : "color-mix(in srgb, var(--foreground) 14%, transparent)",
@@ -79,7 +79,7 @@ export default function PluginWindow({
           />
         ))}
 
-        <div className="flex items-center gap-3 border-b border-foreground/[0.07] px-5 py-3">
+        <div className="flex flex-wrap items-center gap-3 border-b border-foreground/[0.07] px-4 py-3 lg:flex-nowrap lg:px-5">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ background: tint(plugin.brand, 14) }}>
             <Icon className="h-5 w-5" style={{ color: c }} aria-hidden="true" />
           </span>

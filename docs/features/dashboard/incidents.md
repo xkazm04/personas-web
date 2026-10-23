@@ -5,7 +5,7 @@
 Incidents is the fleet's audit-log inbox: every notable event the orchestrator records — circuit-breaker trips, SLO breaches, missing secrets, repeated tool failures, cron drift, review-SLA escalations — surfaced as a single triage queue.
 
 - **KPI header** — the unresolved count (open + escalated) over the total, a severity breakdown (critical / high / medium / low), and a source breakdown (executions / events / triggers / vault / messages / reviews).
-- **Filters** — status, severity, source, and persona pill bars. Pill counts reflect the full set; selections persist across reloads.
+- **Filters** — status, severity, source, and persona pill bars. Status, severity and source pills carry counts that follow the other active filters (disjunctive: a facet ignores its own selection, `incidentFacetCounts` in `src/lib/incidentFormat.ts`), so each number is what a click on that pill would show; selections persist across reloads.
 - **Group by** — none (flat list), agent, severity, or source, with collapsible sections.
 - **Detail modal** — click any incident for the full description, a metadata grid (source / category / agent / detected / resolved), badges (circuit-breaker, auto-fixed), and a recommended remediation. An incident that correlates with signals on other routes (today: the Slack outage with its SLA breach and Observability issue) shows **Related** chips that deep-link to them.
 - **Settles with its cause** — configuring the broken Slack check on Health resolves the Slack incident here (and its correlated cluster) in the same session, and lowers the nav badge; Health's **Undo fix** reopens it.

@@ -9,6 +9,7 @@ export default function CommentInput({
   submitLabel,
   accentRgba,
   autoFocus = false,
+  restore,
 }: {
   onSubmit: (text: string) => void;
   placeholder: string;
@@ -16,8 +17,15 @@ export default function CommentInput({
   submitLabel: string;
   accentRgba: (a: number) => string;
   autoFocus?: boolean;
+  /** Text handed back after the API refused it; a new `seq` refills the box. */
+  restore?: { text: string; seq: number };
 }) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(restore?.text ?? "");
+  const [seenSeq, setSeenSeq] = useState(restore?.seq);
+  if (restore && restore.seq !== seenSeq) {
+    setSeenSeq(restore.seq);
+    setValue(restore.text);
+  }
 
   const handleSubmit = () => {
     const trimmed = value.trim();

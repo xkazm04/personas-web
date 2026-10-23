@@ -17,12 +17,15 @@ export default function Cartridge({
   tagline,
   active,
   still,
+  seat,
   onSelect,
 }: {
   plugin: LabPlugin;
   tagline: string;
   active: boolean;
   still: boolean;
+  /** Slide into the window's socket when active (the side-by-side desktop bay only). */
+  seat: boolean;
   onSelect: () => void;
 }) {
   const c = BRAND_VAR[plugin.brand];
@@ -34,9 +37,9 @@ export default function Cartridge({
       aria-pressed={active}
       onClick={onSelect}
       initial={false}
-      animate={{ x: active ? 16 : 0 }}
+      animate={{ x: active && seat ? 16 : 0 }}
       transition={still ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 22 }}
-      className="group relative flex w-full items-center gap-4 rounded-2xl border px-4 text-left outline-none transition-[background,border-color,box-shadow] duration-300 focus-visible:ring-2 focus-visible:ring-brand-cyan"
+      className="group relative flex w-full items-center gap-3 rounded-2xl border px-3 text-left lg:gap-4 lg:px-4 outline-none transition-[background,border-color,box-shadow] duration-300 focus-visible:ring-2 focus-visible:ring-brand-cyan"
       style={{
         height: CARTRIDGE_H,
         borderColor: active ? tint(plugin.brand, 55) : "color-mix(in srgb, var(--foreground) 10%, transparent)",
@@ -47,18 +50,18 @@ export default function Cartridge({
       }}
     >
       <span
-        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300 lg:h-12 lg:w-12"
         style={{ borderColor: tint(plugin.brand, active ? 50 : 20), background: tint(plugin.brand, active ? 20 : 8) }}
       >
         <Icon className="h-6 w-6" style={{ color: c }} aria-hidden="true" />
       </span>
       <span className="min-w-0">
-        <span className={`block text-[19px] font-semibold leading-tight ${active ? "text-foreground" : "text-foreground/75 group-hover:text-foreground"}`}>
+        <span className={`block text-[16px] font-semibold leading-tight lg:text-[19px] ${active ? "text-foreground" : "text-foreground/75 group-hover:text-foreground"}`}>
           {plugin.label}
         </span>
-        <span className="mt-1 block text-[14px] leading-snug text-foreground/65">{tagline}</span>
+        <span className="mt-1 hidden text-[14px] leading-snug text-foreground/65 lg:block">{tagline}</span>
       </span>
-      <span aria-hidden="true" className="absolute -right-[26px] top-1/2 flex -translate-y-1/2 flex-col gap-2.5">
+      <span aria-hidden="true" className="absolute -right-[26px] top-1/2 hidden -translate-y-1/2 flex-col gap-2.5 lg:flex">
         {[0, 1].map((i) => (
           <span
             key={i}

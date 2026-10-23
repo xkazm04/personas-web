@@ -31,6 +31,9 @@
     changelog: string;
     pricing: string;
     menu: string;
+    openMenu: string;
+    closeMenu: string;
+    navigationMenu: string;
   };
   footer: {
     tagline: string;
@@ -88,6 +91,8 @@
     edit: string;
     search: string;
     noResults: string;
+    sectionLoadFailed: string;
+    reload: string;
     signOut: string;
     signingOut: string;
     signIn: string;
@@ -429,6 +434,8 @@
     selected: string;
     selectReviewsBulk: string;
     noReviewsInFilter: string;
+    reviewsLoadFailed: string;
+    reviewsRefreshFailed: string;
     refreshing: string;
     rejectSelectedTitle: string;
     rejectSelectedBody: string;
@@ -924,6 +931,8 @@
     noIssuesDetected: string;
     noSeverityIssues: string;
     toolInvocations: string;
+    nothingInWindow: string;
+    chartLoadFailed: string;
     distribution: string;
     usageOverTime: string;
     last14Days: string;
@@ -1070,6 +1079,8 @@
     noEvents: string;
     noMatchingEventsDescription: string;
     noEventsDescription: string;
+    loadFailed: string;
+    loadFailedDescription: string;
     loadMore: string;
     failedEventSelected: string;
     failedEventsSelected: string;
@@ -1428,6 +1439,9 @@
     addCommentPlaceholder: string;
     writeReplyPlaceholder: string;
     sendCommentAria: string;
+    voteFailed: string;
+    commentFailed: string;
+    boostFailed: string;
     summary: {
       totalVotes: string;
       commentOne: string;
@@ -2019,6 +2033,9 @@ export const en: CoreTranslations = {
     changelog: 'Changelog',
     pricing: 'Pricing',
     menu: 'Menu',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    navigationMenu: 'Navigation menu',
   },
   footer: {
     tagline: 'AI agents that work for you',
@@ -2076,6 +2093,8 @@ export const en: CoreTranslations = {
     edit: 'Edit',
     search: 'Search',
     noResults: 'No results found',
+    sectionLoadFailed: "This section didn't load.",
+    reload: 'Reload',
     signOut: 'Sign out',
     signingOut: 'Signing out…',
     signIn: 'Sign in',
@@ -2498,6 +2517,8 @@ export const en: CoreTranslations = {
     selected: "selected",
     selectReviewsBulk: "Select reviews for bulk actions",
     noReviewsInFilter: "No reviews in this filter",
+    reviewsLoadFailed: "Couldn't load the review queue.",
+    reviewsRefreshFailed: "Couldn't refresh. Showing the last loaded reviews.",
     refreshing: "Refreshing...",
     rejectSelectedTitle: "Reject selected reviews?",
     rejectSelectedBody: "This will reject the selected reviews ({count}). You will have 5 seconds to undo this action.",
@@ -2983,6 +3004,8 @@ export const en: CoreTranslations = {
     noIssuesDetected: 'No issues detected across monitored services',
     noSeverityIssues: 'No {severity} severity issues',
     toolInvocations: 'Tool Invocations',
+    nothingInWindow: 'Nothing recorded in this window',
+    chartLoadFailed: "Couldn't load this data",
     distribution: 'Distribution',
     usageOverTime: 'Usage Over Time',
     last14Days: 'Last 14 days',
@@ -3126,6 +3149,8 @@ export const en: CoreTranslations = {
     noEvents: 'No events',
     noMatchingEventsDescription: 'Try adjusting your search or filters',
     noEventsDescription: 'Events will appear here as agents process triggers and subscriptions',
+    loadFailed: "Couldn't load events",
+    loadFailedDescription: "The event list didn't load, so an empty list here doesn't mean nothing happened.",
     loadMore: 'Load more events',
     failedEventSelected: 'failed event selected',
     failedEventsSelected: 'failed events selected',
@@ -3424,6 +3449,9 @@ export const en: CoreTranslations = {
     addCommentPlaceholder: 'Add a comment...',
     writeReplyPlaceholder: 'Write a reply...',
     sendCommentAria: 'Send comment',
+    voteFailed: "Your vote didn't go through. Try again.",
+    commentFailed: "Your comment didn't post. It's back in the box below.",
+    boostFailed: "Your boost didn't go through. Try again.",
     summary: {
       totalVotes: '{count} total votes',
       commentOne: '{count} comment',

@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import SectionWrapper from "@/components/SectionWrapper";
-import { ArtBox, Intro, ReplayButton, ScenarioChips, StylisedTag, useTimelineCopy, useWide } from "./shared/Frame";
+import { ArtBox, Intro, PauseButton, ReplayButton, ScenarioChips, StylisedTag, useTimelineCopy, useWide } from "./shared/Frame";
 import { fill, useStory } from "./shared/motion";
 import { DESK, DURATION } from "./data";
 import Scene from "./Scene";
@@ -22,7 +22,16 @@ export default function HowLabTimelineV3() {
   const copy = useTimelineCopy();
   const wide = useWide();
   const ref = useRef<HTMLDivElement>(null);
-  const { p, index, choose, replay, done, still } = useStory(ref, copy.v3.cases.length, () => DURATION, { hold: 3.5 });
+  const [paused, setPaused] = useState(false);
+  const { p, index, choose, replay, resume, done, still, picked } = useStory(ref, copy.v3.cases.length, () => DURATION, { hold: 3.5, paused });
+  // Paused by the control, or stopped by a scenario pick: either way the
+  // control offers Resume, which also hands the cycle back to auto-advance.
+  const stopped = paused || picked;
+  const togglePause = () => {
+    if (!stopped) return setPaused(true);
+    setPaused(false);
+    resume();
+  };
   const cs = copy.v3.cases[index];
   const sc = copy.scenarios[index];
 
@@ -31,6 +40,7 @@ export default function HowLabTimelineV3() {
       <Intro lede={copy.v3.lede} />
       <ScenarioChips names={copy.scenarios.map((s) => s.name)} index={index} onPick={choose} progress={p}>
         <span aria-hidden className="mx-1 hidden h-6 w-px bg-glass-hover sm:block" />
+        <PauseButton paused={stopped} onClick={togglePause} disabled={still} />
         <ReplayButton onClick={replay} disabled={still} />
       </ScenarioChips>
       {wide ? (

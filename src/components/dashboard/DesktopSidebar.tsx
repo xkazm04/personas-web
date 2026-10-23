@@ -130,8 +130,9 @@ function SectionPanel({ section, nav }: { section: NavSection; nav: NavState }) 
 
 function ConnectionChip({ nav }: { nav: NavState }) {
   const { t } = useTranslation();
-  const { isConnected, health } = nav;
-  const label = isConnected ? t.dashboardUi.connected : t.dashboardUi.disconnected;
+  const { isConnected, isChecking, health } = nav;
+  const label = isChecking ? t.common.checking : isConnected ? t.dashboardUi.connected : t.dashboardUi.disconnected;
+  const tone = isChecking ? "text-muted-dark" : isConnected ? "text-emerald-400" : "text-red-400";
   const workers = isConnected && health?.workers ? `${health.workers.total}${t.dashboardUi.weekAbbr}` : null;
 
   return (
@@ -139,7 +140,10 @@ function ConnectionChip({ nav }: { nav: NavState }) {
       className="flex flex-col items-center gap-1 border-t border-glass px-1 py-3 text-xs"
       title={workers ? `${label} · ${workers}` : label}
     >
-      {isConnected ? (
+      {isChecking ? (
+        // Before the first health poll settles: neutral, not a failure.
+        <Wifi aria-hidden className="h-3.5 w-3.5 text-muted-dark" />
+      ) : isConnected ? (
         <span className="relative flex h-3.5 w-3.5 items-center justify-center">
           <Wifi aria-hidden className="absolute h-3.5 w-3.5 text-emerald-400" />
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40 motion-reduce:hidden" />
@@ -147,7 +151,7 @@ function ConnectionChip({ nav }: { nav: NavState }) {
       ) : (
         <WifiOff aria-hidden className="h-3.5 w-3.5 text-red-400" />
       )}
-      <span className={`w-full truncate text-center ${isConnected ? "text-emerald-400" : "text-red-400"}`}>{label}</span>
+      <span className={`w-full truncate text-center ${tone}`}>{label}</span>
       {workers && <span className="tabular-nums text-muted-dark">{workers}</span>}
     </div>
   );

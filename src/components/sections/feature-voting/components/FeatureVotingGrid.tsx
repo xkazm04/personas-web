@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import SkeletonCard from "@/components/dashboard/SkeletonCard";
 import { staggerContainer } from "@/lib/animations";
 import { KOFI_USERNAME } from "../data";
-import type { Comment, Feature, LoadState } from "../local-types";
+import type { Comment, Feature, LoadState, WriteFailure } from "../local-types";
 import FeatureVoteCard from "./FeatureVoteCard";
 
 // Two columns from sm, three from lg. With an odd card count the last card
@@ -21,6 +21,7 @@ export default function FeatureVotingGrid({
   votedIds,
   comments,
   boostTotals,
+  failures,
   onToggleVote,
   onAddComment,
   onBoost,
@@ -31,6 +32,7 @@ export default function FeatureVotingGrid({
   votedIds: Set<string>;
   comments: Comment[];
   boostTotals: Record<string, number>;
+  failures: Record<string, WriteFailure>;
   onToggleVote: (featureId: string, voted: boolean) => void;
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   onBoost: (featureId: string, weight: number) => void;
@@ -68,6 +70,7 @@ export default function FeatureVotingGrid({
           comments={comments}
           onAddComment={onAddComment}
           boostCount={boostTotals[feature.id] ?? 0}
+          failure={failures[feature.id]}
           onBoost={onBoost}
           showBoostUI={!!KOFI_USERNAME}
         />

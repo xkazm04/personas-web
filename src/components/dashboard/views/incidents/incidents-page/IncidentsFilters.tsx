@@ -11,7 +11,7 @@ import {
   INCIDENT_STATUSES,
   type AuditIncident,
 } from "@/lib/mock-dashboard-data";
-import type { SeverityFilter, SourceFilter, StatusFilter } from "@/lib/incidentFormat";
+import { incidentFacetCounts, type SeverityFilter, type SourceFilter, type StatusFilter } from "@/lib/incidentFormat";
 import { useIncidentsFilterStore } from "@/stores/incidentsFilterStore";
 
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
@@ -25,7 +25,8 @@ function FilterGroup({ label, children }: { label: string; children: React.React
 
 /**
  * Incidents filter controls: status / severity / source / persona pill bars.
- * Pill counts reflect the full incident set (stable as other filters change).
+ * Pill counts follow the other active filters (disjunctive: a facet ignores
+ * its own selection), so each number is what a click on that pill would show.
  * Selections live in the persisted incidents filter store.
  */
 export function IncidentsFilters({
@@ -51,17 +52,11 @@ export function IncidentsFilters({
   const setPersona = useIncidentsFilterStore((s) => s.setPersona);
   const reset = useIncidentsFilterStore((s) => s.reset);
 
-  const { statusCounts, severityCounts, personas } = useMemo(() => {
-    const sc: Record<string, number> = { all: incidents.length };
-    const vc: Record<string, number> = { all: incidents.length };
-    const names = new Set<string>();
-    for (const i of incidents) {
-      sc[i.status] = (sc[i.status] ?? 0) + 1;
-      vc[i.severity] = (vc[i.severity] ?? 0) + 1;
-      names.add(i.persona);
-    }
-    return { statusCounts: sc, severityCounts: vc, personas: [...names].sort() };
-  }, [incidents]);
+  const personas = useMemo(() => [...new Set(incidents.map((i) => i.persona))].sort(), [incidents]);
+  const { status: statusCounts, severity: severityCounts, source: sourceCounts } = useMemo(
+    () => incidentFacetCounts(incidents, { status, severity, source, persona }),
+    [incidents, status, severity, source, persona],
+  );
 
   const hasActiveFilter =
     status !== "all" || severity !== "all" || source !== "all" || persona !== "all";
@@ -98,8 +93,8 @@ export function IncidentsFilters({
           active={source}
           onChange={(k) => setSource(k as SourceFilter)}
           options={[
-            { key: "all", label: labels.source.all },
-            ...INCIDENT_SOURCES.map((s) => ({ key: s, label: labels.source[s] })),
+            { key: "all", label: labels.source.all, count: pending ? undefined : (sourceCounts.all ?? 0) },
+            ...INCIDENT_SOURCES.map((s) => ({ key: s, label: labels.source[s], count: pending ? undefined : (sourceCounts[s] ?? 0) })),
           ]}
         />
       </FilterGroup>

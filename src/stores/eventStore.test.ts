@@ -290,6 +290,31 @@ describe("behaviours the FSM must not regress", () => {
     expect(useEventStore.getState().listNotServed).toBe(false);
   });
 
+  it("the first read settles the list either way; a non-501 failure sets eventsError and keeps the rows; a success clears it; reset clears both", async () => {
+    const { api } = await import("@/lib/api");
+    const { ApiError } = await import("@/lib/api-error");
+    const list = api.listEvents as unknown as ReturnType<typeof vi.fn>;
+    useEventStore.getState().reset();
+    expect(useEventStore.getState().eventsSettled).toBe(false);
+    list.mockRejectedValueOnce(new Error("network"));
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState()).toMatchObject({ eventsSettled: true, eventsError: true });
+    const kept = event({ status: "pending" });
+    seed([kept]);
+    list.mockRejectedValueOnce(new ApiError(500, "boom"));
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().eventsError).toBe(true);
+    expect(useEventStore.getState().events.map((e) => e.id)).toEqual([kept.id]);
+    list.mockResolvedValueOnce([]);
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().eventsError).toBe(false);
+    list.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await useEventStore.getState().fetchEvents();
+    expect(useEventStore.getState().eventsError).toBe(false);
+    useEventStore.getState().reset();
+    expect(useEventStore.getState()).toMatchObject({ eventsSettled: false, eventsError: false });
+  });
+
   it("a 501 from the subscription read sets subscriptionsNotServed and keeps the rows; a success clears it; another error leaves it; reset clears it", async () => {
     const { api } = await import("@/lib/api");
     const { ApiError } = await import("@/lib/api-error");

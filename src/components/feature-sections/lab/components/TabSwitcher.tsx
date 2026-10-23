@@ -42,10 +42,12 @@ export default function TabSwitcher({
               }}
             >
               <Icon
+                aria-hidden
                 className="h-4 w-4"
                 style={{ color: isActive ? tab.color : undefined }}
               />
-              <span className="hidden sm:inline">{tabs[tab.key].label}</span>
+              {/* Visually hidden below sm, not removed: the label stays the button's accessible name on phones. */}
+              <span className="sr-only sm:not-sr-only">{tabs[tab.key].label}</span>
             </button>
           );
         })}
