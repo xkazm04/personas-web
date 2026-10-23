@@ -5439,7 +5439,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/roadmap/areas.ts:136 The Windows completion percentage is hand-authored without an adjacent explanation of the missing measurement mechanism, so its provenance is undocumented.",
+          "evaluatedAt": "2026-10-23",
+          "evaluatedAgainst": "sha256-b2:60eb54ef03f44a69",
+          "evaluatedRevision": 3
         },
         {
           "subject": "mcp-tools",

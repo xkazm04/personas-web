@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "14312efa-1476-45bc-929b-fceb5dfbefd6",
+ "subject": "public-claim-provenance",
+ "evaluatedAt": "2026-10-23T21:07:26.503950+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "Public Roadmap",
+   "subject": "public-claim-provenance",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/roadmap/areas.ts:136 The Windows completion percentage is hand-authored without an adjacent explanation of the missing measurement mechanism, so its provenance is undocumented.",
+   "techniques": [
+    {
+     "technique": "build-time-derivation-off-the-client-bundle",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/roadmap/roadmap-area-counts.ts:1 The protected module reduces template, connector and locale registries to numeric counts; the server component passes those counts into RoadmapAreas."
+    },
+    {
+     "technique": "degraded-never-claims-live",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/roadmap/index.tsx:24 These counters receive build-time counts rather than request-time results; searches found no /api/roadmap consumer in src, e2e or scripts."
+    },
+    {
+     "technique": "derived-numerator-authored-denominator",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/roadmap/areas.ts:212 The template fractions use numerators counted from the actual templates catalog and denominators declared in the aspirational TEMPLATE_TARGETS table."
+    },
+    {
+     "technique": "no-data-source-labelled-inline",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/roadmap/areas.ts:136 Windows completion has no adjacent provenance explanation; several device, collaboration and platform percentages likewise lack the required missing-instrument label."
+    },
+    {
+     "technique": "presentation-invariants-on-derived-values",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/roadmap/components/RoadmapAreas.tsx:93 Derived template ratios reach percentages, ARIA values and clip geometry without a clamp; repository searches found no assertion enforcing the documented target >= count invariant."
+    },
+    {
+     "technique": "provenance-as-a-build-gate",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/roadmap/components/RoadmapAreas.tsx:152 This surface renders percentages directly without the formatting chokepoint that the technique explicitly requires before introducing its gate."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-23T21:07:26.503950+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "public-claim-provenance"
+   ],
+   "techniques": [
+    "build-time-derivation-off-the-client-bundle",
+    "degraded-never-claims-live",
+    "derived-numerator-authored-denominator",
+    "no-data-source-labelled-inline",
+    "presentation-invariants-on-derived-values",
+    "provenance-as-a-build-gate"
+   ],
+   "deviations": 1,
+   "context": "Public Roadmap",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
