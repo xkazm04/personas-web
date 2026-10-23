@@ -7,6 +7,7 @@ import { ARRIVE, arriveAt } from "@/components/dashboard/arrival/arrive";
 import { fadeUp } from "@/lib/animations";
 
 import { formatToolName } from "./usageViewData";
+import { ChartEmptyNote } from "../ChartEmptyNote";
 
 // All four charts live in one module (`UsageCharts`, recharts): one shared
 // chunk behind one named loader. Every T3 slot passes it as `preload`, so the
@@ -67,8 +68,11 @@ export function UsageTopCharts({
   pieData,
   totalInvocations,
   insight,
+  emptyText,
 }: {
   labels: { toolInvocations: string; distribution: string };
+  /** Copy for a chart with nothing to plot (no axes are drawn around nothing). */
+  emptyText: string;
   barData: { name: string; invocations: number; fill: string }[];
   pieData: { name: string; value: number; color: string }[];
   totalInvocations: number;
@@ -81,9 +85,13 @@ export function UsageTopCharts({
           <Wrench className="h-4 w-4 text-brand-cyan" />
           {labels.toolInvocations}
         </h3>
-        <Deferred minHeight={BAR_HEIGHT} order={0} preload={loadUsageCharts}>
-          <UsageInvocationsBarChart barData={barData} formatToolName={formatToolName} />
-        </Deferred>
+        {barData.length === 0 ? (
+          <ChartEmptyNote height={BAR_HEIGHT} text={emptyText} />
+        ) : (
+          <Deferred minHeight={BAR_HEIGHT} order={0} preload={loadUsageCharts}>
+            <UsageInvocationsBarChart barData={barData} formatToolName={formatToolName} />
+          </Deferred>
+        )}
         {insight && <InsightBadge text={insight} />}
       </GlowCard>
 
@@ -92,13 +100,13 @@ export function UsageTopCharts({
           <BarChart3 className="h-4 w-4 text-brand-purple" />
           {labels.distribution}
         </h3>
-        <Deferred minHeight={pieBodyHeight(pieData.length)} order={1} preload={loadUsageCharts}>
-          <UsageDistributionPieChart
-            pieData={pieData}
-            totalInvocations={totalInvocations}
-            formatToolName={formatToolName}
-          />
-        </Deferred>
+        {pieData.length === 0 ? (
+          <ChartEmptyNote height={pieBodyHeight(0)} text={emptyText} />
+        ) : (
+          <Deferred minHeight={pieBodyHeight(pieData.length)} order={1} preload={loadUsageCharts}>
+            <UsageDistributionPieChart pieData={pieData} totalInvocations={totalInvocations} formatToolName={formatToolName} />
+          </Deferred>
+        )}
       </GlowCard>
     </div>
   );
@@ -108,10 +116,12 @@ export function UsageOverTimeCard({
   areaData,
   topTools,
   labels,
+  emptyText,
 }: {
   areaData: Record<string, string | number>[];
   topTools: string[];
   labels: { usageOverTime: string; last14Days: string };
+  emptyText: string;
 }) {
   return (
     <div className={`${ARRIVE} mb-8`} style={arriveAt(2)}>
@@ -121,13 +131,13 @@ export function UsageOverTimeCard({
           {labels.usageOverTime}
           <span className="text-sm text-muted-dark font-normal ml-auto">{labels.last14Days}</span>
         </h3>
-        <Deferred minHeight={AREA_HEIGHT} order={2} preload={loadUsageCharts}>
-          <UsageOverTimeAreaChart
-            areaData={areaData}
-            topTools={topTools}
-            formatToolName={formatToolName}
-          />
-        </Deferred>
+        {areaData.length === 0 || topTools.length === 0 ? (
+          <ChartEmptyNote height={AREA_HEIGHT} text={emptyText} />
+        ) : (
+          <Deferred minHeight={AREA_HEIGHT} order={2} preload={loadUsageCharts}>
+            <UsageOverTimeAreaChart areaData={areaData} topTools={topTools} formatToolName={formatToolName} />
+          </Deferred>
+        )}
       </GlowCard>
     </div>
   );
@@ -137,10 +147,12 @@ export function UsageByPersonaCard({
   personaBarData,
   allToolNames,
   title,
+  emptyText,
 }: {
   personaBarData: Record<string, string | number>[];
   allToolNames: string[];
   title: string;
+  emptyText: string;
 }) {
   return (
     <div className={ARRIVE} style={arriveAt(3)}>
@@ -149,13 +161,13 @@ export function UsageByPersonaCard({
           <Wrench className="h-4 w-4 text-amber-400" />
           {title}
         </h3>
-        <Deferred minHeight={PERSONA_BAR_HEIGHT} order={3} preload={loadUsageCharts}>
-          <UsageByPersonaBarChart
-            personaBarData={personaBarData}
-            allToolNames={allToolNames}
-            formatToolName={formatToolName}
-          />
-        </Deferred>
+        {personaBarData.length === 0 ? (
+          <ChartEmptyNote height={PERSONA_BAR_HEIGHT} text={emptyText} />
+        ) : (
+          <Deferred minHeight={PERSONA_BAR_HEIGHT} order={3} preload={loadUsageCharts}>
+            <UsageByPersonaBarChart personaBarData={personaBarData} allToolNames={allToolNames} formatToolName={formatToolName} />
+          </Deferred>
+        )}
       </GlowCard>
     </div>
   );

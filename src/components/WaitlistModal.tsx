@@ -63,7 +63,7 @@ export default function WaitlistModal({ platformKey, platformLabel, platformIcon
     if (open) resetModalState({ setStatus, setEmail, setSubmittedEmail, setEarlyBeta, setErrorMsg, setShareState, setShareFallbackUrl });
   }
 
-  useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, previousFocusRef });
+  useWaitlistFocusAndKeys({ open, onClose, fetchCount, modalRef, previousFocusRef, settled: status === "success" || status === "duplicate" });
   useEffect(() => {
     if (open) trackWaitlistOpen(platformKey, entryPoint);
   }, [open, platformKey, entryPoint]);

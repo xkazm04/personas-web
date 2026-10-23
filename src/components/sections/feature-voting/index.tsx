@@ -15,6 +15,7 @@ export default function FeatureVoting() {
     boostTotals,
     voteCounts,
     loadState,
+    failures,
     handleToggleVote,
     handleAddComment,
     handleBoost,
@@ -39,6 +40,7 @@ export default function FeatureVoting() {
         votedIds={votedIds}
         comments={comments}
         boostTotals={boostTotals}
+        failures={failures}
         onToggleVote={handleToggleVote}
         onAddComment={handleAddComment}
         onBoost={handleBoost}

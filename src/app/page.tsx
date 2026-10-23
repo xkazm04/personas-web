@@ -13,6 +13,7 @@ import {
   LazyVision,
 } from "@/components/sections/lazy";
 import StageSection from "@/components/StageSection";
+import SectionErrorBoundary from "@/components/sections/SectionErrorBoundary";
 import LazyMount from "@/components/LazyMount";
 import LandingHashArrival from "@/components/LandingHashArrival";
 import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
@@ -61,13 +62,16 @@ export default function Home() {
           return (
           <div key={anchorId} id={wrapperId} data-scroll-anchor={anchorId}>
             <StageSection glow={glow} fromColor={fromColor} toColor={toColor}>
-              {gate ? (
-                <LazyMount stage minHeight={640}>
+              {/* A section whose chunk fails stays a failed section, not a failed page. */}
+              <SectionErrorBoundary anchorId={anchorId} minHeight={640}>
+                {gate ? (
+                  <LazyMount stage minHeight={640}>
+                    <Component />
+                  </LazyMount>
+                ) : (
                   <Component />
-                </LazyMount>
-              ) : (
-                <Component />
-              )}
+                )}
+              </SectionErrorBoundary>
             </StageSection>
           </div>
           );

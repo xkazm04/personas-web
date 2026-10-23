@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useStillMotion } from "@/hooks/useStillMotion";
 import { CornerDownRight } from "lucide-react";
 import { useTranslation } from "@/i18n/useTranslation";
-import type { Comment } from "../local-types";
+import type { Comment, WriteFailure } from "../local-types";
 import CommentBubble from "./CommentBubble";
 import CommentInput from "./CommentInput";
 
@@ -14,16 +14,26 @@ export default function CommentThread({
   comments,
   onAddComment,
   accentRgba,
+  restore,
 }: {
   featureId: string;
   comments: Comment[];
   onAddComment: (featureId: string, text: string, parentId: string | null) => void;
   accentRgba: (a: number) => string;
+  /** A refused comment: its text goes back to the input it came from. */
+  restore?: WriteFailure;
 }) {
   const reduced = useStillMotion();
   const { t } = useTranslation();
   const vt = t.featureVoting;
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  // A refused reply reopens its reply box, which then takes the text back.
+  const [seenRestore, setSeenRestore] = useState(restore?.seq);
+  if (restore?.seq !== seenRestore) {
+    setSeenRestore(restore?.seq);
+    if (restore?.parentId) setReplyingTo(restore.parentId);
+  }
+  const draftFor = (parentId: string | null) => (restore && (restore.parentId ?? null) === parentId && restore.text !== undefined ? { text: restore.text, seq: restore.seq } : undefined);
   const featureComments = comments.filter((c) => c.featureId === featureId);
   const topLevel = featureComments.filter((c) => c.parentId === null);
   const replies = featureComments.filter((c) => c.parentId !== null);
@@ -83,6 +93,7 @@ export default function CommentThread({
                     submitLabel={vt.sendCommentAria}
                     accentRgba={accentRgba}
                     autoFocus
+                    restore={draftFor(comment.id)}
                   />
                 </motion.div>
               )}
@@ -96,6 +107,7 @@ export default function CommentThread({
           placeholder={vt.addCommentPlaceholder}
           submitLabel={vt.sendCommentAria}
           accentRgba={accentRgba}
+          restore={draftFor(null)}
         />
       </div>
     </div>

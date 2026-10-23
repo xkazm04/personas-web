@@ -163,6 +163,21 @@ describe("reviewStore decision ledger", () => {
     await store().fetchReviews();
     expect(store().listNotServed).toBe(false);
   });
+
+  it("a non-501 list failure sets reviewsError and keeps the rows; a success clears it; a 501 does not set it", async () => {
+    const { ApiError } = await import("@/lib/api-error");
+    await load([ev("r1", "high", 5)]);
+    expect(store().reviewsError).toBe(false);
+    listEvents.mockRejectedValueOnce(new Error("network"));
+    await store().fetchReviews();
+    expect(store().reviewsError).toBe(true);
+    expect(store().reviews.map((r) => r.id)).toEqual(["r1"]);
+    await load([ev("r1", "high", 5)]);
+    expect(store().reviewsError).toBe(false);
+    listEvents.mockRejectedValueOnce(new ApiError(501, "{}"));
+    await store().fetchReviews();
+    expect(store().reviewsError).toBe(false);
+  });
 });
 
 describe("council Approval reportId", () => {

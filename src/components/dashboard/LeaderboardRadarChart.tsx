@@ -26,6 +26,9 @@ export interface RadarDatum {
   benchmark?: number;
 }
 
+/** Axis names and radius ticks: the theme's muted text token at 12px, readable on every theme. */
+const RADAR_TICK = { fill: "var(--muted-dark)", fontSize: 12 } as const;
+
 export default function LeaderboardRadarChart({
   data,
   selectedName,
@@ -49,12 +52,12 @@ export default function LeaderboardRadarChart({
         <PolarGrid stroke="rgba(255,255,255,0.08)" />
         <PolarAngleAxis
           dataKey="metric"
-          tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 11 }}
+          tick={RADAR_TICK}
         />
         <PolarRadiusAxis
           angle={90}
           domain={[0, 100]}
-          tick={{ fill: "rgba(255,255,255,0.35)", fontSize: 10 }}
+          tick={RADAR_TICK}
           axisLine={false}
         />
         {/* Benchmark (#1) drawn first so it sits behind the selection. */}

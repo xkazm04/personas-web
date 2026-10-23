@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { motion, useTransform, type MotionValue } from "framer-motion";
 import { BRAND_VAR } from "@/lib/brand-theme";
 import { StylisedTag, frame } from "./shared/Stage";
@@ -42,7 +43,8 @@ function AgentBar({ i, clock, dim }: { i: number; clock: MotionValue<number>; di
   );
 }
 
-export default function Statement({ clock, agent }: { clock: MotionValue<number>; agent: number | null }) {
+/** `box` replaces the statement's place in the wide art (the phone layout puts it in flow). */
+export default function Statement({ clock, agent, box }: { clock: MotionValue<number>; agent: number | null; box?: CSSProperties }) {
   const c = featuresSectionsCopy.observe.v3;
   const spend = useTransform(clock, (s) => `$${AGENTS.reduce((sum, _, i) => sum + spendOf(i, s), 0).toFixed(2)}`);
   const runs = useTransform(clock, (s) => String(BASE.runs + printed(s)));
@@ -50,7 +52,7 @@ export default function Statement({ clock, agent }: { clock: MotionValue<number>
   const approvals = useTransform(clock, (s) => String(BASE.approvals + sumLines(printed(s), (l) => (l.stamp === "approved" ? 1 : 0))));
 
   return (
-    <div className="flex flex-col" style={{ ...place(STATEMENT.x, 0, STATEMENT.w, H), ...fs(17, 14) }}>
+    <div className="flex flex-col" style={box ?? { ...place(STATEMENT.x, 0, STATEMENT.w, H), ...fs(17, 14) }}>
       <div className="flex items-center justify-between">
         <span className="font-bold text-foreground" style={{ fontSize: "1.2em" }}>{c.statement.title}</span>
         <StylisedTag style={{ fontSize: "max(12px, 0.7em)" }} />

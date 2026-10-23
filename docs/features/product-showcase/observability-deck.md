@@ -25,6 +25,8 @@ positioned in viewBox units via `frame()`'s `place()`/`fs()`. Selection is
 `useState<number | null>` (agent index) in `index.tsx`; the three layers get
 `clock` and `agent`.
 
+**Below the desktop stage (64rem, `useWide`) the art stacks** (`PhoneRecord.tsx`): the 1200x600 box cannot hold its text floors in a narrow width, so the fleet becomes a row of chips (same isolate-one-agent toggle), the tape gets its own `ArtBox` of `TAPE.w + TAPE.margin` x `TAPE.h` units (`Tape`'s `box` prop; the cables and printer drop out), and the statement follows in flow (`Statement`'s `box` prop). A tape line's text truncates rather than run into its cost.
+
 **One monotonic clock.** `useClock(ref, REST_S)` (`shared/motion.ts`) is a framer
 `MotionValue` of seconds that runs (a linear 3600 s tween) only while
 `useLoopGate(ref)` allows (in view, tab foregrounded, motion allowed); pausing keeps the
@@ -50,6 +52,7 @@ line).
 | `observe-record/log.ts` | Geometry (`W/H`, `FLEET`, `TAPE`, `PRINTER`, `STATEMENT`), `AGENTS`, the 16-line `LINES` log, clock arithmetic |
 | `observe-record/FleetCables.tsx` | Agent buttons, cables, printer, "All agents" |
 | `observe-record/Tape.tsx` | Rising paper tape with lines and stamps |
+| `observe-record/PhoneRecord.tsx` | The stacked layout below 64rem: agent chips, full-width tape, statement in flow |
 | `observe-record/Statement.tsx` | Day's statement: totals and per-agent spend |
 | `observe-record/shared/Stage.tsx` | `Intro`, `ArtBox` (tour anchor), `frame()`, `StylisedTag`, `ToolMark` (masked `/tools/*.svg`) |
 | `observe-record/shared/motion.ts` | `useClock`, `usePlay`, `beat`, `seeded` (some unused here) |

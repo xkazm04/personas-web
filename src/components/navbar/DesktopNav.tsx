@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Download, LayoutDashboard } from "lucide-react";
+import { Download } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -34,7 +34,7 @@ export default function DesktopNav({ onDownloadClick }: DesktopNavProps) {
     <>
       {/* Route tabs */}
       <div className="hidden items-center gap-1 rounded-full border border-glass bg-white/2 p-1 backdrop-blur-sm lg:flex">
-        {routes.map((route) => {
+        {routes.filter((route) => route.kind === "tab").map((route) => {
           const isActive = pathname === route.href;
           return (
             <Link
@@ -62,15 +62,18 @@ export default function DesktopNav({ onDownloadClick }: DesktopNavProps) {
 
       {/* Right cluster — desktop only */}
       <div className="hidden items-center gap-2 lg:flex">
-        {/* Open the dashboard */}
-        <Link
-          href="/dashboard"
-          aria-label={t.nav.dashboard}
-          title={t.nav.dashboard}
-          className="group flex items-center justify-center min-h-11 min-w-11 rounded-full border border-glass bg-white/2 text-muted backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/8 hover:text-brand-cyan focus-ring"
-        >
-          <LayoutDashboard className="h-4 w-4" />
-        </Link>
+        {/* Utility entries from the route registry (the dashboard) as icon buttons */}
+        {routes.filter((route) => route.kind === "utility").map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            aria-label={label}
+            title={label}
+            className="group flex items-center justify-center min-h-11 min-w-11 rounded-full border border-glass bg-white/2 text-muted backdrop-blur-sm transition-all duration-300 hover:border-brand-cyan/40 hover:bg-brand-cyan/8 hover:text-brand-cyan focus-ring"
+          >
+            {Icon && <Icon className="h-4 w-4" />}
+          </Link>
+        ))}
 
         {/* Download CTA */}
         <button

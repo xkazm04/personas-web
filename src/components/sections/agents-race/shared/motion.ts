@@ -41,7 +41,7 @@ type StoryOptions = {
 /**
  * One story clock per scenario: `p` runs 0 -> 1 over `durationOf(index)`
  * seconds once the art is 30% in view, then the next scenario plays after
- * `hold`. Picking a scenario plays it and stops the auto-advance. The clock
+ * `hold`. Picking a scenario plays it and stops the auto-advance until `resume`. The clock
  * pauses off-screen and in a hidden tab; under reduced motion `p` rests at 1
  * and nothing advances on its own.
  */
@@ -102,6 +102,8 @@ export function useStory(ref: RefObject<Element | null>, count: number, duration
     setRun((r) => r + 1);
   }, []);
   const replay = useCallback(() => setRun((r) => r + 1), []);
+  /** Hands the scenarios back to the auto-advance after a pick stopped it. */
+  const resume = useCallback(() => setPicked(false), []);
 
-  return { p, index, choose, replay, done, still, picked };
+  return { p, index, choose, replay, resume, done, still, picked };
 }

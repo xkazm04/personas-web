@@ -7,6 +7,7 @@ import SectionIntro from "@/components/primitives/SectionIntro";
 import { staggerContainer } from "@/lib/animations";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useStillMotion } from "@/hooks/useStillMotion";
+import { useWide } from "@/components/sections/growth-dial/shared/useWide";
 import { SHOWCASE_COUNTS, pluginsIntro } from "@/components/feature-sections/plugins/roster";
 import { DEFAULT_LAB_PLUGIN, LAB_PLUGINS, pluginTagline, type LabPluginKey } from "./shared/roster";
 import Cartridge, { CARTRIDGE_GAP } from "./Cartridge";
@@ -25,6 +26,9 @@ export default function Plugins() {
   const { t, language } = useTranslation();
   const copy = t.pluginShowcase;
   const still = useStillMotion();
+  // At the desktop stage the cartridges seat sideways into the window; below
+  // it the bay stacks (cartridges over a full-width window) and they do not.
+  const wide = useWide();
   const [active, setActive] = useState<LabPluginKey>(DEFAULT_LAB_PLUGIN);
   const plugin = LAB_PLUGINS.find((p) => p.key === active) ?? LAB_PLUGINS[0];
   // Every shipped plugin is on stage, so the intro's two counts come from the
@@ -47,10 +51,10 @@ export default function Plugins() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: still ? 0 : 0.6 }}
-        className="mx-auto mt-8 flex w-full max-w-[1120px] items-stretch gap-[26px] pb-8 stage:mt-[2.4svh]"
+        className="mx-auto mt-8 flex w-full max-w-[1120px] flex-col gap-6 pb-8 lg:flex-row lg:items-stretch lg:gap-[26px] stage:mt-[2.4svh]"
       >
-        <div className="flex w-[290px] shrink-0 flex-col">
-          <div role="group" aria-label={copy.tabsLabel} className="flex flex-col" style={{ gap: CARTRIDGE_GAP }}>
+        <div className="flex w-full flex-col gap-4 lg:w-[290px] lg:shrink-0 lg:gap-0">
+          <div role="group" aria-label={copy.tabsLabel} className="grid grid-cols-2 lg:flex lg:flex-col" style={{ gap: CARTRIDGE_GAP }}>
             {LAB_PLUGINS.map((p) => (
               <Cartridge
                 key={p.key}
@@ -58,6 +62,7 @@ export default function Plugins() {
                 tagline={pluginTagline(t, p.copyKey)}
                 active={p.key === plugin.key}
                 still={still}
+                seat={wide}
                 onSelect={() => setActive(p.key)}
               />
             ))}
