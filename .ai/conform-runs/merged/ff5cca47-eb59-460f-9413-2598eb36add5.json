@@ -1,0 +1,136 @@
+{
+ "schema": "conform-run/1",
+ "worker": "ff5cca47-eb59-460f-9413-2598eb36add5",
+ "subject": "client-fetch-cache",
+ "evaluatedAt": "2026-10-24T22:38:58.137217+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Messages & Settings",
+   "subject": "client-fetch-cache",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:49 Every run of the hand-rolled fetch effect (retry, or the Activity boundary re-running effects when a kept view is shown again) flips loading back to true, and the view then swaps the rows it already holds for ghosts, so a refresh blocks the paint instead of revalidating behind cached data.",
+   "techniques": [
+    {
+     "technique": "swr-design",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/messages/index.tsx:142 The ghost branch is chosen on `loading` alone, not on 'loading and nothing held'. That breaks MessageRowGhosts' own doc ('Shown only while nothing is held; a refetch keeps the last rows on screen') and the stale-window rule to serve the cache and refresh behind it."
+    },
+    {
+     "technique": "warm-remount-caches",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:39 Fetched threads live in component state, with no module-scoped last-result map. Once ViewOutlet's KEEP_ALIVE=4 drops the view, a remount starts cold (loading=true, empty list)."
+    },
+    {
+     "technique": "in-flight-dedup",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 The fetcher is called directly from a per-view effect with no keyed join registry. A retry while a flight is still out launches a second identical request, and the `cancelled` flag only drops the first one's result (latest-wins, not dedup)."
+    },
+    {
+     "technique": "parse-and-derive-caches",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:72 A pure scope projection memoized by input reference identity. The derivation function stays the single door."
+    },
+    {
+     "technique": "sibling-entry-warmth",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/messages/index.tsx:89 The detail modal takes the full thread straight from the list by id. No separate detail read exists for a summary to warm."
+    },
+    {
+     "technique": "similarity-keyed-admission",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:44 There is no keyed cache here at all, let alone one keyed on resemblance."
+    }
+   ]
+  },
+  {
+   "context": "Incidents Inbox",
+   "subject": "client-fetch-cache",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:21 The incidents read goes through SWR under one registered key. It gets a fetch-layer join, a module-scoped cache that survives remount, held data shown during revalidation, and a write surface (fixCause's mutate over DEMO_THREAD_KEYS) that updates the entry when the demo thread settles.",
+   "techniques": [
+    {
+     "technique": "in-flight-dedup",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:21 SWR's keyed dedup at the fetch layer (dedupingInterval 60s in the shared hook) means concurrent readers join one flight."
+    },
+    {
+     "technique": "cache-key-discipline",
+     "verdict": "conformant",
+     "evidence": "src/lib/demoThreads.ts:13 One key registry that both the reader and the fix-writer import, for a read that takes no arguments. The tenant axis is handled by nulling the key outside demo, so a real tenant's session never reads the fixture entry."
+    },
+    {
+     "technique": "swr-design",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:64 Placeholders show only when nothing is held, so a revalidation keeps the last data painted. Focus and reconnect refetch are off. The stale ceiling is not named, but the source is a static fixture."
+    },
+    {
+     "technique": "warm-remount-caches",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:63 The SWR global cache outlives the view, so a remount paints warm with no T2 entrance. Updates are pushed into the cache by fixCause (mutate per thread key)."
+    },
+    {
+     "technique": "parse-and-derive-caches",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:54 A pure filter derivation memoized on the input reference plus the filter values. The applyIncidentFilters function stays the door to recompute."
+    },
+    {
+     "technique": "sibling-entry-warmth",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:44 The detail modal receives the full list row. There is no detail read for a summary to warm."
+    },
+    {
+     "technique": "similarity-keyed-admission",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:9 The entry is keyed by an identity string, not by resemblance."
+    }
+   ],
+   "registryProposal": "swr-design's 'name both thresholds' rule has no clause for a static fixture source, where the honest stale ceiling is 'forever' and the only live trigger is an explicit write. A short carve-out would stop seats from splitting on demo-only reads."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T22:38:58.137217+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-fetch-cache"
+   ],
+   "techniques": [
+    "in-flight-dedup",
+    "parse-and-derive-caches",
+    "sibling-entry-warmth",
+    "similarity-keyed-admission",
+    "swr-design",
+    "warm-remount-caches"
+   ],
+   "deviations": 1,
+   "context": "Messages & Settings",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T22:38:58.137217+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "client-fetch-cache"
+   ],
+   "techniques": [
+    "cache-key-discipline",
+    "in-flight-dedup",
+    "parse-and-derive-caches",
+    "sibling-entry-warmth",
+    "similarity-keyed-admission",
+    "swr-design",
+    "warm-remount-caches"
+   ],
+   "deviations": 0,
+   "context": "Incidents Inbox",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

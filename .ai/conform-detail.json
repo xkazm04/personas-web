@@ -9067,6 +9067,94 @@
           "evidence": "src/components/flow-composer/use-flow-composer.ts:96 There is no camera. The forward mapping is the SVG viewBox, but the inverse (toSvgX) is derived by hand from VB_W in the gesture hook, with a 8..92 clamp the forward mapping lacks, instead of coming from the projection (e.g. getScreenCTM). No round-trip test exists: data.test.ts covers only decodeFlow."
         }
       ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/client-fetch-cache": {
+      "context": "Messages & Settings",
+      "subject": "client-fetch-cache",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:38:58.137Z",
+      "worker": "ff5cca47-eb59-460f-9413-2598eb36add5",
+      "techniques": [
+        {
+          "technique": "swr-design",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:142 The ghost branch is chosen on `loading` alone, not on 'loading and nothing held'. That breaks MessageRowGhosts' own doc ('Shown only while nothing is held; a refetch keeps the last rows on screen') and the stale-window rule to serve the cache and refresh behind it."
+        },
+        {
+          "technique": "warm-remount-caches",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:39 Fetched threads live in component state, with no module-scoped last-result map. Once ViewOutlet's KEEP_ALIVE=4 drops the view, a remount starts cold (loading=true, empty list)."
+        },
+        {
+          "technique": "in-flight-dedup",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 The fetcher is called directly from a per-view effect with no keyed join registry. A retry while a flight is still out launches a second identical request, and the `cancelled` flag only drops the first one's result (latest-wins, not dedup)."
+        },
+        {
+          "technique": "parse-and-derive-caches",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:72 A pure scope projection memoized by input reference identity. The derivation function stays the single door."
+        },
+        {
+          "technique": "sibling-entry-warmth",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:89 The detail modal takes the full thread straight from the list by id. No separate detail read exists for a summary to warm."
+        },
+        {
+          "technique": "similarity-keyed-admission",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:44 There is no keyed cache here at all, let alone one keyed on resemblance."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Incidents Inbox/client-fetch-cache": {
+      "context": "Incidents Inbox",
+      "subject": "client-fetch-cache",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:38:58.137Z",
+      "worker": "ff5cca47-eb59-460f-9413-2598eb36add5",
+      "techniques": [
+        {
+          "technique": "in-flight-dedup",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:21 SWR's keyed dedup at the fetch layer (dedupingInterval 60s in the shared hook) means concurrent readers join one flight."
+        },
+        {
+          "technique": "cache-key-discipline",
+          "verdict": "conformant",
+          "evidence": "src/lib/demoThreads.ts:13 One key registry that both the reader and the fix-writer import, for a read that takes no arguments. The tenant axis is handled by nulling the key outside demo, so a real tenant's session never reads the fixture entry."
+        },
+        {
+          "technique": "swr-design",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:64 Placeholders show only when nothing is held, so a revalidation keeps the last data painted. Focus and reconnect refetch are off. The stale ceiling is not named, but the source is a static fixture."
+        },
+        {
+          "technique": "warm-remount-caches",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:63 The SWR global cache outlives the view, so a remount paints warm with no T2 entrance. Updates are pushed into the cache by fixCause (mutate per thread key)."
+        },
+        {
+          "technique": "parse-and-derive-caches",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:54 A pure filter derivation memoized on the input reference plus the filter values. The applyIncidentFilters function stays the door to recompute."
+        },
+        {
+          "technique": "sibling-entry-warmth",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:44 The detail modal receives the full list row. There is no detail read for a summary to warm."
+        },
+        {
+          "technique": "similarity-keyed-admission",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:9 The entry is keyed by an identity string, not by resemblance."
+        }
+      ],
+      "registryProposal": "swr-design's 'name both thresholds' rule has no clause for a static fixture source, where the honest stale ceiling is 'forever' and the only live trigger is an explicit write. A short carve-out would stop seats from splitting on demo-only reads."
     }
   }
 }

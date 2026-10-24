@@ -5967,7 +5967,11 @@
           "revision": 15,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:49 Every run of the hand-rolled fetch effect (retry, or the Activity boundary re-running effects when a kept view is shown again) flips loading back to true, and the view then swaps the rows it already holds for ghosts, so a refresh blocks the paint instead of revalidating behind cached data.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:20824426732ffb6a",
+          "evaluatedRevision": 15
         },
         {
           "subject": "outbound-notifications",
@@ -8228,7 +8232,11 @@
           "revision": 15,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:21 The incidents read goes through SWR under one registered key. It gets a fetch-layer join, a module-scoped cache that survives remount, held data shown during revalidation, and a write surface (fixCause's mutate over DEMO_THREAD_KEYS) that updates the entry when the demo thread settles.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:20824426732ffb6a",
+          "evaluatedRevision": 15
         },
         {
           "subject": "quality-gates",
