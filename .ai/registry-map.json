@@ -5490,7 +5490,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "docs/features/community/public-roadmap.md:9 A load-bearing negative claim is stamped 'as of writing' with no date, and no test pins the claim, so a reader can't tell when it was last true and nothing would notice if it stopped being true.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         }
       ],
       "governance": "governed"
@@ -7107,7 +7111,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "docs/features/dashboard/executions.md:17 The context's feature doc still points readers at `page.tsx:39`/`:47`, and no executions page.tsx exists any more (the polling now lives at useExecutionsList.ts:48); the rot persists because nothing in the scan treats a bare-basename anchor as checkable.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         },
         {
           "subject": "table",
@@ -9398,7 +9406,11 @@
           "revision": 14,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "docs/features/infrastructure/supabase-client.md:8 getSupabase is defined at src/lib/supabase.ts:36 and the throw is at :41, yet the doc cites :5 and :9-11. Most other line anchors in this doc are also off (supabaseApi.ts:57 → rows<T> at :108; api.ts:134 → ApiClient at :148), and the in-range meter reports all of them clean.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:fd96220db75846a1",
+          "evaluatedRevision": 14
         },
         {
           "subject": "agent-memory",

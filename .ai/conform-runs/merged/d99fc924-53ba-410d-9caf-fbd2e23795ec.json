@@ -1,0 +1,168 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d99fc924-53ba-410d-9caf-fbd2e23795ec",
+ "subject": "docs-sync",
+ "evaluatedAt": "2026-10-24T04:13:29.315949+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "docs-sync",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "docs/features/dashboard/executions.md:17 The context's feature doc still points readers at `page.tsx:39`/`:47`, and no executions page.tsx exists any more (the polling now lives at useExecutionsList.ts:48); the rot persists because nothing in the scan treats a bare-basename anchor as checkable.",
+   "techniques": [
+    {
+     "technique": "doc-rot-detection",
+     "verdict": "deviation",
+     "evidence": "docs/features/dashboard/executions.md:17 No executions page.tsx exists after the dashboard SPA rebuild; the poll is at src/components/dashboard/views/executions/useExecutionsList.ts:48. check-doc-anchors only counts src/-prefixed spans, so it never flags this claim and also never reports it as unverifiable."
+    },
+    {
+     "technique": "checked-vs-skipped-denominators",
+     "verdict": "deviation",
+     "evidence": "docs/features/dashboard/executions.md:80 The clamp is actually at src/app/api/executions/[id]/stream/route.ts:117 (line 64 is the bad_path origin check). This bare `route.ts:64` anchor isn't in the meter's '2403 anchors' denominator, and the meter prints no skipped count, so its 'broken' figure looks complete when it isn't."
+    },
+    {
+     "technique": "negative-claims-are-pinned",
+     "verdict": "deviation",
+     "evidence": "docs/features/dashboard/executions.md:81 A 'never' promise with no pin: stream.test.ts makes no host or upstream_unreachable assertion, so both the behavior and the sentence can disappear without anything failing."
+    },
+    {
+     "technique": "dated-corrections",
+     "verdict": "deviation",
+     "evidence": "docs/features/dashboard/executions.md:58 The superseded claim is kept visible, but it's marked by a milestone with no date and no instrument (likewise the undated 'it used to fall back to `completed`' on line 51)."
+    },
+    {
+     "technique": "source-doc-mapping",
+     "verdict": "conformant",
+     "evidence": "docs/features/dashboard/executions.md:2 The view is mapped to its doc, and view-level coverage is derived from DASHBOARD_VIEW_IDS and gated in CI by src/lib/featureDocsCoverage.test.ts. That gate covers the coupling only at the view grain, not at the claim level."
+    }
+   ]
+  },
+  {
+   "context": "Supabase Client",
+   "subject": "docs-sync",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "docs/features/infrastructure/supabase-client.md:8 getSupabase is defined at src/lib/supabase.ts:36 and the throw is at :41, yet the doc cites :5 and :9-11. Most other line anchors in this doc are also off (supabaseApi.ts:57 \u2192 rows<T> at :108; api.ts:134 \u2192 ApiClient at :148), and the in-range meter reports all of them clean.",
+   "techniques": [
+    {
+     "technique": "doc-rot-detection",
+     "verdict": "deviation",
+     "evidence": "docs/features/infrastructure/supabase-client.md:8 Line 5 of src/lib/supabase.ts is now a comment about fetch timeouts. Freshness is judged only on whether the anchor resolves, never on whether the claim still holds."
+    },
+    {
+     "technique": "dated-corrections",
+     "verdict": "conformant",
+     "evidence": "docs/features/infrastructure/supabase-client.md:33 Behavior changes are recorded in place with a date and a source ('before 2026-10-06 \u2026', 'scan d4b90e7a F11'). Line 10 ('since M20 (2026-10-07)') and line 46 ('PGlite-verified (56 checks)') follow the same practice."
+    },
+    {
+     "technique": "prose-as-an-execution-surface",
+     "verdict": "conformant",
+     "evidence": "scripts/run-sync-migration.mjs:5 The doc's runnable instruction (`npm run db:migrate:sync`, supabase-client.md:46) takes the credential from the environment, not as a positional argument, so following it doesn't put the DB URL into shell history or the process table."
+    }
+   ]
+  },
+  {
+   "context": "Public Roadmap",
+   "subject": "docs-sync",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "docs/features/community/public-roadmap.md:9 A load-bearing negative claim is stamped 'as of writing' with no date, and no test pins the claim, so a reader can't tell when it was last true and nothing would notice if it stopped being true.",
+   "techniques": [
+    {
+     "technique": "dated-corrections",
+     "verdict": "deviation",
+     "evidence": "docs/features/community/public-roadmap.md:9 'As of writing' is an undated freshness claim. The same doc does it right at line 71 ('removed with its five keys on 2026-10-18'), so the practice is applied inconsistently."
+    },
+    {
+     "technique": "negative-claims-are-pinned",
+     "verdict": "deviation",
+     "evidence": "docs/features/community/public-roadmap.md:62 Repo-wide search: no test or e2e spec asserts this wording or the absence of a consumer (the only test hit for api/roadmap is a type-import allow-list in moduleBoundaries.test.ts)."
+    },
+    {
+     "technique": "doc-rot-detection",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/roadmap/components/RoadmapProgress.tsx:19 public-roadmap.md:16 says RoadmapProgress is 'gated behind `useReducedMotion`', but the code uses useStillMotion. The claim is stale and no scan detects it."
+    },
+    {
+     "technique": "translations-drift-against-the-product",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/roadmap/roadmap-area-counts.ts:18 Card numbers in all 14 localized roadmapSection templates are derived from the shipped catalogs (templates, connectors, LANGUAGES) rather than from the English copy, so no locale can show a stale count. This covers counts only, not the wording of captions."
+    },
+    {
+     "technique": "source-doc-mapping",
+     "verdict": "conformant",
+     "evidence": "docs/features/community/public-roadmap.md:39 The module dir sits under check-feature-index MODULE_ROOTS (src/components/sections), and /roadmap is gated by featureDocsCoverage.test.ts. The module-level meter itself is advisory only."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "docs-sync",
+   "context": "Guide Content Blocks & Markdown",
+   "reason": "evidence leans on blocks/CardsBlock.tsx, which is not a tracked file"
+  },
+  {
+   "subject": "docs-sync",
+   "context": "Blog",
+   "reason": "evidence leans on src/lib/og.ts, which is not a tracked file"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-24T04:13:29.315949+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-sync"
+   ],
+   "techniques": [
+    "checked-vs-skipped-denominators",
+    "dated-corrections",
+    "doc-rot-detection",
+    "negative-claims-are-pinned",
+    "source-doc-mapping"
+   ],
+   "deviations": 1,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T04:13:29.315949+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-sync"
+   ],
+   "techniques": [
+    "dated-corrections",
+    "doc-rot-detection",
+    "prose-as-an-execution-surface"
+   ],
+   "deviations": 1,
+   "context": "Supabase Client",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T04:13:29.315949+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-sync"
+   ],
+   "techniques": [
+    "dated-corrections",
+    "doc-rot-detection",
+    "negative-claims-are-pinned",
+    "source-doc-mapping",
+    "translations-drift-against-the-product"
+   ],
+   "deviations": 1,
+   "context": "Public Roadmap",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
