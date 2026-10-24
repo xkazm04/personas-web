@@ -859,19 +859,43 @@
       "subject": "quality-gates",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T23:10:58.577Z",
-      "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:14:58.302Z",
+      "worker": "a010eb50-378a-46ae-8d02-03666bff053b",
       "techniques": [
         {
-          "technique": "renameable-detector-keys",
+          "technique": "match-the-resolved-artifact",
           "verdict": "deviation",
-          "evidence": "eslint-rules/require-animation-gating.js:67 A read-only callback probe produced one finding for direct unguarded requestAnimationFrame and zero for unguarded globalThis.requestAnimationFrame; the capability remains while its detector key changes."
+          "evidence": "src/contexts/reducedMotionHydration.test.ts:43 No presence assertion proves FRAMER_REDUCED_IMPORT matches a real import. The line-comment stripper at :25 is a regex pass with no fixture showing it handles // inside strings."
         },
         {
           "technique": "unparseable-form-is-a-finding",
           "verdict": "deviation",
-          "evidence": "eslint-rules/require-animation-gating.js:98 An unguarded member-expression frame call never enters triggerNodes, and this branch returns without an unsupported-form finding."
+          "evidence": "src/contexts/reducedMotionHydration.test.ts:31 Only the named-import form is recognised. `import * as fm from \"framer-motion\"` plus `fm.useReducedMotion()` is neither matched nor refused, even though the repo owns these files."
+        },
+        {
+          "technique": "renameable-detector-keys",
+          "verdict": "deviation",
+          "evidence": "src/contexts/reducedMotionHydration.test.ts:50 The key is the hook's local name, so an aliased import (`useStillMotion as usePref`) reads the preference in JS and stays green."
+        },
+        {
+          "technique": "waiver-names-its-finding",
+          "verdict": "deviation",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:1 A standing file-wide waiver that names the rule and gives a reason. It names no reaper, and nothing checks its premise that every entry path goes through the ParticleHost gate (ParticleHost.tsx:28)."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "src/contexts/reducedMotionHydration.test.ts:28 A moved or deleted target file throws ENOENT and the test goes red rather than checking an empty string."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "eslint-rules/require-animation-gating.js:67 The animation checker keys frame-loop detection on a bare callee name, allowing the same unguarded capability through member access or an alias.",
+          "evaluatedAt": "2026-10-12T23:10:58.577Z",
+          "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+          "reason": "replaced by a010eb50-378a-46ae-8d02-03666bff053b"
         }
       ]
     },
@@ -880,14 +904,58 @@
       "subject": "quality-gates",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T23:10:58.577Z",
-      "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:14:58.302Z",
+      "worker": "a010eb50-378a-46ae-8d02-03666bff053b",
       "techniques": [
         {
           "technique": "prose-rule-drift",
           "verdict": "deviation",
-          "evidence": "scripts/i18n/check-guide-translations.mjs:21 The CLI can refuse stale translations, but package.json exposes it without --strict, the installed pre-push body does not invoke it, and CI explicitly excludes it; a remembered manual command is the technique's unbacked-checker case."
+          "evidence": "scripts/i18n/guide-drift.mjs:653 The refusal path exists, but its only caller is a manual command without --strict. CI comments it out on purpose and pre-push does not name it."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "deviation",
+          "evidence": "package.json:36 The one wired invocation has no --strict, so it exits 0 at any drift count. Even when run by hand it is output, not a gate."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "deviation",
+          "evidence": ".github/workflows/ci.yml:79 The written non-blocking decision rests on a superseded premise. guide-drift.mjs:35 now treats EOL-only pin differences as fresh. The real obstacle is CI's shallow checkout (no fetch-depth), which is fixable, so the stated promotion trigger (.gitattributes) points at the wrong cause."
+        },
+        {
+          "technique": "gate-laddering",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/getLocalized.test.ts:181 The only check that the committed status table equals what the classifier derives is skipped on shallow clones. CI checks out shallow, so it runs only on local full clones and never at the binding rung. The digest test at :178 covers inputs, not table content."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "scripts/i18n/emit-guide-status.mjs:195 Refuses (exit 2) when it reads zero topics or bodies instead of emitting an all-fresh table. Shallow history is exit 3."
+        },
+        {
+          "technique": "unmeasurable-criteria",
+          "verdict": "conformant",
+          "evidence": "scripts/i18n/guide-drift.mjs:29 A hole in the instrument (an unanchorable pin) is never read as compliance; it gets its own unverified state."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "scripts/i18n/emit-guide-status.mjs:190 The remedy is a git command plus an in-tree script, so it is reachable from any checkout."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "conformant",
+          "evidence": "scripts/i18n/emit-guide-status.mjs:96 Normalises the input before hashing so checkout bytes don't decide the verdict. getLocalized.test.ts:299 carries the positive control that an English edit moves the digest."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "scripts/i18n/check-guide-translations.mjs:21 Translation freshness has a refusing checker, but searches found only a manual package command and no automatic hook or CI invocation, leaving this obligation unbacked.",
+          "evaluatedAt": "2026-10-12T23:10:58.577Z",
+          "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+          "reason": "replaced by a010eb50-378a-46ae-8d02-03666bff053b"
         }
       ]
     },
@@ -896,14 +964,53 @@
       "subject": "quality-gates",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T23:10:58.577Z",
-      "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:14:58.302Z",
+      "worker": "a010eb50-378a-46ae-8d02-03666bff053b",
       "techniques": [
         {
           "technique": "match-the-resolved-artifact",
           "verdict": "deviation",
-          "evidence": "scripts/check-guide-content.mjs:60 A read-only in-memory probe showed ['orphan-topic']: `body` exporting orphan-topic while this exact matcher returned no keys; importing bodies later only checks grammar and does not reconcile that missed key."
+          "evidence": "scripts/check-guide-content.mjs:60 It reads the file, not the engine. The resolved key set is available from the module import but goes unused for the orphan and missing checks."
+        },
+        {
+          "technique": "unparseable-form-is-a-finding",
+          "verdict": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:174 The runtime keys are iterated here for directive parsing, yet a key the regex did not see is never flagged as an unrecognised form."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-content.mjs:39 A zero-population parse is fatal, not green. The same holds for topics at :51."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-content.mjs:209 Any collected error makes the exit code non-zero."
+        },
+        {
+          "technique": "gate-laddering",
+          "verdict": "conformant",
+          "evidence": ".github/workflows/ci.yml:61 Present at the merge rung as well as the local pre-push hook."
+        },
+        {
+          "technique": "waiver-names-its-finding",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-content.mjs:201 Parity-baseline exemptions name an exact locale/topic, and stale ones fail loudly."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-content.mjs:196 The remedy is an in-tree flag of the same script."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:60 Catalogue consistency reads textual property spellings instead of exported content keys, so a computed orphan key can exist at runtime while remaining invisible to the orphan check.",
+          "evaluatedAt": "2026-10-12T23:10:58.577Z",
+          "worker": "d6806809-2ffb-4fb2-9735-becf2338a6ee",
+          "reason": "replaced by a010eb50-378a-46ae-8d02-03666bff053b"
         }
       ]
     },
@@ -7376,6 +7483,37 @@
           "technique": "provenance-as-a-build-gate",
           "verdict": "not-applicable",
           "evidence": "src/components/sections/roadmap/components/RoadmapAreas.tsx:152 This surface renders percentages directly without the formatting chokepoint that the technique explicitly requires before introducing its gate."
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/quality-gates": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:14:58.302Z",
+      "worker": "a010eb50-378a-46ae-8d02-03666bff053b",
+      "techniques": [
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:39 This is a raw-text match with no comment or string stripping, so prose naming the hook satisfies the matcher."
+        },
+        {
+          "technique": "decidable-in-a-window",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:40 The test title claims the module 'cuts its rows', which is a data-flow relation. What the guard actually checks is whether a token appears in the file."
+        },
+        {
+          "technique": "chokepoint-tag-registry",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:34 The set of views carrying the scope bar and the data-module table are compared in both directions."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:18 A moved data module throws ENOENT and the test goes red instead of reading empty."
         }
       ]
     }

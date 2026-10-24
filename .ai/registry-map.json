@@ -3596,12 +3596,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "scripts/i18n/check-guide-translations.mjs:21 Translation freshness has a refusing checker, but searches found only a manual package command and no automatic hook or CI invocation, leaving this obligation unbacked.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:6e635d76a310aa4b",
-          "evaluatedRevision": 53,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "scripts/i18n/guide-drift.mjs:653 The classifier refuses stale or missing translations only under --strict, and no hook, CI step or package script passes --strict, so the freshness refusal is an instrument nobody invokes; only the runtime demotion table is backed (by the digest test in test:unit).",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-instruction-files",
@@ -3736,12 +3735,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "scripts/check-guide-content.mjs:60 Catalogue consistency reads textual property spellings instead of exported content keys, so a computed orphan key can exist at runtime while remaining invisible to the orphan check.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:6e635d76a310aa4b",
-          "evaluatedRevision": 53,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "scripts/check-guide-content.mjs:60 The catalogue-consistency gate for these content modules derives each module's topic keys from a regex over source text, while the same script later imports the real exported `content` objects and never reconciles them, so a computed or differently-quoted key is invisible to the orphan check.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54,
+          "revisionsBehind": 1
         },
         {
           "subject": "async-ui-states",
@@ -8703,13 +8701,12 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "eslint-rules/require-animation-gating.js:67 The animation checker keys frame-loop detection on a bare callee name, allowing the same unguarded capability through member access or an alias.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:6e635d76a310aa4b",
-          "evaluatedRevision": 53,
+          "evidence": "src/contexts/reducedMotionHydration.test.ts:43 The context's own guard asserts absence with regexes over comment-stripped source, but carries no positive control that the needle can match and no seeded pair for its naive stripper, so a reworded or differently-spelled import passes forever as green.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54,
           "source": "retained",
-          "revisionsBehind": 1,
-          "stale": true
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-memory",
@@ -8824,7 +8821,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:39 The scope-honesty guard proves each data module reads the scope by raw substring presence in unstripped source, so a comment naming the hook, or a call whose result never reaches the rows, satisfies it while the claimed property is absent.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "test-harness",
