@@ -1656,7 +1656,11 @@
           "revision": 2,
           "changedAt": "2026-09-07",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/SecurityVault.tsx:15 Here \"vault\" means an animated marketing illustration of credential seals (device, OS keychain, AES-GCM), not a markdown note store; searching security-vault/, observe-record/ and observability-deck/ for frontmatter/wikilink/chokidar/.obsidian found nothing, so no technique applies.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7a10f98b2d9488ac",
+          "evaluatedRevision": 2
         },
         {
           "subject": "credential-vault",
@@ -4056,7 +4060,11 @@
           "revision": 2,
           "changedAt": "2026-09-07",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 The guide renders one bundled markdown string per page into block components, with no store of notes, no frontmatter records, no inter-note link graph and no editor that shares the files; a search of src/components/guide for frontmatter/wikilink/chokidar/.obsidian found nothing (its readdirSync is only a test enumerating locale TS modules).",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7a10f98b2d9488ac",
+          "evaluatedRevision": 2
         },
         {
           "subject": "hitl-approval",
@@ -5997,7 +6005,11 @@
           "revision": 2,
           "changedAt": "2026-09-07",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:7 The Knowledge view's graph draws in-memory mock KnowledgePattern/MemoryItem records from mock-dashboard-data, with no markdown files, frontmatter, link extraction or vault walk; a search of the context directory for frontmatter/wikilink/chokidar/.obsidian found nothing, so the markdown-vault precondition does not hold.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7a10f98b2d9488ac",
+          "evaluatedRevision": 2
         },
         {
           "subject": "agent-memory",
@@ -6853,7 +6865,11 @@
           "revision": 2,
           "changedAt": "2026-09-07",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/notesStore.ts:37 Notes are read-only SyncedNote rows (a bodyMd string per row) fetched through the api proxy from the desktop's synced_notes table or a mock fixture; there is no file vault, walk, frontmatter or link graph on the web side, and a search for frontmatter/wikilink/chokidar/.obsidian over the notes, lib/notes, stores and e2e directories found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7a10f98b2d9488ac",
+          "evaluatedRevision": 2
         },
         {
           "subject": "supply-chain",

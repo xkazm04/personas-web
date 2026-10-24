@@ -1,0 +1,117 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c0632c64-e416-40ea-9d7f-563a8844142f",
+ "subject": "markdown-vault",
+ "evaluatedAt": "2026-10-24T04:26:54.574418+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Knowledge Base",
+   "subject": "markdown-vault",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:7 The Knowledge view's graph draws in-memory mock KnowledgePattern/MemoryItem records from mock-dashboard-data, with no markdown files, frontmatter, link extraction or vault walk; a search of the context directory for frontmatter/wikilink/chokidar/.obsidian found nothing, so the markdown-vault precondition does not hold.",
+   "techniques": [],
+   "absenceTerms": [
+    "frontmatter",
+    "wikilink",
+    "chokidar",
+    ".obsidian"
+   ]
+  },
+  {
+   "context": "Observability Deck & Security Vault",
+   "subject": "markdown-vault",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/SecurityVault.tsx:15 Here \"vault\" means an animated marketing illustration of credential seals (device, OS keychain, AES-GCM), not a markdown note store; searching security-vault/, observe-record/ and observability-deck/ for frontmatter/wikilink/chokidar/.obsidian found nothing, so no technique applies.",
+   "techniques": [],
+   "absenceTerms": [
+    "frontmatter",
+    "wikilink",
+    "chokidar",
+    ".obsidian"
+   ]
+  },
+  {
+   "context": "Notes (Goal Board)",
+   "subject": "markdown-vault",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/notesStore.ts:37 Notes are read-only SyncedNote rows (a bodyMd string per row) fetched through the api proxy from the desktop's synced_notes table or a mock fixture; there is no file vault, walk, frontmatter or link graph on the web side, and a search for frontmatter/wikilink/chokidar/.obsidian over the notes, lib/notes, stores and e2e directories found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "frontmatter",
+    "wikilink",
+    "chokidar",
+    ".obsidian"
+   ]
+  },
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "markdown-vault",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/guide/GuideMarkdown.tsx:14 The guide renders one bundled markdown string per page into block components, with no store of notes, no frontmatter records, no inter-note link graph and no editor that shares the files; a search of src/components/guide for frontmatter/wikilink/chokidar/.obsidian found nothing (its readdirSync is only a test enumerating locale TS modules).",
+   "techniques": [],
+   "absenceTerms": [
+    "frontmatter",
+    "wikilink",
+    "chokidar",
+    ".obsidian"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T04:26:54.574418+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "markdown-vault"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Knowledge Base",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T04:26:54.574418+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "markdown-vault"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Observability Deck & Security Vault",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T04:26:54.574418+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "markdown-vault"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Notes (Goal Board)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T04:26:54.574418+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "markdown-vault"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

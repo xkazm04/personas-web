@@ -8398,6 +8398,46 @@
           "evidence": "docs/features/community/public-roadmap.md:39 The module dir sits under check-feature-index MODULE_ROOTS (src/components/sections), and /roadmap is gated by featureDocsCoverage.test.ts. The module-level meter itself is advisory only."
         }
       ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/markdown-vault": {
+      "context": "Knowledge Base",
+      "subject": "markdown-vault",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:26:54.574Z",
+      "worker": "c0632c64-e416-40ea-9d7f-563a8844142f",
+      "techniques": []
+    },
+    "Product Feature Showcase/Observability Deck & Security Vault/markdown-vault": {
+      "context": "Observability Deck & Security Vault",
+      "subject": "markdown-vault",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:26:54.574Z",
+      "worker": "c0632c64-e416-40ea-9d7f-563a8844142f",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/markdown-vault": {
+      "context": "Notes (Goal Board)",
+      "subject": "markdown-vault",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:26:54.574Z",
+      "worker": "c0632c64-e416-40ea-9d7f-563a8844142f",
+      "techniques": []
+    },
+    "Product Documentation (Guide)/Guide Content Blocks & Markdown/markdown-vault": {
+      "context": "Guide Content Blocks & Markdown",
+      "subject": "markdown-vault",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:26:54.574Z",
+      "worker": "c0632c64-e416-40ea-9d7f-563a8844142f",
+      "techniques": []
     }
   }
 }
