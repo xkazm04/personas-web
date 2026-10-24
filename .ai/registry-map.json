@@ -4886,12 +4886,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/lib/server/json-file-store.ts:60 The publisher replaces the destination without flushing the temporary file or retrying transient sharing errors, falling short of the atomic publication standard.",
-          "evaluatedAt": "2026-10-14",
-          "evaluatedAgainst": "sha256-b2:a22cbe60c40eb259",
-          "evaluatedRevision": 15,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/lib/server/json-file-store.ts:60 The one publish door writes the temp file without flushing it and makes a single rename attempt. A Windows EPERM/EBUSY from a reader holding the destination is cleaned up and rethrown as a hard failure (lines 61-66) rather than classified as transient and retried under a bound, so a torn read becomes a lost update.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ccc991958e998a93",
+          "evaluatedRevision": 16,
+          "revisionsBehind": 1
         },
         {
           "subject": "mcp-tools",
@@ -10154,12 +10153,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/hooks/usePolling.ts:75 Restarting the polling effect starts another callback while a callback from its previous lifetime may still be pending.",
-          "evaluatedAt": "2026-10-14",
-          "evaluatedAgainst": "sha256-b2:a22cbe60c40eb259",
-          "evaluatedRevision": 15,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/hooks/usePolling.ts:75 When the effect restarts (e.g. visibility hidden then visible, or a change to enabled or intervalMs), the new lifetime fires a tick immediately. The `cancelled` flag only stops the old lifetime from rescheduling, not its in-flight callback, so two callbacks can overlap.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ccc991958e998a93",
+          "evaluatedRevision": 16,
+          "revisionsBehind": 1
         },
         {
           "subject": "mcp-tools",
@@ -10467,12 +10465,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/i18n/catalog.ts:189 A failed locale activation leaves the requested-locale gate unchanged, causing another activation of that locale to return without retrying.",
-          "evaluatedAt": "2026-10-14",
-          "evaluatedAgainst": "sha256-b2:a22cbe60c40eb259",
-          "evaluatedRevision": 15,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/i18n/catalog.ts:189 activate() writes `requested = lang` before the load and its rejection handler is a no-op, so after a failed locale load the gate stays held and the store's (unchanged) language re-activating it returns here, so that locale is wedged until the visitor picks a different one.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ccc991958e998a93",
+          "evaluatedRevision": 16,
+          "revisionsBehind": 1
         },
         {
           "subject": "page-load-pipeline",

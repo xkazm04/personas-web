@@ -1,0 +1,198 @@
+{
+  "schema": "conform-run/1",
+  "worker": "51c31870-e9d0-45ed-948d-bedc09eba8dd",
+  "subject": "concurrency-guards",
+  "evaluatedAt": "2026-10-24T02:44:21.256586+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Internationalization (14 locales)",
+      "subject": "concurrency-guards",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/i18n/catalog.ts:189 activate() writes `requested = lang` before the load and its rejection handler is a no-op, so after a failed locale load the gate stays held and the store's (unchanged) language re-activating it returns here, so that locale is wedged until the visitor picks a different one.",
+      "techniques": [
+        {
+          "technique": "release-guarantees",
+          "verdict": "deviation",
+          "evidence": "src/i18n/catalog.ts:204 The failure path of activate() swallows the error without resetting `requested`, so the gate acquired at line 190 is never released on rejection. The load caches do release on rejection (line 167), but this gate does not."
+        },
+        {
+          "technique": "single-flight-primitives",
+          "verdict": "conformant",
+          "evidence": "src/i18n/catalog.ts:159 Join policy: concurrent loadLocale callers share one in-flight promise per locale. The same shape is used for core and section loads."
+        },
+        {
+          "technique": "guard-key-design",
+          "verdict": "conformant",
+          "evidence": "src/i18n/catalog.ts:121 Section loads are keyed on (section id, locale). That is the deliberate identity: neither too broad nor per-request."
+        },
+        {
+          "technique": "attempt-attribution",
+          "verdict": "conformant",
+          "evidence": "src/i18n/catalog.ts:200 A superseded locale load that resolves late is dropped instead of flipping the active catalog backwards."
+        },
+        {
+          "technique": "idempotency-by-design",
+          "verdict": "conformant",
+          "evidence": "src/i18n/catalog.ts:177 Registering a section twice does nothing, so module-scope re-evaluation is harmless."
+        },
+        {
+          "technique": "cache-value-not-handle",
+          "verdict": "not-applicable",
+          "evidence": "src/i18n/catalog.ts:171 The shared promise handle is cached, but in the browser abandoned joiners' continuations still run, and a rejected handle is evicted at line 167. The technique's precondition (continuations torn down while the process lives) does not hold."
+        }
+      ]
+    },
+    {
+      "context": "Server-Side Vote Persistence",
+      "subject": "concurrency-guards",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/lib/server/json-file-store.ts:60 The one publish door writes the temp file without flushing it and makes a single rename attempt. A Windows EPERM/EBUSY from a reader holding the destination is cleaned up and rethrown as a hard failure (lines 61-66) rather than classified as transient and retried under a bound, so a torn read becomes a lost update.",
+      "techniques": [
+        {
+          "technique": "atomic-file-publish",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/json-file-store.ts:60 Conformant parts: same-directory temp, temp removed on failure, one door. Missing: no fsync before replace, no transient-error classification, no bounded retry, and exhaustion is not reported as a distinct failure."
+        },
+        {
+          "technique": "cross-process-exclusion",
+          "verdict": "deviation",
+          "evidence": "src/lib/fileLock.ts:37 The guard is an in-process Map only. The header (lines 17-24) documents that multiple instances or workers both rename and the last one wins. The gap is acknowledged, not closed, and the store is scoped to local dev only by comment."
+        },
+        {
+          "technique": "single-flight-primitives",
+          "verdict": "conformant",
+          "evidence": "src/lib/fileLock.ts:44 One shared primitive with a per-key queue policy. Second callers run after the first, in call order."
+        },
+        {
+          "technique": "release-guarantees",
+          "verdict": "conformant",
+          "evidence": "src/lib/fileLock.ts:46 Release is structural. The wrapper takes the closure and the chain advances on both resolve and reject (lines 47-53), so a throwing body cannot wedge the key."
+        },
+        {
+          "technique": "critical-section-across-a-suspension",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/json-file-store.ts:77 The read-modify-write deliberately holds one critical section across its awaits (read, update, write) instead of splitting it. That avoids the check-to-use race."
+        },
+        {
+          "technique": "guard-key-design",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/json-file-store.ts:71 The guarded resource is the file, but its lock key is a separate free-form string that each call site supplies ('votes', 'waitlist', 'feature-boosts'...). Nothing ties the key to the file name or to one authority, so two writers of one file can use different keys and never collide."
+        }
+      ]
+    },
+    {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "concurrency-guards",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/hooks/usePolling.ts:75 When the effect restarts (e.g. visibility hidden then visible, or a change to enabled or intervalMs), the new lifetime fires a tick immediately. The `cancelled` flag only stops the old lifetime from rescheduling, not its in-flight callback, so two callbacks can overlap.",
+      "techniques": [
+        {
+          "technique": "single-flight-primitives",
+          "verdict": "deviation",
+          "evidence": "src/hooks/usePolling.ts:75 Within one lifetime, ticks are serialized by scheduling after completion. Across lifetimes there is no in-flight guard, so a pending callback from the previous lifetime runs at the same time as the new one."
+        },
+        {
+          "technique": "release-guarantees",
+          "verdict": "conformant",
+          "evidence": "src/hooks/useAbortableEffect.ts:30 The abort and the timeout clear run in the effect cleanup, so every unmount or re-run path cancels the previous attempt."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "concurrency-guards",
+      "context": "Shared UI Primitives & Illustrations",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor src/components/primitives/index.ts:2 is only a re-export line and does not show that async work, shared resources or persisted writes are absent; the claim rests on a grep for four lock-vocabulary terms, which cannot prove the absence of any in-flight or duplicate-call hazard."
+    },
+    {
+      "subject": "concurrency-guards",
+      "context": "Agent Execution Timeline Race",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor src/components/sections/agents-race/data.ts:3 is an import or comment line that shows nothing about guards; the supporting timer at motion.ts:95 is real and cleaned up, but the claim of no shared operation, I/O or persisted state rests on a vocabulary grep and the incidental anchor."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-24T02:44:21.256586+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "concurrency-guards"
+      ],
+      "techniques": [
+        "attempt-attribution",
+        "cache-value-not-handle",
+        "guard-key-design",
+        "idempotency-by-design",
+        "release-guarantees",
+        "single-flight-primitives"
+      ],
+      "deviations": 1,
+      "context": "Internationalization (14 locales)",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T02:44:21.256586+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "concurrency-guards"
+      ],
+      "techniques": [
+        "atomic-file-publish",
+        "critical-section-across-a-suspension",
+        "cross-process-exclusion",
+        "guard-key-design",
+        "release-guarantees",
+        "single-flight-primitives"
+      ],
+      "deviations": 1,
+      "context": "Server-Side Vote Persistence",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T02:44:21.256586+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "concurrency-guards"
+      ],
+      "techniques": [
+        "release-guarantees",
+        "single-flight-primitives"
+      ],
+      "deviations": 1,
+      "context": "Shared Types, Utilities & Hooks",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T02:44:21.256586+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "concurrency-guards"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Shared UI Primitives & Illustrations",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T02:44:21.256586+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "concurrency-guards"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Agent Execution Timeline Race",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}
