@@ -901,12 +901,11 @@
           "changedAt": "2026-10-21",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/components/tour/AthenaCompanion.tsx:86 Athena Companion drives the avatar mouth opening directly from low-mid band audio frequency energy on an unthrottled requestAnimationFrame loop, deviating from speech-timed viseme mapping and mirrored face signaling.",
-          "evaluatedAt": "2026-10-21",
-          "evaluatedAgainst": "sha256-b2:f96c1d7ea0398677",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/tour/AthenaCompanion.tsx:110 The companion's canvas runs its own requestAnimationFrame loop. That loop re-arms every frame for as long as the card is mounted, even when the voice is silent and the face shows only its idle breath. Its choice never to settle is buried in a constant with no stated cost or switch, and its code sits in every page's static graph, so the face is never out of the first paint and never stops asking for frames at rest.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:72517c45ca8e4198",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 1
         },
         {
           "subject": "native-shell-integration",
@@ -2161,7 +2160,11 @@
           "revision": 4,
           "changedAt": "2026-10-21",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/design-blueprint/index.tsx:29 The design-blueprint section draws an agent as a machine on a drawing sheet. Searching the directory for viseme/lipsync/lip-sync/talking-head, and case-insensitively for avatar/mouth/voice/speak/blink, found no face, voice or speaking element, so nothing here is a talking avatar.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:72517c45ca8e4198",
+          "evaluatedRevision": 4
         },
         {
           "subject": "module-design",
