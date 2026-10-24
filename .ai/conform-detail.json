@@ -8973,6 +8973,53 @@
           "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:7 this is a UI artifact the skill produced, not the installed skill, so there is no listing or discovery-budget concern"
         }
       ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/admission-queue": {
+      "context": "Dashboard Home Overview",
+      "subject": "admission-queue",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:49:19.599Z",
+      "worker": "00a72ab2-e2a3-4994-8c79-1fc28d2a6d3f",
+      "techniques": [
+        {
+          "technique": "admission-vocabulary",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:81 Human triage display, not a gate that returns admitted/queued/refused."
+        },
+        {
+          "technique": "self-paced-intake",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/RecentActivityCard.tsx:56 Own-clock tick only re-renders relative timestamps; no intake of arrivals."
+        },
+        {
+          "technique": "depth-bounds-and-shed",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 Single read-only fetch per mount; no work queue whose depth could grow."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Visual Flow Composer & Playground Page/admission-queue": {
+      "context": "Visual Flow Composer & Playground Page",
+      "subject": "admission-queue",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:49:19.599Z",
+      "worker": "00a72ab2-e2a3-4994-8c79-1fc28d2a6d3f",
+      "techniques": [
+        {
+          "technique": "depth-bounds-and-shed",
+          "verdict": "not-applicable",
+          "evidence": "src/components/flow-composer/components/EventQueueBar.tsx:36 Decorative label; there is no depth to bound."
+        },
+        {
+          "technique": "zero-depth-admission",
+          "verdict": "not-applicable",
+          "evidence": "src/app/playground/TerminalSim.tsx:86 Simulated execution replays a fixed script; no capacity gate exists."
+        }
+      ]
     }
   }
 }

@@ -2670,7 +2670,11 @@
           "revision": 15,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/flow-composer/components/EventQueueBar.tsx:36 The 'event queue' here is a static SVG bar in a marketing diagram, and the playground terminal replays scripted lines on timers. No code admits, bounds, orders or drains real work: semaphore, backpressure, maxDepth, concurrencyLimit and tryAcquire have zero hits across src/.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:56e509787bc708cd",
+          "evaluatedRevision": 15
         },
         {
           "subject": "canvas-graph",
@@ -8085,7 +8089,11 @@
           "revision": 15,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:81 The only 'queue' in this context is a ranked list of items for a human to triage (the golden path assigns that to triage-queues). The other files are read-only cards that fetch once or tick a render timer. Nothing admits, holds or refuses expensive work: semaphore, backpressure, maxDepth, concurrencyLimit and tryAcquire have zero hits across src/.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:56e509787bc708cd",
+          "evaluatedRevision": 15
         }
       ],
       "governance": "governed"
