@@ -2813,7 +2813,11 @@
           "revision": 7,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/playback.ts:2 The context is a marketing ring animation that drives a pure playback reducer over a static trigger list; a grep of its files and the whole repo for xterm, node-pty, tmux and pseudo-terminal found nothing, so there are no pseudo-terminal sessions, emulators or attach/detach seams to judge.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c3ef11aba4a471f5",
+          "evaluatedRevision": 7
         },
         {
           "subject": "agent-runtime-assembly",
@@ -8885,7 +8889,11 @@
           "revision": 7,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/primitives/TerminalPanel.tsx:6 TerminalPanel/TerminalChrome are decorative 'terminal-look' containers (traffic-light dots, title, status text) with no process, PTY, emulator or input stream behind them; a grep of these files and the repo for xterm, node-pty, tmux and pseudo-terminal returned no hits.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c3ef11aba4a471f5",
+          "evaluatedRevision": 7
         },
         {
           "subject": "concurrency-guards",
@@ -9531,7 +9539,11 @@
           "revision": 7,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/controllerStore.ts:6 This context is the Supabase data and device-pairing control plane (signed commands over Realtime, reachability polling), not a host of interactive terminal sessions; grepping its files and the repo for xterm, node-pty, tmux and pseudo-terminal found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c3ef11aba4a471f5",
+          "evaluatedRevision": 7
         },
         {
           "subject": "sync-replication",

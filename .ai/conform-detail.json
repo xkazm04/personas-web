@@ -8838,6 +8838,36 @@
           "evidence": "src/lib/notes/notesModel.ts:3 A pure model over in-memory rows. Nothing is unpacked."
         }
       ]
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/terminal-multiplexing": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "terminal-multiplexing",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:00:57.265Z",
+      "worker": "05777c9b-3975-40e2-92ea-2cb50e0e1b91",
+      "techniques": []
+    },
+    "Platform Foundation: Shell, UI & Motion/Shared UI Primitives & Illustrations/terminal-multiplexing": {
+      "context": "Shared UI Primitives & Illustrations",
+      "subject": "terminal-multiplexing",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:00:57.265Z",
+      "worker": "05777c9b-3975-40e2-92ea-2cb50e0e1b91",
+      "techniques": []
+    },
+    "Infrastructure & Telemetry/Supabase Client/terminal-multiplexing": {
+      "context": "Supabase Client",
+      "subject": "terminal-multiplexing",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:00:57.265Z",
+      "worker": "05777c9b-3975-40e2-92ea-2cb50e0e1b91",
+      "techniques": []
     }
   }
 }
