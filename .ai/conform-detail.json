@@ -9155,6 +9155,37 @@
         }
       ],
       "registryProposal": "swr-design's 'name both thresholds' rule has no clause for a static fixture source, where the honest stale ceiling is 'forever' and the only live trigger is an explicit write. A short carve-out would stop seats from splitting on demo-only reads."
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/correlated-exchange-over-broadcast": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "correlated-exchange-over-broadcast",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:49:05.300Z",
+      "worker": "240985ee-d8f9-4ff0-8c02-3191561e292a",
+      "techniques": [
+        {
+          "technique": "passthrough-buffered-wait",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:142 The relay loop forwards every upstream chunk without filtering. There is no targeted wait that could swallow unrelated traffic."
+        },
+        {
+          "technique": "reply-fan-out-filtering",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/events/useScopedEvents.ts:18 The client reads the whole event log by persona and time window. It never issues requests, so it has no replies of its own to filter by correlation id."
+        },
+        {
+          "technique": "correlation-key-vocabulary",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/EventBusVisualization.tsx:28 The visualization groups events by source type only. No metadata keys mark correlated exchanges, and no predicate classifies correlated traffic."
+        },
+        {
+          "technique": "terminal-status-set",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/EventDetailDrawer.tsx:50 The status shown here is an active/idle display derived from traffic volume. It is not a goal status that ends a correlated wait."
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,66 @@
+{
+ "schema": "conform-run/1",
+ "worker": "240985ee-d8f9-4ff0-8c02-3191561e292a",
+ "subject": "correlated-exchange-over-broadcast",
+ "evaluatedAt": "2026-10-24T22:49:05.300676+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Event Bus & Stream Monitoring",
+   "subject": "correlated-exchange-over-broadcast",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/events/stream/route.ts:13 This context only relays and visualizes a one-way event stream: the route pipes upstream SSE bytes to the browser and the components project the event store. Nothing here sends a request and waits for its reply, runs a goal, or holds a correlation id, so the subject's precondition (request/reply or goal/result on a broadcast bus) does not hold. A case-insensitive grep of the context's files plus src/components/dashboard, src/app/api/events, src/lib/types.ts and src/stores/eventStore.ts found no replyTo, reply_to, correlation_id, in_reply_to, goal_status, goal_id or awaitReply, and PersonaEvent carries no correlation field.",
+   "techniques": [
+    {
+     "technique": "passthrough-buffered-wait",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/events/stream/route.ts:142 The relay loop forwards every upstream chunk without filtering. There is no targeted wait that could swallow unrelated traffic."
+    },
+    {
+     "technique": "reply-fan-out-filtering",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/events/useScopedEvents.ts:18 The client reads the whole event log by persona and time window. It never issues requests, so it has no replies of its own to filter by correlation id."
+    },
+    {
+     "technique": "correlation-key-vocabulary",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventBusVisualization.tsx:28 The visualization groups events by source type only. No metadata keys mark correlated exchanges, and no predicate classifies correlated traffic."
+    },
+    {
+     "technique": "terminal-status-set",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/EventDetailDrawer.tsx:50 The status shown here is an active/idle display derived from traffic volume. It is not a goal status that ends a correlated wait."
+    }
+   ],
+   "absenceTerms": [
+    "replyTo",
+    "correlation_id",
+    "in_reply_to",
+    "goal_status",
+    "awaitReply"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T22:49:05.300676+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "correlated-exchange-over-broadcast"
+   ],
+   "techniques": [
+    "correlation-key-vocabulary",
+    "passthrough-buffered-wait",
+    "reply-fan-out-filtering",
+    "terminal-status-set"
+   ],
+   "deviations": 0,
+   "context": "Event Bus & Stream Monitoring",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

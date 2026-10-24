@@ -7788,7 +7788,11 @@
           "revision": 2,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:13 This context only relays and visualizes a one-way event stream: the route pipes upstream SSE bytes to the browser and the components project the event store. Nothing here sends a request and waits for its reply, runs a goal, or holds a correlation id, so the subject's precondition (request/reply or goal/result on a broadcast bus) does not hold. A case-insensitive grep of the context's files plus src/components/dashboard, src/app/api/events, src/lib/types.ts and src/stores/eventStore.ts found no replyTo, reply_to, correlation_id, in_reply_to, goal_status, goal_id or awaitReply, and PersonaEvent carries no correlation field.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:6bbdc63b0d248ecd",
+          "evaluatedRevision": 5
         },
         {
           "subject": "usage-event-ingestion",
