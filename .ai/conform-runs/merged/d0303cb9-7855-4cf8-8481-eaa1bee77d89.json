@@ -1,0 +1,101 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d0303cb9-7855-4cf8-8481-eaa1bee77d89",
+ "subject": "supply-chain",
+ "evaluatedAt": "2026-10-24T06:32:39.551535+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "supply-chain",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:6 The context is a marketing demo whose benches only project bundled local fixtures (`../../data`, `../../ledger`). It contains no dependency manifest, lockfile, archive unpacking, model loading or permission grant. A search of its directories for lockfile, unzip, pickle, dependabot and advisory found nothing, and the only \"plugin\" hits are the context name in a test.",
+   "techniques": [
+    {
+     "technique": "archive-extraction-safety",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:9 Data comes from a bundled module. Nothing is downloaded or unpacked."
+    },
+    {
+     "technique": "unsafe-deserialization-off-by-default",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/bench/chat/signal.ts:11 The chat script is a static import. No saved model, checkpoint or serialized object is loaded."
+    }
+   ],
+   "absenceTerms": [
+    "lockfile",
+    "unzip",
+    "pickle",
+    "dependabot",
+    "advisory"
+   ]
+  },
+  {
+   "context": "Notes (Goal Board)",
+   "subject": "supply-chain",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/notesStore.ts:37 The context's only input is a JSON list read through the app's `api` proxy, which it sorts into zones with a pure model. It has no dependency manifest, lockfile, archive, model loading or permission grant. A search of its directories for lockfile, unzip, pickle, dependabot and advisory found nothing. The one \"secret\" hit is a comment about masking on the desktop before data leaves, which belongs to credential-vault, not to history scanning.",
+   "techniques": [
+    {
+     "technique": "unsafe-deserialization-off-by-default",
+     "verdict": "not-applicable",
+     "evidence": "src/stores/notesStore.ts:37 Plain JSON data rows come through the api proxy. No executable deserialization format is involved."
+    },
+    {
+     "technique": "secret-scanning-architecture",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/notes/notesModel.ts:35 This is redaction when data leaves the desktop (credential-vault's domain), not scanning commits before they enter git history."
+    },
+    {
+     "technique": "archive-extraction-safety",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/notes/notesModel.ts:3 A pure model over in-memory rows. Nothing is unpacked."
+    }
+   ],
+   "absenceTerms": [
+    "lockfile",
+    "unzip",
+    "pickle",
+    "dependabot",
+    "advisory"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T06:32:39.551535+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "supply-chain"
+   ],
+   "techniques": [
+    "archive-extraction-safety",
+    "unsafe-deserialization-off-by-default"
+   ],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T06:32:39.551535+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "supply-chain"
+   ],
+   "techniques": [
+    "archive-extraction-safety",
+    "secret-scanning-architecture",
+    "unsafe-deserialization-off-by-default"
+   ],
+   "deviations": 0,
+   "context": "Notes (Goal Board)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

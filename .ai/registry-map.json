@@ -1766,7 +1766,11 @@
           "revision": 6,
           "changedAt": "2026-09-25",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:6 The context is a marketing demo whose benches only project bundled local fixtures (`../../data`, `../../ledger`). It contains no dependency manifest, lockfile, archive unpacking, model loading or permission grant. A search of its directories for lockfile, unzip, pickle, dependabot and advisory found nothing, and the only \"plugin\" hits are the context name in a test.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:f5666db1094acd9f",
+          "evaluatedRevision": 6
         },
         {
           "subject": "eval-harness",
@@ -6933,7 +6937,11 @@
           "revision": 6,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/notesStore.ts:37 The context's only input is a JSON list read through the app's `api` proxy, which it sorts into zones with a pure model. It has no dependency manifest, lockfile, archive, model loading or permission grant. A search of its directories for lockfile, unzip, pickle, dependabot and advisory found nothing. The one \"secret\" hit is a comment about masking on the desktop before data leaves, which belongs to credential-vault, not to history scanning.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:f5666db1094acd9f",
+          "evaluatedRevision": 6
         },
         {
           "subject": "prompt-assembly",

@@ -8791,6 +8791,53 @@
           "evidence": "src/lib/mockApi.ts:532 Latency is simulated (mockApi.ts:486, delay 300), but the copy is shallow: every section's items array is still the projected fixture array, which the technique calls the same bug with an extra step. Consumers are currently pure (healthActions.ts:51). There is also no declared fault mode for this fetcher."
         }
       ]
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/supply-chain": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "supply-chain",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T06:32:39.551Z",
+      "worker": "d0303cb9-7855-4cf8-8481-eaa1bee77d89",
+      "techniques": [
+        {
+          "technique": "archive-extraction-safety",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:9 Data comes from a bundled module. Nothing is downloaded or unpacked."
+        },
+        {
+          "technique": "unsafe-deserialization-off-by-default",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/bench/chat/signal.ts:11 The chat script is a static import. No saved model, checkpoint or serialized object is loaded."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/supply-chain": {
+      "context": "Notes (Goal Board)",
+      "subject": "supply-chain",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T06:32:39.551Z",
+      "worker": "d0303cb9-7855-4cf8-8481-eaa1bee77d89",
+      "techniques": [
+        {
+          "technique": "unsafe-deserialization-off-by-default",
+          "verdict": "not-applicable",
+          "evidence": "src/stores/notesStore.ts:37 Plain JSON data rows come through the api proxy. No executable deserialization format is involved."
+        },
+        {
+          "technique": "secret-scanning-architecture",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/notes/notesModel.ts:35 This is redaction when data leaves the desktop (credential-vault's domain), not scanning commits before they enter git history."
+        },
+        {
+          "technique": "archive-extraction-safety",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/notes/notesModel.ts:3 A pure model over in-memory rows. Nothing is unpacked."
+        }
+      ]
     }
   }
 }
