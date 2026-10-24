@@ -1386,7 +1386,11 @@
           "revision": 3,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/features/page.tsx:20 The /features metadata is hardcoded English with em dashes under the declared ban and is outside the copy gate's sources (only layout.tsx and seo.ts are read), so these leaks are never caught.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:3071c9ca3c71710b",
+          "evaluatedRevision": 3
         },
         {
           "subject": "agent-memory",
@@ -10635,7 +10639,11 @@
           "revision": 3,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/i18n/en.ts:3474 The source catalog still ships em dashes (34 in en.ts) under a declared em-dash ban, along with UK spellings, Title Case with ampersands, routine 'Please' and participle tails, and every defect carries into the 13 locales translated from it.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:3071c9ca3c71710b",
+          "evaluatedRevision": 3
         },
         {
           "subject": "agent-memory",

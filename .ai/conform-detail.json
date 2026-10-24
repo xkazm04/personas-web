@@ -5840,98 +5840,99 @@
       "context": "Internationalization (14 locales)",
       "subject": "english",
       "bundle": "localization",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-18",
-      "evaluatedTs": "2026-10-18T21:39:15.060Z",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:10:42.717Z",
+      "worker": "7be21d2b-1b7a-46ff-a4d3-b7aa99eeac84",
       "techniques": [
         {
-          "technique": "false-friends-and-collocations",
-          "verdict": "conformant",
-          "evidence": "src/i18n/en.ts:2048 EN-SECTION-NAMES: the navigation uses the conventional English section name Pricing."
-        },
-        {
-          "technique": "generated-prose-patterns",
+          "technique": "variant-and-locale-conventions",
           "verdict": "deviation",
-          "evidence": "src/i18n/en.ts:3071 EN-PARTICIPLE-TAIL: the final 'making it' clause comments on and restates the usage comparison; remove that tail."
-        },
-        {
-          "technique": "interference-constructions",
-          "verdict": "deviation",
-          "evidence": "src/i18n/en.ts:3057 EN-PREP: English locates content 'on this page', not 'in this page'."
+          "evidence": "src/i18n/en.ts:2491 EN-SPELLING: the contract declares US, but en.ts has the UK forms 'Cancelled' (also 3081) and 'Cancelling...' (2505); they are baselined as debt, not fixed."
         },
         {
           "technique": "register-and-voice",
           "verdict": "deviation",
-          "evidence": "src/i18n/en.ts:3396 EN-PLEASE: routine email validation adds decorative politeness without a product-fault or inconvenient-request exception."
+          "evidence": "src/i18n/en.ts:3304 EN-PLEASE: routine validation prompt where the reader is at fault; same pattern at 3476. The waitlist surface also mixes 'Could not copy' (3303) with \"You're\" (3293), which is EN-CONTRACTION."
         },
         {
           "technique": "typography-and-capitalization",
           "verdict": "deviation",
-          "evidence": "src/i18n/en.ts:2043 EN-CASE: this navigation label uses title case despite the declared sentence-case policy."
+          "evidence": "src/i18n/en.ts:3518 EN-CASE plus EN-AMPERSAND: guide categories at 3518-3525 are Title Case with '&', though sentence case is declared; also 'Test Flow'/'Event Types' (2500-2501) and hyphen-as-dash at 3305."
         },
         {
           "technique": "ui-and-landing-microcopy",
           "verdict": "deviation",
-          "evidence": "src/i18n/en.ts:3428 EN-ERROR: the failure label provides no recovery instruction; its template consumers render it without accompanying recovery guidance."
+          "evidence": "src/i18n/en.ts:3310 EN-ERROR: the generic error doesn't say what happened; 3477 is the same shape."
         },
         {
-          "technique": "variant-and-locale-conventions",
+          "technique": "generated-prose-patterns",
           "verdict": "deviation",
-          "evidence": "src/i18n/en.ts:2603 EN-SPELLING: the rendered status uses UK 'Cancelling' instead of US 'Canceling'; this finding concerns the value, not its identifier."
+          "evidence": "src/i18n/en.ts:3659 EN-PARTICIPLE-TAIL ', healing itself if a step ever fails' plus dash density; nearby narration also stacks fragment runs ('six pillars, one place' 3660, 'Full transparency, zero setup.' 3665), which is EN-STACCATO."
+        },
+        {
+          "technique": "false-friends-and-collocations",
+          "verdict": "conformant",
+          "evidence": "src/i18n/en.ts:2048 EN-SECTION-NAMES: the navigation uses the conventional English section name Pricing.",
+          "carriedFrom": "2026-10-18"
+        },
+        {
+          "technique": "interference-constructions",
+          "verdict": "deviation",
+          "evidence": "src/i18n/en.ts:3057 EN-PREP: English locates content 'on this page', not 'in this page'.",
+          "carriedFrom": "2026-10-18"
         }
-      ],
-      "withdrawn": {
-        "worker": "756c9151-528a-4928-b126-850bdf7792d1",
-        "state": "deviation",
-        "at": "2026-10-18T21:39:47.504653+00:00",
-        "reason": "reviewer (sonnet): I found no declared US variant for the English catalog in the i18n files or the language switcher. Line 2589 is `cancelled: \"Cancelled\"`, which the verdict's own mix of UK and US spellings doesn't settle, since the same file uses \"cancelled\" at lines 3175 and 3191."
-      }
+      ]
     },
     "Marketing & Landing/Features Overview & Pricing/english": {
       "context": "Features Overview & Pricing",
       "subject": "english",
       "bundle": "localization",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-18",
-      "evaluatedTs": "2026-10-18T21:39:15.060Z",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:10:42.717Z",
+      "worker": "7be21d2b-1b7a-46ff-a4d3-b7aa99eeac84",
       "techniques": [
-        {
-          "technique": "false-friends-and-collocations",
-          "verdict": "conformant",
-          "evidence": "src/i18n/pending/pricingSection.ts:30 EN-COLLOCATION: 'cost nothing' and agents that 'run through Claude Code' use idiomatic verb constructions."
-        },
-        {
-          "technique": "generated-prose-patterns",
-          "verdict": "conformant",
-          "evidence": "src/i18n/pending/pricingSection.ts:31 EN-PUFFERY: the caption describes specific run and payment paths using named products rather than interchangeable category adjectives."
-        },
-        {
-          "technique": "interference-constructions",
-          "verdict": "conformant",
-          "evidence": "src/i18n/pending/landingSections.ts:95 EN-ARTICLE: the full sentence supplies appropriate determiners in 'an event' and 'the nearest team'."
-        },
-        {
-          "technique": "register-and-voice",
-          "verdict": "conformant",
-          "evidence": "src/i18n/pending/landingSections.ts:94 EN-ACTIVE: the marketing description gives the agents active verbs; its conversational fragment fits the marketing surface."
-        },
         {
           "technique": "typography-and-capitalization",
           "verdict": "deviation",
-          "evidence": "src/i18n/pending/landingSections.ts:93 EN-END-PUNCT: this string closes the features h1 with a full stop, without a recorded display-headline exception."
+          "evidence": "src/app/features/page.tsx:20 EN-DASH: em dash in the OG title (and in the OG description at line 22) despite the house em-dash ban."
+        },
+        {
+          "technique": "variant-and-locale-conventions",
+          "verdict": "deviation",
+          "evidence": "src/app/features/page.tsx:22 EN-SERIAL: 'the agent lab and plugins' has no serial comma, while line 18 on the same page uses one ('the agent lab, and a plugin ecosystem')."
         },
         {
           "technique": "ui-and-landing-microcopy",
           "verdict": "deviation",
-          "evidence": "src/i18n/pending/pricingSection.ts:40 EN-LIST-PARALLEL: the four numbered beat captions mix clauses, a prepositional phrase, and a noun phrase."
+          "evidence": "src/app/features/page.tsx:49 EN-LIST-PARALLEL: the scroll-map nav mixes nouns (DESIGN, MEMORY), a gerund (HEALING) and a verb (OBSERVE) across 9 items, above the 2-7 bound."
+        },
+        {
+          "technique": "false-friends-and-collocations",
+          "verdict": "conformant",
+          "evidence": "src/i18n/pending/pricingSection.ts:30 EN-COLLOCATION: 'cost nothing' and agents that 'run through Claude Code' use idiomatic verb constructions.",
+          "carriedFrom": "2026-10-18"
+        },
+        {
+          "technique": "generated-prose-patterns",
+          "verdict": "conformant",
+          "evidence": "src/i18n/pending/pricingSection.ts:31 EN-PUFFERY: the caption describes specific run and payment paths using named products rather than interchangeable category adjectives.",
+          "carriedFrom": "2026-10-18"
+        },
+        {
+          "technique": "interference-constructions",
+          "verdict": "conformant",
+          "evidence": "src/i18n/pending/landingSections.ts:95 EN-ARTICLE: the full sentence supplies appropriate determiners in 'an event' and 'the nearest team'.",
+          "carriedFrom": "2026-10-18"
+        },
+        {
+          "technique": "register-and-voice",
+          "verdict": "conformant",
+          "evidence": "src/i18n/pending/landingSections.ts:94 EN-ACTIVE: the marketing description gives the agents active verbs; its conversational fragment fits the marketing surface.",
+          "carriedFrom": "2026-10-18"
         }
-      ],
-      "withdrawn": {
-        "worker": "756c9151-528a-4928-b126-850bdf7792d1",
-        "state": "deviation",
-        "at": "2026-10-18T21:39:47.533363+00:00",
-        "reason": "reviewer (sonnet): The cited page.tsx:22 contains a spaced em dash (U+2014), not the spaced hyphen the evidence describes, so the quoted claim doesn't match the line."
-      }
+      ]
     },
     "Theming, i18n & Shared Utilities/Internationalization (14 locales)/i18n": {
       "context": "Internationalization (14 locales)",

@@ -1,0 +1,105 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7be21d2b-1b7a-46ff-a4d3-b7aa99eeac84",
+ "subject": "english",
+ "evaluatedAt": "2026-10-24T23:10:42.717699+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Internationalization (14 locales)",
+   "subject": "english",
+   "bundle": "localization",
+   "state": "deviation",
+   "evidence": "src/i18n/en.ts:3474 The source catalog still ships em dashes (34 in en.ts) under a declared em-dash ban, along with UK spellings, Title Case with ampersands, routine 'Please' and participle tails, and every defect carries into the 13 locales translated from it.",
+   "techniques": [
+    {
+     "technique": "variant-and-locale-conventions",
+     "verdict": "deviation",
+     "evidence": "src/i18n/en.ts:2491 EN-SPELLING: the contract declares US, but en.ts has the UK forms 'Cancelled' (also 3081) and 'Cancelling...' (2505); they are baselined as debt, not fixed."
+    },
+    {
+     "technique": "register-and-voice",
+     "verdict": "deviation",
+     "evidence": "src/i18n/en.ts:3304 EN-PLEASE: routine validation prompt where the reader is at fault; same pattern at 3476. The waitlist surface also mixes 'Could not copy' (3303) with \"You're\" (3293), which is EN-CONTRACTION."
+    },
+    {
+     "technique": "typography-and-capitalization",
+     "verdict": "deviation",
+     "evidence": "src/i18n/en.ts:3518 EN-CASE plus EN-AMPERSAND: guide categories at 3518-3525 are Title Case with '&', though sentence case is declared; also 'Test Flow'/'Event Types' (2500-2501) and hyphen-as-dash at 3305."
+    },
+    {
+     "technique": "ui-and-landing-microcopy",
+     "verdict": "deviation",
+     "evidence": "src/i18n/en.ts:3310 EN-ERROR: the generic error doesn't say what happened; 3477 is the same shape."
+    },
+    {
+     "technique": "generated-prose-patterns",
+     "verdict": "deviation",
+     "evidence": "src/i18n/en.ts:3659 EN-PARTICIPLE-TAIL ', healing itself if a step ever fails' plus dash density; nearby narration also stacks fragment runs ('six pillars, one place' 3660, 'Full transparency, zero setup.' 3665), which is EN-STACCATO."
+    }
+   ]
+  },
+  {
+   "context": "Features Overview & Pricing",
+   "subject": "english",
+   "bundle": "localization",
+   "state": "deviation",
+   "evidence": "src/app/features/page.tsx:20 The /features metadata is hardcoded English with em dashes under the declared ban and is outside the copy gate's sources (only layout.tsx and seo.ts are read), so these leaks are never caught.",
+   "techniques": [
+    {
+     "technique": "typography-and-capitalization",
+     "verdict": "deviation",
+     "evidence": "src/app/features/page.tsx:20 EN-DASH: em dash in the OG title (and in the OG description at line 22) despite the house em-dash ban."
+    },
+    {
+     "technique": "variant-and-locale-conventions",
+     "verdict": "deviation",
+     "evidence": "src/app/features/page.tsx:22 EN-SERIAL: 'the agent lab and plugins' has no serial comma, while line 18 on the same page uses one ('the agent lab, and a plugin ecosystem')."
+    },
+    {
+     "technique": "ui-and-landing-microcopy",
+     "verdict": "deviation",
+     "evidence": "src/app/features/page.tsx:49 EN-LIST-PARALLEL: the scroll-map nav mixes nouns (DESIGN, MEMORY), a gerund (HEALING) and a verb (OBSERVE) across 9 items, above the 2-7 bound."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T23:10:42.717699+00:00",
+   "bundle": "localization",
+   "subjects": [
+    "english"
+   ],
+   "techniques": [
+    "generated-prose-patterns",
+    "register-and-voice",
+    "typography-and-capitalization",
+    "ui-and-landing-microcopy",
+    "variant-and-locale-conventions"
+   ],
+   "deviations": 1,
+   "context": "Internationalization (14 locales)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T23:10:42.717699+00:00",
+   "bundle": "localization",
+   "subjects": [
+    "english"
+   ],
+   "techniques": [
+    "typography-and-capitalization",
+    "ui-and-landing-microcopy",
+    "variant-and-locale-conventions"
+   ],
+   "deviations": 1,
+   "context": "Features Overview & Pricing",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
