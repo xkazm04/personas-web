@@ -5787,7 +5787,11 @@
           "revision": 13,
           "changedAt": "2026-09-05",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:78 Toggles on this settings surface save instantly through settingsStore. That store hydrates by casting the parsed JSON without checking it, ignores a failed persist without telling anyone, and writes the whole document back from a fixed member list, so a write can fail while the switch still shows it saved, and a corrupt value can reach the surface unchecked.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:85c48ec5bdb5581f",
+          "evaluatedRevision": 13
         },
         {
           "subject": "voice-io",
@@ -6121,7 +6125,11 @@
           "revision": 13,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:60 The only thing this context persists is the selected view tab (KNOWLEDGE_VIEW_KEY in localStorage, checked by isViewVariant). That is view-state ergonomics, which the golden path's boundary assigns to client-state. Searching the context for settingsStore, preference and DEFAULTS found nothing, so there is no application settings store here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:85c48ec5bdb5581f",
+          "evaluatedRevision": 13
         },
         {
           "subject": "quality-gates",

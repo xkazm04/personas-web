@@ -1,0 +1,129 @@
+{
+  "schema": "conform-run/1",
+  "worker": "236d3ba1-26b8-4f89-9494-69f12a53b151",
+  "subject": "settings",
+  "evaluatedAt": "2026-10-24T04:45:02.100386+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Messages & Settings",
+      "subject": "settings",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:78 Toggles on this settings surface save instantly through settingsStore. That store hydrates by casting the parsed JSON without checking it, ignores a failed persist without telling anyone, and writes the whole document back from a fixed member list, so a write can fail while the switch still shows it saved, and a corrupt value can reach the surface unchecked.",
+      "techniques": [
+        {
+          "technique": "save-experience",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:75 If the localStorage write fails, the toggle stays flipped with no error shown and quietly reverts on reload. The standard's rule is that a failed write must say so (failure-not-empty-success)."
+        },
+        {
+          "technique": "typed-accessors",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:100 Stored values are cast, never parsed or validated (weeklyDigest could load as a string, and unknown alertSeverity members are spread into state). A parse failure is swallowed at :108 ('ignore — defaults apply') with no telemetry. The sibling reviewStore validates its escalation policy field by field, so the repo already has the right pattern."
+        },
+        {
+          "technique": "in-place-document-patch",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:73 The whole store is one document, read once and written whole. Each save rebuilds it from the three members this build knows, so a top-level member written by a newer or older build is lost on the next toggle. Observers are fine because zustand setState patches in place."
+        },
+        {
+          "technique": "read-batching",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:95 Good: one bulk read of the namespace at module load, and setters write through. Missing: any decision about other writers. There is no storage-event listener and no stated staleness bound, so cross-window staleness is just whatever the code does. The technique calls that implicit position the indefensible one."
+        },
+        {
+          "technique": "key-registry",
+          "verdict": "conformant",
+          "evidence": "src/stores/settingsStore.ts:29 Keys are a closed TS vocabulary, so a typo is a compile error. Weaker on the store side: hydration does not reject unknown stored members, and providerOverrides is an open id-keyed map."
+        },
+        {
+          "technique": "inherited-default-override",
+          "verdict": "not-applicable",
+          "evidence": "src/stores/settingsStore.ts:45 Overrides sit on top of a code or mock constant default, not a live environment source, so the precondition does not hold."
+        }
+      ]
+    },
+    {
+      "context": "Knowledge Base",
+      "subject": "settings",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/dashboard/views/knowledge/index.tsx:60 The only thing this context persists is the selected view tab (KNOWLEDGE_VIEW_KEY in localStorage, checked by isViewVariant). That is view-state ergonomics, which the golden path's boundary assigns to client-state. Searching the context for settingsStore, preference and DEFAULTS found nothing, so there is no application settings store here.",
+      "techniques": [
+        {
+          "technique": "typed-accessors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:66 The view-tab read is guarded by a type check, but it is client view state, not a setting."
+        }
+      ],
+      "absenceTerms": [
+        "settingsStore",
+        "preference",
+        "DEFAULTS"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "settings",
+      "context": "Error Monitoring & Analytics",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "settings",
+      "context": "Server-Side Vote Persistence",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor json-file-store.ts:7 is the DATA_DIR constant, which doesn't show that settings are absent; the only support is a grep for settingsStore/getSetting/SETTINGS_KEY, which are narrow terms for this context."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-24T04:45:02.100386+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "settings"
+      ],
+      "techniques": [
+        "in-place-document-patch",
+        "inherited-default-override",
+        "key-registry",
+        "read-batching",
+        "save-experience",
+        "typed-accessors"
+      ],
+      "deviations": 1,
+      "context": "Messages & Settings",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T04:45:02.100386+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "settings"
+      ],
+      "techniques": [
+        "typed-accessors"
+      ],
+      "deviations": 0,
+      "context": "Knowledge Base",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T04:45:02.100386+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "settings"
+      ],
+      "techniques": [
+        "config-backup-and-restore"
+      ],
+      "deviations": 0,
+      "context": "Server-Side Vote Persistence",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}

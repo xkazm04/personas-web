@@ -8438,6 +8438,84 @@
       "evaluatedTs": "2026-10-24T04:26:54.574Z",
       "worker": "c0632c64-e416-40ea-9d7f-563a8844142f",
       "techniques": []
+    },
+    "Agent Operations Dashboard/Messages & Settings/settings": {
+      "context": "Messages & Settings",
+      "subject": "settings",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:45:02.100Z",
+      "worker": "236d3ba1-26b8-4f89-9494-69f12a53b151",
+      "techniques": [
+        {
+          "technique": "save-experience",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:75 If the localStorage write fails, the toggle stays flipped with no error shown and quietly reverts on reload. The standard's rule is that a failed write must say so (failure-not-empty-success)."
+        },
+        {
+          "technique": "typed-accessors",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:100 Stored values are cast, never parsed or validated (weeklyDigest could load as a string, and unknown alertSeverity members are spread into state). A parse failure is swallowed at :108 ('ignore — defaults apply') with no telemetry. The sibling reviewStore validates its escalation policy field by field, so the repo already has the right pattern."
+        },
+        {
+          "technique": "in-place-document-patch",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:73 The whole store is one document, read once and written whole. Each save rebuilds it from the three members this build knows, so a top-level member written by a newer or older build is lost on the next toggle. Observers are fine because zustand setState patches in place."
+        },
+        {
+          "technique": "read-batching",
+          "verdict": "deviation",
+          "evidence": "src/stores/settingsStore.ts:95 Good: one bulk read of the namespace at module load, and setters write through. Missing: any decision about other writers. There is no storage-event listener and no stated staleness bound, so cross-window staleness is just whatever the code does. The technique calls that implicit position the indefensible one."
+        },
+        {
+          "technique": "key-registry",
+          "verdict": "conformant",
+          "evidence": "src/stores/settingsStore.ts:29 Keys are a closed TS vocabulary, so a typo is a compile error. Weaker on the store side: hydration does not reject unknown stored members, and providerOverrides is an open id-keyed map."
+        },
+        {
+          "technique": "inherited-default-override",
+          "verdict": "not-applicable",
+          "evidence": "src/stores/settingsStore.ts:45 Overrides sit on top of a code or mock constant default, not a live environment source, so the precondition does not hold."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/settings": {
+      "context": "Knowledge Base",
+      "subject": "settings",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:45:02.100Z",
+      "worker": "236d3ba1-26b8-4f89-9494-69f12a53b151",
+      "techniques": [
+        {
+          "technique": "typed-accessors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:66 The view-tab read is guarded by a type check, but it is client view state, not a setting."
+        }
+      ]
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/settings": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "settings",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T04:45:02.100Z",
+      "techniques": [
+        {
+          "technique": "config-backup-and-restore",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/server/json-file-store.ts:36 Not a config file, but it does refuse a corrupt read and writes atomically via temp file plus rename (:60). It has no backup rotation."
+        }
+      ],
+      "withdrawn": {
+        "worker": "236d3ba1-26b8-4f89-9494-69f12a53b151",
+        "state": "not-applicable",
+        "at": "2026-10-24T04:45:26.168200+00:00",
+        "reason": "reviewer (sonnet): The anchor json-file-store.ts:7 is the DATA_DIR constant, which doesn't show that settings are absent; the only support is a grep for settingsStore/getSetting/SETTINGS_KEY, which are narrow terms for this context."
+      }
     }
   }
 }
