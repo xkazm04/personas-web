@@ -1,0 +1,164 @@
+{
+ "schema": "conform-run/1",
+ "worker": "a3f957b0-2a71-4034-aa15-c45388fb9550",
+ "subject": "repository-landing-document",
+ "evaluatedAt": "2026-10-24T06:08:48.889924+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/m2/page.tsx:8 This context is a phone marketing page inside the web app, not the repository's front page; the 'landing' match is only a shared word. I searched the context's dirs (src/components/mobile-landing, src/app/m2, src/components/primitives) for README, shields.io and img.shields and found nothing, so no repository landing document, badge row or host metadata lives here.",
+   "techniques": [
+    {
+     "technique": "landing-document-as-router",
+     "verdict": "not-applicable",
+     "evidence": "src/app/m2/page.tsx:8 In-app phone landing route, not a repository front page."
+    },
+    {
+     "technique": "host-metadata-is-a-second-document",
+     "verdict": "not-applicable",
+     "evidence": "src/app/m2/page.tsx:15 This is web page metadata, not the code host's description, topics or homepage fields."
+    },
+    {
+     "technique": "evidence-linked-badges",
+     "verdict": "not-applicable",
+     "evidence": "src/app/m2/page.tsx:8 No repository badge row anywhere in this context (no shields.io hit)."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ]
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/page.tsx:15 The guide is a catalog of many addressable pages generated from typed records. By the golden path's own rule ('if the artifact is one of many addressable pages, it is a content model'), that belongs to docs-content-model, not this subject. A search of src/app/guide for README and shields.io found nothing.",
+   "techniques": [
+    {
+     "technique": "landing-document-as-router",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/[category]/page.tsx:15 Pages are generated from a catalog, which the subject explicitly excludes as docs-content-model."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ],
+   "registryProposal": "The matcher pairs this subject with documentation-site contexts on the tokens 'guide/page/topics'. The golden path already excludes doc sites (docs-content-model), so a negative trigger on 'many addressable pages' would cut these false pairings."
+  },
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/guide/GuideBlocks.tsx:3 These are render components for a docs site's topic pages, such as CliBlock and Callout. They look like input-channel-distinction, but they serve the doc-site content model the subject excludes, not the repository's front page. A search of src/components/guide for README and shields.io found nothing.",
+   "techniques": [
+    {
+     "technique": "input-channel-distinction",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/GuideBlocks.tsx:3 The CLI and callout blocks render guide topic pages, not a repository landing document."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ]
+  },
+  {
+   "context": "SEO & Social Metadata",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/manifest.ts:12 This is the web app's own PWA manifest, OG images and sitemap, which are claims the application publishes about itself. host-metadata-is-a-second-document is about the code host's repository description, topics and homepage fields, which are not in source. A search of src/app for README and shields.io found nothing.",
+   "techniques": [
+    {
+     "technique": "host-metadata-is-a-second-document",
+     "verdict": "not-applicable",
+     "evidence": "src/app/manifest.ts:12 Web manifest description, not the repository host's description field."
+    },
+    {
+     "technique": "caption-carrying-figures",
+     "verdict": "not-applicable",
+     "evidence": "src/app/manifest.ts:12 The OG images are social unfurl cards for site routes, not figures on a repository front page."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T06:08:48.889924+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "evidence-linked-badges",
+    "host-metadata-is-a-second-document",
+    "landing-document-as-router"
+   ],
+   "deviations": 0,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T06:08:48.889924+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "landing-document-as-router"
+   ],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T06:08:48.889924+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "input-channel-distinction"
+   ],
+   "deviations": 0,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T06:08:48.889924+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "caption-carrying-figures",
+    "host-metadata-is-a-second-document"
+   ],
+   "deviations": 0,
+   "context": "SEO & Social Metadata",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

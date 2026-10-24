@@ -4023,7 +4023,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideBlocks.tsx:3 These are render components for a docs site's topic pages, such as CliBlock and Callout. They look like input-channel-distinction, but they serve the doc-site content model the subject excludes, not the repository's front page. A search of src/components/guide for README and shields.io found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:6f6a6c4541bc949b",
+          "evaluatedRevision": 4
         },
         {
           "subject": "table",
@@ -8495,7 +8499,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:8 This context is a phone marketing page inside the web app, not the repository's front page; the 'landing' match is only a shared word. I searched the context's dirs (src/components/mobile-landing, src/app/m2, src/components/primitives) for README, shields.io and img.shields and found nothing, so no repository landing document, badge row or host metadata lives here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:6f6a6c4541bc949b",
+          "evaluatedRevision": 4
         },
         {
           "subject": "hitl-approval",
@@ -9574,7 +9582,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/manifest.ts:12 This is the web app's own PWA manifest, OG images and sitemap, which are claims the application publishes about itself. host-metadata-is-a-second-document is about the code host's repository description, topics and homepage fields, which are not in source. A search of src/app for README and shields.io found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:6f6a6c4541bc949b",
+          "evaluatedRevision": 4
         },
         {
           "subject": "voice-io",
