@@ -1399,11 +1399,7 @@
           "confidence": "probable",
           "state": "not-applicable",
           "evidence": "src/components/feature-sections/memory-rings/rings.ts:4 The memory section computes illustrative ring geometry, while the pricing files draw a payment illustration, so neither implements an agent memory pipeline.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
-          "evaluatedRevision": 47,
-          "revisionsBehind": 4,
-          "stale": true
+          "evaluatedAt": "2026-10-12"
         },
         {
           "subject": "native-shell-integration",
@@ -3070,12 +3066,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/playground-split/data.ts:85 The playground's memory result comes from authored example copy and its execution advances through scripted timings, so it does not capture or recall actual agent memories.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
-          "evaluatedRevision": 47,
-          "revisionsBehind": 4,
-          "stale": true
+          "evidence": "src/components/sections/playground-split/data.ts:85 The playground's 'memories' result is a localized copy string that beatDetail displays as the last scripted beat (beats.ts:60), and useMindRun only advances fixed step delays, so no memory is captured, stored or recalled; the only memory hits in the context are this display copy.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51,
+          "revisionsBehind": 4
         }
       ],
       "governance": "governed"
@@ -6396,12 +6391,11 @@
           "changedAt": "2026-10-15",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The panel displays mock suggestions held in React state, so it does not implement an agent memory pipeline.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
-          "evaluatedRevision": 47,
-          "revisionsBehind": 4,
-          "stale": true
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The only memory-related file in this context renders a fixed mock list of 'memory insight' suggestions in React state, and dismissing one only filters local state (line 82), so nothing here captures, consolidates, decays or recalls agent memory; searches for the subject's pipeline identifiers found no hits anywhere in the repo, and the word 'memory' appears here only as display copy, mock types and a link to /dashboard/knowledge.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51,
+          "revisionsBehind": 4
         },
         {
           "subject": "prompt-assembly",
@@ -8125,12 +8119,11 @@
           "changedAt": "2026-10-15",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/lib/healthFormat.ts:30 This module maps infrastructure health sections to presentation styles and reduces check severity, without implementing agent knowledge storage or recall.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
-          "evaluatedRevision": 47,
-          "revisionsBehind": 4,
-          "stale": true
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a demo-only mock host-health snapshot, and settleThread/demoCauseFix only project 'fixed cause' state over incident fixtures for this session, so there is no agent memory store or recall path for the subject to govern; a grep of the context's files for memor/learn/recall/remember/knowledge returned nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51,
+          "revisionsBehind": 4
         },
         {
           "subject": "agent-runtime-assembly",
@@ -8723,13 +8716,12 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/hooks/useAutoCycle.ts:29 These modules manage animation timing, viewport visibility, particles, and rendering quality rather than agent task knowledge.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:23599eae61aa7119",
-          "evaluatedRevision": 47,
+          "evidence": "src/contexts/QualityContext.tsx:6 This context handles animation pausing, particles, lazy mounting and a frame-time quality tier, so it has no agent knowledge that could be carried forward; a grep of its files for memor/recall/remember found no hits.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
+          "evaluatedRevision": 51,
           "source": "retained",
-          "revisionsBehind": 4,
-          "stale": true
+          "revisionsBehind": 4
         }
       ],
       "governance": "governed"
