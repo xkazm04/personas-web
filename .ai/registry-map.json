@@ -1272,7 +1272,11 @@
           "revision": 10,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/use-cases/shared/cycle.test.ts:17 reduceCycle is a pure state machine with a small, computable space (caseIdx 0..count x 5 phases x 2 modes x armed x userPlayed x 7 actions, about 1.1k transitions at count=3). The suite tests it with five hand-picked action sequences at count 1, 2 or 3, with no written bound and no enumeration, so it cannot claim the transition space is covered. Untried transitions, such as NEXT/PREV from mid-phase states during the finale, report green without ever running.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:d5ab12a92aba67c4",
+          "evaluatedRevision": 10
         }
       ],
       "governance": "governed"
@@ -2316,7 +2320,11 @@
           "revision": 10,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "vitest.config.ts:20 Unit tests are found only through *.test.ts files, and the healing-run-circuit and illustrate directories contain none. A grep of both directories for vitest, describe(, expect(, fast-check and fuzz returned nothing, and no e2e spec drives the healing circuit (its one e2e mention is a comment in tour.spec.ts:139). This context has no test whose inputs could be generated, so the subject's precondition does not hold.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:d5ab12a92aba67c4",
+          "evaluatedRevision": 10
         },
         {
           "subject": "eval-harness",

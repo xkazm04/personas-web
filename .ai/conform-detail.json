@@ -5229,72 +5229,77 @@
       "context": "Self-Healing & Trigger Automation",
       "subject": "test-input-generation",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T22:26:40.460Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:35:32.615Z",
+      "worker": "0216ea29-fbc3-408d-80dc-ab2f5c73a8b5",
       "techniques": [
         {
           "technique": "exhaustive-when-bounded",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:63 This bounds an animation loop, not a test-input space."
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:62 This is a small, bounded step table (4 cases x 5 phases) that nothing tests at all, so there is no enumerate-or-sample decision to judge. The missing tests are a test-harness or quality-gates question, not this subject's."
         },
         {
           "technique": "field-captured-operation-traces",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/RunLog.tsx:65 RunLog displays supplied text; it does not capture model operations for replay."
+          "evidence": "src/components/feature-sections/healing-run-circuit/RunLog.tsx:65 RunLog displays supplied text; it does not capture model operations for replay.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "generator-bounds-the-space",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:17 These are fixed illustration scenarios, with no randomized test generator located."
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:17 These are fixed illustration scenarios, with no randomized test generator located.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "inside-out-invariants",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:62 Chip appearance is derived from the supplied phase rather than independently maintained subsystem state."
+          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:62 Chip appearance is derived from the supplied phase rather than independently maintained subsystem state.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "liveness-needs-a-quiet-period",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:27 A timer advances the illustration; this does not exercise recovery or measure progress after injected faults."
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:27 A timer advances the illustration; this does not exercise recovery or measure progress after injected faults.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "model-based-oracle",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:36 The displayed error comes from scripted copy, not a tested result requiring an oracle."
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:36 The displayed error comes from scripted copy, not a tested result requiring an oracle.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "negative-space-generation",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:49 Failure names select artwork; they are not malformed inputs submitted to a validator."
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:49 Failure names select artwork; they are not malformed inputs submitted to a validator.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "proof-cost-follows-the-circuit",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:33 The circuit here is SVG artwork, with no solver-backed check under consideration in the inspected implementation."
+          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:33 The circuit here is SVG artwork, with no solver-backed check under consideration in the inspected implementation.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "seed-is-not-a-reproduction",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:24 The initial value is a display position, not a seed retained to reproduce a generated failure."
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:24 The initial value is a display position, not a seed retained to reproduce a generated failure.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "stage-ordered-fuzz-targets",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/Stepper.tsx:7 These stages are displayed labels rather than independently executable pipeline stages being fuzzed."
+          "evidence": "src/components/feature-sections/healing-run-circuit/Stepper.tsx:7 These stages are displayed labels rather than independently executable pipeline stages being fuzzed.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "swarm-feature-sampling",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:76 A visitor selects a scripted case; no randomized operation distribution is involved."
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:76 A visitor selects a scripted case; no randomized operation distribution is involved.",
+          "carriedFrom": "2026-10-17"
         }
-      ],
-      "withdrawn": {
-        "worker": "bbee4b8c-c38b-478a-8a48-07d58efd4073",
-        "state": "not-applicable",
-        "at": "2026-10-17T22:27:02.894494+00:00",
-        "reason": "reviewer (sonnet): The not-applicable anchor, cases.ts:4, is a comment about the desktop app's remedies and doesn't show that the precondition (code that needs generated test inputs) is absent. The no-tests claim rests only on a grep for describe(, expect( and fast-check, and the techniques cite pieces of the illustra"
-      }
+      ]
     },
     "Roadmap, Voting & Waitlist/Feature Voting & Comments/test-input-generation": {
       "context": "Feature Voting & Comments",
@@ -9228,6 +9233,43 @@
           "evidence": "src/app/preview/page.tsx:11 The host never mutates a guest between views (this is a static dev-only review page), so there are no mutation boundaries to checkpoint."
         }
       ]
+    },
+    "Marketing & Landing/Why Agents & Use Cases/test-input-generation": {
+      "context": "Why Agents & Use Cases",
+      "subject": "test-input-generation",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:35:32.615Z",
+      "worker": "0216ea29-fbc3-408d-80dc-ab2f5c73a8b5",
+      "techniques": [
+        {
+          "technique": "exhaustive-when-bounded",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/use-cases/shared/cycle.ts:63 A bounded pure reducer is tested by authored example sequences rather than by enumerating every (state, action) pair against stated invariants. The sibling catalog.test.ts does loop over every static case, which is the realised form for the data."
+        },
+        {
+          "technique": "model-based-oracle",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/use-cases/shared/catalog.test.ts:11 Catalog entries are checked against an independent authority (the connectors catalog plus the pinned desktop corpus), not against shape alone, so a well-formed but wrong tool label, icon or colour fails."
+        },
+        {
+          "technique": "inside-out-invariants",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/use-cases/shared/catalog.test.ts:34 A cross-component relationship (lab catalog -> connector category -> published desktop template) is stated and asserted directly. The rendered section could never show this."
+        },
+        {
+          "technique": "generator-bounds-the-space",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/use-cases/shared/cycle.test.ts:18 There is no randomized generator; every input is a literal chosen by the author."
+        },
+        {
+          "technique": "swarm-feature-sampling",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/use-cases/shared/cycle.test.ts:4 The driver applies a fixed, deterministic action count. Nothing samples operation probabilities."
+        }
+      ],
+      "registryProposal": "exhaustive-when-bounded frames enumeration as the alternative to random sampling. It does not say outright whether a bounded pure state machine tested only by hand-written example sequences is a deviation. Its 'a suite cannot say whether it has finished covering a space' trigger implies yes; stating that explicitly would make verdicts on example-only suites consistent."
     }
   }
 }

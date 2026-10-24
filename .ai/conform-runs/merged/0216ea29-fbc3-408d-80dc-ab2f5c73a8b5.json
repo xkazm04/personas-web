@@ -1,0 +1,101 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0216ea29-fbc3-408d-80dc-ab2f5c73a8b5",
+ "subject": "test-input-generation",
+ "evaluatedAt": "2026-10-24T23:35:32.615686+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Self-Healing & Trigger Automation",
+   "subject": "test-input-generation",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "vitest.config.ts:20 Unit tests are found only through *.test.ts files, and the healing-run-circuit and illustrate directories contain none. A grep of both directories for vitest, describe(, expect(, fast-check and fuzz returned nothing, and no e2e spec drives the healing circuit (its one e2e mention is a comment in tour.spec.ts:139). This context has no test whose inputs could be generated, so the subject's precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "exhaustive-when-bounded",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:62 This is a small, bounded step table (4 cases x 5 phases) that nothing tests at all, so there is no enumerate-or-sample decision to judge. The missing tests are a test-harness or quality-gates question, not this subject's."
+    }
+   ],
+   "absenceTerms": [
+    "vitest",
+    "describe(",
+    "expect(",
+    "fast-check",
+    "fuzz"
+   ]
+  },
+  {
+   "context": "Why Agents & Use Cases",
+   "subject": "test-input-generation",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/use-cases/shared/cycle.test.ts:17 reduceCycle is a pure state machine with a small, computable space (caseIdx 0..count x 5 phases x 2 modes x armed x userPlayed x 7 actions, about 1.1k transitions at count=3). The suite tests it with five hand-picked action sequences at count 1, 2 or 3, with no written bound and no enumeration, so it cannot claim the transition space is covered. Untried transitions, such as NEXT/PREV from mid-phase states during the finale, report green without ever running.",
+   "techniques": [
+    {
+     "technique": "exhaustive-when-bounded",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/use-cases/shared/cycle.ts:63 A bounded pure reducer is tested by authored example sequences rather than by enumerating every (state, action) pair against stated invariants. The sibling catalog.test.ts does loop over every static case, which is the realised form for the data."
+    },
+    {
+     "technique": "model-based-oracle",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/use-cases/shared/catalog.test.ts:11 Catalog entries are checked against an independent authority (the connectors catalog plus the pinned desktop corpus), not against shape alone, so a well-formed but wrong tool label, icon or colour fails."
+    },
+    {
+     "technique": "inside-out-invariants",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/use-cases/shared/catalog.test.ts:34 A cross-component relationship (lab catalog -> connector category -> published desktop template) is stated and asserted directly. The rendered section could never show this."
+    },
+    {
+     "technique": "generator-bounds-the-space",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/shared/cycle.test.ts:18 There is no randomized generator; every input is a literal chosen by the author."
+    },
+    {
+     "technique": "swarm-feature-sampling",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/use-cases/shared/cycle.test.ts:4 The driver applies a fixed, deterministic action count. Nothing samples operation probabilities."
+    }
+   ],
+   "registryProposal": "exhaustive-when-bounded frames enumeration as the alternative to random sampling. It does not say outright whether a bounded pure state machine tested only by hand-written example sequences is a deviation. Its 'a suite cannot say whether it has finished covering a space' trigger implies yes; stating that explicitly would make verdicts on example-only suites consistent."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T23:35:32.615686+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-input-generation"
+   ],
+   "techniques": [
+    "exhaustive-when-bounded"
+   ],
+   "deviations": 0,
+   "context": "Self-Healing & Trigger Automation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T23:35:32.615686+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-input-generation"
+   ],
+   "techniques": [
+    "exhaustive-when-bounded",
+    "generator-bounds-the-space",
+    "inside-out-invariants",
+    "model-based-oracle",
+    "swarm-feature-sampling"
+   ],
+   "deviations": 1,
+   "context": "Why Agents & Use Cases",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
