@@ -8888,6 +8888,91 @@
       "evaluatedTs": "2026-10-24T21:16:44.091Z",
       "worker": "08fd76a3-37fd-40f9-a686-989720e0b2ea",
       "techniques": []
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/agent-instruction-files": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:32:35.156Z",
+      "worker": "38a15a32-f0d7-4d31-88b9-b637fb417b01",
+      "techniques": [
+        {
+          "technique": "line-earning",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/FleetFrame.tsx:19 UI layout component; no always-loaded instruction file in scope"
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/agent-instruction-files": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:32:35.156Z",
+      "worker": "38a15a32-f0d7-4d31-88b9-b637fb417b01",
+      "techniques": [
+        {
+          "technique": "single-source-topology",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/index.tsx:16 marketing section; no instruction files authored or loaded"
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Section Preview & Demo Harness/agent-instruction-files": {
+      "context": "Section Preview & Demo Harness",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:32:35.156Z",
+      "worker": "38a15a32-f0d7-4d31-88b9-b637fb417b01",
+      "techniques": [
+        {
+          "technique": "capability-coverage-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/app/_dev-inspector/DevInspector.tsx:10 agent-friendly clipboard output; this is a developer tool, not an instruction asset"
+        },
+        {
+          "technique": "machine-owned-regions",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/registry.ts:17 the generated content is a preview registry, not a block inside an instruction file"
+        }
+      ]
+    },
+    "Marketing & Landing/Why Agents & Use Cases/agent-instruction-files": {
+      "context": "Why Agents & Use Cases",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:32:35.156Z",
+      "worker": "38a15a32-f0d7-4d31-88b9-b637fb417b01",
+      "techniques": [
+        {
+          "technique": "line-earning",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/use-cases/index.tsx:26 marketing illustration; no instruction file"
+        }
+      ]
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/agent-instruction-files": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:32:35.156Z",
+      "worker": "38a15a32-f0d7-4d31-88b9-b637fb417b01",
+      "techniques": [
+        {
+          "technique": "sibling-floor-ownership",
+          "verdict": "not-applicable",
+          "evidence": "src/components/illustrate/IllustrationSwitcher.tsx:7 this is a UI artifact the skill produced, not the installed skill, so there is no listing or discovery-budget concern"
+        }
+      ]
     }
   }
 }

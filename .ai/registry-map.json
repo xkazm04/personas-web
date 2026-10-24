@@ -1234,8 +1234,12 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/components/sections/use-cases/index.tsx:26 This is an animated marketing section, and a search of use-cases/ found no instruction-file names, so there is no agent instruction file here to judge.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "mcp-tools",
@@ -2341,8 +2345,12 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:15 This is a marketing illustration of self-healing runs plus a prototype switcher the /illustrate skill left behind; it consumes no instruction file, and a search of healing-run-circuit/ and illustrate/ found no instruction-file names.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "fleet-orchestration",
@@ -2471,8 +2479,12 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/app/_dev-inspector/DevInspector.tsx:4 The dev inspector copies a path:line reference that Claude Code can click, and /preview is a dev-only section registry; neither one authors or loads an agent instruction file, and a search of _dev-inspector/, preview/ and demo/ found no instruction-file names.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "test-harness",
@@ -3348,8 +3360,12 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/components/sections/agents-chat-split/index.tsx:16 This is a scripted marketing animation of a bot and an agent chat, and a search of agents-chat-split/ found no instruction-file names, so the subject's precondition (a repo-owned file a coding harness injects) does not hold here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "hitl-approval",
@@ -6762,8 +6778,12 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/components/dashboard/fleet-monitor/FleetFrame.tsx:19 These files are React layout and data modules for a mock fleet dashboard, and a case-insensitive search of fleet-monitor/ found no CLAUDE.md, AGENTS.md, copilot-instructions or cursorrules, so this context neither writes nor consumes an agent instruction file.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25b61236a62604b0",
+          "evaluatedRevision": 31
         },
         {
           "subject": "agent-memory",
