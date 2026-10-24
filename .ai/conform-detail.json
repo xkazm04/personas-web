@@ -6,18 +6,30 @@
       "subject": "hitl-approval",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:35:47.683Z",
+      "worker": "2d7d55b6-4f6f-4ae3-afd5-df775e0669a7",
       "techniques": [
         {
           "technique": "gate-state-machines",
           "verdict": "not-applicable",
-          "evidence": "no pending/approve/reject state exists in src/app/dashboard/observability/** — only display of already-terminal issue status"
+          "evidence": "no pending/approve/reject state exists in src/app/dashboard/observability/** — only display of already-terminal issue status",
+          "carriedFrom": "2026-08-31"
         },
         {
           "technique": "review-queues",
           "verdict": "not-applicable",
-          "evidence": "PerformanceHealthPanel.tsx's \"Run Analysis\" button (line 52) only re-triggers a fetch (PerformanceView.tsx:66-68); it is not a decision surface"
+          "evidence": "PerformanceHealthPanel.tsx's \"Run Analysis\" button (line 52) only re-triggers a fetch (PerformanceView.tsx:66-68); it is not a decision surface",
+          "carriedFrom": "2026-08-31"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/observability/performance-view/PerformanceHealthPanel.tsx:15-104 and PerformanceHealthIssueRow.tsx render health-issue status (open/auto_fixed/resolved) read-only, with no approve/reject/consent affordance anywhere in this context's files — hitl-approval's precondition (an action boundary where a person must pause a machine before it acts) does not hold; this is a post-hoc display surface, not an action surface. Contrast the sibling Agent Operations Dashboard/Manual Review Queue, which does own a real (if incomplete) approve/reject flow.",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by 2d7d55b6-4f6f-4ae3-afd5-df775e0669a7"
         }
       ]
     },
@@ -2258,19 +2270,30 @@
       "subject": "hitl-approval",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T11:49:05.879Z",
-      "worker": "fa0bec11-f23d-4c2a-bd56-1d5fad89f567",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:35:47.683Z",
+      "worker": "2d7d55b6-4f6f-4ae3-afd5-df775e0669a7",
       "techniques": [
         {
           "technique": "fail-loud-classification-default",
           "verdict": "not-applicable",
-          "evidence": "src/components/guide/blocks/Callout.tsx:13 The line names guide-markdown decoration. Callout.tsx:56 maps an unknown type to the info style; that default does not classify a review-queue payload, and this directory does not reference the review ladder."
+          "evidence": "src/components/guide/blocks/Callout.tsx:13 The line names guide-markdown decoration. Callout.tsx:56 maps an unknown type to the info style; that default does not classify a review-queue payload, and this directory does not reference the review ladder.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "human-performed-steps",
           "verdict": "not-applicable",
-          "evidence": "src/components/guide/blocks/Checklist.tsx:70 The checklist counts guide strings the reader ticked in localStorage. It does not hand a person a step the machine is forbidden to perform."
+          "evidence": "src/components/guide/blocks/Checklist.tsx:70 The checklist counts guide strings the reader ticked in localStorage. It does not hand a person a step the machine is forbidden to perform.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 GuideMarkdown only splits a topic body into rendered blocks, and a search of src/components/guide for verdict, unattended, severity, oracle, and consent found no matches, so this context never pauses a machine for a human decision.",
+          "evaluatedAt": "2026-10-13T11:49:05.879Z",
+          "worker": "fa0bec11-f23d-4c2a-bd56-1d5fad89f567",
+          "reason": "replaced by 2d7d55b6-4f6f-4ae3-afd5-df775e0669a7"
         }
       ]
     },
@@ -8160,6 +8183,71 @@
       "evaluatedAt": "2026-10-24",
       "evaluatedTs": "2026-10-24T03:18:51.757Z",
       "worker": "388a7e06-f7a5-4419-9c90-0ab1df6a65d0",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Manual Review Queue/hitl-approval": {
+      "context": "Manual Review Queue",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:35:47.683Z",
+      "worker": "2d7d55b6-4f6f-4ae3-afd5-df775e0669a7",
+      "techniques": [
+        {
+          "technique": "severity-sla-ladder",
+          "verdict": "deviation",
+          "evidence": "src/stores/reviewStore.ts:597 The ladder is one table (review-sla.ts:41) with a closed three-member action set that includes 'none' (hold). But 'escalate' pushes at no different human and records nothing durable; it is wiped by the refetch at reviewStore.ts:103."
+        },
+        {
+          "technique": "cosmetic-vs-enforced-threshold-invariant",
+          "verdict": "deviation",
+          "evidence": "src/lib/review-sla.ts:207 The check runs at load and throws a message that names the consequence, which is good. But it permits equality, as does the stored-policy validator at review-sla.ts:187. The standard calls equality a zero-width window and a violation. It also compares only against the ramp's start, not its 3x end."
+        },
+        {
+          "technique": "fail-loud-classification-default",
+          "verdict": "conformant",
+          "evidence": "src/stores/reviewStore.ts:61 An unparseable payload or invalid severity defaults to critical and sets parseError. The marker shows on the row (ReviewRow.tsx:246) and as a role=alert in the detail panel (ReviewDetailPanel.tsx:115). An unreadable timestamp is treated as due now (review-sla.ts:73)."
+        },
+        {
+          "technique": "review-queues",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useReviewBulkActions.ts:91 'Select all' takes every pending row in the status filter, across mixed severities and personas, and bulk approve needs no confirmation. That is the heterogeneous sweep the technique says should be absent. Positives: the badge derives from the same overlay (countPending), and a failed write keeps the item and reselects it."
+        },
+        {
+          "technique": "decision-records",
+          "verdict": "deviation",
+          "evidence": "src/stores/reviewStore.ts:429 The verdict carries the literal sentinel 'You' (review-display.ts:10), not an authenticated decider. No content version or fingerprint is bound, and nothing records what was shown."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "Real, not mock: api.ts:355-361 uses mockApi only when isDemo. The escalate rung writes client state only; setEscalationEnabled and reviewUtils have zero call sites.",
+          "evaluatedAt": "2026-08-23",
+          "worker": null,
+          "reason": "replaced by 2d7d55b6-4f6f-4ae3-afd5-df775e0669a7"
+        }
+      ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/hitl-approval": {
+      "context": "Mobile App Shell & Views",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:35:47.683Z",
+      "worker": "2d7d55b6-4f6f-4ae3-afd5-df775e0669a7",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/hitl-approval": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:35:47.683Z",
+      "worker": "2d7d55b6-4f6f-4ae3-afd5-df775e0669a7",
       "techniques": []
     }
   }

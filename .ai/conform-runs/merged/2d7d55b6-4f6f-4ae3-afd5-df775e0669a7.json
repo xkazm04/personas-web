@@ -1,0 +1,170 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2d7d55b6-4f6f-4ae3-afd5-df775e0669a7",
+ "subject": "hitl-approval",
+ "evaluatedAt": "2026-10-24T03:35:47.683430+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Manual Review Queue",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/stores/reviewStore.ts:597 When the SLA expires, the 'escalate' rung only stamps escalatedAt on the in-memory row. parseManualReview resets it to null on the next 15 s fetch (reviewStore.ts:103), and nothing renders it, so no other person ever receives the item, and the critical and warning rungs act as an unrecorded, silent hold.",
+   "techniques": [
+    {
+     "technique": "severity-sla-ladder",
+     "verdict": "deviation",
+     "evidence": "src/stores/reviewStore.ts:597 The ladder is one table (review-sla.ts:41) with a closed three-member action set that includes 'none' (hold). But 'escalate' pushes at no different human and records nothing durable; it is wiped by the refetch at reviewStore.ts:103."
+    },
+    {
+     "technique": "cosmetic-vs-enforced-threshold-invariant",
+     "verdict": "deviation",
+     "evidence": "src/lib/review-sla.ts:207 The check runs at load and throws a message that names the consequence, which is good. But it permits equality, as does the stored-policy validator at review-sla.ts:187. The standard calls equality a zero-width window and a violation. It also compares only against the ramp's start, not its 3x end."
+    },
+    {
+     "technique": "fail-loud-classification-default",
+     "verdict": "conformant",
+     "evidence": "src/stores/reviewStore.ts:61 An unparseable payload or invalid severity defaults to critical and sets parseError. The marker shows on the row (ReviewRow.tsx:246) and as a role=alert in the detail panel (ReviewDetailPanel.tsx:115). An unreadable timestamp is treated as due now (review-sla.ts:73)."
+    },
+    {
+     "technique": "review-queues",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useReviewBulkActions.ts:91 'Select all' takes every pending row in the status filter, across mixed severities and personas, and bulk approve needs no confirmation. That is the heterogeneous sweep the technique says should be absent. Positives: the badge derives from the same overlay (countPending), and a failed write keeps the item and reselects it."
+    },
+    {
+     "technique": "decision-records",
+     "verdict": "deviation",
+     "evidence": "src/stores/reviewStore.ts:429 The verdict carries the literal sentinel 'You' (review-display.ts:10), not an authenticated decider. No content version or fingerprint is bound, and nothing records what was shown."
+    }
+   ]
+  },
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/observability/index.tsx:12 The view is three read-only chart tabs, and the only interactive affordance is a local dismiss on the cost-anomaly banner. A search of the context's files for approve, reject, consent, verdict, unattended, escalat and hitl found no matches, so nothing here pauses a machine for a human decision.",
+   "techniques": [],
+   "absenceTerms": [
+    "consent",
+    "unattended",
+    "hitl"
+   ]
+  },
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/guide/GuideMarkdown.tsx:14 GuideMarkdown only splits static topic text into rendered blocks. A grep of src/components/guide for approve, reject, consent, verdict, approval, escalat and hitl returned nothing, so no gate, queue or verdict exists in this context.",
+   "techniques": [],
+   "absenceTerms": [
+    "approve",
+    "reject",
+    "consent",
+    "verdict",
+    "approval"
+   ]
+  },
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/mobile-landing/clock/ClockLanding.tsx:27 The /m2 landing (a noindex marketing page, src/app/m2/page.tsx:8) and the BottomSheet primitive present scripted copy only. A grep of src/app/m2, src/components/mobile-landing/clock and src/components/primitives found no approve, reject, consent, escalat or approval. The one 'verdict' hit is a comment about an owner design decision, not code.",
+   "techniques": [],
+   "absenceTerms": [
+    "approve",
+    "reject",
+    "consent",
+    "escalat"
+   ]
+  },
+  {
+   "context": "Agent Playground & Multi-Agent Chat",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-chat-split/index.tsx:21 This is a timed marketing animation driven by SCENARIOS line timings (scenarios.ts:3-9). The 'handoff to a human' is depicted copy, not a mechanism. A grep of the directory for approve, reject, consent, verdict, escalat and hitl found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "approve",
+    "reject",
+    "consent",
+    "verdict",
+    "escalat"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T03:35:47.683430+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [
+    "cosmetic-vs-enforced-threshold-invariant",
+    "decision-records",
+    "fail-loud-classification-default",
+    "review-queues",
+    "severity-sla-ladder"
+   ],
+   "deviations": 1,
+   "context": "Manual Review Queue",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T03:35:47.683430+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T03:35:47.683430+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T03:35:47.683430+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T03:35:47.683430+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Playground & Multi-Agent Chat",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
