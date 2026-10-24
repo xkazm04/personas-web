@@ -8516,6 +8516,62 @@
         "at": "2026-10-24T04:45:26.168200+00:00",
         "reason": "reviewer (sonnet): The anchor json-file-store.ts:7 is the DATA_DIR constant, which doesn't show that settings are absent; the only support is a grep for settingsStore/getSetting/SETTINGS_KEY, which are narrow terms for this context."
       }
+    },
+    "Infrastructure & Telemetry/Orchestrator API Client & Mock Data/module-design": {
+      "context": "Orchestrator API Client & Mock Data",
+      "subject": "module-design",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:02:19.060Z",
+      "worker": "235eaff9-3384-48c1-8c04-955383028402",
+      "techniques": [
+        {
+          "technique": "seams-and-adapters",
+          "verdict": "conformant",
+          "evidence": "src/lib/api.ts:145 The real and demo planes are adapters of one caller-owned interface. The demo-only standalone fetchers outside ApiClient are reached only through useDemoOnlySWR, so a live session never gets mock data."
+        },
+        {
+          "technique": "borrowed-surface",
+          "verdict": "conformant",
+          "evidence": "src/lib/api.ts:445 An interception proxy that adds a capability (plane selection) and forwards a surface typed by the locally owned ApiClient; it does not create a distinction that delegation could dissolve."
+        },
+        {
+          "technique": "module-depth",
+          "verdict": "conformant",
+          "evidence": "src/app/api/orchestrator/userSession.ts:57 Token → verdict hides the digest-keyed TTL cache, size limit, auth timeout and the 4xx/429/5xx mapping behind one call."
+        },
+        {
+          "technique": "io-free-core",
+          "verdict": "conformant",
+          "evidence": "src/app/api/orchestrator/[...path]/route.ts:33 The path-escape decision is a pure function of values, and so is relayHeaders. Both are private, though, and are exercised only through the handler with a stubbed global fetch."
+        },
+        {
+          "technique": "concurrency-at-the-edge",
+          "verdict": "conformant",
+          "evidence": "src/lib/dashboard-queries.ts:16 The fan-out sits in the loader at the edge; the adapters and the decisions in them stay sequential."
+        },
+        {
+          "technique": "locality-and-leverage",
+          "verdict": "conformant",
+          "evidence": "src/lib/mockApi.ts:1 Mock behaviour and fixture data are split by reason to change, and mockModuleLayers.test.ts enforces the split, so the structural decision is a rule the build checks."
+        },
+        {
+          "technique": "declarative-or-sequential",
+          "verdict": "conformant",
+          "evidence": "src/app/api/orchestrator/userSession.ts:48 A pure one-to-one transformation written as a pipeline."
+        },
+        {
+          "technique": "mirror-type-at-the-edge",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/orchestrator/proxy.test.ts:108 The host type (NextRequest) can be constructed in a test, so the mirror type's precondition does not hold."
+        },
+        {
+          "technique": "state-carrier-decides-the-lane",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/orchestrator/userSession.ts:97 There is one cache per server instance and no forked lanes, so nothing copies state across a lane boundary."
+        }
+      ]
     }
   }
 }

@@ -9980,7 +9980,11 @@
           "revision": 18,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "src/lib/api.ts:145 One ApiClient interface has four adapters (realApi, supabaseApi, desktopApi, mockApi) and a single place that chooses between them, and the session verifier injects fetch, clock and config, so both substitution and isolated testing happen at defined seams.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7c8008f2207b1946",
+          "evaluatedRevision": 18
         },
         {
           "subject": "browser-credential-boundary",
