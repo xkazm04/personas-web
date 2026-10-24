@@ -671,24 +671,36 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T21:08:44.477Z",
-      "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:48:55.263Z",
+      "worker": "619842ce-c411-4f9f-a7c8-b541629c6d37",
       "techniques": [
         {
           "technique": "fluent-syntax-bounded-grammar",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.tsx:21 The only syntax handling splits sample prompt text into highlight runs; nothing accepts a command string as a tool argument."
+          "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.tsx:21 The only syntax handling splits sample prompt text into highlight runs; nothing accepts a command string as a tool argument.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "orchestration-to-tool-migration",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/playground-split/data.ts:28 Each sample binds a fixed intent string to a fixed icon list; there is no stage being moved onto a tool surface and no fixed-roster measurement."
+          "evidence": "src/components/sections/playground-split/data.ts:28 Each sample binds a fixed intent string to a fixed icon list; there is no stage being moved onto a tool surface and no fixed-roster measurement.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "tool-schema-design",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/playground-split/data.ts:30 A sample tool is an icon id later joined to translated copy, not a schema a model selects or a server enforces."
+          "evidence": "src/components/sections/playground-split/data.ts:30 A sample tool is an icon id later joined to translated copy, not a schema a model selects or a server enforces.",
+          "carriedFrom": "2026-10-12"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:15 This section is a filmed landing demo whose prompt pane is a script of sample scenes, so it never speaks a tool protocol.",
+          "evaluatedAt": "2026-10-12T21:08:44.477Z",
+          "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+          "reason": "replaced by 619842ce-c411-4f9f-a7c8-b541629c6d37"
         }
       ]
     },
@@ -697,19 +709,30 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T21:08:44.477Z",
-      "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:48:55.263Z",
+      "worker": "619842ce-c411-4f9f-a7c8-b541629c6d37",
       "techniques": [
         {
           "technique": "command-audit-by-position",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/platform-command/components/CommandBadge.tsx:30 The badge renders a pillar label; this file does not parse a command string or decide whether a process may be spawned."
+          "evidence": "src/components/sections/platform-command/components/CommandBadge.tsx:30 The badge renders a pillar label; this file does not parse a command string or decide whether a process may be spawned.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "orchestration-to-tool-migration",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/data.ts:50 The catalog is a total map of trigger kinds to icons and brands, not a pipeline stage being migrated onto tools."
+          "evidence": "src/components/sections/orchestration-hub/data.ts:50 The catalog is a total map of trigger kinds to icons and brands, not a pipeline stage being migrated onto tools.",
+          "carriedFrom": "2026-10-12"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub mirrors desktop trigger kinds for a landing visual and does not host, spawn, or dispatch a tool protocol.",
+          "evaluatedAt": "2026-10-12T21:08:44.477Z",
+          "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+          "reason": "replaced by 619842ce-c411-4f9f-a7c8-b541629c6d37"
         }
       ]
     },
@@ -749,19 +772,30 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T21:08:44.477Z",
-      "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:48:55.263Z",
+      "worker": "619842ce-c411-4f9f-a7c8-b541629c6d37",
       "techniques": [
         {
           "technique": "first-party-agent-is-a-principal",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/data.ts:13 The lab agent is a constant list of scripted chat lines, not a principal admitted through a tool door."
+          "evidence": "src/components/feature-sections/lab/data.ts:13 The lab agent is a constant list of scripted chat lines, not a principal admitted through a tool door.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "write-freshness-gate",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 The chat tab reveals that fixed script on timers; it does not read or write an artifact."
+          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 The chat tab reveals that fixed script on timers; it does not read or write an artifact.",
+          "carriedFrom": "2026-10-12"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:21 The listed lab files are one on-screen version ledger for chat, arena, and eval labels, with no tool door and no plugin or protocol client.",
+          "evaluatedAt": "2026-10-12T21:08:44.477Z",
+          "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+          "reason": "replaced by 619842ce-c411-4f9f-a7c8-b541629c6d37"
         }
       ]
     },
@@ -770,37 +804,50 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T21:08:44.477Z",
-      "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T00:48:55.263Z",
+      "worker": "619842ce-c411-4f9f-a7c8-b541629c6d37",
       "techniques": [
         {
           "technique": "authentication-and-scoping",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/connections-catalog/data.ts:4 Auth handling here is a display rename of the string PAT; the catalog does not mint a per-consumer token or check a scope on a call."
+          "evidence": "src/components/sections/connections-catalog/data.ts:4 Auth handling here is a display rename of the string PAT; the catalog does not mint a per-consumer token or check a scope on a call.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "catalog-projection-modes",
           "verdict": "not-applicable",
-          "evidence": "src/lib/tool-catalogue.ts:7 swarmFeatured curates a visualization highlight; no host is refusing a request for too many tool definitions."
+          "evidence": "src/lib/tool-catalogue.ts:7 swarmFeatured curates a visualization highlight; no host is refusing a request for too many tool definitions.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "client-integration",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/connections-catalog/index.tsx:114 The only MCP affordance is a static card title; these files write no spawn command and show no install consent."
+          "evidence": "src/components/sections/connections-catalog/index.tsx:114 The only MCP affordance is a static card title; these files write no spawn command and show no install consent.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "server-composition",
           "verdict": "not-applicable",
-          "evidence": "src/lib/tool-catalogue.ts:16 The shared list feeds two visuals; it has no handlers, dispatch door, or transport that one handler could take down."
+          "evidence": "src/lib/tool-catalogue.ts:16 The shared list feeds two visuals; it has no handlers, dispatch door, or transport that one handler could take down.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "tool-identity-vs-tool-name",
           "verdict": "not-applicable",
-          "evidence": "src/lib/tool-catalogue.ts:66 Duplicate display ids fail module init; nothing here stores consent, cost, or history against a tool across a rename."
+          "evidence": "src/lib/tool-catalogue.ts:66 Duplicate display ids fail module init; nothing here stores consent, cost, or history against a tool across a rename.",
+          "carriedFrom": "2026-10-12"
         }
       ],
-      "registryProposal": "The golden path excludes vendor function-calling, in-process plugins, and model-free RPC, but it does not say whether a public catalog that only names MCP is inside the subject. These files name MCP and do not speak the wire."
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/connections-catalog/index.tsx:129 This page tells visitors that connections are set up in the desktop app, so the catalog does not mint tokens, spawn servers, or dispatch tools.",
+          "evaluatedAt": "2026-10-12T21:08:44.477Z",
+          "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+          "reason": "replaced by 619842ce-c411-4f9f-a7c8-b541629c6d37"
+        }
+      ]
     },
     "Interactive Demos & Playground/Orchestration & Platform Visualizers/test-harness": {
       "context": "Orchestration & Platform Visualizers",

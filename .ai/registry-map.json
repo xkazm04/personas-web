@@ -1815,12 +1815,11 @@
           "changedAt": "2026-10-15",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/index.tsx:21 The listed lab files are one on-screen version ledger for chat, arena, and eval labels, with no tool door and no plugin or protocol client.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
-          "evaluatedRevision": 31,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/feature-sections/lab/index.tsx:21 The Lab section is client-side state (a version ledger driving chat, arena and eval benches) with no tool server, client, transport or schema; a search of src/components/feature-sections for mcp, jsonrpc, inputSchema, tools/call and modelcontextprotocol found nothing, so none of the 22 techniques has a precondition here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34,
+          "revisionsBehind": 3
         },
         {
           "subject": "test-harness",
@@ -2686,12 +2685,11 @@
           "changedAt": "2026-10-15",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub mirrors desktop trigger kinds for a landing visual and does not host, spawn, or dispatch a tool protocol.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
-          "evaluatedRevision": 31,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub is a landing visual of the desktop app's trigger kinds and does not host, spawn or dispatch any tool protocol; a search of src/components/sections/orchestration-hub for mcp, jsonrpc, inputSchema, tools/call and modelcontextprotocol found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34,
+          "revisionsBehind": 3
         },
         {
           "subject": "test-harness",
@@ -2920,12 +2918,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/playground-split/index.tsx:15 This section is a filmed landing demo whose prompt pane is a script of sample scenes, so it never speaks a tool protocol.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
-          "evaluatedRevision": 31,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/sections/playground-split/index.tsx:15 This section plays a filmed demo of fixed beats, and its prompt pane is a script of sample scenes, so it never speaks a tool protocol; a search of src/components/sections/playground-split for mcp, jsonrpc, inputSchema, tools/call and modelcontextprotocol found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34,
+          "revisionsBehind": 3
         },
         {
           "subject": "module-design",
@@ -5696,12 +5693,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/connections-catalog/index.tsx:129 This page tells visitors that connections are set up in the desktop app, so the catalog does not mint tokens, spawn servers, or dispatch tools.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
-          "evaluatedRevision": 31,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/sections/connections-catalog/index.tsx:129 The catalog is a read-only marketing listing that sends setup to the desktop app; \"MCP\" shows up only as visitor-facing copy (ExtendCard at index.tsx:114 and summaries in src/data/connectors.ts), while a search of the catalog, src/app/connections, src/data and src/lib for protocol constructs (jsonrpc, inputSchema, tools/call) found nothing, so this context has no tool server or client for the techniques to govern.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34,
+          "revisionsBehind": 3
         },
         {
           "subject": "connector-catalog",
