@@ -1797,20 +1797,38 @@
       "subject": "agent-runtime-assembly",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T08:45:59.538Z",
-      "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
-      "techniques": []
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:18:51.757Z",
+      "worker": "388a7e06-f7a5-4419-9c90-0ab1df6a65d0",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:148 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found no matches; this module mounts an HTML5 canvas to manage client-side particle rendering and motion pause behavior rather than an agent execution runtime.",
+          "evaluatedAt": "2026-10-13T08:45:59.538Z",
+          "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+          "reason": "replaced by 388a7e06-f7a5-4419-9c90-0ab1df6a65d0"
+        }
+      ]
     },
     "Infrastructure & Telemetry/Authentication & User Session/agent-runtime-assembly": {
       "context": "Authentication & User Session",
       "subject": "agent-runtime-assembly",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T08:45:59.538Z",
-      "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
-      "techniques": []
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:18:51.757Z",
+      "worker": "388a7e06-f7a5-4419-9c90-0ab1df6a65d0",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found zero hits; this module manages browser user authentication via Supabase OAuth rather than assembling an agent runtime.",
+          "evaluatedAt": "2026-10-13T08:45:59.538Z",
+          "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
+          "reason": "replaced by 388a7e06-f7a5-4419-9c90-0ab1df6a65d0"
+        }
+      ]
     },
     "Marketing & Landing/Conversion: Get Started, FAQ & Footer/agent-runtime-assembly": {
       "context": "Conversion: Get Started, FAQ & Footer",
@@ -8113,6 +8131,36 @@
           "evidence": "src/components/dashboard/fleet-monitor/board/HostCard.tsx:153 No reclaim decision is made here. When the host goes offline, agents keep their last recorded state; none are declared dead."
         }
       ]
+    },
+    "Agent Operations Dashboard/Agents (Personas) Management/agent-runtime-assembly": {
+      "context": "Agents (Personas) Management",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:18:51.757Z",
+      "worker": "388a7e06-f7a5-4419-9c90-0ab1df6a65d0",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Manual Review Queue/agent-runtime-assembly": {
+      "context": "Manual Review Queue",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:18:51.757Z",
+      "worker": "388a7e06-f7a5-4419-9c90-0ab1df6a65d0",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/agent-runtime-assembly": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:18:51.757Z",
+      "worker": "388a7e06-f7a5-4419-9c90-0ab1df6a65d0",
+      "techniques": []
     }
   }
 }

@@ -6313,8 +6313,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/dashboard/views/reviews/useScopedReviews.ts:16 The review views read a client-side review store and render it; searches for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost under src/components/dashboard/views/reviews found 0 hits, so no hook chain, extension loading or conversation checkpointing exists here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "translation-quality-measurement",
@@ -6432,8 +6436,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "fixtures/command-envelope-v1.json:2 This context only sends signed commands (for example pause_persona) to the desktop, which runs the agents, and shows UI such as ExecuteToast; searches for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost across fixtures, scripts, src/app/dashboard, src/components/dashboard and src/lib/commands found 0 hits, so this repo has no runtime assembly for these techniques to govern.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "mcp-tools",
@@ -6756,8 +6764,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/dashboard/fleet-monitor/board/AgentActivity.tsx:15 The fleet board renders seeded, simulated agents (SimAgent from a pure reducer in sim.ts) rather than running a model or tool loop; searches for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost under src/components/dashboard/fleet-monitor found 0 hits (toolCall appears only as a simulated liveToolCalls counter).",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "module-design",
@@ -8569,12 +8581,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/particle-host/particleHostRegistry.ts:148 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found no matches; this module mounts an HTML5 canvas to manage client-side particle rendering and motion pause behavior rather than an agent execution runtime.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:9036e979656a8dc5",
-          "evaluatedRevision": 27,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:148 This context mounts a shared canvas and registers particle layers for client-side motion; searches for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost across src/components, src/contexts and src/hooks found 0 hits, so there is no hook chain around model or tool calls and nothing to assemble.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28,
+          "revisionsBehind": 1
         },
         {
           "subject": "talking-avatar",
@@ -10017,12 +10028,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/stores/authStore.ts:215 Grep of context files and the repository for runtime assembly terms ('checkpoint_mode', 'hook_placement', 'assembly_identity') found zero hits; this module manages browser user authentication via Supabase OAuth rather than assembling an agent runtime.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:9036e979656a8dc5",
-          "evaluatedRevision": 27,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/stores/authStore.ts:11 This context is browser Supabase/mock auth session handling; searches for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost across src/components, src/lib and src/stores found 0 hits, so no agent runtime is assembled, extended or checkpointed here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-cli-transport",
