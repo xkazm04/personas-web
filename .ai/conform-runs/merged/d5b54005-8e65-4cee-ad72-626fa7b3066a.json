@@ -1,0 +1,210 @@
+{
+  "schema": "conform-run/1",
+  "worker": "d5b54005-8e65-4cee-ad72-626fa7b3066a",
+  "subject": "table",
+  "evaluatedAt": "2026-10-24T01:35:02.554434+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Knowledge Base",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:57 The \"Patterns N\" headline stat (KnowledgeDenseTopBar.tsx:31) is reduced over the unfiltered set, so once a type chip narrows the rows the count still reads as the universe size and does not carry the applied predicate.",
+      "techniques": [
+        {
+          "technique": "filtering",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:57 Chips commit on change and there is a single clear (TopBar :59-62), but all five stats in the toolbar are computed over allPatterns, not the filtered rows."
+        },
+        {
+          "technique": "sorting",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:72 There is no identity tiebreaker (:105-129 returns 0 on ties), so equal counts fall in input order. localeCompare gets no reader locale, and KnowledgeSortHeader exposes no aria-sort and makes no announcement."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgePatternTable.tsx:52 The ghost sits under the chrome (:46) and pending is cold-only (index.tsx:181), which is good. But a failed cold fetch leaves patterns empty with pending false, so the body shows noPatterns (\"none yet\") beside the error banner: error wears the empty state's clothes."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgePatternRow.tsx:24 Each row is a button inside div layout, with no table or grid role and no column headers tied to cells. That is one tab stop per row, and screen readers hear the row as a single button."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:74 The filtered and sorted sequence is derived from named inputs. Rows are keyed by pattern.id (KnowledgePatternTable.tsx:49), although an index prop is passed for the zebra stripe."
+        },
+        {
+          "technique": "client-server-split",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:116 The regime is clean all-client (the whole set is fetched, then scoped, filtered and sorted locally), but the fetch is unbounded and no growth bet is written down. Minor."
+        },
+        {
+          "technique": "compressed-scroll-space",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-dense-table/KnowledgePatternTable.tsx:49 There is no windowed rendering; every row is mounted."
+        }
+      ]
+    },
+    {
+      "context": "Execution History & Streaming",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:53 On a real plane the store fetches only the newest 50 runs (executionStore.ts:107-109), and this status filter and its chip counts then run on the client below that server-truncated window, so \"Failed N\" describes the window, not the dataset.",
+      "techniques": [
+        {
+          "technique": "client-server-split",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:53 The filter runs client-side under a server window (limit 50 in real mode). This is the forbidden split; only demo mode holds the complete set."
+        },
+        {
+          "technique": "pagination",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:71 The \"All\" count is the loaded-window length, shown with no honest bound (e.g. 50+) and no hasMore. LoadMore only slices what is already held, so in real mode no row past 50 can be reached."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:63 Enumerated chips commit on change and a filter change resets the window. The filtered-empty state names the status and offers a one-tap show-all (ExecutionsEmptyState)."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/executions/index.tsx:130 The first-load reservation replaces the whole DataTable, header row included, so the column chrome is absent while loading. DataTable.tsx:65 also drops the header when empty. On a cold error, awaitingFirstData goes false (:118), so ExecutionsEmptyState shows \"no executions\" under the error banner."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/DataTable.tsx:103 There is a role=table/row shell, but the interactive row inserts a button role between row and cells, cells carry no cell role, and every row is a tab stop (:104). Up to 200 rows plus cancel buttons sit in the tab order. This is neither a native table nor a grid."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/DataTable.tsx:97 Rows are keyed by execution id via keyExtractor. The visible window is a memoized slice with named inputs (useExecutionsList.ts:57)."
+        }
+      ]
+    },
+    {
+      "context": "Leaderboard & Rankings",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardSort.ts:38 Ties are broken on the display name, which is mutable and can collide, rather than on persona id, so two same-named personas with equal scores have no deterministic order and the sort is not total.",
+      "techniques": [
+        {
+          "technique": "sorting",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardSort.ts:38 The tiebreaker is the display label, which the standard forbids. LeaderboardSortHeader (:27) also exposes no aria-sort; its aria-label only says \"sort by X\"."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/leaderboard/index.tsx:113 A failed fetch keeps the empty-state title (only the description and retry change). Separately, a real-mode retry sets fetchLoading (useLeaderboardData.ts:49), and :103 then swaps rendered rows and chrome for ViewGap."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardTable.tsx:78 Rows are buttons in a CSS grid of divs and spans. There is no table or grid semantics and the header spans are not column headers."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardTable.tsx:79 Rows are keyed by persona id. The ordered sequence is useMemo over named inputs (:45-48)."
+        },
+        {
+          "technique": "client-server-split",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:51 The regime is clean all-client over the whole fleet, but the fetch is unbounded with no written growth bet. Minor, since the rows are per-persona aggregates."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "table",
+      "context": "Observability Charts & SLA",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "table",
+      "context": "Mobile App Shell & Views",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor src/app/m2/page.tsx:8 is a doc-comment line that shows no tabular surface is absent, and the absence grep (<table, columnheader, aria-sort, DataTable, sortField) missed role=table/grid/row, <dl>, 'sort' and similar; I found no table in the clock files I opened, but the proof rests on a co"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-24T01:35:02.554434+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "table"
+      ],
+      "techniques": [
+        "client-server-split",
+        "compressed-scroll-space",
+        "filtering",
+        "grid-keyboard-model",
+        "loading-and-empty-states",
+        "performance",
+        "sorting"
+      ],
+      "deviations": 1,
+      "context": "Knowledge Base",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:35:02.554434+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "table"
+      ],
+      "techniques": [
+        "client-server-split",
+        "filtering",
+        "grid-keyboard-model",
+        "loading-and-empty-states",
+        "pagination",
+        "performance"
+      ],
+      "deviations": 1,
+      "context": "Execution History & Streaming",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:35:02.554434+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "table"
+      ],
+      "techniques": [
+        "client-server-split",
+        "grid-keyboard-model",
+        "loading-and-empty-states",
+        "performance",
+        "sorting"
+      ],
+      "deviations": 1,
+      "context": "Leaderboard & Rankings",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:35:02.554434+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "table"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Mobile App Shell & Views",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}

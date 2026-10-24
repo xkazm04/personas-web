@@ -6020,13 +6020,12 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "added by /conform: the matcher scored table at zero although KnowledgeDenseTable.tsx and knowledge-dense-table/ are a ten-column sortable comparison surface with a first-class column model (knowledgeDenseTypes.ts:19). Verdict: KnowledgeDenseTable.tsx:46-54 reduces the five headline stats over allPatterns, so KnowledgeDenseTopBar.tsx:28 renders \"Patterns: N\" beside the type chips at :39 that narrow the rows - a count that does not carry the applied predicate; :93-117 has no identity tiebreaker and returns 0 on ties, so equal counts order by input accident; KnowledgeSortHeader.tsx:19 announces no sort state; page.tsx:152 replaces chrome and body with three SkeletonCards while loading. Realized: chips commit on change with a single clear at KnowledgeDenseTopBar.tsx:56, :56-64 names the derivation's inputs, KnowledgePatternTable.tsx:37 keys rows by identity.",
-          "evaluatedAt": "2026-09-20",
-          "evaluatedAgainst": "sha256:9ac911984c10d3d5",
-          "evaluatedRevision": 5,
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:57 The \"Patterns N\" headline stat (KnowledgeDenseTopBar.tsx:31) is reduced over the unfiltered set, so once a type chip narrows the rows the count still reads as the universe size and does not carry the applied predicate.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14,
           "source": "conform",
-          "revisionsBehind": 9,
-          "stale": true
+          "revisionsBehind": 9
         },
         {
           "subject": "declarative-object-graph-configs",
@@ -7098,13 +7097,12 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/stores/executionStore.ts:96 The executions list is fetched as a fixed 50-row window, and the page then filters and counts that array by status on the client, so the Failed chip describes the window.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:f5aa23bf6f14872f",
-          "evaluatedRevision": 12,
+          "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:53 On a real plane the store fetches only the newest 50 runs (executionStore.ts:107-109), and this status filter and its chip counts then run on the client below that server-truncated window, so \"Failed N\" describes the window, not the dataset.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14,
           "source": "conform",
-          "revisionsBehind": 2,
-          "stale": true
+          "revisionsBehind": 2
         }
       ],
       "governance": "governed"
@@ -7160,13 +7158,12 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "leaderboardSort.ts:38 tiebreaks on the display name, not the row identity, and LeaderboardSortHeader.tsx:27 draws sort state without aria-sort; page.tsx:92 unmounts the whole table under SkeletonCard while data is in flight (useLeaderboardData.ts:46 does it again on every retry, hiding rendered rows), and page.tsx:100 keeps the empty title \"No agents ranked yet\" over a failed fetch; supabaseApi.ts:781 selects the set unbounded with no window and no written growth bound. Realized: LeaderboardTable.tsx:42-46 names the derivation's inputs, :80 keys rows by persona id.",
-          "evaluatedAt": "2026-09-20",
-          "evaluatedAgainst": "sha256:9ac911984c10d3d5",
-          "evaluatedRevision": 5,
+          "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardSort.ts:38 Ties are broken on the display name, which is mutable and can collide, rather than on persona id, so two same-named personas with equal scores have no deterministic order and the sort is not total.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14,
           "source": "retained",
-          "revisionsBehind": 9,
-          "stale": true
+          "revisionsBehind": 9
         },
         {
           "subject": "scoring-rubrics",
