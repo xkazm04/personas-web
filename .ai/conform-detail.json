@@ -9186,6 +9186,47 @@
           "evidence": "src/components/dashboard/EventDetailDrawer.tsx:50 The status shown here is an active/idle display derived from traffic volume. It is not a goal status that ends a correlated wait."
         }
       ]
+    },
+    "Interactive Demos & Playground/Section Preview & Demo Harness/embedded-preview": {
+      "context": "Section Preview & Demo Harness",
+      "subject": "embedded-preview",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:56:34.060Z",
+      "worker": "9662a04f-750e-45a8-a1f9-b391383bf616",
+      "techniques": [
+        {
+          "technique": "cross-frame-protocol",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/PreviewMount.tsx:85 Section is created in-tree via createElement; there is no frame or message channel, so there is nothing to correlate."
+        },
+        {
+          "technique": "origin-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/registry.ts:19 The previewed content is the host's own production components, so there is no foreign origin and no inbound or outbound messages to validate."
+        },
+        {
+          "technique": "dev-server-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/[section]/page.tsx:16 Preview is a route of the host's own Next dev server and 404s in production; no guest server is spawned or owned."
+        },
+        {
+          "technique": "injected-instrumentation-with-fallback",
+          "verdict": "not-applicable",
+          "evidence": "src/app/_dev-inspector/DevInspector.tsx:18 DevInspector instruments the host itself, not a guest. It does match the spirit (dev-gated, degrades to a HUD hint when no data-loc stamps exist), but it is not a guest agent."
+        },
+        {
+          "technique": "convention-discovery",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/derive.ts:46 Slugs are derived from the host's own Lazy* exports, not from a guest's file tree. This matches the technique's spirit (derived, not hand-listed, pinned by registry.test.ts), but no guest exists."
+        },
+        {
+          "technique": "preview-checkpoints",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/page.tsx:11 The host never mutates a guest between views (this is a static dev-only review page), so there are no mutation boundaries to checkpoint."
+        }
+      ]
     }
   }
 }

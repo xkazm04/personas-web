@@ -1,0 +1,78 @@
+{
+ "schema": "conform-run/1",
+ "worker": "9662a04f-750e-45a8-a1f9-b391383bf616",
+ "subject": "embedded-preview",
+ "evaluatedAt": "2026-10-24T22:56:34.060490+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Section Preview & Demo Harness",
+   "subject": "embedded-preview",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/preview/PreviewMount.tsx:92 The /preview harness mounts the host's own first-party section components in its own React tree (no frame, no guest server, no bridge), which is the 'same-origin, first-party embed' case the golden path excludes; searches of src/ for postMessage, iframe, contentWindow, MessageEvent and targetOrigin found no hits (and none in the context's directories).",
+   "techniques": [
+    {
+     "technique": "cross-frame-protocol",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/PreviewMount.tsx:85 Section is created in-tree via createElement; there is no frame or message channel, so there is nothing to correlate."
+    },
+    {
+     "technique": "origin-validation",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/registry.ts:19 The previewed content is the host's own production components, so there is no foreign origin and no inbound or outbound messages to validate."
+    },
+    {
+     "technique": "dev-server-registry",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/[section]/page.tsx:16 Preview is a route of the host's own Next dev server and 404s in production; no guest server is spawned or owned."
+    },
+    {
+     "technique": "injected-instrumentation-with-fallback",
+     "verdict": "not-applicable",
+     "evidence": "src/app/_dev-inspector/DevInspector.tsx:18 DevInspector instruments the host itself, not a guest. It does match the spirit (dev-gated, degrades to a HUD hint when no data-loc stamps exist), but it is not a guest agent."
+    },
+    {
+     "technique": "convention-discovery",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/derive.ts:46 Slugs are derived from the host's own Lazy* exports, not from a guest's file tree. This matches the technique's spirit (derived, not hand-listed, pinned by registry.test.ts), but no guest exists."
+    },
+    {
+     "technique": "preview-checkpoints",
+     "verdict": "not-applicable",
+     "evidence": "src/app/preview/page.tsx:11 The host never mutates a guest between views (this is a static dev-only review page), so there are no mutation boundaries to checkpoint."
+    }
+   ],
+   "absenceTerms": [
+    "postMessage",
+    "iframe",
+    "contentWindow",
+    "MessageEvent",
+    "targetOrigin"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T22:56:34.060490+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "embedded-preview"
+   ],
+   "techniques": [
+    "convention-discovery",
+    "cross-frame-protocol",
+    "dev-server-registry",
+    "injected-instrumentation-with-fallback",
+    "origin-validation",
+    "preview-checkpoints"
+   ],
+   "deviations": 0,
+   "context": "Section Preview & Demo Harness",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

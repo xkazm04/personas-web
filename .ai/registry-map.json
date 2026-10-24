@@ -2463,7 +2463,11 @@
           "revision": 2,
           "changedAt": "2026-09-15",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/preview/PreviewMount.tsx:92 The /preview harness mounts the host's own first-party section components in its own React tree (no frame, no guest server, no bridge), which is the 'same-origin, first-party embed' case the golden path excludes; searches of src/ for postMessage, iframe, contentWindow, MessageEvent and targetOrigin found no hits (and none in the context's directories).",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:a6e12ae70d42efcc",
+          "evaluatedRevision": 2
         },
         {
           "subject": "agent-instruction-files",
