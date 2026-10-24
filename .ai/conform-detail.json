@@ -8678,6 +8678,75 @@
           "evidence": "src/components/sections/download-cta/downloadCtaTypes.ts:3 Platform choice picks an installer for an OS, not a model or engine grade sized to the host."
         }
       ]
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/eval-harness": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:49:41.434Z",
+      "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
+      "techniques": [
+        {
+          "technique": "assertion-vs-judgment",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:3 attention.ts maps live agent state to display piles; it does not score agent output, so there is no choice between an assertion and a judge."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Manual Review Queue/eval-harness": {
+      "context": "Manual Review Queue",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:49:41.434Z",
+      "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
+      "techniques": [
+        {
+          "technique": "monitor-inside-the-loop",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/index.tsx:35 The reviewer is a human whose verdict is a command sent to the desktop, not a model monitor inside a scored loop."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Leaderboard & Rankings/eval-harness": {
+      "context": "Leaderboard & Rankings",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:49:41.434Z",
+      "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
+      "techniques": [
+        {
+          "technique": "resolution-precondition",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts:18 This sorts operational telemetry from personas doing different jobs, not a matrix run over conditions. There is no within-condition or between-condition variance for the technique to compare. The sort has no resolution check, though, which is the ranking risk the technique describes."
+        }
+      ],
+      "registryProposal": "resolution-precondition covers 'publishing an order over models or prompts or configurations' only for eval matrix runs. It says nothing about a production telemetry leaderboard that sorts agents by a composite with no noise check, and here the engine's only guard is MIN_RUNS=3 on the delta (src/lib/standings.ts). That case could be named in scoring-rubrics, or in a technique's boundary, so seats don't stretch resolution-precondition onto it."
+    },
+    "Product Feature Showcase/Memory Layers & Multi-Provider AI/eval-harness": {
+      "context": "Memory Layers & Multi-Provider AI",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:49:41.434Z",
+      "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/eval-harness": {
+      "context": "Observability Charts & SLA",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:49:41.434Z",
+      "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
+      "techniques": []
     }
   }
 }

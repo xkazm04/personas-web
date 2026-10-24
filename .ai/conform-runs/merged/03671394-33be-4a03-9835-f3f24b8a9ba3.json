@@ -1,0 +1,173 @@
+{
+ "schema": "conform-run/1",
+ "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
+ "subject": "eval-harness",
+ "evaluatedAt": "2026-10-24T05:49:41.434946+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Fleet Playground (prototypes)",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/fleet-monitor/FleetFrame.tsx:19 The context is a set of fleet-monitor UI prototypes that draw agent state for a human; a case-insensitive search of src/components/dashboard/fleet-monitor for scenario, holdout, trial, rubric and golden found 0 files, and nothing here runs candidates against declared scenarios or scores them, so the eval-harness precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "assertion-vs-judgment",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/fleet-monitor/attention.ts:3 attention.ts maps live agent state to display piles; it does not score agent output, so there is no choice between an assertion and a judge."
+    }
+   ],
+   "absenceTerms": [
+    "scenario",
+    "holdout",
+    "trial",
+    "rubric",
+    "golden"
+   ]
+  },
+  {
+   "context": "Manual Review Queue",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/reviews/index.tsx:22 This is a queue where a human approves or rejects agent output. It is not a harness that scores candidates against scenarios. A search of src/components/dashboard/views/reviews found 0 files for scenario, holdout, trial, rubric and golden, and every 'judge' hit is prose like 'judged on the whole list'.",
+   "techniques": [
+    {
+     "technique": "monitor-inside-the-loop",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/reviews/index.tsx:35 The reviewer is a human whose verdict is a command sent to the desktop, not a model monitor inside a scored loop."
+    }
+   ],
+   "absenceTerms": [
+    "scenario",
+    "holdout",
+    "trial",
+    "rubric",
+    "golden"
+   ]
+  },
+  {
+   "context": "Leaderboard & Rankings",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:27 The leaderboard ranks personas from their production execution snapshots (synced_metrics_snapshots through standings()), not from a harness that runs candidates against declared scenarios. A search of src/components/dashboard found 0 files for scenario, holdout, trial, rubric and golden, so the eval-harness precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "resolution-precondition",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardRank.ts:18 This sorts operational telemetry from personas doing different jobs, not a matrix run over conditions. There is no within-condition or between-condition variance for the technique to compare. The sort has no resolution check, though, which is the ranking risk the technique describes."
+    }
+   ],
+   "absenceTerms": [
+    "scenario",
+    "holdout",
+    "trial",
+    "rubric",
+    "golden"
+   ],
+   "registryProposal": "resolution-precondition covers 'publishing an order over models or prompts or configurations' only for eval matrix runs. It says nothing about a production telemetry leaderboard that sorts agents by a composite with no noise check, and here the engine's only guard is MIN_RUNS=3 on the delta (src/lib/standings.ts). That case could be named in scoring-rubrics, or in a technique's boundary, so seats don't stretch resolution-precondition onto it."
+  },
+  {
+   "context": "Memory Layers & Multi-Provider AI",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/design-blueprint/TestRun.tsx:11 The 'test run' here is a framer-motion marketing animation of an email moving through the visitor's designed machine, not an evaluation run. A search of src/components/feature-sections/design-blueprint found 0 files for scenario, holdout, trial, rubric and golden, so the eval-harness precondition does not hold.",
+   "techniques": [],
+   "absenceTerms": [
+    "scenario",
+    "holdout",
+    "trial",
+    "rubric",
+    "golden"
+   ]
+  },
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "eval-harness",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:13 The context charts operational usage, cost and performance from mock or synced telemetry and does not score candidates against scenarios. A search of src/components/dashboard found 0 files for scenario, holdout, trial, rubric and golden, and the only 'eval' hits are SWR revalidateOnFocus options.",
+   "techniques": [],
+   "absenceTerms": [
+    "scenario",
+    "holdout",
+    "trial",
+    "rubric",
+    "golden"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T05:49:41.434946+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "assertion-vs-judgment"
+   ],
+   "deviations": 0,
+   "context": "Fleet Playground (prototypes)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:49:41.434946+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "monitor-inside-the-loop"
+   ],
+   "deviations": 0,
+   "context": "Manual Review Queue",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:49:41.434946+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [
+    "resolution-precondition"
+   ],
+   "deviations": 0,
+   "context": "Leaderboard & Rankings",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:49:41.434946+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Memory Layers & Multi-Provider AI",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:49:41.434946+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "eval-harness"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

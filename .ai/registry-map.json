@@ -2118,8 +2118,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/feature-sections/design-blueprint/TestRun.tsx:11 The 'test run' here is a framer-motion marketing animation of an email moving through the visitor's designed machine, not an evaluation run. A search of src/components/feature-sections/design-blueprint found 0 files for scenario, holdout, trial, rubric and golden, so the eval-harness precondition does not hold.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         },
         {
           "subject": "mcp-tools",
@@ -6261,8 +6265,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/reviews/index.tsx:22 This is a queue where a human approves or rejects agent output. It is not a harness that scores candidates against scenarios. A search of src/components/dashboard/views/reviews found 0 files for scenario, holdout, trial, rubric and golden, and every 'judge' hit is prose like 'judged on the whole list'.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         },
         {
           "subject": "voice-io",
@@ -6676,8 +6684,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/fleet-monitor/FleetFrame.tsx:19 The context is a set of fleet-monitor UI prototypes that draw agent state for a human; a case-insensitive search of src/components/dashboard/fleet-monitor for scenario, holdout, trial, rubric and golden found 0 files, and nothing here runs candidates against declared scenarios or scores them, so the eval-harness precondition does not hold.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         },
         {
           "subject": "fleet-orchestration",
@@ -7219,8 +7231,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:27 The leaderboard ranks personas from their production execution snapshots (synced_metrics_snapshots through standings()), not from a harness that runs candidates against declared scenarios. A search of src/components/dashboard found 0 files for scenario, holdout, trial, rubric and golden, so the eval-harness precondition does not hold.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         },
         {
           "subject": "table",
@@ -7640,8 +7656,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:13 The context charts operational usage, cost and performance from mock or synced telemetry and does not score candidates against scenarios. A search of src/components/dashboard found 0 files for scenario, holdout, trial, rubric and golden, and the only 'eval' hits are SWR revalidateOnFocus options.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:7ccead00b7f92aba",
+          "evaluatedRevision": 37
         }
       ],
       "governance": "governed"
