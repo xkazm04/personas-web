@@ -1,0 +1,132 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0a06bce3-67f2-4101-81c3-7caa08878553",
+ "subject": "narrative-scroll-surface",
+ "evaluatedAt": "2026-10-24T05:15:43.662942+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "How It Works & Changelog",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/how-role-path/index.tsx:54 The /how opener's first screen asks the reader to say which role they are (developer / PM / enterprise) before anything is explained. That is the 'choice of entry points' that no-orientation-tax refuses.",
+   "techniques": [
+    {
+     "technique": "no-orientation-tax",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/index.tsx:15 A decision on the first screen. The scroll-map labels are also a second hand-kept list (page.tsx:46) beside the StageSection order."
+    },
+    {
+     "technique": "reveal-without-loss",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-lazy.tsx:27 Four of the six /how stations are ssr:false chunks, so the served document holds skeletons and not the page's argument (page.tsx:59 says so). The manifesto ships with opacity-0 fadeUp and tw-char-hidden in its served frame, and there is no print rule."
+    },
+    {
+     "technique": "scroll-bound-progression",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/Route.tsx:70 Station gestures are timed whileInView-once entrances (1.6s route draw, typewriter delays). Nothing follows per-station scroll progress, and there is no in/peak/out envelope."
+    },
+    {
+     "technique": "sequence-as-spine",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-role-path/Route.tsx:20 The route spine is a fixed 2x2 snake plotted by hand for exactly four stops, with a parallel hand CELL list and STOP_HREFS. Numbering is correctly derived from the index (Stop.tsx:45)."
+    },
+    {
+     "technique": "illustration-carries-the-claim",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/how-manifesto/Ambience.tsx:93 The decorative backdrop is inert to assistive tech. Proof panels carry their text as real copy. I did not check mockup fidelity against the product."
+    }
+   ]
+  },
+  {
+   "context": "Agent Execution Timeline Race",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/agents-race/shared/motion.ts:72 Story progress p only moves on a clock, and the reader gets Pause/Replay and scenario picks but no way to step or scrub to a beat. The technique refuses a mechanism explainer that can only be played live.",
+   "techniques": [
+    {
+     "technique": "motion-carries-the-mechanism",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/agents-race/index.tsx:44 Conformant parts: every actor is a pure useTransform of p over beat windows (data.ts:23 legWindow), the loop has a pause control, and under reduced motion p rests at 1 on a map that draws the route spatially. Missing: step controls with a readout naming the step, scrubbing, and a filmstrip view."
+    },
+    {
+     "technique": "reveal-without-loss",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/agents-race/shared/Frame.tsx:17 The whole explainer, including its scenario captions and results, is client-only. It is absent from the served document for crawlers, previews and readers whose script did not run."
+    }
+   ],
+   "registryProposal": "motion-carries-the-mechanism does not say whether a stylised metaphor (e.g. train-vs-route map) whose timing is pure-function-of-beats counts as informative art under illustration-carries-the-claim; the two techniques' litmus tests diverge for metaphor art."
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:178 The guide is a reference document with an on-this-page TOC and ReadingProgress, for a reader who already wants the content. The golden path assigns that to long-form-reading-surface, not to the narrative scroll surface. Searching src/app/guide found no scroll-bound progress, spine or station constructs; the only reveal is a whileInView stagger on the category grid.",
+   "techniques": [],
+   "absenceTerms": [
+    "useScroll",
+    "scrollYProgress",
+    "spine",
+    "station"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "narrative-scroll-surface",
+   "context": "Internationalization (14 locales)",
+   "reason": "The context's files are a language switcher, a locale offer and locale dictionaries. None of them is a narrative explanatory page, and nothing in them carries sequence, reveal, scroll-binding or mechanism motion. A not-applicable verdict would need an absence search over src/components and src/i18n, and src/components holds the /how narrative sections, so the search would hit by construction. No own-code anchor can carry a technique verdict here."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-24T05:15:43.662942+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [
+    "illustration-carries-the-claim",
+    "no-orientation-tax",
+    "reveal-without-loss",
+    "scroll-bound-progression",
+    "sequence-as-spine"
+   ],
+   "deviations": 1,
+   "context": "How It Works & Changelog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:15:43.662942+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [
+    "motion-carries-the-mechanism",
+    "reveal-without-loss"
+   ],
+   "deviations": 1,
+   "context": "Agent Execution Timeline Race",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:15:43.662942+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

@@ -3183,7 +3183,11 @@
           "revision": 3,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/agents-race/shared/motion.ts:72 Story progress p only moves on a clock, and the reader gets Pause/Replay and scenario picks but no way to step or scrub to a beat. The technique refuses a mechanism explainer that can only be played live.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:e93abcf9f70a6c36",
+          "evaluatedRevision": 3
         },
         {
           "subject": "module-design",
@@ -4298,7 +4302,11 @@
           "revision": 3,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/how-role-path/index.tsx:54 The /how opener's first screen asks the reader to say which role they are (developer / PM / enterprise) before anything is explained. That is the 'choice of entry points' that no-orientation-tax refuses.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:e93abcf9f70a6c36",
+          "evaluatedRevision": 3
         },
         {
           "subject": "design-tokens",
