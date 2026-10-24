@@ -2466,37 +2466,42 @@
       "context": "Public Roadmap",
       "subject": "browser-credential-boundary",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T13:16:24.405Z",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:11:27.570Z",
+      "worker": "72149f17-75bd-49b5-9e64-97bd6e745211",
       "techniques": [
         {
           "technique": "opaque-upstream-errors",
-          "verdict": "deviation",
-          "evidence": "src/app/api/roadmap/route.ts:7 Returns an empty list with 200 OK when Supabase is not configured, violating failure-not-empty-success by collapsing missing configuration into empty success."
+          "verdict": "conformant",
+          "evidence": "src/app/api/roadmap/route.ts:26 Closed vocabulary from types.ts:3. 'none' (not configured, line 7) and 'error' are distinct from 'supabase' with zero rows. Gaps against the full technique: no correlation id is minted or returned, every error is clamped to 502 (throttling is not kept as its own class), and 'not configured' is returned as 200 rather than its own status."
         },
         {
           "technique": "public-vs-server-env-split",
-          "verdict": "deviation",
-          "evidence": "src/app/api/roadmap/route.ts:12 The server route imports getSupabase() which relies on public client environment variables instead of a server-only client."
+          "verdict": "conformant",
+          "evidence": "src/app/api/roadmap/route.ts:2 The route gates on env through the server-only module, and the client it builds uses only the public NEXT_PUBLIC anon pair (a role selector). The page and section components read no env and no Supabase."
+        },
+        {
+          "technique": "broker-proxy-attaches-secret",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/roadmap/route.ts:11 It uses the anon client, so the dependency is public by design, which the technique lists as a case for not brokering. No privileged secret is attached."
+        },
+        {
+          "technique": "outbound-fetch-destination-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/roadmap/route.ts:12 The destination is fixed by deployment config (the Supabase URL). Nothing fetches an address taken from a response or a request."
         },
         {
           "technique": "aggregate-view-not-base-table",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/roadmap/index.tsx:13 No aggregate views over identifying rows are queried."
+          "evidence": "src/app/api/roadmap/route.ts:15 roadmap_items is a public reference table with no identifiers (id, name, description, status, priority, sort_order). The area counts in roadmap-area-counts.ts are computed at build time from static modules, not from rows that identify anyone."
         },
         {
           "technique": "allowlisted-operator-stream",
           "verdict": "not-applicable",
-          "evidence": "src/app/roadmap/page.tsx:33 No operator stream exists in the public roadmap section."
+          "evidence": "src/app/api/roadmap/route.ts:20 This is a server log of an upstream error object for the operator. It does not render requests that carried a credential, so there is no debug stream to allowlist."
         }
-      ],
-      "withdrawn": {
-        "worker": "340e3867-db54-4854-8f20-599ca3c48522",
-        "state": "deviation",
-        "at": "2026-10-13T13:17:34.142318+00:00",
-        "reason": "reviewer (sonnet): src/app/api/roadmap/route.ts:7 does return an empty items array with 200 when Supabase is unconfigured, but the body carries `source: \"none\"`, which marks the state explicitly. So the 'silent' empty success is contradicted. The getSupabase() anon-client claim concerns public roadmap data and is not "
-      }
+      ]
     },
     "Observability & Event Monitoring/Event Bus & Stream Monitoring/client-fetch-cache": {
       "context": "Event Bus & Stream Monitoring",

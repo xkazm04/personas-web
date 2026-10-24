@@ -5538,7 +5538,11 @@
           "revision": 3,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "src/app/api/roadmap/route.ts:26 /api/roadmap reads a public, non-identifying table through the anon client (regime one). On failure it logs the Supabase details on the server and returns a closed `source` vocabulary (supabase|none|error) with a 502, so the caller never sees upstream detail and a failure never looks like an empty success.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:d3eef10e9ed8459f",
+          "evaluatedRevision": 3
         },
         {
           "subject": "docs-sync",
