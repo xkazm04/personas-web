@@ -1,0 +1,188 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f45375a6-58e1-4e78-ba63-2a951eaaa737",
+ "subject": "native-shell-integration",
+ "evaluatedAt": "2026-10-24T02:27:06.513628+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Animation & Motion System",
+   "subject": "native-shell-integration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/particle-host/particleHostRegistry.ts:57 The only long-lived loop is a document canvas that stops when the tab is hidden or nothing is in view, and a case-insensitive search of src for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing, so no native process holds a capability these files rely on.",
+   "techniques": [
+    {
+     "technique": "native-owned-stream",
+     "verdict": "not-applicable",
+     "evidence": "src/components/particle-host/particleHostRegistry.ts:57 This is a page-side animation loop that pauses on purpose. It is not a stream that a native host should keep alive while the window is hidden."
+    }
+   ],
+   "absenceTerms": [
+    "__TAURI__",
+    "@tauri-apps",
+    "setIgnoreMouseEvents",
+    "alwaysOnTop",
+    "AXUIElement"
+   ]
+  },
+  {
+   "context": "Orchestration & Platform Visualizers",
+   "subject": "native-shell-integration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub is a marketing diagram that shows a static copy of the desktop repo's trigger catalog and never calls a native host, and the src-wide search for native-shell APIs (__TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop, AXUIElement) found nothing.",
+   "techniques": [
+    {
+     "technique": "capability-presence-contract",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/orchestration-hub/data.ts:19 These are display data copied from another repo. No host capability is queried here."
+    }
+   ],
+   "absenceTerms": [
+    "__TAURI__",
+    "@tauri-apps",
+    "setIgnoreMouseEvents",
+    "alwaysOnTop",
+    "AXUIElement"
+   ]
+  },
+  {
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "subject": "native-shell-integration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/dashboard/layout.tsx:16 The dashboard is an in-document SPA shell with no native wrapper (the in-document case the golden path places outside this subject), and the src-wide search for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing.",
+   "techniques": [
+    {
+     "technique": "native-owned-stream",
+     "verdict": "not-applicable",
+     "evidence": "src/app/dashboard/layout.tsx:39 The realtime feed is a page-side provider in a browser SPA. There is no native process that could own the stream."
+    }
+   ],
+   "absenceTerms": [
+    "__TAURI__",
+    "@tauri-apps",
+    "setIgnoreMouseEvents",
+    "alwaysOnTop",
+    "AXUIElement"
+   ]
+  },
+  {
+   "context": "Guided Product Tour",
+   "subject": "native-shell-integration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/tour/TourOverlay.tsx:12 The tour is an in-page spotlight and dialog, not a surface placed over a foreign application, and the src-wide search for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing.",
+   "techniques": [
+    {
+     "technique": "non-stealing-overlay",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourOverlay.tsx:12 The overlay sits inside the product's own document. It never floats over another application."
+    }
+   ],
+   "absenceTerms": [
+    "__TAURI__",
+    "@tauri-apps",
+    "setIgnoreMouseEvents",
+    "alwaysOnTop",
+    "AXUIElement"
+   ]
+  },
+  {
+   "context": "Layout, Navigation & Page Shell",
+   "subject": "native-shell-integration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/layout.tsx:94 The shell is the Next.js document root and calls no native-shell API (the src-wide search for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing); its one webview mention is a CookieConsent comment about localStorage failing in embedded webviews.",
+   "techniques": [
+    {
+     "technique": "capability-presence-contract",
+     "verdict": "not-applicable",
+     "evidence": "src/app/layout.tsx:94 This is the document root of a web app. No host capability is negotiated here."
+    }
+   ],
+   "absenceTerms": [
+    "__TAURI__",
+    "@tauri-apps",
+    "setIgnoreMouseEvents",
+    "alwaysOnTop",
+    "AXUIElement"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T02:27:06.513628+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-shell-integration"
+   ],
+   "techniques": [
+    "native-owned-stream"
+   ],
+   "deviations": 0,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T02:27:06.513628+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-shell-integration"
+   ],
+   "techniques": [
+    "capability-presence-contract"
+   ],
+   "deviations": 0,
+   "context": "Orchestration & Platform Visualizers",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T02:27:06.513628+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-shell-integration"
+   ],
+   "techniques": [
+    "native-owned-stream"
+   ],
+   "deviations": 0,
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T02:27:06.513628+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-shell-integration"
+   ],
+   "techniques": [
+    "non-stealing-overlay"
+   ],
+   "deviations": 0,
+   "context": "Guided Product Tour",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T02:27:06.513628+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-shell-integration"
+   ],
+   "techniques": [
+    "capability-presence-contract"
+   ],
+   "deviations": 0,
+   "context": "Layout, Navigation & Page Shell",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

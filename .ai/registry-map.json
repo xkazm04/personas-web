@@ -923,12 +923,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/tour/TourOverlay.tsx:13 The tour is an in-page spotlight and dialog rendered by PageShell, with a window keydown listener and HTML audio clips, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent from the tour components, TourContext, and the tour hooks.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/tour/TourOverlay.tsx:12 The tour is an in-page spotlight and dialog, not a surface placed over a foreign application, and the src-wide search for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:9034ad02704d9c88",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "prompt-assembly",
@@ -2862,13 +2861,12 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub is a page diagram whose trigger ids are a static snapshot of another repo's catalog, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent from orchestration-hub and platform-command.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
-          "evaluatedRevision": 3,
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The hub is a marketing diagram that shows a static copy of the desktop repo's trigger catalog and never calls a native host, and the src-wide search for native-shell APIs (__TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop, AXUIElement) found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:9034ad02704d9c88",
+          "evaluatedRevision": 5,
           "source": "retained",
-          "revisionsBehind": 1,
-          "stale": true
+          "revisionsBehind": 1
         }
       ],
       "governance": "governed"
@@ -8606,12 +8604,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/particle-host/particleHostRegistry.ts:57 The only long-lived loop here is a document canvas that stops when the tab is hidden or nothing is in view, and a search of these files and of src for alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow found no native-shell API.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/particle-host/particleHostRegistry.ts:57 The only long-lived loop is a document canvas that stops when the tab is hidden or nothing is in view, and a case-insensitive search of src for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing, so no native process holds a capability these files rely on.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:9034ad02704d9c88",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "test-harness",
@@ -8982,12 +8979,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/dashboard/layout.tsx:15 The chrome is a document SPA whose live updates are a Supabase channel created in a React effect and removed on cleanup, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent from the dashboard shell.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/dashboard/layout.tsx:16 The dashboard is an in-document SPA shell with no native wrapper (the in-document case the golden path places outside this subject), and the src-wide search for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:9034ad02704d9c88",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "mcp-tools",
@@ -9128,12 +9124,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/layout.tsx:94 The shell is the Next.js document root, and alwaysOnTop, setIgnoreMouseEvents, AXUIElement, GetKeyboardLayout, and NSWindow are absent; the only webview wording is a localStorage failure comment in CookieConsent.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:eb941b25ec740109",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/layout.tsx:94 The shell is the Next.js document root and calls no native-shell API (the src-wide search for __TAURI__, @tauri-apps, setIgnoreMouseEvents, alwaysOnTop and AXUIElement found nothing); its one webview mention is a CookieConsent comment about localStorage failing in embedded webviews.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:9034ad02704d9c88",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "long-form-reading-surface",
