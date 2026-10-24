@@ -1897,8 +1897,12 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/feature-sections/lab/bench/chat/ChatBench.tsx:9 The Lab benches are scripted marketing illustrations driven by pending copy and fixed step clocks. A search of src/components/feature-sections for constitution, self-model, selfModel, identity.md and companion-brain found nothing, so no companion identity is stored, edited or adopted here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         },
         {
           "subject": "prompt-assembly",
@@ -3494,8 +3498,12 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 The chat split is a scripted scenario animation whose lines and timing are fixed data. A search of the folder for constitution, self-model, selfModel, identity.md and companion-brain found nothing, so there is no persistent companion identity to judge.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         },
         {
           "subject": "machine-paced-delivery",
@@ -3846,8 +3854,12 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "deviation",
+          "priorNotApplicable": 2,
+          "evidence": "src/data/guide/content/companion.ts:15 The guide's list of what Athena can do is hand-written prose, not generated from the companion's permitted-action list. It never reports actions with no description or descriptions with no action, so a capability removed or added on the desktop can sit in the published help text without anything noticing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         },
         {
           "subject": "agent-memory",
@@ -7038,8 +7050,12 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/stores/notesStore.ts:23 The Notes view is a read-only mirror of the desktop's synced goal notes. A search of its directories for constitution, self-model, selfModel, identity.md and companion-brain found nothing, so no companion self is held, changed or adopted here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         },
         {
           "subject": "mcp-tools",

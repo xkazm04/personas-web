@@ -1,0 +1,123 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d47d8a61-9bce-4d1c-965c-fca37e2b4e85",
+ "subject": "companion-identity",
+ "evaluatedAt": "2026-10-24T23:50:04.373042+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "companion-identity",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/bench/chat/ChatBench.tsx:9 The Lab benches are scripted marketing illustrations driven by pending copy and fixed step clocks. A search of src/components/feature-sections for constitution, self-model, selfModel, identity.md and companion-brain found nothing, so no companion identity is stored, edited or adopted here.",
+   "techniques": [],
+   "absenceTerms": [
+    "constitution",
+    "selfModel",
+    "identity.md"
+   ]
+  },
+  {
+   "context": "Notes (Goal Board)",
+   "subject": "companion-identity",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/notesStore.ts:23 The Notes view is a read-only mirror of the desktop's synced goal notes. A search of its directories for constitution, self-model, selfModel, identity.md and companion-brain found nothing, so no companion self is held, changed or adopted here.",
+   "techniques": [],
+   "absenceTerms": [
+    "constitution",
+    "selfModel",
+    "identity.md"
+   ]
+  },
+  {
+   "context": "Agent Playground & Multi-Agent Chat",
+   "subject": "companion-identity",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 The chat split is a scripted scenario animation whose lines and timing are fixed data. A search of the folder for constitution, self-model, selfModel, identity.md and companion-brain found nothing, so there is no persistent companion identity to judge.",
+   "techniques": [],
+   "absenceTerms": [
+    "constitution",
+    "selfModel",
+    "identity.md"
+   ]
+  },
+  {
+   "context": "Guide Data, Content & Search Index",
+   "subject": "companion-identity",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/data/guide/content/companion.ts:15 The guide's list of what Athena can do is hand-written prose, not generated from the companion's permitted-action list. It never reports actions with no description or descriptions with no action, so a capability removed or added on the desktop can sit in the published help text without anything noticing.",
+   "techniques": [
+    {
+     "technique": "capability-exercise-ledger",
+     "verdict": "deviation",
+     "evidence": "src/data/guide/content/companion.ts:232 The approval-card action list is a hand-maintained copy of the desktop's action set, with no derivation and no two-sided drift report. The only partial safeguard, check-guide-coverage.mjs, watches whole directories (topics.ts watchedFiles: src/features/plugins/companion/) with history-backfilled review dates, not exercised evidence."
+    }
+   ],
+   "registryProposal": "capability-exercise-ledger could say how it applies when the help text lives in a separate repo (a marketing/docs site) from the action list: whether a snapshot of the action list (like this repo's sync-desktop-facts.mjs) counts as derivation."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "companion-identity",
+   "context": "Localized Guide Content (14 locales)",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-24T23:50:04.373042+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "companion-identity"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T23:50:04.373042+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "companion-identity"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Notes (Goal Board)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T23:50:04.373042+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "companion-identity"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Playground & Multi-Agent Chat",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T23:50:04.373042+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "companion-identity"
+   ],
+   "techniques": [
+    "capability-exercise-ledger"
+   ],
+   "deviations": 1,
+   "context": "Guide Data, Content & Search Index",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

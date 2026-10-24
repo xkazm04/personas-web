@@ -2247,23 +2247,18 @@
       "context": "Guide Data, Content & Search Index",
       "subject": "companion-identity",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T11:09:52.329Z",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:50:04.373Z",
+      "worker": "d47d8a61-9bce-4d1c-965c-fca37e2b4e85",
       "techniques": [
         {
           "technique": "capability-exercise-ledger",
           "verdict": "deviation",
-          "evidence": "src/data/guide/content/companion.ts:229 Companion action inventory in the guide is hand-maintained prose rather than re-generated from the runtime permitted-action list, allowing documented capabilities to drift from runtime reality."
+          "evidence": "src/data/guide/content/companion.ts:232 The approval-card action list is a hand-maintained copy of the desktop's action set, with no derivation and no two-sided drift report. The only partial safeguard, check-guide-coverage.mjs, watches whole directories (topics.ts watchedFiles: src/features/plugins/companion/) with history-backfilled review dates, not exercised evidence."
         }
       ],
-      "registryProposal": "When 'writing documentation of what a companion is able to do' is evaluated on a separate web documentation repo rather than the runtime repo, the technique should clarify how the derivation artifact cross-publishes across repository boundaries without requiring full runtime dependencies.",
-      "withdrawn": {
-        "worker": "76ea847c-99bf-4583-b43b-eeae6e073f77",
-        "state": "deviation",
-        "at": "2026-10-13T11:10:17.591649+00:00",
-        "reason": "reviewer (sonnet): companion.ts:229 is only the intro line of the Decision Hub's list of approval-card actions; I found no permitted-action list in the repo and nothing showing the prose drifts from runtime capabilities, so the hand-maintained-and-drifting claim is unconfirmed."
-      }
+      "registryProposal": "capability-exercise-ledger could say how it applies when the help text lives in a separate repo (a marketing/docs site) from the action list: whether a snapshot of the action list (like this repo's sync-desktop-facts.mjs) counts as derivation."
     },
     "Product Documentation (Guide)/Guide Content Blocks & Markdown/hitl-approval": {
       "context": "Guide Content Blocks & Markdown",
@@ -9270,6 +9265,36 @@
         }
       ],
       "registryProposal": "exhaustive-when-bounded frames enumeration as the alternative to random sampling. It does not say outright whether a bounded pure state machine tested only by hand-written example sequences is a deviation. Its 'a suite cannot say whether it has finished covering a space' trigger implies yes; stating that explicitly would make verdicts on example-only suites consistent."
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/companion-identity": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:50:04.373Z",
+      "worker": "d47d8a61-9bce-4d1c-965c-fca37e2b4e85",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/companion-identity": {
+      "context": "Notes (Goal Board)",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:50:04.373Z",
+      "worker": "d47d8a61-9bce-4d1c-965c-fca37e2b4e85",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/companion-identity": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T23:50:04.373Z",
+      "worker": "d47d8a61-9bce-4d1c-965c-fca37e2b4e85",
+      "techniques": []
     }
   }
 }
