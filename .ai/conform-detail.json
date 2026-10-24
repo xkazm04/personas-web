@@ -5577,47 +5577,48 @@
       "context": "How It Works & Changelog",
       "subject": "canvas-graph",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-18",
-      "evaluatedTs": "2026-10-18T00:24:04.358Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:24:22.510Z",
+      "worker": "ba045705-05c9-4493-870c-64e66f1a89b9",
       "techniques": [
         {
           "technique": "canvas-accessibility",
           "verdict": "deviation",
-          "evidence": "src/components/flow-composer/components/FlowNodes.tsx:38 Every node is independently tabbable, with additional tab stops for node removal and wire removal; keyboard movement is also absent."
+          "evidence": "src/components/flow-composer/components/FlowNodes.tsx:38 Every node is independently tabbable, with additional tab stops for node removal and wire removal; keyboard movement is also absent.",
+          "carriedFrom": "2026-10-18"
         },
         {
           "technique": "direct-manipulation",
           "verdict": "deviation",
-          "evidence": "src/components/flow-composer/use-flow-composer.ts:111 Pointer movement updates model state without first crossing a screen-space threshold; dragging is not kept provisional until completion."
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:111 Pointer movement updates model state without first crossing a screen-space threshold; dragging is not kept provisional until completion.",
+          "carriedFrom": "2026-10-18"
         },
         {
           "technique": "edge-management",
           "verdict": "deviation",
-          "evidence": "src/components/flow-composer/components/FlowWires.tsx:27 Wire identity is the endpoint pair rather than an independent durable edge ID."
+          "evidence": "src/components/flow-composer/components/FlowWires.tsx:27 Wire identity is the endpoint pair rather than an independent durable edge ID.",
+          "carriedFrom": "2026-10-18"
         },
         {
           "technique": "graph-layout",
           "verdict": "deviation",
-          "evidence": "src/components/flow-composer/use-flow-composer.ts:132 New nodes clamp to x=92 without collision resolution, so repeated additions on the same side overlap."
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:132 New nodes clamp to x=92 without collision resolution, so repeated additions on the same side overlap.",
+          "carriedFrom": "2026-10-18"
         },
         {
           "technique": "render-budget",
           "verdict": "deviation",
-          "evidence": "src/components/flow-composer/index.tsx:141 Each composer render recreates interaction callbacks, and each drag update renders the entire node map without per-node memoization."
+          "evidence": "src/components/flow-composer/index.tsx:141 Each composer render recreates interaction callbacks, and each drag update renders the entire node map without per-node memoization.",
+          "carriedFrom": "2026-10-18"
         },
         {
           "technique": "viewport-transform",
           "verdict": "deviation",
-          "evidence": "src/components/flow-composer/use-flow-composer.ts:97 The handwritten inverse clamps coordinates although forward rendering uses node.x directly, so the mapping cannot round-trip rendered coordinates outside 8–92."
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:97 The handwritten inverse clamps coordinates although forward rendering uses node.x directly, so the mapping cannot round-trip rendered coordinates outside 8–92.",
+          "carriedFrom": "2026-10-18"
         }
-      ],
-      "withdrawn": {
-        "worker": "a401ecba-36fc-4e08-9faf-dc0a0554e61e",
-        "state": "deviation",
-        "at": "2026-10-18T00:25:16.819836+00:00",
-        "reason": "reviewer (sonnet): The flow-composer code the verdict cites is outside this context. None of the listed how/changelog/how-manifesto/how-role-path files import it; only sections/event-hub/index.tsx and FlowComposer.tsx reference it. The code claims are accurate, but the verdict is about a different context."
-      }
+      ]
     },
     "Interactive Demos & Playground/Orchestration & Platform Visualizers/conversation-orchestration": {
       "context": "Orchestration & Platform Visualizers",
@@ -9023,6 +9024,47 @@
           "technique": "zero-depth-admission",
           "verdict": "not-applicable",
           "evidence": "src/app/playground/TerminalSim.tsx:86 Simulated execution replays a fixed script; no capacity gate exists."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Visual Flow Composer & Playground Page/canvas-graph": {
+      "context": "Visual Flow Composer & Playground Page",
+      "subject": "canvas-graph",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T22:24:22.510Z",
+      "worker": "ba045705-05c9-4493-870c-64e66f1a89b9",
+      "techniques": [
+        {
+          "technique": "canvas-accessibility",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/components/FlowNodes.tsx:38 One tab stop per node, plus one per remove button (FlowNodes.tsx:108) and one per wire (FlowWires.tsx:65). The <svg> in index.tsx has no role or accessible name, there is no roving focus, and there is no keyboard nudge for x position (drag is pointer-only)."
+        },
+        {
+          "technique": "direct-manipulation",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:111 The drag starts at pointerdown, and the model is mutated on the first pointermove with no screen-space movement threshold. After pointerup clears dragNode, the trailing click still reaches handleNodeClick and can start wiring. Pointer capture is taken on e.target (index.tsx:145), and there is no pointercancel or lostpointercapture handler. There is no undo."
+        },
+        {
+          "technique": "edge-management",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/components/FlowWires.tsx:27 Edge identity is the (from,to) pair: the Wire type has no id, and removeWire filters on from/to, which is the identity scheme the technique names as broken. Node geometry is also restated separately in FlowNodes (y from PRODUCER_Y/CONSUMER_Y), in NodeConnectors, and in nodePos+NODE_R in FlowWires, instead of coming from one geometry function."
+        },
+        {
+          "technique": "graph-layout",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/data.ts:80 Positions persist in the URL hash and are keyed by durable node id (good). The document has no version field, though, and a decode failure silently falls back to DEFAULT_NODES with no visible degradation. addNode places a node at last+18 clamped to 92, so new nodes can stack on each other."
+        },
+        {
+          "technique": "render-budget",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/components/FlowWires.tsx:50 Each wire runs an infinite ambient animation while the surface is idle. There is no population gate (the wire count is user-unbounded) and no visibility pause; only reduced motion stops it. Drag commits are rAF-throttled (use-flow-composer.ts:108), but FlowNodes is not memoized and receives inline callbacks rebuilt on every render."
+        },
+        {
+          "technique": "viewport-transform",
+          "verdict": "deviation",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:96 There is no camera. The forward mapping is the SVG viewBox, but the inverse (toSvgX) is derived by hand from VB_W in the gesture hook, with a 8..92 clamp the forward mapping lacks, instead of coming from the projection (e.g. getScreenCTM). No round-trip test exists: data.test.ts covers only decodeFlow."
         }
       ]
     }

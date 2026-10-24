@@ -2690,7 +2690,11 @@
           "revision": 6,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/flow-composer/components/FlowNodes.tsx:38 Every node, every node's remove control and every wire's remove control is its own tab stop inside an SVG with no role or name, and dragging is the only way to move a node; this is the per-node and per-edge tab wall the standard names as a failure, and there is no non-pointer move path.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:98dcec8d04236b95",
+          "evaluatedRevision": 6
         }
       ],
       "governance": "governed"
@@ -4478,7 +4482,11 @@
           "revision": 6,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/how-role-path/Route.tsx:51 The only node-on-a-line drawing in this context is an inert, aria-hidden, pointer-events-none decorative path beside a fixed four-item <ol> of jump links, so it has no graph, edges, pan/zoom or manipulation. Searching the context's files found no pointer capture, world/screen conversion or graph-layout library usage (the Ambience <canvas> is a particle field, not a graph).",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:98dcec8d04236b95",
+          "evaluatedRevision": 6
         }
       ],
       "governance": "governed"
