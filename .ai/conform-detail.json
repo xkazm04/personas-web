@@ -8868,6 +8868,26 @@
       "evaluatedTs": "2026-10-24T21:00:57.265Z",
       "worker": "05777c9b-3975-40e2-92ea-2cb50e0e1b91",
       "techniques": []
+    },
+    "Agent Operations Dashboard/Manual Review Queue/translation-quality-measurement": {
+      "context": "Manual Review Queue",
+      "subject": "translation-quality-measurement",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:16:44.091Z",
+      "worker": "08fd76a3-37fd-40f9-a686-989720e0b2ea",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Leaderboard & Rankings/translation-quality-measurement": {
+      "context": "Leaderboard & Rankings",
+      "subject": "translation-quality-measurement",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T21:16:44.091Z",
+      "worker": "08fd76a3-37fd-40f9-a686-989720e0b2ea",
+      "techniques": []
     }
   }
 }

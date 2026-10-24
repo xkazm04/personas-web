@@ -6404,7 +6404,11 @@
           "revision": 6,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/useScopedReviews.ts:11 This queue holds human-in-the-loop reviews of agent (persona) executions, with severities like critical, warning and info. It holds no translated units, so there is no translation store here to measure. A search of views/reviews/ for pretranslation, translator, MQM, post-edit and quality estimation found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:a50db88f6aef4acb",
+          "evaluatedRevision": 8
         },
         {
           "subject": "toasts-notifications",
@@ -7351,7 +7355,11 @@
           "revision": 6,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/leaderboard/useLeaderboardData.ts:27 The leaderboard ranks demo agent personas on composite and radar scores; it does not rank machine-translation engines per language pair. Searching the leaderboard view, LeaderboardRadarChart and ScoreDistributionChart for pretranslation, translator, MQM, post-edit and quality estimation found nothing. 'engine' does appear there, but it means the ranking engine.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:a50db88f6aef4acb",
+          "evaluatedRevision": 8
         }
       ],
       "governance": "governed"
