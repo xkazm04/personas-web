@@ -1291,30 +1291,57 @@
       "subject": "prompt-assembly",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T02:20:45.884Z",
-      "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
-      "techniques": []
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T02:09:47.873Z",
+      "worker": "b42affca-34e6-4bc1-b245-fe06a7d7c1d3",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 Context and repository searches found authentication UI names and user-cache management here, while the actual session implementation invokes Supabase OAuth rather than assembling model prompts.",
+          "evaluatedAt": "2026-10-13T02:20:45.884Z",
+          "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+          "reason": "replaced by b42affca-34e6-4bc1-b245-fe06a7d7c1d3"
+        }
+      ]
     },
     "Interactive Demos & Playground/Orchestration & Platform Visualizers/prompt-assembly": {
       "context": "Orchestration & Platform Visualizers",
       "subject": "prompt-assembly",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T02:20:45.884Z",
-      "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
-      "techniques": []
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T02:09:47.873Z",
+      "worker": "b42affca-34e6-4bc1-b245-fe06a7d7c1d3",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:56 Context and repository searches found only guide-image paths mentioning prompts in this visualizer, whose implementation renders trigger-selection widgets without assembling model input.",
+          "evaluatedAt": "2026-10-13T02:20:45.884Z",
+          "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+          "reason": "replaced by b42affca-34e6-4bc1-b245-fe06a7d7c1d3"
+        }
+      ]
     },
     "Product Feature Showcase/Agent Lab & Plugin Ecosystem/prompt-assembly": {
       "context": "Agent Lab & Plugin Ecosystem",
       "subject": "prompt-assembly",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T02:20:45.884Z",
-      "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
-      "techniques": []
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T02:09:47.873Z",
+      "worker": "b42affca-34e6-4bc1-b245-fe06a7d7c1d3",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 Context and repository searches found no prompt assembler or model-call path in the listed Lab modules, where timers replay a fixed chat script and the other tabs display predefined experiment data.",
+          "evaluatedAt": "2026-10-13T02:20:45.884Z",
+          "worker": "27244df4-792f-44f0-8469-f19594a9aecd",
+          "reason": "replaced by b42affca-34e6-4bc1-b245-fe06a7d7c1d3"
+        }
+      ]
     },
     "Product Feature Showcase/Agent Lab & Plugin Ecosystem/agent-instruction-files": {
       "context": "Agent Lab & Plugin Ecosystem",
@@ -7855,6 +7882,26 @@
       "evaluatedAt": "2026-10-24",
       "evaluatedTs": "2026-10-24T01:53:43.023Z",
       "worker": "01e82e91-7cd0-49e0-b528-47d66a8beee5",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Agents (Personas) Management/prompt-assembly": {
+      "context": "Agents (Personas) Management",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T02:09:47.873Z",
+      "worker": "b42affca-34e6-4bc1-b245-fe06a7d7c1d3",
+      "techniques": []
+    },
+    "Product Feature Showcase/Memory Layers & Multi-Provider AI/prompt-assembly": {
+      "context": "Memory Layers & Multi-Provider AI",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T02:09:47.873Z",
+      "worker": "b42affca-34e6-4bc1-b245-fe06a7d7c1d3",
       "techniques": []
     }
   }

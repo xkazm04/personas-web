@@ -1889,12 +1889,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 Context and repository searches found no prompt assembler or model-call path in the listed Lab modules, where timers replay a fixed chat script and the other tabs display predefined experiment data.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:7436fd55a7cb2500",
-          "evaluatedRevision": 43,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/feature-sections/lab/bench/chat/ChatBench.tsx:33 The Lab chat bench steps a clock through a fixed CHAT_SCRIPT (signal.ts imports CHAT_SCRIPT from ../../data), and searching the Lab files and src/components for maxTokens, tiktoken, contextWindow, assemblePrompt and buildPrompt found no hits, so no model prompt is assembled here.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-memory",
@@ -2030,8 +2029,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 3
+          "state": "not-applicable",
+          "priorNotApplicable": 3,
+          "evidence": "src/components/feature-sections/design-blueprint/shared/copy.ts:13 In this marketing illustration 'prompt' is the text of a UI question shown to the visitor, and 'messages' is an SVG geometry key; searching for maxTokens, tiktoken, contextWindow, assemblePrompt and buildPrompt found no hits, and no anthropic/openai client call exists in feature-sections, so no prompt is assembled.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "test-harness",
@@ -2746,12 +2749,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/index.tsx:56 Context and repository searches found only guide-image paths mentioning prompts in this visualizer, whose implementation renders trigger-selection widgets without assembling model input.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:7436fd55a7cb2500",
-          "evaluatedRevision": 43,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/sections/orchestration-hub/playback.ts:116 The hub's logic is a playback reducer over a static trigger catalog (data.ts), and 'prompt' only shows up in guide-image filenames in AgentLens.tsx; searching for maxTokens, tiktoken, contextWindow, assemblePrompt and buildPrompt found no hits, so nothing reaches a model.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44,
+          "revisionsBehind": 1
         },
         {
           "subject": "fleet-orchestration",
@@ -6412,8 +6414,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 3
+          "state": "not-applicable",
+          "priorNotApplicable": 3,
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:18 The context's one structured payload is a signed Ed25519 remote-command envelope (type pause_persona, empty params), not a model prompt, and the other files are toasts and subscription and memory panels; searching for maxTokens, tiktoken, contextWindow, assemblePrompt and buildPrompt across these files, src/components, src/lib, scripts and fixtures found nothing.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "agent-runtime-assembly",
@@ -9979,12 +9985,11 @@
           "changedAt": "2026-10-14",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/stores/authStore.ts:215 Context and repository searches found authentication UI names and user-cache management here, while the actual session implementation invokes Supabase OAuth rather than assembling model prompts.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:7436fd55a7cb2500",
-          "evaluatedRevision": 43,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/stores/authStore.ts:215 The session layer is Supabase OAuth plus a mock demo sign-in; 'prompt' only appears as the SignInPrompt/SessionErrorPrompt UI component names, and searching for maxTokens, tiktoken, contextWindow, assemblePrompt and buildPrompt across src/components, src/lib and src/stores found nothing, so no model input is built.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44,
+          "revisionsBehind": 1
         },
         {
           "subject": "mcp-tools",
