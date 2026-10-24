@@ -141,14 +141,35 @@
       "context": "Dashboard Home Overview",
       "subject": "fleet-orchestration",
       "bundle": "software-engineering",
-      "state": "not-applicable",
-      "evaluatedAt": "2026-08-31",
-      "worker": "w8-personas-web",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:03:12.704Z",
+      "worker": "6a29d253-1ab0-4081-8973-b2ca047e8b46",
       "techniques": [
         {
           "technique": "session-registry",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/FleetSessionsStrip.tsx:18 Consumer keeps its own list of states instead of deriving it. STATE_TONE at line 20 is an exhaustive Record, which is correct, but the order list and the counts cast at line 39 are not checked. The drop is latent: all four states are present today."
+        },
+        {
+          "technique": "absent-status-passthrough",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/home/home-page/StatusTicker.tsx:84 Until the executions load, the ticker leaves its row empty rather than showing a made-up 0% fleet success figure, so an unobserved value is not replaced with a default."
+        },
+        {
+          "technique": "durable-fleet-state",
           "verdict": "not-applicable",
-          "evidence": "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx:31 sorts a static MOCK_FLEET_SESSIONS array — no registry exists"
+          "evidence": "src/components/dashboard/views/home/home-page/FleetSessionsStrip.tsx:14 The strip reads static fixture data. No registry or orchestrator here could restart or forget sessions."
+        }
+      ],
+      "registryProposal": "session-registry's consumer-side rule needs a sentence for display-order arrays. An ordering list legitimately restates the vocabulary, so the rule should require an exhaustiveness check (satisfies + Exclude, as the react application shows) rather than banning the list outright. Otherwise every ordered legend reads as a deviation.",
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx:8-31 renders MOCK_FLEET_SESSIONS, a static fixture array with no registry/lifecycle/dispatch machinery behind it, and is gated behind isDemo at the call site (src/app/dashboard/home/page.tsx:172-181, comment: \"Pure fixtures with no synced source\") — never shown to real users. fleet-orchestration's precondition (a real orchestrated multi-session fleet) does not hold in this repo; presentation is honestly disclosed as demo-only.",
+          "evaluatedAt": "2026-08-31",
+          "worker": null,
+          "reason": "replaced by 6a29d253-1ab0-4081-8973-b2ca047e8b46"
         }
       ]
     },
@@ -1852,26 +1873,43 @@
       "subject": "fleet-orchestration",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T09:19:28.251Z",
-      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:03:12.704Z",
       "techniques": [
         {
           "technique": "session-registry",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/FleetOptimizationCard.tsx:54 Component renders a mock recommendation card for dashboard display rather than managing a session registry or state transitions for live agent runs."
+          "evidence": "src/components/dashboard/FleetOptimizationCard.tsx:54 Component renders a mock recommendation card for dashboard display rather than managing a session registry or state transitions for live agent runs.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "lifecycle-signals",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/ConnectionStatusIndicator.tsx:40 Indicator tracks web client EventSource connection status rather than receiving agent runtime lifecycle signals or operating a staleness sweeper."
+          "evidence": "src/components/dashboard/ConnectionStatusIndicator.tsx:40 Indicator tracks web client EventSource connection status rather than receiving agent runtime lifecycle signals or operating a staleness sweeper.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "durable-fleet-state",
           "verdict": "not-applicable",
-          "evidence": "src/app/dashboard/layout.tsx:20 Layout acts as a frontend single-page application shell rather than an orchestrator persisting durable fleet states or reconciling surviving sessions on startup."
+          "evidence": "src/app/dashboard/layout.tsx:20 Layout acts as a frontend single-page application shell rather than an orchestrator persisting durable fleet states or reconciling surviving sessions on startup.",
+          "carriedFrom": "2026-10-13"
         }
-      ]
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/layout.tsx:15 The layout defines the client-side single-page dashboard shell and chrome, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of fleet orchestration machinery.",
+          "evaluatedAt": "2026-10-13T09:19:28.251Z",
+          "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+          "reason": "replaced by 6a29d253-1ab0-4081-8973-b2ca047e8b46"
+        }
+      ],
+      "withdrawn": {
+        "worker": "6a29d253-1ab0-4081-8973-b2ca047e8b46",
+        "state": "not-applicable",
+        "at": "2026-10-24T03:03:38.415806+00:00",
+        "reason": "reviewer (sonnet): The anchor layout.tsx:16 is a doc comment saying the layout is the SPA shell. It does not itself show that no agent-session registry or lifecycle exists, so the not-applicable rests on a keyword grep that is incidental. The context also holds realtime and connection-status code (ConnectionStatusIndi"
+      }
     },
     "Marketing & Landing/Conversion: Get Started, FAQ & Footer/fleet-orchestration": {
       "context": "Conversion: Get Started, FAQ & Footer",
@@ -8039,6 +8077,42 @@
         "at": "2026-10-24T02:44:50.635363+00:00",
         "reason": "reviewer (sonnet): The anchor src/components/sections/agents-race/data.ts:3 is an import or comment line that shows nothing about guards; the supporting timer at motion.ts:95 is real and cleaned up, but the claim of no shared operation, I/O or persisted state rests on a vocabulary grep and the incidental anchor."
       }
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/fleet-orchestration": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T03:03:12.704Z",
+      "worker": "6a29d253-1ab0-4081-8973-b2ca047e8b46",
+      "techniques": [
+        {
+          "technique": "parallel-dispatch",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:226 Admit-to-cap/queue is correct (sim.ts:131), and promotion reuses the queued agent's own row and id (sim.ts:173). The failure path frees a slot with no promotion, and self-heal's startOrQueue (sim.ts:219) takes the slot ahead of the ordered queue."
+        },
+        {
+          "technique": "session-registry",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:64 The module that calls itself the 'one state language' hand-copies the needs-you subset that fleet-data.ts:13 already defines as NEEDS_YOU_STATES, so the same list exists twice. The copy is currently unused. The transition door itself is good: sim.ts:265 refuses any action verbs.ts disallows."
+        },
+        {
+          "technique": "absent-status-passthrough",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/fleet-monitor/board/host.ts:41 When the host is offline, readHost returns null for CPU, memory and latency (line 59) instead of a default number, so an unobserved value stays absent."
+        },
+        {
+          "technique": "lifecycle-signals",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:16 The simulation tick stops while the host is offline (line 23), and an OfflineBanner shows how old the heartbeat is, so an unreachable machine does not keep animating as working. Viewer side only; there is no sweeper in the demo."
+        },
+        {
+          "technique": "evidence-outranks-a-liveness-claim",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/board/HostCard.tsx:153 No reclaim decision is made here. When the host goes offline, agents keep their last recorded state; none are declared dead."
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,134 @@
+{
+  "schema": "conform-run/1",
+  "worker": "6a29d253-1ab0-4081-8973-b2ca047e8b46",
+  "subject": "fleet-orchestration",
+  "evaluatedAt": "2026-10-24T03:03:12.704196+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Dashboard Home Overview",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/home/home-page/FleetSessionsStrip.tsx:18 The strip's legend (line 53) and its sort both walk a hand-kept copy of the four-state vocabulary that the compiler checks element by element but never for completeness, and the count initializer at line 39 is cast with `as Record<...>`, so a fifth state added to mock-dashboard-data.ts would be dropped from the legend with no error. That is the parallel-enum failure session-registry names; today the copy happens to be complete.",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/FleetSessionsStrip.tsx:18 Consumer keeps its own list of states instead of deriving it. STATE_TONE at line 20 is an exhaustive Record, which is correct, but the order list and the counts cast at line 39 are not checked. The drop is latent: all four states are present today."
+        },
+        {
+          "technique": "absent-status-passthrough",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/home/home-page/StatusTicker.tsx:84 Until the executions load, the ticker leaves its row empty rather than showing a made-up 0% fleet success figure, so an unobserved value is not replaced with a default."
+        },
+        {
+          "technique": "durable-fleet-state",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/FleetSessionsStrip.tsx:14 The strip reads static fixture data. No registry or orchestrator here could restart or forget sessions."
+        }
+      ],
+      "registryProposal": "session-registry's consumer-side rule needs a sentence for display-order arrays. An ordering list legitimately restates the vocabulary, so the rule should require an exhaustiveness check (satisfies + Exclude, as the react application shows) rather than banning the list outright. Otherwise every ordered legend reads as a deviation."
+    },
+    {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:226 In the simulated fleet's slot scheduler, a run that fails moves from running to failed and frees a slot, but nothing promotes the queue head into it (only complete() and cancel call fillSlot). Self-heal then hands free slots to failed agents ahead of queued ones (line 219), so queued agents wait while capacity sits idle, which breaks parallel-dispatch's rule that a freed slot is filled by promoting the queue head.",
+      "techniques": [
+        {
+          "technique": "parallel-dispatch",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:226 Admit-to-cap/queue is correct (sim.ts:131), and promotion reuses the queued agent's own row and id (sim.ts:173). The failure path frees a slot with no promotion, and self-heal's startOrQueue (sim.ts:219) takes the slot ahead of the ordered queue."
+        },
+        {
+          "technique": "session-registry",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:64 The module that calls itself the 'one state language' hand-copies the needs-you subset that fleet-data.ts:13 already defines as NEEDS_YOU_STATES, so the same list exists twice. The copy is currently unused. The transition door itself is good: sim.ts:265 refuses any action verbs.ts disallows."
+        },
+        {
+          "technique": "absent-status-passthrough",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/fleet-monitor/board/host.ts:41 When the host is offline, readHost returns null for CPU, memory and latency (line 59) instead of a default number, so an unobserved value stays absent."
+        },
+        {
+          "technique": "lifecycle-signals",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/fleet-monitor/board/useBoardRuntime.ts:16 The simulation tick stops while the host is offline (line 23), and an OfflineBanner shows how old the heartbeat is, so an unreachable machine does not keep animating as working. Viewer side only; there is no sweeper in the demo."
+        },
+        {
+          "technique": "evidence-outranks-a-liveness-claim",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/board/HostCard.tsx:153 No reclaim decision is made here. When the host goes offline, agents keep their last recorded state; none are declared dead."
+        }
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "fleet-orchestration",
+      "context": "Orchestration & Platform Visualizers",
+      "reason": "evidence leans on shared/useHubPlayback.ts, which is not a tracked file"
+    },
+    {
+      "subject": "fleet-orchestration",
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "reason": "absence contradicted: src/components/dashboard/fleet-monitor/board/host.test.ts:2 contains 'slotCapacity' (8 hit(s) in the context's directories)"
+    },
+    {
+      "subject": "fleet-orchestration",
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor layout.tsx:16 is a doc comment saying the layout is the SPA shell. It does not itself show that no agent-session registry or lifecycle exists, so the not-applicable rests on a keyword grep that is incidental. The context also holds realtime and connection-status code (ConnectionStatusIndi"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-24T03:03:12.704196+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "fleet-orchestration"
+      ],
+      "techniques": [
+        "absent-status-passthrough",
+        "durable-fleet-state",
+        "session-registry"
+      ],
+      "deviations": 1,
+      "context": "Dashboard Home Overview",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T03:03:12.704196+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "fleet-orchestration"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T03:03:12.704196+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "fleet-orchestration"
+      ],
+      "techniques": [
+        "absent-status-passthrough",
+        "evidence-outranks-a-liveness-claim",
+        "lifecycle-signals",
+        "parallel-dispatch",
+        "session-registry"
+      ],
+      "deviations": 1,
+      "context": "Fleet Playground (prototypes)",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}

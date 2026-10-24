@@ -6635,8 +6635,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "deviation",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:226 In the simulated fleet's slot scheduler, a run that fails moves from running to failed and frees a slot, but nothing promotes the queue head into it (only complete() and cancel call fillSlot). Self-heal then hands free slots to failed agents ahead of queued ones (line 219), so queued agents wait while capacity sits idle, which breaks parallel-dispatch's rule that a freed slot is filled by promoting the queue head.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "quality-gates",
@@ -7835,11 +7839,11 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "strong",
-          "state": "not-applicable",
-          "evidence": "src/app/dashboard/home/home-page/FleetSessionsStrip.tsx:8-31 renders MOCK_FLEET_SESSIONS, a static fixture array with no registry/lifecycle/dispatch machinery behind it, and is gated behind isDemo at the call site (src/app/dashboard/home/page.tsx:172-181, comment: \"Pure fixtures with no synced source\") — never shown to real users. fleet-orchestration's precondition (a real orchestrated multi-session fleet) does not hold in this repo; presentation is honestly disclosed as demo-only.",
-          "evaluatedAt": "2026-08-31",
-          "evaluatedAgainst": "sha256:5215e21162717d59",
-          "stale": true
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/FleetSessionsStrip.tsx:18 The strip's legend (line 53) and its sort both walk a hand-kept copy of the four-state vocabulary that the compiler checks element by element but never for completeness, and the count initializer at line 39 is cast with `as Record<...>`, so a fifth state added to mock-dashboard-data.ts would be dropped from the legend with no error. That is the parallel-enum failure session-registry names; today the copy happens to be complete.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "prompt-assembly",
@@ -8919,11 +8923,7 @@
           "confidence": "probable",
           "state": "not-applicable",
           "evidence": "src/app/dashboard/layout.tsx:15 The layout defines the client-side single-page dashboard shell and chrome, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of fleet orchestration machinery.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:4fc5c1fbe75c52d2",
-          "evaluatedRevision": 25,
-          "revisionsBehind": 3,
-          "stale": true
+          "evaluatedAt": "2026-10-13"
         },
         {
           "subject": "agent-runtime-assembly",
