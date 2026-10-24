@@ -1,0 +1,104 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c37d28fd-b346-474c-8a64-311a6008ae01",
+ "subject": "test-harness",
+ "evaluatedAt": "2026-10-24T01:16:48.228905+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:64 The structural pin searches for the bare identifier \"CompareToggle\" in the scope bar's source, so a comment naming the old toggle (any prose that spells it) turns the suite red. That is the over-match direction pin-the-call-not-the-name names: the needle has no token that only code could produce.",
+   "techniques": [
+    {
+     "technique": "pin-the-call-not-the-name",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:64 Absence pin on a bare identifier that prose can spell. Line 39's needle \"useDashboardScope()\" has an empty argument list, which a comment can also spell. Line 59 shows the right shape: a needle with an argument list."
+    },
+    {
+     "technique": "unreached-decisions-pin-nothing",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:40 The scope filter is lifted into a reachable unit (scopeProjections, tested on the fixtures), and each call site's adoption is asserted as well, which is what the shared-predicate rule asks for."
+    },
+    {
+     "technique": "derived-selection-must-be-measured",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:34 The walk's population comes from viewTraits and is checked against the pinned table in both directions, so a view that gains the scope bar with no data module goes red instead of passing as an empty selection."
+    },
+    {
+     "technique": "fixture-economics",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/scope/scopeProjections.test.ts:55 The demo world is folded once per file into read-only constants that every case reads. The 'going back' case (line 172) shows that no hidden state carries between calls."
+    }
+   ],
+   "registryProposal": "pin-the-call-not-the-name's decision rules talk about ordering claims and presence needles. They could state the ABSENCE case outright: a not.toContain over a bare identifier is the over-match direction in its plainest form, because any comment naming the removed construct fails the pin."
+  },
+  {
+   "context": "Manual Review Queue",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/reviews/reviews-split-pane/ReviewList.tsx:64 The repeated review row's test identifier is the bare role with no entity id, even though review.id is on the same line. The production-build Playwright spec has to re-find a row by its displayed aria-label (e2e/review-undo.spec.ts:45), so the lookup breaks if a label changes or two reviews share one.",
+   "techniques": [
+    {
+     "technique": "live-app-harness",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/reviews/reviews-split-pane/ReviewList.tsx:64 The test-identifier contract says a repeated element's identifier combines its role with the entity's stable id. Here the role stands alone. The product's own keyboard navigation also queries this attribute (ReviewsSplitPane.tsx:102), so it is not used only by the harness."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "test-harness",
+   "context": "Memory Layers & Multi-Provider AI",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "test-harness",
+   "context": "Agent Lab & Plugin Ecosystem",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "test-harness",
+   "context": "Agents (Personas) Management",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-24T01:16:48.228905+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "derived-selection-must-be-measured",
+    "fixture-economics",
+    "pin-the-call-not-the-name",
+    "unreached-decisions-pin-nothing"
+   ],
+   "deviations": 1,
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T01:16:48.228905+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "live-app-harness"
+   ],
+   "deviations": 1,
+   "context": "Manual Review Queue",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

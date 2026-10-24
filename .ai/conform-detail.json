@@ -7620,6 +7620,54 @@
           "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:18 A moved data module throws ENOENT and the test goes red instead of reading empty."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/test-harness": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T01:16:48.228Z",
+      "worker": "c37d28fd-b346-474c-8a64-311a6008ae01",
+      "techniques": [
+        {
+          "technique": "pin-the-call-not-the-name",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:64 Absence pin on a bare identifier that prose can spell. Line 39's needle \"useDashboardScope()\" has an empty argument list, which a comment can also spell. Line 59 shows the right shape: a needle with an argument list."
+        },
+        {
+          "technique": "unreached-decisions-pin-nothing",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:40 The scope filter is lifted into a reachable unit (scopeProjections, tested on the fixtures), and each call site's adoption is asserted as well, which is what the shared-predicate rule asks for."
+        },
+        {
+          "technique": "derived-selection-must-be-measured",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:34 The walk's population comes from viewTraits and is checked against the pinned table in both directions, so a view that gains the scope bar with no data module goes red instead of passing as an empty selection."
+        },
+        {
+          "technique": "fixture-economics",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/scope/scopeProjections.test.ts:55 The demo world is folded once per file into read-only constants that every case reads. The 'going back' case (line 172) shows that no hidden state carries between calls."
+        }
+      ],
+      "registryProposal": "pin-the-call-not-the-name's decision rules talk about ordering claims and presence needles. They could state the ABSENCE case outright: a not.toContain over a bare identifier is the over-match direction in its plainest form, because any comment naming the removed construct fails the pin."
+    },
+    "Agent Operations Dashboard/Manual Review Queue/test-harness": {
+      "context": "Manual Review Queue",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T01:16:48.228Z",
+      "worker": "c37d28fd-b346-474c-8a64-311a6008ae01",
+      "techniques": [
+        {
+          "technique": "live-app-harness",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/reviews-split-pane/ReviewList.tsx:64 The test-identifier contract says a repeated element's identifier combines its role with the entity's stable id. Here the role stands alone. The product's own keyboard navigation also queries this attribute (ReviewsSplitPane.tsx:102), so it is not used only by the harness."
+        }
+      ]
     }
   }
 }

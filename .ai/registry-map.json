@@ -6276,7 +6276,11 @@
           "revision": 26,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/reviews/reviews-split-pane/ReviewList.tsx:64 The repeated review row's test identifier is the bare role with no entity id, even though review.id is on the same line. The production-build Playwright spec has to re-find a row by its displayed aria-label (e2e/review-undo.spec.ts:45), so the lookup breaks if a label changes or two reviews share one.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "fleet-orchestration",
@@ -8829,7 +8833,11 @@
           "revision": 26,
           "changedAt": "2026-10-06",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/spa/scopeHonesty.test.ts:64 The structural pin searches for the bare identifier \"CompareToggle\" in the scope bar's source, so a comment naming the old toggle (any prose that spells it) turns the suite red. That is the over-match direction pin-the-call-not-the-name names: the needle has no token that only code could produce.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "app-shell",
