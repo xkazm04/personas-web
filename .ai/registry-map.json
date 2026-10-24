@@ -1132,7 +1132,11 @@
           "revision": 8,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:8 The 'download' here is a link to the desktop installer per platform (packaging/release territory, which the golden path explicitly excludes), not a post-install sidecar or model fetch; the search for sidecar, child_process, execFile, gguf and onnx found zero hits in src/components and src/app/api.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25f000a9ae879947",
+          "evaluatedRevision": 8
         },
         {
           "subject": "quality-gates",
@@ -1799,7 +1803,11 @@
           "revision": 8,
           "changedAt": "2026-09-03",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:9 The Lab benches are client-side marketing animations that project numbers from a static in-repo data module; a search of src/components and src/app/api for sidecar, child_process, execFile, gguf and onnx found zero hits, so nothing is spawned, downloaded or provisioned after install and no technique's precondition holds.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25f000a9ae879947",
+          "evaluatedRevision": 8
         },
         {
           "subject": "mcp-tools",
@@ -5291,7 +5299,11 @@
           "revision": 8,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/storage.ts:3 Voting is Supabase-or-JSON-file persistence for small vote records, not external executables or large model artifacts; the same search for sidecar, child_process, execFile, gguf and onnx across src/app/api and src/components found zero hits, so the subject's precondition does not hold.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:25f000a9ae879947",
+          "evaluatedRevision": 8
         },
         {
           "subject": "browser-credential-boundary",

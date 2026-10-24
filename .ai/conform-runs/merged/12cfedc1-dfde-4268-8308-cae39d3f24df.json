@@ -1,0 +1,118 @@
+{
+ "schema": "conform-run/1",
+ "worker": "12cfedc1-dfde-4268-8308-cae39d3f24df",
+ "subject": "sidecar-provisioning",
+ "evaluatedAt": "2026-10-24T05:35:00.878874+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "sidecar-provisioning",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:9 The Lab benches are client-side marketing animations that project numbers from a static in-repo data module; a search of src/components and src/app/api for sidecar, child_process, execFile, gguf and onnx found zero hits, so nothing is spawned, downloaded or provisioned after install and no technique's precondition holds.",
+   "techniques": [
+    {
+     "technique": "atomic-downloads",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/Lab.tsx:1 The Lab entry is a plain re-export of a client UI section; no artifact fetch exists in the context."
+    }
+   ],
+   "absenceTerms": [
+    "sidecar",
+    "child_process",
+    "execFile",
+    "gguf",
+    "onnx"
+   ]
+  },
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "sidecar-provisioning",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/votes/storage.ts:3 Voting is Supabase-or-JSON-file persistence for small vote records, not external executables or large model artifacts; the same search for sidecar, child_process, execFile, gguf and onnx across src/app/api and src/components found zero hits, so the subject's precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "atomic-downloads",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/storage.ts:4 Atomic temp-file writes here cover local JSON state persistence, not staging downloaded artifacts; out of this subject's scope."
+    }
+   ],
+   "absenceTerms": [
+    "sidecar",
+    "child_process",
+    "execFile",
+    "gguf",
+    "onnx"
+   ]
+  },
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "sidecar-provisioning",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:8 The 'download' here is a link to the desktop installer per platform (packaging/release territory, which the golden path explicitly excludes), not a post-install sidecar or model fetch; the search for sidecar, child_process, execFile, gguf and onnx found zero hits in src/components and src/app/api.",
+   "techniques": [
+    {
+     "technique": "grade-selection",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/downloadCtaTypes.ts:3 Platform choice picks an installer for an OS, not a model or engine grade sized to the host."
+    }
+   ],
+   "absenceTerms": [
+    "sidecar",
+    "child_process",
+    "execFile",
+    "gguf",
+    "onnx"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-24T05:35:00.878874+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "sidecar-provisioning"
+   ],
+   "techniques": [
+    "atomic-downloads"
+   ],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:35:00.878874+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "sidecar-provisioning"
+   ],
+   "techniques": [
+    "atomic-downloads"
+   ],
+   "deviations": 0,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:35:00.878874+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "sidecar-provisioning"
+   ],
+   "techniques": [
+    "grade-selection"
+   ],
+   "deviations": 0,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

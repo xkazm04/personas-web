@@ -8630,6 +8630,54 @@
         }
       ],
       "registryProposal": "motion-carries-the-mechanism does not say whether a stylised metaphor (e.g. train-vs-route map) whose timing is pure-function-of-beats counts as informative art under illustration-carries-the-claim; the two techniques' litmus tests diverge for metaphor art."
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/sidecar-provisioning": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "sidecar-provisioning",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:35:00.878Z",
+      "worker": "12cfedc1-dfde-4268-8308-cae39d3f24df",
+      "techniques": [
+        {
+          "technique": "atomic-downloads",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/Lab.tsx:1 The Lab entry is a plain re-export of a client UI section; no artifact fetch exists in the context."
+        }
+      ]
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/sidecar-provisioning": {
+      "context": "Feature Voting & Comments",
+      "subject": "sidecar-provisioning",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:35:00.878Z",
+      "worker": "12cfedc1-dfde-4268-8308-cae39d3f24df",
+      "techniques": [
+        {
+          "technique": "atomic-downloads",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/votes/storage.ts:4 Atomic temp-file writes here cover local JSON state persistence, not staging downloaded artifacts; out of this subject's scope."
+        }
+      ]
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/sidecar-provisioning": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "sidecar-provisioning",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:35:00.878Z",
+      "worker": "12cfedc1-dfde-4268-8308-cae39d3f24df",
+      "techniques": [
+        {
+          "technique": "grade-selection",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/downloadCtaTypes.ts:3 Platform choice picks an installer for an OS, not a model or engine grade sized to the host."
+        }
+      ]
     }
   }
 }
