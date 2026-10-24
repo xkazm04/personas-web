@@ -864,12 +864,11 @@
           "changedAt": "2026-10-18",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/contexts/TourContext.tsx:151 Audio-bearing steps bypass independent dwell progression and instead advance through narration completion or its failure watchdog, violating the rule that narration follows the flow without governing it.",
-          "evaluatedAt": "2026-10-14",
-          "evaluatedAgainst": "sha256-b2:fa03abeab38c89c7",
-          "evaluatedRevision": 21,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/lib/tour-progress.ts:65 Any step that has a narration clip gets no dwell timer of its own and advances only on the clip's `ended` event (useTourAudio onEnded), on its error fallback, or on the stall watchdog, so the tour's pace is set by the voice rather than by its own rules — the inversion voice-ux-integration names.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23,
+          "revisionsBehind": 2
         },
         {
           "subject": "conversation-orchestration",
@@ -2140,7 +2139,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/design-blueprint/index.tsx:40 The blueprint section is driven by a visual build clock with no narration. A search of src/components/feature-sections/design-blueprint (including shared/) for speechSynthesis, SpeechRecognition, getUserMedia, voice and speak found zero hits; ReplayButton replays the animation, not audio.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "talking-avatar",
@@ -5784,12 +5787,11 @@
           "changedAt": "2026-10-18",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:91 Preview availability depends only on the preference toggle although the traced speech helper silently returns when speech synthesis is absent, allowing an enabled-looking control to do nothing without explanation.",
-          "evaluatedAt": "2026-10-14",
-          "evaluatedAgainst": "sha256-b2:fa03abeab38c89c7",
-          "evaluatedRevision": 21,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:91 The Preview button is enabled whenever the stored toggle is on, but speak()/armSpeech() return silently when `speechSynthesis` is missing (review-voice.ts:94/178), so on a browser without speech the control looks usable and does nothing, with no sentence saying why — the 'lying affordance'.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23,
+          "revisionsBehind": 2
         },
         {
           "subject": "table",
@@ -8317,7 +8319,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:19 /m2 renders only the visual clock landing. A search of src/app/m2, src/components/mobile-landing/clock and src/components/primitives for speechSynthesis, SpeechRecognition, getUserMedia, voice and speak found zero hits, so there is no voice capture or output to judge.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "prompt-assembly",

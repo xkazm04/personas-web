@@ -1,0 +1,184 @@
+{
+  "schema": "conform-run/1",
+  "worker": "01e82e91-7cd0-49e0-b528-47d66a8beee5",
+  "subject": "voice-io",
+  "evaluatedAt": "2026-10-24T01:53:43.023622+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Guided Product Tour",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/lib/tour-progress.ts:65 Any step that has a narration clip gets no dwell timer of its own and advances only on the clip's `ended` event (useTourAudio onEnded), on its error fallback, or on the stall watchdog, so the tour's pace is set by the voice rather than by its own rules — the inversion voice-ux-integration names.",
+      "techniques": [
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "deviation",
+          "evidence": "src/lib/tour-progress.ts:65 The flow waits on narration. Also, useTourAudio.ts:219 `audio.play().catch(() => {})` swallows a refused autoplay with no 'narration is ready' affordance, and TourVolumeControl only shows the slider level, so a muted tour and a broken one look the same."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "conformant",
+          "evidence": "src/hooks/useTourAudio.ts:194 The per-clip effect cleanup pauses the clip, disconnects its source and clears its timers on every exit (step change, exit, unmount), so the old clip is replaced and nothing plays on after its step. The AudioContext is closed on unmount (useTourAudio.ts:236)."
+        },
+        {
+          "technique": "bounded-playback-wait",
+          "verdict": "conformant",
+          "evidence": "src/hooks/useTourAudio.ts:158 The wait for `ended` has a deadline taken from the clip's own duration. It is re-armed on loadedmetadata/durationchange/play, cleared on pause, and armed at creation so a refused autoplay is covered too."
+        },
+        {
+          "technique": "speech-timing-timeline",
+          "verdict": "conformant",
+          "evidence": "src/components/tour/AthenaCompanion.tsx:70 The companion's glow and mouth follow the live amplitude of the clip actually playing, which is the documented floor for pre-rendered audio, and they make no claim to per-phoneme timing. In-step cues run on the audio element's own currentTime (TourContext.tsx:212)."
+        },
+        {
+          "technique": "engine-abstraction",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/tour-script.ts:179 The narration is static pre-generated mp3 files, so no synthesis engine runs at runtime and there is no engine to abstract or probe."
+        }
+      ],
+      "registryProposal": "voice-ux-integration's 'nothing in the flow ever waits on the voice' does not say how to treat a passive narrated presentation, where the clip length is the intended step pacing and is backed by a duration-derived watchdog plus an error fallback. A note separating 'clip as pacing hint, with an independent bound' from 'flow blocked on voice' would make verdicts here less arguable."
+    },
+    {
+      "context": "Messages & Settings",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:91 The Preview button is enabled whenever the stored toggle is on, but speak()/armSpeech() return silently when `speechSynthesis` is missing (review-voice.ts:94/178), so on a browser without speech the control looks usable and does nothing, with no sentence saying why — the 'lying affordance'.",
+      "techniques": [
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:91 Availability is gated only on the preference toggle, never on engine availability. The quiet-by-default opt-in (reviewVoiceStore enabled:false) and arming speech on a user gesture are both done correctly."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "src/lib/review-voice.ts:190 Each announcement goes into the browser's default append queue with no utterance identity, no replace or drop policy, no depth bound and no onerror handling, and speech is never cancelled when SyncedRealtimeProvider unmounts. A burst of reviews therefore builds up a backlog of announcements that cannot be stopped."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:52 The first line of raw review content is spoken. composeAnnouncement (review-voice.ts:59-62) only trims and clips to 240 characters, with no step that strips markup or addresses before speech."
+        },
+        {
+          "technique": "on-device-vs-cloud",
+          "verdict": "deviation",
+          "evidence": "src/lib/review-voice-data.ts:91 pickVoice walks a list that ranks Chrome's network-backed Google voices and never checks `localService`, so private review titles can be sent quietly to a cloud voice without a labelled opt-in."
+        }
+      ]
+    },
+    {
+      "context": "Mobile App Shell & Views",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/m2/page.tsx:19 /m2 renders only the visual clock landing. A search of src/app/m2, src/components/mobile-landing/clock and src/components/primitives for speechSynthesis, SpeechRecognition, getUserMedia, voice and speak found zero hits, so there is no voice capture or output to judge.",
+      "techniques": [],
+      "absenceTerms": [
+        "speechSynthesis",
+        "SpeechRecognition",
+        "getUserMedia",
+        "voice",
+        "speak"
+      ]
+    },
+    {
+      "context": "Memory Layers & Multi-Provider AI",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/feature-sections/design-blueprint/index.tsx:40 The blueprint section is driven by a visual build clock with no narration. A search of src/components/feature-sections/design-blueprint (including shared/) for speechSynthesis, SpeechRecognition, getUserMedia, voice and speak found zero hits; ReplayButton replays the animation, not audio.",
+      "techniques": [],
+      "absenceTerms": [
+        "speechSynthesis",
+        "SpeechRecognition",
+        "getUserMedia",
+        "voice",
+        "speak"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "voice-io",
+      "context": "Manual Review Queue",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor ReviewsSplitPane.tsx:52 is a setInterval for checkEscalations, so it does not show that voice is absent. The claim that escalation is the queue's \"only time-driven behaviour\" is also contradicted by usePolling(fetchReviews, 15_000) at line 49."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-24T01:53:43.023622+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [
+        "bounded-playback-wait",
+        "engine-abstraction",
+        "speech-timing-timeline",
+        "tts-pipeline",
+        "voice-ux-integration"
+      ],
+      "deviations": 1,
+      "context": "Guided Product Tour",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:53:43.023622+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [
+        "on-device-vs-cloud",
+        "speech-ready-text",
+        "tts-pipeline",
+        "voice-ux-integration"
+      ],
+      "deviations": 1,
+      "context": "Messages & Settings",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:53:43.023622+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Manual Review Queue",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:53:43.023622+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Mobile App Shell & Views",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-10-24T01:53:43.023622+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "voice-io"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Memory Layers & Multi-Provider AI",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}
