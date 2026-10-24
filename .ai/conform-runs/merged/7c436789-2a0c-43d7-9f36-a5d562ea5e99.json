@@ -1,0 +1,117 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
+ "subject": "demo-data-plane",
+ "evaluatedAt": "2026-10-24T05:59:20.746813+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "demo-data-plane",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 MemoryActionsPanel imports the fixture array straight from mock-dashboard-data and renders it with no ApiClient method behind it, so a consumer names the fake plane and nothing breaks at build time if the live plane grows a memory-actions read; its only protection from real tenants is an isDemo gate at its off-context caller (DimDetail.tsx:89)",
+   "techniques": [
+    {
+     "technique": "one-interface-many-planes",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 The surface reaches for the fixture directly instead of through the api proxy. That is the 'no consumer names a plane' failure. By contrast, SubscriptionsPanel goes through the stores to api and renders a 501 refusal (line 90)."
+    },
+    {
+     "technique": "network-faithful-mocks",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The fixture is seeded synchronously into state: no latency, no loading state, no provocable failure. A StalenessIndicator shows a fetchedAt for a fetch that never happened."
+    },
+    {
+     "technique": "fake-surface-honesty-contract",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:90 When the plane refuses the read (501), the panel renders an honest unsupported note, not fixtures. The plane, not emptiness, is the outer term because subscriptionsNotServed is only set on a 501. MemoryActionsPanel's suggestion count is shown only under the caller's isDemo gate, which is off-context."
+    },
+    {
+     "technique": "fixture-self-consistency",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:52 Each card's event-match count is folded from the same events collection the store holds, not typed beside it (aggregate agreement). Persona enrichment joins by personaId (line 68), not by display name."
+    }
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "demo-data-plane",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The health hook imports a standalone mock fetcher that is not on ApiClient, so this surface names the fake plane directly and the live plane has no method that refuses by name (contrast the 501s in api.ts). Containment still holds because useDemoOnlySWR keys the fetch on the session's isDemo flag.",
+   "techniques": [
+    {
+     "technique": "one-interface-many-planes",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The consumer imports the fake plane. index.tsx:16 does the same for getBlastRadiusInputs. This is the consumer side of the recorded Orchestrator-context deviation at mockApi.ts:462."
+    },
+    {
+     "technique": "runtime-dispatch-not-build-flag",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The SWR key is derived from the live useAuthStore isDemo on each render, not from an env/build flag. A null key skips the fetch for real sessions."
+    },
+    {
+     "technique": "fake-surface-honesty-contract",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/health/index.tsx:94 The declared plane is the outermost term. A real session gets the live-unavailable empty state, never fixtures. Fixed causes are also forced empty outside demo (line 48). The panel has no faithful source, so it renders only in the demo."
+    },
+    {
+     "technique": "fixture-self-consistency",
+     "verdict": "conformant",
+     "evidence": "src/lib/settleThread.ts:154 The Health nav badge is a fold over the same projected check rows the panel renders. Fixes are keyed by thread causeKey, so health, SLA, incidents and badges settle together."
+    },
+    {
+     "technique": "network-faithful-mocks",
+     "verdict": "deviation",
+     "evidence": "src/lib/mockApi.ts:532 Latency is simulated (mockApi.ts:486, delay 300), but the copy is shallow: every section's items array is still the projected fixture array, which the technique calls the same bug with an extra step. Consumers are currently pure (healthActions.ts:51). There is also no declared fault mode for this fetcher."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "demo-data-plane",
+   "context": "Section Preview & Demo Harness",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-10-24T05:59:20.746813+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "demo-data-plane"
+   ],
+   "techniques": [
+    "fake-surface-honesty-contract",
+    "fixture-self-consistency",
+    "network-faithful-mocks",
+    "one-interface-many-planes"
+   ],
+   "deviations": 1,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-24T05:59:20.746813+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "demo-data-plane"
+   ],
+   "techniques": [
+    "fake-surface-honesty-contract",
+    "fixture-self-consistency",
+    "network-faithful-mocks",
+    "one-interface-many-planes",
+    "runtime-dispatch-not-build-flag"
+   ],
+   "deviations": 1,
+   "context": "System Health Panel",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

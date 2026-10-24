@@ -6624,7 +6624,11 @@
           "revision": 4,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 MemoryActionsPanel imports the fixture array straight from mock-dashboard-data and renders it with no ApiClient method behind it, so a consumer names the fake plane and nothing breaks at build time if the live plane grows a memory-actions read; its only protection from real tenants is an isDemo gate at its off-context caller (DimDetail.tsx:89)",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
+          "evaluatedRevision": 4
         },
         {
           "subject": "multi-provider-gateway-plane",
@@ -8356,7 +8360,11 @@
           "revision": 4,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The health hook imports a standalone mock fetcher that is not on ApiClient, so this surface names the fake plane directly and the live plane has no method that refuses by name (contrast the 501s in api.ts). Containment still holds because useDemoOnlySWR keys the fetch on the session's isDemo flag.",
+          "evaluatedAt": "2026-10-24",
+          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
+          "evaluatedRevision": 4
         },
         {
           "subject": "eval-harness",

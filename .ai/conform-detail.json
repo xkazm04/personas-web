@@ -4654,32 +4654,38 @@
       "context": "Agents (Personas) Management",
       "subject": "demo-data-plane",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-16",
-      "evaluatedTs": "2026-10-16T22:26:34.523Z",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:59:20.746Z",
+      "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
       "techniques": [
-        {
-          "technique": "fake-surface-honesty-contract",
-          "verdict": "deviation",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:102 Displays an action-provoking suggestion badge count derived from mock data on real tenant dashboards without gating on the demo session."
-        },
         {
           "technique": "one-interface-many-planes",
           "verdict": "deviation",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 Directly imports mock data fixtures instead of consuming data through the unified ApiClient interface."
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 The surface reaches for the fixture directly instead of through the api proxy. That is the 'no consumer names a plane' failure. By contrast, SubscriptionsPanel goes through the stores to api and renders a 501 refusal (line 90)."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The fixture is seeded synchronously into state: no latency, no loading state, no provocable failure. A StalenessIndicator shows a fetchedAt for a fetch that never happened."
+        },
+        {
+          "technique": "fake-surface-honesty-contract",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:90 When the plane refuses the read (501), the panel renders an honest unsupported note, not fixtures. The plane, not emptiness, is the outer term because subscriptionsNotServed is only set on a 501. MemoryActionsPanel's suggestion count is shown only under the caller's isDemo gate, which is off-context."
+        },
+        {
+          "technique": "fixture-self-consistency",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:52 Each card's event-match count is folded from the same events collection the store holds, not typed beside it (aggregate agreement). Persona enrichment joins by personaId (line 68), not by display name."
         },
         {
           "technique": "runtime-dispatch-not-build-flag",
           "verdict": "deviation",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 Statically binds to mock data rather than dynamically selecting a plane from live session state per call."
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 Statically binds to mock data rather than dynamically selecting a plane from live session state per call.",
+          "carriedFrom": "2026-10-16"
         }
-      ],
-      "withdrawn": {
-        "worker": "f92d3ef9-b41e-41d8-957e-c60fccc33dea",
-        "state": "deviation",
-        "at": "2026-10-16T22:26:54.629413+00:00",
-        "reason": "reviewer (sonnet): MemoryActionsPanel's only caller, DimDetail.tsx, renders it inside `{isDemo && ...}` (line 89), so mock suggestion counts cannot reach a real tenant. The claim that they leak is contradicted by the code."
-      }
+      ]
     },
     "Infrastructure & Telemetry/Orchestrator API Client & Mock Data/demo-data-plane": {
       "context": "Orchestrator API Client & Mock Data",
@@ -8747,6 +8753,42 @@
       "evaluatedTs": "2026-10-24T05:49:41.434Z",
       "worker": "03671394-33be-4a03-9835-f3f24b8a9ba3",
       "techniques": []
+    },
+    "Observability & Event Monitoring/System Health Panel/demo-data-plane": {
+      "context": "System Health Panel",
+      "subject": "demo-data-plane",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-24",
+      "evaluatedTs": "2026-10-24T05:59:20.746Z",
+      "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
+      "techniques": [
+        {
+          "technique": "one-interface-many-planes",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The consumer imports the fake plane. index.tsx:16 does the same for getBlastRadiusInputs. This is the consumer side of the recorded Orchestrator-context deviation at mockApi.ts:462."
+        },
+        {
+          "technique": "runtime-dispatch-not-build-flag",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The SWR key is derived from the live useAuthStore isDemo on each render, not from an env/build flag. A null key skips the fetch for real sessions."
+        },
+        {
+          "technique": "fake-surface-honesty-contract",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/health/index.tsx:94 The declared plane is the outermost term. A real session gets the live-unavailable empty state, never fixtures. Fixed causes are also forced empty outside demo (line 48). The panel has no faithful source, so it renders only in the demo."
+        },
+        {
+          "technique": "fixture-self-consistency",
+          "verdict": "conformant",
+          "evidence": "src/lib/settleThread.ts:154 The Health nav badge is a fold over the same projected check rows the panel renders. Fixes are keyed by thread causeKey, so health, SLA, incidents and badges settle together."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "deviation",
+          "evidence": "src/lib/mockApi.ts:532 Latency is simulated (mockApi.ts:486, delay 300), but the copy is shallow: every section's items array is still the projected fixture array, which the technique calls the same bug with an extra step. Consumers are currently pure (healthActions.ts:51). There is also no declared fault mode for this fetcher."
+        }
+      ]
     }
   }
 }
