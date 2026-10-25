@@ -1,0 +1,66 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c1369b65-eb87-446c-858b-8fb01abfbfa1",
+ "subject": "import-normalization",
+ "evaluatedAt": "2026-10-25T01:33:27.910133+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Shared Types, Utilities & Hooks",
+   "subject": "import-normalization",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/format.ts:16 This context's only 'normalize' is a string helper that turns blank strings into undefined. A search of src/hooks and src/lib for detectFormat, FileReader, readAsText, lossLedger and parseImport found nothing, and a search of all of src for type=\"file\", FileReader, readAsText and .arrayBuffer() also found nothing, so there is no foreign-format import pipeline here to judge.",
+   "techniques": [
+    {
+     "technique": "format-detection",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useSearchParamState.ts:19 The only input parsing in this context reads a URL search param into state. No uploaded artifact goes through a format detector."
+    },
+    {
+     "technique": "import-validation",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/server/env.ts:4 The only validation here checks env vars are present. No untrusted import is parsed, so no import caps apply."
+    },
+    {
+     "technique": "intermediate-representation",
+     "verdict": "not-applicable",
+     "evidence": "src/hooks/useDemoOnlySWR.ts:33 Data enters through SWR over an in-house mock fetcher, not through foreign adapters, so there is no staging IR."
+    },
+    {
+     "technique": "overlay-merge-absence-semantics",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/bodyScrollLock.ts:2 'Overlay' here means UI modals, not patch documents, so there are no merge semantics to judge."
+    }
+   ],
+   "absenceTerms": [
+    "detectFormat",
+    "FileReader",
+    "readAsText",
+    "lossLedger",
+    "parseImport"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T01:33:27.910133+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "import-normalization"
+   ],
+   "techniques": [
+    "format-detection",
+    "import-validation",
+    "intermediate-representation",
+    "overlay-merge-absence-semantics"
+   ],
+   "deviations": 0,
+   "context": "Shared Types, Utilities & Hooks",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

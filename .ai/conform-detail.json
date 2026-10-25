@@ -7440,57 +7440,56 @@
       "context": "Shared Types, Utilities & Hooks",
       "subject": "import-normalization",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-22",
-      "evaluatedTs": "2026-10-22T02:03:35.383Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T01:33:27.910Z",
+      "worker": "c1369b65-eb87-446c-858b-8fb01abfbfa1",
       "techniques": [
-        {
-          "technique": "adapter-capability-tables",
-          "verdict": "not-applicable",
-          "evidence": "src/lib/constants.ts:23 This table derives navigation sections; it does not map foreign types into host entities."
-        },
-        {
-          "technique": "durable-intermediate-representation",
-          "verdict": "not-applicable",
-          "evidence": "src/hooks/useHydrated.ts:19 The hook coordinates hydration snapshots, without an expensive document parse or reprocessing artifact."
-        },
         {
           "technique": "format-detection",
           "verdict": "not-applicable",
-          "evidence": "src/hooks/useSearchParamState.ts:19 Input is a known URL parameter, without foreign-format classification or adapter selection."
+          "evidence": "src/hooks/useSearchParamState.ts:19 The only input parsing in this context reads a URL search param into state. No uploaded artifact goes through a format detector."
         },
         {
           "technique": "import-validation",
           "verdict": "not-applicable",
-          "evidence": "src/lib/server/env.ts:11 Validation concerns environment configuration, without untrusted import parsing or entity creation."
+          "evidence": "src/lib/server/env.ts:4 The only validation here checks env vars are present. No untrusted import is parsed, so no import caps apply."
         },
         {
           "technique": "intermediate-representation",
           "verdict": "not-applicable",
-          "evidence": "src/hooks/useDemoOnlySWR.ts:33 The hook reads caller-provided demo data, without lowering foreign entities into a shared staging vocabulary."
-        },
-        {
-          "technique": "lossy-conversion-disclosure",
-          "verdict": "not-applicable",
-          "evidence": "src/lib/format-date.ts:15 Date formatting produces display text, without semantic conversion of imported entities."
+          "evidence": "src/hooks/useDemoOnlySWR.ts:33 Data enters through SWR over an in-house mock fetcher, not through foreign adapters, so there is no staging IR."
         },
         {
           "technique": "overlay-merge-absence-semantics",
           "verdict": "not-applicable",
-          "evidence": "src/lib/bodyScrollLock.ts:48 This restores a captured CSS value; the module's overlays are UI panels, not partial import documents."
+          "evidence": "src/lib/bodyScrollLock.ts:2 'Overlay' here means UI modals, not patch documents, so there are no merge semantics to judge."
+        },
+        {
+          "technique": "adapter-capability-tables",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/constants.ts:23 This table derives navigation sections; it does not map foreign types into host entities.",
+          "carriedFrom": "2026-10-22"
+        },
+        {
+          "technique": "durable-intermediate-representation",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useHydrated.ts:19 The hook coordinates hydration snapshots, without an expensive document parse or reprocessing artifact.",
+          "carriedFrom": "2026-10-22"
+        },
+        {
+          "technique": "lossy-conversion-disclosure",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/format-date.ts:15 Date formatting produces display text, without semantic conversion of imported entities.",
+          "carriedFrom": "2026-10-22"
         },
         {
           "technique": "review-before-commit",
           "verdict": "not-applicable",
-          "evidence": "src/hooks/useFocusTrap.ts:34 The hook manages modal accessibility, without import selection, collision resolution, or persistence."
+          "evidence": "src/hooks/useFocusTrap.ts:34 The hook manages modal accessibility, without import selection, collision resolution, or persistence.",
+          "carriedFrom": "2026-10-22"
         }
-      ],
-      "withdrawn": {
-        "worker": "d8bb3004-d3c0-438f-bf57-07b445976129",
-        "state": "not-applicable",
-        "at": "2026-10-22T02:03:53.660775+00:00",
-        "reason": "reviewer (sonnet): I found no foreign-format ingestion in the files I opened, so the claim is plausible. But the primary anchor (useDemoOnlySWR.ts:16) is the demoOnlyKey ternary, which doesn't show an import pipeline is absent, and the technique anchors are equally incidental. The absence search used only the identifi"
-      }
+      ]
     },
     "Product Documentation (Guide)/Guide Data, Content & Search Index/index-free-random-access": {
       "context": "Guide Data, Content & Search Index",

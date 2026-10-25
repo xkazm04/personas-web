@@ -10467,7 +10467,11 @@
           "revision": 1,
           "changedAt": "2026-09-05",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/format.ts:16 This context's only 'normalize' is a string helper that turns blank strings into undefined. A search of src/hooks and src/lib for detectFormat, FileReader, readAsText, lossLedger and parseImport found nothing, and a search of all of src for type=\"file\", FileReader, readAsText and .arrayBuffer() also found nothing, so there is no foreign-format import pipeline here to judge.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:4981ff0ea8a59c1b",
+          "evaluatedRevision": 1
         },
         {
           "subject": "retrieval",
