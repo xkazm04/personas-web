@@ -1120,7 +1120,11 @@
           "revision": 2,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:3 This context is a set of React client components and hooks: a download CTA, platform pills, a footer, and a release-freshness timer. It embeds no language runtime, has no collected guest heap, and has no host/guest boundary. A search of the context files and of src/ for NativeFunction, downcast, JsValue, WebAssembly, GcRefCell, from_copy_closure, boa_engine and quickjs found nothing, `git ls-files` lists no Cargo/.rs/.wasm files, and package.json dependencies (next, react, framer-motion, etc.) include no embeddable engine.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:24dff9c7b931faef",
+          "evaluatedRevision": 3
         },
         {
           "subject": "sidecar-provisioning",

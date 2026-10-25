@@ -1,0 +1,59 @@
+{
+ "schema": "conform-run/1",
+ "worker": "29564fc6-1fca-41cd-8300-d454c3fc48cd",
+ "subject": "native-guest-interop",
+ "evaluatedAt": "2026-10-25T01:46:11.372063+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "native-guest-interop",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/DownloadCTA.tsx:3 This context is a set of React client components and hooks: a download CTA, platform pills, a footer, and a release-freshness timer. It embeds no language runtime, has no collected guest heap, and has no host/guest boundary. A search of the context files and of src/ for NativeFunction, downcast, JsValue, WebAssembly, GcRefCell, from_copy_closure, boa_engine and quickjs found nothing, `git ls-files` lists no Cargo/.rs/.wasm files, and package.json dependencies (next, react, framer-motion, etc.) include no embeddable engine.",
+   "techniques": [
+    {
+     "technique": "aligned-native-data-cell",
+     "verdict": "not-applicable",
+     "evidence": "package.json:58 The manifest is a Next/React web app with no collected guest heap and no cell headers."
+    },
+    {
+     "technique": "async-native-as-promise",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:1 The async work here is ordinary React effects and timers. No host future is bridged into a guest promise."
+    },
+    {
+     "technique": "copy-closure-safe-api",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 This is a plain JS closure passed to a browser timer. No native function is registered into a guest runtime."
+    }
+   ],
+   "absenceTerms": [
+    "NativeFunction",
+    "downcast",
+    "JsValue",
+    "GcRefCell"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T01:46:11.372063+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-guest-interop"
+   ],
+   "techniques": [
+    "aligned-native-data-cell",
+    "async-native-as-promise",
+    "copy-closure-safe-api"
+   ],
+   "deviations": 0,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
