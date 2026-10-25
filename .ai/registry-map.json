@@ -8452,7 +8452,11 @@
           "revision": 5,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a static demo fixture once through SWR, with revalidation off and no polling, and its actions are synchronous store/cache writes, so there is no recurring loop, tick, long-running job or tracked wait for the background-jobs runtime to govern. I searched the health view directory and src/lib for refreshInterval, cancelToken, startupSweep and `new Worker` and found nothing; setInterval/heartbeat hit only unrelated src/lib modules (demoRealtime, event-bus-demo, sync/reachability, server/rate-limit) that sit outside this context.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:22ed2a99172ae050",
+          "evaluatedRevision": 5
         },
         {
           "subject": "demo-data-plane",

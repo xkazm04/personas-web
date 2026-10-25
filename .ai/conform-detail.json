@@ -9295,6 +9295,42 @@
       "evaluatedTs": "2026-10-24T23:50:04.373Z",
       "worker": "d47d8a61-9bce-4d1c-965c-fca37e2b4e85",
       "techniques": []
+    },
+    "Observability & Event Monitoring/System Health Panel/background-jobs": {
+      "context": "System Health Panel",
+      "subject": "background-jobs",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T00:11:49.217Z",
+      "worker": "5d48cf34-531a-4bae-8f81-f2a83aecddef",
+      "techniques": [
+        {
+          "technique": "adaptive-cadence",
+          "verdict": "not-applicable",
+          "evidence": "src/hooks/useDemoOnlySWR.ts:34 The hook the panel uses turns off focus/reconnect revalidation and sets no refreshInterval, so this surface has no polling cadence to adapt."
+        },
+        {
+          "technique": "job-progress-and-cancellation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/index.tsx:71 Configure/Install is one synchronous in-session store write plus a toast. Nothing long-running exists to need progress or a cancel."
+        },
+        {
+          "technique": "loop-health-telemetry",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:10 The panel shows host checks taken from a fixture, not per-tick snapshots from supervised loops. No loop exists to report on."
+        },
+        {
+          "technique": "loop-supervision",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/demoCauseFix.ts:36 Fixing a cause writes the SWR cache once per key. No timer is armed, so no roster or stop handle is needed."
+        },
+        {
+          "technique": "startup-sweeps",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/settleThread.ts:31 The thread settlement is a pure projection over fixtures. No persisted in-flight state can be orphaned across a restart."
+        }
+      ]
     }
   }
 }
