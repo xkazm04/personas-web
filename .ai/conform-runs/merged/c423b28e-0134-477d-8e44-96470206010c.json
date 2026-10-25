@@ -1,0 +1,48 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c423b28e-0134-477d-8e44-96470206010c",
+ "subject": "docs-content-model",
+ "evaluatedAt": "2026-10-25T01:30:51.074880+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "SEO & Social Metadata",
+   "subject": "docs-content-model",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/guide/[category]/opengraph-image.tsx:12 The category social card counts topics over the unfiltered catalog, so its badge counts the devOnly draft 'choosing-your-ai-provider' in getting-started. The category page (src/app/guide/[category]/page.tsx:21) and the sitemap count only isTopicVisible topics, so the count on the card and the count on the page disagree, and the topic OG route renders draft metadata without passing the visibility predicate.",
+   "techniques": [
+    {
+     "technique": "derived-navigation-projection",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/opengraph-image.tsx:12 The count is derived from the catalog, which is good, but it does not carry the predicate. It counts drafts that navigation hides, which breaks count-carries-predicate. The sitemap itself is a proper projection over GUIDE_CATEGORIES/GUIDE_TOPICS (sitemap.ts:35,43), with no second list."
+    },
+    {
+     "technique": "draft-visibility-gating",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/opengraph-image.tsx:11 The sitemap inventory does pass the door (sitemap.ts:43 GUIDE_TOPICS.filter(isTopicVisible)). The topic OG image route, though, resolves a record by address without isTopicVisible and without checking that the category matches. So /guide/getting-started/choosing-your-ai-provider/opengraph-image renders the devOnly draft's title and description even though the page itself calls notFound(). This is the forgotten direct-address-resolution consumer. Also, sitemap.ts:35 lists every category without checking that it has any visible topic."
+    }
+   ],
+   "registryProposal": "draft-visibility-gating lists the consumers that must pass the door, and generated per-route social/OG image endpoints are missing from that list. In file-convention frameworks they are separate route handlers that resolve the same record by address, so a page-level notFound() does not gate them. They leak a draft's title and summary as an image, and the author never counts them as a consumer. They deserve to be named next to direct address resolution."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T01:30:51.074880+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "docs-content-model"
+   ],
+   "techniques": [
+    "derived-navigation-projection",
+    "draft-visibility-gating"
+   ],
+   "deviations": 1,
+   "context": "SEO & Social Metadata",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
