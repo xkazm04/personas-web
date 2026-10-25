@@ -9559,6 +9559,37 @@
           "evidence": "src/components/dashboard/fleet-monitor/attention.ts:17 The only type vocabulary here describes the UI attention state of demo agents. It has no capability declarations for runners or jobs."
         }
       ]
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/scale-investment-timing": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "scale-investment-timing",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T23:22:52.857Z",
+      "worker": "2bfdf960-0fd8-41e2-9d94-df47ef6f98f6",
+      "techniques": [
+        {
+          "technique": "ceiling-as-deadline-not-trigger",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/playback.ts:2 The only 'state machine' here is presentational playback timing, not a load-bearing architecture with a ceiling that could be reached."
+        },
+        {
+          "technique": "next-order-of-magnitude-only",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The data is a static catalog of ten trigger definitions that mirrors the desktop app. There is no observed load and no growth axis to size against."
+        },
+        {
+          "technique": "execution-model-concurrency-threshold",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/shared/useHubPlayback.ts:3 It runs entirely as React client hooks in the visitor's browser. No worker pool or cooperative concurrency model is chosen."
+        },
+        {
+          "technique": "vertical-headroom-before-distribution",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:1 It is a client component with no server-side workload, so there is nothing to distribute or scale vertically."
+        }
+      ]
     }
   }
 }

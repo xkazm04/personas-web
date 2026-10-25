@@ -2919,7 +2919,11 @@
           "revision": 7,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:35 This context is a client-side marketing section: an SVG ring diagram of ten triggers with a pure playback reducer. It carries no production load, has no ceiling, no execution model chosen for concurrency, no distribution and no proposed migration, so the subject's precondition (deciding whether a system needs to carry more load) does not hold. A case-insensitive search of the context directory for ceiling, capacity, concurrency, shard, headroom and migration returned no matches; 'scale' appears only as a framer-motion transform property.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:43b2188e6c19354d",
+          "evaluatedRevision": 7
         },
         {
           "subject": "native-shell-integration",
