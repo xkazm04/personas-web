@@ -6707,47 +6707,47 @@
       "context": "Knowledge Base",
       "subject": "declarative-object-graph-configs",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-20",
-      "evaluatedTs": "2026-10-20T21:21:32.818Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T01:23:06.468Z",
+      "worker": "d140d926-f8da-4ff2-86ab-a571417fea98",
       "techniques": [
         {
           "technique": "directive-key-namespace",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeGraphNode.tsx:62 Code explicitly supplies component props; no generic instantiator mixes loader directives with constructor arguments."
-        },
-        {
-          "technique": "escape-hatch-expressions",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterLabels.tsx:19 Display arithmetic runs directly in TypeScript; no evaluated configuration-expression format was found."
-        },
-        {
-          "technique": "merge-vs-override-marking",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:68 Persona colors are projected from fleet data; no configuration-file layering or command-line composition was found."
-        },
-        {
-          "technique": "reference-resolution-with-cycle-detection",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx:34 Graph identifiers look up display coordinates, without recursively constructing objects from configuration references."
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:15 Entries are fixed typed fields read by components. No constructor is called with the remaining keys, and no node gets loader directives."
         },
         {
           "technique": "sigil-grammar-over-schema",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterTopBar.tsx:38 Configuration keys select display labels directly; no string-prefix reference grammar was found."
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:67 Cross-entry wiring is plain TS code (a projection of FLEET), not a reference grammar inside data values."
+        },
+        {
+          "technique": "escape-hatch-expressions",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterLabels.tsx:19 Display arithmetic runs directly in TypeScript; no evaluated configuration-expression format was found.",
+          "carriedFrom": "2026-10-20"
+        },
+        {
+          "technique": "merge-vs-override-marking",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:68 Persona colors are projected from fleet data; no configuration-file layering or command-line composition was found.",
+          "carriedFrom": "2026-10-20"
+        },
+        {
+          "technique": "reference-resolution-with-cycle-detection",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterSvg.tsx:34 Graph identifiers look up display coordinates, without recursively constructing objects from configuration references.",
+          "carriedFrom": "2026-10-20"
         },
         {
           "technique": "textual-macro-prepass",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterCanvas.tsx:51 Ordinary TypeScript computes graph layout from data; no configuration-fragment splicing or relative configuration-id prepass was found."
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterCanvas.tsx:51 Ordinary TypeScript computes graph layout from data; no configuration-fragment splicing or relative configuration-id prepass was found.",
+          "carriedFrom": "2026-10-20"
         }
       ],
-      "withdrawn": {
-        "worker": "dcb8cb2a-1086-4715-8c34-6441c0d654b6",
-        "state": "not-applicable",
-        "at": "2026-10-20T21:21:44.783873+00:00",
-        "reason": "reviewer (sonnet): The main anchor, index.tsx:173, is just closing JSX (`</div>`/`);`) and shows nothing about loader directives or config resolution, so it is incidental. The technique anchors are real code, but they only show ordinary component code and a static config map, not that a declarative object-graph config"
-      }
+      "registryProposal": "The match was likely earned by the tokens 'config' and 'graph': this context has a knowledgeClusterConfig.ts and a visual cluster graph. The subject's use_when triggers could exclude UI display lookup tables and data-visualisation graphs to cut false-positive mappings."
     },
     "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/declarative-resource-lifecycle": {
       "context": "Server-Side Vote Persistence",

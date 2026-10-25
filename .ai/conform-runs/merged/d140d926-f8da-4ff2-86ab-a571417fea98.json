@@ -1,0 +1,55 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d140d926-f8da-4ff2-86ab-a571417fea98",
+ "subject": "declarative-object-graph-configs",
+ "evaluatedAt": "2026-10-25T01:23:06.468213+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Knowledge Base",
+   "subject": "declarative-object-graph-configs",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:12 The only thing called a \"config\" in this context is a compile-time TypeScript lookup table of display metadata (icon, colour, Tailwind classes, cluster angle) per knowledge type. Its consumers (TopBar, Labels, DetailPanel, layout) already decide what to render and only read values from it, so by the golden path's boundary rule it is settings, not an object-graph config. I searched the context's directories for _target_, _disabled_, _requires_, eval( and new Function and found no hits: there is no loader, reference sigil, resolver, expression hatch, macro prepass or layered override.",
+   "techniques": [
+    {
+     "technique": "directive-key-namespace",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:15 Entries are fixed typed fields read by components. No constructor is called with the remaining keys, and no node gets loader directives."
+    },
+    {
+     "technique": "sigil-grammar-over-schema",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:67 Cross-entry wiring is plain TS code (a projection of FLEET), not a reference grammar inside data values."
+    }
+   ],
+   "absenceTerms": [
+    "_target_",
+    "_disabled_",
+    "_requires_",
+    "new Function",
+    "eval("
+   ],
+   "registryProposal": "The match was likely earned by the tokens 'config' and 'graph': this context has a knowledgeClusterConfig.ts and a visual cluster graph. The subject's use_when triggers could exclude UI display lookup tables and data-visualisation graphs to cut false-positive mappings."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T01:23:06.468213+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "declarative-object-graph-configs"
+   ],
+   "techniques": [
+    "directive-key-namespace",
+    "sigil-grammar-over-schema"
+   ],
+   "deviations": 0,
+   "context": "Knowledge Base",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

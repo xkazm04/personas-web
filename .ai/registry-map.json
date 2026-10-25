@@ -6184,7 +6184,11 @@
           "revision": 1,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterConfig.ts:12 The only thing called a \"config\" in this context is a compile-time TypeScript lookup table of display metadata (icon, colour, Tailwind classes, cluster angle) per knowledge type. Its consumers (TopBar, Labels, DetailPanel, layout) already decide what to render and only read values from it, so by the golden path's boundary rule it is settings, not an object-graph config. I searched the context's directories for _target_, _disabled_, _requires_, eval( and new Function and found no hits: there is no loader, reference sigil, resolver, expression hatch, macro prepass or layered override.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:eb9279efa181d8c8",
+          "evaluatedRevision": 2
         },
         {
           "subject": "metrics-rollups",
