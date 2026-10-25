@@ -4083,7 +4083,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 The guide's markdown goes from a line-split parse straight to React nodes, and none of the 12 block components compiles to an instruction stream or runs one; a search of src/components/guide (and all of src/) for bytecode, opcode, interpreter, coroutine and register file found no hits, so this subject's precondition (a bytecode compiler/interpreter) does not hold.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:e9d7b45e69f60087",
+          "evaluatedRevision": 3
         },
         {
           "subject": "repository-landing-document",

@@ -9533,6 +9533,16 @@
         }
       ],
       "registryProposal": "algorithm-selection says 'a refused attempt consumes no allowance' and asks reviewers to confirm the recording line is unreachable from the refusing branch. In a fixed window whose reset instant is set only on admission, incrementing on refusal is harmless: it cannot extend the lockout. The technique could say that the self-renewal defect needs the refused event to extend the horizon (sliding log, sub-buckets, a moving reset). Otherwise reviewers will flag harmless fixed-window increments, like the one at rate-limit.ts:99, as the shipped bug."
+    },
+    "Product Documentation (Guide)/Guide Content Blocks & Markdown/register-bytecode-execution": {
+      "context": "Guide Content Blocks & Markdown",
+      "subject": "register-bytecode-execution",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T22:49:14.527Z",
+      "worker": "85bf6809-8c6a-486c-97d8-c61c3715dbb9",
+      "techniques": []
     }
   }
 }
