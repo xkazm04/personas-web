@@ -1,0 +1,60 @@
+{
+ "schema": "conform-run/1",
+ "worker": "b275021c-43c4-403a-86e0-25f454785ec1",
+ "subject": "metric-surface-contract",
+ "evaluatedAt": "2026-10-25T01:41:41.331059+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "metric-surface-contract",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:28 This context reads metrics from the demo mock fetcher (and api.getObservability over SWR) and renders them as charts, so it is a consumer of a metric surface, not an exporter; searching src/components/dashboard for prometheus, prom-client, opentelemetry, sampleRate/sample_rate and \"/metrics\" found nothing, and neither did searching src/ and package.json for prometheus/prom-client/opentelemetry.",
+   "techniques": [
+    {
+     "technique": "export-terms-not-ratios",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:38 This is the consumer side doing the division from counts it received. Nothing is published from here, so the exporter rule has no subject in this context."
+    },
+    {
+     "technique": "same-process-monotonic-intervals",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:47 Durations and latency arrive already computed from the fetched payload. This context stamps no transitions and computes no intervals of its own."
+    },
+    {
+     "technique": "sampled-metrics-declare-their-rate",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/observability/performance-view/CostAnomalyBanner.tsx:54 This only displays a deviation that was already derived. No sampled observation or sample rate is produced or exported here; a search for sampleRate/sample_rate found nothing."
+    }
+   ],
+   "absenceTerms": [
+    "prometheus",
+    "prom-client",
+    "opentelemetry",
+    "sampleRate",
+    "/metrics"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T01:41:41.331059+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "metric-surface-contract"
+   ],
+   "techniques": [
+    "export-terms-not-ratios",
+    "same-process-monotonic-intervals",
+    "sampled-metrics-declare-their-rate"
+   ],
+   "deviations": 0,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

@@ -9390,6 +9390,32 @@
           "evidence": "src/components/sections/how-lazy.tsx:24 Only code-split chunk loading; no ownership-taking zero-copy send or fast-to-slow fallback exists."
         }
       ]
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/metric-surface-contract": {
+      "context": "Observability Charts & SLA",
+      "subject": "metric-surface-contract",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T01:41:41.331Z",
+      "worker": "b275021c-43c4-403a-86e0-25f454785ec1",
+      "techniques": [
+        {
+          "technique": "export-terms-not-ratios",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:38 This is the consumer side doing the division from counts it received. Nothing is published from here, so the exporter rule has no subject in this context."
+        },
+        {
+          "technique": "same-process-monotonic-intervals",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:47 Durations and latency arrive already computed from the fetched payload. This context stamps no transitions and computes no intervals of its own."
+        },
+        {
+          "technique": "sampled-metrics-declare-their-rate",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/performance-view/CostAnomalyBanner.tsx:54 This only displays a deviation that was already derived. No sampled observation or sample rate is produced or exported here; a search for sampleRate/sample_rate found nothing."
+        }
+      ]
     }
   }
 }

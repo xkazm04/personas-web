@@ -7727,7 +7727,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/observability/activity-view/useActivityMetrics.ts:28 This context reads metrics from the demo mock fetcher (and api.getObservability over SWR) and renders them as charts, so it is a consumer of a metric surface, not an exporter; searching src/components/dashboard for prometheus, prom-client, opentelemetry, sampleRate/sample_rate and \"/metrics\" found nothing, and neither did searching src/ and package.json for prometheus/prom-client/opentelemetry.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:7fac3c16c37ab0cc",
+          "evaluatedRevision": 3
         },
         {
           "subject": "quality-gates",
