@@ -10307,7 +10307,11 @@
           "revision": 15,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 This context's only outbound calls are Supabase auth calls (getSession at :130, onAuthStateChange at :155, signInWithOAuth at :215, signOut at :255). None of them is billed per unit to the product, and a case-insensitive search of all 8 context files for cost|budget|spend|price|ledger|billing found no hits, so the subject's precondition (a metered call to price, record, attribute or cap) does not hold here.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:7247db31eb8f3dce",
+          "evaluatedRevision": 15
         },
         {
           "subject": "agent-memory",

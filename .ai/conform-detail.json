@@ -9361,6 +9361,16 @@
           "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:78 These are consumer-side alert-severity preferences. The producer-side decision about whether a background outcome deserves attention (announce or absorb) is made outside this context, in the desktop app or orchestrator."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Authentication & User Session/cost-metering": {
+      "context": "Authentication & User Session",
+      "subject": "cost-metering",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T01:01:36.716Z",
+      "worker": "0263bf50-6aad-4ff5-bd9b-e1848131056c",
+      "techniques": []
     }
   }
 }

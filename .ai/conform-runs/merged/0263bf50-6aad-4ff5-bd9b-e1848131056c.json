@@ -1,0 +1,38 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0263bf50-6aad-4ff5-bd9b-e1848131056c",
+ "subject": "cost-metering",
+ "evaluatedAt": "2026-10-25T01:01:36.716173+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Authentication & User Session",
+   "subject": "cost-metering",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/authStore.ts:215 This context's only outbound calls are Supabase auth calls (getSession at :130, onAuthStateChange at :155, signInWithOAuth at :215, signOut at :255). None of them is billed per unit to the product, and a case-insensitive search of all 8 context files for cost|budget|spend|price|ledger|billing found no hits, so the subject's precondition (a metered call to price, record, attribute or cap) does not hold here.",
+   "techniques": [],
+   "absenceTerms": [
+    "debit",
+    "priceTable",
+    "estimateCost"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T01:01:36.716173+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "cost-metering"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Authentication & User Session",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
