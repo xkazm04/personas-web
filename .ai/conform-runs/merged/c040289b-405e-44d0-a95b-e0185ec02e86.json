@@ -1,0 +1,72 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c040289b-405e-44d0-a95b-e0185ec02e86",
+ "subject": "rate-limiting",
+ "evaluatedAt": "2026-10-25T22:37:56.661900+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Server-Side Vote Persistence",
+   "subject": "rate-limiting",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/server/rate-limit.ts:40 The shared limiter is a fixed window over a process-local Map with a 5-minute reaper but no size cap, no counters, and a 429 that states retry-after but not the limit or the layer. Several techniques are realized only in part, though its distribution stance and computed Retry-After are good.",
+   "techniques": [
+    {
+     "technique": "algorithm-selection",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.ts:89 Window arithmetic runs on wall-clock Date.now(), not a monotonic source. The fixed-window burst semantic and its error bound (2x across a window seam) are not stated anywhere. The count also increments on refused calls (line 99), but resetAt never moves, so it does not cause a self-renewing lockout. The durability class is stated in the header (lines 21-22)."
+    },
+    {
+     "technique": "key-design",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.ts:40 The map has a staleness reaper but no size cap and no LRU bound, so its cardinality is set by world-controlled keys (IPs and fp: hashes). The API also takes a caller-built key string (line 58), and the policy (limit, windowMs) is a per-call argument, not limiter state."
+    },
+    {
+     "technique": "limit-observability",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.ts:126 Neither branch increments an admitted or refused counter, and there is no snapshot or near-limit warning. Because the limit is a call-site parameter, nothing can report a key's true limit."
+    },
+    {
+     "technique": "limiter-topology",
+     "verdict": "conformant",
+     "evidence": "src/lib/server/rate-limit.ts:23 One shared module is 'the single door every rate-limited route goes through' (line 112). The distribution posture is stated explicitly as an approximation bounded by N x limit. The module does not write down a door list."
+    },
+    {
+     "technique": "refusal-contract",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.ts:127 It uses the standard 429 with a Retry-After computed from resetAt (lines 107-108, 128), spelled distinctly as code rate_limited. The refusal does not carry the rule (limit and window) or the namespace that refused, so a caller cannot pace itself. The result type is {allowed:boolean,...}, not a closed verdict."
+    },
+    {
+     "technique": "storm-hygiene",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.ts:44 Good: the refusal path is O(1) and does not log. The reaper runs on a named 5-minute cadence (line 52, unref'd). But each sweep walks the whole uncapped map with no time or count bound, and it emits no metrics (pruned count, map size)."
+    }
+   ],
+   "registryProposal": "algorithm-selection says 'a refused attempt consumes no allowance' and asks reviewers to confirm the recording line is unreachable from the refusing branch. In a fixed window whose reset instant is set only on admission, incrementing on refusal is harmless: it cannot extend the lockout. The technique could say that the self-renewal defect needs the refused event to extend the horizon (sliding log, sub-buckets, a moving reset). Otherwise reviewers will flag harmless fixed-window increments, like the one at rate-limit.ts:99, as the shipped bug."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T22:37:56.661900+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "rate-limiting"
+   ],
+   "techniques": [
+    "algorithm-selection",
+    "key-design",
+    "limit-observability",
+    "limiter-topology",
+    "refusal-contract",
+    "storm-hygiene"
+   ],
+   "deviations": 1,
+   "context": "Server-Side Vote Persistence",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

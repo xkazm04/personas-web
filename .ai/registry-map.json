@@ -5064,7 +5064,11 @@
           "revision": 8,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/server/rate-limit.ts:40 The shared limiter is a fixed window over a process-local Map with a 5-minute reaper but no size cap, no counters, and a 429 that states retry-after but not the limit or the layer. Several techniques are realized only in part, though its distribution stance and computed Retry-After are good.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:c1ab95c98c885951",
+          "evaluatedRevision": 8
         },
         {
           "subject": "declarative-resource-lifecycle",
