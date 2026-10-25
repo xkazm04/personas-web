@@ -7422,7 +7422,11 @@
           "revision": 3,
           "changedAt": "2026-09-20",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardPodium.tsx:20 When the podium ranks by one dimension, its ScoreRing bands that dimension's value with the composite's 80/60/40 thresholds. The breakdown therefore grades a dimension on the composite's scale, which the standard forbids, and this sits alongside an unversioned, unrationalized equal-weight vector, absence scored as 0 or 50, and a re-derived rank whose tie-break differs from the engine's.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:476078a37f34137d",
+          "evaluatedRevision": 3
         },
         {
           "subject": "measurement-honesty",

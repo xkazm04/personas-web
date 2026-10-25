@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "70755ecf-0d1b-4949-80bb-50a8313004e8",
+ "subject": "scoring-rubrics",
+ "evaluatedAt": "2026-10-25T23:38:01.203048+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Leaderboard & Rankings",
+   "subject": "scoring-rubrics",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardPodium.tsx:20 When the podium ranks by one dimension, its ScoreRing bands that dimension's value with the composite's 80/60/40 thresholds. The breakdown therefore grades a dimension on the composite's scale, which the standard forbids, and this sits alongside an unversioned, unrationalized equal-weight vector, absence scored as 0 or 50, and a re-derived rank whose tie-break differs from the engine's.",
+   "techniques": [
+    {
+     "technique": "score-explanation",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/LeaderboardPodium.tsx:20 ScoreRing gets dimensionScore(persona, dim), a single metric whenever dim is not 'overall', and bands it with the composite thresholds. The radar shows raw axis values with no weights, contributions, coverage or top-gap action, so the breakdown does not visibly sum to the composite."
+    },
+    {
+     "technique": "weight-design",
+     "verdict": "deviation",
+     "evidence": "src/lib/standings.ts:169 The weights are an implicit equal-weight mean written inline where the sum happens. There is no declared vector, no per-weight rationale, no stated or asserted total and no version. The legacy path in src/lib/supabaseApi.ts repeats the same '/ 5' inline."
+    },
+    {
+     "technique": "unmeasured-honesty",
+     "verdict": "deviation",
+     "evidence": "src/lib/standings.ts:217 A persona with no runs in the window gets composite 0 and EMPTY_AXES, so absence is scored as the floor and ranked as last place. selfRelative returns NEUTRAL=50 when there is no baseline (absence as the middle), and quality is a proxy that mirrors reliability, presented as a measured axis. No coverage is disclosed and there is no coverage floor."
+    },
+    {
+     "technique": "normalization",
+     "verdict": "deviation",
+     "evidence": "src/lib/standings.ts:162 Cost and speed use a movement frame (each persona against its own trailing baseline), while volume is cohort-relative and reliability absolute; the composite mixes all three and is used to rank the cohort now. The frame never reaches the surface: the radar plots 'cost 50' on a 0-100 domain, where 50 means 'unchanged', not 'average cost'. The fallback in supabaseApi normalizes the same axis names against the cohort max instead."
+    },
+    {
+     "technique": "rubric-stability",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/leaderboard/leaderboard-page/leaderboardSort.ts:12 The view re-derives ranks with a name tie-break, while standings() ranks with an id tie-break (standings.ts:178/225). That makes two un-gated twin orderings, beside two twin composites (standings.ts and the supabaseApi fallback) that normalize differently. The tests (standings.test.ts, leaderboardSort.test.ts) check each one on its own expectations. There is no rubric version and no parity fixture."
+    },
+    {
+     "technique": "gap-ranking",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/leaderboard/index.tsx:47 The gap to the leader is only shown visually, as a radar overlay. There is no computed gap list (distance \u00d7 weight, effort), no ranked order, and no top gap phrased as an action. Separately, persona ties are broken by display name rather than stable id (leaderboardRank.ts:24)."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T23:38:01.203048+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "scoring-rubrics"
+   ],
+   "techniques": [
+    "gap-ranking",
+    "normalization",
+    "rubric-stability",
+    "score-explanation",
+    "unmeasured-honesty",
+    "weight-design"
+   ],
+   "deviations": 1,
+   "context": "Leaderboard & Rankings",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
