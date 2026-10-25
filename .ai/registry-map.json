@@ -5391,7 +5391,11 @@
           "revision": 1,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/route.ts:9 This context is a set of Next.js route handlers and React components that run on a host runtime, not an embeddable guest-language runtime with an engine, standards packages, extras layer or CLI. A case-insensitive rg for realm, registrar, wintercg, boa_engine and JsValue over src/app/api and src/components/sections/feature-voting found nothing, and no repo file outside node_modules mentions boa_engine, deno_core, wintercg, quickjs, isolated-vm or JsValue.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:3cf694924d502131",
+          "evaluatedRevision": 2
         },
         {
           "subject": "sidecar-provisioning",

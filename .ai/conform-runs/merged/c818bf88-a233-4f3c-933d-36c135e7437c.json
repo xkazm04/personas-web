@@ -1,0 +1,79 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c818bf88-a233-4f3c-933d-36c135e7437c",
+ "subject": "standards-layered-runtime",
+ "evaluatedAt": "2026-10-25T23:54:27.148990+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "standards-layered-runtime",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/votes/route.ts:9 This context is a set of Next.js route handlers and React components that run on a host runtime, not an embeddable guest-language runtime with an engine, standards packages, extras layer or CLI. A case-insensitive rg for realm, registrar, wintercg, boa_engine and JsValue over src/app/api and src/components/sections/feature-voting found nothing, and no repo file outside node_modules mentions boa_engine, deno_core, wintercg, quickjs, isolated-vm or JsValue.",
+   "techniques": [
+    {
+     "technique": "crate-per-standards-body",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/feature-comments/route.ts:12 The routes import shared app helpers from @/lib. No package is split out per external standard, because the context ships no runtime packages."
+    },
+    {
+     "technique": "backend-parameterised-web-api",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/storage.ts:2 The Supabase/filesystem storage switch is an app data-access backend. It is not a backend trait behind a guest-facing standard API, so the technique's precondition does not hold."
+    },
+    {
+     "technique": "baseline-plus-extension-tuple",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/rate-limit.ts:7 Nothing registers APIs into a guest context here. Modules are wired with ordinary imports."
+    },
+    {
+     "technique": "status-header-per-api",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/feature-boosts/route.ts:2 The module headers record PII and integrity policy. They are not standard-clause citations, and no standard package exists that would need them."
+    },
+    {
+     "technique": "cli-as-thin-assembler",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/feature-voting/components/FeatureBoostButton.tsx:1 The context is web UI plus HTTP handlers. It has no command-line front end of a runtime."
+    },
+    {
+     "technique": "re-export-preserves-import-path",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/storage.ts:11 This re-export is an app-level convenience. No API is moving between runtime layers, so the layer-migration precondition does not hold."
+    }
+   ],
+   "absenceTerms": [
+    "realm",
+    "registrar",
+    "wintercg",
+    "boa_engine",
+    "JsValue"
+   ],
+   "registryProposal": "The registry-map matched this subject to a Next.js API/voting context. The subject should state its precondition (the repo implements an embeddable guest-language runtime) in a form the matcher can use to keep it off web-application contexts."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T23:54:27.148990+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "standards-layered-runtime"
+   ],
+   "techniques": [
+    "backend-parameterised-web-api",
+    "baseline-plus-extension-tuple",
+    "cli-as-thin-assembler",
+    "crate-per-standards-body",
+    "re-export-preserves-import-path",
+    "status-header-per-api"
+   ],
+   "deviations": 0,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
