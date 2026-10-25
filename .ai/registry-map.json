@@ -5829,7 +5829,11 @@
           "revision": 4,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/tool-catalogue.ts:15 The context has two lists that each claim to be the catalog: the generated `connectors` rows in src/data/connectors.ts and a hand-kept TOOL_CATALOGUE with its own ids (\"calendar\" where the catalog uses \"google_calendar\") and its own presentation (GitHub is #8b5cf6 here but #1F2937 at src/data/connectors.ts:344). That second service list is the drifting copy the catalog-as-data technique names as its failure.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:d78c2c6c19304554",
+          "evaluatedRevision": 4
         },
         {
           "subject": "voice-io",

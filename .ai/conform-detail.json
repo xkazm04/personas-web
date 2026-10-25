@@ -6579,42 +6579,43 @@
       "context": "Connectors Catalog",
       "subject": "connector-catalog",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-19",
-      "evaluatedTs": "2026-10-19T08:56:46.048Z",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T00:35:00.361Z",
+      "worker": "1c8d9b88-db09-4a91-bf08-a9b8ebfa8b1e",
       "techniques": [
-        {
-          "technique": "adapter-normalization",
-          "verdict": "not-applicable",
-          "evidence": "src/components/sections/connector-modal/terminalScript.ts:33 The gallery reads static records and its terminal simulates activity; searches found no provider-response adapter in this context."
-        },
         {
           "technique": "catalog-as-data",
           "verdict": "deviation",
-          "evidence": "src/lib/tool-catalogue.ts:22 This independently authored GitHub record uses #8b5cf6; src/data/connectors.ts:344 declares #1F2937 for GitHub, demonstrating divergent presentation authorities."
+          "evidence": "src/lib/tool-catalogue.ts:22 The main rows are generated data keyed on the stable `name` (index.tsx:108, page.tsx:28). But TOOL_CATALOGUE is hand-maintained beside them, calls itself canonical, and has already drifted: the GitHub color differs from connectors.ts:344, and ids such as calendar/drive do not match catalog names google_calendar/google_drive. Also, `category` is typed as an open `string` (connectors.ts:11) instead of the closed `categories` keys."
         },
         {
           "technique": "matching-and-ranking",
           "verdict": "conformant",
-          "evidence": "src/app/connections/page.tsx:28 URL references resolve by exact machine name and misses remain null; substring search only filters cards for explicit human selection."
+          "evidence": "src/app/connections/page.tsx:28 The only binding resolution is an exact-identity lookup, and a miss returns null rather than a least-bad candidate. Free-text search only filters (allowed for interactive pickers), and it has an explicit no-match state at index.tsx:122."
+        },
+        {
+          "technique": "catalog-lifecycle",
+          "verdict": "conformant",
+          "evidence": "src/data/connectors.ts:48 Retirement is reachable: a full regeneration drops rows removed upstream, and --check lists 'only on web' names, so the set difference is computed. The upstream desktop JSON has no stage field. Caveat: a ?connector= deep link to a retired name resolves to null silently, with no tombstone."
         },
         {
           "technique": "schema-driven-forms",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/connector-modal/components/SetupDetails.tsx:45 Declared fields render as explanatory list items, without credential inputs or saving; the catalog directs actual setup to the desktop app."
+          "evidence": "src/components/sections/connections-catalog/index.tsx:129 There is no credential form or probe on the web side. Rows carry only a display `authType` string (connectors.ts:14), not the desktop's fields/healthcheck_config."
         },
         {
           "technique": "shipped-vs-operator-ownership",
           "verdict": "not-applicable",
-          "evidence": "scripts/generate-connectors.mjs:417 Refresh regenerates a checked-in source file; searches found no operator-editable installed connector store or startup upsert in this context."
+          "evidence": "src/data/connectors.ts:47 The catalog is a static, build-time generated TS module. It has no user-writable store and no operator edit door, so there is no second writer."
+        },
+        {
+          "technique": "adapter-normalization",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/connections-catalog/index.tsx:11 The gallery reads a static import and calls no provider API. There is nothing to normalize."
         }
       ],
-      "withdrawn": {
-        "worker": "b6eb036f-af33-4818-83af-ed11708509de",
-        "state": "deviation",
-        "at": "2026-10-19T08:57:14.559101+00:00",
-        "reason": "reviewer (sonnet): The two GitHub colors are real (tool-catalogue.ts:22 #8b5cf6, connectors.ts:344 #1F2937), but tool-catalogue is only imported by event-hub files (LanesView, LanesPhone, PhoneHub, telemetry) and not by the connections page, so it is a different surface's registry, and I found no single-authority requ"
-      }
+      "registryProposal": "The standard assumes a catalog that is the live source of truth. It does not cover a read-only published mirror of another repo's catalog, like this marketing gallery generated from the desktop app's JSON. For such mirrors, the drift gate against the upstream source is the main lifecycle mechanism, and dropping the upstream multi-valued `categories` axis down to one scalar is a projection choice worth a decision rule."
     },
     "Product Feature Showcase/Observability Deck & Security Vault/credential-vault": {
       "context": "Observability Deck & Security Vault",

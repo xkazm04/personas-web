@@ -1,0 +1,72 @@
+{
+ "schema": "conform-run/1",
+ "worker": "1c8d9b88-db09-4a91-bf08-a9b8ebfa8b1e",
+ "subject": "connector-catalog",
+ "evaluatedAt": "2026-10-25T00:35:00.361683+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Connectors Catalog",
+   "subject": "connector-catalog",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/tool-catalogue.ts:15 The context has two lists that each claim to be the catalog: the generated `connectors` rows in src/data/connectors.ts and a hand-kept TOOL_CATALOGUE with its own ids (\"calendar\" where the catalog uses \"google_calendar\") and its own presentation (GitHub is #8b5cf6 here but #1F2937 at src/data/connectors.ts:344). That second service list is the drifting copy the catalog-as-data technique names as its failure.",
+   "techniques": [
+    {
+     "technique": "catalog-as-data",
+     "verdict": "deviation",
+     "evidence": "src/lib/tool-catalogue.ts:22 The main rows are generated data keyed on the stable `name` (index.tsx:108, page.tsx:28). But TOOL_CATALOGUE is hand-maintained beside them, calls itself canonical, and has already drifted: the GitHub color differs from connectors.ts:344, and ids such as calendar/drive do not match catalog names google_calendar/google_drive. Also, `category` is typed as an open `string` (connectors.ts:11) instead of the closed `categories` keys."
+    },
+    {
+     "technique": "matching-and-ranking",
+     "verdict": "conformant",
+     "evidence": "src/app/connections/page.tsx:28 The only binding resolution is an exact-identity lookup, and a miss returns null rather than a least-bad candidate. Free-text search only filters (allowed for interactive pickers), and it has an explicit no-match state at index.tsx:122."
+    },
+    {
+     "technique": "catalog-lifecycle",
+     "verdict": "conformant",
+     "evidence": "src/data/connectors.ts:48 Retirement is reachable: a full regeneration drops rows removed upstream, and --check lists 'only on web' names, so the set difference is computed. The upstream desktop JSON has no stage field. Caveat: a ?connector= deep link to a retired name resolves to null silently, with no tombstone."
+    },
+    {
+     "technique": "schema-driven-forms",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/connections-catalog/index.tsx:129 There is no credential form or probe on the web side. Rows carry only a display `authType` string (connectors.ts:14), not the desktop's fields/healthcheck_config."
+    },
+    {
+     "technique": "shipped-vs-operator-ownership",
+     "verdict": "not-applicable",
+     "evidence": "src/data/connectors.ts:47 The catalog is a static, build-time generated TS module. It has no user-writable store and no operator edit door, so there is no second writer."
+    },
+    {
+     "technique": "adapter-normalization",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/connections-catalog/index.tsx:11 The gallery reads a static import and calls no provider API. There is nothing to normalize."
+    }
+   ],
+   "registryProposal": "The standard assumes a catalog that is the live source of truth. It does not cover a read-only published mirror of another repo's catalog, like this marketing gallery generated from the desktop app's JSON. For such mirrors, the drift gate against the upstream source is the main lifecycle mechanism, and dropping the upstream multi-valued `categories` axis down to one scalar is a projection choice worth a decision rule."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T00:35:00.361683+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "connector-catalog"
+   ],
+   "techniques": [
+    "adapter-normalization",
+    "catalog-as-data",
+    "catalog-lifecycle",
+    "matching-and-ranking",
+    "schema-driven-forms",
+    "shipped-vs-operator-ownership"
+   ],
+   "deviations": 1,
+   "context": "Connectors Catalog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
