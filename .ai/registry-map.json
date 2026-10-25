@@ -6908,7 +6908,11 @@
           "revision": 2,
           "changedAt": "2026-08-31",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:5 This context is a client-side demo UI that sorts simulated AI agents into attention piles for display, and it contains no CI runners; a search of src/components/dashboard/fleet-monitor for runner, runs-on, self-hosted, ephemeral and autoscal found nothing, so none of the subject's preconditions (job queues, runner pools, shared build caches, deploy serialization) hold here.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:8119510164547576",
+          "evaluatedRevision": 3
         },
         {
           "subject": "mcp-tools",

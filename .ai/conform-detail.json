@@ -9543,6 +9543,22 @@
       "evaluatedTs": "2026-10-25T22:49:14.527Z",
       "worker": "85bf6809-8c6a-486c-97d8-c61c3715dbb9",
       "techniques": []
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/runner-fleet": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "runner-fleet",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T23:09:40.568Z",
+      "worker": "5d27bac6-5280-4939-b5da-25475112e5ce",
+      "techniques": [
+        {
+          "technique": "capability-typed-queues",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:17 The only type vocabulary here describes the UI attention state of demo agents. It has no capability declarations for runners or jobs."
+        }
+      ]
     }
   }
 }
