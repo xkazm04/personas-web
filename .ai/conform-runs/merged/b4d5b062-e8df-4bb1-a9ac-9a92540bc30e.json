@@ -1,0 +1,78 @@
+{
+ "schema": "conform-run/1",
+ "worker": "b4d5b062-e8df-4bb1-a9ac-9a92540bc30e",
+ "subject": "pipeline-dag",
+ "evaluatedAt": "2026-10-25T22:22:03.266182+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Split & Pipeline Playground",
+   "subject": "pipeline-dag",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:24 The 'pipeline' here is a hard-coded six-beat marketing animation played on a virtual clock (fixed STEP_DELAYS, statusOf derived from a step counter), not a user-authored graph that gets executed, so the subject's precondition does not hold; I grepped the context directory for topolog, readiness, skipped, cycle, condition, pipeline, retry, fetch, validate and approval and found nothing; the only graph words are the cosmetic worldEdges/edgePath drawing helpers in world.ts.",
+   "techniques": [
+    {
+     "technique": "graph-validation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:24 The topology is a compile-time constant tuple. No user writes a graph, so there is nothing to validate."
+    },
+    {
+     "technique": "node-execution-model",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:93 Node status comes from a clock step index. Nothing executes, nothing is persisted, and there is no run to recover."
+    },
+    {
+     "technique": "conditional-edges",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/CameraStage.tsx:72 Edges are drawn and lit by beat index. No condition is ever evaluated on an edge."
+    },
+    {
+     "technique": "external-adapter-nodes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/data.ts:80 The 'tools' are only labels and icons. No outbound call or user-supplied endpoint exists."
+    },
+    {
+     "technique": "deterministic-vs-model-nodes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/data.ts:28 The 'model' output is canned text. No node is sampled or retried."
+    },
+    {
+     "technique": "pause-and-gate-nodes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:57 The only pause is the animation clock stopping while the tab is hidden. There is no human gate and no durable pause."
+    }
+   ],
+   "absenceTerms": [
+    "topolog",
+    "readiness",
+    "skipped",
+    "cycle",
+    "condition"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T22:22:03.266182+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "pipeline-dag"
+   ],
+   "techniques": [
+    "conditional-edges",
+    "deterministic-vs-model-nodes",
+    "external-adapter-nodes",
+    "graph-validation",
+    "node-execution-model",
+    "pause-and-gate-nodes"
+   ],
+   "deviations": 0,
+   "context": "Split & Pipeline Playground",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

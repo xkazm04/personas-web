@@ -9450,6 +9450,47 @@
           "evidence": "src/components/guide/TranslationNotice.tsx:25 The styling uses shared utility classes and adds no stylesheet. A grep for <link, <script and preload over the context's files found nothing, so the context adds no blocking resource."
         }
       ]
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/pipeline-dag": {
+      "context": "Split & Pipeline Playground",
+      "subject": "pipeline-dag",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T22:22:03.266Z",
+      "worker": "b4d5b062-e8df-4bb1-a9ac-9a92540bc30e",
+      "techniques": [
+        {
+          "technique": "graph-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:24 The topology is a compile-time constant tuple. No user writes a graph, so there is nothing to validate."
+        },
+        {
+          "technique": "node-execution-model",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:93 Node status comes from a clock step index. Nothing executes, nothing is persisted, and there is no run to recover."
+        },
+        {
+          "technique": "conditional-edges",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/CameraStage.tsx:72 Edges are drawn and lit by beat index. No condition is ever evaluated on an edge."
+        },
+        {
+          "technique": "external-adapter-nodes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:80 The 'tools' are only labels and icons. No outbound call or user-supplied endpoint exists."
+        },
+        {
+          "technique": "deterministic-vs-model-nodes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:28 The 'model' output is canned text. No node is sampled or retried."
+        },
+        {
+          "technique": "pause-and-gate-nodes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:57 The only pause is the animation clock stopping while the tab is hidden. There is no human gate and no durable pause."
+        }
+      ]
     }
   }
 }
