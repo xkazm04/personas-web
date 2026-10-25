@@ -884,7 +884,11 @@
           "revision": 6,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/tour/TourCaptionCard.tsx:79 The tour's narration is a fixed i18n key per scripted step (TourNarrationKey in src/lib/tour-script.ts, with pre-recorded audio), and nothing in it is a model-driven conversation. The subject's precondition, a resident companion running model turns with memory, does not hold here: a case-insensitive grep of src/components/tour for anthropic, openai, completion, recall and chat found 0 files.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:f3ecee1630629b34",
+          "evaluatedRevision": 6
         },
         {
           "subject": "talking-avatar",

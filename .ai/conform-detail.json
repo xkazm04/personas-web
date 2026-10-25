@@ -5675,57 +5675,55 @@
       "context": "Guided Product Tour",
       "subject": "conversation-orchestration",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-18",
-      "evaluatedTs": "2026-10-18T00:35:04.827Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T00:44:02.964Z",
+      "worker": "35086d01-c2ec-4f3d-aa9e-05d50cbd9f02",
       "techniques": [
+        {
+          "technique": "show-dont-tell-walkthrough",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourSpotlight.tsx:25 This is the onboarding tour that dims the page. The technique carves this out under 'when the user has never seen the product, first-run teaching wants the dimming tour'. No turn starts a walkthrough here."
+        },
         {
           "technique": "layered-avatar-state-machine",
           "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourOverlay.tsx:24 The caption and its avatar mount during tour stepping; the technique expressly excludes companions confined to their own panel."
+          "evidence": "src/components/tour/TourCaptionCard.tsx:68 Athena appears only inside the tour caption card, so she is not a permanent presence, and there are no turn events to drive state. Her layers (an idle video loop plus an audio-reactive canvas) follow the voice level, not a turn lifecycle."
         },
         {
           "technique": "model-proposed-quick-replies",
           "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourBridgeCard.tsx:51 This authored tour-continuation control is not a model-proposed reply chip."
+          "evidence": "src/components/tour/TourBridgeCard.tsx:29 The end-of-tour bridge offer is fixed copy that navigates when accepted. No model proposes it."
         },
         {
           "technique": "narration-promote-on-finish",
           "verdict": "not-applicable",
-          "evidence": "src/hooks/useTourAudio.ts:102 Narration plays configured audio assets rather than accumulating live conversational beats for promotion."
+          "evidence": "src/components/tour/TourRecapCard.tsx:11 The recap is an ephemeral count built from the tour's own signals. There is no persisted conversation record to write a trail into, which is the technique's 'conversation is ephemeral' carve-out."
         },
         {
           "technique": "progress-beat-grammar",
           "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourCaptionCard.tsx:79 Captions resolve authored translation keys; no model reports its progress here."
-        },
-        {
-          "technique": "recall-transparency",
-          "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourLauncher.tsx:75 The persisted seen flag controls onboarding presentation, not user-memory grounding for an answer."
-        },
-        {
-          "technique": "show-dont-tell-walkthrough",
-          "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourIntroCard.tsx:25 This is the onboarding tour that the standard explicitly distinguishes from a turn-invoked, non-dimming companion walkthrough."
-        },
-        {
-          "technique": "structured-visual-replies",
-          "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourCaptionCard.tsx:82 The surface renders authored instructional tasks, not model-composed comparative answers."
+          "evidence": "src/components/tour/AthenaCompanion.tsx:13 Narration is pre-recorded audio plus scripted captions. No model output exists to lift beats out of."
         },
         {
           "technique": "two-surface-doctrine",
           "verdict": "not-applicable",
-          "evidence": "src/components/tour/TourOverlay.tsx:19 The surfaces are phases of one transient tour, not ambient and full-conversation renderings of companion state."
+          "evidence": "src/components/tour/TourCaptionCard.tsx:36 The tour has one surface (the caption card) and no chat or ambient pair to route between."
+        },
+        {
+          "technique": "recall-transparency",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourLauncher.tsx:75 The persisted seen flag controls onboarding presentation, not user-memory grounding for an answer.",
+          "carriedFrom": "2026-10-18"
+        },
+        {
+          "technique": "structured-visual-replies",
+          "verdict": "not-applicable",
+          "evidence": "src/components/tour/TourCaptionCard.tsx:82 The surface renders authored instructional tasks, not model-composed comparative answers.",
+          "carriedFrom": "2026-10-18"
         }
       ],
-      "withdrawn": {
-        "worker": "8a4eae3e-cac3-4161-8af2-eb08c5cd7081",
-        "state": "not-applicable",
-        "at": "2026-10-18T00:35:24.953212+00:00",
-        "reason": "reviewer (sonnet): The tour does have a companion (AthenaCompanion, mounted in TourCaptionCard and TourIntroCard with audio-reactive narration), and the claim that the technique excludes it rests on technique text I could not check in code; the anchor TourLauncher.tsx:94 only shows the start handler, so it is incident"
-      }
+      "registryProposal": "The tour's avatar realizes the ambient layer (a pre-rendered idle loop) and the reactive layer (an audio-reactive canvas) of layered-avatar-state-machine outside any companion. That technique could note that the layering applies to a scripted narrator presence even where no turn-event state machine exists."
     },
     "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/copy-quality-gates": {
       "context": "Mobile App Shell & Views",

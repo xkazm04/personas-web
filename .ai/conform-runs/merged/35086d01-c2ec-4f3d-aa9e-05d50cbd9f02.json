@@ -1,0 +1,79 @@
+{
+ "schema": "conform-run/1",
+ "worker": "35086d01-c2ec-4f3d-aa9e-05d50cbd9f02",
+ "subject": "conversation-orchestration",
+ "evaluatedAt": "2026-10-25T00:44:02.964702+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Guided Product Tour",
+   "subject": "conversation-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/tour/TourCaptionCard.tsx:79 The tour's narration is a fixed i18n key per scripted step (TourNarrationKey in src/lib/tour-script.ts, with pre-recorded audio), and nothing in it is a model-driven conversation. The subject's precondition, a resident companion running model turns with memory, does not hold here: a case-insensitive grep of src/components/tour for anthropic, openai, completion, recall and chat found 0 files.",
+   "techniques": [
+    {
+     "technique": "show-dont-tell-walkthrough",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourSpotlight.tsx:25 This is the onboarding tour that dims the page. The technique carves this out under 'when the user has never seen the product, first-run teaching wants the dimming tour'. No turn starts a walkthrough here."
+    },
+    {
+     "technique": "layered-avatar-state-machine",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourCaptionCard.tsx:68 Athena appears only inside the tour caption card, so she is not a permanent presence, and there are no turn events to drive state. Her layers (an idle video loop plus an audio-reactive canvas) follow the voice level, not a turn lifecycle."
+    },
+    {
+     "technique": "model-proposed-quick-replies",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourBridgeCard.tsx:29 The end-of-tour bridge offer is fixed copy that navigates when accepted. No model proposes it."
+    },
+    {
+     "technique": "narration-promote-on-finish",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourRecapCard.tsx:11 The recap is an ephemeral count built from the tour's own signals. There is no persisted conversation record to write a trail into, which is the technique's 'conversation is ephemeral' carve-out."
+    },
+    {
+     "technique": "progress-beat-grammar",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/AthenaCompanion.tsx:13 Narration is pre-recorded audio plus scripted captions. No model output exists to lift beats out of."
+    },
+    {
+     "technique": "two-surface-doctrine",
+     "verdict": "not-applicable",
+     "evidence": "src/components/tour/TourCaptionCard.tsx:36 The tour has one surface (the caption card) and no chat or ambient pair to route between."
+    }
+   ],
+   "absenceTerms": [
+    "anthropic",
+    "openai",
+    "completion",
+    "recall",
+    "chat"
+   ],
+   "registryProposal": "The tour's avatar realizes the ambient layer (a pre-rendered idle loop) and the reactive layer (an audio-reactive canvas) of layered-avatar-state-machine outside any companion. That technique could note that the layering applies to a scripted narrator presence even where no turn-event state machine exists."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T00:44:02.964702+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "conversation-orchestration"
+   ],
+   "techniques": [
+    "layered-avatar-state-machine",
+    "model-proposed-quick-replies",
+    "narration-promote-on-finish",
+    "progress-beat-grammar",
+    "show-dont-tell-walkthrough",
+    "two-surface-doctrine"
+   ],
+   "deviations": 0,
+   "context": "Guided Product Tour",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
