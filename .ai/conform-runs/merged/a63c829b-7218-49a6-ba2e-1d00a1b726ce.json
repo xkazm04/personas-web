@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "a63c829b-7218-49a6-ba2e-1d00a1b726ce",
+ "subject": "retry-backoff",
+ "evaluatedAt": "2026-10-25T23:00:35.828799+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "retry-backoff",
+   "context": "Self-Healing & Trigger Automation",
+   "reason": "evidence leans on core/src/healing.rs, which is not a tracked file"
+  }
+ ],
+ "consults": []
+}
