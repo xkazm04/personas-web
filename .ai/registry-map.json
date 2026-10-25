@@ -4345,7 +4345,11 @@
           "revision": 3,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/how-role-path/RoleLenses.tsx:8 This context is a client-rendered marketing page (/how) where 'role' means a visitor persona lens (developer / product-manager / enterprise) used to recolour sections and pick a reading path; a search of src/app/how and all of src/components/sections for certificate, issuer, issuance, x509 and notAfter returned zero hits, so nothing here issues certificates, signed keys or logins and the subject's precondition does not hold.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:fc31943d5d78e4d2",
+          "evaluatedRevision": 3
         },
         {
           "subject": "release-pipeline",

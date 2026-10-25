@@ -7536,52 +7536,51 @@
       "context": "How It Works & Changelog",
       "subject": "issuance-policy-ladder",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-22",
-      "evaluatedTs": "2026-10-22T02:37:11.945Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T01:37:24.578Z",
+      "worker": "46ec583b-297a-4209-b24d-97eef6e5e398",
       "techniques": [
         {
           "technique": "bounds-as-modes",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-manifesto/Typewriter.tsx:58 The timing values control text animation, with no requested credential validity or issuer lifetime to compose."
+          "evidence": "src/app/how/page.tsx:40 The only 'role' is UI state for a persona toggle. There are no validity or lifetime bounds to clamp or refuse."
         },
         {
           "technique": "explicit-forbid-beats-allow-any",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-manifesto/Proofs.tsx:60 The rules panel illustrates an autonomy level; it evaluates no issuance allowlists, forbids, or allow-any flags."
+          "evidence": "src/app/how/page.tsx:20 The role maps carry colours, not allow or forbid lists."
         },
         {
           "technique": "float-references-resolve-at-use",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-role-path/Stop.tsx:49 These references select page navigation targets rather than issuing keys, issuance policies, or artifact templates."
+          "evidence": "src/components/sections/how-role-path/RoleLenses.tsx:5 The role definitions are static display constants. Nothing references an issuing key or policy."
         },
         {
           "technique": "program-role-returns-the-artifact",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-manifesto/Proofs.tsx:42 The component displays example prompt copy; it does not evaluate an operator-authored issuance program."
+          "evidence": "src/components/sections/how-manifesto/Proofs.tsx:42 The component displays example prompt copy; it does not evaluate an operator-authored issuance program.",
+          "carriedFrom": "2026-10-22"
         },
         {
           "technique": "require-one-constraint",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-role-path/roles.ts:19 The role record defines a visitor lens through copy, icon, and color rather than a persisted credential-issuance policy."
+          "evidence": "src/components/sections/how-role-path/roles.ts:19 The role record defines a visitor lens through copy, icon, and color rather than a persisted credential-issuance policy.",
+          "carriedFrom": "2026-10-22"
         },
         {
           "technique": "stamped-instants-name-their-clock",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/changelog-timeline/index.tsx:103 The changelog formats an existing release date; it does not stamp an instant into a newly issued authority-bearing artifact."
+          "evidence": "src/components/sections/changelog-timeline/index.tsx:103 The changelog formats an existing release date; it does not stamp an instant into a newly issued authority-bearing artifact.",
+          "carriedFrom": "2026-10-22"
         },
         {
           "technique": "verbatim-is-a-separate-privilege",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-role-path/RoleLenses.tsx:32 Selecting a visitor lens changes presentation state and exposes no signing endpoint or unconstrained issuance privilege."
+          "evidence": "src/components/sections/how-role-path/RoleLenses.tsx:32 Selecting a visitor lens changes presentation state and exposes no signing endpoint or unconstrained issuance privilege.",
+          "carriedFrom": "2026-10-22"
         }
-      ],
-      "withdrawn": {
-        "worker": "82e27dda-1062-4085-af5c-5d34119e6f08",
-        "state": "not-applicable",
-        "at": "2026-10-22T02:37:30.379469+00:00",
-        "reason": "reviewer (sonnet): The context is probably free of issuance code (my grep of src/app/how, changelog-timeline and the how-* sections found no issu/allow_any/notAfter/credential/ttl/expir terms), but the anchors are incidental: index.tsx:16 is a doc-comment line, Typewriter.tsx:58 is an animation delay, Stop.tsx:49 is a"
-      }
+      ]
     },
     "Product Feature Showcase/Self-Healing & Trigger Automation/job-coordination": {
       "context": "Self-Healing & Trigger Automation",
