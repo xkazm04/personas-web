@@ -1,0 +1,30 @@
+{
+  "schema": "conform-run/1",
+  "worker": "2f025f94-ea91-45dc-bbba-395ffd6133a3",
+  "subject": "schema-driven-ui",
+  "evaluatedAt": "2026-10-25T23:30:38.229098+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "schema-driven-ui",
+      "context": "Build Config & E2E Tests",
+      "reason": "withdrawn after review: reviewer (sonnet): The anchor, e2e/guide.spec.ts:195, is only a comment about CompareBlock and does not show that a spec-to-UI registry is absent. The 'src/ has no spec renderer' claim is about code outside this context. I also found that src/components/guide/guide-markdown/ (parseGuide.ts, renderGuideDoc.tsx) parses "
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-25T23:30:38.229098+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "schema-driven-ui"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Build Config & E2E Tests",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}

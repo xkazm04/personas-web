@@ -9590,6 +9590,21 @@
           "evidence": "src/components/sections/orchestration-hub/index.tsx:1 It is a client component with no server-side workload, so there is nothing to distribute or scale vertically."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Build Config & E2E Tests/schema-driven-ui": {
+      "context": "Build Config & E2E Tests",
+      "subject": "schema-driven-ui",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T23:30:38.229Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "2f025f94-ea91-45dc-bbba-395ffd6133a3",
+        "state": "not-applicable",
+        "at": "2026-10-25T23:31:00.462995+00:00",
+        "reason": "reviewer (sonnet): The anchor, e2e/guide.spec.ts:195, is only a comment about CompareBlock and does not show that a spec-to-UI registry is absent. The 'src/ has no spec renderer' claim is about code outside this context. I also found that src/components/guide/guide-markdown/ (parseGuide.ts, renderGuideDoc.tsx) parses "
+      }
     }
   }
 }
