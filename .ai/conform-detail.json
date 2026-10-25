@@ -9331,6 +9331,37 @@
           "evidence": "src/lib/settleThread.ts:31 The thread settlement is a pure projection over fixtures. No persisted in-flight state can be orphaned across a restart."
         }
       ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/companion-runtime": {
+      "context": "Messages & Settings",
+      "subject": "companion-runtime",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T00:28:39.138Z",
+      "worker": "92c9b5fa-ecbe-4b37-8ece-6c2956cbf6bf",
+      "techniques": [
+        {
+          "technique": "headless-turn-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/messages-page/ThreadDetailModal.tsx:118 The thread modal only renders persisted message bodies. It has no compose box and runs no turns, so there is no turn stream to make headless."
+        },
+        {
+          "technique": "metered-llm-seam",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/ModelProvidersCard.tsx:24 The provider card is a demo-only allowlist toggle over mock providers. It makes no model call, so there is no leg to meter."
+        },
+        {
+          "technique": "action-catalog-single-source",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:117 The only mutations here are user-driven read-state and settings toggles. No model emits action kinds, so there is no catalog to keep in parity."
+        },
+        {
+          "technique": "signal-economy-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:78 These are consumer-side alert-severity preferences. The producer-side decision about whether a background outcome deserves attention (announce or absorb) is made outside this context, in the desktop app or orchestrator."
+        }
+      ]
     }
   }
 }
