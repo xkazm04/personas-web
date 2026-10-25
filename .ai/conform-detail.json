@@ -9371,6 +9371,27 @@
       "evaluatedTs": "2026-10-25T01:01:36.716Z",
       "worker": "0263bf50-6aad-4ff5-bd9b-e1848131056c",
       "techniques": []
+    },
+    "Content & Informational Pages/How It Works & Changelog/data-plane-transport-selection": {
+      "context": "How It Works & Changelog",
+      "subject": "data-plane-transport-selection",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T01:09:50.500Z",
+      "worker": "c8f9f596-db83-48f9-91df-abbfd7daa6ad",
+      "techniques": [
+        {
+          "technique": "control-plane-off-the-data-path",
+          "verdict": "not-applicable",
+          "evidence": "src/app/how/page.tsx:87 The 'event bus' is a rendered marketing section, not a supervisor on a message hot path."
+        },
+        {
+          "technique": "moved-payload-has-no-fallback",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/how-lazy.tsx:24 Only code-split chunk loading; no ownership-taking zero-copy send or fast-to-slow fallback exists."
+        }
+      ]
     }
   }
 }

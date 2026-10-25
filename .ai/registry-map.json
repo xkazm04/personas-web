@@ -4498,7 +4498,11 @@
           "revision": 1,
           "changedAt": "2026-09-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/how-lazy.tsx:25 The context is a marketing page whose only 'event bus' is a lazily imported presentational showcase chunk; a search of src/app/how and src/components/sections for SharedArrayBuffer, postMessage, MessageChannel, RTCPeerConnection and zero-copy found nothing, so there is no process graph, broker or direct transport to choose between and the subject's precondition does not hold.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:258f60841392a710",
+          "evaluatedRevision": 2
         },
         {
           "subject": "canvas-graph",
