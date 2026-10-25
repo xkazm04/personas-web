@@ -1,0 +1,65 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0be84065-8d8a-4748-9f25-751cf1a92e91",
+ "subject": "page-load-pipeline",
+ "evaluatedAt": "2026-10-25T22:07:35.359448+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Localized Guide Content (14 locales)",
+   "subject": "page-load-pipeline",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "src/data/guide/getLocalized.test.ts:156 The context's test requires that the English path loads no locale topics module, no locale content module and no status table, so the 5.3 MB of translated guide text stays out of the default reader's first load and is fetched one locale and category at a time only when it is actually served.",
+   "techniques": [
+    {
+     "technique": "script-cost-is-main-thread-time",
+     "verdict": "conformant",
+     "evidence": "src/data/guide/getLocalized.test.ts:166 The test checks that English readers never import a locale content module. The resolver it tests (src/data/guide/getLocalized.ts:98, outside this context) imports each locale/category file on its own, so the locale bundles are split by need and never shipped with the route."
+    },
+    {
+     "technique": "layout-stability-by-reservation",
+     "verdict": "conformant",
+     "evidence": "src/components/guide/TranslationNotice.tsx:16 Toggling between the two whole units keeps the notice's geometry the same, and the notice has no motion. The page that hosts it resolves the unit on the server, so the notice is in the first render rather than inserted above the reader later."
+    },
+    {
+     "technique": "discoverable-critical-resources",
+     "verdict": "not-applicable",
+     "evidence": "src/data/guide/locales/ar/content/agents-prompts.ts:1 The locale bodies are markdown text strings. A grep for src=, .png, .webp, .svg and image markdown across src/data/guide/locales found no subresource references, so the context declares nothing the look-ahead scanner would need to discover."
+    },
+    {
+     "technique": "priority-is-declared-not-hoped",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/TranslationNotice.tsx:27 The notice's only graphic is an inline SVG icon component, so there is no image request to prioritise. The localized bodies carry no media either (see the grep above)."
+    },
+    {
+     "technique": "render-blocking-budget",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/TranslationNotice.tsx:25 The styling uses shared utility classes and adds no stylesheet. A grep for <link, <script and preload over the context's files found nothing, so the context adds no blocking resource."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T22:07:35.359448+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "page-load-pipeline"
+   ],
+   "techniques": [
+    "discoverable-critical-resources",
+    "layout-stability-by-reservation",
+    "priority-is-declared-not-hoped",
+    "render-blocking-budget",
+    "script-cost-is-main-thread-time"
+   ],
+   "deviations": 0,
+   "context": "Localized Guide Content (14 locales)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

@@ -3644,7 +3644,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "src/data/guide/getLocalized.test.ts:156 The context's test requires that the English path loads no locale topics module, no locale content module and no status table, so the 5.3 MB of translated guide text stays out of the default reader's first load and is fetched one locale and category at a time only when it is actually served.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:449e36ca8d3fe3a6",
+          "evaluatedRevision": 4
         },
         {
           "subject": "data-access",

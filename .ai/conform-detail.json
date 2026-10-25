@@ -9414,6 +9414,42 @@
           "evidence": "src/components/dashboard/views/observability/performance-view/CostAnomalyBanner.tsx:54 This only displays a deviation that was already derived. No sampled observation or sample rate is produced or exported here; a search for sampleRate/sample_rate found nothing."
         }
       ]
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/page-load-pipeline": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "page-load-pipeline",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T22:07:35.359Z",
+      "worker": "0be84065-8d8a-4748-9f25-751cf1a92e91",
+      "techniques": [
+        {
+          "technique": "script-cost-is-main-thread-time",
+          "verdict": "conformant",
+          "evidence": "src/data/guide/getLocalized.test.ts:166 The test checks that English readers never import a locale content module. The resolver it tests (src/data/guide/getLocalized.ts:98, outside this context) imports each locale/category file on its own, so the locale bundles are split by need and never shipped with the route."
+        },
+        {
+          "technique": "layout-stability-by-reservation",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/TranslationNotice.tsx:16 Toggling between the two whole units keeps the notice's geometry the same, and the notice has no motion. The page that hosts it resolves the unit on the server, so the notice is in the first render rather than inserted above the reader later."
+        },
+        {
+          "technique": "discoverable-critical-resources",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/content/agents-prompts.ts:1 The locale bodies are markdown text strings. A grep for src=, .png, .webp, .svg and image markdown across src/data/guide/locales found no subresource references, so the context declares nothing the look-ahead scanner would need to discover."
+        },
+        {
+          "technique": "priority-is-declared-not-hoped",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/TranslationNotice.tsx:27 The notice's only graphic is an inline SVG icon component, so there is no image request to prioritise. The localized bodies carry no media either (see the grep above)."
+        },
+        {
+          "technique": "render-blocking-budget",
+          "verdict": "not-applicable",
+          "evidence": "src/components/guide/TranslationNotice.tsx:25 The styling uses shared utility classes and adds no stylesheet. A grep for <link, <script and preload over the context's files found nothing, so the context adds no blocking resource."
+        }
+      ]
     }
   }
 }
