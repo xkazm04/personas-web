@@ -1,0 +1,78 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2bc45426-8919-49d3-8be3-3ee2aa14621f",
+ "subject": "self-describing-data-envelopes",
+ "evaluatedAt": "2026-10-25T23:45:42.412535+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "SEO & Social Metadata",
+   "subject": "self-describing-data-envelopes",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/sitemap.ts:13 This context is a set of Next.js metadata-route functions (sitemap, robots, manifest, OG images) that each return a static route list or an ImageResponse; there is no transform pipeline of numeric values whose frame or op history could travel inside the value, and searching the context's directories (and all of src/app) for collate, MetaTensor, applied_operations, torch_function and track_meta found nothing (the only repo-wide 'affine' hits are the French verb in fr.ts locale files)",
+   "techniques": [
+    {
+     "technique": "subclass-the-primitive-not-wrap-it",
+     "verdict": "not-applicable",
+     "evidence": "src/app/opengraph-image.tsx:10 OG images return a JSX ImageResponse; no third-party numeric engine type to subclass or wrap"
+    },
+    {
+     "technique": "global-tracking-kill-switch",
+     "verdict": "not-applicable",
+     "evidence": "src/app/manifest.ts:7 Static manifest object; no metadata tracking to toggle"
+    },
+    {
+     "technique": "batch-vs-instance-copy-policy",
+     "verdict": "not-applicable",
+     "evidence": "src/app/sitemap.ts:35 Builds plain fresh objects per entry; no envelope slots get propagated or copied"
+    },
+    {
+     "technique": "first-input-wins-propagation",
+     "verdict": "not-applicable",
+     "evidence": "src/app/sitemap.ts:17 No binary operations on envelopes; lastModified is computed from git history, not inherited from an operand"
+    },
+    {
+     "technique": "intersect-then-collate",
+     "verdict": "not-applicable",
+     "evidence": "src/app/robots.ts:7 No step that stacks items with mismatched metadata keys into a batch"
+    },
+    {
+     "technique": "sidecar-as-export-format",
+     "verdict": "not-applicable",
+     "evidence": "src/app/sitemap.ts:1 'Metadata' here means SEO page metadata, not sibling-key metadata stored next to a value; there is nothing to migrate between the two layouts"
+    }
+   ],
+   "absenceTerms": [
+    "collate",
+    "MetaTensor",
+    "applied_operations",
+    "torch_function",
+    "track_meta"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T23:45:42.412535+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "self-describing-data-envelopes"
+   ],
+   "techniques": [
+    "batch-vs-instance-copy-policy",
+    "first-input-wins-propagation",
+    "global-tracking-kill-switch",
+    "intersect-then-collate",
+    "sidecar-as-export-format",
+    "subclass-the-primitive-not-wrap-it"
+   ],
+   "deviations": 0,
+   "context": "SEO & Social Metadata",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

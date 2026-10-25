@@ -9646,6 +9646,47 @@
           "evidence": "src/components/dashboard/views/leaderboard/index.tsx:47 The gap to the leader is only shown visually, as a radar overlay. There is no computed gap list (distance × weight, effort), no ranked order, and no top gap phrased as an action. Separately, persona ties are broken by display name rather than stable id (leaderboardRank.ts:24)."
         }
       ]
+    },
+    "Infrastructure & Telemetry/SEO & Social Metadata/self-describing-data-envelopes": {
+      "context": "SEO & Social Metadata",
+      "subject": "self-describing-data-envelopes",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T23:45:42.412Z",
+      "worker": "2bc45426-8919-49d3-8be3-3ee2aa14621f",
+      "techniques": [
+        {
+          "technique": "subclass-the-primitive-not-wrap-it",
+          "verdict": "not-applicable",
+          "evidence": "src/app/opengraph-image.tsx:10 OG images return a JSX ImageResponse; no third-party numeric engine type to subclass or wrap"
+        },
+        {
+          "technique": "global-tracking-kill-switch",
+          "verdict": "not-applicable",
+          "evidence": "src/app/manifest.ts:7 Static manifest object; no metadata tracking to toggle"
+        },
+        {
+          "technique": "batch-vs-instance-copy-policy",
+          "verdict": "not-applicable",
+          "evidence": "src/app/sitemap.ts:35 Builds plain fresh objects per entry; no envelope slots get propagated or copied"
+        },
+        {
+          "technique": "first-input-wins-propagation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/sitemap.ts:17 No binary operations on envelopes; lastModified is computed from git history, not inherited from an operand"
+        },
+        {
+          "technique": "intersect-then-collate",
+          "verdict": "not-applicable",
+          "evidence": "src/app/robots.ts:7 No step that stacks items with mismatched metadata keys into a batch"
+        },
+        {
+          "technique": "sidecar-as-export-format",
+          "verdict": "not-applicable",
+          "evidence": "src/app/sitemap.ts:1 'Metadata' here means SEO page metadata, not sibling-key metadata stored next to a value; there is nothing to migrate between the two layouts"
+        }
+      ]
     }
   }
 }
