@@ -9804,6 +9804,27 @@
           "evidence": "src/lib/analytics.ts:148 Every outbound record here is copied or constructed (error events, fixed-attribute metrics); there is no generated/composed artifact for an exclusion list to bound."
         }
       ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/tenant-scoped-agent-runtime": {
+      "context": "Dashboard Home Overview",
+      "subject": "tenant-scoped-agent-runtime",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:16:58.230Z",
+      "worker": "c57cb658-47a8-490d-b689-96e78fb102fa",
+      "techniques": [
+        {
+          "technique": "task-local-tenant-scope",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:25 Client hook: data source is chosen by the demo flag. There is no per-turn tenant identity and no process environment to scope."
+        },
+        {
+          "technique": "resolve-handles-at-call-time",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 Each read is a stateless call to the shared api client, so no store handle is bound across tenants."
+        }
+      ]
     }
   }
 }

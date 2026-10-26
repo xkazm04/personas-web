@@ -8159,7 +8159,11 @@
           "revision": 7,
           "changedAt": "2026-10-10",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:25 The context is browser-side React cards and hooks that read demo fixtures or call the remote orchestrator API per component (useOpenAlertCount picks between demo data and one `api` fetch), so no long-lived agent process here serves several tenant configurations; a search of src/components/dashboard for AsyncLocalStorage, multiplex, contextvars and runWithTenant found 0 hits.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:e25b75ee0d820e2b",
+          "evaluatedRevision": 7
         },
         {
           "subject": "hitl-approval",
