@@ -3563,8 +3563,12 @@
           "revision": 5,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "not-applicable",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/sections/agents-chat-split/ChatWindow.tsx:42 The 'transcript' is a marketing animation: a story clock reveals hardcoded scenario lines with owned pending copy. I searched this directory for textarea, onSubmit, composer, EventSource, fetch(, markdown, dangerouslySetInnerHTML, scrollTo, scrollTop, sanitize and stream and got zero hits, so there is no model output, no user input and no scroll container for the subject to govern.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:5b4e7d399a4d924e",
+          "evaluatedRevision": 5
         }
       ],
       "governance": "governed"
@@ -7198,8 +7202,12 @@
           "revision": 5,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "deviation",
+          "priorNotApplicable": 2,
+          "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:149 The execution output viewer follows the tail correctly and pauses following when the user scrolls up, but its jump-to-latest pill shows only the static text 'Jump to latest' and no count of unseen output, and it keys lines by position in a window that slides at 500 lines, so two named failures of the subject apply.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:5b4e7d399a4d924e",
+          "evaluatedRevision": 5
         },
         {
           "subject": "test-harness",

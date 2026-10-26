@@ -1,0 +1,132 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2eeabd35-93aa-4a63-8a00-7fedc2a8a10b",
+ "subject": "chat-transcript",
+ "evaluatedAt": "2026-10-26T00:57:38.717293+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "chat-transcript",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:149 The execution output viewer follows the tail correctly and pauses following when the user scrolls up, but its jump-to-latest pill shows only the static text 'Jump to latest' and no count of unseen output, and it keys lines by position in a window that slides at 500 lines, so two named failures of the subject apply.",
+   "techniques": [
+    {
+     "technique": "transcript-scroll",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:149 Pin-to-tail with a forgiving 24px threshold (line 55) and the user override are done right. The disengaged affordance carries no count of what arrived since the user scrolled up, which the technique requires ('a visible way back with a count')."
+    },
+    {
+     "technique": "turn-model",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:123 Rows are keyed by index, and useExecutionPolling keeps output as [...prev, ...new].slice(-500). Past 500 lines every poll shifts every key, which is the 'keyed by index changes identity whenever history is windowed' failure: selection and anchoring drift. The dropped head is not loadable and nothing says it was dropped. Failed runs do render as failures (errorMessage block in ExecutionDetailModal.tsx:91-97)."
+    },
+    {
+     "technique": "turn-metadata",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:99 Cost and duration come from the poll and print as bare 'Cost'/'Duration', with no predicate and no expansion. The same modal also shows a second Cost/Duration pair from the list record (ExecutionDetailModal.tsx:72,77), so two sources can disagree with no arbiter. The strip is also not limited to settlement."
+    },
+    {
+     "technique": "markdown-and-code-rendering",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:125 Agent stdout renders only as escaped React text nodes in a mono block, with no markdown or HTML interpretation, so the sanitizing-door rule holds. Caveat: there is no copy affordance on the stdout block."
+    },
+    {
+     "technique": "inline-structured-rows",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:122 Output is a flat string[] of stdout lines. No typed tool, approval or artifact rows reach this view."
+    },
+    {
+     "technique": "composer-turn-queue",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/executions-page/ExecutionOutput.tsx:27 Read-only viewer fed by polling. There is no composer or submit path in this context."
+    },
+    {
+     "technique": "virtual-filtered-channel",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/executions/useExecutionsList.ts:50 The only filter is a status filter over the executions table, not over a transcript channel shown in several panes."
+    }
+   ],
+   "registryProposal": "The subject's precondition is two or more authors alternating turns, but it was matched here (on 'streaming'/'history') to a single-run agent stdout viewer. transcript-scroll and the identity rules clearly transfer to such run-log viewers, while composer, narration-collapse and structured-rows do not. The golden path could say explicitly whether a single machine turn's live log falls under this subject or under streaming-output."
+  },
+  {
+   "context": "Agent Playground & Multi-Agent Chat",
+   "subject": "chat-transcript",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-chat-split/ChatWindow.tsx:42 The 'transcript' is a marketing animation: a story clock reveals hardcoded scenario lines with owned pending copy. I searched this directory for textarea, onSubmit, composer, EventSource, fetch(, markdown, dangerouslySetInnerHTML, scrollTo, scrollTop, sanitize and stream and got zero hits, so there is no model output, no user input and no scroll container for the subject to govern.",
+   "techniques": [
+    {
+     "technique": "composer-turn-queue",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-chat-split/index.tsx:28 Lines are driven by a timer-based story clock, not by user submissions. There is no composer."
+    },
+    {
+     "technique": "markdown-and-code-rendering",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-chat-split/Bubble.tsx:35 Bubble text is owned copy from src/i18n/pending/howSections.ts rendered as plain text. No model-authored markup."
+    },
+    {
+     "technique": "transcript-scroll",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-chat-split/ChatWindow.tsx:96 An overflow-hidden column-reverse box with no user scrolling, so there is no pin or override contract to keep."
+    },
+    {
+     "technique": "turn-model",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:34 Turns are static scripted lines (time and tone) that are never fetched, streamed, regenerated or reconciled."
+    }
+   ],
+   "absenceTerms": [
+    "textarea",
+    "EventSource",
+    "fetch(",
+    "dangerouslySetInnerHTML",
+    "scrollTop"
+   ],
+   "registryProposal": "Scripted or illustrative depictions of a chat (marketing animations with hardcoded lines) match this subject lexically on 'chat'/'window'/'live'. The golden path could name them as out of scope so they stop being mapped."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-26T00:57:38.717293+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "chat-transcript"
+   ],
+   "techniques": [
+    "composer-turn-queue",
+    "inline-structured-rows",
+    "markdown-and-code-rendering",
+    "transcript-scroll",
+    "turn-metadata",
+    "turn-model",
+    "virtual-filtered-channel"
+   ],
+   "deviations": 1,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-26T00:57:38.717293+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "chat-transcript"
+   ],
+   "techniques": [
+    "composer-turn-queue",
+    "markdown-and-code-rendering",
+    "transcript-scroll",
+    "turn-model"
+   ],
+   "deviations": 0,
+   "context": "Agent Playground & Multi-Agent Chat",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
