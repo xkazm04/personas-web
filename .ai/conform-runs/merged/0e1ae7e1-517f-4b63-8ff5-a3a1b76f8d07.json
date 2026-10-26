@@ -1,0 +1,94 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
+ "subject": "agent-cli-transport",
+ "evaluatedAt": "2026-10-26T00:46:42.393712+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The context's only 'envelope' is a signed remote-command test vector, and its panels read client stores. A search of src/, scripts/ and fixtures/ for claude -p, codex exec, dangerously-skip-permissions, permission-mode, ANTHROPIC_API_KEY and --resume found nothing. The only child_process uses in scripts/ spawn git, never an agent CLI, so nothing here spawns a coding-agent CLI as a model transport.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  {
+   "context": "Agent Playground & Multi-Agent Chat",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 The chat is a scripted marketing animation built from timed copy lines, with no spawned process and no model call. A search of the context and the repo for child_process, claude -p, codex exec, permission-mode and ANTHROPIC_API_KEY found no hit in this directory, so the agent-CLI transport precondition does not hold.",
+   "techniques": [],
+   "absenceTerms": [
+    "child_process",
+    "claude -p",
+    "codex exec",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:11 Health checks, including the mock 'in_gemini' install row, are demo fixtures that settle in-session, and nothing probes a real agent binary. A search of src/ for claude -p, codex exec, dangerously-skip-permissions, permission-mode and ANTHROPIC_API_KEY found nothing. The only child_process in src/lib (git-dates.ts) runs git, so no agent-CLI transport exists to judge.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-26T00:46:42.393712+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-26T00:46:42.393712+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Playground & Multi-Agent Chat",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-10-26T00:46:42.393712+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "System Health Panel",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

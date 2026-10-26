@@ -9910,6 +9910,36 @@
           "evidence": "src/app/playground/PromptSelector.tsx:24 The prompt cards are a single, independent choice. There is no step sequence, so there is no position or remaining count to communicate."
         }
       ]
+    },
+    "Agent Operations Dashboard/Agents (Personas) Management/agent-cli-transport": {
+      "context": "Agents (Personas) Management",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:46:42.393Z",
+      "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/agent-cli-transport": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:46:42.393Z",
+      "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/System Health Panel/agent-cli-transport": {
+      "context": "System Health Panel",
+      "subject": "agent-cli-transport",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:46:42.393Z",
+      "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
+      "techniques": []
     }
   }
 }
