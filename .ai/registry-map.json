@@ -7603,8 +7603,12 @@
           "revision": 3,
           "changedAt": "2026-09-30",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:32 The Director roster scores, ranks and flags AI agents (DirectorRosterEntry rows are built from FLEET = MOCK_PERSONAS.map(...) in src/lib/mock-dashboard-data.ts:34), not identifiable humans, and a case-insensitive grep of src/components/dashboard/views/director/ for author|reviewer|assignee|employee|contributor|engineer|userId|userName|email found no hits, so the subject's precondition (person-level data about people who produced engineering artifacts) does not hold.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:cb03bdda55f3119d",
+          "evaluatedRevision": 3
         },
         {
           "subject": "eval-harness",

@@ -1,0 +1,66 @@
+{
+ "schema": "conform-run/1",
+ "worker": "99f97ca7-6705-4015-b29b-d53a001b35e3",
+ "subject": "people-analytics-ethics",
+ "evaluatedAt": "2026-10-26T01:00:16.836408+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Director Coaching",
+   "subject": "people-analytics-ethics",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:32 The Director roster scores, ranks and flags AI agents (DirectorRosterEntry rows are built from FLEET = MOCK_PERSONAS.map(...) in src/lib/mock-dashboard-data.ts:34), not identifiable humans, and a case-insensitive grep of src/components/dashboard/views/director/ for author|reviewer|assignee|employee|contributor|engineer|userId|userName|email found no hits, so the subject's precondition (person-level data about people who produced engineering artifacts) does not hold.",
+   "techniques": [
+    {
+     "technique": "risk-framing-anonymization",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:19 Deficit flags (low/declining/stale) exist, but they attach to agent personas, not to people, so no name of a person ever gets a risk framing."
+    },
+    {
+     "technique": "naming-population-floor",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:28 The cohort is five agents. A naming floor only guards against identifying people."
+    },
+    {
+     "technique": "producer-enforced-suppression",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/director/useDirectorData.ts:21 The producer is a demo-only mock snapshot of agent data. No person-level identity needs suppressing."
+    },
+    {
+     "technique": "aggregate-vs-individual-split",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/director/index.tsx:25 The per-row view is per agent, not per person. There's no org-vs-self split between humans."
+    }
+   ],
+   "absenceTerms": [
+    "author",
+    "assignee",
+    "employee",
+    "contributor"
+   ],
+   "registryProposal": "The subject's use_when triggers ('per-person breakdown', 'ranking') fire on any table that ranks named entities with low/declining flags. It would help if the golden path said explicitly that it doesn't cover non-human subjects (AI agents, services) unless their scores can be traced back to a human operator or owner."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-26T01:00:16.836408+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "people-analytics-ethics"
+   ],
+   "techniques": [
+    "aggregate-vs-individual-split",
+    "naming-population-floor",
+    "producer-enforced-suppression",
+    "risk-framing-anonymization"
+   ],
+   "deviations": 0,
+   "context": "Director Coaching",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

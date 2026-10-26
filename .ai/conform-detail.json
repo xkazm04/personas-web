@@ -3384,48 +3384,45 @@
       "context": "Director Coaching",
       "subject": "people-analytics-ethics",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-15",
-      "evaluatedTs": "2026-10-15T00:11:23.751Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T01:00:16.836Z",
+      "worker": "99f97ca7-6705-4015-b29b-d53a001b35e3",
       "techniques": [
-        {
-          "technique": "naming-population-floor",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:69 Roster membership is an agent, so a distinct-person naming floor has no human cohort to test."
-        },
-        {
-          "technique": "aggregate-vs-individual-split",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/director/director-page/ScoreDistributionCard.tsx:29 The histogram and the filtered table both describe agents in one coaching scope, not an org aggregate beside a person's own rows."
-        },
         {
           "technique": "risk-framing-anonymization",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:75 A low verdict flags an agent roster entry; it is not a liability claim about a person."
+          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:19 Deficit flags (low/declining/stale) exist, but they attach to agent personas, not to people, so no name of a person ever gets a risk framing."
         },
         {
-          "technique": "contribution-eligibility-floors",
+          "technique": "naming-population-floor",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:17 Fourteen days marks an agent review stale for a chip; it does not decide whether a human enters a ranking."
-        },
-        {
-          "technique": "private-view-separation",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:21 One director snapshot feeds the command center; identity is not taken from the viewer as a self-only scope."
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:28 The cohort is five agents. A naming floor only guards against identifying people."
         },
         {
           "technique": "producer-enforced-suppression",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:110 The identity column is the agent, so there is no person-level payload a producer floor would withhold."
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:21 The producer is a demo-only mock snapshot of agent data. No person-level identity needs suppressing."
+        },
+        {
+          "technique": "aggregate-vs-individual-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/index.tsx:25 The per-row view is per agent, not per person. There's no org-vs-self split between humans."
+        },
+        {
+          "technique": "contribution-eligibility-floors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/director-page/directorMeta.ts:17 Fourteen days marks an agent review stale for a chip; it does not decide whether a human enters a ranking.",
+          "carriedFrom": "2026-10-15"
+        },
+        {
+          "technique": "private-view-separation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:21 One director snapshot feeds the command center; identity is not taken from the viewer as a self-only scope.",
+          "carriedFrom": "2026-10-15"
         }
       ],
-      "registryProposal": "The subject defines its party as an identifiable human and carves out product telemetry, but it never says a named, scored, deficit-flagged product agent is out of scope. Director Coaching is that scoreboard for agents. A when-not-to-use line for software agents would stop human floors being applied to agent operations.",
-      "withdrawn": {
-        "worker": "4982dbba-2b8c-4bed-9766-622ed3da53fb",
-        "state": "not-applicable",
-        "at": "2026-10-15T00:11:51.916537+00:00",
-        "reason": "reviewer (sonnet): The cited anchor src/components/dashboard/views/director/index.tsx:25 is an import line, so it does not show the 'per-agent verdict history' claim; that wording sits in the doc comment a few lines below, and the absence of identifiable people was not shown at the anchor."
-      }
+      "registryProposal": "The subject's use_when triggers ('per-person breakdown', 'ranking') fire on any table that ranks named entities with low/declining flags. It would help if the golden path said explicitly that it doesn't cover non-human subjects (AI agents, services) unless their scores can be traced back to a human operator or owner."
     },
     "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/people-analytics-ethics": {
       "context": "Dashboard Shell, Chrome & Realtime",
