@@ -1,0 +1,65 @@
+{
+ "schema": "conform-run/1",
+ "worker": "32fe52e2-76ec-4646-a854-2e30c4b1b732",
+ "subject": "wizard-flows",
+ "evaluatedAt": "2026-10-26T00:44:03.985567+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Visual Flow Composer & Playground Page",
+   "subject": "wizard-flows",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/playground/page.tsx:17 The playground holds one selection index that drives a scripted terminal replay, and the flow composer is a free-form canvas editor (nodes and wires, autosaved to the URL hash) with no ordered steps, no dependent questions and no final commit; a case-insensitive search of src/app/playground and src/components/flow-composer found no 'step' token at all, and the wizard identifiers below have no hits in src/components or src/app/playground, so the staged-commitment precondition of wizard-flows does not hold here.",
+   "techniques": [
+    {
+     "technique": "step-state-model",
+     "verdict": "not-applicable",
+     "evidence": "src/components/flow-composer/use-flow-composer.ts:24 Composer state is a node/wire graph edited freely on one canvas. There is no step position, visited set or step registry to model."
+    },
+    {
+     "technique": "snapshot-and-resume",
+     "verdict": "not-applicable",
+     "evidence": "src/components/flow-composer/use-flow-composer.ts:59 The canvas persists to the URL hash as a shareable document, not as a draft snapshot of a multi-step flow. Nothing has side effects, so no wizard resume tier applies."
+    },
+    {
+     "technique": "commit-boundary",
+     "verdict": "not-applicable",
+     "evidence": "src/components/flow-composer/index.tsx:176 The CTA is a marketing link that shows counts. There is no review step and no apply action that turns a draft into a real resource."
+    },
+    {
+     "technique": "progress-communication",
+     "verdict": "not-applicable",
+     "evidence": "src/app/playground/PromptSelector.tsx:24 The prompt cards are a single, independent choice. There is no step sequence, so there is no position or remaining count to communicate."
+    }
+   ],
+   "absenceTerms": [
+    "prevStep",
+    "resumeDraft",
+    "goToStep",
+    "stepRegistry"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-26T00:44:03.985567+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "wizard-flows"
+   ],
+   "techniques": [
+    "commit-boundary",
+    "progress-communication",
+    "snapshot-and-resume",
+    "step-state-model"
+   ],
+   "deviations": 0,
+   "context": "Visual Flow Composer & Playground Page",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

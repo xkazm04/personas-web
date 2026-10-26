@@ -9879,6 +9879,37 @@
         }
       ],
       "registryProposal": "The batching-and-quota technique could name the case where the client SDK already buffers metrics, as Sentry's metrics API does. Such a buffer saves network calls, but each item still carries its own timestamp, so it is not a session summary. Seats might otherwise read an SDK-level buffer as conformance."
+    },
+    "Interactive Demos & Playground/Visual Flow Composer & Playground Page/wizard-flows": {
+      "context": "Visual Flow Composer & Playground Page",
+      "subject": "wizard-flows",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:44:03.985Z",
+      "worker": "32fe52e2-76ec-4646-a854-2e30c4b1b732",
+      "techniques": [
+        {
+          "technique": "step-state-model",
+          "verdict": "not-applicable",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:24 Composer state is a node/wire graph edited freely on one canvas. There is no step position, visited set or step registry to model."
+        },
+        {
+          "technique": "snapshot-and-resume",
+          "verdict": "not-applicable",
+          "evidence": "src/components/flow-composer/use-flow-composer.ts:59 The canvas persists to the URL hash as a shareable document, not as a draft snapshot of a multi-step flow. Nothing has side effects, so no wizard resume tier applies."
+        },
+        {
+          "technique": "commit-boundary",
+          "verdict": "not-applicable",
+          "evidence": "src/components/flow-composer/index.tsx:176 The CTA is a marketing link that shows counts. There is no review step and no apply action that turns a draft into a real resource."
+        },
+        {
+          "technique": "progress-communication",
+          "verdict": "not-applicable",
+          "evidence": "src/app/playground/PromptSelector.tsx:24 The prompt cards are a single, independent choice. There is no step sequence, so there is no position or remaining count to communicate."
+        }
+      ]
     }
   }
 }

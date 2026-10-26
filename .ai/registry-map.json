@@ -2682,7 +2682,11 @@
           "revision": 4,
           "changedAt": "2026-08-22",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/playground/page.tsx:17 The playground holds one selection index that drives a scripted terminal replay, and the flow composer is a free-form canvas editor (nodes and wires, autosaved to the URL hash) with no ordered steps, no dependent questions and no final commit; a case-insensitive search of src/app/playground and src/components/flow-composer found no 'step' token at all, and the wizard identifiers below have no hits in src/components or src/app/playground, so the staged-commitment precondition of wizard-flows does not hold here.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:e0fac678b7164451",
+          "evaluatedRevision": 4
         },
         {
           "subject": "admission-queue",
