@@ -9887,7 +9887,11 @@
           "revision": 1,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/sentry-pii.ts:557 The beforeSend hook only strips the fragment from event.request.url, so the query string and any identifier-shaped path segments leave intact, and request.query_string / request.cookies / transaction have no disposition anywhere. The inventory at the scrubber does not name these fields, so the gap is invisible to the next contributor.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:291ed63388cf9602",
+          "evaluatedRevision": 1
         },
         {
           "subject": "settings",

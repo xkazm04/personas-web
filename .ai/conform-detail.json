@@ -9758,6 +9758,52 @@
           "evidence": "src/lib/analytics.ts:24 No upstream origin is proxied to a client. Analytics calls the SDK in-process."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/telemetry-pii-redaction": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "telemetry-pii-redaction",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:13:24.128Z",
+      "worker": "2297a5dd-89a5-4c2b-93f1-30e3099ee86b",
+      "techniques": [
+        {
+          "technique": "emit-site-inventory",
+          "verdict": "deviation",
+          "evidence": "src/lib/sentry-pii.ts:557 A partial inventory lives beside the redactor (header lines 4-11, the frame note at 565-574 with a stated pass reason for function/lineno/colno/in_app). But it lists only what is scrubbed, not every transport field: request.url query/path, request.query_string, cookies, transaction and exception.type have no scrubbed/dropped/passed disposition, and request.url's query actually passes raw."
+        },
+        {
+          "technique": "denylist-plus-pattern-pass",
+          "verdict": "deviation",
+          "evidence": "src/lib/sentry-pii.ts:514 Both passes exist, the pattern order is numbered (lines 257-271), there is one exported set, and domain vs generic keys are split by a comment. But the key match is exact and case-sensitive, with no credential substring markers (password/token/secret/authorization; a grep found none), so extra: { accessToken: 'abc...' } survives with only a pattern pass that matches no token shape. There is also no digit-run/token pattern, and request.url is not reduced to scheme+host."
+        },
+        {
+          "technique": "correlation-preserving-redaction",
+          "verdict": "conformant",
+          "evidence": "src/lib/sentry-pii.ts:223 Keyed SHA-256 (CSPRNG key, never sent), truncated to 6 bytes, tagged [id:]. The per-tab/process key is stated as a deliberate choice (lines 182-186). user.id is pseudonymised whole. Page-view routes collapse UUID segments and then run scrubPii (PageViewTracker.tsx:14 -> normalizePathname). Minor gap: no collision budget is stated next to MARKER_BYTES."
+        },
+        {
+          "technique": "redact-at-the-cap",
+          "verdict": "conformant",
+          "evidence": "src/lib/sentry-pii.ts:487 Depth/breadth/node-budget/string caps all drop, with distinct markers (redacted-depth/-breadth/-budget/-cycle/truncated). There is a path-local cycle guard. safeScrubEvent returns a payload-free skeleton tagged scrub_failed on throw. Keyed removals are silent (no marker), and exotic objects are walked via Object.entries rather than dropped with a kind marker; both are minor."
+        },
+        {
+          "technique": "hook-coverage-gaps",
+          "verdict": "conformant",
+          "evidence": "src/lib/sentry-pii.ts:712 One shared baseSentryConfig (sendDefaultPii false, tracesSampleRate 0, fail-closed hooks) for all runtimes. Replays are set to 0 on the client. The captureExceptionScrubbed wrapper is enforced by no-raw-sentry-capture.test.ts. The gap prose is at the wrapper, but it omits request.url query and the metrics channel (Sentry.metrics attributes bypass beforeSend; analytics.ts builds them as fixed allowlists)."
+        },
+        {
+          "technique": "redaction-invariants-as-tests",
+          "verdict": "conformant",
+          "evidence": "src/lib/sentry-pii.test.ts:152 Absence asserted on JSON.stringify output. There are per-cap cases (depth, cycle, DAG, breadth, node budget), fail-closed cases, clean-survival cases (line 85; location suite line 136), and the wrapper is exercised in sentry-pii-location.test.ts. There is no hostile record covering request.url query, which is why that leak is untested."
+        },
+        {
+          "technique": "exclusion-bounds-reads-not-output",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:148 Every outbound record here is copied or constructed (error events, fixed-attribute metrics); there is no generated/composed artifact for an exclusion list to bound."
+        }
+      ]
     }
   }
 }
