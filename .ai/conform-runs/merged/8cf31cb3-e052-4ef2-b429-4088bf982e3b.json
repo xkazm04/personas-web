@@ -1,0 +1,64 @@
+{
+ "schema": "conform-run/1",
+ "worker": "8cf31cb3-e052-4ef2-b429-4088bf982e3b",
+ "subject": "stream-proxy-hop",
+ "evaluatedAt": "2026-10-25T23:59:04.864214+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Error Monitoring & Analytics",
+   "subject": "stream-proxy-hop",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/sentry.ts:5 This context has no long-lived streaming hop: Sentry events go straight to the DSN, with no `tunnel` or proxy route. A search of the context's files for EventSource, text/event-stream, keep-alive, heartbeat, getReader and ReadableStream found nothing. The only hits in src/lib were in other contexts' tests and server helpers, and the real SSE hops live in src/app/api/*/stream/route.ts, which this context does not own.",
+   "techniques": [
+    {
+     "technique": "idle-heartbeat-injection",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/sentry.ts:5 No proxied long-lived stream to keep warm; the Sentry transport posts directly to the DSN."
+    },
+    {
+     "technique": "abort-versus-unreachable",
+     "verdict": "not-applicable",
+     "evidence": "src/instrumentation.ts:26 This is generic request-error capture, not a stream hop's abort/outage split. The abort/502 split lives in the api stream routes, which this context does not own."
+    },
+    {
+     "technique": "reconnect-storm-hygiene",
+     "verdict": "not-applicable",
+     "evidence": "src/components/PageViewTracker.tsx:17 Client telemetry is fire-and-forget metric counts, with no socket or reconnect loop."
+    },
+    {
+     "technique": "origin-non-disclosure",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/analytics.ts:24 No upstream origin is proxied to a client. Analytics calls the SDK in-process."
+    }
+   ],
+   "absenceTerms": [
+    "EventSource",
+    "keep-alive",
+    "upstreamBody"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-25T23:59:04.864214+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "stream-proxy-hop"
+   ],
+   "techniques": [
+    "abort-versus-unreachable",
+    "idle-heartbeat-injection",
+    "origin-non-disclosure",
+    "reconnect-storm-hygiene"
+   ],
+   "deviations": 0,
+   "context": "Error Monitoring & Analytics",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

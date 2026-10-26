@@ -9729,6 +9729,37 @@
         }
       ],
       "registryProposal": "The registry-map matched this subject to a Next.js API/voting context. The subject should state its precondition (the repo implements an embeddable guest-language runtime) in a form the matcher can use to keep it off web-application contexts."
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/stream-proxy-hop": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "stream-proxy-hop",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-25",
+      "evaluatedTs": "2026-10-25T23:59:04.864Z",
+      "worker": "8cf31cb3-e052-4ef2-b429-4088bf982e3b",
+      "techniques": [
+        {
+          "technique": "idle-heartbeat-injection",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sentry.ts:5 No proxied long-lived stream to keep warm; the Sentry transport posts directly to the DSN."
+        },
+        {
+          "technique": "abort-versus-unreachable",
+          "verdict": "not-applicable",
+          "evidence": "src/instrumentation.ts:26 This is generic request-error capture, not a stream hop's abort/outage split. The abort/502 split lives in the api stream routes, which this context does not own."
+        },
+        {
+          "technique": "reconnect-storm-hygiene",
+          "verdict": "not-applicable",
+          "evidence": "src/components/PageViewTracker.tsx:17 Client telemetry is fire-and-forget metric counts, with no socket or reconnect loop."
+        },
+        {
+          "technique": "origin-non-disclosure",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/analytics.ts:24 No upstream origin is proxied to a client. Analytics calls the SDK in-process."
+        }
+      ]
     }
   }
 }

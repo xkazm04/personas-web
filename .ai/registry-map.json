@@ -10020,7 +10020,11 @@
           "revision": 7,
           "changedAt": "2026-10-08",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/sentry.ts:5 This context has no long-lived streaming hop: Sentry events go straight to the DSN, with no `tunnel` or proxy route. A search of the context's files for EventSource, text/event-stream, keep-alive, heartbeat, getReader and ReadableStream found nothing. The only hits in src/lib were in other contexts' tests and server helpers, and the real SSE hops live in src/app/api/*/stream/route.ts, which this context does not own.",
+          "evaluatedAt": "2026-10-25",
+          "evaluatedAgainst": "sha256-b2:35d2934ae538833a",
+          "evaluatedRevision": 7
         },
         {
           "subject": "delivery-analytics",
