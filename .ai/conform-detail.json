@@ -6306,62 +6306,60 @@
       "context": "Event Bus & Stream Monitoring",
       "subject": "streaming-output",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-18",
-      "evaluatedTs": "2026-10-18T23:42:49.827Z",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:07:39.881Z",
+      "worker": "204d31c4-32e0-4095-ab02-bbbc560e2dfd",
       "techniques": [
         {
           "technique": "buffering-and-backpressure",
           "verdict": "deviation",
-          "evidence": "src/stores/eventStore.ts:26 Event buffer bounds only by entry count without a byte budget, and evicts from the tail without honest truncation accounting."
-        },
-        {
-          "technique": "cancellation-and-finalization",
-          "verdict": "deviation",
-          "evidence": "src/app/api/events/stream/route.ts:127 The route terminates on HTTP abort, but the stream monitoring surface provides no run-scoped finalization path or outcome taxonomy."
-        },
-        {
-          "technique": "emit-behind-the-revision-window",
-          "verdict": "not-applicable",
-          "evidence": "src/app/api/events/stream/route.ts:132 Event bus items are immutable, append-only facts with no producer retroactively revising emitted events."
-        },
-        {
-          "technique": "mid-turn-steering",
-          "verdict": "not-applicable",
-          "evidence": "src/app/api/events/stream/route.ts:46 The global event stream is a read-only telemetry broadcast with no in-flight conversational turns to steer."
-        },
-        {
-          "technique": "phase-derivation",
-          "verdict": "deviation",
-          "evidence": "src/components/dashboard/EventBusStats.tsx:124 Connection status is coarse transport state ('connected', 'reconnecting', 'polling') rather than a human-readable phase derived from event shapes."
-        },
-        {
-          "technique": "render-throttling",
-          "verdict": "deviation",
-          "evidence": "src/components/dashboard/views/events/index.tsx:43 The view mounts the event stream which appends directly to the store on each wire arrival, triggering renders per event rather than coalescing on a perceptual cadence."
-        },
-        {
-          "technique": "run-attribution",
-          "verdict": "deviation",
-          "evidence": "src/stores/eventStore.ts:325 The stream deduplicates solely by event ID into a single shared global log without scoping or gating by run identity."
-        },
-        {
-          "technique": "sink-reversibility-decides-the-commit",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/EventsListPanel.tsx:35 The monitoring surface is a single re-renderable React UI table with no dual-sink commit split between live view and append-only log."
+          "evidence": "src/app/api/events/stream/route.ts:142 The read loop in start() ignores desiredSize, which is the 'unbounded intermediate queue' the technique forbids; a pull() source would keep backpressure. The client ring (eventStore.ts:26/341) has an entry budget but no byte budget, and its head eviction records no count or notice."
         },
         {
           "technique": "stream-parsing",
           "verdict": "deviation",
-          "evidence": "src/hooks/useEventStream.ts:121 Malformed frames and unparseable events are dropped silently rather than sampled, counted into records, or surfaced as diagnostic events."
+          "evidence": "src/hooks/useEventStream.ts:117 EventSource does the framing and personaEventWire.ts parses a typed, field-validated payload, which is good. But only the named 'event' type is subscribed, so unknown event types are dropped instead of forwarded, and off-contract frames are thrown away at :118-121 with no counter, sample or diagnostic event."
+        },
+        {
+          "technique": "render-throttling",
+          "verdict": "deviation",
+          "evidence": "src/hooks/useEventStream.ts:121 Every SSE message calls appendEvent straight away, a separate zustand set and a new array each time (eventStore.ts:333-348). The list, the bus and the counts re-render once per arrival; there is no coalesced flush on a set cadence."
+        },
+        {
+          "technique": "cancellation-and-finalization",
+          "verdict": "conformant",
+          "evidence": "src/app/api/events/stream/route.ts:137 A client abort cancels the upstream reader. Abort, upstream done and upstream error all reach the one finally block (:147-155), which clears the heartbeat, removes the listener and closes the controller exactly once. An upstream error closes the stream cleanly, but EventSource treats any close as an error and reconnects, so the client still shows 'reconnecting' rather than claiming success."
+        },
+        {
+          "technique": "run-attribution",
+          "verdict": "not-applicable",
+          "evidence": "src/stores/eventStore.ts:334 An event-bus tail has no runs to tell apart; events are keyed and deduplicated by id. The consumer-lifecycle half is covered by the per-effect 'disposed' flag and closing the previous EventSource before reconnecting (useEventStream.ts:103-110)."
+        },
+        {
+          "technique": "mid-turn-steering",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/events/index.tsx:49 The only user input on this page publishes a fresh bus event. Nothing interjects into an in-flight turn."
+        },
+        {
+          "technique": "sink-reversibility-decides-the-commit",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/EventsListPanel.tsx:31 The only sink is a React table that is re-rendered with rows repainted in place, so there is no append-only surface whose commit has to be decided."
+        },
+        {
+          "technique": "emit-behind-the-revision-window",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:132 Event bus items are immutable, append-only facts with no producer retroactively revising emitted events.",
+          "carriedFrom": "2026-10-18"
+        },
+        {
+          "technique": "phase-derivation",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/EventBusStats.tsx:124 Connection status is coarse transport state ('connected', 'reconnecting', 'polling') rather than a human-readable phase derived from event shapes.",
+          "carriedFrom": "2026-10-18"
         }
       ],
-      "withdrawn": {
-        "worker": "7657794c-5b2f-4054-a34f-851b65d1168a",
-        "state": "deviation",
-        "at": "2026-10-18T23:43:15.455742+00:00",
-        "reason": "reviewer (sonnet): EventsListPanel.tsx:142 is only a DataTable render and does not consume the SSE stream, and the 'immutable, append-only events' claim at route.ts:132 (a plain enqueue) is contradicted by eventStore.ts, which rewrites event status for retry, discard and verdict overlays. The route.ts:46 not-applicabl"
-      }
+      "registryProposal": "This subject assumes a 'run' with a terminal outcome. A perpetual monitoring tail (an event-bus SSE feed) has no run identity, no phase and no settled record, yet buffering, parsing and throttling still apply in full. The golden path could name 'perpetual live tail' as a variant in which run-attribution, phase-derivation and finalization outcomes reduce to connection-lifecycle concerns."
     },
     "Observability & Event Monitoring/Execution History & Streaming/streaming-output": {
       "context": "Execution History & Streaming",

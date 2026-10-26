@@ -7982,7 +7982,11 @@
           "revision": 8,
           "changedAt": "2026-09-17",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/api/events/stream/route.ts:142 The SSE proxy drains the upstream reader inside start() and enqueues every chunk without checking controller.desiredSize, so a pull-based upstream that could be slowed instead fills an unbounded queue whenever the browser reads slowly. Downstream, the live log is capped only by entry count (MAX_EVENTS_BUFFER = 1_000 in src/stores/eventStore.ts:26) and evicts at :341-344 without saying so, so the bound is in one currency and the truncation is silent.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:f390cca5c416535b",
+          "evaluatedRevision": 8
         },
         {
           "subject": "fleet-orchestration",
