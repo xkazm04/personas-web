@@ -3602,8 +3602,12 @@
           "revision": 12,
           "changedAt": "2026-10-06",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "state": "deviation",
+          "priorNotApplicable": 2,
+          "evidence": "scripts/i18n/guide-drift.mjs:102 The guide pipeline keeps its own hardcoded locale list instead of deriving it from the repo's language registry (LANGUAGES in src/i18n/localeRelease.ts). Adding or removing a language therefore means editing a second file, so the guide pipeline and the switcher can drift apart; the per-locale guide translations are also committed to master as LLM output with no recorded review.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:7a5b5afa04e7f7ad",
+          "evaluatedRevision": 13
         },
         {
           "subject": "hash-pinned-translation-pipeline",
@@ -8298,8 +8302,8 @@
           "revision": 12,
           "changedAt": "2026-10-06",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 2
+          "priorNotApplicable": 2,
+          "state": "unknown"
         },
         {
           "subject": "search",
