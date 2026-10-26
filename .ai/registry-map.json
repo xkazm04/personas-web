@@ -9931,7 +9931,11 @@
           "revision": 4,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/analytics.ts:24 Every page view, CTA click and waitlist step goes to Sentry metrics as its own timestamped count, the moment it happens. There is no local session summary and no cumulative flush on visibilitychange, so the collector receives the per-interaction trail that the standard's aggregation-before-egress rule exists to prevent.",
+          "evaluatedAt": "2026-10-26",
+          "evaluatedAgainst": "sha256-b2:83367bcb68dbb99a",
+          "evaluatedRevision": 4
         },
         {
           "subject": "voice-io",

@@ -9847,6 +9847,38 @@
         }
       ],
       "registryProposal": "census-counts-unmarked-members should say whether an `any` value read only to feed a test assertion library (whose matchers take unknown and re-check at runtime) counts as a member at the same weight as one flowing into production typed code. The lint predicate counts it, but the soundness exposure is close to nil."
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/usage-analytics": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "usage-analytics",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-26",
+      "evaluatedTs": "2026-10-26T00:34:48.122Z",
+      "worker": "d32025af-f90c-4329-a0b0-0181279e9e63",
+      "techniques": [
+        {
+          "technique": "batching-and-quota",
+          "verdict": "deviation",
+          "evidence": "src/lib/analytics.ts:24 Sends one count per interaction instead of a per-session summary. No hidden-page cumulative resend, no session id or sequence number, no declared loss rate and no quota budget."
+        },
+        {
+          "technique": "sink-abstraction",
+          "verdict": "deviation",
+          "evidence": "src/lib/analytics.ts:26 Sink failures are hidden from users, which is correct, but they are also silent to operators: an empty catch with no counter or background error door. The destination is hardwired to Sentry with no sink interface, no null sink (consent is a flag check at line 45 inside the layer) and no development sink. Call sites are at least consent-blind."
+        },
+        {
+          "technique": "privacy-scrubbing",
+          "verdict": "deviation",
+          "evidence": "src/lib/analytics.ts:51 Each event's attributes are built explicitly, and the private trackEvent is the only door, so payloads are allowlisted by construction. But events recorded while consent is declined or withdrawn sit in the queue and are never discarded. Nothing clears the queue on 'essential', so a later accept sends them through flushAnalyticsQueue, which is grandfathering. The page attribute is scrubbed by denylist (normalizePathname in src/lib/route-key.ts: UUID regex plus scrubPii) instead of being admitted from a closed route list."
+        },
+        {
+          "technique": "event-taxonomy",
+          "verdict": "deviation",
+          "evidence": "src/lib/analytics.ts:128 Event names are closed by construction: only the named track* exports reach the private trackEvent. Payload fields are not: platform, featureId and page are free strings. There is no registry entry with a question, version or retired status, and names are not past tense (page_view, download_click, waitlist_open)."
+        }
+      ],
+      "registryProposal": "The batching-and-quota technique could name the case where the client SDK already buffers metrics, as Sentry's metrics API does. Such a buffer saves network calls, but each item still carries its own timestamp, so it is not a session summary. Seats might otherwise read an SDK-level buffer as conformance."
     }
   }
 }
