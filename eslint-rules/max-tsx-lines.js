@@ -29,7 +29,7 @@ module.exports = {
 
   create(context) {
     const max = context.options[0]?.max ?? 200;
-    const filename = context.getFilename();
+    const filename = (context.filename ?? context.getFilename());
 
     if (!filename.endsWith(".tsx")) {
       return {};
