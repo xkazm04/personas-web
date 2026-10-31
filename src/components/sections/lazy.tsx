@@ -39,6 +39,16 @@ function VisionSkeleton() {
 
 /* ── Lazy section exports ──────────────────────────────────────── */
 
+/*
+ * Render mode is decided per stage, in two places: `ssr` here and `gate` in
+ * lib/home-manifest.ts. Every `ssr: false` below is a GATED stage, and that is
+ * its reason: a gated stage emits only its LazyMount placeholder (labelled with
+ * the section name) ahead of time, so a server render of the section would
+ * reach no reader. Vision is not gated and stays server-rendered.
+ * home-manifest.test.ts fails if an ungated stage is client-only, so
+ * removing a gate forces this choice to be made again.
+ */
+
 export const LazyVision = createLazySection(
   () => import("@/components/sections/vision-grid"),
   VisionSkeleton,

@@ -16,7 +16,7 @@ import StageSection from "@/components/StageSection";
 import SectionErrorBoundary from "@/components/sections/SectionErrorBoundary";
 import LazyMount from "@/components/LazyMount";
 import LandingHashArrival from "@/components/LandingHashArrival";
-import { SCROLL_MAP_SECTIONS } from "@/lib/constants";
+import { LANDING_SECTIONS, SCROLL_MAP_SECTIONS } from "@/lib/constants";
 import { HOME_STAGES } from "@/lib/home-manifest";
 import { organizationJsonLd, softwareJsonLd } from "./homeJsonLd";
 
@@ -24,6 +24,10 @@ const scrollMapItems = SCROLL_MAP_SECTIONS.map((s) => ({
   label: s.label.toUpperCase(),
   href: `#${s.id}`,
 }));
+
+/** Declared address -> its label. A gated stage names itself in its placeholder,
+ *  so a reader without script sees which section is coming, not a blank stage. */
+const LABEL_BY_ANCHOR = new Map(LANDING_SECTIONS.map((s) => [s.id, s.label]));
 
 /** Slug (see `lib/home-manifest.ts`) -> the lazy section it mounts. */
 const COMPONENTS: Record<string, ComponentType> = {
@@ -65,7 +69,7 @@ export default function Home() {
               {/* A section whose chunk fails stays a failed section, not a failed page. */}
               <SectionErrorBoundary anchorId={anchorId} minHeight={640}>
                 {gate ? (
-                  <LazyMount stage minHeight={640}>
+                  <LazyMount stage minHeight={640} label={LABEL_BY_ANCHOR.get(anchorId)}>
                     <Component />
                   </LazyMount>
                 ) : (

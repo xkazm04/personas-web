@@ -36,6 +36,23 @@ describe("HOME_STAGES", () => {
     }
   });
 
+  // The pre-script document of a gated stage is its placeholder whatever the
+  // section's ssr flag says, so client-only is only free behind a gate.
+  it("every client-only home section is a gated stage", () => {
+    const clientOnly = [...lazySrc.matchAll(/export const (Lazy\w+)\s*=\s*createLazySection\([^;]*?ssr:\s*false/g)].map((m) =>
+      previewSlug(m[1]) ?? m[1],
+    );
+    expect(clientOnly.length).toBeGreaterThan(0);
+    const ungated = clientOnly.filter((slug) => !HOME_STAGE_BY_SLUG.get(slug)?.gate);
+    expect(ungated).toEqual([]);
+  });
+
+  it("every gated stage has a label for its placeholder", () => {
+    const labels = new Map(LANDING_SECTIONS.map((s) => [s.id, s.label]));
+    expect(HOME_STAGES.filter((s) => s.gate && !labels.get(s.anchorId)).map((s) => s.anchorId)).toEqual([]);
+    expect(pageSrc).toMatch(/<LazyMount stage minHeight=\{640\} label=\{LABEL_BY_ANCHOR\.get\(anchorId\)\}>/);
+  });
+
   it("derives aliases only for wrappers that differ from their anchor", () => {
     expect(HOME_WRAPPER_ALIASES).toMatchObject({ tools: "personas", "download-section": "download", vision: "private" });
     expect(HOME_WRAPPER_ALIASES).not.toHaveProperty("get-started");
