@@ -1974,24 +1974,36 @@
       "subject": "fleet-orchestration",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T09:19:28.251Z",
-      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T17:54:32.799Z",
+      "worker": "8dbb322d-1e1b-47d5-abdf-54eabc591a03",
       "techniques": [
         {
           "technique": "session-registry",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/data.ts:106 Context defines a static catalog of trigger types for landing page display, with no agent session records, state transitions, or session registry."
+          "evidence": "src/components/sections/orchestration-hub/data.ts:106 Context defines a static catalog of trigger types for landing page display, with no agent session records, state transitions, or session registry.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "parallel-dispatch",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/index.tsx:28 Component renders an interactive marketing visualizer of trigger types, with no concurrency budgeting, slot scheduling, or parallel dispatch."
+          "evidence": "src/components/sections/orchestration-hub/index.tsx:28 Component renders an interactive marketing visualizer of trigger types, with no concurrency budgeting, slot scheduling, or parallel dispatch.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "result-harvest",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/platform-command/components/CommandBadge.tsx:8 Component renders a styling badge for marketing command sequences, with no agent run accounting, drop-point collection, or result harvesting."
+          "evidence": "src/components/sections/platform-command/components/CommandBadge.tsx:8 Component renders a styling badge for marketing command sequences, with no agent run accounting, drop-point collection, or result harvesting.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The module defines display metadata for a marketing trigger catalog that mirrors desktop configuration rather than running agent orchestration, and repository-wide search for session_registry, parallel_dispatch, and result_harvest found zero occurrences.",
+          "evaluatedAt": "2026-10-13T09:19:28.251Z",
+          "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+          "reason": "replaced by 8dbb322d-1e1b-47d5-abdf-54eabc591a03"
         }
       ]
     },
@@ -2043,24 +2055,36 @@
       "subject": "fleet-orchestration",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T09:19:28.251Z",
-      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T17:54:32.799Z",
+      "worker": "8dbb322d-1e1b-47d5-abdf-54eabc591a03",
       "techniques": [
         {
           "technique": "session-registry",
           "verdict": "not-applicable",
-          "evidence": "src/components/PrimaryCTA.tsx:37 Component renders a call-to-action button for user conversion rather than managing agent session identities or state registries."
+          "evidence": "src/components/PrimaryCTA.tsx:37 Component renders a call-to-action button for user conversion rather than managing agent session identities or state registries.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "parallel-dispatch",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/DownloadCTA.tsx:39 Component handles binary download links and waitlist signups rather than scheduling concurrency slots or dispatching agent sessions."
+          "evidence": "src/components/sections/DownloadCTA.tsx:39 Component handles binary download links and waitlist signups rather than scheduling concurrency slots or dispatching agent sessions.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "result-harvest",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/FAQ.tsx:87 Component renders an accordion of frequently asked questions rather than harvesting or verifying execution results from agent sessions."
+          "evidence": "src/components/sections/FAQ.tsx:87 Component renders an accordion of frequently asked questions rather than harvesting or verifying execution results from agent sessions.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:32 The component defines client-side release and download link routing for marketing conversion, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of agent fleet orchestration.",
+          "evaluatedAt": "2026-10-13T09:19:28.251Z",
+          "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+          "reason": "replaced by 8dbb322d-1e1b-47d5-abdf-54eabc591a03"
         }
       ]
     },
@@ -2069,24 +2093,36 @@
       "subject": "fleet-orchestration",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T09:19:28.251Z",
-      "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T17:54:32.799Z",
+      "worker": "8dbb322d-1e1b-47d5-abdf-54eabc591a03",
       "techniques": [
         {
           "technique": "session-registry",
           "verdict": "not-applicable",
-          "evidence": "src/app/page.tsx:45 Component defines the Next.js landing page root and section mounting table rather than managing an agent session registry."
+          "evidence": "src/app/page.tsx:45 Component defines the Next.js landing page root and section mounting table rather than managing an agent session registry.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "outbound-compute-plane",
           "verdict": "not-applicable",
-          "evidence": "src/app/homeJsonLd.ts:15 Metadata structure defines SEO schema for a developer application rather than establishing an outbound compute channel to executor planes."
+          "evidence": "src/app/homeJsonLd.ts:15 Metadata structure defines SEO schema for a developer application rather than establishing an outbound compute channel to executor planes.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "substrate-reconciliation",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/LazySection.tsx:40 Helper wraps Next.js dynamic component loading with placeholder skeletons rather than reconciling containers or worktrees against a registry."
+          "evidence": "src/components/sections/LazySection.tsx:40 Helper wraps Next.js dynamic component loading with placeholder skeletons rather than reconciling containers or worktrees against a registry.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/page.tsx:31 The root page mounts landing page marketing sections through lazy dynamic wrappers, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of agent fleet orchestration.",
+          "evaluatedAt": "2026-10-13T09:19:28.251Z",
+          "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
+          "reason": "replaced by 8dbb322d-1e1b-47d5-abdf-54eabc591a03"
         }
       ]
     },
@@ -10448,6 +10484,16 @@
           "evidence": "src/components/guide/blocks/CardsBlock.tsx:54 The inline waiver names one rule and covers the next line only."
         }
       ]
+    },
+    "Agent Operations Dashboard/Manual Review Queue/fleet-orchestration": {
+      "context": "Manual Review Queue",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T17:54:32.799Z",
+      "worker": "8dbb322d-1e1b-47d5-abdf-54eabc591a03",
+      "techniques": []
     }
   }
 }

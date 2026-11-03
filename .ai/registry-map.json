@@ -1242,13 +1242,12 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/DownloadCTA.tsx:32 The component defines client-side release and download link routing for marketing conversion, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of agent fleet orchestration.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:4fc5c1fbe75c52d2",
-          "evaluatedRevision": 25,
+          "evidence": "src/components/sections/DownloadCTA.tsx:32 The context only routes visitors to a release download, waitlist and footer links, with no agent sessions to register, dispatch or harvest; searching src/components for hibernat, sweeper, harvest and worktree found zero hits.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28,
           "source": "retained",
-          "revisionsBehind": 3,
-          "stale": true
+          "revisionsBehind": 3
         }
       ],
       "governance": "governed"
@@ -1676,12 +1675,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/page.tsx:31 The root page mounts landing page marketing sections through lazy dynamic wrappers, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of agent fleet orchestration.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:4fc5c1fbe75c52d2",
-          "evaluatedRevision": 25,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/app/page.tsx:28 The homepage only maps manifest slugs to lazily mounted marketing sections plus a hero illustration, with no agent fleet to orchestrate; searching src/app and src/components/sections for hibernat, sweeper, harvest and worktree found zero hits.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28,
+          "revisionsBehind": 3
         },
         {
           "subject": "prompt-assembly",
@@ -2961,12 +2959,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The module defines display metadata for a marketing trigger catalog that mirrors desktop configuration rather than running agent orchestration, and repository-wide search for session_registry, parallel_dispatch, and result_harvest found zero occurrences.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:4fc5c1fbe75c52d2",
-          "evaluatedRevision": 25,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 The module is a static marketing catalog of desktop trigger kinds, with no session registry, dispatcher, lifecycle sweeper or harvest; searching the orchestration-hub directory for fleet, harvest, hibernat, sweeper and heartbeat found zero hits (the only 'dispatch' hits are a useReducer playback dispatch in useHubPlayback.ts, which is unrelated).",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28,
+          "revisionsBehind": 3
         },
         {
           "subject": "terminal-multiplexing",
@@ -6824,8 +6821,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 4
+          "state": "not-applicable",
+          "priorNotApplicable": 4,
+          "evidence": "src/components/dashboard/views/reviews/useScopedReviews.ts:11 The context is a human approve/reject queue over review items read from a review store (the hitl-approval subject's territory), not a dispatcher holding a session registry or harvesting worker results; searching the reviews directory for fleet, harvest, hibernat, sweeper, worktree and heartbeat found zero hits.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "translation-quality-measurement",
