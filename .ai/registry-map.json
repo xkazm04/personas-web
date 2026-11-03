@@ -1512,9 +1512,10 @@
           "changedAt": "2026-10-25",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/feature-sections/memory-rings/rings.ts:4 The memory section computes illustrative ring geometry, while the pricing files draw a payment illustration, so neither implements an agent memory pipeline.",
-          "evaluatedAt": "2026-10-12",
-          "stale": true
+          "evidence": "src/app/features/page.tsx:74 On the features page, 'memory' is only a lazily mounted marketing illustration section and a line of metadata copy (line 18), and murmuration-hero and vision-grid draw art and copy cards. Nothing here implements an agent memory pipeline, and the absence terms have zero hits in these directories or anywhere in src.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "quality-gates",
@@ -3267,13 +3268,12 @@
           "changedAt": "2026-10-25",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/playground-split/data.ts:85 The playground's 'memories' result is a localized copy string that beatDetail displays as the last scripted beat (beats.ts:60), and useMindRun only advances fixed step delays, so no memory is captured, stored or recalled; the only memory hits in the context are this display copy.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
-          "evaluatedRevision": 51,
+          "evidence": "src/components/sections/playground-split/shared/beats.ts:60 The playground's 'memories' result is localized copy (data.ts:85), shown as the last scripted beat. useMindRun only advances fixed step delays (buildScript over STEP_DELAYS), so no memory is captured, stored or recalled. The only memory hits in this context are that display copy, and the absence terms have zero hits.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52,
           "source": "retained",
-          "revisionsBehind": 1,
-          "stale": true
+          "revisionsBehind": 1
         }
       ],
       "governance": "governed"
@@ -6865,12 +6865,11 @@
           "changedAt": "2026-10-25",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The only memory-related file in this context renders a fixed mock list of 'memory insight' suggestions in React state, and dismissing one only filters local state (line 82), so nothing here captures, consolidates, decays or recalls agent memory; searches for the subject's pipeline identifiers found no hits anywhere in the repo, and the word 'memory' appears here only as display copy, mock types and a link to /dashboard/knowledge.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
-          "evaluatedRevision": 51,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The panel seeds React state from a fixed mock list (MOCK_MEMORY_ACTIONS in src/lib/mock-dashboard-data.ts:368: three hardcoded suggestions), and dismiss only filters that local state. Nothing in this context captures, consolidates, decays or recalls agent memory. A search of the context directories (fixtures, scripts, src/app/dashboard, src/components/dashboard, src/lib/commands) and of all of src found no memoryStore, recallBudget, writeMemory or saveMemory; 'memory' appears here only as display copy, mock types and a link to /dashboard/knowledge.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52,
+          "revisionsBehind": 1
         },
         {
           "subject": "prompt-assembly",
@@ -8746,12 +8745,11 @@
           "changedAt": "2026-10-25",
           "confidence": "strong",
           "state": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a demo-only mock host-health snapshot, and settleThread/demoCauseFix only project 'fixed cause' state over incident fixtures for this session, so there is no agent memory store or recall path for the subject to govern; a grep of the context's files for memor/learn/recall/remember/knowledge returned nothing.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
-          "evaluatedRevision": 51,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a demo-only mock host-health snapshot, and settleThread/demoCauseFix only project per-session incident state, so there is no agent memory store or recall path for the subject to govern. A grep of the context files for memor/recall/remember/knowledge found nothing, and the absence terms have zero hits across src.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-runtime-assembly",
@@ -9355,13 +9353,12 @@
           "changedAt": "2026-10-25",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/contexts/QualityContext.tsx:6 This context handles animation pausing, particles, lazy mounting and a frame-time quality tier, so it has no agent knowledge that could be carried forward; a grep of its files for memor/recall/remember found no hits.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:4f054116d66a9495",
-          "evaluatedRevision": 51,
+          "evidence": "src/contexts/QualityContext.tsx:6 The only state this context carries is a measured rendering-quality tier plus animation pause and lazy-mount flags. It holds no agent knowledge that could be carried forward. A grep of its files for memor/recall/remember/knowledge found nothing, and the absence terms have zero hits across src/components, src/hooks and src/contexts.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52,
           "source": "retained",
-          "revisionsBehind": 1,
-          "stale": true
+          "revisionsBehind": 1
         },
         {
           "subject": "quality-gates",

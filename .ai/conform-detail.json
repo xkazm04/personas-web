@@ -557,9 +557,9 @@
       "subject": "agent-memory",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T00:31:22.316Z",
-      "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T09:48:29.154Z",
+      "worker": "c7eeb450-613e-4e11-856b-429e514b9294",
       "techniques": [
         {
           "technique": "durable-store-failure-posture",
@@ -581,6 +581,13 @@
           "evaluatedAt": "2026-10-12T19:51:50.567Z",
           "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
           "reason": "replaced by d911da3c-c0d9-44e0-8885-dd41d22844d2"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The only memory-related file in this context renders a fixed mock list of 'memory insight' suggestions in React state, and dismissing one only filters local state (line 82), so nothing here captures, consolidates, decays or recalls agent memory; searches for the subject's pipeline identifiers found no hits anywhere in the repo, and the word 'memory' appears here only as display copy, mock types and a link to /dashboard/knowledge.",
+          "evaluatedAt": "2026-10-24T00:31:22.316Z",
+          "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+          "reason": "replaced by c7eeb450-613e-4e11-856b-429e514b9294"
         }
       ]
     },
@@ -589,9 +596,9 @@
       "subject": "agent-memory",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T00:31:22.316Z",
-      "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T09:48:29.154Z",
+      "worker": "c7eeb450-613e-4e11-856b-429e514b9294",
       "techniques": [
         {
           "technique": "coverage-instrumentation",
@@ -607,6 +614,13 @@
           "evaluatedAt": "2026-10-12T19:51:50.567Z",
           "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
           "reason": "replaced by d911da3c-c0d9-44e0-8885-dd41d22844d2"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a demo-only mock host-health snapshot, and settleThread/demoCauseFix only project 'fixed cause' state over incident fixtures for this session, so there is no agent memory store or recall path for the subject to govern; a grep of the context's files for memor/learn/recall/remember/knowledge returned nothing.",
+          "evaluatedAt": "2026-10-24T00:31:22.316Z",
+          "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+          "reason": "replaced by c7eeb450-613e-4e11-856b-429e514b9294"
         }
       ]
     },
@@ -615,8 +629,9 @@
       "subject": "agent-memory",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T00:31:22.316Z",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T09:48:29.154Z",
+      "worker": "c7eeb450-613e-4e11-856b-429e514b9294",
       "techniques": [
         {
           "technique": "episodic-capture",
@@ -638,23 +653,24 @@
           "evaluatedAt": "2026-10-12T19:51:50.567Z",
           "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
           "reason": "replaced by d911da3c-c0d9-44e0-8885-dd41d22844d2"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/memory-rings/rings.ts:4 The memory section computes illustrative ring geometry, while the pricing files draw a payment illustration, so neither implements an agent memory pipeline.",
+          "evaluatedAt": "2026-10-12",
+          "worker": null,
+          "reason": "replaced by c7eeb450-613e-4e11-856b-429e514b9294"
         }
-      ],
-      "withdrawn": {
-        "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
-        "state": "not-applicable",
-        "at": "2026-10-24T00:31:54.813367+00:00",
-        "reason": "reviewer (sonnet): The anchor at features/page.tsx:74 is only a LazyMount wrapper around LazyMemoryLayers; the code behind it, feature-sections/memory-rings, was never opened. Its rings.ts models memories left by earlier runs and recalled by the agent (a 'recall line'), so 'no memory pipeline exists to judge' is uncon"
-      }
+      ]
     },
     "Platform Foundation: Shell, UI & Motion/Animation & Motion System/agent-memory": {
       "context": "Animation & Motion System",
       "subject": "agent-memory",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T00:31:22.316Z",
-      "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T09:48:29.154Z",
+      "worker": "c7eeb450-613e-4e11-856b-429e514b9294",
       "techniques": [
         {
           "technique": "working-memory",
@@ -670,6 +686,13 @@
           "evaluatedAt": "2026-10-12T19:51:50.567Z",
           "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
           "reason": "replaced by d911da3c-c0d9-44e0-8885-dd41d22844d2"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/contexts/QualityContext.tsx:6 This context handles animation pausing, particles, lazy mounting and a frame-time quality tier, so it has no agent knowledge that could be carried forward; a grep of its files for memor/recall/remember found no hits.",
+          "evaluatedAt": "2026-10-24T00:31:22.316Z",
+          "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+          "reason": "replaced by c7eeb450-613e-4e11-856b-429e514b9294"
         }
       ]
     },
@@ -678,9 +701,9 @@
       "subject": "agent-memory",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T00:31:22.316Z",
-      "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T09:48:29.154Z",
+      "worker": "c7eeb450-613e-4e11-856b-429e514b9294",
       "techniques": [
         {
           "technique": "working-memory",
@@ -696,6 +719,13 @@
           "evaluatedAt": "2026-10-12T19:51:50.567Z",
           "worker": "7d7b4a96-d14b-4df3-a93b-8cb94d526307",
           "reason": "replaced by d911da3c-c0d9-44e0-8885-dd41d22844d2"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:85 The playground's 'memories' result is a localized copy string that beatDetail displays as the last scripted beat (beats.ts:60), and useMindRun only advances fixed step delays, so no memory is captured, stored or recalled; the only memory hits in the context are this display copy.",
+          "evaluatedAt": "2026-10-24T00:31:22.316Z",
+          "worker": "d911da3c-c0d9-44e0-8885-dd41d22844d2",
+          "reason": "replaced by c7eeb450-613e-4e11-856b-429e514b9294"
         }
       ]
     },
