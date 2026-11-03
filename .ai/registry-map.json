@@ -1943,7 +1943,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/data/desktop-plugins.test.ts:44 The test name claims it mirrors the desktop catalog, but it only compares the hand-copied local manifest to a hard-coded list. No lane reads the desktop's PluginsSidebarNav or CHANGELOG, so the next desktop roster change stays green. That is the same silent landing the file's own header describes.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "agent-cli-transport",
@@ -2144,7 +2148,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "scripts/sync-desktop-facts.mjs:24 The desktop-facts snapshot that rings.test.ts and desktopFacts.test.ts assert against is a copy of another repo's sources. Its only re-check passes as 'skipped' wherever no ../personas checkout exists, and that includes every CI runner. So nothing re-certifies the copy against the live desktop, and the suite stays green while the desktop drifts.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "prompt-assembly",
@@ -7015,7 +7023,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/commands/reviewLearning.desktopParity.test.ts:14 The parity suite asserts expected values copied from the desktop's flip_status at a pinned commit. Nothing re-runs them against the desktop, so a change in desktop behaviour leaves this suite green and certifying the old behaviour.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "agent-cli-transport",
@@ -9133,7 +9145,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "e2e/mobile/m2-landing.spec.ts:274 The /m2 reduced-motion test asserts no running animations and an unmoved hero step loop, with no no-preference control. It would pass just as well on a page whose animations or step loop never run at all.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "copy-quality-gates",
@@ -9906,7 +9922,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "e2e/connections.spec.ts:27 Two connector-modal tests were labelled flaky and silently skipped in the spec. They have no entry in e2e/flaky-register.json (entries: []), no owner and no expiry, so the quarantine is invisible to the register's own expiry gate and produces no history.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "settings",
