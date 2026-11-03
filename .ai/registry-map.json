@@ -2620,12 +2620,11 @@
           "changedAt": "2026-10-23",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/app/preview/registry.test.ts:70 The preview registry unit test inspects raw source code files using regular expressions without line-ending normalization and uses bare negative string patterns vulnerable to comments, deviating from pin-the-call-not-the-name.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:5521806124d93882",
-          "evaluatedRevision": 26,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/preview/registry.test.ts:72 The test named 'registry.ts feeds every live table into buildPreviewRegistry' checks only that each namespace import exists and that some call to buildPreviewRegistry exists. It never reads the call's argument list, so dropping athenaSections from registry.ts:53 keeps the test green.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27,
+          "revisionsBehind": 1
         },
         {
           "subject": "demo-data-plane",
@@ -2880,7 +2879,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/orchestration-hub/playback.test.ts:151 The pin searches RingNodes.tsx for the bare name 'data-trigger-id', and the file's own doc comment at line 20 contains that name. Deleting the real attribute at line 35 would break the guided tour's click targets while this test stays green.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "narrative-scroll-surface",
