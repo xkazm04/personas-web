@@ -10321,6 +10321,133 @@
           "evidence": "e2e/mobile/m2-landing.spec.ts:6 Phone specs belong to the mobile project by location under e2e/mobile/."
         }
       ]
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/quality-gates": {
+      "context": "Observability Charts & SLA",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T16:59:18.122Z",
+      "worker": "e5199975-54e2-4692-bcce-88114c55f3b8",
+      "techniques": [
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:29 Absence assertions are paired with presence ones and comments are stripped, but reach is never asserted apart from content: a hand list cannot see a context file nobody added to it."
+        },
+        {
+          "technique": "renameable-detector-keys",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:7 The gate keys on a location (file paths). The cheapest evasion is to move the read into a new, unlisted child file, and the gate still states its result as a context-wide property rather than a floor."
+        },
+        {
+          "technique": "false-positive-economics",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:13 Comment stripping stops a doc comment that names the old hook from tripping the gate on correct code."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:17 It reads only the repository's own files, so the verdict is a function of the tree and is allowed to block."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/usageViewDemoPath.test.ts:49 The sibling gate checks the population it walked before judging the result, so a moved locale dir cannot pass with an empty walk; and in the motion gate, readFileSync throws when an enrolled file is missing."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:39 A failing expect fails vitest, and CI runs npm run test:unit, so the exit code carries the finding."
+        },
+        {
+          "technique": "unparseable-form-is-a-finding",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:44 An import form the matcher does not recognise fails the presence assertion, so it is a finding, not a silent pass."
+        },
+        {
+          "technique": "decidable-in-a-window",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:45 The rule can be decided from one file's text, so a source pattern is an honest instrument for it."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:42 The failing test's name gives the remedy (useStillMotion), and that hook exists in src/hooks."
+        },
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:55 The CLAUDE.md prose rule 'never let reduced-motion decide markup' has a mechanism for this context's breach log."
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Guide Content Blocks & Markdown/quality-gates": {
+      "context": "Guide Content Blocks & Markdown",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T16:59:18.122Z",
+      "worker": "e5199975-54e2-4692-bcce-88114c55f3b8",
+      "techniques": [
+        {
+          "technique": "gate-liveness",
+          "verdict": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:174 `?? {}` turns a module the gate could not read into an empty success. Nothing asserts the number of topics walked per module (the seeded-red tests in directiveLint.test.ts prove the parser, not the walk)."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/directiveLint.ts:4 The gate uses the renderer's own grammar, so what it checks is what the page renders, not a second regex over the text."
+        },
+        {
+          "technique": "unparseable-form-is-a-finding",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:413 An opener the grammar cannot parse is reported as a diagnostic instead of being dropped silently."
+        },
+        {
+          "technique": "renameable-detector-keys",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:418 The vocabulary is closed: an unrecognised or renamed directive name is a finding, so renaming cannot clear the check."
+        },
+        {
+          "technique": "policy-projection",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:311 The known-directive list comes from the grammar table itself, and directiveLint re-exports it, so there is no hand-kept second copy to drift."
+        },
+        {
+          "technique": "decidable-in-a-window",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:434 Each item line can be decided inside its own block body, so the check is a real parse, not a judgment about intent."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:451 The refusal gives the exact form that would clear it, and the author can apply that form in the content file."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "conformant",
+          "evidence": "scripts/check-guide-content.mjs:209 Every collected diagnostic reaches a non-zero exit, and ci.yml runs check:guide-content."
+        },
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/directiveLint.test.ts:8 Silent block loss, which used to be invisible, now has a mechanism."
+        },
+        {
+          "technique": "false-positive-economics",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/directiveLint.test.ts:47 A precision guard: fenced example syntax does not trip the gate on correct content."
+        },
+        {
+          "technique": "waiver-names-its-finding",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/blocks/CardsBlock.tsx:54 The inline waiver names one rule and covers the next line only."
+        }
+      ]
     }
   }
 }

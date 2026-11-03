@@ -4231,7 +4231,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:174 The CI gate over this context's grammar treats a content module that no longer exports `content` as an empty one and walks zero topics there. Its OK line prints a count but asserts no floor, so a renamed export makes the directive/parity scan exit green over a module it never read.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "register-bytecode-execution",
@@ -8103,7 +8107,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/observability/observabilityStillMotion.test.ts:29 The context owns a source-scan gate whose reach is a hand-written list of 5 files, yet it claims a property of the whole 57-file context: a new or extracted component that reads framer's useReducedMotion is never scanned (PerformanceHealthIssueRow.tsx, which animates in the same performance-view folder, is not enrolled), so the green is a floor that reads as a ceiling.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "measurement-honesty",
