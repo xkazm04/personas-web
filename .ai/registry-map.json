@@ -1965,12 +1965,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/data.ts:13 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module provides hardcoded chat dialogue and simulated benchmark scores for an interactive marketing showcase rather than invoking a coding-agent CLI transport.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
-          "evaluatedRevision": 9,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/feature-sections/lab/bench/chat/signal.ts:11 The Lab benches draw their figures from a hardcoded chat script and fixed constants, with no process spawn or model call. A search of the context's directories and the repo for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' found nothing, so no agent CLI is used as a transport here.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:75415727a875a42a",
+          "evaluatedRevision": 10,
+          "revisionsBehind": 1
         },
         {
           "subject": "companion-identity",
@@ -3602,12 +3601,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 The chat is a scripted marketing animation built from timed copy lines, with no spawned process and no model call. A search of the context and the repo for child_process, claude -p, codex exec, permission-mode and ANTHROPIC_API_KEY found no hit in this directory, so the agent-CLI transport precondition does not hold.",
-          "evaluatedAt": "2026-10-26",
-          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
-          "evaluatedRevision": 9,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 This chat is a scripted marketing animation: copy lines from a pending i18n module, played on a shared clock, with no model call or subprocess. A search for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' under src/components found nothing.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:75415727a875a42a",
+          "evaluatedRevision": 10,
+          "revisionsBehind": 1
         },
         {
           "subject": "prompt-assembly",
@@ -5617,12 +5615,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/api/votes/storage.ts:52 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module implements local JSON and Supabase persistence for user feature votes and roadmap suggestions rather than headless agent CLI process execution.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
-          "evaluatedRevision": 9,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/api/votes/storage.ts:56 These API routes save votes and comments to Supabase or local JSON files and never spawn a child process. A search for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' under src/app and the repo found nothing, so the subject's precondition does not hold.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:75415727a875a42a",
+          "evaluatedRevision": 10,
+          "revisionsBehind": 1
         },
         {
           "subject": "standards-layered-runtime",
@@ -7040,12 +7037,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The context's only 'envelope' is a signed remote-command test vector, and its panels read client stores. A search of src/, scripts/ and fixtures/ for claude -p, codex exec, dangerously-skip-permissions, permission-mode, ANTHROPIC_API_KEY and --resume found nothing. The only child_process uses in scripts/ spawn git, never an agent CLI, so nothing here spawns a coding-agent CLI as a model transport.",
-          "evaluatedAt": "2026-10-26",
-          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
-          "evaluatedRevision": 9,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The context's 'envelope' is an Ed25519-signed remote-command test vector built with node:crypto, and its panels read client stores. A search of src/, scripts/ and fixtures/ for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' found nothing, and the repo's child_process calls in scripts/ spawn only git or node tooling.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:75415727a875a42a",
+          "evaluatedRevision": 10,
+          "revisionsBehind": 1
         },
         {
           "subject": "client-state",
@@ -10866,12 +10862,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/stores/authStore.ts:215 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this store manages browser client authentication and demo session state using Supabase OAuth rather than managing credentials or child processes for headless agent CLIs.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:5791230ffb7d9fad",
-          "evaluatedRevision": 9,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/stores/authStore.ts:2 The auth store handles browser Supabase or mock sessions for site visitors. It never picks a billing identity or credentials for a spawned agent CLI. A search for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' under src/stores, src/lib and src/components found nothing.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:75415727a875a42a",
+          "evaluatedRevision": 10,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-runtime-assembly",

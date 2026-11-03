@@ -2372,24 +2372,36 @@
       "subject": "agent-cli-transport",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T12:34:39.180Z",
-      "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T12:02:06.038Z",
+      "worker": "38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd",
       "techniques": [
         {
           "technique": "availability-probe",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:93 The tab toggles a static UI indicator based on local component phase rather than probing a local CLI binary's installation or authorization."
+          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:93 The tab toggles a static UI indicator based on local component phase rather than probing a local CLI binary's installation or authorization.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "fallback-ladder",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:57 The arena tab indexes pre-computed scores from static data rather than stepping down a fallback ladder across agent transport rungs."
+          "evidence": "src/components/feature-sections/lab/components/ArenaTab.tsx:57 The arena tab indexes pre-computed scores from static data rather than stepping down a fallback ladder across agent transport rungs.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "dated-capability-matrix",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/types.ts:4 Defines static UI tab union types for presentation rather than querying a dated capability matrix for supported CLI flags and versions."
+          "evidence": "src/components/feature-sections/lab/types.ts:4 Defines static UI tab union types for presentation rather than querying a dated capability matrix for supported CLI flags and versions.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/data.ts:13 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module provides hardcoded chat dialogue and simulated benchmark scores for an interactive marketing showcase rather than invoking a coding-agent CLI transport.",
+          "evaluatedAt": "2026-10-13T12:34:39.180Z",
+          "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+          "reason": "replaced by 38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd"
         }
       ]
     },
@@ -2398,24 +2410,36 @@
       "subject": "agent-cli-transport",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T12:34:39.180Z",
-      "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T12:02:06.038Z",
+      "worker": "38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd",
       "techniques": [
         {
           "technique": "thread-custody-across-resume",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/feature-voting/components/CommentThread.tsx:28 Filters user discussion comments by parent ID for frontend display rather than tracking child agent CLI conversation threads across process spawns."
+          "evidence": "src/components/sections/feature-voting/components/CommentThread.tsx:28 Filters user discussion comments by parent ID for frontend display rather than tracking child agent CLI conversation threads across process spawns.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "output-normalization",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/feature-comments/route.ts:55 Normalizes user-submitted comment text to enforce string length limits rather than decoding structured coding-agent CLI output envelopes."
+          "evidence": "src/app/api/feature-comments/route.ts:55 Normalizes user-submitted comment text to enforce string length limits rather than decoding structured coding-agent CLI output envelopes.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "availability-probe",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/feature-boosts/route.ts:44 Checks Supabase database environment variables rather than executing a zero-token availability probe against a local CLI binary."
+          "evidence": "src/app/api/feature-boosts/route.ts:44 Checks Supabase database environment variables rather than executing a zero-token availability probe against a local CLI binary.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/storage.ts:52 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this module implements local JSON and Supabase persistence for user feature votes and roadmap suggestions rather than headless agent CLI process execution.",
+          "evaluatedAt": "2026-10-13T12:34:39.180Z",
+          "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+          "reason": "replaced by 38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd"
         }
       ]
     },
@@ -2424,24 +2448,36 @@
       "subject": "agent-cli-transport",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T12:34:39.180Z",
-      "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T12:02:06.038Z",
+      "worker": "38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd",
       "techniques": [
         {
           "technique": "subscription-auth-selection",
           "verdict": "not-applicable",
-          "evidence": "src/lib/clearUserCaches.ts:36 Wipes browser SWR and store caches upon user sign-out rather than stripping or injecting environment variables to select seat versus metered CLI billing."
+          "evidence": "src/lib/clearUserCaches.ts:36 Wipes browser SWR and store caches upon user sign-out rather than stripping or injecting environment variables to select seat versus metered CLI billing.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "availability-probe",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/AuthGuard.tsx:35 Polls web application system health endpoints on an interval rather than running a zero-token local agent CLI availability check through a child process spawn door."
+          "evidence": "src/components/dashboard/AuthGuard.tsx:35 Polls web application system health endpoints on an interval rather than running a zero-token local agent CLI availability check through a child process spawn door.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "permission-stance-enforcement",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/SignInPrompt.tsx:124 Triggers in-memory mock demo user session entry rather than configuring or enforcing permissions or sandbox stances on a spawned agent subprocess."
+          "evidence": "src/components/dashboard/SignInPrompt.tsx:124 Triggers in-memory mock demo user session entry rather than configuring or enforcing permissions or sandbox stances on a spawned agent subprocess.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/stores/authStore.ts:215 Searched the context files and repository for 'agent-cli', 'readonly-scan', 'availabilityProbe', and 'capabilityMatrix' with zero occurrences; this store manages browser client authentication and demo session state using Supabase OAuth rather than managing credentials or child processes for headless agent CLIs.",
+          "evaluatedAt": "2026-10-13T12:34:39.180Z",
+          "worker": "3c408270-9b55-4aaa-825b-06f167cae0b9",
+          "reason": "replaced by 38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd"
         }
       ]
     },
@@ -9988,20 +10024,38 @@
       "subject": "agent-cli-transport",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-26",
-      "evaluatedTs": "2026-10-26T00:46:42.393Z",
-      "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
-      "techniques": []
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T12:02:06.038Z",
+      "worker": "38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The context's only 'envelope' is a signed remote-command test vector, and its panels read client stores. A search of src/, scripts/ and fixtures/ for claude -p, codex exec, dangerously-skip-permissions, permission-mode, ANTHROPIC_API_KEY and --resume found nothing. The only child_process uses in scripts/ spawn git, never an agent CLI, so nothing here spawns a coding-agent CLI as a model transport.",
+          "evaluatedAt": "2026-10-26T00:46:42.393Z",
+          "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
+          "reason": "replaced by 38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd"
+        }
+      ]
     },
     "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/agent-cli-transport": {
       "context": "Agent Playground & Multi-Agent Chat",
       "subject": "agent-cli-transport",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-26",
-      "evaluatedTs": "2026-10-26T00:46:42.393Z",
-      "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
-      "techniques": []
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T12:02:06.038Z",
+      "worker": "38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd",
+      "techniques": [],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 The chat is a scripted marketing animation built from timed copy lines, with no spawned process and no model call. A search of the context and the repo for child_process, claude -p, codex exec, permission-mode and ANTHROPIC_API_KEY found no hit in this directory, so the agent-CLI transport precondition does not hold.",
+          "evaluatedAt": "2026-10-26T00:46:42.393Z",
+          "worker": "0e1ae7e1-517f-4b63-8ff5-a3a1b76f8d07",
+          "reason": "replaced by 38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd"
+        }
+      ]
     },
     "Observability & Event Monitoring/System Health Panel/agent-cli-transport": {
       "context": "System Health Panel",

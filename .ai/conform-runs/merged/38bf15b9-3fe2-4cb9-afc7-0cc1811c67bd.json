@@ -1,0 +1,148 @@
+{
+ "schema": "conform-run/1",
+ "worker": "38bf15b9-3fe2-4cb9-afc7-0cc1811c67bd",
+ "subject": "agent-cli-transport",
+ "evaluatedAt": "2026-11-03T12:02:06.038534+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/lab/bench/chat/signal.ts:11 The Lab benches draw their figures from a hardcoded chat script and fixed constants, with no process spawn or model call. A search of the context's directories and the repo for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' found nothing, so no agent CLI is used as a transport here.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The context's 'envelope' is an Ed25519-signed remote-command test vector built with node:crypto, and its panels read client stores. A search of src/, scripts/ and fixtures/ for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' found nothing, and the repo's child_process calls in scripts/ spawn only git or node tooling.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/votes/storage.ts:56 These API routes save votes and comments to Supabase or local JSON files and never spawn a child process. A search for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' under src/app and the repo found nothing, so the subject's precondition does not hold.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  {
+   "context": "Agent Playground & Multi-Agent Chat",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 This chat is a scripted marketing animation: copy lines from a pending i18n module, played on a shared clock, with no model call or subprocess. A search for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' under src/components found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  },
+  {
+   "context": "Authentication & User Session",
+   "subject": "agent-cli-transport",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/authStore.ts:2 The auth store handles browser Supabase or mock sessions for site visitors. It never picks a billing identity or credentials for a spawned agent CLI. A search for 'claude -p', 'codex exec', 'dangerously-skip-permissions', 'permission-mode' and 'ANTHROPIC_API_KEY' under src/stores, src/lib and src/components found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "claude -p",
+    "codex exec",
+    "dangerously-skip-permissions",
+    "permission-mode",
+    "ANTHROPIC_API_KEY"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-03T12:02:06.038534+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T12:02:06.038534+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T12:02:06.038534+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T12:02:06.038534+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agent Playground & Multi-Agent Chat",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T12:02:06.038534+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-cli-transport"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Authentication & User Session",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
