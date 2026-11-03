@@ -1572,7 +1572,11 @@
           "revision": 8,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/LazySection.tsx:48 The lazy-section factory renders its skeleton immediately with no delay. Five different gated landing stages use the same generic SectionSkeleton, and since they first show LazyMount's labelled held block, a cold entry shows two unrelated loading shapes in a row before content.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:b55c5172e3d9fac0",
+          "evaluatedRevision": 8
         },
         {
           "subject": "agent-instruction-files",
@@ -4665,12 +4669,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/components/sections/how-lazy.tsx:16 Every lazy /how stage shows the same pulsing title-and-block silhouette immediately, with no warm-path delay.",
-          "evaluatedAt": "2026-10-15",
-          "evaluatedAgainst": "sha256-b2:62a9a7fc993ea8b5",
-          "evaluatedRevision": 6,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/components/sections/how-lazy.tsx:16 All four lazy /how stages share one pulsing title+subtitle+block silhouette that matches none of them. It is drawn immediately through createLazySection's loading prop, with no warm-path delay, so a warm chunk still flashes a wrong outline.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:b55c5172e3d9fac0",
+          "evaluatedRevision": 8,
+          "revisionsBehind": 2
         },
         {
           "subject": "lazy-section-addressability",
@@ -9564,12 +9567,11 @@
           "changedAt": "2026-10-27",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/components/dashboard/DesktopSidebar.tsx:58 When a grouped section has any child count, the rail shows only an aria-hidden color dot, so that badge grade has no text equivalent.",
-          "evaluatedAt": "2026-10-15",
-          "evaluatedAgainst": "sha256-b2:62a9a7fc993ea8b5",
-          "evaluatedRevision": 6,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:122 A grouped section whose children carry counts collapses to a bare 'dot' grade. DesktopSidebar.tsx:58 renders it as an aria-hidden amber span with no text equivalent, and counts render uncapped, so the attention scale is partly colour-only.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:b55c5172e3d9fac0",
+          "evaluatedRevision": 8,
+          "revisionsBehind": 2
         },
         {
           "subject": "quality-gates",
@@ -9805,12 +9807,11 @@
           "changedAt": "2026-10-27",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/app/loading.tsx:22 Route transitions replace the page, navbar included, with an immediate full-area spinner, so the frame does not stay put and there is no warm-path delay.",
-          "evaluatedAt": "2026-10-15",
-          "evaluatedAgainst": "sha256-b2:62a9a7fc993ea8b5",
-          "evaluatedRevision": 6,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/components/PageTransition.tsx:53 The root layout keys the wrapper around every page on the pathname, and each page renders its own <Navbar> (whose header enters from y:-20/opacity 0). So outside /dashboard every navigation remounts and re-animates the navbar, and the root loading.tsx (an immediate spinner) replaces the navbar during streaming: the frame takes part in every transition.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:b55c5172e3d9fac0",
+          "evaluatedRevision": 8,
+          "revisionsBehind": 2
         },
         {
           "subject": "native-shell-integration",

@@ -3948,39 +3948,49 @@
       "subject": "app-shell",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-15",
-      "evaluatedTs": "2026-10-15T01:45:00.344Z",
-      "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:20:53.641Z",
+      "worker": "be535d87-8685-415b-8727-2cbbb903280b",
       "techniques": [
         {
-          "technique": "navigation-model",
+          "technique": "lazy-section-loading",
           "verdict": "deviation",
-          "evidence": "src/components/navbar/DesktopNav.tsx:67 Desktop hard-codes /dashboard outside useRoutes, the only list MobilePanel renders, and still special-cases /how which that list does not contain."
+          "evidence": "src/app/loading.tsx:22 The route fallback is a spinner that renders at once, with no warm-path delay. It replaces the whole page segment, Navbar included because Navbar lives in each page, so the frame blanks instead of holding still."
+        },
+        {
+          "technique": "navigation-model",
+          "verdict": "conformant",
+          "evidence": "src/components/navbar/useRoutes.ts:19 Navbar's DesktopNav and MobilePanel both iterate one registry, and active state is derived from usePathname. Nothing is stored. It is an exact match, which is enough because /features and /roadmap have no sub-routes."
         },
         {
           "technique": "nav-hierarchy",
-          "verdict": "deviation",
-          "evidence": "src/components/navbar/DesktopNav.tsx:64 That desktop-only cluster holds the dashboard link; the mobile panel rebuilds Download from useRoutes and never that destination. The off-canvas menu does close from pathname."
+          "verdict": "conformant",
+          "evidence": "src/components/navbar/useMobileMenu.ts:36 The nav is flat (one level). The off-canvas mobile panel closes because the location changed, not through per-link handlers."
+        },
+        {
+          "technique": "shell-hosted-services",
+          "verdict": "conformant",
+          "evidence": "src/app/layout.tsx:122 Session-wide residents (PageViewTracker, WebVitalsReporter, CookieConsent, LocaleOfferMount) are mounted in the root layout, outside the pathname-keyed PageTransition, so they sit above the swap point."
         },
         {
           "technique": "entitlement-gating",
-          "verdict": "deviation",
-          "evidence": "src/components/Navbar.tsx:55 Platform policy is applied in the click handler. The control always renders as Download, so a platform that cannot download looks enabled until the click opens the waitlist."
+          "verdict": "not-applicable",
+          "evidence": "src/components/navbar/useRoutes.ts:15 The public marketing nav registry carries only a placement kind. No tiers, roles or flags gate any entry."
         },
         {
           "technique": "badge-and-attention",
           "verdict": "not-applicable",
-          "evidence": "src/components/navbar/useRoutes.ts:14 Nav entries are label and href only. Searched badge, unread, and count under src/components/navbar and Navbar.tsx and found no nav badge."
-        },
+          "evidence": "src/components/navbar/useRoutes.ts:14 Nav entries are label and href only. Searched badge, unread, and count under src/components/navbar and Navbar.tsx and found no nav badge.",
+          "carriedFrom": "2026-10-15"
+        }
+      ],
+      "superseded": [
         {
-          "technique": "shell-hosted-services",
-          "verdict": "deviation",
-          "evidence": "src/components/PageTransition.tsx:45 Non-dashboard pathnames are distinct remount keys. Navbar and PageShell's TourProvider are rendered inside that keyed children tree, while CookieConsent and the trackers sit in the root layout outside it."
-        },
-        {
-          "technique": "lazy-section-loading",
-          "verdict": "deviation",
-          "evidence": "src/app/loading.tsx:19 The segment fallback is an immediate centered spinner with no navbar and no delay. PageTransition also replays its enter animation on every distinct pathname key."
+          "state": "deviation",
+          "evidence": "src/app/loading.tsx:22 Route transitions replace the page, navbar included, with an immediate full-area spinner, so the frame does not stay put and there is no warm-path delay.",
+          "evaluatedAt": "2026-10-15T01:45:00.344Z",
+          "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+          "reason": "replaced by be535d87-8685-415b-8727-2cbbb903280b"
         }
       ]
     },
@@ -3989,81 +3999,109 @@
       "subject": "app-shell",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-15",
-      "evaluatedTs": "2026-10-15T01:45:00.344Z",
-      "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:20:53.641Z",
+      "worker": "be535d87-8685-415b-8727-2cbbb903280b",
       "techniques": [
+        {
+          "technique": "badge-and-attention",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:122 The dot grade has no text alternative (aria-hidden at DesktopSidebar.tsx:58) and there is no 99+ display cap. On the plus side, counts are derived from stores, and the fixture counts are suppressed for real tenants (line 112)."
+        },
         {
           "technique": "navigation-model",
           "verdict": "conformant",
-          "evidence": "src/components/dashboard/DashboardNavigation.tsx:94 The current view comes from the pathname, parent highlight is section.views.includes(current), and DashLink writes history through navigateDashboard. Unknown segments fail isDashboardViewId."
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:103 One current view comes from the URL (viewIdFromPath). Section activation is a containment query over the navRegistry, never a stored flag."
         },
         {
           "technique": "nav-hierarchy",
           "verdict": "conformant",
-          "evidence": "src/components/dashboard/DesktopSidebar.tsx:17 The second level is the active section's panel; group captions are non-link labels. There is no user collapse control. The phone bar flattens leaves and keeps the rest under More."
-        },
-        {
-          "technique": "entitlement-gating",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/DashboardNavigation.tsx:48 Every registry section is rendered. Searched entitlement, featureFlag, requiresPlan, isLocked, canAccess, and upsell in the dashboard nav; the review gate is device reachability, not a hidden or locked entry."
-        },
-        {
-          "technique": "badge-and-attention",
-          "verdict": "deviation",
-          "evidence": "src/components/dashboard/DashboardNavigation.tsx:105 Demo message, incident, and health badges are constants, so they never clear. Review and execution counts are store derivations. The overview parent marker is an aria-hidden dot, numeric badges render with no 99+ cap, and MobileMoreMenu is not given getBadge."
+          "evidence": "src/components/dashboard/DesktopSidebar.tsx:17 The level-2 panel renders only for the active grouped section (section-scoped, never global), and there is no third shell level."
         },
         {
           "technique": "shell-hosted-services",
           "verdict": "conformant",
-          "evidence": "src/app/dashboard/layout.tsx:36 The realtime worker is mounted beside ViewOutlet, renders nothing, and useSyncedRealtime removes the channel and timers on cleanup. Sign-out calls clearUserScopedCaches. Socket failure sets eventStore connectionStatus, which is not the sidebar health chip."
+          "evidence": "src/app/dashboard/layout.tsx:39 The realtime worker, TourProvider/TourAutostart and TourOverlay are mounted once in the dashboard layout, as siblings above ViewOutlet. All /dashboard/* share one transition key, so they survive view switches."
         },
         {
           "technique": "lazy-section-loading",
-          "verdict": "deviation",
-          "evidence": "src/components/dashboard/AuthGuard.tsx:37 Until auth resolves, the shell is replaced by a skeleton that includes a fake sidebar. After that, each view is its own dynamic chunk, ViewGap is shapeless with a 160ms ghost delay, hover and focus call preloadView, and keep-alive is capped at 4."
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/DashboardErrorBoundary.tsx:88 The view's boundary resets on location change instead of re-keying the subtree. ViewOutlet keeps a bounded keep-alive of 4 <Activity> views, chunks load per view and are preloaded on hover/focus plus idle warm-up, and the loading gap is the shapeless ViewGap."
+        },
+        {
+          "technique": "screen-contributed-second-level",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:37 The second level is declared in the navRegistry, not contributed by screens. No screen portals its own sections into the sidebar."
+        },
+        {
+          "technique": "entitlement-gating",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/DashboardNavigation.tsx:48 Every registry section is rendered. Searched entitlement, featureFlag, requiresPlan, isLocked, canAccess, and upsell in the dashboard nav; the review gate is device reachability, not a hidden or locked entry.",
+          "carriedFrom": "2026-10-15"
         }
       ],
-      "registryProposal": "The shell-paints-first rule never says whether an unresolved session check may withhold the frame. AuthGuard skeletons the whole dashboard, including a fake nav, until identity resolves; if that is forbidden, the technique should say so."
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/components/dashboard/DesktopSidebar.tsx:58 When a grouped section has any child count, the rail shows only an aria-hidden color dot, so that badge grade has no text equivalent.",
+          "evaluatedAt": "2026-10-15T01:45:00.344Z",
+          "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+          "reason": "replaced by be535d87-8685-415b-8727-2cbbb903280b"
+        }
+      ]
     },
     "Content & Informational Pages/How It Works & Changelog/app-shell": {
       "context": "How It Works & Changelog",
       "subject": "app-shell",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-15",
-      "evaluatedTs": "2026-10-15T01:45:00.344Z",
-      "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:20:53.641Z",
+      "worker": "be535d87-8685-415b-8727-2cbbb903280b",
       "techniques": [
+        {
+          "technique": "lazy-section-loading",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/how-lazy.tsx:16 This is a generic, drawn silhouette, not section-shaped and not an empty held block, and it has no delay. The held stage height (data-stage=fill) is the part that is right."
+        },
         {
           "technique": "navigation-model",
           "verdict": "deviation",
-          "evidence": "src/components/sections/how-manifesto/index.tsx:27 The parent StageSection on /how also sets id manifesto, and the same hashes are hand-listed again in scrollMapItems and STOP_HREFS."
+          "evidence": "src/components/sections/how-manifesto/index.tsx:27 The parent StageSection on /how also sets id manifesto, and the same hashes are hand-listed again in scrollMapItems and STOP_HREFS.",
+          "carriedFrom": "2026-10-15"
         },
         {
           "technique": "nav-hierarchy",
           "verdict": "conformant",
-          "evidence": "src/components/sections/how-role-path/Stop.tsx:49 The role route is an in-page sequence of hash jumps. It does not add a shell nav level; the changelog timeline is a content section."
+          "evidence": "src/components/sections/how-role-path/Stop.tsx:49 The role route is an in-page sequence of hash jumps. It does not add a shell nav level; the changelog timeline is a content section.",
+          "carriedFrom": "2026-10-15"
         },
         {
           "technique": "entitlement-gating",
           "verdict": "not-applicable",
-          "evidence": "src/app/how/page.tsx:69 All six stages render for every viewer. Role lenses are aria-pressed content tints. Searched badge, entitlement, and locked in the how and changelog files and found no section gate."
+          "evidence": "src/app/how/page.tsx:69 All six stages render for every viewer. Role lenses are aria-pressed content tints. Searched badge, entitlement, and locked in the how and changelog files and found no section gate.",
+          "carriedFrom": "2026-10-15"
         },
         {
           "technique": "badge-and-attention",
           "verdict": "not-applicable",
-          "evidence": "src/app/how/page.tsx:47 In-page entries are label and href only. No count, predicate, or clearing rule appears in these files."
+          "evidence": "src/app/how/page.tsx:47 In-page entries are label and href only. No count, predicate, or clearing rule appears in these files.",
+          "carriedFrom": "2026-10-15"
         },
         {
           "technique": "shell-hosted-services",
           "verdict": "not-applicable",
-          "evidence": "src/app/how/layout.tsx:23 The how layout mounts no resident. Session hosts are not decided in these files."
-        },
+          "evidence": "src/app/how/layout.tsx:23 The how layout mounts no resident. Session hosts are not decided in these files.",
+          "carriedFrom": "2026-10-15"
+        }
+      ],
+      "superseded": [
         {
-          "technique": "lazy-section-loading",
-          "verdict": "deviation",
-          "evidence": "src/components/sections/LazySection.tsx:48 next/dynamic shows StageSkeleton at once for every lazy stage. The skeleton is a generic pulse, not a delayed empty hold, and a chunk failure has no boundary of its own on the page."
+          "state": "deviation",
+          "evidence": "src/components/sections/how-lazy.tsx:16 Every lazy /how stage shows the same pulsing title-and-block silhouette immediately, with no warm-path delay.",
+          "evaluatedAt": "2026-10-15T01:45:00.344Z",
+          "worker": "af49d765-881b-4c16-9ecd-dc5974f790a5",
+          "reason": "replaced by be535d87-8685-415b-8727-2cbbb903280b"
         }
       ]
     },
@@ -10494,6 +10532,22 @@
       "evaluatedTs": "2026-11-03T17:54:32.799Z",
       "worker": "8dbb322d-1e1b-47d5-abdf-54eabc591a03",
       "techniques": []
+    },
+    "Marketing & Landing/Homepage & Hero/app-shell": {
+      "context": "Homepage & Hero",
+      "subject": "app-shell",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:20:53.641Z",
+      "worker": "be535d87-8685-415b-8727-2cbbb903280b",
+      "techniques": [
+        {
+          "technique": "lazy-section-loading",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/LazySection.tsx:48 There is no warm-path delay, and the generic silhouette is stacked after the LazyMount placeholder (page.tsx:72). Chunk failure is handled honestly: SectionErrorBoundary.tsx:37 holds the slot and offers a reload."
+        }
+      ]
     }
   }
 }
