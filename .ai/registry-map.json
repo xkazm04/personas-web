@@ -6952,12 +6952,11 @@
           "changedAt": "2026-10-27",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 MemoryActionsPanel imports the fixture array straight from mock-dashboard-data and renders it with no ApiClient method behind it, so a consumer names the fake plane and nothing breaks at build time if the live plane grows a memory-actions read; its only protection from real tenants is an isDemo gate at its off-context caller (DimDetail.tsx:89)",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
-          "evaluatedRevision": 4,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 MemoryActionsPanel imports the fixture array straight from mock-dashboard-data, with no ApiClient method behind it. A consumer therefore names the fake plane, and nothing fails at build time if a live source for memory actions appears; the panel's only containment is an isDemo gate in its off-context caller (DimDetail.tsx).",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:8b6581bd5537bf1b",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-runtime-assembly",
@@ -8918,12 +8917,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The health hook imports a standalone mock fetcher that is not on ApiClient, so this surface names the fake plane directly and the live plane has no method that refuses by name (contrast the 501s in api.ts). Containment still holds because useDemoOnlySWR keys the fetch on the session's isDemo flag.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
-          "evaluatedRevision": 4,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The health hook (and the view at index.tsx:16 for blast radius) imports standalone mock fetchers that are not on ApiClient, so the surface names the fake plane directly. Containment still holds because useDemoOnlySWR keys the fetch on the session's isDemo flag, and a live session gets an empty state.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:8b6581bd5537bf1b",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-cli-transport",
@@ -10659,12 +10657,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/lib/mockApi.ts:462 The mock API exports standalone fetchers outside the ApiClient interface that callers import directly rather than dispatching through the api proxy, violating interface completeness and allowing consumers to bypass runtime dispatch.",
-          "evaluatedAt": "2026-10-16",
-          "evaluatedAgainst": "sha256-b2:952fe6652c22027d",
-          "evaluatedRevision": 4,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/lib/mockApi.ts:462 mockApi exports standalone demo-only fetchers (incidents, system health, blast radius, director, knowledge, leaderboard) outside ApiClient, and its own doc comment says callers import them directly. Several surfaces therefore name the fake plane, and the live planes have no method that refuses these reads by name.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:8b6581bd5537bf1b",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "prompt-assembly",

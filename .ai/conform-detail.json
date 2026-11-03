@@ -4894,35 +4894,46 @@
       "subject": "demo-data-plane",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T05:59:20.746Z",
-      "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:19:23.852Z",
+      "worker": "17d2b499-35ed-4668-bc2e-c26d890e4f47",
       "techniques": [
         {
           "technique": "one-interface-many-planes",
           "verdict": "deviation",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 The surface reaches for the fixture directly instead of through the api proxy. That is the 'no consumer names a plane' failure. By contrast, SubscriptionsPanel goes through the stores to api and renders a 501 refusal (line 90)."
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 The surface imports the fake plane's fixture directly, which breaks the 'no consumer names a plane' rule. By contrast, SubscriptionsPanel reads through stores and the api proxy."
         },
         {
           "technique": "network-faithful-mocks",
           "verdict": "deviation",
-          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The fixture is seeded synchronously into state: no latency, no loading state, no provocable failure. A StalenessIndicator shows a fetchedAt for a fetch that never happened."
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The fixture is seeded synchronously into state: no simulated latency, no loading state, no way to make it fail. Line 79 then stamps a fabricated 'fetched at' time for a fetch that never happened."
         },
         {
           "technique": "fake-surface-honesty-contract",
           "verdict": "conformant",
-          "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:90 When the plane refuses the read (501), the panel renders an honest unsupported note, not fixtures. The plane, not emptiness, is the outer term because subscriptionsNotServed is only set on a 501. MemoryActionsPanel's suggestion count is shown only under the caller's isDemo gate, which is off-context."
+          "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:90 When the plane refuses the read (501), the panel renders an honest unsupported note, not fixtures. The plane, not emptiness, is the outer term because subscriptionsNotServed is only set on a 501. MemoryActionsPanel's suggestion count is shown only under the caller's isDemo gate, which is off-context.",
+          "carriedFrom": "2026-10-24"
         },
         {
           "technique": "fixture-self-consistency",
           "verdict": "conformant",
-          "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:52 Each card's event-match count is folded from the same events collection the store holds, not typed beside it (aggregate agreement). Persona enrichment joins by personaId (line 68), not by display name."
+          "evidence": "src/components/dashboard/SubscriptionsPanel.tsx:52 Each card's event-match count is folded from the same events collection the store holds, not typed beside it (aggregate agreement). Persona enrichment joins by personaId (line 68), not by display name.",
+          "carriedFrom": "2026-10-24"
         },
         {
           "technique": "runtime-dispatch-not-build-flag",
           "verdict": "deviation",
           "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 Statically binds to mock data rather than dynamically selecting a plane from live session state per call.",
           "carriedFrom": "2026-10-16"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 MemoryActionsPanel imports the fixture array straight from mock-dashboard-data and renders it with no ApiClient method behind it, so a consumer names the fake plane and nothing breaks at build time if the live plane grows a memory-actions read; its only protection from real tenants is an isDemo gate at its off-context caller (DimDetail.tsx:89)",
+          "evaluatedAt": "2026-10-24T05:59:20.746Z",
+          "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
+          "reason": "replaced by 17d2b499-35ed-4668-bc2e-c26d890e4f47"
         }
       ]
     },
@@ -4931,34 +4942,48 @@
       "subject": "demo-data-plane",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-16",
-      "evaluatedTs": "2026-10-16T22:26:34.523Z",
-      "worker": "f92d3ef9-b41e-41d8-957e-c60fccc33dea",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:19:23.852Z",
+      "worker": "17d2b499-35ed-4668-bc2e-c26d890e4f47",
       "techniques": [
         {
           "technique": "one-interface-many-planes",
           "verdict": "deviation",
-          "evidence": "src/lib/mockApi.ts:462 Exports standalone mock fetchers directly imported by surfaces instead of implementing them on the shared ApiClient interface."
-        },
-        {
-          "technique": "network-faithful-mocks",
-          "verdict": "deviation",
-          "evidence": "src/lib/mockApi.ts:174 Mutates global in-memory fixture arrays directly upon deletion instead of maintaining an isolated per-session copy."
+          "evidence": "src/lib/mockApi.ts:462 These fetchers sit outside the interface, so consumers bypass dispatch. Separately, realApi answers listNotes/listChatSessions with an empty success (api.ts:405 `listNotes: async () => []`) where the standard calls for a refusal; sendChatMessage and pausePersona do refuse with 501."
         },
         {
           "technique": "runtime-dispatch-not-build-flag",
           "verdict": "conformant",
-          "evidence": "src/lib/api.ts:448 Resolves the active data plane dynamically on each property access from live session state in the auth store."
+          "evidence": "src/lib/api.ts:448 The Proxy get trap reads the auth store's isDemo flag on every property access, so the plane is chosen per call, not at module load. isDemo lives only in memory and is never persisted."
         },
         {
           "technique": "fixture-self-consistency",
           "verdict": "conformant",
-          "evidence": "src/lib/mock-dashboard-data.ts:34 Projects the dashboard fleet roster directly from MOCK_PERSONAS so all mock surfaces share the canonical root entities."
+          "evidence": "src/lib/mock-dashboard-data.ts:34 The dashboard roster is projected from the same MOCK_PERSONAS that listPersonas serves, and the header comment says it is not re-declared. knowledgeProvenance.test.ts checks referential closure for cited runs."
         },
         {
           "technique": "seeded-determinism",
           "verdict": "conformant",
-          "evidence": "src/lib/mockData.ts:39 Provides a deterministic Lehmer PRNG so jittered mock figures remain stable across reloads and tabs."
+          "evidence": "src/lib/mockData.ts:39 Fixtures draw variation from an explicit Lehmer generator with checked-in seeds. Timestamps derive from one reference instant read at module evaluation (demoClock.ts:14 DEMO_SEED_NOW)."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "deviation",
+          "evidence": "src/lib/mockApi.ts:174 Demo writes mutate the declared root fixture array. signOut on a demo session does not reset it, so a client-side re-entry sees a world that is no longer pristine. Reads return only shallow copies (line 157 `[...MOCK_PERSONAS]`), and each method's latency is a fixed value rather than a band. Latency itself is present."
+        },
+        {
+          "technique": "replay-clock-pinning",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/demoClock.ts:14 The demo serves generated fixtures relative to the entry time; it does not replay a recorded moment through live ingestion, so entry-relative seeding is the right strategy."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/lib/mockApi.ts:462 The mock API exports standalone fetchers outside the ApiClient interface that callers import directly rather than dispatching through the api proxy, violating interface completeness and allowing consumers to bypass runtime dispatch.",
+          "evaluatedAt": "2026-10-16T22:26:34.523Z",
+          "worker": "f92d3ef9-b41e-41d8-957e-c60fccc33dea",
+          "reason": "replaced by 17d2b499-35ed-4668-bc2e-c26d890e4f47"
         }
       ]
     },
@@ -8998,34 +9023,44 @@
       "subject": "demo-data-plane",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T05:59:20.746Z",
-      "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:19:23.852Z",
+      "worker": "17d2b499-35ed-4668-bc2e-c26d890e4f47",
       "techniques": [
         {
           "technique": "one-interface-many-planes",
           "verdict": "deviation",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The consumer imports the fake plane. index.tsx:16 does the same for getBlastRadiusInputs. This is the consumer side of the recorded Orchestrator-context deviation at mockApi.ts:462."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The surface imports the fake plane directly; no interface method exists that a live plane could refuse."
         },
         {
           "technique": "runtime-dispatch-not-build-flag",
           "verdict": "conformant",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The SWR key is derived from the live useAuthStore isDemo on each render, not from an env/build flag. A null key skips the fetch for real sessions."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The fetch is keyed on live session state (isDemo) through useDemoOnlySWR, which passes a null key outside demo, so it is gated at runtime rather than by a build flag."
         },
         {
           "technique": "fake-surface-honesty-contract",
           "verdict": "conformant",
-          "evidence": "src/components/dashboard/views/health/index.tsx:94 The declared plane is the outermost term. A real session gets the live-unavailable empty state, never fixtures. Fixed causes are also forced empty outside demo (line 48). The panel has no faithful source, so it renders only in the demo."
+          "evidence": "src/components/dashboard/views/health/index.tsx:94 A panel with no faithful source renders an explicit 'live unavailable' empty state for a real session instead of fixtures. The plane is the outermost term of the condition."
         },
         {
           "technique": "fixture-self-consistency",
           "verdict": "conformant",
-          "evidence": "src/lib/settleThread.ts:154 The Health nav badge is a fold over the same projected check rows the panel renders. Fixes are keyed by thread causeKey, so health, SLA, incidents and badges settle together."
+          "evidence": "src/lib/settleThread.ts:153 The Health nav badge count is folded from the same projected health sections the panel renders, so the badge and the rows agree."
         },
         {
           "technique": "network-faithful-mocks",
           "verdict": "deviation",
-          "evidence": "src/lib/mockApi.ts:532 Latency is simulated (mockApi.ts:486, delay 300), but the copy is shallow: every section's items array is still the projected fixture array, which the technique calls the same bug with an extra step. Consumers are currently pure (healthActions.ts:51). There is also no declared fault mode for this fetcher."
+          "evidence": "src/lib/mockApi.ts:532 Latency is simulated (mockApi.ts:486, delay 300), but the copy is shallow: every section's items array is still the projected fixture array, which the technique calls the same bug with an extra step. Consumers are currently pure (healthActions.ts:51). There is also no declared fault mode for this fetcher.",
+          "carriedFrom": "2026-10-24"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The health hook imports a standalone mock fetcher that is not on ApiClient, so this surface names the fake plane directly and the live plane has no method that refuses by name (contrast the 501s in api.ts). Containment still holds because useDemoOnlySWR keys the fetch on the session's isDemo flag.",
+          "evaluatedAt": "2026-10-24T05:59:20.746Z",
+          "worker": "7c436789-2a0c-43d7-9f36-a5d562ea5e99",
+          "reason": "replaced by 17d2b499-35ed-4668-bc2e-c26d890e4f47"
         }
       ]
     },
