@@ -1609,7 +1609,11 @@
           "revision": 4,
           "changedAt": "2026-10-31",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/landing-address.ts:121 The arrival protocol is otherwise complete: it scrolls the wrapper, waits on a bounded retry, lands, moves focus, re-asserts, and cancels on reader intent. But exhaustion stops silently with no recorded event, and the location vocabulary is split across three hand-written lists.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:d8bb8cfa97d2f2fd",
+          "evaluatedRevision": 4
         },
         {
           "subject": "english",
@@ -4690,12 +4694,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/app/how/page.tsx:60 The published hash, the stage wrapper, and the lazy section share one id, and the page depends on document order to pick the wrapper, with no second namespace or alias.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:7932d7ba8929c786",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/app/how/page.tsx:86 The published hash sits on a styled StageSection, and the lazy section inside it later mounts with the same id. Address and internal handle are one string, and resolution depends on document order rather than on a declared wrapper/handle split.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:d8bb8cfa97d2f2fd",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 2
         },
         {
           "subject": "voice-io",
@@ -9857,12 +9860,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/components/MobilePageTOC.tsx:47 The mobile section list smooth-scrolls once only when the hash is already an element id, and otherwise does nothing, so a jump never waits for a lazy section or follows a wrapper alias.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:7932d7ba8929c786",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/components/MobilePageTOC.tsx:46 The mobile section list looks up the raw id once with getElementById. It never uses the shared resolver or a data-scroll-anchor wrapper, and it never waits for or re-lands on a lazy section, so on /features (LazyMount stages) a jump lands on the reserved stub and drifts as the sections above it mount.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:d8bb8cfa97d2f2fd",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 2
         },
         {
           "subject": "page-load-pipeline",
@@ -11433,12 +11435,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/i18n/localeRelease.ts:2 These modules decide which locales ship and render a language offer; data-scroll-anchor, findAnchorGaps, and ARRIVAL_BUDGET_MS are absent under src/i18n, src/components, and src/stores, and scrollMap in the catalogs is only the translated landmark label.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:7932d7ba8929c786",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/i18n/localeRelease.ts:2 These modules decide which locales ship and show a language offer. LocaleOffer reads only ?lang= from location.search and never touches the hash or scrolling. Searching src/i18n, src/components and src/stores for data-scroll-anchor, findAnchorGaps, ARRIVAL_BUDGET_MS and wrapperId found nothing, so these files neither host nor consume a lazy page's address space.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:d8bb8cfa97d2f2fd",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 2
         },
         {
           "subject": "narrative-scroll-surface",

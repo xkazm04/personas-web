@@ -5027,71 +5027,95 @@
       "subject": "lazy-section-addressability",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T00:29:41.193Z",
-      "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:38:32.745Z",
+      "worker": "adf40298-bc61-4ebd-a206-9a429be15d74",
       "techniques": [
         {
-          "technique": "always-present-anchor-wrappers",
-          "verdict": "not-applicable",
-          "evidence": "src/components/InfoPageLayout.tsx:43 This layout forwards the page's own sections; these files do not code-split or viewport-mount an addressable section."
+          "technique": "scroll-to-hydrate-then-retry",
+          "verdict": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:47 Scrolls once and smoothly, even for reduced-motion users. There is no bounded wait for the mounted section, no re-assertion after reserved height turns into real height, and focus does not move. It ignores the startArrival protocol that ScrollMap uses."
         },
         {
           "technique": "anchor-coverage-guard",
           "verdict": "conformant",
-          "evidence": "src/hooks/useAnchorCoverageGuard.ts:8 PageShell runs this after first paint, dev-only, both directions, console.warn, no production throw."
+          "evidence": "src/components/PageShell.tsx:34 Every PageShell page runs a dev-only check against the live DOM after first paint. It checks both directions, never throws, and its message names the address, the consumer and the page (src/hooks/useAnchorCoverageGuard.ts, src/lib/anchor-coverage.ts)."
+        },
+        {
+          "technique": "ssr-gating-decision-tree",
+          "verdict": "deviation",
+          "evidence": "src/app/loading.tsx:13 This is the route-level loading boundary the technique names as a failure. In the newest build on disk (.next, 2026-10-16; loading.tsx unchanged since June), both /how.html and /index.html show the role=status Loading fallback, and the page sits inside `<div hidden id=\"S:0\">` (event-bus wrapper at byte 50263, after the hidden div at 7081). So the address wrappers are in the bytes, but a reader without script cannot see or reach them."
+        },
+        {
+          "technique": "always-present-anchor-wrappers",
+          "verdict": "not-applicable",
+          "evidence": "src/components/InfoPageLayout.tsx:43 This layout forwards the page's own sections; these files do not code-split or viewport-mount an addressable section.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "external-anchor-vs-internal-id",
           "verdict": "deviation",
-          "evidence": "src/components/MobilePageTOC.tsx:46 The published href is resolved as a raw element id, so a data-scroll-anchor alias is invisible to this consumer."
-        },
-        {
-          "technique": "scroll-to-hydrate-then-retry",
-          "verdict": "deviation",
-          "evidence": "src/components/MobilePageTOC.tsx:47 One-shot smooth scroll, no retry budget, no cancel, no reduced-motion instant path."
-        },
-        {
-          "technique": "ssr-gating-decision-tree",
-          "verdict": "not-applicable",
-          "evidence": "src/components/Navbar.tsx:13 The only client-only split here is the closed-until-click waitlist modal, not a page section."
+          "evidence": "src/components/MobilePageTOC.tsx:46 The published href is resolved as a raw element id, so a data-scroll-anchor alias is invisible to this consumer.",
+          "carriedFrom": "2026-10-17"
         }
       ],
-      "registryProposal": "The React application for scroll-to-hydrate-then-retry still describes ScrollMap as a one-shot getElementById and says no cold hash handler exists; current ScrollMap calls startArrival, and the home page mounts useHashArrival."
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/components/MobilePageTOC.tsx:47 The mobile section list smooth-scrolls once only when the hash is already an element id, and otherwise does nothing, so a jump never waits for a lazy section or follows a wrapper alias.",
+          "evaluatedAt": "2026-10-17T00:29:41.193Z",
+          "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+          "reason": "replaced by adf40298-bc61-4ebd-a206-9a429be15d74"
+        }
+      ]
     },
     "Theming, i18n & Shared Utilities/Internationalization (14 locales)/lazy-section-addressability": {
       "context": "Internationalization (14 locales)",
       "subject": "lazy-section-addressability",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T00:29:41.193Z",
-      "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:38:32.745Z",
+      "worker": "adf40298-bc61-4ebd-a206-9a429be15d74",
       "techniques": [
         {
           "technique": "always-present-anchor-wrappers",
           "verdict": "not-applicable",
-          "evidence": "src/components/LocaleOffer.tsx:65 The offer is a fixed banner, not a section in a long page."
+          "evidence": "src/components/LocaleOffer.tsx:65 The offer is a fixed banner, not a section in a long page.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "anchor-coverage-guard",
           "verdict": "not-applicable",
-          "evidence": "src/i18n/localeRelease.ts:2 No declared page-location vocabulary in this module."
+          "evidence": "src/i18n/localeRelease.ts:2 No declared page-location vocabulary in this module.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "external-anchor-vs-internal-id",
           "verdict": "not-applicable",
-          "evidence": "src/i18n/en.ts:3704 scrollMap here is copy for the page-nav landmark, not a list of section addresses."
+          "evidence": "src/i18n/en.ts:3704 scrollMap here is copy for the page-nav landmark, not a list of section addresses.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "scroll-to-hydrate-then-retry",
           "verdict": "not-applicable",
-          "evidence": "src/components/LanguageSwitcher.tsx:39 The control changes locale; it does not jump to a section."
+          "evidence": "src/components/LanguageSwitcher.tsx:39 The control changes locale; it does not jump to a section.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "ssr-gating-decision-tree",
           "verdict": "not-applicable",
-          "evidence": "src/components/LocaleOfferMount.tsx:6 Client-only is a browser-language card gated on locale release, not a long-page section."
+          "evidence": "src/components/LocaleOfferMount.tsx:6 Client-only is a browser-language card gated on locale release, not a long-page section.",
+          "carriedFrom": "2026-10-17"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/i18n/localeRelease.ts:2 These modules decide which locales ship and render a language offer; data-scroll-anchor, findAnchorGaps, and ARRIVAL_BUDGET_MS are absent under src/i18n, src/components, and src/stores, and scrollMap in the catalogs is only the translated landmark label.",
+          "evaluatedAt": "2026-10-17T00:29:41.193Z",
+          "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+          "reason": "replaced by adf40298-bc61-4ebd-a206-9a429be15d74"
         }
       ]
     },
@@ -5100,32 +5124,45 @@
       "subject": "lazy-section-addressability",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T00:29:41.193Z",
-      "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:38:32.745Z",
+      "worker": "adf40298-bc61-4ebd-a206-9a429be15d74",
       "techniques": [
         {
           "technique": "always-present-anchor-wrappers",
-          "verdict": "conformant",
-          "evidence": "src/app/how/page.tsx:57 The page renders the stage id around each lazy chunk; the chunk skeleton uses data-stage=fill so the slot has a stage height before the chunk loads."
+          "verdict": "deviation",
+          "evidence": "src/app/how/page.tsx:86 The page renders the wrapper unconditionally, which is right. But the wrapper is the visual stage (glow, gradients, overflow-clip, scroll-mt), which the technique refuses: 'a wrapper that has acquired styling responsibilities'. There is also no data-scroll-anchor or focus target."
         },
         {
           "technique": "external-anchor-vs-internal-id",
           "verdict": "deviation",
-          "evidence": "src/app/how/page.tsx:60 One string is both the deep link and the inner section id; the inner event-bus, for-you, and manifesto wrappers repeat it."
+          "evidence": "src/components/sections/how-manifesto/index.tsx:27 The inner section reuses the wrapper's published id (page.tsx:82), and the same is true for for-you, event-bus, agents-timeline, agents-chat and platform-layers. That leaves duplicate ids, one string serving both link and tracker, and no alias table."
         },
         {
           "technique": "scroll-to-hydrate-then-retry",
-          "verdict": "not-applicable",
-          "evidence": "src/components/sections/how-role-path/roles.ts:28 In-page jumps are fragment links to StageSection ids the page renders up front, so there is no unmounted inner target to retry."
+          "verdict": "deviation",
+          "evidence": "src/app/how/page.tsx:60 Deep links rely on the browser's one-shot fragment scroll plus document order. Nothing re-lands after the ssr:false chunks mount, and nothing moves focus. The page's own jump consumers are the shared shell's: MobilePageTOC jumps once, and ScrollMap does nothing here (see notes)."
         },
         {
           "technique": "ssr-gating-decision-tree",
           "verdict": "deviation",
-          "evidence": "src/components/sections/how-lazy.tsx:27 The event-bus export, and the three demos under it, skip pre-rendering; the file comment only explains reserving one stage of skeleton, not which tree exception allows client-only."
+          "evidence": "src/components/sections/how-lazy.tsx:27 All four /how sections are client-only without a gate and without a recorded reason; the file header explains only the skeleton. These sections carry the page's explanatory meaning, which the tree says may not be client-only."
+        },
+        {
+          "technique": "anchor-coverage-guard",
+          "verdict": "deviation",
+          "evidence": "src/app/how/page.tsx:46 The vocabulary is declared by hand inline, and its hosts are plain ids. The shared guard's reverse direction (hosted without declaration) scans only [data-scroll-anchor], so on /how the check runs in one direction only. Declared-to-host does run, via InfoPageLayout/PageShell."
         }
       ],
-      "registryProposal": "external-anchor-vs-internal-id forbids one string for the published hash and the section id; /how shares them on purpose and breaks the tie by document order, and the technique states no such exception."
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/app/how/page.tsx:60 The published hash, the stage wrapper, and the lazy section share one id, and the page depends on document order to pick the wrapper, with no second namespace or alias.",
+          "evaluatedAt": "2026-10-17T00:29:41.193Z",
+          "worker": "33af0c9d-a869-4b96-9b27-3d5f6178cc78",
+          "reason": "replaced by adf40298-bc61-4ebd-a206-9a429be15d74"
+        }
+      ]
     },
     "Observability & Event Monitoring/Observability Charts & SLA/measurement-honesty": {
       "context": "Observability Charts & SLA",
@@ -10682,6 +10719,42 @@
       "evaluatedTs": "2026-11-03T23:01:13.734Z",
       "worker": "222dcb6b-5c2d-46de-aa97-a049ca3d8b21",
       "techniques": []
+    },
+    "Marketing & Landing/Homepage & Hero/lazy-section-addressability": {
+      "context": "Homepage & Hero",
+      "subject": "lazy-section-addressability",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:38:32.745Z",
+      "worker": "adf40298-bc61-4ebd-a206-9a429be15d74",
+      "techniques": [
+        {
+          "technique": "always-present-anchor-wrappers",
+          "verdict": "conformant",
+          "evidence": "src/app/page.tsx:67 The page renders an unstyled wrapper per manifest row, outside every condition. The section mounts inside a LazyMount stage with a minHeight reservation and mounts once."
+        },
+        {
+          "technique": "scroll-to-hydrate-then-retry",
+          "verdict": "deviation",
+          "evidence": "src/lib/landing-address.ts:121 It has a 100ms/6000ms budget, re-resolves from the selector on each tick, re-asserts, cancels on intent, and supersedes older jumps. But useHashArrival.ts just stops on 'exhausted' and records nothing, which the technique refuses as 'exhaustion that leaves no trace'."
+        },
+        {
+          "technique": "external-anchor-vs-internal-id",
+          "verdict": "deviation",
+          "evidence": "src/lib/landing-address.ts:50 There are two namespaces, with aliases kept forever (tools, download-section, use-cases). But the internal handles are a separate hand-written list beside LANDING_SECTIONS (constants.ts) and HOME_STAGES (home-manifest.ts), not one declaration. Source-scan tests catch drift between them."
+        },
+        {
+          "technique": "anchor-coverage-guard",
+          "verdict": "conformant",
+          "evidence": "src/lib/landing-address.test.ts:201 A CTA/link consumer guard backs up the live dev-time guard that runs through PageShell. home-manifest.test.ts pins the scroll map to the stages in both directions."
+        },
+        {
+          "technique": "ssr-gating-decision-tree",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/lazy.tsx:44 The reason is recorded once per page, and home-manifest.test.ts fails if an ungated stage goes client-only. Gated placeholders carry the section label. The root loading.tsx hiding the visible document is judged under Layout."
+        }
+      ]
     }
   }
 }
