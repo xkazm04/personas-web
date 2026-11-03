@@ -6594,7 +6594,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:41 This context is a dashboard graph and table view. A search of src/components/dashboard/views/knowledge found no exit-code path, no warning ceiling, no hook and no eslint-disable or ts-ignore waivers, so no quality-gates technique applies.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "model-composed-workspace",
@@ -7195,7 +7199,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/fleet-monitor/FleetFrame.tsx:24 This context is presentational dashboard UI. A search of src/components/dashboard/fleet-monitor found no gate machinery (no exit-code path, no warning ceiling, no hook) and no inline lint or type waivers, so no quality-gates technique has its precondition here.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "agent-instruction-files",
@@ -7888,7 +7896,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/director/index.tsx:37 This context is a dashboard view that shows scores and verdicts as data. A search of src/components/dashboard/views/director found no exit-code path, no warning ceiling, no hook and no inline waivers, so it neither implements a gate nor escapes one.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "agent-memory",

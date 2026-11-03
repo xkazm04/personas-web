@@ -10617,6 +10617,36 @@
           "evidence": "src/lib/supabase-admin.ts:89 Production without the service role fails closed with its own 'not configured' code instead of degrading to anon. The cause goes to Sentry once."
         }
       ]
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/quality-gates": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:01:13.734Z",
+      "worker": "222dcb6b-5c2d-46de-aa97-a049ca3d8b21",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Director Coaching/quality-gates": {
+      "context": "Director Coaching",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:01:13.734Z",
+      "worker": "222dcb6b-5c2d-46de-aa97-a049ca3d8b21",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Knowledge Base/quality-gates": {
+      "context": "Knowledge Base",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T23:01:13.734Z",
+      "worker": "222dcb6b-5c2d-46de-aa97-a049ca3d8b21",
+      "techniques": []
     }
   }
 }
