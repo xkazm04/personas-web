@@ -2544,44 +2544,61 @@
       "subject": "browser-credential-boundary",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T13:16:24.405Z",
-      "worker": "340e3867-db54-4854-8f20-599ca3c48522",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:47:24.393Z",
+      "worker": "154b4735-2063-48d0-bf07-2e440281c81e",
       "techniques": [
         {
           "technique": "aggregate-view-not-base-table",
           "verdict": "deviation",
-          "evidence": "src/app/api/votes/route.ts:36 Reads individual identifier-bearing rows from base table feature_votes to compute tallies in JS rather than querying an aggregate view."
-        },
-        {
-          "technique": "omit-the-column-not-the-value",
-          "verdict": "deviation",
-          "evidence": "src/app/api/votes/storage.ts:18 The email column is colocated in the feature_votes table and filtered out in application queries rather than structurally omitted into a separate relation."
+          "evidence": "scripts/setup-voting-db.sql:116 Totals are published as a view, but the identifier-bearing base table is still granted to anon. This is the revoke half the technique says usually gets skipped. The route reads the view (src/app/api/feature-boosts/route.ts:81), so no feature needs the base grant."
         },
         {
           "technique": "default-deny-plus-defaulted-owner",
-          "verdict": "deviation",
-          "evidence": "src/app/api/votes/route.ts:148 Client sends an unauthenticated voterId which is inserted into voter_id rather than having the database default owner from session."
+          "verdict": "conformant",
+          "evidence": "scripts/setup-voting-db.sql:89 RLS is on for every voting table, and feature_votes has no anon policy (setup-voting-db.sql lines 94-100 drop them). Writes go through the service-role route."
+        },
+        {
+          "technique": "omit-the-column-not-the-value",
+          "verdict": "conformant",
+          "evidence": "scripts/harden-voting-rls.sql:29 The public projection has no email or voter_id column. Legacy email still sits in feature_votes, but that table is revoked from anon outright (harden-voting-rls.sql:50) rather than filtered by a predicate."
+        },
+        {
+          "technique": "opaque-upstream-errors",
+          "verdict": "conformant",
+          "evidence": "src/app/api/votes/route.ts:63 Supabase errors become a fixed message plus 500, and a missing service role becomes a 503 store_unavailable. No upstream detail is relayed."
+        },
+        {
+          "technique": "public-vs-server-env-split",
+          "verdict": "conformant",
+          "evidence": "src/app/api/votes/storage.ts:50 The service-role client comes from a `server-only` module, and the key never takes the public prefix."
         },
         {
           "technique": "broker-proxy-attaches-secret",
           "verdict": "deviation",
-          "evidence": "src/app/api/votes/route.ts:88 The route accepts mutations from unauthenticated callers before spending the privileged administrative Supabase client credentials."
-        },
-        {
-          "technique": "opaque-upstream-errors",
-          "verdict": "deviation",
-          "evidence": "src/app/api/votes/route.ts:44 Upstream errors return a generic response but fail to log details under a minted correlation identifier."
+          "evidence": "src/app/api/votes/route.ts:88 The route accepts mutations from unauthenticated callers before spending the privileged administrative Supabase client credentials.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "outbound-fetch-destination-validation",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/votes/route.ts:9 Does not perform outbound HTTP fetches to dynamically supplied addresses."
+          "evidence": "src/app/api/votes/route.ts:9 Does not perform outbound HTTP fetches to dynamically supplied addresses.",
+          "carriedFrom": "2026-10-13"
         },
         {
           "technique": "allowlisted-operator-stream",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/votes/rate-limit.ts:10 No debug or live operator request stream is exposed by feature voting."
+          "evidence": "src/app/api/votes/rate-limit.ts:10 No debug or live operator request stream is exposed by feature voting.",
+          "carriedFrom": "2026-10-13"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/app/api/votes/route.ts:36 The voting route queries individual identifier-bearing rows from the base table feature_votes to compute tallies in memory rather than querying an aggregate view, and relies on column omission in application code to avoid returning the email column stored in the same table.",
+          "evaluatedAt": "2026-10-13T13:16:24.405Z",
+          "worker": "340e3867-db54-4854-8f20-599ca3c48522",
+          "reason": "replaced by 154b4735-2063-48d0-bf07-2e440281c81e"
         }
       ]
     },
@@ -2631,39 +2648,55 @@
       "subject": "browser-credential-boundary",
       "bundle": "software-engineering",
       "state": "conformant",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T22:11:27.570Z",
-      "worker": "72149f17-75bd-49b5-9e64-97bd6e745211",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:47:24.393Z",
+      "worker": "154b4735-2063-48d0-bf07-2e440281c81e",
       "techniques": [
         {
           "technique": "opaque-upstream-errors",
           "verdict": "conformant",
-          "evidence": "src/app/api/roadmap/route.ts:26 Closed vocabulary from types.ts:3. 'none' (not configured, line 7) and 'error' are distinct from 'supabase' with zero rows. Gaps against the full technique: no correlation id is minted or returned, every error is clamped to 502 (throttling is not kept as its own class), and 'not configured' is returned as 200 rather than its own status."
+          "evidence": "src/app/api/roadmap/route.ts:26 Closed vocabulary (supabase|none|error). Error detail is logged server-side at line 20 and never returned."
         },
         {
           "technique": "public-vs-server-env-split",
           "verdict": "conformant",
-          "evidence": "src/app/api/roadmap/route.ts:2 The route gates on env through the server-only module, and the client it builds uses only the public NEXT_PUBLIC anon pair (a role selector). The page and section components read no env and no Supabase."
+          "evidence": "src/app/api/roadmap/route.ts:2 The env probe comes from the server-only module, and the client used is the published anon pair, which fits a public table."
         },
         {
           "technique": "broker-proxy-attaches-secret",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/roadmap/route.ts:11 It uses the anon client, so the dependency is public by design, which the technique lists as a case for not brokering. No privileged secret is attached."
-        },
-        {
-          "technique": "outbound-fetch-destination-validation",
-          "verdict": "not-applicable",
-          "evidence": "src/app/api/roadmap/route.ts:12 The destination is fixed by deployment config (the Supabase URL). Nothing fetches an address taken from a response or a request."
+          "evidence": "src/app/api/roadmap/route.ts:12 The dependency is public by design (anon key), so the technique's 'when not to broker' case applies."
         },
         {
           "technique": "aggregate-view-not-base-table",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/roadmap/route.ts:15 roadmap_items is a public reference table with no identifiers (id, name, description, status, priority, sort_order). The area counts in roadmap-area-counts.ts are computed at build time from static modules, not from rows that identify anyone."
+          "evidence": "src/app/api/roadmap/route.ts:15 The roadmap items carry no identifiers, so there are no counts over identifying rows to protect."
+        },
+        {
+          "technique": "omit-the-column-not-the-value",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/roadmap/route.ts:16 Every selected field is public product copy, and no sensitive value shares the table."
+        },
+        {
+          "technique": "outbound-fetch-destination-validation",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/roadmap/route.ts:12 The destination is fixed by deployment config (the Supabase URL). Nothing fetches an address taken from a response or a request.",
+          "carriedFrom": "2026-10-24"
         },
         {
           "technique": "allowlisted-operator-stream",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/roadmap/route.ts:20 This is a server log of an upstream error object for the operator. It does not render requests that carried a credential, so there is no debug stream to allowlist."
+          "evidence": "src/app/api/roadmap/route.ts:20 This is a server log of an upstream error object for the operator. It does not render requests that carried a credential, so there is no debug stream to allowlist.",
+          "carriedFrom": "2026-10-24"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "conformant",
+          "evidence": "src/app/api/roadmap/route.ts:26 /api/roadmap reads a public, non-identifying table through the anon client (regime one). On failure it logs the Supabase details on the server and returns a closed `source` vocabulary (supabase|none|error) with a 502, so the caller never sees upstream detail and a failure never looks like an empty success.",
+          "evaluatedAt": "2026-10-24T22:11:27.570Z",
+          "worker": "72149f17-75bd-49b5-9e64-97bd6e745211",
+          "reason": "replaced by 154b4735-2063-48d0-bf07-2e440281c81e"
         }
       ]
     },
@@ -10546,6 +10579,42 @@
           "technique": "lazy-section-loading",
           "verdict": "deviation",
           "evidence": "src/components/sections/LazySection.tsx:48 There is no warm-path delay, and the generic silhouette is stacked after the LazyMount placeholder (page.tsx:72). Chunk failure is handled honestly: SectionErrorBoundary.tsx:37 holds the slot and offers a reload."
+        }
+      ]
+    },
+    "Infrastructure & Telemetry/Supabase Client/browser-credential-boundary": {
+      "context": "Supabase Client",
+      "subject": "browser-credential-boundary",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-11-03",
+      "evaluatedTs": "2026-11-03T22:47:24.393Z",
+      "worker": "154b4735-2063-48d0-bf07-2e440281c81e",
+      "techniques": [
+        {
+          "technique": "default-deny-plus-defaulted-owner",
+          "verdict": "conformant",
+          "evidence": "scripts/setup-sync-db.sql:39 The owner column defaults from the session, and the browser writers omit user_id. The `for all` policy covers the upsert paths (line 622)."
+        },
+        {
+          "technique": "aggregate-view-not-base-table",
+          "verdict": "conformant",
+          "evidence": "scripts/setup-sync-db.sql:655 The dashboard aggregates are invoker views granted to authenticated (line 707), so the base-table RLS still applies to whoever queries them."
+        },
+        {
+          "technique": "omit-the-column-not-the-value",
+          "verdict": "conformant",
+          "evidence": "scripts/setup-sync-db.sql:286 Trigger config and vault ciphertext have no column in the reachable projection (see also line 18)."
+        },
+        {
+          "technique": "public-vs-server-env-split",
+          "verdict": "conformant",
+          "evidence": "src/lib/supabase-admin.ts:1 The service-role client lives behind the server-only marker. The browser client in supabase.ts reads only the NEXT_PUBLIC anon pair."
+        },
+        {
+          "technique": "opaque-upstream-errors",
+          "verdict": "conformant",
+          "evidence": "src/lib/supabase-admin.ts:89 Production without the service role fails closed with its own 'not configured' code instead of degrading to anon. The cause goes to Sentry once."
         }
       ]
     }

@@ -5600,12 +5600,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/app/api/votes/route.ts:36 The voting route queries individual identifier-bearing rows from the base table feature_votes to compute tallies in memory rather than querying an aggregate view, and relies on column omission in application code to avoid returning the email column stored in the same table.",
-          "evaluatedAt": "2026-10-13",
-          "evaluatedAgainst": "sha256-b2:d3eef10e9ed8459f",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "scripts/setup-voting-db.sql:116 Boost totals are already served through the `feature_boost_totals` view by a service-role route. Even so, the anon role keeps an unconditional read policy on the base `feature_boosts` table, and the hardening script never revokes it. So the public key can still list every voter_id; the votes route accepts that same id as the only proof of who the voter is.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:8c4e4cc37445b46c",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-cli-transport",
@@ -5832,12 +5831,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "conformant",
-          "evidence": "src/app/api/roadmap/route.ts:26 /api/roadmap reads a public, non-identifying table through the anon client (regime one). On failure it logs the Supabase details on the server and returns a closed `source` vocabulary (supabase|none|error) with a 502, so the caller never sees upstream detail and a failure never looks like an empty success.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:d3eef10e9ed8459f",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/api/roadmap/route.ts:26 The route reads a public, non-identifying table through the anon client (regime one). Supabase details go to the server log only, and the caller gets a closed `source` value with a 502, so a failure never looks like an empty success.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:8c4e4cc37445b46c",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 1
         },
         {
           "subject": "mcp-tools",
@@ -10139,7 +10137,11 @@
           "revision": 4,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "scripts/setup-sync-db.sql:624 Every synced table has RLS on with a single owner-only policy for the authenticated role and no anon policy, owner columns default from auth.uid(), and aggregates are invoker-evaluated views. The browser's anon key therefore reaches only the caller's own rows.",
+          "evaluatedAt": "2026-11-03",
+          "evaluatedAgainst": "sha256-b2:8c4e4cc37445b46c",
+          "evaluatedRevision": 4
         },
         {
           "subject": "test-harness",
