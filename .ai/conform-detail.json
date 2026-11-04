@@ -2047,8 +2047,9 @@
       "subject": "fleet-orchestration",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T03:03:12.704Z",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:35:07.022Z",
+      "worker": "92a32135-8cc4-4415-8a70-47947f4e7a49",
       "techniques": [
         {
           "technique": "session-registry",
@@ -2076,14 +2077,15 @@
           "evaluatedAt": "2026-10-13T09:19:28.251Z",
           "worker": "aef5d03d-b47c-4aed-a257-4e4a63a5ccd1",
           "reason": "replaced by 6a29d253-1ab0-4081-8973-b2ca047e8b46"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/dashboard/layout.tsx:15 The layout defines the client-side single-page dashboard shell and chrome, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of fleet orchestration machinery.",
+          "evaluatedAt": "2026-10-13",
+          "worker": null,
+          "reason": "replaced by 92a32135-8cc4-4415-8a70-47947f4e7a49"
         }
-      ],
-      "withdrawn": {
-        "worker": "6a29d253-1ab0-4081-8973-b2ca047e8b46",
-        "state": "not-applicable",
-        "at": "2026-10-24T03:03:38.415806+00:00",
-        "reason": "reviewer (sonnet): The anchor layout.tsx:16 is a doc comment saying the layout is the SPA shell. It does not itself show that no agent-session registry or lifecycle exists, so the not-applicable rests on a keyword grep that is incidental. The context also holds realtime and connection-status code (ConnectionStatusIndi"
-      }
+      ]
     },
     "Marketing & Landing/Conversion: Get Started, FAQ & Footer/fleet-orchestration": {
       "context": "Conversion: Get Started, FAQ & Footer",
@@ -11574,6 +11576,36 @@
       "evaluatedAt": "2026-11-04",
       "evaluatedTs": "2026-11-04T05:29:41.474Z",
       "worker": "63159cab-1732-4dc6-a431-7d62dd727da9",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/fleet-orchestration": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:35:07.022Z",
+      "worker": "92a32135-8cc4-4415-8a70-47947f4e7a49",
+      "techniques": []
+    },
+    "Infrastructure & Telemetry/Orchestrator API Client & Mock Data/fleet-orchestration": {
+      "context": "Orchestrator API Client & Mock Data",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:35:07.022Z",
+      "worker": "92a32135-8cc4-4415-8a70-47947f4e7a49",
+      "techniques": []
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/fleet-orchestration": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:35:07.022Z",
+      "worker": "92a32135-8cc4-4415-8a70-47947f4e7a49",
       "techniques": []
     }
   }

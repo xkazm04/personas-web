@@ -2505,8 +2505,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:4 The context is a marketing illustration that animates the desktop app's healing policy and runs no agent sessions. A case-insensitive grep of healing-run-circuit and illustrate for dispatch, hibernat, sweeper, harvest and fleet found no hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "job-coordination",
@@ -8502,8 +8506,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/api/events/stream/route.ts:13 The route copies upstream SSE bytes through unchanged and adds keep-alives. The views render the bus's message-delivery states (pending/processed/dead_letter, via eventStatusFsm), not agent-session states, so the context has no fleet registry or dispatch. A case-insensitive grep of src/app/api and src/components/dashboard for hibernat, sweeper, harvest and writeScope found no hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "streaming-output",
@@ -9807,9 +9815,10 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/dashboard/layout.tsx:15 The layout defines the client-side single-page dashboard shell and chrome, and searching for session_registry, parallel_dispatch, and result_harvest across its files and directories confirmed zero occurrences of fleet orchestration machinery.",
-          "evaluatedAt": "2026-10-13",
-          "stale": true
+          "evidence": "src/app/dashboard/layout.tsx:16 The context is view chrome (shell layout, navigation, scope bar and scope filters over rows read elsewhere) and holds no session registry, dispatcher, sweeper or harvest; a case-insensitive grep of src/app/dashboard and src/components/dashboard for hibernat, sweeper, harvest and writeScope found no hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "agent-runtime-assembly",
@@ -10856,8 +10865,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/mockApi.ts:138 The context is a same-origin REST proxy, a typed client and demo mocks for an external orchestrator. The mock says it has no dispatcher, and the fleet's registry and lifecycle live in the desktop or orchestrator. A case-insensitive grep of src/lib and src/app/api for hibernat, sweeper, harvest and writeScope found no hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "browser-credential-boundary",
