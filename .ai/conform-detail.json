@@ -8380,16 +8380,11 @@
       "context": "Manual Review Queue",
       "subject": "voice-io",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T01:53:43.023Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "01e82e91-7cd0-49e0-b528-47d66a8beee5",
-        "state": "not-applicable",
-        "at": "2026-10-24T01:54:17.479990+00:00",
-        "reason": "reviewer (sonnet): The anchor ReviewsSplitPane.tsx:52 is a setInterval for checkEscalations, so it does not show that voice is absent. The claim that escalation is the queue's \"only time-driven behaviour\" is also contradicted by usePolling(fetchReviews, 15_000) at line 49."
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T00:47:01.267Z",
+      "worker": "e9521028-1aeb-4a94-be09-4fa003be4143",
+      "techniques": []
     },
     "Product Feature Showcase/Memory Layers & Multi-Provider AI/voice-io": {
       "context": "Memory Layers & Multi-Provider AI",
@@ -10795,6 +10790,36 @@
           "evidence": "src/lib/settleThread.test.ts:192 The walked population `sources` (line 185) is shared with the absence test. This positive control fails if the walk returns zero files or misses mockApi.ts, so the for-loop absence check at 196 cannot pass vacuously over an empty walk without the sibling test going red."
         }
       ]
+    },
+    "Interactive Demos & Playground/Visual Flow Composer & Playground Page/voice-io": {
+      "context": "Visual Flow Composer & Playground Page",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T00:47:01.267Z",
+      "worker": "e9521028-1aeb-4a94-be09-4fa003be4143",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/voice-io": {
+      "context": "Split & Pipeline Playground",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T00:47:01.267Z",
+      "worker": "e9521028-1aeb-4a94-be09-4fa003be4143",
+      "techniques": []
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/voice-io": {
+      "context": "Feature Voting & Comments",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T00:47:01.267Z",
+      "worker": "e9521028-1aeb-4a94-be09-4fa003be4143",
+      "techniques": []
     }
   }
 }

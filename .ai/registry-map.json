@@ -2780,7 +2780,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/playground/TerminalSim.tsx:9 The playground plays canned text prompts into a simulated terminal, and the flow composer is an SVG canvas. A search of src/app/playground, src/components/flow-composer and src/components found no speechSynthesis, SpeechRecognition or getUserMedia, so nothing here listens or speaks.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "wizard-flows",
@@ -3199,7 +3203,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:14 This is a silent, film-styled visual demo. Its 'subtitles' are on-screen text paced by a run clock, not by synthesized speech, and a search of playground-split for voice, speech, audio, speechSynthesis and SpeechRecognition found nothing, so speech-timing-timeline and the other techniques have nothing to govern.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "prompt-assembly",
@@ -5741,7 +5749,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/feature-comments/route.ts:3 Comments and feature requests come in as typed text through CommentInput and API routes, with no dictation or read-aloud. A search of the feature-voting components and the votes, feature-boosts, feature-comments and feature-requests routes for voice, speech, audio, speechSynthesis and SpeechRecognition found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "agent-runtime-assembly",
@@ -6719,7 +6731,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/index.tsx:22 The review queue is a visual approve/reject surface, and a search of views/reviews (including the focus-flow and split-pane subdirectories) for voice, speech, speechSynthesis, SpeechRecognition and audio found nothing. The spoken new-review announcement lives in src/lib/review-voice.ts, src/hooks/useReviewVoice.ts and src/stores/reviewVoiceStore.ts, is mounted in SyncedRealtimeProvider and is not in this context's files, so the subject's precondition does not hold here.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "agent-memory",
