@@ -4526,7 +4526,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "e2e/guide.spec.ts:26 The suite's own comment records that /guide has no inbound nav link in production (undiscoverable), yet every running guide test enters by page.goto('/guide'), and the one assertion that would fail is parked as fixme, so the lane stays green over a feature visitors cannot find.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "narrative-scroll-surface",
@@ -5716,7 +5720,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/api/votes/publicReads.test.ts:20 The vote/comment read correctness (counts past the 1000-row cap, head-count semantics) is asserted only against a hand-written model of PostgREST. No recorded or live certification lane exists (the e2e drill runs only with Supabase absent), so an upstream behaviour change or a misread of PostgREST stays green.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "mcp-tools",
@@ -9397,7 +9405,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "e2e/reduced-motion-hydration.spec.ts:59 The 'never discarded' verdict is read after a fixed 1.5 s wall-clock wait (and a 3 s wait for the hero hydration check at line 99), so on a loaded runner a late discard lands after the window and the test passes green over the very defect it guards.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "design-tokens",
