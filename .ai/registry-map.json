@@ -1065,12 +1065,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:13 The inspected context implements browser controls and release-plan presentation, while context-directory and repository searches for PhantomData, thread_local, downcast, and destructor found no matches or foreign-runtime binding requiring these techniques.",
-          "evaluatedAt": "2026-10-18",
-          "evaluatedAgainst": "sha256-b2:823cd55ac89d000b",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/sections/download-cta/useDownloadPlatforms.ts:13 The context maps a release plan to download pills in plain React/TypeScript; searches of its files, src/components, src/i18n and package.json dependencies for WebAssembly, FinalizationRegistry, PhantomData and thread_local found no hits, so there is no foreign engine binding layer for any of the six techniques to govern.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:cf656e76f4ec68fa",
+          "evaluatedRevision": 3,
+          "revisionsBehind": 1
         },
         {
           "subject": "narrative-scroll-surface",
@@ -11508,12 +11507,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/LocaleOffer.tsx:48 The inspected context loads literal translation catalogs through promises and implements locale selection, while context-directory and repository searches for PhantomData, thread_local, downcast, and destructor found no matches or foreign-runtime binding requiring these techniques.",
-          "evaluatedAt": "2026-10-18",
-          "evaluatedAgainst": "sha256-b2:823cd55ac89d000b",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/LocaleOffer.tsx:48 Locale catalogs are plain TS modules loaded through a host promise, not a foreign engine calling back synchronously; searches of the context files, src/i18n, src/components and package.json deps for WebAssembly, FinalizationRegistry, PhantomData and thread_local found no hits, so the subject's precondition (a binding over an engine the host did not write) does not hold.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:cf656e76f4ec68fa",
+          "evaluatedRevision": 3,
+          "revisionsBehind": 1
         },
         {
           "subject": "lazy-section-addressability",
