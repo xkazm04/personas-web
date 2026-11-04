@@ -10655,7 +10655,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/sentry.ts:4 This context is Sentry initialisation, PII scrubbing and analytics events, with no UI that renders records. Grepping its files for table, sort, csv and grid found only unrelated comment words, and text/csv and pageSize have zero hits anywhere in the repo (git grep).",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "mcp-tools",
@@ -11312,7 +11316,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/format.ts:1 These are generic helpers (formatters, polling, focus trap, URL-param state, env); none renders, sorts, pages or exports tabular rows. Searching src/lib and src/hooks for aria-sort, role=\"grid\", text/csv and pageSize returned no hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "translation-pipeline-topology",
