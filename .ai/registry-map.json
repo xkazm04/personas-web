@@ -3915,7 +3915,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "scripts/i18n/guide-drift.mjs:3 This context is static user documentation plus translation-drift tooling; the word 'prompt' appears only as topic prose (for example agents-prompts.ts tells users how to write prompts), and the five-term search found no code that assembles or sends a model prompt.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "async-ui-states",
@@ -7361,8 +7365,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/fleet-monitor/attention.ts:17 The fleet prototypes sort simulated agents (SimAgent from ./model, seeded by mulberry32) into visual attention piles, and AnswerBox only hands the user's text to a local onSend callback; the same five-term search found no LLM call or prompt builder, so no prompt is put together here.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "agent-runtime-assembly",
@@ -9171,8 +9179,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/m2/page.tsx:19 The /m2 route only renders a static phone landing (ClockLanding over pending copy); a search of src/, scripts/ and e2e/ for @anthropic-ai, api.anthropic, api.openai, cache_control and assemblePrompt found no hits, so this context never builds or sends a model prompt.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "mcp-tools",
@@ -10159,8 +10171,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "scripts/setup-sync-db.sql:56 The only prompt-related item here is a stored column: synced_personas mirrors the desktop's system_prompt/structured_prompt strings as opaque text for display. Nothing in this context composes layers, budgets context or calls a model, and the five-term search found no hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "mcp-tools",
