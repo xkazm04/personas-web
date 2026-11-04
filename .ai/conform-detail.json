@@ -5339,24 +5339,48 @@
       "subject": "page-load-pipeline",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T01:30:13.071Z",
-      "worker": "213b558f-ec7d-400a-b71e-6926490090d9",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:13:34.672Z",
+      "worker": "b2665c50-f903-44d1-9a64-2c2239c8b2fc",
       "techniques": [
         {
-          "technique": "layout-stability-by-reservation",
-          "verdict": "conformant",
-          "evidence": "src/components/CookieConsent.tsx:98 The consent banner appears after mount as a fixed overlay, avoiding insertion into document flow."
+          "technique": "script-cost-is-main-thread-time",
+          "verdict": "deviation",
+          "evidence": "src/components/PageTransition.tsx:56 This is the failure the technique names: a page-transition wrapper around the main content of every route that starts at zero opacity, so only script can reveal it. The className motion-reduce:opacity-100! on line 54 helps only reduced-motion visitors."
         },
         {
           "technique": "priority-is-declared-not-hoped",
           "verdict": "deviation",
-          "evidence": "src/components/NavbarLogoGlyph.tsx:49 The shared 56-by-56 navbar logo unconditionally requests priority across routes, contrary to the rule against prioritizing a shared image unless it is every route's largest element."
+          "evidence": "src/components/NavbarLogoGlyph.tsx:49 A 56px navbar logo rendered on every page through Navbar (imported in 15 files) gets priority, i.e. a head preload and a high fetch priority. The rule says never put a high hint on an every-route component unless it is the largest element on every route; a 56px glyph is not. `priority` is also deprecated in Next 16 in favour of preload."
         },
         {
-          "technique": "script-cost-is-main-thread-time",
-          "verdict": "deviation",
-          "evidence": "src/lib/animations.ts:121 PageTransition applies this initial variant around route content; its CSS visibility override is restricted to reduced motion, leaving ordinary first paint hidden until script reveals it."
+          "technique": "render-blocking-budget",
+          "verdict": "conformant",
+          "evidence": "src/app/layout.tsx:96 The only head-blocking script is inline, small, has no imports, and decides theme, lang and dir before paint, which is the one allowed case."
+        },
+        {
+          "technique": "font-loading-discipline",
+          "verdict": "conformant",
+          "evidence": "src/app/layout.tsx:108 Noto stylesheets for non-Latin scripts were removed from the head and load on demand per locale. Geist is self-hosted through next/font/local (variable 100-900 range, swap with an adjusted fallback by default), wired at line 113."
+        },
+        {
+          "technique": "layout-stability-by-reservation",
+          "verdict": "conformant",
+          "evidence": "src/components/CookieConsent.tsx:98 The late, unrequested consent banner is a fixed overlay that animates with transform and opacity, not content inserted above the reader."
+        },
+        {
+          "technique": "field-measured-load-budget",
+          "verdict": "conformant",
+          "evidence": "src/app/layout.tsx:119 The root layout mounts field LCP/INP/CLS reporting tagged by normalized route. p75 aggregation and the owner live outside this context."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/components/PageTransition.tsx:56 The root route wrapper starts transparent, making visible first content depend on hydration and its entrance animation for visitors without reduced motion.",
+          "evaluatedAt": "2026-10-17T01:30:13.071Z",
+          "worker": "213b558f-ec7d-400a-b71e-6926490090d9",
+          "reason": "replaced by b2665c50-f903-44d1-9a64-2c2239c8b2fc"
         }
       ]
     },
