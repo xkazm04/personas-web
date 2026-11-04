@@ -1409,8 +1409,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/features/page.tsx:7 The features page is a force-static marketing route made of illustration sections (murmuration swarm, vision grid) that call no model; searching src/app/features, murmuration-hero and vision-grid found no systemPrompt, max_tokens, messages.create, tokenBudget or contextWindow.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "agent-instruction-files",
@@ -3251,8 +3255,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/playground-split/shared/PromptText.tsx:7 Here 'prompt' means scripted marketing sample text, shown with highlighted keywords and driven by a virtual-clock simulation (useMindRun beats); nothing is assembled for or sent to a model, and searching the directory found no systemPrompt, max_tokens, messages.create, tokenBudget or contextWindow.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "companion-identity",
@@ -7530,8 +7538,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/notes/notesModel.ts:28 Notes is a read-only view of synced desktop goals (a pure model plus a zustand fetch store), with no prompt or model call; searching src/lib/notes, src/stores, the notes view and e2e found no systemPrompt, max_tokens, messages.create, tokenBudget or contextWindow.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "companion-identity",
@@ -9573,8 +9585,8 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "quality-gates",

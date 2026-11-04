@@ -11713,6 +11713,51 @@
           "evidence": "src/components/dashboard/views/observability/UsageView.tsx:49 The tool bar chart is capped at the top 15, with an 'Other' remainder row so the rows still sum to the total. Gap: the per-agent chart builds one series per tool name with no budget, and real-mode spend has no top-N."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Animation & Motion System/prompt-assembly": {
+      "context": "Animation & Motion System",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T22:27:30.039Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "c2bd0665-84d6-452a-a0b9-5676806ca6e5",
+        "state": "not-applicable",
+        "at": "2026-11-04T22:28:07.100413+00:00",
+        "reason": "reviewer (sonnet): The anchor src/hooks/useCanvasCompositor.ts:7 is only the framer-motion import line, so it does not show that no model call or prompt assembly exists; the absence rests on the grep alone."
+      }
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/prompt-assembly": {
+      "context": "Split & Pipeline Playground",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T22:27:30.039Z",
+      "worker": "c2bd0665-84d6-452a-a0b9-5676806ca6e5",
+      "techniques": []
+    },
+    "Marketing & Landing/Features Overview & Pricing/prompt-assembly": {
+      "context": "Features Overview & Pricing",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T22:27:30.039Z",
+      "worker": "c2bd0665-84d6-452a-a0b9-5676806ca6e5",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/prompt-assembly": {
+      "context": "Notes (Goal Board)",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T22:27:30.039Z",
+      "worker": "c2bd0665-84d6-452a-a0b9-5676806ca6e5",
+      "techniques": []
     }
   }
 }
