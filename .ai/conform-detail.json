@@ -5490,59 +5490,76 @@
       "subject": "plan-entitlements",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T01:48:24.010Z",
-      "worker": "a34885b4-30b6-42c9-9186-18fcaa3f3ef2",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:23:25.822Z",
+      "worker": "ce353ff3-7e67-4769-ad57-ca7d0ab2175f",
       "techniques": [
         {
           "technique": "capability-gate-predicates",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/shared/useStepLoop.ts:15 The loop gate checks motion preference and visibility, not paid capability access."
-        },
-        {
-          "technique": "deployment-mode-short-circuit",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:26 This illustration uses the motion gate; it has no commercial deployment-mode gate to short-circuit."
-        },
-        {
-          "technique": "entitlement-lifecycle-revocation",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:10 Login expiry is a connector credential failure, not subscription expiry or entitlement revocation."
-        },
-        {
-          "technique": "id-vs-label-split",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:31 These labels identify illustrated tools and a model, not commercial tiers."
-        },
-        {
-          "technique": "inherited-tier-not-cloned-tier",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:49 The selectable variants are failure scenarios; no negotiated customer agreement or derived tier exists here."
-        },
-        {
-          "technique": "live-catalog-edit-is-a-lifecycle-event",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:27 The changing state is an animation step, not an edit to subscribed plan capabilities."
-        },
-        {
-          "technique": "price-book-authority",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:38 This constructs repair and retry copy; the context renders no commercial price or charging promise."
-        },
-        {
-          "technique": "provider-publishes-state-not-decision",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:33 The board renders SVG artwork, not an entitlement service contract."
-        },
-        {
-          "technique": "subtractive-entitlement",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:33 Escalation follows the illustrated error category; it does not remove an inherited subscription capability."
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:15 The only enumerated vocabulary is failure cases, not capabilities, so nothing here is gated by a plan."
         },
         {
           "technique": "tier-model-single-source",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:15 The declared vocabulary models operational failures, not product tiers."
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/HealingSection.tsx:16 The section reads marketing copy only; no tier model is declared or consumed."
+        },
+        {
+          "technique": "deployment-mode-short-circuit",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:26 This illustration uses the motion gate; it has no commercial deployment-mode gate to short-circuit.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "entitlement-lifecycle-revocation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:10 Login expiry is a connector credential failure, not subscription expiry or entitlement revocation.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "id-vs-label-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:31 These labels identify illustrated tools and a model, not commercial tiers.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "inherited-tier-not-cloned-tier",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/geometry.ts:49 The selectable variants are failure scenarios; no negotiated customer agreement or derived tier exists here.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "live-catalog-edit-is-a-lifecycle-event",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:27 The changing state is an animation step, not an edit to subscribed plan capabilities.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "price-book-authority",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:38 This constructs repair and retry copy; the context renders no commercial price or charging promise.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "provider-publishes-state-not-decision",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/Board.tsx:33 The board renders SVG artwork, not an entitlement service contract.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "subtractive-entitlement",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/healing-run-circuit/index.tsx:33 Escalation follows the illustrated error category; it does not remove an inherited subscription capability.",
+          "carriedFrom": "2026-10-17"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/i18n/pending/featuresSections.ts:408 Searches found no entitlement, tierId, or paywall references in this context, which animates operational failure scenarios rather than deciding access purchased through a plan.",
+          "evaluatedAt": "2026-10-17T01:48:24.010Z",
+          "worker": "a34885b4-30b6-42c9-9186-18fcaa3f3ef2",
+          "reason": "replaced by ce353ff3-7e67-4769-ad57-ca7d0ab2175f"
         }
       ]
     },

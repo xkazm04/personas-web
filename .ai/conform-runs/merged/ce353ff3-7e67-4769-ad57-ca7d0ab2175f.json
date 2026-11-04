@@ -1,0 +1,60 @@
+{
+ "schema": "conform-run/1",
+ "worker": "ce353ff3-7e67-4769-ad57-ca7d0ab2175f",
+ "subject": "plan-entitlements",
+ "evaluatedAt": "2026-11-04T04:23:25.822572+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Self-Healing & Trigger Automation",
+   "subject": "plan-entitlements",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:4 A case-insensitive search of IllustrationSwitcher.tsx and healing-run-circuit/ for entitle, tier, paywall, upgrade and pricing found nothing. The context animates the desktop app's failure-and-remedy cases (rate limit, timeout, overload, setup, login), not access that a plan pays for. The only 'subscribe' hit is a useSyncExternalStore listener.",
+   "techniques": [
+    {
+     "technique": "capability-gate-predicates",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:15 The only enumerated vocabulary is failure cases, not capabilities, so nothing here is gated by a plan."
+    },
+    {
+     "technique": "tier-model-single-source",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/healing-run-circuit/shared/HealingSection.tsx:16 The section reads marketing copy only; no tier model is declared or consumed."
+    }
+   ],
+   "absenceTerms": [
+    "entitle",
+    "tier",
+    "paywall",
+    "upgrade",
+    "pricing"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "plan-entitlements",
+   "context": "Features Overview & Pricing",
+   "reason": "evidence leans on features/page.tsx, which is not a tracked file"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-04T04:23:25.822572+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "plan-entitlements"
+   ],
+   "techniques": [
+    "capability-gate-predicates",
+    "tier-model-single-source"
+   ],
+   "deviations": 0,
+   "context": "Self-Healing & Trigger Automation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

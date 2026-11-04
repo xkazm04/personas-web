@@ -2414,12 +2414,11 @@
           "changedAt": "2026-10-25",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/i18n/pending/featuresSections.ts:408 Searches found no entitlement, tierId, or paywall references in this context, which animates operational failure scenarios rather than deciding access purchased through a plan.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:58f21c0561a86e45",
-          "evaluatedRevision": 7,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:4 A case-insensitive search of IllustrationSwitcher.tsx and healing-run-circuit/ for entitle, tier, paywall, upgrade and pricing found nothing. The context animates the desktop app's failure-and-remedy cases (rate limit, timeout, overload, setup, login), not access that a plan pays for. The only 'subscribe' hit is a useSyncExternalStore listener.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:66961f93b3ce02ba",
+          "evaluatedRevision": 8,
+          "revisionsBehind": 1
         },
         {
           "subject": "test-input-generation",
