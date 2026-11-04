@@ -8978,7 +8978,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/settleThread.test.ts:195 The context's one source-scan gate (blocking: vitest runs in CI) asserts a property, that badge counts are not import-time constants, by matching two literal identifiers in raw source text, so renaming the constant clears the check while the pass still claims the property holds.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "engine-host-contract",

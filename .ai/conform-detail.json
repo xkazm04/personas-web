@@ -10769,6 +10769,32 @@
           "evidence": "src/components/sections/lazy.tsx:44 The reason is recorded once per page, and home-manifest.test.ts fails if an ungated stage goes client-only. Gated placeholders carry the section label. The root loading.tsx hiding the visible document is judged under Layout."
         }
       ]
+    },
+    "Observability & Event Monitoring/System Health Panel/quality-gates": {
+      "context": "System Health Panel",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T00:27:37.983Z",
+      "worker": "44d88eea-c1b9-4f2b-9e79-452bdf71d72d",
+      "techniques": [
+        {
+          "technique": "renameable-detector-keys",
+          "verdict": "deviation",
+          "evidence": "src/lib/settleThread.test.ts:195 The key is a name the author controls: MOCK_HEALTH_ALERTS / MOCK_OPEN_INCIDENTS on lines 198-199. Reintroducing an import-time constant under any other name passes. The test title states the property ('are no longer import-time constants') instead of 'no listed token found', so this floor reports itself as a ceiling."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "deviation",
+          "evidence": "src/lib/settleThread.test.ts:190 The presence assertion runs a regex over raw readFileSync text (line 189) that was never normalised to executing code. A commented-out import line, or one whose binding is never called, satisfies 'has a production importer'. The absence assertions on 198-199 also have no presence assertion for the replacement (e.g. healthAlertCount being the badge's source)."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "src/lib/settleThread.test.ts:192 The walked population `sources` (line 185) is shared with the absence test. This positive control fails if the walk returns zero files or misses mockApi.ts, so the for-loop absence check at 196 cannot pass vacuously over an empty walk without the sibling test going red."
+        }
+      ]
     }
   }
 }
