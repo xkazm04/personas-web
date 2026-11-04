@@ -11236,6 +11236,31 @@
         "at": "2026-11-04T02:55:30.347539+00:00",
         "reason": "reviewer (sonnet): The anchor (murmuration-hero/index.tsx:12) is an incidental hero docstring. The context's own src/app/features/page.tsx:10-14 names sitemapRoutesHaveMetadata.test.ts, a gate that fails for this route. That contradicts not-applicable, and the verdict wrongly dismisses it as living outside the context"
       }
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/prompt-assembly": {
+      "context": "Dashboard Home Overview",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T03:27:46.028Z",
+      "worker": "67bb4d53-8449-4629-838b-4cbd33ac01c9",
+      "techniques": []
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/prompt-assembly": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T03:27:46.028Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "67bb4d53-8449-4629-838b-4cbd33ac01c9",
+        "state": "not-applicable",
+        "at": "2026-11-04T03:28:16.311456+00:00",
+        "reason": "reviewer (sonnet): The claim that nothing here builds a prompt for a model is contradicted by scripts/i18n/translate-guide-subagent-prompt.md. It is a canonical prompt template whose placeholders are filled in for one Claude translation subagent per locale. It sits in the searched scripts/i18n directory and is named b"
+      }
     }
   }
 }

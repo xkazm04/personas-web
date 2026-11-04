@@ -3912,8 +3912,8 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "async-ui-states",
@@ -8620,8 +8620,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:23 The home cards and hooks read demo fixtures or synced rows (here a count of open alerts) and render them, with no model call or prompt layer; searching src/components/dashboard and src/components/dashboard/views/home found no systemPrompt, messages.create, max_tokens or cache_control.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "measurement-honesty",
