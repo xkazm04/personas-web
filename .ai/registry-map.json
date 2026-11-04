@@ -8856,7 +8856,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/incidentFormat.ts:81 The inbox comparator stops at severity then detectedAt with no row-identity tiebreaker, so incidents with equal severity and timestamp fall back to storage order instead of a total, deterministic order.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "client-fetch-cache",

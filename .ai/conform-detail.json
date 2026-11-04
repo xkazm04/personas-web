@@ -11374,6 +11374,52 @@
         "at": "2026-11-04T03:28:16.311456+00:00",
         "reason": "reviewer (sonnet): The claim that nothing here builds a prompt for a model is contradicted by scripts/i18n/translate-guide-subagent-prompt.md. It is a canonical prompt template whose placeholders are filled in for one Claude translation subagent per locale. It sits in the searched scripts/i18n directory and is named b"
       }
+    },
+    "Observability & Event Monitoring/Incidents Inbox/table": {
+      "context": "Incidents Inbox",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:35:47.817Z",
+      "worker": "152d339e-1d56-4005-acc0-18a7c359884e",
+      "techniques": [
+        {
+          "technique": "sorting",
+          "verdict": "deviation",
+          "evidence": "src/lib/incidentFormat.ts:81 bySeverityThenRecency ends on detectedAt (a timestamp, which the technique names as a colliding key) with no incident.id final term, so the order is not total."
+        },
+        {
+          "technique": "client-server-split",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:55 All-client regime: filter, sort and counts all run over the complete demo-only incident set, so no axis is split across tiers."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx:114 Enumerated pill controls commit on change (store setters). A single clear action exists exactly when the applied predicate is non-empty, and filtered-empty is its own state."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:64 The ghost shows only on a cold load with nothing held. It is geometry-matched and delayed by .dash-ghost, and the delay survives reduced motion in dashboard.css. Empty is typed (none vs filtered), and error renders the banner instead of the empty state (index.tsx:92)."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/incidents/index.tsx:56 The presentation sequence is a memoized derivation whose recomputation inputs are named explicitly. The bounded demo set needs no windowing."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentRow.tsx:33 Each row is a single whole-row button in a list, not a table with interactive cells, so the native-table-vs-grid choice does not arise."
+        },
+        {
+          "technique": "pagination",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentList.tsx:48 The complete, fixed demo set is rendered whole with no server window, so offset vs keyset is not in play."
+        }
+      ]
     }
   }
 }
