@@ -6295,8 +6295,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/messages/index.tsx:33 The messages view reads and paginates report threads, and the settings cards toggle device-local BYOM provider permissions (ModelProvidersCard) and notifications. Neither assembles a model prompt, and a search of src for buildPrompt/assemblePrompt/cache_control/contextWindow found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "agent-runtime-assembly",
@@ -10759,8 +10763,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/api.ts:244 The client sends the user's raw task text to the external orchestrator unchanged, and that orchestrator (in another repo) builds the model's prompt. A search of src for buildPrompt/assemblePrompt/cache_control/contextWindow found nothing. The systemPrompt strings in mockData.ts and desktopApi.ts are persona fields shown in the UI, not layers this code assembles, so nothing here is a prompt assembler.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "mcp-tools",
