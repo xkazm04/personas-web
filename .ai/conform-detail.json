@@ -11339,16 +11339,32 @@
       "context": "Features Overview & Pricing",
       "subject": "quality-gates",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "deviation",
       "evaluatedAt": "2026-11-04",
-      "evaluatedTs": "2026-11-04T02:54:59.577Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "b366f006-af93-470c-8f0a-2f87982f6c10",
-        "state": "not-applicable",
-        "at": "2026-11-04T02:55:30.347539+00:00",
-        "reason": "reviewer (sonnet): The anchor (murmuration-hero/index.tsx:12) is an incidental hero docstring. The context's own src/app/features/page.tsx:10-14 names sitemapRoutesHaveMetadata.test.ts, a gate that fails for this route. That contradicts not-applicable, and the verdict wrongly dismisses it as living outside the context"
-      }
+      "evaluatedTs": "2026-11-04T05:04:11.549Z",
+      "worker": "4177ca45-7c1b-4819-8869-256a572a44e7",
+      "techniques": [
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "conformant",
+          "evidence": "src/app/features/page.tsx:13 The convention 'every sitemap route carries metadata' used to be prose only, and /features broke it. It is now mechanised by a test that fails on regression."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "deviation",
+          "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:27 The symbol is matched against unstripped source text. A comment that describes the rule would satisfy it. There is no seeded describe-vs-call pair and no note explaining why a raw read is the safe direction here."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:61 The test asserts the walked population is at least 9 routes (line 63), so a regex that matches nothing fails loudly instead of passing vacuously."
+        },
+        {
+          "technique": "refusal-names-a-reachable-remedy",
+          "verdict": "conformant",
+          "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:69 The failure message names the route, the cause, and an in-tree remedy for both the server-page case and the client-page case."
+        }
+      ]
     },
     "Observability & Event Monitoring/Dashboard Home Overview/prompt-assembly": {
       "context": "Dashboard Home Overview",

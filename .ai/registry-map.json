@@ -1519,7 +1519,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:47 The guard written for this context's /features metadata regression reads page.tsx as raw text with a regex. It strips no comments or strings first, so a comment or string containing 'export const metadata' would make a route without metadata read as compliant. That is exactly the permissive raw-text failure that match-the-resolved-artifact names.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "talking-avatar",
