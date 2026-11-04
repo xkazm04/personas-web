@@ -6578,12 +6578,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/knowledgeClusterLayout.ts:6 A pattern with no attempts produces a displayed 0% success rate, conflating an undefined rate with measured failure.",
-          "evaluatedAt": "2026-10-22",
-          "evaluatedAgainst": "sha256-b2:1905deb541d7de9d",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:46 The detail panel shows the success rate as a percentage, and the rate comes from knowledgeClusterSuccessRate, which returns 0 when a pattern has zero attempts, so 'never tried' shows as '0.0%' (everything failed) rather than as no value.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6318452e98e7c33d",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 1
         },
         {
           "subject": "declarative-object-graph-configs",
@@ -8291,7 +8290,11 @@
           "revision": 4,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:38 A period with no outcomes gets a value-delivered rate of 0, which line 59 shows as '0%'. 'Nothing measured' reads as 'everything failed', and the same 0 feeds the period-over-period delta.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6318452e98e7c33d",
+          "evaluatedRevision": 4
         },
         {
           "subject": "eval-harness",
