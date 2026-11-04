@@ -9806,34 +9806,47 @@
       "subject": "background-jobs",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-25",
-      "evaluatedTs": "2026-10-25T00:11:49.217Z",
-      "worker": "5d48cf34-531a-4bae-8f81-f2a83aecddef",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:40:46.804Z",
+      "worker": "2f76d4a3-3232-4b05-95db-de0e1c2f1476",
       "techniques": [
         {
           "technique": "adaptive-cadence",
           "verdict": "not-applicable",
-          "evidence": "src/hooks/useDemoOnlySWR.ts:34 The hook the panel uses turns off focus/reconnect revalidation and sets no refreshInterval, so this surface has no polling cadence to adapt."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 A one-shot SWR read of a static fixture. There is no polling cadence to adapt."
         },
         {
           "technique": "job-progress-and-cancellation",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/index.tsx:71 Configure/Install is one synchronous in-session store write plus a toast. Nothing long-running exists to need progress or a cancel."
+          "evidence": "src/components/dashboard/views/health/index.tsx:71 Configure/Install is one synchronous in-session store write plus a toast. Nothing long-running exists to need progress or a cancel.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "loop-health-telemetry",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:10 The panel shows host checks taken from a fixture, not per-tick snapshots from supervised loops. No loop exists to report on."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:10 The panel shows host checks taken from a fixture, not per-tick snapshots from supervised loops. No loop exists to report on.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "loop-supervision",
           "verdict": "not-applicable",
-          "evidence": "src/lib/demoCauseFix.ts:36 Fixing a cause writes the SWR cache once per key. No timer is armed, so no roster or stop handle is needed."
+          "evidence": "src/lib/demoCauseFix.ts:36 Fixing a cause writes the SWR cache once per key. No timer is armed, so no roster or stop handle is needed.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "startup-sweeps",
           "verdict": "not-applicable",
-          "evidence": "src/lib/settleThread.ts:31 The thread settlement is a pure projection over fixtures. No persisted in-flight state can be orphaned across a restart."
+          "evidence": "src/lib/settleThread.ts:31 The thread settlement is a pure projection over fixtures. No persisted in-flight state can be orphaned across a restart.",
+          "carriedFrom": "2026-10-25"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a static demo fixture once through SWR, with revalidation off and no polling, and its actions are synchronous store/cache writes, so there is no recurring loop, tick, long-running job or tracked wait for the background-jobs runtime to govern. I searched the health view directory and src/lib for refreshInterval, cancelToken, startupSweep and `new Worker` and found nothing; setInterval/heartbeat hit only unrelated src/lib modules (demoRealtime, event-bus-demo, sync/reachability, server/rate-limit) that sit outside this context.",
+          "evaluatedAt": "2026-10-25T00:11:49.217Z",
+          "worker": "5d48cf34-531a-4bae-8f81-f2a83aecddef",
+          "reason": "replaced by 2f76d4a3-3232-4b05-95db-de0e1c2f1476"
         }
       ]
     },
@@ -11607,6 +11620,37 @@
       "evaluatedTs": "2026-11-04T05:35:07.022Z",
       "worker": "92a32135-8cc4-4415-8a70-47947f4e7a49",
       "techniques": []
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/background-jobs": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "background-jobs",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:40:46.804Z",
+      "worker": "2f76d4a3-3232-4b05-95db-de0e1c2f1476",
+      "techniques": [
+        {
+          "technique": "adaptive-cadence",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 A fixed 60s interval with no usePageVisibility or visibilitychange gate and no refresh on becoming visible. A grep of the context's files found no visibility hook."
+        },
+        {
+          "technique": "loop-supervision",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:19 The timer names its reaper: the effect cleanup clears it on unmount or when the date changes. Any roster beyond the component lifecycle would sit outside this context."
+        },
+        {
+          "technique": "tick-isolation",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:17 The tick body is a synchronous pure timestamp comparison. It cannot overlap, hang or need a deadline or quarantine."
+        },
+        {
+          "technique": "first-tick-gates-readiness",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:12 Initial state comes from a lazy initializer, not from a first tick that gates the readiness of a runtime."
+        }
+      ]
     }
   }
 }

@@ -1200,7 +1200,11 @@
           "revision": 6,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 useFreshRelease runs a client-side display poller that re-checks the release-freshness flag every 60s for as long as DownloadCTA is mounted. Nothing pauses it while the tab is hidden, nothing refreshes it when the tab becomes visible again, and it keeps ticking after the 7-day window has closed for good, which breaks adaptive-cadence's visibility-aware contract for client pollers. Each tick is only a Date comparison, so the practical cost is small.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:e3e7a428140a2fbb",
+          "evaluatedRevision": 6
         },
         {
           "subject": "sidecar-provisioning",
@@ -8994,12 +8998,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a static demo fixture once through SWR, with revalidation off and no polling, and its actions are synchronous store/cache writes, so there is no recurring loop, tick, long-running job or tracked wait for the background-jobs runtime to govern. I searched the health view directory and src/lib for refreshInterval, cancelToken, startupSweep and `new Worker` and found nothing; setInterval/heartbeat hit only unrelated src/lib modules (demoRealtime, event-bus-demo, sync/reachability, server/rate-limit) that sit outside this context.",
-          "evaluatedAt": "2026-10-25",
-          "evaluatedAgainst": "sha256-b2:22ed2a99172ae050",
-          "evaluatedRevision": 5,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a static demo fixture once through useDemoOnlySWR, which turns off focus and reconnect revalidation and sets no refreshInterval, and its actions (healthActions.ts) are pure state projections, so there is no recurring loop, tick, job or tracked wait for this subject to govern. A search of the health view directory and of healthFormat/settleThread/demoCauseFix for setInterval, setTimeout, refreshInterval, AbortController, poll, progress and cancel found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:e3e7a428140a2fbb",
+          "evaluatedRevision": 6,
+          "revisionsBehind": 1
         },
         {
           "subject": "health-checks",
