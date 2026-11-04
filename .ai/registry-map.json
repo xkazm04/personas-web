@@ -4128,12 +4128,11 @@
           "changedAt": "2026-10-22",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/data/guide/categories.ts:3 The guide category catalog defines category metadata without introductory body modules and lacks self-contained load-time referential assertions.",
-          "evaluatedAt": "2026-10-15",
-          "evaluatedAgainst": "sha256-b2:95cdaebc076df84d",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/data/guide/topics-nav.ts:45 The navigation projection groups by category but never sorts by a declared position. Neither GuideCategory nor GuideTopic has an order field, so sidebar, category-list and prev/next order all depend on source-declaration order in categories.ts and topics.ts, which the technique names as the one field that must not be implicit.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:74839e7c9eeb3728",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 2
         },
         {
           "subject": "data-access",
@@ -4433,12 +4432,11 @@
           "changedAt": "2026-10-22",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/app/guide/layout.tsx:11 Layout metadata calculates the topic count floor from raw GUIDE_TOPICS length without applying isTopicVisible, leaking draft topics into the published description count.",
-          "evaluatedAt": "2026-10-15",
-          "evaluatedAgainst": "sha256-b2:95cdaebc076df84d",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/app/guide/page.tsx:12 The /guide landing page is a \"use client\" component that imports the full GUIDE_TOPICS table and the guide-utils projection functions to compute per-category and total counts in the browser, so the reader downloads the whole record set to render a handful of numbers: the projection that saved nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:74839e7c9eeb3728",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 2
         },
         {
           "subject": "long-form-reading-surface",

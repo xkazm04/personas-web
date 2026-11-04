@@ -4322,66 +4322,83 @@
       "subject": "docs-content-model",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-15",
-      "evaluatedTs": "2026-10-15T03:04:20.622Z",
-      "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T03:42:16.424Z",
+      "worker": "16d514c1-850c-467a-b23d-7c6a2293441a",
       "techniques": [
         {
-          "technique": "draft-visibility-gating",
-          "verdict": "deviation",
-          "evidence": "src/app/guide/layout.tsx:11 TOPIC_FLOOR derives from unfiltered GUIDE_TOPICS.length without calling isTopicVisible, leaking draft counts into layout metadata."
+          "technique": "catalog-referential-invariants",
+          "verdict": "conformant",
+          "evidence": "src/app/guide/[category]/[topic]/page.tsx:41 The body-loader map is derived from the category table (lines 46-52), so a missing category content module becomes a resolution failure instead of a report finding. This is the 'make the assertion unnecessary' shape. The route also 404s when the body key is absent (line 95)."
         },
         {
           "technique": "derived-navigation-projection",
           "verdict": "deviation",
-          "evidence": "src/app/guide/[category]/[topic]/page.tsx:98 Prev/next sequence walks topics in implicit source array declaration order because GuideTopic lacks a declared position ordering field."
+          "evidence": "src/app/guide/page.tsx:12 Counts are derived and use the visibility predicate (layout.tsx:11 uses countVisibleTopics, so the stale earlier verdict is fixed). But the client page imports the catalog and projection functions instead of receiving projected values. CategoryTopics (a client component) also gets untrimmed GuideTopic records, including coverage metadata, via [category]/page.tsx:136. The boundary is drawn at the function, not the value."
+        },
+        {
+          "technique": "draft-visibility-gating",
+          "verdict": "conformant",
+          "evidence": "src/app/guide/[category]/[topic]/page.tsx:91 Direct address resolution is gated. Prev/next is built from the filtered collection before indexing (lines 99-104). Category listings and counts filter with isTopicVisible ([category]/page.tsx:21,38). Audience (mode) is a separate predicate used only for listing in page.tsx:25-29; the route never consults it."
         },
         {
           "technique": "product-location-mapping",
           "verdict": "conformant",
-          "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:148 TopicView renders the mapped desktop product location badge from TOPIC_MODULE_MAP for the current topic."
-        },
-        {
-          "technique": "catalog-referential-invariants",
-          "verdict": "conformant",
-          "evidence": "src/app/guide/[category]/[topic]/page.tsx:48 Topic page dynamically imports category content modules lazily per category rather than eagerly bundling the markdown corpus."
+          "evidence": "src/app/guide/[category]/[topic]/TopicHeader.tsx:27 The product location renders from a typed map keyed by the topic's minted id rather than from prose. The map and its desktop source-of-truth header live in the data context (desktop-modules.ts)."
         }
       ],
-      "registryProposal": "Next.js opengraph-image.tsx routes should be explicitly enumerated in draft-visibility-gating as direct-address metadata consumers that bypass page.tsx and notFound() guards."
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/app/guide/layout.tsx:11 Layout metadata calculates the topic count floor from raw GUIDE_TOPICS length without applying isTopicVisible, leaking draft topics into the published description count.",
+          "evaluatedAt": "2026-10-15T03:04:20.622Z",
+          "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+          "reason": "replaced by 16d514c1-850c-467a-b23d-7c6a2293441a"
+        }
+      ]
     },
     "Product Documentation (Guide)/Guide Data, Content & Search Index/docs-content-model": {
       "context": "Guide Data, Content & Search Index",
       "subject": "docs-content-model",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-15",
-      "evaluatedTs": "2026-10-15T03:04:20.622Z",
-      "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T03:42:16.424Z",
+      "worker": "16d514c1-850c-467a-b23d-7c6a2293441a",
       "techniques": [
+        {
+          "technique": "derived-navigation-projection",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/topics-nav.ts:45 Projection is derived, visibility-filtered and documented as server-only (header at lines 7-23), which is good. But ordering is implicit array order with no declared position and no stable tie-break key."
+        },
         {
           "technique": "catalog-referential-invariants",
           "verdict": "deviation",
-          "evidence": "src/data/guide/categories.ts:3 GUIDE_CATEGORIES contains no self-evaluating load-time referential assertions and categories lack introductory body modules."
+          "evidence": "src/data/guide/content/index.ts:13 The body map is a spread-merge of the per-category modules, so a key present in two category files is silently last-wins. The standalone check's orphan test (scripts/check-guide-content.mjs:103) compares against the global topic-id set, so a stray duplicate body in the wrong category is never flagged. Body-side id uniqueness is unasserted, and /guide-md and llms-full can serve different prose than the topic page. The load tier (guide-utils.ts:87) asserts the category FK only; it does not check topic-id uniqueness."
+        },
+        {
+          "technique": "draft-visibility-gating",
+          "verdict": "deviation",
+          "evidence": "src/data/guide/topics.ts:3 isTopicVisible (guide-utils.ts:36) is one build-time predicate, and guide-search, sitemap and nav use it. But the short, default accessor every consumer imports is the unfiltered table, so gating relies on discipline. A missed consumer exists: [topic]/opengraph-image.tsx:11 resolves a devOnly topic's title and description, and [category]/opengraph-image.tsx:12 counts drafts. isCategoryVisibleForMode (guide-utils.ts:22) also ignores readiness."
         },
         {
           "technique": "per-topic-freshness-metadata",
-          "verdict": "deviation",
-          "evidence": "src/data/guide/types.ts:41 Documentation acknowledges contentReviewedAt dates are backfilled from git history rather than earned human review dates."
+          "verdict": "conformant",
+          "evidence": "src/data/guide/types.ts:60 Review date, checked-against version and coarse watched sources are typed optional fields. Backfilled dates are spelled differently from earned ones and are never counted as reviewed. Missing watchedFiles or a missing review date is declared to be a named skip class, never drift-free. The coarse watch set is documented as deliberate."
         },
         {
           "technique": "product-location-mapping",
           "verdict": "conformant",
-          "evidence": "src/data/guide/desktop-modules.ts:6 Desktop module registry explicitly declares external source-of-truth registry file paths in the desktop repository."
-        },
+          "evidence": "src/data/guide/desktop-modules.ts:5 The cross-artifact mirror names the desktop files that own the vocabulary (lines 5-10) and is the single map keyed by topic id. moduleId is a plain string rather than a compile-time enum; desktop-modules.test.ts guards it instead."
+        }
+      ],
+      "superseded": [
         {
-          "technique": "draft-visibility-gating",
-          "verdict": "conformant",
-          "evidence": "src/lib/guide-search.ts:96 Search index walk gates topic matches through isTopicVisible to prevent surfacing unreleased draft topics."
-        },
-        {
-          "technique": "derived-navigation-projection",
-          "verdict": "conformant",
-          "evidence": "src/data/guide/content/index.ts:13 GUIDE_CONTENT re-exports category content blocks into a single derived map used by lazy full-text body search indexing."
+          "state": "deviation",
+          "evidence": "src/data/guide/categories.ts:3 The guide category catalog defines category metadata without introductory body modules and lacks self-contained load-time referential assertions.",
+          "evaluatedAt": "2026-10-15T03:04:20.622Z",
+          "worker": "72894ce9-8336-4fef-a0c0-0c1319432818",
+          "reason": "replaced by 16d514c1-850c-467a-b23d-7c6a2293441a"
         }
       ]
     },
