@@ -11420,6 +11420,59 @@
           "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentList.tsx:48 The complete, fixed demo set is rendered whole with no server window, so offset vs keyset is not in play."
         }
       ]
+    },
+    "Content & Informational Pages/Blog/test-harness": {
+      "context": "Blog",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:48:50.510Z",
+      "worker": "2e340840-95dd-46d5-892e-9ac9b6119b97",
+      "techniques": [
+        {
+          "technique": "assert-through-the-reader",
+          "verdict": "deviation",
+          "evidence": "src/app/blog/feed.xml/route.ts:37 The artifact is emitted for a foreign interpreter (feed readers) and is never parsed by one. The XML parse that would answer at unit cost is not in any suite."
+        },
+        {
+          "technique": "live-app-harness",
+          "verdict": "conformant",
+          "evidence": "e2e/blog.spec.ts:16 The article route is checked against the production build that playwright's webServer starts with build && start, not against an imported component."
+        },
+        {
+          "technique": "approval-snapshots-with-guarded-update",
+          "verdict": "not-applicable",
+          "evidence": "src/app/blog/[slug]/blog-article/BlogArticleContent.test.ts:33 The rendering tests are per-field and no-throw sweeps over every shipped post. No snapshot suite exists, so there is no re-baseline to guard."
+        }
+      ]
+    },
+    "Infrastructure & Telemetry/Supabase Client/test-harness": {
+      "context": "Supabase Client",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:48:50.510Z",
+      "worker": "2e340840-95dd-46d5-892e-9ac9b6119b97",
+      "techniques": [
+        {
+          "technique": "recorded-interaction-fixtures",
+          "verdict": "deviation",
+          "evidence": "src/lib/supabaseApi.test.ts:11 This is the 'hand-written fake' option the technique names as asserting against the author's own model of the service. There are no recordings and no live lane, and the DDL is locally hostable, which the technique prefers. The scripts/check-sync-rows.mjs DDL drift gate covers only 4 row interfaces and not the query behaviour."
+        },
+        {
+          "technique": "assert-the-schedule-not-the-stopwatch",
+          "verdict": "conformant",
+          "evidence": "src/lib/supabase.timeout.test.ts:30 The timedFetch cutoff is proven on a fake clock against a fetch that never settles, not with a wall-clock bound."
+        },
+        {
+          "technique": "isolation-lanes",
+          "verdict": "conformant",
+          "evidence": "src/lib/supabase-admin.test.ts:36 Each case loads a fresh module, so the once-per-process admin client and its report-once flag cannot leak between cases. Env is stubbed and unstubbed per test."
+        }
+      ],
+      "registryProposal": "recorded-interaction-fixtures covers recorded suites well. A suite that never records and instead hand-fakes a query builder whose filters are no-ops is only touched in the opening paragraph. A short decision rule for that case would make the verdict less of a judgement call: when the fake ignores the request parameters that select the data, the integration boundary is unasserted."
     }
   }
 }

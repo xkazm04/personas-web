@@ -5184,7 +5184,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/blog/feed.xml/route.ts:37 The blog builds an RSS 2.0 document by string concatenation for feed readers. A search of e2e/, src/**/*.test.ts, scripts and .github for 'feed.xml', 'feed' and 'rss' found no test in any lane that fetches it, let alone runs it through an XML/RSS parser, so a malformed or rejected feed would ship on a green board.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "feed",
@@ -10260,7 +10264,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/supabaseApi.test.ts:11 supabaseApi's queries are tested only against a hand-written fake of the Supabase query builder in which eq/order/limit/in/gte are no-ops returning the staged rows, so a wrong filter, column or table never reaches anything that could reject it. No lane (unit, e2e or scheduled) runs these queries against the real service or a locally hosted Postgres built from scripts/setup-sync-db.sql.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "docs-sync",

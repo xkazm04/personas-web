@@ -1,0 +1,110 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2e340840-95dd-46d5-892e-9ac9b6119b97",
+ "subject": "test-harness",
+ "evaluatedAt": "2026-11-04T04:48:50.510631+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Blog",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/blog/feed.xml/route.ts:37 The blog builds an RSS 2.0 document by string concatenation for feed readers. A search of e2e/, src/**/*.test.ts, scripts and .github for 'feed.xml', 'feed' and 'rss' found no test in any lane that fetches it, let alone runs it through an XML/RSS parser, so a malformed or rejected feed would ship on a green board.",
+   "techniques": [
+    {
+     "technique": "assert-through-the-reader",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/feed.xml/route.ts:37 The artifact is emitted for a foreign interpreter (feed readers) and is never parsed by one. The XML parse that would answer at unit cost is not in any suite."
+    },
+    {
+     "technique": "live-app-harness",
+     "verdict": "conformant",
+     "evidence": "e2e/blog.spec.ts:16 The article route is checked against the production build that playwright's webServer starts with build && start, not against an imported component."
+    },
+    {
+     "technique": "approval-snapshots-with-guarded-update",
+     "verdict": "not-applicable",
+     "evidence": "src/app/blog/[slug]/blog-article/BlogArticleContent.test.ts:33 The rendering tests are per-field and no-throw sweeps over every shipped post. No snapshot suite exists, so there is no re-baseline to guard."
+    }
+   ]
+  },
+  {
+   "context": "Supabase Client",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/supabaseApi.test.ts:11 supabaseApi's queries are tested only against a hand-written fake of the Supabase query builder in which eq/order/limit/in/gte are no-ops returning the staged rows, so a wrong filter, column or table never reaches anything that could reject it. No lane (unit, e2e or scheduled) runs these queries against the real service or a locally hosted Postgres built from scripts/setup-sync-db.sql.",
+   "techniques": [
+    {
+     "technique": "recorded-interaction-fixtures",
+     "verdict": "deviation",
+     "evidence": "src/lib/supabaseApi.test.ts:11 This is the 'hand-written fake' option the technique names as asserting against the author's own model of the service. There are no recordings and no live lane, and the DDL is locally hostable, which the technique prefers. The scripts/check-sync-rows.mjs DDL drift gate covers only 4 row interfaces and not the query behaviour."
+    },
+    {
+     "technique": "assert-the-schedule-not-the-stopwatch",
+     "verdict": "conformant",
+     "evidence": "src/lib/supabase.timeout.test.ts:30 The timedFetch cutoff is proven on a fake clock against a fetch that never settles, not with a wall-clock bound."
+    },
+    {
+     "technique": "isolation-lanes",
+     "verdict": "conformant",
+     "evidence": "src/lib/supabase-admin.test.ts:36 Each case loads a fresh module, so the once-per-process admin client and its report-once flag cannot leak between cases. Env is stubbed and unstubbed per test."
+    }
+   ],
+   "registryProposal": "recorded-interaction-fixtures covers recorded suites well. A suite that never records and instead hand-fakes a query builder whose filters are no-ops is only touched in the opening paragraph. A short decision rule for that case would make the verdict less of a judgement call: when the fake ignores the request parameters that select the data, the integration boundary is unasserted."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "test-harness",
+   "context": "Execution History & Streaming",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "test-harness",
+   "context": "Guide Data, Content & Search Index",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "test-harness",
+   "context": "Self-Healing & Trigger Automation",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-04T04:48:50.510631+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "approval-snapshots-with-guarded-update",
+    "assert-through-the-reader",
+    "live-app-harness"
+   ],
+   "deviations": 1,
+   "context": "Blog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T04:48:50.510631+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "assert-the-schedule-not-the-stopwatch",
+    "isolation-lanes",
+    "recorded-interaction-fixtures"
+   ],
+   "deviations": 1,
+   "context": "Supabase Client",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
