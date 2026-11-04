@@ -11391,12 +11391,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "src/stores/i18nStore.ts:60 Reachable non-Latin locales load swap fonts without metric-matched fallbacks, leaving late font reflow unmitigated.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:f51109a4fa17ac48",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/stores/i18nStore.ts:60 When a non-Latin locale is applied, script inserts a foreign-origin Google Fonts stylesheet with display=swap and five enumerated weights. No connection to fonts.googleapis.com or fonts.gstatic.com is warmed, and the tokens.css fallback chain has no size-adjust or ascent-override, so every late Noto arrival reflows the page. This is dormant in production (LOCALE_RELEASE is empty) but reachable in preview and after any release.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6eb078a45499ad8a",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 2
         },
         {
           "subject": "engine-binding-surface",

@@ -5293,24 +5293,38 @@
       "subject": "page-load-pipeline",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T01:30:13.071Z",
-      "worker": "213b558f-ec7d-400a-b71e-6926490090d9",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T00:07:32.127Z",
+      "worker": "d8c6b281-1807-49eb-9c98-1a27877aedfd",
       "techniques": [
         {
           "technique": "font-loading-discipline",
           "verdict": "deviation",
-          "evidence": "src/styles/tokens.css:107 The loader selects display=swap, while Arabic falls back through the Latin/system stack; repository searches found no font metric override declarations matching that fallback to Noto."
+          "evidence": "src/stores/i18nStore.ts:60 It uses swap with no metric-matched fallback for the Noto families and a foreign-origin font stylesheet with no warmed connections. The weights are enumerated rather than declared as a range."
         },
         {
-          "technique": "layout-stability-by-reservation",
+          "technique": "render-blocking-budget",
           "verdict": "conformant",
-          "evidence": "src/components/LocaleOffer.tsx:65 The asynchronously populated language offer uses a fixed overlay, so its arrival does not displace page content."
+          "evidence": "src/stores/i18nStore.ts:38 The six-family font stylesheet was moved out of the root layout's head, so nothing an English page does not use blocks its first render."
         },
         {
           "technique": "script-cost-is-main-thread-time",
           "verdict": "conformant",
-          "evidence": "src/components/LocaleOfferMount.tsx:9 The optional language offer has a separate dynamic import, and the mount returns null when no additional locale is reachable."
+          "evidence": "src/i18n/catalog.ts:225 Each non-English core catalog is loaded through a dynamic import. Only the English core ships with every route."
+        },
+        {
+          "technique": "layout-stability-by-reservation",
+          "verdict": "conformant",
+          "evidence": "src/components/LocaleOffer.tsx:65 The late, client-only locale offer is a fixed overlay. It is mounted through dynamic with ssr:false and never inserts into the flow above the reader."
+        }
+      ],
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "src/stores/i18nStore.ts:60 Reachable non-Latin locales load swap fonts without metric-matched fallbacks, leaving late font reflow unmitigated.",
+          "evaluatedAt": "2026-10-17T01:30:13.071Z",
+          "worker": "213b558f-ec7d-400a-b71e-6926490090d9",
+          "reason": "replaced by d8c6b281-1807-49eb-9c98-1a27877aedfd"
         }
       ]
     },
