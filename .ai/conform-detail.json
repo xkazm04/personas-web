@@ -3743,24 +3743,26 @@
       "subject": "repository-landing-document",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T06:08:48.889Z",
-      "worker": "a3f957b0-2a71-4034-aa15-c45388fb9550",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:26:37.482Z",
+      "worker": "2946bff8-14ff-4da1-986b-ae198df94a00",
       "techniques": [
+        {
+          "technique": "evidence-linked-badges",
+          "verdict": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:15 This is web page metadata for a route, not a repository badge row or host description. No shields.io or img.shields reference exists in the context's directories."
+        },
         {
           "technique": "landing-document-as-router",
           "verdict": "not-applicable",
-          "evidence": "src/app/m2/page.tsx:8 In-app phone landing route, not a repository front page."
+          "evidence": "src/app/m2/page.tsx:8 In-app phone landing route, not a repository front page.",
+          "carriedFrom": "2026-10-24"
         },
         {
           "technique": "host-metadata-is-a-second-document",
           "verdict": "not-applicable",
-          "evidence": "src/app/m2/page.tsx:15 This is web page metadata, not the code host's description, topics or homepage fields."
-        },
-        {
-          "technique": "evidence-linked-badges",
-          "verdict": "not-applicable",
-          "evidence": "src/app/m2/page.tsx:8 No repository badge row anywhere in this context (no shields.io hit)."
+          "evidence": "src/app/m2/page.tsx:15 This is web page metadata, not the code host's description, topics or homepage fields.",
+          "carriedFrom": "2026-10-24"
         },
         {
           "technique": "caption-carrying-figures",
@@ -3792,6 +3794,15 @@
           "evidence": "src/components/mobile-landing/clock/Faq.tsx:130 These paragraphs render an interactive website FAQ.",
           "carriedFrom": "2026-10-15"
         }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:8 This context is a phone marketing page inside the web app, not the repository's front page; the 'landing' match is only a shared word. I searched the context's dirs (src/components/mobile-landing, src/app/m2, src/components/primitives) for README, shields.io and img.shields and found nothing, so no repository landing document, badge row or host metadata lives here.",
+          "evaluatedAt": "2026-10-24T06:08:48.889Z",
+          "worker": "a3f957b0-2a71-4034-aa15-c45388fb9550",
+          "reason": "replaced by 2946bff8-14ff-4da1-986b-ae198df94a00"
+        }
       ]
     },
     "Product Documentation (Guide)/Guide Content Blocks & Markdown/repository-landing-document": {
@@ -3799,14 +3810,14 @@
       "subject": "repository-landing-document",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T06:08:48.889Z",
-      "worker": "a3f957b0-2a71-4034-aa15-c45388fb9550",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:26:37.482Z",
+      "worker": "2946bff8-14ff-4da1-986b-ae198df94a00",
       "techniques": [
         {
           "technique": "input-channel-distinction",
           "verdict": "not-applicable",
-          "evidence": "src/components/guide/GuideBlocks.tsx:3 The CLI and callout blocks render guide topic pages, not a repository landing document."
+          "evidence": "src/components/guide/blocks/CliBlock.tsx:42 CliBlock gives shell input its own visual channel, but only on guide topic pages. The technique governs blocks in the repository's landing document, which these are not."
         },
         {
           "technique": "caption-carrying-figures",
@@ -3843,6 +3854,15 @@
           "verdict": "not-applicable",
           "evidence": "src/components/guide/blocks/CalloutStack.tsx:82 This renders individual guide fragments rather than composing a repository front page.",
           "carriedFrom": "2026-10-15"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/guide/GuideBlocks.tsx:3 These are render components for a docs site's topic pages, such as CliBlock and Callout. They look like input-channel-distinction, but they serve the doc-site content model the subject excludes, not the repository's front page. A search of src/components/guide for README and shields.io found nothing.",
+          "evaluatedAt": "2026-10-24T06:08:48.889Z",
+          "worker": "a3f957b0-2a71-4034-aa15-c45388fb9550",
+          "reason": "replaced by 2946bff8-14ff-4da1-986b-ae198df94a00"
         }
       ]
     },
@@ -11104,6 +11124,23 @@
           "evidence": "src/components/dashboard/ThreadRow.tsx:26 Each row is a single button in a feed-style list, not a multi-column table or grid."
         }
       ]
+    },
+    "Marketing & Landing/Homepage & Hero/repository-landing-document": {
+      "context": "Homepage & Hero",
+      "subject": "repository-landing-document",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:26:37.482Z",
+      "worker": "2946bff8-14ff-4da1-986b-ae198df94a00",
+      "techniques": [
+        {
+          "technique": "host-metadata-is-a-second-document",
+          "verdict": "not-applicable",
+          "evidence": "src/app/homeJsonLd.ts:10 This is structured-data metadata in the site's own JSON-LD. It is not the code host's description, topics or homepage fields for the repository."
+        }
+      ],
+      "registryProposal": "The subject keys off the word 'landing', so the registry map matches it to web-app contexts named landing, homepage or guide. None of these is a repository front page. The map could require a README or front-page path in a context before it pairs that context with this subject."
     }
   }
 }

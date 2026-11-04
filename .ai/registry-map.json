@@ -1662,8 +1662,12 @@
           "revision": 5,
           "changedAt": "2026-10-31",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 3
+          "state": "not-applicable",
+          "priorNotApplicable": 3,
+          "evidence": "src/app/page.tsx:5 This context is the public marketing site's homepage, which the app renders itself. It is not the README that the code host renders for the repository. Claims the app renders on its own pages belong to public-claim-provenance. Searching src/app and src/components/sections for README, shields.io and img.shields found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:21e7be3c68f38a9a",
+          "evaluatedRevision": 5
         },
         {
           "subject": "fleet-orchestration",
@@ -4308,12 +4312,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/guide/GuideBlocks.tsx:3 These are render components for a docs site's topic pages, such as CliBlock and Callout. They look like input-channel-distinction, but they serve the doc-site content model the subject excludes, not the repository's front page. A search of src/components/guide for README and shields.io found nothing.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:6f6a6c4541bc949b",
-          "evaluatedRevision": 4,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/guide/GuideBlocks.tsx:3 These are render components for the topic pages of a docs site. The golden path assigns that work to docs-content-model, not to the repository front page. Searching src/components/guide for README, shields.io and img.shields found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:21e7be3c68f38a9a",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "markdown-vault",
@@ -9207,12 +9210,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/m2/page.tsx:8 This context is a phone marketing page inside the web app, not the repository's front page; the 'landing' match is only a shared word. I searched the context's dirs (src/components/mobile-landing, src/app/m2, src/components/primitives) for README, shields.io and img.shields and found nothing, so no repository landing document, badge row or host metadata lives here.",
-          "evaluatedAt": "2026-10-24",
-          "evaluatedAgainst": "sha256-b2:6f6a6c4541bc949b",
-          "evaluatedRevision": 4,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/m2/page.tsx:8 This context renders /m2, a phone marketing page with noindex inside the web app. It is not the repository's front page. Searching src/components/mobile-landing, src/app/m2 and src/components/primitives for README, shields.io and img.shields found nothing, so no landing document, badge row or host metadata lives here.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:21e7be3c68f38a9a",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "agent-host-experience",
