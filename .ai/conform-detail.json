@@ -804,29 +804,42 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-12",
-      "evaluatedTs": "2026-10-12T21:08:44.477Z",
-      "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:20:14.207Z",
+      "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
       "techniques": [
         {
           "technique": "suspendable-request-classes",
           "verdict": "not-applicable",
-          "evidence": "src/app/playground/TerminalSim.tsx:90 The only wait is a random reveal delay between canned terminal lines, not a protocol verb that may pause for a person."
+          "evidence": "src/app/playground/TerminalSim.tsx:90 The only wait is a random reveal delay between canned terminal lines, not a protocol verb that may pause for a person.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "tool-schema-design",
           "verdict": "not-applicable",
-          "evidence": "src/app/playground/data.ts:58 Tool names are characters in a scripted terminal line, not a published input schema."
+          "evidence": "src/app/playground/data.ts:58 Tool names are characters in a scripted terminal line, not a published input schema.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "transport-selection",
           "verdict": "not-applicable",
-          "evidence": "src/components/flow-composer/components/FlowHeader.tsx:22 The surface tells the visitor to drag and wire drawing nodes; it does not choose a child process or a network listener."
+          "evidence": "src/components/flow-composer/components/FlowHeader.tsx:22 The surface tells the visitor to drag and wire drawing nodes; it does not choose a child process or a network listener.",
+          "carriedFrom": "2026-10-12"
         },
         {
           "technique": "untrusted-result-handling",
           "verdict": "not-applicable",
-          "evidence": "src/app/playground/TerminalSim.tsx:136 The terminal footer is the simulated-execution label, and the lines replayed into it are the page's own script rather than upstream tool output entering a model."
+          "evidence": "src/app/playground/TerminalSim.tsx:136 The terminal footer is the simulated-execution label, and the lines replayed into it are the page's own script rather than upstream tool output entering a model.",
+          "carriedFrom": "2026-10-12"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/flow-composer/components/FlowCTA.tsx:11 The composer calls its own graph a website, so this context is not a tool-protocol host or server.",
+          "evaluatedAt": "2026-10-12T21:08:44.477Z",
+          "worker": "ea94a6ba-8521-400d-9341-7cb004f4502a",
+          "reason": "replaced by 1cd9a9be-b81e-4334-b016-fb7f5a22f7c5"
         }
       ]
     },
@@ -10904,6 +10917,46 @@
           "evidence": "src/app/api/votes/publicReads.test.ts:70 The module-level limiter state is isolated per test by key, so one test's budget is never inherited by the next."
         }
       ]
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/mcp-tools": {
+      "context": "Mobile App Shell & Views",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:20:14.207Z",
+      "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/mcp-tools": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:20:14.207Z",
+      "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Agents (Personas) Management/mcp-tools": {
+      "context": "Agents (Personas) Management",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:20:14.207Z",
+      "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
+      "techniques": []
+    },
+    "Product Feature Showcase/Memory Layers & Multi-Provider AI/mcp-tools": {
+      "context": "Memory Layers & Multi-Provider AI",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:20:14.207Z",
+      "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
+      "techniques": []
     }
   }
 }

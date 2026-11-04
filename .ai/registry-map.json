@@ -2257,8 +2257,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/feature-sections/design-blueprint/shared/ToolMark.tsx:4 In this context 'tool' only means a connector logo drawn as an SVG mask in an animated marketing blueprint; I searched src/components/feature-sections/design-blueprint for MCP, tool-schema and JSON-RPC terms with no hits, so no tool-protocol boundary exists.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34
         },
         {
           "subject": "voice-io",
@@ -2759,12 +2763,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/flow-composer/components/FlowCTA.tsx:11 The composer calls its own graph a website, so this context is not a tool-protocol host or server.",
-          "evaluatedAt": "2026-10-12",
-          "evaluatedAgainst": "sha256-b2:afba7a2b8c938ae1",
-          "evaluatedRevision": 31,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/flow-composer/components/FlowCTA.tsx:11 The composer is a marketing sketch of an agent graph that no app imports and no model calls; I searched src/app/playground, src/components/flow-composer and src/components (src, scripts, fixtures and package.json too) for the protocol's own identifiers and found none, so this context is neither a tool-protocol host nor a server.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34,
+          "revisionsBehind": 3
         },
         {
           "subject": "voice-io",
@@ -7020,8 +7023,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The only wire contract in this context is an Ed25519-signed command that a paired phone (a human controller) sends to the desktop, with no model reading or calling it; I searched src/components/dashboard, src/app/dashboard, src/lib/commands, fixtures and scripts for MCP and tool-schema terms with no hits, so the precondition fails.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34
         },
         {
           "subject": "agent-browser-control",
@@ -7304,8 +7311,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:124 Here 'tool calls' are only a simulated counter that the prototype board draws; I searched src/components/dashboard/fleet-monitor for MCP, server-transport, tool-schema and JSON-RPC terms with no hits, so this code neither hosts nor serves a tool protocol.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34
         },
         {
           "subject": "prompt-assembly",
@@ -9126,8 +9137,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/m2/page.tsx:2 /m2 is a static landing page made from clock and dial components plus a bottom sheet; I searched src/app/m2, src/components/mobile-landing/clock and src/components/primitives for MCP, tool-schema and JSON-RPC terms and found nothing, so no tool boundary exists here.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:ed8e615f51454325",
+          "evaluatedRevision": 34
         },
         {
           "subject": "agent-memory",
