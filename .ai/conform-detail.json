@@ -7222,39 +7222,51 @@
       "subject": "engine-host-contract",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-21",
-      "evaluatedTs": "2026-10-21T21:08:32.242Z",
-      "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:01:11.633Z",
+      "worker": "db9c14d1-64bc-48ee-a0c1-a474c307356a",
       "techniques": [
         {
           "technique": "contained-async-module-loader",
           "verdict": "not-applicable",
-          "evidence": "src/app/m2/page.tsx:2 The page imports its React view normally; no guest-module loader interface was found."
+          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:63 No guest-module import hook; no embedded engine."
         },
         {
           "technique": "idle-aware-job-loop",
           "verdict": "not-applicable",
-          "evidence": "src/components/mobile-landing/clock/ClockLanding.tsx:56 Animation uses browser timers rather than draining an embedded engine's job queues."
+          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:63 The frame loop is a browser rAF animation, not a host draining engine job queues."
         },
         {
           "technique": "monotonic-and-wall-clock-split",
           "verdict": "not-applicable",
-          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:167 This measures animation progress; it does not implement clocks exposed to an embedded language engine."
+          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:63 The clock's digits are a stylized story value driven by scroll offset; no engine time hook."
         },
         {
           "technique": "null-and-blocking-executors",
           "verdict": "not-applicable",
-          "evidence": "src/components/mobile-landing/clock/Dial.tsx:40 The component consumes the browser's video-play promise; it ships no engine job executors."
+          "evidence": "src/components/mobile-landing/clock/Dial.tsx:40 The component consumes the browser's video-play promise; it ships no engine job executors.",
+          "carriedFrom": "2026-10-21"
         },
         {
           "technique": "spec-mirrored-hook-surface",
           "verdict": "not-applicable",
-          "evidence": "src/components/mobile-landing/clock/Chrome.tsx:11 This is a UI navigation callback, not an override of a language specification's host operation."
+          "evidence": "src/components/mobile-landing/clock/Chrome.tsx:11 This is a UI navigation callback, not an override of a language specification's host operation.",
+          "carriedFrom": "2026-10-21"
         },
         {
           "technique": "untraceable-jobs-as-roots",
           "verdict": "not-applicable",
-          "evidence": "src/components/mobile-landing/clock/CardLayer.tsx:34 The browser retains this focus callback; the context defines no guest heap, tracing collector or external job-root representation."
+          "evidence": "src/components/mobile-landing/clock/CardLayer.tsx:34 The browser retains this focus callback; the context defines no guest heap, tracing collector or external job-root representation.",
+          "carriedFrom": "2026-10-21"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/useClockEngine.ts:62 The context implements browser views and scroll animation, and context and repository searches found no HostHooks, JobExecutor or ModuleLoader implementing an embedded language engine's contract.",
+          "evaluatedAt": "2026-10-21T21:08:32.242Z",
+          "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+          "reason": "replaced by db9c14d1-64bc-48ee-a0c1-a474c307356a"
         }
       ]
     },
@@ -7263,39 +7275,52 @@
       "subject": "engine-host-contract",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-21",
-      "evaluatedTs": "2026-10-21T21:08:32.242Z",
-      "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T04:01:11.633Z",
+      "worker": "db9c14d1-64bc-48ee-a0c1-a474c307356a",
       "techniques": [
         {
-          "technique": "contained-async-module-loader",
+          "technique": "spec-mirrored-hook-surface",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The hook imports an application mock fetcher; it exposes no guest-module resolution or loading seam."
-        },
-        {
-          "technique": "idle-aware-job-loop",
-          "verdict": "not-applicable",
-          "evidence": "src/lib/demoCauseFix.ts:36 This updates SWR caches rather than scheduling or draining language-engine jobs."
-        },
-        {
-          "technique": "monotonic-and-wall-clock-split",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/index.tsx:71 Civil time records a demo incident fix; no embedded-engine timer or clock interface is implemented."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 Data fetch hook, not an engine override surface."
         },
         {
           "technique": "null-and-blocking-executors",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/health-page/healthActions.ts:22 Health actions synchronously record UI resolutions, not engine jobs requiring an executor default."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 No job executor; promises settle via the browser's own runtime."
         },
         {
-          "technique": "spec-mirrored-hook-surface",
+          "technique": "contained-async-module-loader",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/health/health-page/HealthSectionCard.tsx:38 The extension point is a health-row UI callback, not a language-specification host hook."
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The hook imports an application mock fetcher; it exposes no guest-module resolution or loading seam.",
+          "carriedFrom": "2026-10-21"
+        },
+        {
+          "technique": "idle-aware-job-loop",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/demoCauseFix.ts:36 This updates SWR caches rather than scheduling or draining language-engine jobs.",
+          "carriedFrom": "2026-10-21"
+        },
+        {
+          "technique": "monotonic-and-wall-clock-split",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/index.tsx:71 Civil time records a demo incident fix; no embedded-engine timer or clock interface is implemented.",
+          "carriedFrom": "2026-10-21"
         },
         {
           "technique": "untraceable-jobs-as-roots",
           "verdict": "not-applicable",
-          "evidence": "src/lib/settleThread.ts:146 This constructs an application-data projection; there is no guest tracing heap or host-held engine job whose captures require rooting."
+          "evidence": "src/lib/settleThread.ts:146 This constructs an application-data projection; there is no guest tracing heap or host-held engine job whose captures require rooting.",
+          "carriedFrom": "2026-10-21"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel consumes demo health snapshots and projects application state, while context and repository searches found no HostHooks, JobExecutor or ModuleLoader implementing an embedded language engine's contract.",
+          "evaluatedAt": "2026-10-21T21:08:32.242Z",
+          "worker": "47bf908e-0b44-4026-a18d-3c466b0f8839",
+          "reason": "replaced by db9c14d1-64bc-48ee-a0c1-a474c307356a"
         }
       ]
     },
