@@ -5801,7 +5801,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/rate-limit.ts:9 The only 'refusal' in this context is a per-IP request rate limiter that answers HTTP 429, a runtime traffic control and not a quality gate; searching the feature-boosts, feature-comments, feature-requests and votes API dirs and sections/feature-voting for eslint-disable, @ts-expect-error, max-warnings and waiver found no hit.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         }
       ],
       "governance": "governed"

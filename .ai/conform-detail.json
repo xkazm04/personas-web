@@ -11007,6 +11007,16 @@
       "evaluatedTs": "2026-11-04T01:36:59.005Z",
       "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
       "techniques": []
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/quality-gates": {
+      "context": "Feature Voting & Comments",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:53:26.485Z",
+      "worker": "2fbd34a2-0a94-4508-b5db-8bdd358ed74d",
+      "techniques": []
     }
   }
 }
