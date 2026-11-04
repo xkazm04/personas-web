@@ -2135,8 +2135,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/feature-sections/design-blueprint/geometry.ts:8 Here 'memory' is one cell of an SVG blueprint drawing on a marketing page (a geometry box, a tank path, a fill animation in TestRun); no code reads or writes an agent memory store. A search of the directory for episodic, consolidat, embedding and decay found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "test-harness",
@@ -6762,8 +6766,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/reviews/useScopedReviews.ts:15 This context is a human approve/reject queue that reads reviewStore and narrows it by scope; it stores, distills and injects no agent memory. A grep of its directory for memor, recall, episodic, consolidat, embedding and decay found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "quality-gates",
@@ -7411,8 +7419,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/stores/notesStore.ts:23 The notes store is a read-only mirror of the goals people write in the desktop Notepad, fetched through the api proxy. It holds no agent-derived beliefs or episodes, and nothing here captures, consolidates, decays or recalls them. A search of src/stores, src/lib/notes, the notes views and e2e for episodic, consolidat, embedding and decay found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "markdown-vault",
@@ -8065,8 +8077,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/AthenaUsageChart.tsx:33 The only memory-adjacent word here is 'recall', and it is a series key on a recharts usage chart that plots demo counts of Athena actions; this context holds no agent memory store and does no capture, consolidation, decay or injection. A search of its directories for episodic, consolidat, embedding and decay found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "cost-metering",
@@ -9158,8 +9174,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/mobile-landing/clock/Dial.tsx:69 Here 'memory' is a decorative aria-hidden SVG constellation (MEMORY_PTS) on the /m2 landing dial; the context is presentation-only and has no memory store or pipeline. A search of its directories for episodic, consolidat, embedding and decay found nothing.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "repository-landing-document",

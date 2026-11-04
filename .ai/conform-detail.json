@@ -10957,6 +10957,56 @@
       "evaluatedTs": "2026-11-04T01:20:14.207Z",
       "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
       "techniques": []
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/agent-memory": {
+      "context": "Observability Charts & SLA",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:36:59.005Z",
+      "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Manual Review Queue/agent-memory": {
+      "context": "Manual Review Queue",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:36:59.005Z",
+      "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
+      "techniques": []
+    },
+    "Product Feature Showcase/Memory Layers & Multi-Provider AI/agent-memory": {
+      "context": "Memory Layers & Multi-Provider AI",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:36:59.005Z",
+      "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/agent-memory": {
+      "context": "Notes (Goal Board)",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:36:59.005Z",
+      "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
+      "techniques": []
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/agent-memory": {
+      "context": "Mobile App Shell & Views",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T01:36:59.005Z",
+      "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
+      "techniques": []
     }
   }
 }
