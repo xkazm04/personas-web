@@ -5710,34 +5710,46 @@
       "subject": "agent-browser-control",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T23:27:14.452Z",
-      "worker": "f7ce1e9e-fdf0-4da7-acfc-0ed22c33c78f",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T03:09:07.117Z",
+      "worker": "1a9e4bce-cfce-4d6a-ab34-e70bab5e635d",
       "techniques": [
-        {
-          "technique": "agent-actionable-errors",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/ExecuteToast.tsx:10 This is feedback for manual persona execution, not browser-driver errors returned to an agent."
-        },
-        {
-          "technique": "effect-classed-commands",
-          "verdict": "not-applicable",
-          "evidence": "src/lib/commands/envelope.ts:15 The closed command vocabulary manages personas and conversations; it contains no browser-driving commands."
-        },
         {
           "technique": "persistent-browser-daemon",
           "verdict": "not-applicable",
-          "evidence": "src/lib/commands/personaCommands.ts:36 Commands target a persona and its device through the command store, without launching or maintaining an agent browser."
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:22 No browser process is spawned or kept alive; commands target personas."
         },
         {
           "technique": "references-over-selectors",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/subscriptions-panel/SubscriptionCard.tsx:30 The UI updates subscription records by identifiers; it does not resolve browser elements for agent actions."
+          "evidence": "src/lib/commands/commandReducer.test.ts:19 Commands name personas by id, not page elements; no accessibility snapshot exists."
+        },
+        {
+          "technique": "agent-actionable-errors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/ExecuteToast.tsx:10 This is feedback for manual persona execution, not browser-driver errors returned to an agent.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "effect-classed-commands",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/commands/envelope.ts:15 The closed command vocabulary manages personas and conversations; it contains no browser-driving commands.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "socket-scoped-surface",
           "verdict": "not-applicable",
-          "evidence": "src/lib/commands/controllerPlane.ts:51 Controller pairing uses a Supabase record, not a remotely forwarded browser-daemon listener."
+          "evidence": "src/lib/commands/controllerPlane.ts:51 Controller pairing uses a Supabase record, not a remotely forwarded browser-daemon listener.",
+          "carriedFrom": "2026-10-17"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/lib/commands/envelope.ts:15 Context searches found no daemon, puppeteer or connectOverCDP usage, and the command contract exposes persona-management operations rather than an agent-driven browser.",
+          "evaluatedAt": "2026-10-17T23:27:14.452Z",
+          "worker": "f7ce1e9e-fdf0-4da7-acfc-0ed22c33c78f",
+          "reason": "replaced by 1a9e4bce-cfce-4d6a-ab34-e70bab5e635d"
         }
       ]
     },
@@ -5746,34 +5758,46 @@
       "subject": "agent-browser-control",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-17",
-      "evaluatedTs": "2026-10-17T23:27:14.452Z",
-      "worker": "f7ce1e9e-fdf0-4da7-acfc-0ed22c33c78f",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T03:09:07.117Z",
+      "worker": "1a9e4bce-cfce-4d6a-ab34-e70bab5e635d",
       "techniques": [
-        {
-          "technique": "agent-actionable-errors",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/experiment.ts:75 This failure concerns lookup of local experiment data, not a failed browser command surfaced to an agent."
-        },
-        {
-          "technique": "effect-classed-commands",
-          "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/index.tsx:24 The dispatch surface is a React version-ledger reducer, not an agent browser-command registry."
-        },
         {
           "technique": "persistent-browser-daemon",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/components/ChatTab.tsx:52 Chat playback iterates a fixed message script and schedules local updates; it has no browser process or login session to preserve."
+          "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:6 Arena module is a deterministic projection, no browser process."
         },
         {
           "technique": "references-over-selectors",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/components/TabSwitcher.tsx:33 The application handles its own tab clicks directly rather than naming arbitrary page elements for an agent."
+          "evidence": "src/components/feature-sections/lab/bench/chat/signal.ts:11 Chat bench replays a fixed script; no page snapshot or element references."
+        },
+        {
+          "technique": "agent-actionable-errors",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/experiment.ts:75 This failure concerns lookup of local experiment data, not a failed browser command surfaced to an agent.",
+          "carriedFrom": "2026-10-17"
+        },
+        {
+          "technique": "effect-classed-commands",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:24 The dispatch surface is a React version-ledger reducer, not an agent browser-command registry.",
+          "carriedFrom": "2026-10-17"
         },
         {
           "technique": "socket-scoped-surface",
           "verdict": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/ledger.ts:15 The Lab state module is driven locally through a reducer; no browser-daemon listener or tunnel surface was found."
+          "evidence": "src/components/feature-sections/lab/ledger.ts:15 The Lab state module is driven locally through a reducer; no browser-daemon listener or tunnel surface was found.",
+          "carriedFrom": "2026-10-17"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/lab/index.tsx:24 Context searches found no daemon, puppeteer or connectOverCDP usage, while the Lab implements local version state and scripted displays rather than browser control for an agent.",
+          "evaluatedAt": "2026-10-17T23:27:14.452Z",
+          "worker": "f7ce1e9e-fdf0-4da7-acfc-0ed22c33c78f",
+          "reason": "replaced by 1a9e4bce-cfce-4d6a-ab34-e70bab5e635d"
         }
       ]
     },

@@ -2095,13 +2095,12 @@
           "changedAt": "2026-10-22",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/feature-sections/lab/index.tsx:24 Context searches found no daemon, puppeteer or connectOverCDP usage, while the Lab implements local version state and scripted displays rather than browser control for an agent.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:0d439bfcafe8cabd",
-          "evaluatedRevision": 3,
+          "evidence": "src/components/feature-sections/lab/bench/arena/arena.ts:6 The Lab benches are pure-TS projections over a scripted ledger and experiment matrix that drive marketing displays; searching src/components/feature-sections for puppeteer, connectOverCDP, chromium and daemon found no hits, so no agent drives a browser here and none of the subject's techniques has a precondition to meet.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:a5e059a866a49108",
+          "evaluatedRevision": 5,
           "source": "retained",
-          "revisionsBehind": 2,
-          "stale": true
+          "revisionsBehind": 2
         }
       ],
       "governance": "governed"
@@ -7072,12 +7071,11 @@
           "changedAt": "2026-10-22",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/lib/commands/envelope.ts:15 Context searches found no daemon, puppeteer or connectOverCDP usage, and the command contract exposes persona-management operations rather than an agent-driven browser.",
-          "evaluatedAt": "2026-10-17",
-          "evaluatedAgainst": "sha256-b2:0d439bfcafe8cabd",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "scripts/gen-command-envelope-fixture.mjs:22 The context's command surface is a signed remote-command envelope for persona operations (pause_persona/resume_persona), not a browser handed to an agent; searching its files and directories (fixtures, scripts, src/app/dashboard, src/components/dashboard, src/lib/commands) for puppeteer, connectOverCDP, chromium and daemon found no hits, so there is no browser daemon, snapshot reference table, effect-classed browser commands or tunnel listener to judge.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:a5e059a866a49108",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 2
         },
         {
           "subject": "test-harness",
