@@ -2037,8 +2037,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/feature-sections/lab/bench/evolution/EvolutionBench.tsx:17 The Lab benches are marketing animations that replay fixed copy, such as an evolution strip chart over a static SUMMARY; no agent memory is written or recalled; a search of src/components/feature-sections (recursive) for episodic, consolidat, decay, forget and embedding found 0 hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "node-boot-and-declarative-bootstrap",
@@ -2384,8 +2388,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:4 This context is a marketing illustration of retry and healing cases taken from the desktop app's healing.rs, plus an illustration switcher, and has no agent memory store; a search of healing-run-circuit/ (recursive) and src/components/illustrate for episodic, decay, forget and embedding found 0 hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "test-harness",
@@ -7306,8 +7314,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/fleet-monitor/board/attStore.ts:6 The only 'store' in this prototype is an in-memory hover/keyboard attention cell for a monitoring board, not agent memory; a search of fleet-monitor/ and fleet-monitor/board/ for episodic, consolidat, decay, forget and embedding found 0 hits, and the 2 'memory' hits are a host RAM label and a UI 'spatial memory' comment.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "runner-fleet",
@@ -9752,8 +9764,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "strong",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/scope/scopeProjections.ts:60 The only place this context touches memory is a display filter that narrows mock memory rows by persona for the dashboard scope bar, and it captures, consolidates, decays and recalls nothing; a search of src/app/dashboard and src/components/dashboard (recursive) for episodic, consolidat, decay, forget and embedding found 0 hits.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "realtime-events",

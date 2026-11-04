@@ -11515,6 +11515,46 @@
       "worker": "e5188b7f-354a-4f23-ad41-cd47d7d41fe5",
       "techniques": [],
       "registryProposal": "The subject's applicability test could name the 'prompt as stored data' case: a sync mirror holding a system_prompt column is a persistence or sync concern, not prompt assembly. Without that, a keyword match on 'system_prompt' can wrongly tie such contexts to this subject."
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/agent-memory": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:21:32.348Z",
+      "worker": "05b15149-0cfd-4501-bed0-3ec1bd8f384c",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Fleet Playground (prototypes)/agent-memory": {
+      "context": "Fleet Playground (prototypes)",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:21:32.348Z",
+      "worker": "05b15149-0cfd-4501-bed0-3ec1bd8f384c",
+      "techniques": []
+    },
+    "Product Feature Showcase/Agent Lab & Plugin Ecosystem/agent-memory": {
+      "context": "Agent Lab & Plugin Ecosystem",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:21:32.348Z",
+      "worker": "05b15149-0cfd-4501-bed0-3ec1bd8f384c",
+      "techniques": []
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/agent-memory": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T05:21:32.348Z",
+      "worker": "05b15149-0cfd-4501-bed0-3ec1bd8f384c",
+      "techniques": []
     }
   }
 }
