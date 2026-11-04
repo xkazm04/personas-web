@@ -11017,6 +11017,93 @@
       "evaluatedTs": "2026-11-04T01:53:26.485Z",
       "worker": "2fbd34a2-0a94-4508-b5db-8bdd358ed74d",
       "techniques": []
+    },
+    "Observability & Event Monitoring/Director Coaching/table": {
+      "context": "Director Coaching",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:09:46.319Z",
+      "worker": "4e6375f9-ce01-45c1-91a8-6efdcb24479b",
+      "techniques": [
+        {
+          "technique": "sorting",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:78 The last comparison term is the display label, not the immutable id. There is always a sort (a named default), but the order is not total by identity."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/director/director-page/AttentionTriageBar.tsx:59 Enumerated facet chips commit on change. Only one facet is applied at a time, and a clear chip names the active facet."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:125 Empty only shows once roster is non-null (settled): `rows === null` holds the rows under painted header chrome. The copy is typed by cause ('No agents match this filter'), and the page shows a separate error banner with retry."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:132 Rows are keyed by identity. The sorted and filtered sequence is a useMemo over the named inputs [roster, facet, now] (line 81)."
+        },
+        {
+          "technique": "client-server-split",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:28 All-client over the complete roster snapshot. The small-dataset bet is written down (five demo agents)."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:109 The cells are read-only, so the technique's rule is to keep a native table. Instead the header and rows are CSS-grid divs and spans with no table, row or columnheader semantics."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/table": {
+      "context": "Messages & Settings",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:09:46.319Z",
+      "worker": "4e6375f9-ce01-45c1-91a8-6efdcb24479b",
+      "techniques": [
+        {
+          "technique": "sorting",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:65 There is no message.id tiebreaker. The technique says a timestamp collides and must not be the final term."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:72 The view toggle resets to page 0 (line 130). A scope-bar change (persona/window, via useDashboardScope) does not reset the page; it only clamps it. A committed predicate change can therefore land the user on page N of a different result set."
+        },
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:148 When a fetch fails and no threads are held, the error banner (line 140) renders and the body then falls through to the empty claim 'No messages in this page.' This asserts empty after a failed fetch (error ≠ empty), and the copy does not name a cause. The cold-load ghosts are delayed and geometry-matched, which is good."
+        },
+        {
+          "technique": "pagination",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:92 Client-side offset over a modest, fully held set, with an honest 'page n of total' and clamped bounds."
+        },
+        {
+          "technique": "client-server-split",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 All-client regime: the whole synced_messages table is fetched with no limit (supabaseApi.ts orders only), then windowed on the client. The technique requires the growth bet to be written down (an upper bound or a guard), and there is none for live mode."
+        },
+        {
+          "technique": "performance",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:157 Rows are keyed by identity, and the page window bounds what is mounted."
+        },
+        {
+          "technique": "grid-keyboard-model",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/ThreadRow.tsx:26 Each row is a single button in a feed-style list, not a multi-column table or grid."
+        }
+      ]
     }
   }
 }

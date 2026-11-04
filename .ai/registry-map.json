@@ -6272,7 +6272,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:65 The flat message list sorts by timestamp alone and then pages with offsets (slice at line 75). Messages with the same timestamp have no identity tiebreaker, so their order around a page boundary is not defined by identity.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "prompt-assembly",
@@ -7986,9 +7990,12 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "evidence": "added by /conform: the matcher scored table at zero; CoachingTable.tsx:33 is a fourth bespoke per-agent comparison table with facet chips and flag counts (:47-58). Pairing established by reading the code; not judged in this run.",
-          "source": "conform"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/director/director-page/CoachingTable.tsx:78 The coaching table's fixed sort (attention rank, then score) uses the display name as its final tiebreaker instead of the row identity `entry.id`. The sorting technique names exactly this as the failure: a label is mutable and can collide, so two agents with the same name have no deterministic order.",
+          "source": "conform",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "people-analytics-ethics",
