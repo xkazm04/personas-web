@@ -11161,6 +11161,57 @@
       "evaluatedTs": "2026-11-04T02:41:35.838Z",
       "worker": "e08efd69-148c-4534-ab47-b571d5810177",
       "techniques": []
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/quality-gates": {
+      "context": "Split & Pipeline Playground",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:54:59.577Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "b366f006-af93-470c-8f0a-2f87982f6c10",
+        "state": "not-applicable",
+        "at": "2026-11-04T02:55:30.287658+00:00",
+        "reason": "reviewer (sonnet): The anchor (index.tsx:14) is a docstring about the film staging. It does not show that a gate is absent, and the evidence rests only on a grep that returned nothing."
+      }
+    },
+    "Agent Operations Dashboard/Manual Review Queue/quality-gates": {
+      "context": "Manual Review Queue",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:54:59.577Z",
+      "worker": "b366f006-af93-470c-8f0a-2f87982f6c10",
+      "techniques": [],
+      "registryProposal": "The registry-map matched this context to quality-gates on the token 'gate' (score 1065), but the hit is a runtime authorization guard. The matcher could down-weight 'gate' when it appears as an identifier in UI hooks rather than in CI, hook or lint config."
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/quality-gates": {
+      "context": "Notes (Goal Board)",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:54:59.577Z",
+      "worker": "b366f006-af93-470c-8f0a-2f87982f6c10",
+      "techniques": []
+    },
+    "Marketing & Landing/Features Overview & Pricing/quality-gates": {
+      "context": "Features Overview & Pricing",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-04",
+      "evaluatedTs": "2026-11-04T02:54:59.577Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "b366f006-af93-470c-8f0a-2f87982f6c10",
+        "state": "not-applicable",
+        "at": "2026-11-04T02:55:30.347539+00:00",
+        "reason": "reviewer (sonnet): The anchor (murmuration-hero/index.tsx:12) is an incidental hero docstring. The context's own src/app/features/page.tsx:10-14 names sitemapRoutesHaveMetadata.test.ts, a gate that fails for this route. That contradicts not-applicable, and the verdict wrongly dismisses it as living outside the context"
+      }
     }
   }
 }

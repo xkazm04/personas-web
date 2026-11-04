@@ -6802,7 +6802,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/index.tsx:35 The only 'gate' here (`useReviewGate` / `canDecideReview`) is a runtime reachability and authorization guard that enables Approve/Reject on human reviews, not a check that refuses changes to a tree. That puts it under the hitl-approval subject, not quality-gates. Searching the context's directories found no CI, hook or exit-code gate machinery: no hits for process.exit, max-warnings, exitCode, husky or lint-staged.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "copy-quality-gates",
@@ -7568,7 +7572,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/notes/notesModel.ts:3 This context is a read-only goal board, made of a pure model, a store, views, and a unit test plus e2e specs that the repo's gates run. It defines no gate, severity, waiver or exit-code path of its own: a search of its directories found no hits for process.exit, max-warnings, exitCode, husky or lint-staged, and the tests are instruments rather than refusal machinery.",
+          "evaluatedAt": "2026-11-04",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         }
       ],
       "governance": "governed"
