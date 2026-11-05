@@ -11900,6 +11900,56 @@
       "evaluatedTs": "2026-11-05T23:33:46.778Z",
       "worker": "21adefea-8b0d-4240-b204-28621f388a87",
       "techniques": []
+    },
+    "Infrastructure & Telemetry/Authentication & User Session/mcp-tools": {
+      "context": "Authentication & User Session",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:51:14.700Z",
+      "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+      "techniques": []
+    },
+    "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/mcp-tools": {
+      "context": "Dashboard Shell, Chrome & Realtime",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:51:14.700Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+        "state": "not-applicable",
+        "at": "2026-11-05T23:51:55.305906+00:00",
+        "reason": "reviewer (sonnet): The anchor DashboardScopeBar.tsx:17 is a doc comment about persona and date filters. It does not show that no tool-protocol server or client exists, so it is incidental. My re-search of the context found no MCP surface, but the anchor does not carry that claim."
+      }
+    },
+    "Infrastructure & Telemetry/Supabase Client/mcp-tools": {
+      "context": "Supabase Client",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:51:14.700Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+        "state": "not-applicable",
+        "at": "2026-11-05T23:51:55.387681+00:00",
+        "reason": "reviewer (sonnet): The anchor supabase.ts:4 is a comment about the Supabase fetch timeout. It says nothing about the absence of a tool server or host, so it is incidental."
+      }
+    },
+    "Marketing & Landing/Why Agents & Use Cases/mcp-tools": {
+      "context": "Why Agents & Use Cases",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:51:14.700Z",
+      "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+      "techniques": []
     }
   }
 }
