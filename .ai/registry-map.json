@@ -5395,7 +5395,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/server/rate-limit.ts:17 The rule that caused a real production inversion is kept only as a prose prohibition in a header comment. The next line admits a violation is compile-clean, and no lint rule, test or script checks callers for a boolean wrapper (rg found checkRateLimit used only in the module and its tests), so a reintroduced inverted wrapper would pass every gate.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:0d8378dd13155e59",
+          "evaluatedRevision": 54
         },
         {
           "subject": "retrieval",

@@ -11758,6 +11758,47 @@
       "evaluatedTs": "2026-11-04T22:27:30.039Z",
       "worker": "c2bd0665-84d6-452a-a0b9-5676806ca6e5",
       "techniques": []
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/quality-gates": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "quality-gates",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T22:11:14.501Z",
+      "worker": "ffe80d5d-5d7b-4725-9e8e-04c84ae89d12",
+      "techniques": [
+        {
+          "technique": "prose-rule-drift",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/rate-limit.ts:17 This is a prohibition on an action, not an artifact, so its violation looks the same as compliance. Callers currently use rateLimitGuard, so it is not violated today, but it is unmechanised: checkRateLimit is still exported returning {allowed}, and nothing refuses a new wrapper around it."
+        },
+        {
+          "technique": "oracle-frozen-during-repair",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/rate-limit.test.ts:25 The direction test was added in the same commit as the inversion fix (5a228cbc), not red first. This is partly mitigated after the fact by rateLimitMutants.test.ts, which proves the suite goes red against wrong implementations."
+        },
+        {
+          "technique": "gate-liveness",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rateLimitMutants.test.ts:130 Known violations (mutants of rate-limit.ts) are seeded, and each must turn the suite red. Line 124 also asserts the unmutated harness is sound, so the test separates 'checked and clean' from a dead harness."
+        },
+        {
+          "technique": "match-the-resolved-artifact",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rateLimitMutants.test.ts:121 Every mutation's needle carries a presence assertion over the real source, so a rewording cannot silently turn a mutant into a no-op that 'passes'."
+        },
+        {
+          "technique": "blocking-by-input-determinism",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rateLimitMutants.test.ts:35 The verdict is a function of the tree's own source only: mutants are transpiled in memory under fake time with server-only stubbed and no external feed, so the test may block."
+        },
+        {
+          "technique": "severity-by-construction",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rateLimitMutants.test.ts:36 The threshold is set where the code can actually trip it: one surviving mutant fails the expect at line 135, so the ratchet is fireable rather than set beyond reach."
+        }
+      ]
     }
   }
 }
