@@ -11870,6 +11870,36 @@
       "evaluatedTs": "2026-11-05T23:09:10.918Z",
       "worker": "5ec998c5-0f1e-4ff5-b061-475c7d28b80a",
       "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/agent-memory": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:33:46.778Z",
+      "worker": "21adefea-8b0d-4240-b204-28621f388a87",
+      "techniques": []
+    },
+    "Theming, i18n & Shared Utilities/Internationalization (14 locales)/agent-memory": {
+      "context": "Internationalization (14 locales)",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:33:46.778Z",
+      "worker": "21adefea-8b0d-4240-b204-28621f388a87",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Director Coaching/agent-memory": {
+      "context": "Director Coaching",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:33:46.778Z",
+      "worker": "21adefea-8b0d-4240-b204-28621f388a87",
+      "techniques": []
     }
   }
 }

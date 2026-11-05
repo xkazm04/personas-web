@@ -3575,8 +3575,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 The marketing chat section replays scripted transcripts on a fixed clock and has no agent that carries state between sessions. A search of its directory for consolidat, decay, supersed and embedding found nothing.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "agent-instruction-files",
@@ -8045,8 +8049,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:8 The Director view renders mock coaching verdicts (one category is labelled 'memory') through a demo-only fetcher and has no memory store, capture or recall. A search of its directory for consolidat, decay, supersed and embedding found nothing.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "table",
@@ -11554,8 +11562,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/i18n/localeRelease.ts:2 The context is locale dictionaries plus a release predicate for which locales visitors can reach. There is no agent memory pipeline here; the words 'memory' and 'recall' appear only as translated marketing copy, and searching for decay, supersed and embedding found nothing.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "concurrency-guards",
