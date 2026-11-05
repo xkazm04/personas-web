@@ -11799,6 +11799,37 @@
           "evidence": "src/lib/server/rateLimitMutants.test.ts:36 The threshold is set where the code can actually trip it: one surviving mutant fails the expect at line 135, so the ratchet is fireable rather than set beyond reach."
         }
       ]
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/test-harness": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "test-harness",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T22:33:31.002Z",
+      "worker": "9d8cb8c9-13a4-4a4e-bf1d-30271a315f51",
+      "techniques": [
+        {
+          "technique": "negative-control-tests",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/json-file-store.ts:36 A recovery/refusal arm that the normal suite never runs. It has no test at all, so it has no negative control. The temp-file cleanup arm at line 65 is in the same position."
+        },
+        {
+          "technique": "assert-the-schedule-not-the-stopwatch",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rate-limit.test.ts:64 The window-refill and Retry-After claims run on a fake clock (advanceTimersByTime), not on wall time."
+        },
+        {
+          "technique": "isolation-lanes",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rate-limit.test.ts:18 Bucket state is module-level, so each test gets a unique namespace instead of inheriting buckets from earlier tests. The test states this explicitly."
+        },
+        {
+          "technique": "unreached-decisions-pin-nothing",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rate-limit.test.ts:11 The rate-limit tests assert the admit/refuse direction, so the limiter's decision is actually reached and the assertion depends on it. The comment names the inversion mutation the tests defend against."
+        }
+      ]
     }
   }
 }

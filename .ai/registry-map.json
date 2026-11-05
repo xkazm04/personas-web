@@ -5452,7 +5452,11 @@
           "revision": 27,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/lib/server/json-file-store.ts:36 The corrupt-JSON refusal arm exists to stop data loss, but no test runs it: a grep of all *.test.ts and *.spec.ts files for readJsonFile, updateJsonFile, withWriteLock, json-file-store and fileLock finds nothing, so a refactor back to the empty fallback would stay green.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:c96e1ee699a88119",
+          "evaluatedRevision": 27
         },
         {
           "subject": "client-state",
