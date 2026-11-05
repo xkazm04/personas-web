@@ -11830,6 +11830,46 @@
           "evidence": "src/lib/server/rate-limit.test.ts:11 The rate-limit tests assert the admit/refuse direction, so the limiter's decision is actually reached and the assertion depends on it. The comment names the inversion mutation the tests defend against."
         }
       ]
+    },
+    "Infrastructure & Telemetry/Supabase Client/voice-io": {
+      "context": "Supabase Client",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:09:10.918Z",
+      "worker": "5ec998c5-0f1e-4ff5-b061-475c7d28b80a",
+      "techniques": []
+    },
+    "Content & Informational Pages/How It Works & Changelog/voice-io": {
+      "context": "How It Works & Changelog",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:09:10.918Z",
+      "worker": "5ec998c5-0f1e-4ff5-b061-475c7d28b80a",
+      "techniques": []
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/voice-io": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:09:10.918Z",
+      "worker": "5ec998c5-0f1e-4ff5-b061-475c7d28b80a",
+      "techniques": []
+    },
+    "Connectors & Templates/Connectors Catalog/voice-io": {
+      "context": "Connectors Catalog",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-05",
+      "evaluatedTs": "2026-11-05T23:09:10.918Z",
+      "worker": "5ec998c5-0f1e-4ff5-b061-475c7d28b80a",
+      "techniques": []
     }
   }
 }

@@ -4763,7 +4763,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/how/page.tsx:10 The /how page and its manifesto, role-path and changelog sections are static marketing components. I grepped them for speech, voice, tts, audio, transcri, getUserMedia and MediaRecorder and found nothing; the Typewriter component is a visual effect with no audio. Voice input and output have no surface here.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "data-plane-transport-selection",
@@ -6234,7 +6238,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/data/connectors.ts:1416 Voice engines such as Deepgram and ElevenLabs show up here only as marketing catalog entries, as static summary strings and example CLI commands. The catalog UI renders cards from this data. I searched the context's files for getUserMedia, MediaRecorder and speech-synthesis or recognition calls and found none, so no audio is captured, synthesized or played and the voice-io techniques do not apply.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         }
       ],
       "governance": "governed"
@@ -10206,7 +10214,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/supabase.ts:1 This context is a Supabase data client plus sync-reachability hooks and stores. I grepped its files for speech, voice, tts, stt, audio, microphone, getUserMedia, MediaRecorder and transcri. The only hit was a SQL comment that names a persona's identity/voice JSON field (setup-sync-db.sql:76), which is persona text, not audio. There is no speech capture or synthesis pipeline for the technique to govern.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "prompt-assembly",
@@ -10674,7 +10686,11 @@
           "revision": 23,
           "changedAt": "2026-10-18",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/sentry.ts:5 This context only configures Sentry, PII scrubbing, analytics and the page-view and cookie controls. I grepped all its files for speech, voice, audio, tts, transcri and MediaRecorder and found nothing, so there is no voice pipeline to judge.",
+          "evaluatedAt": "2026-11-05",
+          "evaluatedAgainst": "sha256-b2:29f8b158c4d44054",
+          "evaluatedRevision": 23
         },
         {
           "subject": "table",
