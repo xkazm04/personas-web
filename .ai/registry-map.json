@@ -5726,12 +5726,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/app/api/votes/route.ts:9 This context is a set of Next.js route handlers and React components that run on a host runtime, not an embeddable guest-language runtime with an engine, standards packages, extras layer or CLI. A case-insensitive rg for realm, registrar, wintercg, boa_engine and JsValue over src/app/api and src/components/sections/feature-voting found nothing, and no repo file outside node_modules mentions boa_engine, deno_core, wintercg, quickjs, isolated-vm or JsValue.",
-          "evaluatedAt": "2026-10-25",
-          "evaluatedAgainst": "sha256-b2:3cf694924d502131",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/app/api/votes/route.ts:9 This context is made of Next.js route handlers and React components that run on top of a host runtime. It does not build an embeddable guest-language runtime with an engine, standards packages, an extras layer or a CLI. A case-insensitive search of src/app/api and src/components/sections/feature-voting for realm, registrar, wintercg, boa_engine, JsValue, deno_core, quickjs, isolated-vm and guest returned nothing. Outside node_modules, the engine terms appear only in the conform metadata files under .ai/.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:72be2b66c8d50db7",
+          "evaluatedRevision": 3,
+          "revisionsBehind": 1
         },
         {
           "subject": "sidecar-provisioning",

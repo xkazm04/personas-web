@@ -10312,42 +10312,54 @@
       "subject": "standards-layered-runtime",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-25",
-      "evaluatedTs": "2026-10-25T23:54:27.148Z",
-      "worker": "c818bf88-a233-4f3c-933d-36c135e7437c",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T23:48:57.468Z",
+      "worker": "31c7af6e-d6b0-4783-ab60-bec761a2dbea",
       "techniques": [
         {
           "technique": "crate-per-standards-body",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/feature-comments/route.ts:12 The routes import shared app helpers from @/lib. No package is split out per external standard, because the context ships no runtime packages."
+          "evidence": "src/app/api/votes/route.ts:9 The context uses the host's Request and Response APIs. It does not implement or package any standard's API set."
         },
         {
           "technique": "backend-parameterised-web-api",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/votes/storage.ts:2 The Supabase/filesystem storage switch is an app data-access backend. It is not a backend trait behind a guest-facing standard API, so the technique's precondition does not hold."
+          "evidence": "src/app/api/votes/storage.ts:2 The Supabase/filesystem split is an app storage backend. It is not a backend that a standard web API runs on, and no guest program can see it."
         },
         {
           "technique": "baseline-plus-extension-tuple",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/votes/rate-limit.ts:7 Nothing registers APIs into a guest context here. Modules are wired with ordinary imports."
+          "evidence": "src/app/api/votes/rate-limit.ts:7 Nothing registers APIs into a guest context here. Modules are wired with ordinary imports.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "status-header-per-api",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/feature-boosts/route.ts:2 The module headers record PII and integrity policy. They are not standard-clause citations, and no standard package exists that would need them."
+          "evidence": "src/app/api/feature-boosts/route.ts:2 The module headers record PII and integrity policy. They are not standard-clause citations, and no standard package exists that would need them.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "cli-as-thin-assembler",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/feature-voting/components/FeatureBoostButton.tsx:1 The context is web UI plus HTTP handlers. It has no command-line front end of a runtime."
+          "evidence": "src/components/sections/feature-voting/components/FeatureBoostButton.tsx:1 The context is web UI plus HTTP handlers. It has no command-line front end of a runtime.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "re-export-preserves-import-path",
           "verdict": "not-applicable",
-          "evidence": "src/app/api/votes/storage.ts:11 This re-export is an app-level convenience. No API is moving between runtime layers, so the layer-migration precondition does not hold."
+          "evidence": "src/app/api/votes/storage.ts:11 This re-export is an app-level convenience. No API is moving between runtime layers, so the layer-migration precondition does not hold.",
+          "carriedFrom": "2026-10-25"
         }
       ],
-      "registryProposal": "The registry-map matched this subject to a Next.js API/voting context. The subject should state its precondition (the repo implements an embeddable guest-language runtime) in a form the matcher can use to keep it off web-application contexts."
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/route.ts:9 This context is a set of Next.js route handlers and React components that run on a host runtime, not an embeddable guest-language runtime with an engine, standards packages, extras layer or CLI. A case-insensitive rg for realm, registrar, wintercg, boa_engine and JsValue over src/app/api and src/components/sections/feature-voting found nothing, and no repo file outside node_modules mentions boa_engine, deno_core, wintercg, quickjs, isolated-vm or JsValue.",
+          "evaluatedAt": "2026-10-25T23:54:27.148Z",
+          "worker": "c818bf88-a233-4f3c-933d-36c135e7437c",
+          "reason": "replaced by 31c7af6e-d6b0-4783-ab60-bec761a2dbea"
+        }
+      ]
     },
     "Infrastructure & Telemetry/Error Monitoring & Analytics/stream-proxy-hop": {
       "context": "Error Monitoring & Analytics",
