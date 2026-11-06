@@ -899,12 +899,11 @@
           "changedAt": "2026-10-27",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "src/contexts/TourContext.tsx:170 Most steps advance because the narration clip ended or the dwell timer fired, so the tour moves while the visitor watches unless that step sets waitForSignal.",
-          "evaluatedAt": "2026-10-16",
-          "evaluatedAgainst": "sha256-b2:6f44ad03ebd5bd19",
-          "evaluatedRevision": 4,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/contexts/TourContext.tsx:174 A dwell timer advances any step that has no waitForSignal, even when the step declares advanceOn. So the Board, Mission Control and Health steps, which ask the visitor to act, move on after 45, 30 or 35 seconds, and nothing records the step as moved past rather than performed.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:5fd51481dedaf230",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 1
         },
         {
           "subject": "voice-io",

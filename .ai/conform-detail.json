@@ -286,41 +286,57 @@
       "subject": "guided-tours",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-16",
-      "evaluatedTs": "2026-10-16T22:59:13.055Z",
-      "worker": "df031895-867d-4f0e-a300-01881869ded9",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T01:32:20.283Z",
+      "worker": "8f3f2179-77e9-4990-a827-599655f2c6a5",
       "techniques": [
         {
           "technique": "action-driven-advancement",
           "verdict": "deviation",
-          "evidence": "src/lib/tour-progress.ts:65 Board, mission, and health declare advanceOn but not waitForSignal and have no audioSrc, so dwellMs still completes them; only the reviews step waits for the real signal."
-        },
-        {
-          "technique": "anchor-contracts",
-          "verdict": "conformant",
-          "evidence": "src/lib/tour-anchors.test.ts:248 The test derives selectors from the live step objects and fails when src/ does not host that attribute; the spotlight re-queries the selector every animation frame rather than caching the element."
-        },
-        {
-          "technique": "missing-anchor-degradation",
-          "verdict": "deviation",
-          "evidence": "src/components/tour/TourSpotlight.tsx:37 Every unresolved step takes this one path after 3000ms; TourStep has no per-step skip or re-center field, and the breadcrumb records only waitedMs."
+          "evidence": "src/lib/tour-progress.ts:65 Steps with advanceOn do complete on real product signals (command, view focus, causeFixed, verdict), which is good. But board, mission and health (tour-script.ts:359-385) set advanceOn without waitForSignal, so the dwell timer auto-completes them. That is the 'next-button wearing a stopwatch' this technique refuses. Next also stays live on interactive steps, and no ledger separates performed from skipped."
         },
         {
           "technique": "narration-and-pacing",
           "verdict": "deviation",
-          "evidence": "src/hooks/useTourAudio.ts:170 A step clip's ended event schedules advancement, and an audio error does the same after dwellMs; captions do exist as text and playback is paused on cleanup."
+          "evidence": "src/contexts/TourContext.tsx:179 When a narration clip ends, every step without waitForSignal advances. That is auto-advance on narration-end, which this technique refuses outright. The text-first steps, the play/pause toggle and the persisted volume are fine."
+        },
+        {
+          "technique": "anchor-contracts",
+          "verdict": "conformant",
+          "evidence": "src/lib/tour-anchors.test.ts:127 Anchors are semantic data-tour-diagram and data-* identifiers that live on the elements. The vitest gate builds its manifest from the live step objects, checks every selector against src/, names tour, step and attribute when one fails, and bans text-aimed actions. TourSpotlight looks the selector up again on every frame (TourSpotlight.tsx:96) instead of caching the element. One minor gap: that per-frame querySelector is a fast poll, not a movement subscription."
+        },
+        {
+          "technique": "missing-anchor-degradation",
+          "verdict": "deviation",
+          "evidence": "src/components/tour/TourSpotlight.tsx:143 The never-strand rule holds: the caption card and its exit render without the anchor, and patience is bounded at 3000 ms. But one global 'drop the scrim, keep the caption' policy covers every step, and the docblock explicitly rejects skip, so no step declares its own policy. The degradation breadcrumb carries only waitedMs, with no tour, step or anchor, so it cannot serve as a drift gauge."
         },
         {
           "technique": "overlay-precedence",
           "verdict": "deviation",
-          "evidence": "src/components/tour/TourCaptionCard.tsx:45 Tab is trapped in the caption on every step, including steps that ask the visitor to use the spotlit control; the tour paints at z-[80]/z-[90] and Escape always exits it."
+          "evidence": "src/hooks/useTourKeyboard.ts:21 A window-level listener exits the tour on Escape 'from anywhere', so a press meant for a dashboard Modal (z-[100]) above the tour also tears the tour down. Nothing pauses the tour when an unrelated modal opens. The tour also sets its own layer numbers (z-[80] scrim, z-[90] cards) instead of registering with a layering authority. The caption card's Tab trap covers the dialog only, not the anchor; 'Show me' is the keyboard path."
         },
         {
           "technique": "tour-lifecycle",
           "verdict": "deviation",
-          "evidence": "src/hooks/useTourAutostart.ts:7 Step ids are stable strings, but stepIndex is React state, start() begins at 0, and the only stored tour flag means started, not resumed, completed, or declined."
+          "evidence": "src/contexts/TourContext.tsx:45 Step ids are stable strings, which is good. But progress and the active tour exist only in React state, so a reload restarts at step 0. The only thing persisted is a 'seen' flag written when the tour starts (TourLauncher.tsx:89), which feeds the launcher's first-visit pulse. There is no completed, exited or declined ledger and no version or retirement state."
+        },
+        {
+          "technique": "tour-path-curriculum",
+          "verdict": "deviation",
+          "evidence": "src/components/tour/TourCaptionCard.tsx:156 The chapter quick-nav types its own Home/Features/Dashboard list instead of reading the site's single nav authority, useRoutes() (src/components/navbar/useRoutes.ts). It has already drifted: /roadmap has a tour and a nav tab but no chapter button. The dashboard-route test (tour-anchors.test.ts:356) checks against a copied route list."
+        },
+        {
+          "technique": "product-performed-effects",
+          "verdict": "deviation",
+          "evidence": "src/lib/tour-script.ts:146 Effects do press the product's own controls, which is good, and the Reviews step holds and only moves focus to Approve. But actions fire at atMs on the narration clock, and clickTarget silently does nothing when the control is absent. Nothing waits for the control to be pressable, so an effect is fired on a timer, which the technique refuses."
+        },
+        {
+          "technique": "spotlight-continuity",
+          "verdict": "conformant",
+          "evidence": "src/components/tour/TourSpotlight.tsx:97 The cutout is only rewritten when the step's element is found, so it keeps its last box while the next element is missing. The hold is bounded (ANCHOR_TIMEOUT_MS 3000) and then the spotlight drops. Measurement writes DOM styles in a rAF loop with no React re-render, so the ring's pulse does not restart, and useSpotlightMarker marks only the element it actually found. The 3 s bound is about twice the technique's suggested ~1.5 s, and the cross-route jump is a cut, not a glide."
         }
       ],
+      "registryProposal": "anchor-contracts recommends subscribing to scroll, resize and mutation instead of polling. It does not cover the common case of a rAF loop that re-reads the rect directly into DOM styles every frame without React re-renders. That loop is cheap per frame and catches every movement. The technique should say whether this counts as acceptable 'live derivation' or as the 'fast poll that taxes the product'.",
       "superseded": [
         {
           "state": "deviation",
@@ -328,6 +344,13 @@
           "evaluatedAt": "2026-08-31",
           "worker": null,
           "reason": "replaced by df031895-867d-4f0e-a300-01881869ded9"
+        },
+        {
+          "state": "deviation",
+          "evidence": "src/contexts/TourContext.tsx:170 Most steps advance because the narration clip ended or the dwell timer fired, so the tour moves while the visitor watches unless that step sets waitForSignal.",
+          "evaluatedAt": "2026-10-16T22:59:13.055Z",
+          "worker": "df031895-867d-4f0e-a300-01881869ded9",
+          "reason": "replaced by 8f3f2179-77e9-4990-a827-599655f2c6a5"
         }
       ]
     },
