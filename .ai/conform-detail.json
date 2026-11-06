@@ -8330,24 +8330,27 @@
       "subject": "native-guest-interop",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-25",
-      "evaluatedTs": "2026-10-25T01:46:11.372Z",
-      "worker": "29564fc6-1fca-41cd-8300-d454c3fc48cd",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T02:23:23.041Z",
+      "worker": "b3a303e1-edb3-481e-8580-a44f366c3e90",
       "techniques": [
         {
           "technique": "aligned-native-data-cell",
           "verdict": "not-applicable",
-          "evidence": "package.json:58 The manifest is a Next/React web app with no collected guest heap and no cell headers."
+          "evidence": "package.json:58 The manifest is a Next/React web app with no collected guest heap and no cell headers.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "async-native-as-promise",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:1 The async work here is ordinary React effects and timers. No host future is bridged into a guest promise."
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:1 The async work here is ordinary React effects and timers. No host future is bridged into a guest promise.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "copy-closure-safe-api",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 This is a plain JS closure passed to a browser timer. No native function is registered into a guest runtime."
+          "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 This is a plain JS closure passed to a browser timer. No native function is registered into a guest runtime.",
+          "carriedFrom": "2026-10-25"
         },
         {
           "technique": "class-from-impl-with-borrow-warning",
@@ -8366,6 +8369,15 @@
           "verdict": "not-applicable",
           "evidence": "src/components/sections/DownloadCTA.tsx:44 State is held directly in React with TypeScript types, without recovering erased host payloads or accessing a runtime type-keyed host-state map.",
           "carriedFrom": "2026-10-22"
+        }
+      ],
+      "superseded": [
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/sections/DownloadCTA.tsx:3 This context is a set of React client components and hooks: a download CTA, platform pills, a footer, and a release-freshness timer. It embeds no language runtime, has no collected guest heap, and has no host/guest boundary. A search of the context files and of src/ for NativeFunction, downcast, JsValue, WebAssembly, GcRefCell, from_copy_closure, boa_engine and quickjs found nothing, `git ls-files` lists no Cargo/.rs/.wasm files, and package.json dependencies (next, react, framer-motion, etc.) include no embeddable engine.",
+          "evaluatedAt": "2026-10-25T01:46:11.372Z",
+          "worker": "29564fc6-1fca-41cd-8300-d454c3fc48cd",
+          "reason": "replaced by b3a303e1-edb3-481e-8580-a44f366c3e90"
         }
       ]
     },

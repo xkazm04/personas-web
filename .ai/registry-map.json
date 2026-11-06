@@ -1182,12 +1182,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/sections/DownloadCTA.tsx:3 This context is a set of React client components and hooks: a download CTA, platform pills, a footer, and a release-freshness timer. It embeds no language runtime, has no collected guest heap, and has no host/guest boundary. A search of the context files and of src/ for NativeFunction, downcast, JsValue, WebAssembly, GcRefCell, from_copy_closure, boa_engine and quickjs found nothing, `git ls-files` lists no Cargo/.rs/.wasm files, and package.json dependencies (next, react, framer-motion, etc.) include no embeddable engine.",
-          "evaluatedAt": "2026-10-25",
-          "evaluatedAgainst": "sha256-b2:24dff9c7b931faef",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/sections/DownloadCTA.tsx:3 This context is React client components and hooks (download CTA, platform pills, footer, a release-freshness interval in useFreshRelease.ts). It embeds no language runtime and has no collected guest heap or host/guest boundary. A case-insensitive search of src/ for WebAssembly, NativeFunction, downcast, quickjs, JsValue, boa_engine, GcRefCell, from_copy_closure and isolated-vm returned no matches. `git ls-files` lists no .rs, .wasm or Cargo files, and the package.json dependencies (next, react, framer-motion, recharts, shiki, swr, zustand, supabase, sentry) include no embeddable engine, so none of the subject's preconditions hold here.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:6124db5a2085100a",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 1
         },
         {
           "subject": "background-jobs",
