@@ -11975,6 +11975,53 @@
       "evaluatedTs": "2026-11-06T00:27:40.343Z",
       "worker": "e363bceb-dea7-4ac4-9e5a-5c9713a29eeb",
       "techniques": []
+    },
+    "Platform Foundation: Shell, UI & Motion/Mobile App Shell & Views/agent-host-experience": {
+      "context": "Mobile App Shell & Views",
+      "subject": "agent-host-experience",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:38:07.792Z",
+      "worker": "32e7f491-6327-454a-b175-a22d2fe5f6ef",
+      "techniques": [
+        {
+          "technique": "depth-handoff",
+          "verdict": "not-applicable",
+          "evidence": "src/components/mobile-landing/clock/useHandoff.ts:43 The 'handoff' here sends a download link from the phone to the visitor's computer. No agent host is involved, so no state handle or consent is passed."
+        },
+        {
+          "technique": "agent-ui-event-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:5 A force-static landing page that attaches to no agent run stream."
+        }
+      ]
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/agent-host-experience": {
+      "context": "Notes (Goal Board)",
+      "subject": "agent-host-experience",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:38:07.792Z",
+      "worker": "32e7f491-6327-454a-b175-a22d2fe5f6ef",
+      "techniques": [
+        {
+          "technique": "agent-ui-event-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/stores/notesStore.ts:15 A Realtime ping makes the board refetch a table of notes. That is row sync for a goal board, not a typed run stream for a surface showing a live run."
+        },
+        {
+          "technique": "depth-handoff",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/notes/notesModel.ts:28 Read-only on the web: nothing irreversible is requested through an agent host here, so there is nothing to hand back to the product."
+        },
+        {
+          "technique": "journey-shaped-tool-surface",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/notes/notesModel.ts:42 Agent activity appears only as a count of reviews; the board offers no operations to outside agents."
+        }
+      ]
     }
   }
 }

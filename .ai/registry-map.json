@@ -7629,7 +7629,11 @@
           "revision": 2,
           "changedAt": "2026-11-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/stores/notesStore.ts:25 The Notes board is a read-only mirror of the desktop's synced_notes rows (mock, sync mirror or empty list). It is not a tool surface for outside agents, and it is not a live front end for an agent run. I searched for mcp, tool_call, EventSource, structuredContent and runId and found nothing; the only 'agent' hit is the openReviews count comment.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:1ba6c714c7d9ee8c",
+          "evaluatedRevision": 2
         },
         {
           "subject": "quality-gates",
@@ -9337,7 +9341,11 @@
           "revision": 2,
           "changedAt": "2026-11-03",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/m2/page.tsx:8 /m2 is a static, noindexed marketing landing (a clock dial, FAQ, CTA and waitlist). It exposes no tool surface to outside agents and hosts no agent front end. I searched the context's directories for mcp, tool_call, EventSource, structuredContent and runId and found nothing; the 'agent' hits are only illustration copy (art.ts, data.ts).",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:1ba6c714c7d9ee8c",
+          "evaluatedRevision": 2
         },
         {
           "subject": "test-harness",
