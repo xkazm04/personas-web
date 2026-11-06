@@ -6541,12 +6541,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:149 This module displays runtime patterns from fixtures or Supabase; searches for registry, catalog, contributor, and digest found no context hits, while repository hits concerned separate tooling and catalogs, so the shared knowledge repository precondition does not hold.",
-          "evaluatedAt": "2026-10-16",
-          "evaluatedAgainst": "sha256-b2:08227ed9be7fc676",
-          "evaluatedRevision": 11,
-          "revisionsBehind": 2,
-          "stale": true
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:44 The view only shows runtime knowledge patterns and agent memories from demo fixtures or Supabase (via useKnowledgeData). A search of the context directory for registry, catalog, contributor, digest, overlay, manifest, lane and propose found nothing, so this context is not a shared, multi-consumer knowledge repository and the subject's precondition does not hold.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:6c7d2c16b9fe5b9b",
+          "evaluatedRevision": 13,
+          "revisionsBehind": 2
         },
         {
           "subject": "markdown-vault",

@@ -480,44 +480,49 @@
       "subject": "knowledge-registry",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-16",
-      "evaluatedTs": "2026-10-16T23:45:19.478Z",
-      "worker": "0a1eabbc-10c3-4ae5-9e91-ec679debd845",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T01:43:13.703Z",
+      "worker": "921c8195-888b-4c3c-8876-1c58b347b617",
       "techniques": [
         {
           "technique": "catalog-as-sync-key",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:124 Synced rows become persona-specific display patterns; this context does not compare copies of published registry items."
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:13 Data comes from a mock API or Supabase rows. There is no generated index or digest that consumers could use to check whether their copy is current."
         },
         {
           "technique": "consumer-overlays",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/index.tsx:173 The table is a presentation of the page's patterns, with no shared registry declaration or second registry consumer."
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:15 The view reads per-user synced patterns. It is not a second consumer of a shared registry, so the overlay question of whose fact a field is does not come up."
         },
         {
           "technique": "deterministic-seeding",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:105 Demo memories are application data reads; no registry creation proposal or repository seeding occurs here."
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:105 Demo memories are application data reads; no registry creation proposal or repository seeding occurs here.",
+          "carriedFrom": "2026-10-16"
         },
         {
           "technique": "lane-contracts",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:39 Knowledge types filter runtime pattern rows; they do not define repository lanes with specifications and gates."
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeClusterGraph.tsx:39 Knowledge types filter runtime pattern rows; they do not define repository lanes with specifications and gates.",
+          "carriedFrom": "2026-10-16"
         },
         {
           "technique": "per-contributor-aggregation",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:60 This aggregates runtime success counts for display, rather than files contributed by registry installations."
+          "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:60 This aggregates runtime success counts for display, rather than files contributed by registry installations.",
+          "carriedFrom": "2026-10-16"
         },
         {
           "technique": "propose-then-adopt",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:95 Acceptance updates the component's resolved-memory IDs; it is not adoption of a repository contribution through merge."
+          "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:95 Acceptance updates the component's resolved-memory IDs; it is not adoption of a repository contribution through merge.",
+          "carriedFrom": "2026-10-16"
         },
         {
           "technique": "verification-is-contributed",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:63 Evidence links identify runtime executions, rather than contributing verification counts about published registry claims."
+          "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:63 Evidence links identify runtime executions, rather than contributing verification counts about published registry claims.",
+          "carriedFrom": "2026-10-16"
         }
       ],
       "superseded": [
@@ -527,6 +532,13 @@
           "evaluatedAt": "2026-08-31",
           "worker": null,
           "reason": "replaced by 0a1eabbc-10c3-4ae5-9e91-ec679debd845"
+        },
+        {
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/useKnowledgeData.ts:149 This module displays runtime patterns from fixtures or Supabase; searches for registry, catalog, contributor, and digest found no context hits, while repository hits concerned separate tooling and catalogs, so the shared knowledge repository precondition does not hold.",
+          "evaluatedAt": "2026-10-16T23:45:19.478Z",
+          "worker": "0a1eabbc-10c3-4ae5-9e91-ec679debd845",
+          "reason": "replaced by 921c8195-888b-4c3c-8876-1c58b347b617"
         }
       ]
     },
