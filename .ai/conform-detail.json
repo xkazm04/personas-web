@@ -12134,6 +12134,22 @@
           "evidence": "src/components/sections/roadmap/index.tsx:13 This is a server-rendered section with no session-lifetime services. The frame and tour host belong to InfoPageLayout."
         }
       ]
+    },
+    "Agent Operations Dashboard/Knowledge Base/model-composed-workspace": {
+      "context": "Knowledge Base",
+      "subject": "model-composed-workspace",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T01:56:01.562Z",
+      "worker": "140faeec-d07e-4602-8bf0-ce5558a3df49",
+      "techniques": [
+        {
+          "technique": "composition-region",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:135 Users pick the view by hand; the model has no region it composes into."
+        }
+      ]
     }
   }
 }

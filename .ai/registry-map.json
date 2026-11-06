@@ -6725,7 +6725,11 @@
           "revision": 3,
           "changedAt": "2026-11-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:135 The Knowledge view switches between a fixed set of view variants (dense table, cluster graph, memories) only on the user's tab click, with data from mock/API hooks, so no model picks or arranges the views; searches for composition, arrangement, streamText, anthropic and openai over the knowledge directory found 0 hits.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:7c6aa8f4a4d53a56",
+          "evaluatedRevision": 3
         },
         {
           "subject": "people-analytics-ethics",
