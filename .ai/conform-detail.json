@@ -11718,16 +11718,11 @@
       "context": "Animation & Motion System",
       "subject": "prompt-assembly",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-11-04",
-      "evaluatedTs": "2026-11-04T22:27:30.039Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "c2bd0665-84d6-452a-a0b9-5676806ca6e5",
-        "state": "not-applicable",
-        "at": "2026-11-04T22:28:07.100413+00:00",
-        "reason": "reviewer (sonnet): The anchor src/hooks/useCanvasCompositor.ts:7 is only the framer-motion import line, so it does not show that no model call or prompt assembly exists; the absence rests on the grep alone."
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:27:40.343Z",
+      "worker": "e363bceb-dea7-4ac4-9e5a-5c9713a29eeb",
+      "techniques": []
     },
     "Interactive Demos & Playground/Split & Pipeline Playground/prompt-assembly": {
       "context": "Split & Pipeline Playground",
@@ -11949,6 +11944,36 @@
       "evaluatedAt": "2026-11-05",
       "evaluatedTs": "2026-11-05T23:51:14.700Z",
       "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+      "techniques": []
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/prompt-assembly": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:27:40.343Z",
+      "worker": "e363bceb-dea7-4ac4-9e5a-5c9713a29eeb",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Section Preview & Demo Harness/prompt-assembly": {
+      "context": "Section Preview & Demo Harness",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:27:40.343Z",
+      "worker": "e363bceb-dea7-4ac4-9e5a-5c9713a29eeb",
+      "techniques": []
+    },
+    "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/prompt-assembly": {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:27:40.343Z",
+      "worker": "e363bceb-dea7-4ac4-9e5a-5c9713a29eeb",
       "techniques": []
     }
   }

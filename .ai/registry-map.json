@@ -1140,8 +1140,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/DownloadCTA.tsx:30 This context renders the download CTA, waitlist and footer and does no LLM work; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "release-pipeline",
@@ -2698,8 +2702,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/preview/registry.ts:14 This context is a dev-only section preview registry and DOM inspector with no model calls; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing (the one \"prompting\" hit in devInspectorUi.tsx:148 is a keyboard hint).",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "eval-harness",
@@ -9614,7 +9622,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/hooks/useAnimationPause.ts:8 This context is client-side motion gating, particles and visibility hooks, and it makes no model call; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing (\"prompt\" appears only as tour-UI copy in src/contexts/tourTypes.ts).",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "quality-gates",
@@ -11311,8 +11323,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/format.ts:9 This context's files are formatters, polling, focus-trap, scroll-lock and env helpers that format results but never build a prompt; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing (systemPrompt in sibling src/lib files such as types.ts:18 is a persona record field, not an assembler, so it was left out of the terms).",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "import-normalization",
