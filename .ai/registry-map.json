@@ -1739,7 +1739,11 @@
           "revision": 3,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/page.tsx:72 Five of the six landing stages (every HOME_STAGES row with gate: true, client-only via ssr:false in lazy.tsx) mount their content only when an IntersectionObserver fires near the viewport, so the served HTML holds just a label placeholder and crawlers, print, capture and no-script readers never get the page's argument.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:e93abcf9f70a6c36",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"

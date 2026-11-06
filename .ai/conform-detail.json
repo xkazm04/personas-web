@@ -12150,6 +12150,28 @@
           "evidence": "src/components/dashboard/views/knowledge/index.tsx:135 Users pick the view by hand; the model has no region it composes into."
         }
       ]
+    },
+    "Marketing & Landing/Homepage & Hero/narrative-scroll-surface": {
+      "context": "Homepage & Hero",
+      "subject": "narrative-scroll-surface",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T02:09:02.330Z",
+      "worker": "7ce61ea7-46dc-416a-b16f-67d5ae98fdf6",
+      "techniques": [
+        {
+          "technique": "reveal-without-loss",
+          "verdict": "deviation",
+          "evidence": "src/app/page.tsx:72 Reveal is a mounting decision, the failure the technique names: LazyMount renders only a labelled placeholder until the IntersectionObserver fires, and the gated sections are created with ssr:false (lazy.tsx). Only Vision is server-rendered."
+        },
+        {
+          "technique": "motion-carries-the-mechanism",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/hero-hive/hive-geometry.ts:57 The hero animates a mechanism (event lands, hands off cell to cell, done pillar rises) as an endless 9s CSS keyframe loop with per-element animationDelay clocks. There is no render(t), step or scrub control, and no visible stop control, which the technique requires of a looping mechanism explainer. It does pause off-screen and in a hidden tab, and its reduced-motion still keeps the drawn path and both chips (degraded form 3)."
+        }
+      ],
+      "registryProposal": "motion-carries-the-mechanism does not say where an ambient hero loop that depicts a flow as a metaphor (not a step-by-step explainer) stands. The step/scrub/filmstrip obligations read as built for an in-page explainer station, and a seat has to guess whether a first-screen ambient loop owes them or only the stop-control and degraded-form rules."
     }
   }
 }
