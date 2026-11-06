@@ -6499,13 +6499,12 @@
           "changedAt": "2026-10-22",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 Context and repository searches found no standing signal edge here: messages use fetched snapshots, queue references concern rendering or status display, and backpressure/drop-oldest appeared only in unrelated repository documentation.",
-          "evaluatedAt": "2026-10-21",
-          "evaluatedAgainst": "sha256-b2:b3e96fa159f5a35a",
-          "evaluatedRevision": 1,
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 The context loads messages as a one-shot request/response snapshot that the user can refetch with retry, and settings only reads status/health once and displays an orchestrator `queueLength` number; I searched messages/, settings/ and the whole src/components/dashboard tree for backpressure, drop-oldest, WebSocket, EventSource and highWaterMark and found nothing, so no long-lived bounded producer-to-consumer edge exists here for a queue policy to govern.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:7c5ede012311eb86",
+          "evaluatedRevision": 3,
           "source": "retained",
-          "revisionsBehind": 2,
-          "stale": true
+          "revisionsBehind": 2
         }
       ],
       "governance": "governed"

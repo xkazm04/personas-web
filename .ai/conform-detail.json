@@ -7701,39 +7701,51 @@
       "subject": "edge-queue-policy",
       "bundle": "software-engineering",
       "state": "not-applicable",
-      "evaluatedAt": "2026-10-21",
-      "evaluatedTs": "2026-10-21T23:59:21.864Z",
-      "worker": "16132bd8-12d1-4ea7-a0a5-4f69e396317c",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T01:15:00.193Z",
+      "worker": "08f62ed1-7f9c-484e-a80b-a492d12158dd",
       "techniques": [
         {
-          "technique": "control-channel-headroom",
+          "technique": "per-edge-depth-and-policy",
           "verdict": "not-applicable",
-          "evidence": "src/lib/review-voice.ts:82 The settings preview's notification bus invokes listeners directly; it does not admit lifecycle and data messages into a shared bounded channel."
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 A one-shot awaited fetch, not a standing declared edge with a depth."
         },
         {
           "technique": "drop-accounting",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:70 The message source selects mock or fetched thread snapshots, rather than receiving a standing signal whose queue deliberately drops messages."
-        },
-        {
-          "technique": "eviction-priority-classes",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/messages/index.tsx:75 The displayed message limit selects a page from retained data; it does not evict classes of traffic from a bounded channel."
+          "evidence": "src/components/dashboard/views/settings/index.tsx:140 This only displays the remote orchestrator's work-queue length. Nothing in this context drops messages, so there are no drops to count."
         },
         {
           "technique": "in-band-flush",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:52 Cancellation suppresses a completed request's stale result; there is no queued continuing output requiring admission-time interruption."
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:50 A single preview event is emitted on a click. No queued output gets superseded and needs flushing."
+        },
+        {
+          "technique": "control-channel-headroom",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/review-voice.ts:82 The settings preview's notification bus invokes listeners directly; it does not admit lifecycle and data messages into a shared bounded channel.",
+          "carriedFrom": "2026-10-21"
+        },
+        {
+          "technique": "eviction-priority-classes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/index.tsx:75 The displayed message limit selects a page from retained data; it does not evict classes of traffic from a bounded channel.",
+          "carriedFrom": "2026-10-21"
         },
         {
           "technique": "least-recently-used-input-fairness",
           "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/arrival/Deferred.tsx:24 The modal's arrival queue schedules a one-time mount callback, rather than selecting messages across continuing typed inputs."
-        },
+          "evidence": "src/components/dashboard/arrival/Deferred.tsx:24 The modal's arrival queue schedules a one-time mount callback, rather than selecting messages across continuing typed inputs.",
+          "carriedFrom": "2026-10-21"
+        }
+      ],
+      "superseded": [
         {
-          "technique": "per-edge-depth-and-policy",
-          "verdict": "not-applicable",
-          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:53 A completed fetch replaces the thread snapshot; no declared standing channel needs a per-edge depth or overflow policy."
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 Context and repository searches found no standing signal edge here: messages use fetched snapshots, queue references concern rendering or status display, and backpressure/drop-oldest appeared only in unrelated repository documentation.",
+          "evaluatedAt": "2026-10-21T23:59:21.864Z",
+          "worker": "16132bd8-12d1-4ea7-a0a5-4f69e396317c",
+          "reason": "replaced by 08f62ed1-7f9c-484e-a80b-a492d12158dd"
         }
       ]
     },
