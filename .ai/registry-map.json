@@ -4254,12 +4254,11 @@
           "changedAt": "2026-10-22",
           "confidence": "strong",
           "state": "deviation",
-          "evidence": "scripts/check-guide-content.mjs:160 Locale parity compares only block types, allowing changed item counts and semantic labels to pass despite the required structural invariance.",
-          "evaluatedAt": "2026-10-16",
-          "evaluatedAgainst": "sha256-b2:2a061e427ef67238",
-          "evaluatedRevision": 2,
-          "revisionsBehind": 3,
-          "stale": true
+          "evidence": "src/components/guide/blocks/FeatureHighlight.tsx:16 The `:::feature` block passes an authored `color=` value straight into an inline style (14 corpus uses across en and every locale), and the locale-parity gate compares only the sequence of block types; that breaks closure (appearance is set in content) and leaves item counts, enum labels and anchors unchecked across locales.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:c1af6baefdf9687d",
+          "evaluatedRevision": 5,
+          "revisionsBehind": 3
         },
         {
           "subject": "chat-transcript",

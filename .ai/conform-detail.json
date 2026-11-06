@@ -512,34 +512,34 @@
       "subject": "authoring-block-vocabulary",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-16",
-      "evaluatedTs": "2026-10-16T21:15:26.498Z",
-      "worker": "2d859c90-b24d-4df2-8fad-2d0897b90b67",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T01:01:17.763Z",
+      "worker": "4735aff2-4c8e-4efd-8e7a-7a11878808ca",
       "techniques": [
-        {
-          "technique": "blocks-as-machine-readable-source",
-          "verdict": "deviation",
-          "evidence": "src/components/guide/blocks/StepWizard.tsx:33 Shared parsing is realized, but StepWizard renders raw strings while page.tsx:34 strips inline markup for JSON-LD; real steps contain links and backticks, so machine text differs from visible text."
-        },
         {
           "technique": "closed-directive-set",
           "verdict": "deviation",
-          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:183 Unknown directives are dropped with gated diagnostics, but feature blocks accept arbitrary authored color attributes, passed into FeatureHighlight's inline styles; the standard explicitly rejects appearance pass-through."
-        },
-        {
-          "technique": "enum-guarded-block-payloads",
-          "verdict": "deviation",
-          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:261 The guard is case-insensitive, but its literals duplicate CalloutVariant, standalone directive entries, and both renderer style tables; those tables use Record<string, ...> rather than deriving exhaustiveness from one shared enumeration."
+          "evidence": "src/components/guide/blocks/FeatureHighlight.tsx:16 Most of this is done well: one dispatch, KNOWN_DIRECTIVES derived from GRAMMAR (parseGuide.ts:311), and an unknown name renders nothing while a diagnostic fails the build (parseGuide.ts:418). But the feature grammar captures `color=(\\S+)` (parseGuide.ts:207) and the renderer applies it as a raw style. That is the style pass-through the technique names as an escape hatch to refuse."
         },
         {
           "technique": "per-block-line-grammar",
-          "verdict": "deviation",
-          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:193 Separate block grammars exist, but checklist continuation prose becomes a new item instead of folding into the preceding item; an in-memory probe confirmed two items and zero diagnostics after wrapping one item."
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:287 Each block has its own line grammar. Continuation lines fold into the previous item, but a line shaped like a label is reported instead of folded. The dash separator is accepted as a class (DASH, line 126). A skipped line becomes an ignored-line diagnostic, and a block with no usable items becomes an empty-block diagnostic; the gate counts both."
+        },
+        {
+          "technique": "enum-guarded-block-payloads",
+          "verdict": "conformant",
+          "evidence": "src/components/guide/guide-markdown/parseGuide.ts:56 Each label set is declared once as a const tuple. The grammar admits only those literals, case-insensitively. Style tables are typed as Record<CalloutVariant>/Record<CardStatus>, so a missing entry is a compile error (Callout.tsx:17). Only `warning` escalates to role=alert. Small gap: the on-screen label text ('Tip', 'Roadmap', 'Coming soon') is hardcoded English rather than resolved per locale."
         },
         {
           "technique": "vocabulary-as-translation-invariant",
           "verdict": "deviation",
-          "evidence": "scripts/check-guide-content.mjs:180 The gate reads actual locale bodies, but compares only node-type sequences and permits baselined divergence; removing a step or changing warning to info leaves that comparison unchanged, and separate fidelity tests cover outlines and link targets rather than item counts and enum positions."
+          "evidence": "scripts/check-guide-content.mjs:160 The gate does parse the real locale bodies with the renderer's parser, but it compares only the block-type sequence. Item count per block, enum label per item position and the anchor set are not compared, and existing divergences are frozen in a baseline file. BLOCK_TYPES (line 155) is also a hand-kept copy of the node vocabulary."
+        },
+        {
+          "technique": "blocks-as-machine-readable-source",
+          "verdict": "conformant",
+          "evidence": "src/app/guide/[category]/[topic]/page.tsx:121 The HowTo JSON-LD, the TOC (headingsOf) and search (sectionsOf) all re-read the same parsed tree the renderer uses. Emitted step text goes through stripInline (page.tsx:34) so it matches what the reader sees. A body with no steps emits no steps."
         }
       ],
       "superseded": [
@@ -549,6 +549,13 @@
           "evaluatedAt": "2026-08-31",
           "worker": null,
           "reason": "replaced by 2d859c90-b24d-4df2-8fad-2d0897b90b67"
+        },
+        {
+          "state": "deviation",
+          "evidence": "scripts/check-guide-content.mjs:160 Locale parity compares only block types, allowing changed item counts and semantic labels to pass despite the required structural invariance.",
+          "evaluatedAt": "2026-10-16T21:15:26.498Z",
+          "worker": "2d859c90-b24d-4df2-8fad-2d0897b90b67",
+          "reason": "replaced by 4735aff2-4c8e-4efd-8e7a-7a11878808ca"
         }
       ]
     },
