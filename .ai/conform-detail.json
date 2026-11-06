@@ -12193,6 +12193,43 @@
         }
       ],
       "registryProposal": "motion-carries-the-mechanism does not say where an ambient hero loop that depicts a flow as a metaphor (not a step-by-step explainer) stands. The step/scrub/filmstrip obligations read as built for an in-page explainer station, and a seat has to guess whether a first-screen ambient loop owes them or only the stop-control and degraded-form rules."
+    },
+    "Observability & Event Monitoring/Incidents Inbox/self-healing": {
+      "context": "Incidents Inbox",
+      "subject": "self-healing",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T23:36:19.548Z",
+      "worker": "8f5d5f35-d26e-4b1c-8d15-58304ac28904",
+      "techniques": [
+        {
+          "technique": "effectiveness-accounting",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentDetailModal.tsx:77 The 'Auto-fixed' label is based only on autoFixApplied being present. The rendered record has no confirmed, reverted or unknown outcome, which is the applied-equals-fixed inflation the technique names. The same pattern is at IncidentRow.tsx:48-51."
+        },
+        {
+          "technique": "incident-promotion",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:21 The inbox only displays mock incidents that were already promoted. Promotion, triggers and signature dedup happen upstream, outside this context."
+        },
+        {
+          "technique": "failure-diagnosis",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentDetailModal.tsx:97 The view renders the category computed upstream; it does no signature extraction or diagnosis of its own. It also shows no diagnosis-vs-guess marker, but that field does not exist in the source shape."
+        },
+        {
+          "technique": "strategy-selection",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentDetailModal.tsx:119 A recommendation string is displayed; no strategy is selected or run here."
+        },
+        {
+          "technique": "auto-rollback",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsKpiHeader.tsx:44 The view computes only display counts; it applies no change and watches no error rate, so there is nothing to roll back."
+        }
+      ],
+      "registryProposal": "The standard says 'healing is visible' and wants an operator to be able to answer 'did it help?', but no technique covers the read-only surface that renders healer records. A short rule is worth adding: a display that receives an applied-fix record without an outcome must say 'applied', not 'fixed'."
     }
   }
 }

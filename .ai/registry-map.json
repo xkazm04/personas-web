@@ -8891,7 +8891,11 @@
           "revision": 11,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentDetailModal.tsx:74 The inbox shows a green 'Auto-fixed' badge whenever an applied-fix string is present, and the AuditIncident shape it renders has no outcome field, so the surface operators read cannot tell confirmed-fixed from reverted or unknown.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:d27f99525a697c4b",
+          "evaluatedRevision": 11
         },
         {
           "subject": "agent-memory",
