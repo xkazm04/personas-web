@@ -4319,12 +4319,11 @@
           "changedAt": "2026-10-31",
           "confidence": "probable",
           "state": "not-applicable",
-          "evidence": "src/components/guide/GuideMarkdown.tsx:14 The guide's markdown goes from a line-split parse straight to React nodes, and none of the 12 block components compiles to an instruction stream or runs one; a search of src/components/guide (and all of src/) for bytecode, opcode, interpreter, coroutine and register file found no hits, so this subject's precondition (a bytecode compiler/interpreter) does not hold.",
-          "evaluatedAt": "2026-10-25",
-          "evaluatedAgainst": "sha256-b2:e9d7b45e69f60087",
-          "evaluatedRevision": 3,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "src/components/guide/GuideMarkdown.tsx:14 The guide markdown is split into lines, parsed into a document tree (parseGuide), and rendered straight to React nodes by renderGuideDoc. Nothing compiles to an instruction stream or runs one, and searching src/components/guide and all of src/ for bytecode, opcode, interpreter, coroutine and regalloc found no hits, so this subject's precondition (a bytecode compiler or interpreter) does not hold.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:7a8111a0a2ae3aa6",
+          "evaluatedRevision": 4,
+          "revisionsBehind": 1
         },
         {
           "subject": "table",
