@@ -12022,6 +12022,64 @@
           "evidence": "src/lib/notes/notesModel.ts:42 Agent activity appears only as a count of reviews; the board offers no operations to outside agents."
         }
       ]
+    },
+    "Connectors & Templates/Connectors Catalog/app-shell": {
+      "context": "Connectors Catalog",
+      "subject": "app-shell",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:48:57.843Z",
+      "worker": "65cff576-6d7f-4b50-b899-f4aaa0933741",
+      "techniques": [
+        {
+          "technique": "navigation-model",
+          "verdict": "deviation",
+          "evidence": "src/app/connections/page.tsx:24 The deep-linked location is trusted without checking it against the vocabulary (prohibition 4). Active state is otherwise derived from that one value, and the active category is shown only by colour (no aria-pressed or aria-current)."
+        },
+        {
+          "technique": "nav-hierarchy",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/connections-catalog/components/CategorySidebar.tsx:19 The desktop fixed rail sorts categories alphabetically, while the mobile pill posture (CatalogFilters.tsx:51) iterates them in declaration order. The same map comes out in a different order per posture."
+        },
+        {
+          "technique": "entitlement-gating",
+          "verdict": "not-applicable",
+          "evidence": "src/app/connections/layout.tsx:5 This is a statically generated public catalog with no tiers, roles or per-user policy to render."
+        },
+        {
+          "technique": "badge-and-attention",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/connections-catalog/index.tsx:34 The category counts are inventory totals derived from data, not attention signals."
+        },
+        {
+          "technique": "screen-contributed-second-level",
+          "verdict": "not-applicable",
+          "evidence": "src/app/connections/page.tsx:53 The page renders its own frame and its own category column. There is no persistent shell sidebar to contribute into."
+        }
+      ],
+      "registryProposal": "nav-hierarchy and navigation-model are written for shell nav. It is unclear whether they govern a page-level filter rail whose values are URL-addressable (here a fixed-position category rail plus mobile pills). A sentence on whether addressable in-page filters count as nav levels would settle it."
+    },
+    "Roadmap, Voting & Waitlist/Public Roadmap/app-shell": {
+      "context": "Public Roadmap",
+      "subject": "app-shell",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-06",
+      "evaluatedTs": "2026-11-06T00:48:57.843Z",
+      "worker": "65cff576-6d7f-4b50-b899-f4aaa0933741",
+      "techniques": [
+        {
+          "technique": "navigation-model",
+          "verdict": "not-applicable",
+          "evidence": "src/app/roadmap/page.tsx:27 The only nav here is a list of in-page anchor links passed to the layout, not a shell location vocabulary."
+        },
+        {
+          "technique": "shell-hosted-services",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/roadmap/index.tsx:13 This is a server-rendered section with no session-lifetime services. The frame and tour host belong to InfoPageLayout."
+        }
+      ]
     }
   }
 }

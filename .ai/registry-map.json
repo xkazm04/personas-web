@@ -5964,7 +5964,11 @@
           "revision": 8,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/roadmap/page.tsx:35 The roadmap context is one static content page that hands its whole frame to InfoPageLayout, which is outside this context, and owns no nav vocabulary, sidebar, gating, badges or hosted services. A case-insensitive search of src/app/roadmap, src/app/api/roadmap and src/components/sections/roadmap for usePathname, aria-current, sidebar, entitlement, badge, router and prefetch returned no hits.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:b55c5172e3d9fac0",
+          "evaluatedRevision": 8
         },
         {
           "subject": "docs-sync",
@@ -6238,7 +6242,11 @@
           "revision": 8,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/connections/page.tsx:24 The addressable ?category= location is taken straight from the URL and never checked against the closed categories list (the ?connector= param is checked at line 28). A stale or bogus link therefore renders an empty grid saying 'No services found. Try a different search.', with no category highlighted and no fallback.",
+          "evaluatedAt": "2026-11-06",
+          "evaluatedAgainst": "sha256-b2:b55c5172e3d9fac0",
+          "evaluatedRevision": 8
         },
         {
           "subject": "voice-io",
