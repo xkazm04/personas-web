@@ -1122,8 +1122,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/DownloadCTA.tsx:39 This context is a marketing download CTA plus the footer (platform pills, release freshness, trust signals). Searches of src/components/sections and the top-level components found no agent memory construct, so the subject does not apply.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "prompt-assembly",
@@ -8840,8 +8844,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/RecentActivityCard.tsx:26 This context renders home-dashboard cards (recent activity, heatmap, triage, routines, vault changes) from mock or synced data. Searches of src/components/dashboard found no memory capture, consolidation or recall pipeline. The only hits on 'memor' are a counter in the separate home/mission files, which this context does not own.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "admission-queue",
@@ -11280,8 +11288,8 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "browser-credential-boundary",

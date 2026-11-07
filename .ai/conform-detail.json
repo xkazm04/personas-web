@@ -12292,6 +12292,41 @@
           "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:14 The 'run' is an in-browser simulation step counter, not a build lane that executes contributed code."
         }
       ]
+    },
+    "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/agent-memory": {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T01:39:22.756Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "f942caed-9d13-425d-a84e-c222316150b3",
+        "state": "not-applicable",
+        "at": "2026-11-07T01:41:21.480926+00:00",
+        "reason": "reviewer (sonnet): The evidence says searches of src/lib found no memory store, but src/lib holds learned-memory code (commands/reviewLearning.ts, mockCommandPlane.ts writing MOCK_LEARNED_MEMORIES, clearUserCaches.ts). The claim is false as written, and the anchor (the usePolling.ts doc comment) only shows that one ho"
+      }
+    },
+    "Marketing & Landing/Conversion: Get Started, FAQ & Footer/agent-memory": {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T01:39:22.756Z",
+      "worker": "f942caed-9d13-425d-a84e-c222316150b3",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/agent-memory": {
+      "context": "Dashboard Home Overview",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T01:39:22.756Z",
+      "worker": "f942caed-9d13-425d-a84e-c222316150b3",
+      "techniques": []
     }
   }
 }
