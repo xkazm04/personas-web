@@ -5263,8 +5263,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/blog/feed.xml/route.ts:1 The blog context renders static posts, category filters and an RSS feed from a data module with no agent runtime; a recursive search of src/app/blog for memory, recall, consolidat, embedding and episod found zero hits, so the subject's precondition (an agent carrying state forward) does not hold.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "test-harness",
@@ -8990,8 +8994,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:9 The context is a demo-only incidents inbox (mock fetcher, filter store, formatting helpers) with no agent memory; a search of the incidents view, src/lib and src/stores for working memory, episodic, memory store, half-life and salience found zero hits (the incident files themselves contain no memory, recall, consolidat, decay or embedding terms either).",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "translation-pipeline-topology",

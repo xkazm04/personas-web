@@ -12644,6 +12644,26 @@
         "at": "2026-11-07T03:48:28.488908+00:00",
         "reason": "reviewer (sonnet): The anchor src/app/api/votes/route.ts:4 is the PII-policy comment (voter_id), not a line that shows an agent loop or extension surface is absent, so the anchor is incidental."
       }
+    },
+    "Observability & Event Monitoring/Incidents Inbox/agent-memory": {
+      "context": "Incidents Inbox",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:54:52.792Z",
+      "worker": "a170ce22-0d33-4c11-bd1c-4f10359c73bd",
+      "techniques": []
+    },
+    "Content & Informational Pages/Blog/agent-memory": {
+      "context": "Blog",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:54:52.792Z",
+      "worker": "a170ce22-0d33-4c11-bd1c-4f10359c73bd",
+      "techniques": []
     }
   }
 }
