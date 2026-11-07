@@ -1561,7 +1561,11 @@
           "revision": 4,
           "changedAt": "2026-10-22",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/feature-sections/murmuration-hero/swarm.ts:2 The animated surface here is a particle-swarm hero plus a static vision-grid and pricing content, not a face that speaks; searching its files and directories for viseme, lipsync, lip-sync and talking-head found no hits, so none of the talking-avatar techniques have a subject to apply to.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:72517c45ca8e4198",
+          "evaluatedRevision": 4
         }
       ],
       "governance": "governed"
@@ -9640,7 +9644,11 @@
           "revision": 4,
           "changedAt": "2026-10-22",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/hooks/useCanvasCompositor.ts:7 This context is a generic canvas-layer compositor, particle host, pause and reduced-motion plumbing with no face, voice or speech-synchronised motion; searching its files and directories for viseme, lipsync, lip-sync and talking-head found no hits, so the talking-avatar precondition (a face that moves with a voice) does not hold.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:72517c45ca8e4198",
+          "evaluatedRevision": 4
         },
         {
           "subject": "test-harness",

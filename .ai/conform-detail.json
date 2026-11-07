@@ -8872,16 +8872,11 @@
       "context": "Animation & Motion System",
       "subject": "talking-avatar",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T03:54:31.532Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "2dd295f4-a0bb-40a5-849f-d969f1493e13",
-        "state": "not-applicable",
-        "at": "2026-10-24T03:54:55.353603+00:00",
-        "reason": "reviewer (sonnet): The anchor useCanvasCompositor.ts:7 is a doc-comment line about a render callback; it does not show that the context has no talking face. The claim rests only on a grep that returned no hits."
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:45:30.447Z",
+      "worker": "114acdab-42a5-4ea0-9f8c-1c5787bc2338",
+      "techniques": []
     },
     "Infrastructure & Telemetry/SEO & Social Metadata/talking-avatar": {
       "context": "SEO & Social Metadata",
@@ -12618,6 +12613,16 @@
       "evaluatedAt": "2026-11-07",
       "evaluatedTs": "2026-11-07T03:32:19.866Z",
       "worker": "6163e354-719e-4b9d-beb7-00f2733b522b",
+      "techniques": []
+    },
+    "Marketing & Landing/Features Overview & Pricing/talking-avatar": {
+      "context": "Features Overview & Pricing",
+      "subject": "talking-avatar",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:45:30.447Z",
+      "worker": "114acdab-42a5-4ea0-9f8c-1c5787bc2338",
       "techniques": []
     }
   }
