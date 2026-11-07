@@ -9874,7 +9874,11 @@
           "revision": 16,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/primitives/TerminalPanel.tsx:3 The context is a set of stateless presentational components (props in, JSX out) with no async operations, effects, shared mutable state, file writes or keyed work; a grep of all 12 files for lock/mutex/inflight/pending/async/await/fetch/promise/setTimeout/idempot/dedup/useEffect/AbortController/localStorage/writeFile/rename found nothing, and mutex/singleFlight/acquireLock/fencingToken/tryBegin have zero hits anywhere under src/components, so no operation exists here that could run twice concurrently.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ccc991958e998a93",
+          "evaluatedRevision": 16
         }
       ],
       "governance": "governed"

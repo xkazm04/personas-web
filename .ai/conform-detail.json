@@ -8691,16 +8691,11 @@
       "context": "Shared UI Primitives & Illustrations",
       "subject": "concurrency-guards",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T02:44:21.256Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "51c31870-e9d0-45ed-948d-bedc09eba8dd",
-        "state": "not-applicable",
-        "at": "2026-10-24T02:44:50.596185+00:00",
-        "reason": "reviewer (sonnet): The anchor src/components/primitives/index.ts:2 is only a re-export line and does not show that async work, shared resources or persisted writes are absent; the claim rests on a grep for four lock-vocabulary terms, which cannot prove the absence of any in-flight or duplicate-call hazard."
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T22:01:53.496Z",
+      "worker": "ac299677-f2f7-4a96-9d2d-936087e617b2",
+      "techniques": []
     },
     "Interactive Demos & Playground/Agent Execution Timeline Race/concurrency-guards": {
       "context": "Agent Execution Timeline Race",
