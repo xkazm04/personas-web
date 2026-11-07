@@ -6591,8 +6591,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/knowledge/index.tsx:44 The view only reads memory rows from somewhere else (demo fixtures, or the desktop's synced sub_memories in real mode) and renders them as table, graph and cards; a case-insensitive search of src/components/dashboard/views/knowledge (memories-view/ and knowledge-cluster-graph/ included) found no consolidat, decay, recall, distill or episod, so this context has no capture, consolidation, decay or recall-injection stage for the standard to govern.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "table",
@@ -11228,8 +11232,12 @@
           "revision": 52,
           "changedAt": "2026-10-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/clearUserCaches.ts:15 In this context 'memory' only ever means in-process session or cache state (clearUserCaches, the demo authStore session); a search of src/components, src/lib and src/stores found no memoryStore, vectorstore, tombstone or half_life, so no agent memory is stored, scoped or recalled here.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "client-state",
@@ -11289,7 +11297,11 @@
           "changedAt": "2026-10-25",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/hooks/usePolling.ts:4 The context holds generic React hooks, formatters, constants and server env access; none of its files mention memory, recall or prompts, and a search of src/hooks and src/lib found no memoryStore, vectorstore, tombstone or half_life, so there is no memory pipeline to judge.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:6c06fb6d8d6c900f",
+          "evaluatedRevision": 52
         },
         {
           "subject": "browser-credential-boundary",

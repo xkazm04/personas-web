@@ -12297,16 +12297,11 @@
       "context": "Shared Types, Utilities & Hooks",
       "subject": "agent-memory",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "not-applicable",
       "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T01:39:22.756Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "f942caed-9d13-425d-a84e-c222316150b3",
-        "state": "not-applicable",
-        "at": "2026-11-07T01:41:21.480926+00:00",
-        "reason": "reviewer (sonnet): The evidence says searches of src/lib found no memory store, but src/lib holds learned-memory code (commands/reviewLearning.ts, mockCommandPlane.ts writing MOCK_LEARNED_MEMORIES, clearUserCaches.ts). The claim is false as written, and the anchor (the usePolling.ts doc comment) only shows that one ho"
-      }
+      "evaluatedTs": "2026-11-07T02:13:12.298Z",
+      "worker": "98c85f43-c482-4b18-a9ab-55fbc370fadc",
+      "techniques": []
     },
     "Marketing & Landing/Conversion: Get Started, FAQ & Footer/agent-memory": {
       "context": "Conversion: Get Started, FAQ & Footer",
@@ -12326,6 +12321,27 @@
       "evaluatedAt": "2026-11-07",
       "evaluatedTs": "2026-11-07T01:39:22.756Z",
       "worker": "f942caed-9d13-425d-a84e-c222316150b3",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Knowledge Base/agent-memory": {
+      "context": "Knowledge Base",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:13:12.298Z",
+      "worker": "98c85f43-c482-4b18-a9ab-55fbc370fadc",
+      "techniques": [],
+      "registryProposal": "The subject has no rule for a read-only operator surface over a memory store that another runtime owns (showing pending, active and archived items in one list; a conflict review whose accept or reject decisions stay in client state). A short technique on what such a viewer owes, for example never presenting pending items as settled and persisting governance decisions, would let contexts like this be judged rather than marked not-applicable."
+    },
+    "Infrastructure & Telemetry/Authentication & User Session/agent-memory": {
+      "context": "Authentication & User Session",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:13:12.298Z",
+      "worker": "98c85f43-c482-4b18-a9ab-55fbc370fadc",
       "techniques": []
     }
   }
