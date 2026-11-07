@@ -1678,8 +1678,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/page.tsx:5 The context is a marketing landing page made of section components and JSON-LD, with no tool-protocol surface; searching it for modelcontextprotocol, McpServer, callTool and inputSchema found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "repository-landing-document",
@@ -5860,8 +5864,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/api/votes/route.ts:9 These are plain Next route handlers for voting, comments and requests backed by Supabase or a file store, and their React components; searching the context for mcp, modelcontextprotocol, McpServer, callTool and inputSchema found nothing, so no tool server or client exists here.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "voice-io",
@@ -5998,8 +6006,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/api/roadmap/route.ts:5 The roadmap is one GET route that reads a Supabase table and feeds display components, with no tool-protocol surface; searching the context for modelcontextprotocol, McpServer, callTool and inputSchema found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "app-shell",
@@ -10878,8 +10890,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/sentry-pii.ts:80 Tool names show up here only as one Sentry breadcrumb field that gets scrubbed for PII; the context has no tool server or client, and searching it for modelcontextprotocol, McpServer, callTool and inputSchema found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "people-analytics-ethics",

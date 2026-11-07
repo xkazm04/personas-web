@@ -12664,6 +12664,46 @@
       "evaluatedTs": "2026-11-07T03:54:52.792Z",
       "worker": "a170ce22-0d33-4c11-bd1c-4f10359c73bd",
       "techniques": []
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/mcp-tools": {
+      "context": "Feature Voting & Comments",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:00:16.438Z",
+      "worker": "988bbff4-f710-4dc2-a84f-e763b524f086",
+      "techniques": []
+    },
+    "Marketing & Landing/Homepage & Hero/mcp-tools": {
+      "context": "Homepage & Hero",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:00:16.438Z",
+      "worker": "988bbff4-f710-4dc2-a84f-e763b524f086",
+      "techniques": []
+    },
+    "Infrastructure & Telemetry/Error Monitoring & Analytics/mcp-tools": {
+      "context": "Error Monitoring & Analytics",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:00:16.438Z",
+      "worker": "988bbff4-f710-4dc2-a84f-e763b524f086",
+      "techniques": []
+    },
+    "Roadmap, Voting & Waitlist/Public Roadmap/mcp-tools": {
+      "context": "Public Roadmap",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:00:16.438Z",
+      "worker": "988bbff4-f710-4dc2-a84f-e763b524f086",
+      "techniques": []
     }
   }
 }
