@@ -12343,6 +12343,36 @@
       "evaluatedTs": "2026-11-07T02:13:12.298Z",
       "worker": "98c85f43-c482-4b18-a9ab-55fbc370fadc",
       "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/prompt-assembly": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:24:05.654Z",
+      "worker": "1d186ce3-465b-41ba-b927-a1708a89d12d",
+      "techniques": []
+    },
+    "Marketing & Landing/Guided Product Tour/prompt-assembly": {
+      "context": "Guided Product Tour",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:24:05.654Z",
+      "worker": "1d186ce3-465b-41ba-b927-a1708a89d12d",
+      "techniques": []
+    },
+    "Content & Informational Pages/How It Works & Changelog/prompt-assembly": {
+      "context": "How It Works & Changelog",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:24:05.654Z",
+      "worker": "1d186ce3-465b-41ba-b927-a1708a89d12d",
+      "techniques": []
     }
   }
 }

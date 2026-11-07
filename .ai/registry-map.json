@@ -1003,8 +1003,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/tour/TourBridgeCard.tsx:19 Here 'prompt' means a UI confirmation card filled from i18n copy (t.tour.bridgePrompt), not model input; the search found no systemPrompt, max_tokens, anthropic or contextWindow in the tour components.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         }
       ],
       "governance": "governed"
@@ -3698,8 +3702,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:7 The chat is a scripted marketing animation: each line is timed copy on a shared clock, and nothing calls a model or builds a prompt. The search found no prompt, systemPrompt, max_tokens, anthropic or contextWindow in the section.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "fleet-orchestration",
@@ -4728,8 +4736,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/how-manifesto/Proofs.tsx:42 The only 'prompt' here is a marketing example sentence shown as static copy; no model call or prompt assembly exists. The search found no systemPrompt, max_tokens, anthropic or contextWindow in the how and changelog sections.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "app-shell",
