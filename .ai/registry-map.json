@@ -2360,7 +2360,11 @@
           "revision": 18,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/feature-sections/design-blueprint/shared/machine.ts:11 The default answers to the two questions are set in two places: machine.ts DEFAULT_ANSWERS decides which machine gets drawn, and copy.ts PICKED decides which callout value and selected chip are shown. Only cross-referencing comments link them and no test compares them, so changing one default makes the drawn machine (gate or no gate) disagree with the text shown next to it.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:7c8008f2207b1946",
+          "evaluatedRevision": 18
         }
       ],
       "governance": "governed"
@@ -3207,7 +3211,11 @@
           "revision": 18,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/sections/playground-split/components/RunClock.tsx:18 The run is driven by a virtual clock that pauses on a hidden tab (useMindRun.ts:108), but the elapsed/remaining timer reads wall-clock Date.now() against a wall-clock startedAt. After the tab has been hidden mid-run, the timer shows the full duration with no time remaining while the beats still have seconds left: two authorities for 'what time is it in the run' that disagree.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:7c8008f2207b1946",
+          "evaluatedRevision": 18
         },
         {
           "subject": "ci-execution-trust",

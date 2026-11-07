@@ -12431,6 +12431,103 @@
           "evidence": "src/components/LanguageSwitcher.tsx:35 This is a footer locale select, which is a settings control for a task. It is not a side index on an explanatory page."
         }
       ]
+    },
+    "Product Feature Showcase/Memory Layers & Multi-Provider AI/module-design": {
+      "context": "Memory Layers & Multi-Provider AI",
+      "subject": "module-design",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:59:43.073Z",
+      "worker": "5d0be1ba-60a7-4b13-b1ca-45312ee38f20",
+      "techniques": [
+        {
+          "technique": "locality-and-leverage",
+          "verdict": "deviation",
+          "evidence": "src/components/feature-sections/design-blueprint/shared/copy.ts:19 The same decision (the default answers) lives in copy.ts and in machine.ts:11, and the two must change together. machine.test.ts pins only the machine side. This is the 'information leaked across a boundary' failure."
+        },
+        {
+          "technique": "seams-and-adapters",
+          "verdict": "deviation",
+          "evidence": "src/components/feature-sections/design-blueprint/shared/machine.ts:6 Correctness depends on the option order in the i18n copy module (a fact the copy module owns). It is restated as TRIGGER/REVIEW indices, but only a comment holds the two together. Reordering the copy's options would quietly draw a clock for 'Real-time webhook'."
+        },
+        {
+          "technique": "io-free-core",
+          "verdict": "conformant",
+          "evidence": "src/components/feature-sections/design-blueprint/geometry.ts:88 The machine, the test-run keyframes and the clock reducer are pure functions of values. Timers and IntersectionObserver live only in the useBuildClock driver, and machine.test.ts checks runPoints, machineFor and REVISE with no test doubles."
+        },
+        {
+          "technique": "concurrency-at-the-edge",
+          "verdict": "conformant",
+          "evidence": "src/components/feature-sections/design-blueprint/index.tsx:40 One hook at the section root owns all timing (setTimeout, visibility, in-view). Parts, TestRun and Callout get plain phase and moving values and do no scheduling of their own."
+        },
+        {
+          "technique": "module-depth",
+          "verdict": "conformant",
+          "evidence": "src/components/feature-sections/design-blueprint/TestRun.tsx:40 TestRun takes the Machine plus three flags and hides the keyframe, gate-window and lane computation behind them. A small interface over a substantial animation."
+        },
+        {
+          "technique": "declarative-or-sequential",
+          "verdict": "conformant",
+          "evidence": "src/components/feature-sections/design-blueprint/geometry.ts:92 One pass fills five parallel arrays, so it is correctly written as sequential pushes rather than a forced pipeline. Single-output transforms such as PART_PATHS and DIMS.map are written as compositions."
+        },
+        {
+          "technique": "mirror-type-at-the-edge",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/design-blueprint/shared/machine.test.ts:14 The logic's inputs are plain records a test can build directly. No host-minted type stands in front of the logic."
+        },
+        {
+          "technique": "emitted-code-names-from-a-root",
+          "verdict": "not-applicable",
+          "evidence": "src/components/feature-sections/design-blueprint/paths.ts:24 The only generated output is SVG path data. No macro or code generator splices names into a caller's scope."
+        }
+      ]
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/module-design": {
+      "context": "Split & Pipeline Playground",
+      "subject": "module-design",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:59:43.073Z",
+      "worker": "5d0be1ba-60a7-4b13-b1ca-45312ee38f20",
+      "techniques": [
+        {
+          "technique": "io-free-core",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/playground-split/components/RunClock.tsx:18 The elapsed-time logic asks the environment for the time instead of taking the run's virtual time as a parameter. This breaks the 'time is a parameter' property, and the run's own clock pauses where this one does not."
+        },
+        {
+          "technique": "module-depth",
+          "verdict": "deviation",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:106 The hook hides the virtual time t from useRunClock but exposes a wall-clock startedAt. Callers (RunTimer) therefore reach past it and re-derive elapsed time with one variation, which is the 'depth in the wrong place' failure."
+        },
+        {
+          "technique": "concurrency-at-the-edge",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:108 Beat progression is one timer owned by the shared run-clock driver. Script and CameraStage only read step and status values."
+        },
+        {
+          "technique": "locality-and-leverage",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/playground-split/data.ts:95 The highlighter keywords were merged from three drifting copies into one source, from which the regex and the membership set are derived."
+        },
+        {
+          "technique": "declarative-or-sequential",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/playground-split/data.ts:73 One input, one output, and each element transformed totally, so a declarative map is the right form."
+        },
+        {
+          "technique": "seams-and-adapters",
+          "verdict": "conformant",
+          "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.tsx:41 The tokenizer is split out as a pure export that SyntaxPrompt.test.ts checks directly and PromptText reuses, so the test and production share one door."
+        },
+        {
+          "technique": "mirror-type-at-the-edge",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.test.ts:9 The inputs are plain strings and records that tests can build. No host-only type is involved."
+        }
+      ]
     }
   }
 }
