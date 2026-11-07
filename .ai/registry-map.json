@@ -1741,8 +1741,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/page.tsx:33 The homepage composes lazy marketing sections and JSON-LD (the 'prompt' token appears only as feature copy in homeJsonLd.ts:31), and a search of src/app and src/components/sections for systemPrompt, max_tokens, messages.create and cache_control found nothing, so there is no prompt to assemble.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "narrative-scroll-surface",
@@ -4181,8 +4185,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/data/guide/content/agents-prompts.ts:28 The guide content is static markdown that tells users how to write prompts for the desktop product; it is documentation prose, not assembly code, and a search of src/data/guide for systemPrompt, max_tokens, messages.create and cache_control found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "index-free-random-access",
@@ -8234,8 +8242,12 @@
           "revision": 44,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:21 Director coaching reads a demo-only mock snapshot through SWR and renders verdicts and KPIs (its only 'prompt' token is a verdict-category chip key in VerdictFeedCard.tsx:21), and no model call or prompt assembly exists in the context.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         }
       ],
       "governance": "governed"

@@ -12704,6 +12704,36 @@
       "evaluatedTs": "2026-11-07T04:00:16.438Z",
       "worker": "988bbff4-f710-4dc2-a84f-e763b524f086",
       "techniques": []
+    },
+    "Product Documentation (Guide)/Guide Data, Content & Search Index/prompt-assembly": {
+      "context": "Guide Data, Content & Search Index",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:07:15.233Z",
+      "worker": "218d2ae4-8215-462d-88e1-697c19d1e0ab",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Director Coaching/prompt-assembly": {
+      "context": "Director Coaching",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:07:15.233Z",
+      "worker": "218d2ae4-8215-462d-88e1-697c19d1e0ab",
+      "techniques": []
+    },
+    "Marketing & Landing/Homepage & Hero/prompt-assembly": {
+      "context": "Homepage & Hero",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:07:15.233Z",
+      "worker": "218d2ae4-8215-462d-88e1-697c19d1e0ab",
+      "techniques": []
     }
   }
 }
