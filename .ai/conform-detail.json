@@ -12554,6 +12554,46 @@
           "evidence": "src/components/dashboard/views/settings/settings-sections/ModelProvidersCard.tsx:24 The only switch is demo versus live mode, not an operator flag that turns a capability probe off."
         }
       ]
+    },
+    "Interactive Demos & Playground/Orchestration & Platform Visualizers/agent-runtime-assembly": {
+      "context": "Orchestration & Platform Visualizers",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:24:40.070Z",
+      "worker": "0068417f-a741-4fd0-b37b-89e8dbd83449",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/agent-runtime-assembly": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:24:40.070Z",
+      "worker": "0068417f-a741-4fd0-b37b-89e8dbd83449",
+      "techniques": []
+    },
+    "Agent Operations Dashboard/Messages & Settings/agent-runtime-assembly": {
+      "context": "Messages & Settings",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:24:40.070Z",
+      "worker": "0068417f-a741-4fd0-b37b-89e8dbd83449",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/System Health Panel/agent-runtime-assembly": {
+      "context": "System Health Panel",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:24:40.070Z",
+      "worker": "0068417f-a741-4fd0-b37b-89e8dbd83449",
+      "techniques": []
     }
   }
 }

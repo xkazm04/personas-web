@@ -3092,8 +3092,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/orchestration-hub/data.ts:19 This context is a marketing visualizer that copies the desktop app's trigger catalog as static display data and builds no hook chain, extension loader or conversation store, so there is nothing for the subject to judge; I searched orchestration-hub/ for registerHook, hookChain, middleware, checkpoint and plugin and found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "scale-investment-timing",
@@ -6418,8 +6422,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:24 Messages read mock threads or synced Supabase rows for display and Settings is presentational cards, so this context assembles no agent runtime, extension surface or resumable checkpoint store; I searched src/components/dashboard for registerHook, hookChain, middleware, checkpoint and plugin and found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "toasts-notifications",
@@ -8660,8 +8668,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/api/events/stream/route.ts:13 The only server code here passes the external orchestrator's SSE byte stream through (adding a session check and a heartbeat), and the rest is dashboard UI, so no hooks wrap model or tool calls and no code is loaded into a runtime; I searched src/app/api/events and src/components/dashboard for registerHook, hookChain, middleware, checkpoint and plugin and found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "stream-proxy-hop",
@@ -9100,8 +9112,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/settleThread.ts:17 The health panel is pure projection over mock fixtures (settleThread, demoCauseFix, healthActions) for a demo dashboard, with no agent run, hook chain or extension loading to assemble; I searched src/lib and src/components/dashboard/views/health for registerHook, hookChain, middleware and checkpoint and found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "background-jobs",
