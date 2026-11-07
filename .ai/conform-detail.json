@@ -12271,6 +12271,27 @@
           "evidence": "src/components/dashboard/views/sla/sla-page/SLABreachLog.tsx:121 When a severity chip (zero-count chips can still be chosen) empties the breach log, it shows the generic 'no breaches' copy instead of a filter-caused empty worded from the applied predicate. The health panel gets this right at PerformanceHealthPanel.tsx:89 (noSeverityIssues)."
         }
       ]
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/ci-execution-trust": {
+      "context": "Split & Pipeline Playground",
+      "subject": "ci-execution-trust",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T00:54:54.236Z",
+      "worker": "0dc67d6b-a7e0-43b7-82cd-dc1e4f53ced3",
+      "techniques": [
+        {
+          "technique": "control-plane-execution-boundary",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:20 A React section component. Nothing here decides or performs delivery jobs."
+        },
+        {
+          "technique": "untrusted-contribution-lanes",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:14 The 'run' is an in-browser simulation step counter, not a build lane that executes contributed code."
+        }
+      ]
     }
   }
 }

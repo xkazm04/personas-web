@@ -3211,7 +3211,11 @@
           "revision": 7,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:20 This context is a client-rendered marketing section that animates a scripted agent run. It has no delivery pipeline, runner, CI credential or build definition, and a grep of src/components/sections/playground-split/ for GITHUB_TOKEN, workflow_dispatch, pull_request_target, secrets. and runs-on found no hits, so the subject's precondition does not hold.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:47305180676ccbaa",
+          "evaluatedRevision": 7
         },
         {
           "subject": "translation-pipeline-topology",
