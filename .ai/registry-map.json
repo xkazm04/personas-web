@@ -1109,8 +1109,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/DownloadCTA.tsx:14 These are marketing download/CTA/footer components that only track clicks and show release info. They contain no agent runtime, hooks around model or tool calls, or durable conversation state, and the search for the subject's terms found nothing under src/components/sections.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "agent-memory",
@@ -5889,8 +5893,8 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "quality-gates",
@@ -9997,8 +10001,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/dashboard/layout.tsx:16 This context is a client SPA shell (navbar, scope bar, error banner, realtime indicator) that renders demo or orchestrator data and never assembles or runs an agent. A search for checkpoint, registerHook, hook chain and agent loop found no hits in src/app/dashboard or src/components/dashboard.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "multi-provider-gateway-plane",
@@ -10446,8 +10454,8 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "browser-credential-boundary",

@@ -2020,31 +2020,21 @@
       "context": "Conversion: Get Started, FAQ & Footer",
       "subject": "agent-runtime-assembly",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T08:45:59.538Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
-        "state": "not-applicable",
-        "at": "2026-10-13T08:46:27.311943+00:00",
-        "reason": "reviewer (sonnet): The anchor DownloadCTA.tsx:36 is a comment and constant declarations that don't show the precondition is absent, so it is incidental. It also lies in a download/waitlist section, which doesn't say anything about agent-runtime assembly."
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:47:44.500Z",
+      "worker": "0037b08b-3e8f-4a64-b28a-021a7cc7ebdd",
+      "techniques": []
     },
     "Platform Foundation: Shell, UI & Motion/Dashboard Shell, Chrome & Realtime/agent-runtime-assembly": {
       "context": "Dashboard Shell, Chrome & Realtime",
       "subject": "agent-runtime-assembly",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-13",
-      "evaluatedTs": "2026-10-13T08:45:59.538Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "bdf6d9f1-66f3-487c-b627-78caac93eb90",
-        "state": "not-applicable",
-        "at": "2026-10-13T08:46:27.344566+00:00",
-        "reason": "reviewer (sonnet): The anchor layout.tsx:20 is the end of a doc comment just before the component declaration, so it is incidental. The shell imports a SyncedRealtimeProvider and a TourOverlay, and I did not open those or the other context files, so I could not confirm that nothing in this context assembles a runtime."
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:47:44.500Z",
+      "worker": "0037b08b-3e8f-4a64-b28a-021a7cc7ebdd",
+      "techniques": []
     },
     "Interactive Demos & Playground/Orchestration & Platform Visualizers/fleet-orchestration": {
       "context": "Orchestration & Platform Visualizers",
@@ -12624,6 +12614,36 @@
       "evaluatedTs": "2026-11-07T03:45:30.447Z",
       "worker": "114acdab-42a5-4ea0-9f8c-1c5787bc2338",
       "techniques": []
+    },
+    "Infrastructure & Telemetry/Supabase Client/agent-runtime-assembly": {
+      "context": "Supabase Client",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:47:44.500Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "0037b08b-3e8f-4a64-b28a-021a7cc7ebdd",
+        "state": "not-applicable",
+        "at": "2026-11-07T03:48:28.436922+00:00",
+        "reason": "reviewer (sonnet): The anchor src/lib/supabase.ts:4 is a comment about the fetch timeout and says nothing on agent assembly, and the context also holds supabaseApi.ts, which sends run_persona, resume_persona, cancel_execution and chat_send commands and lazy-imports a chat model that the verdict never examined."
+      }
+    },
+    "Roadmap, Voting & Waitlist/Feature Voting & Comments/agent-runtime-assembly": {
+      "context": "Feature Voting & Comments",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:47:44.500Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "0037b08b-3e8f-4a64-b28a-021a7cc7ebdd",
+        "state": "not-applicable",
+        "at": "2026-11-07T03:48:28.488908+00:00",
+        "reason": "reviewer (sonnet): The anchor src/app/api/votes/route.ts:4 is the PII-policy comment (voter_id), not a line that shows an agent loop or extension surface is absent, so the anchor is incidental."
+      }
     }
   }
 }
