@@ -9098,20 +9098,25 @@
       "subject": "settings",
       "bundle": "software-engineering",
       "state": "unknown",
-      "evaluatedAt": "2026-10-24",
-      "evaluatedTs": "2026-10-24T04:45:02.100Z",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:35:37.615Z",
       "techniques": [
         {
           "technique": "config-backup-and-restore",
           "verdict": "not-applicable",
-          "evidence": "src/lib/server/json-file-store.ts:36 Not a config file, but it does refuse a corrupt read and writes atomically via temp file plus rename (:60). It has no backup rotation."
+          "evidence": "src/lib/server/json-file-store.ts:21 The file is user-content data, not a configuration file. Its load side does already stop on a non-ENOENT or corrupt read instead of falling back to empty, which matches the technique's 'stop, don't boot on defaults' spirit, but there is no backup rotation."
+        },
+        {
+          "technique": "setting-kinds",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/server/rate-limit.ts:13 Rate limits (limit, windowMs) are literals passed at each call site, not stored ceiling settings, so there is no stored setting to classify."
         }
       ],
       "withdrawn": {
-        "worker": "236d3ba1-26b8-4f89-9494-69f12a53b151",
+        "worker": "4b234a5e-30ff-42e3-aaba-317b76e34177",
         "state": "not-applicable",
-        "at": "2026-10-24T04:45:26.168200+00:00",
-        "reason": "reviewer (sonnet): The anchor json-file-store.ts:7 is the DATA_DIR constant, which doesn't show that settings are absent; the only support is a grep for settingsStore/getSetting/SETTINGS_KEY, which are narrow terms for this context."
+        "at": "2026-11-07T03:36:04.235586+00:00",
+        "reason": "reviewer (sonnet): The not-applicable anchor, json-file-store.ts:7 (`const DATA_DIR = path.join(process.cwd(), \".data\")`), only names the data directory and does not show that no settings key space exists; the claim rests on a grep for four invented names, and I did not open the rate-limit.ts:13 call-site literals the"
       }
     },
     "Infrastructure & Telemetry/Orchestrator API Client & Mock Data/module-design": {
