@@ -6514,7 +6514,11 @@
           "revision": 3,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 The only remote reads are the project's own Supabase synced_messages table (owned store, which falls under optional-dependency-degradation) and a health check of its own orchestrator (the health-checks neighbour); a search of src/components/dashboard found no Accept-Ranges, Content-Range or bytes= range handling, so no remote peer's capabilities are ever probed.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:9bb6b3bf0d353d66",
+          "evaluatedRevision": 3
         },
         {
           "subject": "edge-queue-policy",

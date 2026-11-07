@@ -12528,6 +12528,32 @@
           "evidence": "src/components/sections/playground-split/components/SyntaxPrompt.test.ts:9 The inputs are plain strings and records that tests can build. No host-only type is involved."
         }
       ]
+    },
+    "Agent Operations Dashboard/Messages & Settings/remote-capability-probing": {
+      "context": "Messages & Settings",
+      "subject": "remote-capability-probing",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:06:14.074Z",
+      "worker": "558b50ca-3d20-4793-9051-0c2115f6010f",
+      "techniques": [
+        {
+          "technique": "advertised-support-is-not-evidence",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 Whole-row query to the project's own Supabase, not a partial read against a stranger's store."
+        },
+        {
+          "technique": "single-blocker-short-circuit",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/index.tsx:41 This is a liveness check of the team's own orchestrator (the health-checks neighbour), not a multi-row capability report."
+        },
+        {
+          "technique": "assertion-permission-and-bypass-are-three-switches",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/ModelProvidersCard.tsx:24 The only switch is demo versus live mode, not an operator flag that turns a capability probe off."
+        }
+      ]
     }
   }
 }
