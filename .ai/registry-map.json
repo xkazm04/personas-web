@@ -2797,7 +2797,11 @@
           "revision": 3,
           "changedAt": "2026-11-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/playground/TerminalSim.tsx:86 The playground plays back fixed lines from data.ts on timers, and FlowComposer is a builder where the user places nodes by hand (use-flow-composer addNode/removeNode). No model picks views or arranges the screen. Searching the context's directories for openai, streamText, composeView and tool_use found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:7c6aa8f4a4d53a56",
+          "evaluatedRevision": 3
         },
         {
           "subject": "mcp-tools",
@@ -8790,7 +8794,11 @@
           "revision": 3,
           "changedAt": "2026-11-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 The home cards are fixed components fed by the demo API through hooks. No model decides which cards appear or where. Searching the context's directories for openai, streamText, composeView and tool_use found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:7c6aa8f4a4d53a56",
+          "evaluatedRevision": 3
         },
         {
           "subject": "tenant-scoped-agent-runtime",

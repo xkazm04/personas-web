@@ -12373,6 +12373,43 @@
       "evaluatedTs": "2026-11-07T02:24:05.654Z",
       "worker": "1d186ce3-465b-41ba-b927-a1708a89d12d",
       "techniques": []
+    },
+    "Interactive Demos & Playground/Visual Flow Composer & Playground Page/model-composed-workspace": {
+      "context": "Visual Flow Composer & Playground Page",
+      "subject": "model-composed-workspace",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:36:38.763Z",
+      "worker": "0804ef7c-0e8c-4124-a078-b5447615ef9f",
+      "techniques": [
+        {
+          "technique": "answer-form-routing",
+          "verdict": "not-applicable",
+          "evidence": "src/app/playground/data.ts:50 Every answer is a fixed script, so no model chooses an answer form."
+        },
+        {
+          "technique": "composition-region",
+          "verdict": "not-applicable",
+          "evidence": "src/components/flow-composer/components/EventQueueBar.tsx:5 Static SVG chrome on a canvas the user composes; there is no region set aside for a model."
+        }
+      ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/model-composed-workspace": {
+      "context": "Dashboard Home Overview",
+      "subject": "model-composed-workspace",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:36:38.763Z",
+      "worker": "0804ef7c-0e8c-4124-a078-b5447615ef9f",
+      "techniques": [
+        {
+          "technique": "composition-region",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:18 The triage pane renders a fixed hook-driven queue, not a model-composed view."
+        }
+      ]
     }
   }
 }
