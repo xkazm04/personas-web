@@ -12242,6 +12242,27 @@
         }
       ],
       "registryProposal": "The standard says 'healing is visible' and wants an operator to be able to answer 'did it help?', but no technique covers the read-only surface that renders healer records. A short rule is worth adding: a display that receives an applied-fix record without an outcome must say 'applied', not 'fixed'."
+    },
+    "Observability & Event Monitoring/Observability Charts & SLA/table": {
+      "context": "Observability Charts & SLA",
+      "subject": "table",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T00:08:14.739Z",
+      "worker": "9d9dd029-0175-477c-a133-543a02698bf9",
+      "techniques": [
+        {
+          "technique": "loading-and-empty-states",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:66 The charts get a `failed` prop (line 141), but the health list does not, so an error with no data reaches the empty branch and shows allSystemsHealthy. Rule 4 says error never wears the empty state's clothes."
+        },
+        {
+          "technique": "filtering",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/sla/sla-page/SLABreachLog.tsx:121 When a severity chip (zero-count chips can still be chosen) empties the breach log, it shows the generic 'no breaches' copy instead of a filter-caused empty worded from the applied predicate. The health panel gets this right at PerformanceHealthPanel.tsx:89 (noSeverityIssues)."
+        }
+      ]
     }
   }
 }

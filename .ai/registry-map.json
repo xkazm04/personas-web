@@ -8251,7 +8251,11 @@
           "revision": 14,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceHealthPanel.tsx:77 In real mode a failed observability fetch leaves the health-issue list empty (PerformanceView.tsx:66 returns [] when not demo), so this branch says \"All systems healthy / no issues detected\" under the error banner, which is an error shown as a settled empty.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:c587a204413d5373",
+          "evaluatedRevision": 14
         },
         {
           "subject": "hitl-approval",
