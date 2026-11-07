@@ -12734,6 +12734,58 @@
       "evaluatedTs": "2026-11-07T04:07:15.233Z",
       "worker": "218d2ae4-8215-462d-88e1-697c19d1e0ab",
       "techniques": []
+    },
+    "Interactive Demos & Playground/Split & Pipeline Playground/agent-instruction-files": {
+      "context": "Split & Pipeline Playground",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:10:29.952Z",
+      "techniques": [
+        {
+          "technique": "line-earning",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:20 This is a React section component, not an always-loaded instruction file."
+        },
+        {
+          "technique": "enforcement-demotion",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/playground-split/index.tsx:22 This line runs a UI animation hook. There is no prose rule here that could be moved into a gate."
+        }
+      ],
+      "withdrawn": {
+        "worker": "e8867915-b101-4961-a244-2cd2b510efb6",
+        "state": "not-applicable",
+        "at": "2026-11-07T04:10:53.815615+00:00",
+        "reason": "reviewer (sonnet): Both anchors are incidental React and metadata lines that cannot show an instruction file is absent, and the repo root has CLAUDE.md and AGENTS.md that govern all of src, so the precondition does hold."
+      }
+    },
+    "Marketing & Landing/Features Overview & Pricing/agent-instruction-files": {
+      "context": "Features Overview & Pricing",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:10:29.952Z",
+      "techniques": [
+        {
+          "technique": "line-earning",
+          "verdict": "not-applicable",
+          "evidence": "src/app/features/page.tsx:16 This is page metadata for search engines, not agent instruction lines."
+        },
+        {
+          "technique": "instruction-freshness",
+          "verdict": "not-applicable",
+          "evidence": "src/app/features/page.tsx:7 This is route rendering config. There is no instruction file here whose claims could go stale."
+        }
+      ],
+      "withdrawn": {
+        "worker": "e8867915-b101-4961-a244-2cd2b510efb6",
+        "state": "not-applicable",
+        "at": "2026-11-07T04:10:53.815615+00:00",
+        "reason": "reviewer (sonnet): Both anchors are incidental React and metadata lines that cannot show an instruction file is absent, and the repo root has CLAUDE.md and AGENTS.md that govern all of src, so the precondition does hold."
+      }
     }
   }
 }

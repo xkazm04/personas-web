@@ -1448,8 +1448,8 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 9
+          "priorNotApplicable": 9,
+          "state": "unknown"
         },
         {
           "subject": "narrative-scroll-surface",
@@ -3376,8 +3376,8 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 9
+          "priorNotApplicable": 9,
+          "state": "unknown"
         },
         {
           "subject": "agent-memory",
