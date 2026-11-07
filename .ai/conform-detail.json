@@ -12781,6 +12781,38 @@
       "evaluatedTs": "2026-11-07T04:14:57.082Z",
       "worker": "73658802-7f6b-400e-8752-424d846c6089",
       "techniques": []
+    },
+    "Agent Operations Dashboard/Manual Review Queue/copy-quality-gates": {
+      "context": "Manual Review Queue",
+      "subject": "copy-quality-gates",
+      "bundle": "localization",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T22:25:12.937Z",
+      "techniques": [
+        {
+          "technique": "rendered-string-extraction",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/index.tsx:67 The view fills placeholders at render time. The walker that skips placeholders belongs to the catalog gate, not to this consumer."
+        },
+        {
+          "technique": "enforcement-at-the-write-seams",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx:5 The copy is imported from a catalog module that is written elsewhere. This context has no write seam for catalog copy."
+        },
+        {
+          "technique": "length-and-render-budgets",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/reviews/reviews-split-pane/ReviewDetailPanel.tsx:42 Catalog copy sits in a max-width box that wraps. The technique's 'when not to use' clause excludes surfaces that reflow, and any budget would be declared in the copy contract, not here."
+        }
+      ],
+      "registryProposal": "The registry map probably paired this context with copy-quality-gates on lexical tokens ('review', 'gate', 'severity', 'copy' from mobileCopy). Those words mean human approval of agent executions here. The matcher should not treat 'review' or 'severity' as evidence for a copy-gate subject unless catalog or i18n authoring paths are present.",
+      "withdrawn": {
+        "worker": "a467c03c-406d-4d9a-9b4b-a91b6ee0a93c",
+        "state": "not-applicable",
+        "at": "2026-11-07T22:26:06.526326+00:00",
+        "reason": "reviewer (sonnet): The anchor index.tsx:19 is only the `useTranslation` import line, so it doesn't show the precondition is absent. `mobileCopy` and `pending/mobile` appear in ReviewDetailPanel.tsx, not at the anchor. I couldn't confirm the claim that the gate's walker and copy contract live elsewhere. The 0-hit grep "
+      }
     }
   }
 }
