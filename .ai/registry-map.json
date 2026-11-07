@@ -11759,7 +11759,11 @@
           "revision": 3,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/LocaleOffer.tsx:25 This context has a footer locale select, a browser-language offer card and the locale catalogs. It has no explanatory page, stations or scroll-driven motion: searching src/components, src/i18n and the context's files for 'narrative', 'scroll-bound' and 'filmstrip' found nothing, so the subject's precondition (a page explaining something to a reader who hasn't decided to care) does not hold.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:e93abcf9f70a6c36",
+          "evaluatedRevision": 3
         }
       ],
       "governance": "governed"

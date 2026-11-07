@@ -12410,6 +12410,27 @@
           "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:18 The triage pane renders a fixed hook-driven queue, not a model-composed view."
         }
       ]
+    },
+    "Theming, i18n & Shared Utilities/Internationalization (14 locales)/narrative-scroll-surface": {
+      "context": "Internationalization (14 locales)",
+      "subject": "narrative-scroll-surface",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T02:49:39.512Z",
+      "worker": "2026b7a6-7f29-4433-8896-98ab1d39bbcb",
+      "techniques": [
+        {
+          "technique": "scroll-bound-progression",
+          "verdict": "not-applicable",
+          "evidence": "src/components/LocaleOffer.tsx:25 The offer card is static and fixed-position. Nothing here is bound to scroll or a timer."
+        },
+        {
+          "technique": "no-orientation-tax",
+          "verdict": "not-applicable",
+          "evidence": "src/components/LanguageSwitcher.tsx:35 This is a footer locale select, which is a settings control for a task. It is not a side index on an explanatory page."
+        }
+      ]
     }
   }
 }
