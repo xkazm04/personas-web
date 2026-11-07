@@ -5377,8 +5377,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/server/json-file-store.ts:13 This context is a locked JSON-file store and a rate limiter for roadmap votes, with no model-facing tool surface; a search of src/lib and src/lib/server for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing, so no MCP technique has a precondition here.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "agent-instruction-files",
@@ -10045,7 +10049,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/scope/useDashboardScope.ts:21 The shell is React navigation, error and scope-filter UI over Zustand stores; a search of src/components/dashboard and src/app/dashboard for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing, so no tool boundary exists for these techniques to govern.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "people-analytics-ethics",
@@ -10372,7 +10380,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/supabaseApi.ts:2 This context reads a Supabase table mirror under RLS and tracks device/controller pairing state, and no model reads or calls any of it; a search of src/lib, src/hooks, src/stores and scripts for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "optional-dependency-degradation",
@@ -11407,7 +11419,11 @@
           "changedAt": "2026-10-15",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/hooks/usePolling.ts:4 These are generic React hooks, formatters and a server env reader with no tool server, schema or transport; a search of src/hooks and src/lib for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "prompt-assembly",

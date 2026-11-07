@@ -12005,31 +12005,21 @@
       "context": "Dashboard Shell, Chrome & Realtime",
       "subject": "mcp-tools",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "not-applicable",
       "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T03:28:33.346Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
-        "state": "not-applicable",
-        "at": "2026-11-07T03:29:14.329937+00:00",
-        "reason": "reviewer (sonnet): The anchor useDashboardScope.ts:21 is a hook signature line that does not show a tool protocol is absent. The claim rests only on a keyword search."
-      }
+      "evaluatedTs": "2026-11-07T03:32:19.866Z",
+      "worker": "6163e354-719e-4b9d-beb7-00f2733b522b",
+      "techniques": []
     },
     "Infrastructure & Telemetry/Supabase Client/mcp-tools": {
       "context": "Supabase Client",
       "subject": "mcp-tools",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "not-applicable",
       "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T03:28:33.346Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
-        "state": "not-applicable",
-        "at": "2026-11-07T03:29:14.384639+00:00",
-        "reason": "reviewer (sonnet): The anchor controllerStore.ts:6 is a comment about the paired-controller key. It does not show absence of a model-facing tool protocol. src/lib/supabaseApi.ts also handles per-tool usage (`tool_name`), which the verdict never examined."
-      }
+      "evaluatedTs": "2026-11-07T03:32:19.866Z",
+      "worker": "6163e354-719e-4b9d-beb7-00f2733b522b",
+      "techniques": []
     },
     "Marketing & Landing/Why Agents & Use Cases/mcp-tools": {
       "context": "Why Agents & Use Cases",
@@ -12609,16 +12599,21 @@
       "context": "Shared Types, Utilities & Hooks",
       "subject": "mcp-tools",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "not-applicable",
       "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T03:28:33.346Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
-        "state": "not-applicable",
-        "at": "2026-11-07T03:29:14.463467+00:00",
-        "reason": "reviewer (sonnet): The anchor env.ts:3 is just `import \"server-only\"`. It is incidental and shows nothing about tool protocols."
-      }
+      "evaluatedTs": "2026-11-07T03:32:19.866Z",
+      "worker": "6163e354-719e-4b9d-beb7-00f2733b522b",
+      "techniques": []
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/mcp-tools": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:32:19.866Z",
+      "worker": "6163e354-719e-4b9d-beb7-00f2733b522b",
+      "techniques": []
     }
   }
 }
