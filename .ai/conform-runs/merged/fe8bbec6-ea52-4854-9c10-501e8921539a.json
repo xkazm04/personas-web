@@ -1,0 +1,47 @@
+{
+ "schema": "conform-run/1",
+ "worker": "fe8bbec6-ea52-4854-9c10-501e8921539a",
+ "subject": "trust-base",
+ "evaluatedAt": "2026-11-07T00:41:23.644084+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Build Config & E2E Tests",
+   "subject": "trust-base",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "e2e/guide.spec.ts:16 JSON.parse returns TypeScript's unchecked `any` into an unannotated binding whose members (`data[\"@type\"]`, `data.numberOfItems`, `data.description`) are read on lines 17-19. That makes it a trust-base member with nothing at the call site to spell it. The repo's lint setup has no type-aware unsafe-any rule (eslint.config.mjs extends only nextVitals/nextTs, with no projectService and no no-unsafe-* rules), so no census would count it. The practical harm is small, because each read goes straight into a runtime `expect`.",
+   "techniques": [
+    {
+     "technique": "census-counts-unmarked-members",
+     "verdict": "deviation",
+     "evidence": "e2e/guide.spec.ts:16 The technique's 'unchecked type is a value' case: a standard decoder returns `any` with no directive or `as` to count. It is neither decoded into `unknown` and checked (the removal the technique ranks first) nor counted by a type-aware lint. A grep of the 12 context specs for JSON.parse, `as any`, `: any`, @ts- and .json() found only this site."
+    },
+    {
+     "technique": "soundness-argument-names-its-dependencies",
+     "verdict": "not-applicable",
+     "evidence": "e2e/review-undo.spec.ts:75 The only spelled assertion in the context is a double cast whose claimed shape is optional and is written by the same evaluate callback (line 79). It does not rest on a distant declaration, so there is no dependency edge to name at two ends."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T00:41:23.644084+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "trust-base"
+   ],
+   "techniques": [
+    "census-counts-unmarked-members",
+    "soundness-argument-names-its-dependencies"
+   ],
+   "deviations": 1,
+   "context": "Build Config & E2E Tests",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

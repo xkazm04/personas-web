@@ -10464,22 +10464,30 @@
       "subject": "trust-base",
       "bundle": "software-engineering",
       "state": "deviation",
-      "evaluatedAt": "2026-10-26",
-      "evaluatedTs": "2026-10-26T00:22:53.449Z",
-      "worker": "7701adc7-d888-4287-875c-40ddb79d4b3e",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T00:41:23.644Z",
+      "worker": "fe8bbec6-ea52-4854-9c10-501e8921539a",
       "techniques": [
         {
           "technique": "census-counts-unmarked-members",
           "verdict": "deviation",
-          "evidence": "e2e/guide.spec.ts:17 This is the unsafe member access on the `any` from line 16. The value was never decoded into `unknown` and checked, which is the removal step the technique asks for. Text census over the 12 files: 1 unspelled decoder member (guide.spec.ts:16), plus spelled `as unknown as` assertions at review-undo.spec.ts:75 and :85."
+          "evidence": "e2e/guide.spec.ts:16 The technique's 'unchecked type is a value' case: a standard decoder returns `any` with no directive or `as` to count. It is neither decoded into `unknown` and checked (the removal the technique ranks first) nor counted by a type-aware lint. A grep of the 12 context specs for JSON.parse, `as any`, `: any`, @ts- and .json() found only this site."
         },
         {
           "technique": "soundness-argument-names-its-dependencies",
           "verdict": "not-applicable",
-          "evidence": "e2e/review-undo.spec.ts:85 This double assertion depends on a global that the same test writes ten lines above (line 75) with the same restated shape. The dependency is local and adjacent, not on a distant declaration, so the technique's precondition does not hold."
+          "evidence": "e2e/review-undo.spec.ts:75 The only spelled assertion in the context is a double cast whose claimed shape is optional and is written by the same evaluate callback (line 79). It does not rest on a distant declaration, so there is no dependency edge to name at two ends."
         }
       ],
-      "registryProposal": "census-counts-unmarked-members should say whether an `any` value read only to feed a test assertion library (whose matchers take unknown and re-check at runtime) counts as a member at the same weight as one flowing into production typed code. The lint predicate counts it, but the soundness exposure is close to nil."
+      "superseded": [
+        {
+          "state": "deviation",
+          "evidence": "e2e/guide.spec.ts:16 JSON.parse returns TypeScript's unchecked `any`, and it goes into an unannotated binding whose members are read on the next lines, so this is a trust-base member with no spelling at the call site that no directive or `as` census would count. Its practical harm is small, because each read goes straight into a runtime `expect`.",
+          "evaluatedAt": "2026-10-26T00:22:53.449Z",
+          "worker": "7701adc7-d888-4287-875c-40ddb79d4b3e",
+          "reason": "replaced by fe8bbec6-ea52-4854-9c10-501e8921539a"
+        }
+      ]
     },
     "Infrastructure & Telemetry/Error Monitoring & Analytics/usage-analytics": {
       "context": "Error Monitoring & Analytics",

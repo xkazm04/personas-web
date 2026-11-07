@@ -10207,12 +10207,11 @@
           "changedAt": "2026-10-27",
           "confidence": "probable",
           "state": "deviation",
-          "evidence": "e2e/guide.spec.ts:16 JSON.parse returns TypeScript's unchecked `any`, and it goes into an unannotated binding whose members are read on the next lines, so this is a trust-base member with no spelling at the call site that no directive or `as` census would count. Its practical harm is small, because each read goes straight into a runtime `expect`.",
-          "evaluatedAt": "2026-10-26",
-          "evaluatedAgainst": "sha256-b2:3ad9d5604e9627ce",
-          "evaluatedRevision": 5,
-          "revisionsBehind": 1,
-          "stale": true
+          "evidence": "e2e/guide.spec.ts:16 JSON.parse returns TypeScript's unchecked `any` into an unannotated binding whose members (`data[\"@type\"]`, `data.numberOfItems`, `data.description`) are read on lines 17-19. That makes it a trust-base member with nothing at the call site to spell it. The repo's lint setup has no type-aware unsafe-any rule (eslint.config.mjs extends only nextVitals/nextTs, with no projectService and no no-unsafe-* rules), so no census would count it. The practical harm is small, because each read goes straight into a runtime `expect`.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:0fd52192b37a88e4",
+          "evaluatedRevision": 6,
+          "revisionsBehind": 1
         },
         {
           "subject": "schema-driven-ui",
