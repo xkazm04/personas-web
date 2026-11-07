@@ -7669,8 +7669,12 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/stores/notesStore.ts:23 The context is a read-only notes view over a synced table through the api proxy; searching src/components/dashboard/views/notes, src/lib/notes, src/stores and e2e for mcp/modelcontextprotocol/jsonrpc/inputSchema/tools/call found no hits, so no tool protocol exists here.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:cb2b1c9f6fef5eb9",
+          "evaluatedRevision": 35
         },
         {
           "subject": "agent-host-experience",
@@ -11402,8 +11406,8 @@
           "revision": 34,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "prompt-assembly",

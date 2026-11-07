@@ -12006,14 +12006,14 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "unknown",
-      "evaluatedAt": "2026-11-05",
-      "evaluatedTs": "2026-11-05T23:51:14.700Z",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:28:33.346Z",
       "techniques": [],
       "withdrawn": {
-        "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+        "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
         "state": "not-applicable",
-        "at": "2026-11-05T23:51:55.305906+00:00",
-        "reason": "reviewer (sonnet): The anchor DashboardScopeBar.tsx:17 is a doc comment about persona and date filters. It does not show that no tool-protocol server or client exists, so it is incidental. My re-search of the context found no MCP surface, but the anchor does not carry that claim."
+        "at": "2026-11-07T03:29:14.329937+00:00",
+        "reason": "reviewer (sonnet): The anchor useDashboardScope.ts:21 is a hook signature line that does not show a tool protocol is absent. The claim rests only on a keyword search."
       }
     },
     "Infrastructure & Telemetry/Supabase Client/mcp-tools": {
@@ -12021,14 +12021,14 @@
       "subject": "mcp-tools",
       "bundle": "software-engineering",
       "state": "unknown",
-      "evaluatedAt": "2026-11-05",
-      "evaluatedTs": "2026-11-05T23:51:14.700Z",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:28:33.346Z",
       "techniques": [],
       "withdrawn": {
-        "worker": "d4e17bd7-8791-4d0d-8cf4-d7925f4b3c5b",
+        "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
         "state": "not-applicable",
-        "at": "2026-11-05T23:51:55.387681+00:00",
-        "reason": "reviewer (sonnet): The anchor supabase.ts:4 is a comment about the Supabase fetch timeout. It says nothing about the absence of a tool server or host, so it is incidental."
+        "at": "2026-11-07T03:29:14.384639+00:00",
+        "reason": "reviewer (sonnet): The anchor controllerStore.ts:6 is a comment about the paired-controller key. It does not show absence of a model-facing tool protocol. src/lib/supabaseApi.ts also handles per-tool usage (`tool_name`), which the verdict never examined."
       }
     },
     "Marketing & Landing/Why Agents & Use Cases/mcp-tools": {
@@ -12594,6 +12594,31 @@
       "evaluatedTs": "2026-11-07T03:24:40.070Z",
       "worker": "0068417f-a741-4fd0-b37b-89e8dbd83449",
       "techniques": []
+    },
+    "Agent Operations Dashboard/Notes (Goal Board)/mcp-tools": {
+      "context": "Notes (Goal Board)",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:28:33.346Z",
+      "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
+      "techniques": []
+    },
+    "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/mcp-tools": {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "mcp-tools",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T03:28:33.346Z",
+      "techniques": [],
+      "withdrawn": {
+        "worker": "fa2b1efb-b77f-4338-bb3b-2f3bcd43d2ae",
+        "state": "not-applicable",
+        "at": "2026-11-07T03:29:14.463467+00:00",
+        "reason": "reviewer (sonnet): The anchor env.ts:3 is just `import \"server-only\"`. It is incidental and shows nothing about tool protocols."
+      }
     }
   }
 }
