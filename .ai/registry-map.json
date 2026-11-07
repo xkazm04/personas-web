@@ -5914,7 +5914,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/app/api/votes/route.ts:24 These are CRUD routes and UI for roadmap votes, comments and boosts backed by Supabase or a file store, so no model or tool call is wrapped and no contributed code is loaded; a search for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost over src/app/api and src/components/sections found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "quality-gates",
@@ -10487,7 +10491,11 @@
           "changedAt": "2026-10-14",
           "confidence": "probable",
           "priorNotApplicable": 5,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/lib/supabase-admin.ts:10 This context builds anon and service-role Supabase clients with a fetch timeout, plus device and sync reachability stores, and runs no agent loop, hook chain or extension host; a search for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost over src/lib, src/hooks, src/stores and scripts found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "browser-credential-boundary",
@@ -11554,8 +11562,12 @@
           "revision": 28,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/hooks/usePolling.ts:4 The 'hooks' here are React hooks (polling, focus trap, hydration) and format/env helpers, not callbacks wrapping model or tool calls, so the subject's precondition does not hold; a search for checkpoint, hookChain, wrapModelCall, registerHook and extensionHost over src/hooks and src/lib found 0 hits.",
+          "evaluatedAt": "2026-11-07",
+          "evaluatedAgainst": "sha256-b2:45b3f952560a4cbc",
+          "evaluatedRevision": 28
         },
         {
           "subject": "table",

@@ -12619,31 +12619,21 @@
       "context": "Supabase Client",
       "subject": "agent-runtime-assembly",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "not-applicable",
       "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T03:47:44.500Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "0037b08b-3e8f-4a64-b28a-021a7cc7ebdd",
-        "state": "not-applicable",
-        "at": "2026-11-07T03:48:28.436922+00:00",
-        "reason": "reviewer (sonnet): The anchor src/lib/supabase.ts:4 is a comment about the fetch timeout and says nothing on agent assembly, and the context also holds supabaseApi.ts, which sends run_persona, resume_persona, cancel_execution and chat_send commands and lazy-imports a chat model that the verdict never examined."
-      }
+      "evaluatedTs": "2026-11-07T04:14:57.082Z",
+      "worker": "73658802-7f6b-400e-8752-424d846c6089",
+      "techniques": []
     },
     "Roadmap, Voting & Waitlist/Feature Voting & Comments/agent-runtime-assembly": {
       "context": "Feature Voting & Comments",
       "subject": "agent-runtime-assembly",
       "bundle": "software-engineering",
-      "state": "unknown",
+      "state": "not-applicable",
       "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T03:47:44.500Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "0037b08b-3e8f-4a64-b28a-021a7cc7ebdd",
-        "state": "not-applicable",
-        "at": "2026-11-07T03:48:28.488908+00:00",
-        "reason": "reviewer (sonnet): The anchor src/app/api/votes/route.ts:4 is the PII-policy comment (voter_id), not a line that shows an agent loop or extension surface is absent, so the anchor is incidental."
-      }
+      "evaluatedTs": "2026-11-07T04:14:57.082Z",
+      "worker": "73658802-7f6b-400e-8752-424d846c6089",
+      "techniques": []
     },
     "Observability & Event Monitoring/Incidents Inbox/agent-memory": {
       "context": "Incidents Inbox",
@@ -12786,6 +12776,16 @@
         "at": "2026-11-07T04:10:53.815615+00:00",
         "reason": "reviewer (sonnet): Both anchors are incidental React and metadata lines that cannot show an instruction file is absent, and the repo root has CLAUDE.md and AGENTS.md that govern all of src, so the precondition does hold."
       }
+    },
+    "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/agent-runtime-assembly": {
+      "context": "Shared Types, Utilities & Hooks",
+      "subject": "agent-runtime-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-07",
+      "evaluatedTs": "2026-11-07T04:14:57.082Z",
+      "worker": "73658802-7f6b-400e-8752-424d846c6089",
+      "techniques": []
     }
   }
 }
