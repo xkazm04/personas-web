@@ -1,0 +1,101 @@
+{
+ "schema": "conform-run/1",
+ "worker": "7ce61ea7-46dc-416a-b16f-67d5ae98fdf6",
+ "subject": "narrative-scroll-surface",
+ "evaluatedAt": "2026-11-06T02:09:02.330833+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Homepage & Hero",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/page.tsx:72 Five of the six landing stages (every HOME_STAGES row with gate: true, client-only via ssr:false in lazy.tsx) mount their content only when an IntersectionObserver fires near the viewport, so the served HTML holds just a label placeholder and crawlers, print, capture and no-script readers never get the page's argument.",
+   "techniques": [
+    {
+     "technique": "reveal-without-loss",
+     "verdict": "deviation",
+     "evidence": "src/app/page.tsx:72 Reveal is a mounting decision, the failure the technique names: LazyMount renders only a labelled placeholder until the IntersectionObserver fires, and the gated sections are created with ssr:false (lazy.tsx). Only Vision is server-rendered."
+    },
+    {
+     "technique": "motion-carries-the-mechanism",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/hero-hive/hive-geometry.ts:57 The hero animates a mechanism (event lands, hands off cell to cell, done pillar rises) as an endless 9s CSS keyframe loop with per-element animationDelay clocks. There is no render(t), step or scrub control, and no visible stop control, which the technique requires of a looping mechanism explainer. It does pause off-screen and in a hidden tab, and its reduced-motion still keeps the drawn path and both chips (degraded form 3)."
+    }
+   ],
+   "registryProposal": "motion-carries-the-mechanism does not say where an ambient hero loop that depicts a flow as a metaphor (not a step-by-step explainer) stands. The step/scrub/filmstrip obligations read as built for an in-page explainer station, and a seat has to guess whether a first-screen ambient loop owes them or only the stop-control and degraded-form rules."
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:178 The guide is a document surface (markdown topic body, an 'on this page' TOC, ReadingProgress, prev/next topics) for a reader who came for the content, which the golden path cedes to long-form-reading-surface. A search of src/app/guide found no scroll-bound progress (useScroll, scrollYProgress) and no spine/station structure, only once-per-view whileInView fades on the category grid and Discord CTA.",
+   "techniques": [
+    {
+     "technique": "no-orientation-tax",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:178 The side index is a document contents panel; the technique's 'When not to use: Documents' clause applies."
+    },
+    {
+     "technique": "reveal-without-loss",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/guide-page/GuideCategoryGrid.tsx:33 The grid starts at initial=\"hidden\" and reveals in view, but on a documentation hub, not a narrative page. Its SSR-hidden start state is a defect under the motion and page-load subjects."
+    },
+    {
+     "technique": "illustration-carries-the-claim",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:164 Topic content is reference prose for a reader who has already decided; the technique excludes those pages."
+    }
+   ],
+   "absenceTerms": [
+    "useScroll",
+    "scrollYProgress",
+    "spine",
+    "station"
+   ],
+   "registryProposal": "The subject does not say whether the landing/hub of a documentation section (a card grid that sells categories to a browsing reader) counts as a narrative surface. Its reveal-without-loss obligations clearly matter there, since crawlers and print lose the SSR-hidden grid, but the precondition only names explanatory pages."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "narrative-scroll-surface",
+   "context": "Internationalization (14 locales)",
+   "reason": "This context is locale string bundles plus the language switcher and locale offer. It renders no explanatory page, so the subject plainly does not apply. A not-applicable verdict still cannot pass the directory-level absence re-search, because its directory src/components also holds every landing section: useScroll hits 6 files, scrollYProgress 2, whileInView 23, station 4. Any honest term list would be refused."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-06T02:09:02.330833+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [
+    "motion-carries-the-mechanism",
+    "reveal-without-loss"
+   ],
+   "deviations": 1,
+   "context": "Homepage & Hero",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-06T02:09:02.330833+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [
+    "illustration-carries-the-claim",
+    "no-orientation-tax",
+    "reveal-without-loss"
+   ],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

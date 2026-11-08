@@ -1,0 +1,54 @@
+{
+ "schema": "conform-run/1",
+ "worker": "31c7af6e-d6b0-4783-ab60-bec761a2dbea",
+ "subject": "standards-layered-runtime",
+ "evaluatedAt": "2026-11-06T23:48:57.468622+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "standards-layered-runtime",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/votes/route.ts:9 This context is made of Next.js route handlers and React components that run on top of a host runtime. It does not build an embeddable guest-language runtime with an engine, standards packages, an extras layer or a CLI. A case-insensitive search of src/app/api and src/components/sections/feature-voting for realm, registrar, wintercg, boa_engine, JsValue, deno_core, quickjs, isolated-vm and guest returned nothing. Outside node_modules, the engine terms appear only in the conform metadata files under .ai/.",
+   "techniques": [
+    {
+     "technique": "crate-per-standards-body",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/route.ts:9 The context uses the host's Request and Response APIs. It does not implement or package any standard's API set."
+    },
+    {
+     "technique": "backend-parameterised-web-api",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/votes/storage.ts:2 The Supabase/filesystem split is an app storage backend. It is not a backend that a standard web API runs on, and no guest program can see it."
+    }
+   ],
+   "absenceTerms": [
+    "realm",
+    "registrar",
+    "wintercg",
+    "boa_engine",
+    "JsValue"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-06T23:48:57.468622+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "standards-layered-runtime"
+   ],
+   "techniques": [
+    "backend-parameterised-web-api",
+    "crate-per-standards-body"
+   ],
+   "deviations": 0,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

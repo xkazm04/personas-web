@@ -1,0 +1,112 @@
+{
+ "schema": "conform-run/1",
+ "worker": "09167493-f4f9-4484-90b3-f47949624546",
+ "subject": "long-form-reading-surface",
+ "evaluatedAt": "2026-11-07T01:59:11.292328+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "long-form-reading-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:177 The desktop on-this-page panel is pinned with a top offset from the budget but has no height bound (guide-chrome.ts exports no panel max-height or heading scroll-margin constant), so a long contents list runs off the bottom of the viewport; together with the hardcoded heading clearance and the first-entry default in the scroll-spy, the budget and band disciplines are only partly realized.",
+   "techniques": [
+    {
+     "technique": "anchor-id-single-assigner",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/page.tsx:120 One parse per document: parseGuide creates one stateful createHeadingIdAssigner (parseGuide.ts:113: dedup Map + section-N fallback counter), and both headingsOf (TOC) and renderGuideDoc (HeadingAnchor id={node.id}) read node.id from the same tree."
+    },
+    {
+     "technique": "fixed-chrome-offset-budget",
+     "verdict": "deviation",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:144 guide-chrome.ts is a real budget module (measured navbar 76/86, band diagram, literal-string rationale), but the anchored-heading clearance is a local scroll-mt-24 (96px) here and in HeadingAnchor.tsx, not a budget constant. Below lg the fixed chrome ends at 122px (navbar 76 + progress 2 + mobile TOC bar 44), so an anchor jump lands the heading about 26px under the mobile TOC bar. The budget also has no panel max-height constant."
+    },
+    {
+     "technique": "scroll-spy-reading-band",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/useActiveHeading.ts:8 Partly realized: IntersectionObserver band (-96px top, -65% bottom), topmost intersecting wins, and the last answer stands when nothing intersects. But the panel highlights the first entry before any observation (the 'not yet computed' failure the technique names), and the band's top inset is a literal (line 19) instead of a value from the budget. The desktop TopicTOC also lacks aria-current, so the current entry is only shown by colour. ReadingProgress uses document-wide useScroll(), not progress through the article body."
+    },
+    {
+     "technique": "focus-transfer-on-in-place-navigation",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:43 The guard is keyed on topic identity and held at module scope so a remount cannot erase it; it is null on a cold load. Focus goes to an h1 with tabIndex={-1} and a focus-visible outline, after the new content commits. e2e/guide.spec.ts:143 checks both directions: in-place change focuses the h1, and a cold load does not move focus."
+    },
+    {
+     "technique": "server-parsed-once-reused",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:83 The server parses once and passes initialHeadings with the body. The client re-extracts only when the body value differs, which is the acceptable 'compare the body value' form. Minor gap: reading time is a word count computed on the client (line 90) rather than next to the server extraction, and it counts directive/code lines."
+    }
+   ],
+   "registryProposal": "fixed-chrome-offset-budget could say what to do when one heading renderer is shared by several reading surfaces whose chrome stacks differ (here the guide's mobile band ends at 122px and the blog's at 88px). Each surface's scroll-margin must then come from that surface's budget, not from one class baked into the shared renderer."
+  },
+  {
+   "context": "Blog",
+   "subject": "long-form-reading-surface",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/blog/[slug]/BlogArticle.tsx:36 The blog article mounts the guide's ReadingProgress, which follows whole-document scroll (useScroll() with no target). With the byline, cross-links and the full Footer below the prose, the bar measures the page rather than the article body: the miscounted progress the technique names.",
+   "techniques": [
+    {
+     "technique": "anchor-id-single-assigner",
+     "verdict": "conformant",
+     "evidence": "src/app/blog/[slug]/blog-article/BlogArticleContent.tsx:23 Blog bodies render through the guide engine (parseBlocks -> parseGuide), so heading ids come from the single per-document assigner. Their only consumers are the copy-anchor links and deep links, both of which read the rendered ids."
+    },
+    {
+     "technique": "fixed-chrome-offset-budget",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/[slug]/BlogArticle.tsx:38 The progress bar uses the budget (CHROME_TOP_PROGRESS), but the space below the fixed Navbar is a local h-24 literal instead of the budget's CHROME_PAD_NAVBAR, and the heading clearance is the shared scroll-mt-24 literal. Both happen to clear 86+2px today, but they are independent re-guesses of the same measurement."
+    },
+    {
+     "technique": "scroll-spy-reading-band",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/ReadingProgress.tsx:10 No contents panel or section highlight exists on blog posts. The progress indicator they do show measures document scroll, not the article body, so the predicate is wrong."
+    },
+    {
+     "technique": "server-parsed-once-reused",
+     "verdict": "deviation",
+     "evidence": "src/app/blog/[slug]/BlogArticle.tsx:63 Reading time is a number the author types in (src/data/blog.ts:45 `readingTime: 5,`), not computed from the body the reader sees. The technique names this exact failure. Separately, BlogArticle is a 'use client' component, so parseBlocks also runs on the client during hydration."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T01:59:11.292328+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "long-form-reading-surface"
+   ],
+   "techniques": [
+    "anchor-id-single-assigner",
+    "fixed-chrome-offset-budget",
+    "focus-transfer-on-in-place-navigation",
+    "scroll-spy-reading-band",
+    "server-parsed-once-reused"
+   ],
+   "deviations": 1,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T01:59:11.292328+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "long-form-reading-surface"
+   ],
+   "techniques": [
+    "anchor-id-single-assigner",
+    "fixed-chrome-offset-budget",
+    "scroll-spy-reading-band",
+    "server-parsed-once-reused"
+   ],
+   "deviations": 1,
+   "context": "Blog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

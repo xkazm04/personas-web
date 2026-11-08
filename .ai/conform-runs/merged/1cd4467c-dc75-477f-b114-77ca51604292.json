@@ -1,0 +1,71 @@
+{
+ "schema": "conform-run/1",
+ "worker": "1cd4467c-dc75-477f-b114-77ca51604292",
+ "subject": "browser-credential-boundary",
+ "evaluatedAt": "2026-11-04T04:53:02.593102+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "browser-credential-boundary",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/api/orchestrator/[...path]/route.ts:133 The broker relays the upstream's own status and body to the browser (lines 132-137) rather than mapping them onto a closed vocabulary. So if the orchestrator rejects the server-attached TEAM_API_KEY, the browser gets a 401 'you are not signed in' for a server misconfiguration, and the upstream's error bodies cross the boundary verbatim.",
+   "techniques": [
+    {
+     "technique": "opaque-upstream-errors",
+     "verdict": "deviation",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:133 The route's own failures do use a closed vocabulary (orchestrator_not_configured 503, auth_unavailable 503, unauthenticated 401, bad_path 400, upstream_unreachable 502, timeout 504, abort 499 kept separate). But the upstream status and body are passed through rather than clamped, and no correlation id is minted. The route also reads the upstream base from NEXT_PUBLIC_ORCHESTRATOR_URL (line 63), so the 'never surface the hostname' rule at line 125 is defeated by the bundle: the settings view, outside this context, renders that value."
+    },
+    {
+     "technique": "broker-proxy-attaches-secret",
+     "verdict": "deviation",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:113 Mostly realized: the contract is written at the top (lines 10-21), the caller's session is verified before the key is spent (72-78), the forwarded headers are rebuilt from an allowlist (97-102), path segments are rejected or encoded and the origin is re-checked (34-36), and the base is validated (63). However, the fetch follows redirects by default with no redirect option and no re-validation. The technique requires one or the other, and the user's X-User-Token, a custom header, would follow a redirect. No per-call record of caller, outcome and timing is kept either."
+    },
+    {
+     "technique": "public-vs-server-env-split",
+     "verdict": "conformant",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:23 The privileged key is read only under its unprefixed server name, and the legacy NEXT_PUBLIC_TEAM_API_KEY is no longer read (no temporary alias; proxy.test.ts:141 covers this). The public orchestrator URL is an endpoint address, which step 2 allows to be public. Its cost is charged under opaque-upstream-errors."
+    },
+    {
+     "technique": "outbound-fetch-destination-validation",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:36 The destination is fixed by deployment configuration, with caller path segments pinned to the configured origin. No address arrives as data, so the technique's own 'does not apply' clause holds."
+    }
+   ],
+   "registryProposal": "public-vs-server-env-split step 2 lists 'an endpoint address' as an acceptable public value, while opaque-upstream-errors ('Opacity is only as strong as the fact's cheapest publication') says a published upstream address makes broker opacity a ritual. Proposal: the env-split step should add a cross-reference stating that the address of a regime-two (brokered) upstream is not one of the acceptable public values. This repo is the measured case: the earlier verdict charged the wrong technique because the two documents disagree."
+  }
+ ],
+ "declined": [
+  {
+   "subject": "browser-credential-boundary",
+   "context": "Shared Types, Utilities & Hooks",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "browser-credential-boundary",
+   "context": "Error Monitoring & Analytics",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-04T04:53:02.593102+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "browser-credential-boundary"
+   ],
+   "techniques": [
+    "broker-proxy-attaches-secret",
+    "opaque-upstream-errors",
+    "outbound-fetch-destination-validation",
+    "public-vs-server-env-split"
+   ],
+   "deviations": 1,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

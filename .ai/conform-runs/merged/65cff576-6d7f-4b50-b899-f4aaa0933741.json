@@ -1,0 +1,113 @@
+{
+ "schema": "conform-run/1",
+ "worker": "65cff576-6d7f-4b50-b899-f4aaa0933741",
+ "subject": "app-shell",
+ "evaluatedAt": "2026-11-06T00:48:57.843627+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Connectors Catalog",
+   "subject": "app-shell",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/connections/page.tsx:24 The addressable ?category= location is taken straight from the URL and never checked against the closed categories list (the ?connector= param is checked at line 28). A stale or bogus link therefore renders an empty grid saying 'No services found. Try a different search.', with no category highlighted and no fallback.",
+   "techniques": [
+    {
+     "technique": "navigation-model",
+     "verdict": "deviation",
+     "evidence": "src/app/connections/page.tsx:24 The deep-linked location is trusted without checking it against the vocabulary (prohibition 4). Active state is otherwise derived from that one value, and the active category is shown only by colour (no aria-pressed or aria-current)."
+    },
+    {
+     "technique": "nav-hierarchy",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/connections-catalog/components/CategorySidebar.tsx:19 The desktop fixed rail sorts categories alphabetically, while the mobile pill posture (CatalogFilters.tsx:51) iterates them in declaration order. The same map comes out in a different order per posture."
+    },
+    {
+     "technique": "entitlement-gating",
+     "verdict": "not-applicable",
+     "evidence": "src/app/connections/layout.tsx:5 This is a statically generated public catalog with no tiers, roles or per-user policy to render."
+    },
+    {
+     "technique": "badge-and-attention",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/connections-catalog/index.tsx:34 The category counts are inventory totals derived from data, not attention signals."
+    },
+    {
+     "technique": "screen-contributed-second-level",
+     "verdict": "not-applicable",
+     "evidence": "src/app/connections/page.tsx:53 The page renders its own frame and its own category column. There is no persistent shell sidebar to contribute into."
+    }
+   ],
+   "registryProposal": "nav-hierarchy and navigation-model are written for shell nav. It is unclear whether they govern a page-level filter rail whose values are URL-addressable (here a fixed-position category rail plus mobile pills). A sentence on whether addressable in-page filters count as nav levels would settle it."
+  },
+  {
+   "context": "Public Roadmap",
+   "subject": "app-shell",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/roadmap/page.tsx:35 The roadmap context is one static content page that hands its whole frame to InfoPageLayout, which is outside this context, and owns no nav vocabulary, sidebar, gating, badges or hosted services. A case-insensitive search of src/app/roadmap, src/app/api/roadmap and src/components/sections/roadmap for usePathname, aria-current, sidebar, entitlement, badge, router and prefetch returned no hits.",
+   "techniques": [
+    {
+     "technique": "navigation-model",
+     "verdict": "not-applicable",
+     "evidence": "src/app/roadmap/page.tsx:27 The only nav here is a list of in-page anchor links passed to the layout, not a shell location vocabulary."
+    },
+    {
+     "technique": "shell-hosted-services",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/roadmap/index.tsx:13 This is a server-rendered section with no session-lifetime services. The frame and tour host belong to InfoPageLayout."
+    }
+   ],
+   "absenceTerms": [
+    "usePathname",
+    "aria-current",
+    "sidebar",
+    "entitlement",
+    "badge"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "app-shell",
+   "context": "Guide Pages & Navigation",
+   "reason": "evidence leans on guide/layout.tsx, which is not a tracked file"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-06T00:48:57.843627+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "app-shell"
+   ],
+   "techniques": [
+    "badge-and-attention",
+    "entitlement-gating",
+    "nav-hierarchy",
+    "navigation-model",
+    "screen-contributed-second-level"
+   ],
+   "deviations": 1,
+   "context": "Connectors Catalog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-06T00:48:57.843627+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "app-shell"
+   ],
+   "techniques": [
+    "navigation-model",
+    "shell-hosted-services"
+   ],
+   "deviations": 0,
+   "context": "Public Roadmap",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

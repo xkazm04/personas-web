@@ -1,0 +1,157 @@
+{
+ "schema": "conform-run/1",
+ "worker": "17d2b499-35ed-4668-bc2e-c26d890e4f47",
+ "subject": "demo-data-plane",
+ "evaluatedAt": "2026-11-03T23:19:23.852531+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "demo-data-plane",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 MemoryActionsPanel imports the fixture array straight from mock-dashboard-data, with no ApiClient method behind it. A consumer therefore names the fake plane, and nothing fails at build time if a live source for memory actions appears; the panel's only containment is an isDemo gate in its off-context caller (DimDetail.tsx).",
+   "techniques": [
+    {
+     "technique": "one-interface-many-planes",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:18 The surface imports the fake plane's fixture directly, which breaks the 'no consumer names a plane' rule. By contrast, SubscriptionsPanel reads through stores and the api proxy."
+    },
+    {
+     "technique": "network-faithful-mocks",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The fixture is seeded synchronously into state: no simulated latency, no loading state, no way to make it fail. Line 79 then stamps a fabricated 'fetched at' time for a fetch that never happened."
+    }
+   ]
+  },
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "demo-data-plane",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/mockApi.ts:462 mockApi exports standalone demo-only fetchers (incidents, system health, blast radius, director, knowledge, leaderboard) outside ApiClient, and its own doc comment says callers import them directly. Several surfaces therefore name the fake plane, and the live planes have no method that refuses these reads by name.",
+   "techniques": [
+    {
+     "technique": "one-interface-many-planes",
+     "verdict": "deviation",
+     "evidence": "src/lib/mockApi.ts:462 These fetchers sit outside the interface, so consumers bypass dispatch. Separately, realApi answers listNotes/listChatSessions with an empty success (api.ts:405 `listNotes: async () => []`) where the standard calls for a refusal; sendChatMessage and pausePersona do refuse with 501."
+    },
+    {
+     "technique": "runtime-dispatch-not-build-flag",
+     "verdict": "conformant",
+     "evidence": "src/lib/api.ts:448 The Proxy get trap reads the auth store's isDemo flag on every property access, so the plane is chosen per call, not at module load. isDemo lives only in memory and is never persisted."
+    },
+    {
+     "technique": "fixture-self-consistency",
+     "verdict": "conformant",
+     "evidence": "src/lib/mock-dashboard-data.ts:34 The dashboard roster is projected from the same MOCK_PERSONAS that listPersonas serves, and the header comment says it is not re-declared. knowledgeProvenance.test.ts checks referential closure for cited runs."
+    },
+    {
+     "technique": "seeded-determinism",
+     "verdict": "conformant",
+     "evidence": "src/lib/mockData.ts:39 Fixtures draw variation from an explicit Lehmer generator with checked-in seeds. Timestamps derive from one reference instant read at module evaluation (demoClock.ts:14 DEMO_SEED_NOW)."
+    },
+    {
+     "technique": "network-faithful-mocks",
+     "verdict": "deviation",
+     "evidence": "src/lib/mockApi.ts:174 Demo writes mutate the declared root fixture array. signOut on a demo session does not reset it, so a client-side re-entry sees a world that is no longer pristine. Reads return only shallow copies (line 157 `[...MOCK_PERSONAS]`), and each method's latency is a fixed value rather than a band. Latency itself is present."
+    },
+    {
+     "technique": "replay-clock-pinning",
+     "verdict": "not-applicable",
+     "evidence": "src/lib/demoClock.ts:14 The demo serves generated fixtures relative to the entry time; it does not replay a recorded moment through live ingestion, so entry-relative seeding is the right strategy."
+    }
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "demo-data-plane",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The health hook (and the view at index.tsx:16 for blast radius) imports standalone mock fetchers that are not on ApiClient, so the surface names the fake plane directly. Containment still holds because useDemoOnlySWR keys the fetch on the session's isDemo flag, and a live session gets an empty state.",
+   "techniques": [
+    {
+     "technique": "one-interface-many-planes",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:5 The surface imports the fake plane directly; no interface method exists that a live plane could refuse."
+    },
+    {
+     "technique": "runtime-dispatch-not-build-flag",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The fetch is keyed on live session state (isDemo) through useDemoOnlySWR, which passes a null key outside demo, so it is gated at runtime rather than by a build flag."
+    },
+    {
+     "technique": "fake-surface-honesty-contract",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/health/index.tsx:94 A panel with no faithful source renders an explicit 'live unavailable' empty state for a real session instead of fixtures. The plane is the outermost term of the condition."
+    },
+    {
+     "technique": "fixture-self-consistency",
+     "verdict": "conformant",
+     "evidence": "src/lib/settleThread.ts:153 The Health nav badge count is folded from the same projected health sections the panel renders, so the badge and the rows agree."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "demo-data-plane",
+   "context": "Section Preview & Demo Harness",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-03T23:19:23.852531+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "demo-data-plane"
+   ],
+   "techniques": [
+    "network-faithful-mocks",
+    "one-interface-many-planes"
+   ],
+   "deviations": 1,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T23:19:23.852531+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "demo-data-plane"
+   ],
+   "techniques": [
+    "fixture-self-consistency",
+    "network-faithful-mocks",
+    "one-interface-many-planes",
+    "replay-clock-pinning",
+    "runtime-dispatch-not-build-flag",
+    "seeded-determinism"
+   ],
+   "deviations": 1,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T23:19:23.852531+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "demo-data-plane"
+   ],
+   "techniques": [
+    "fake-surface-honesty-contract",
+    "fixture-self-consistency",
+    "one-interface-many-planes",
+    "runtime-dispatch-not-build-flag"
+   ],
+   "deviations": 1,
+   "context": "System Health Panel",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

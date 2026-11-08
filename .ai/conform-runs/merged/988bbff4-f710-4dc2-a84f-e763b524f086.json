@@ -1,0 +1,143 @@
+{
+ "schema": "conform-run/1",
+ "worker": "988bbff4-f710-4dc2-a84f-e763b524f086",
+ "subject": "mcp-tools",
+ "evaluatedAt": "2026-11-07T04:00:16.438969+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/orchestrator/[...path]/route.ts:11 The context is a same-origin REST proxy to the external orchestrator plus static demo mocks, with no tool-protocol server or client; searching its files and src/lib for mcp, modelcontextprotocol, McpServer, callTool, inputSchema and tools/call found nothing, and the only tool-related hit is demo usage data (MOCK_TOOL_USAGE toolName rows in mockData.ts) that the UI renders, which no model ever calls.",
+   "techniques": [],
+   "absenceTerms": [
+    "modelcontextprotocol",
+    "McpServer",
+    "callTool",
+    "inputSchema"
+   ]
+  },
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/votes/route.ts:9 These are plain Next route handlers for voting, comments and requests backed by Supabase or a file store, and their React components; searching the context for mcp, modelcontextprotocol, McpServer, callTool and inputSchema found nothing, so no tool server or client exists here.",
+   "techniques": [],
+   "absenceTerms": [
+    "modelcontextprotocol",
+    "McpServer",
+    "callTool",
+    "inputSchema"
+   ]
+  },
+  {
+   "context": "Homepage & Hero",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/page.tsx:5 The context is a marketing landing page made of section components and JSON-LD, with no tool-protocol surface; searching it for modelcontextprotocol, McpServer, callTool and inputSchema found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "modelcontextprotocol",
+    "McpServer",
+    "callTool",
+    "inputSchema"
+   ]
+  },
+  {
+   "context": "Error Monitoring & Analytics",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/sentry-pii.ts:80 Tool names show up here only as one Sentry breadcrumb field that gets scrubbed for PII; the context has no tool server or client, and searching it for modelcontextprotocol, McpServer, callTool and inputSchema found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "modelcontextprotocol",
+    "McpServer",
+    "callTool",
+    "inputSchema"
+   ]
+  },
+  {
+   "context": "Public Roadmap",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/roadmap/route.ts:5 The roadmap is one GET route that reads a Supabase table and feeds display components, with no tool-protocol surface; searching the context for modelcontextprotocol, McpServer, callTool and inputSchema found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "modelcontextprotocol",
+    "McpServer",
+    "callTool",
+    "inputSchema"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T04:00:16.438969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T04:00:16.438969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T04:00:16.438969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Homepage & Hero",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T04:00:16.438969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Error Monitoring & Analytics",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T04:00:16.438969+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Public Roadmap",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
