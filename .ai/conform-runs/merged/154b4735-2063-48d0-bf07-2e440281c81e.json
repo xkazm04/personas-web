@@ -1,0 +1,222 @@
+{
+ "schema": "conform-run/1",
+ "worker": "154b4735-2063-48d0-bf07-2e440281c81e",
+ "subject": "browser-credential-boundary",
+ "evaluatedAt": "2026-11-03T22:47:24.393293+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Feature Voting & Comments",
+   "subject": "browser-credential-boundary",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "scripts/setup-voting-db.sql:116 Boost totals are already served through the `feature_boost_totals` view by a service-role route. Even so, the anon role keeps an unconditional read policy on the base `feature_boosts` table, and the hardening script never revokes it. So the public key can still list every voter_id; the votes route accepts that same id as the only proof of who the voter is.",
+   "techniques": [
+    {
+     "technique": "aggregate-view-not-base-table",
+     "verdict": "deviation",
+     "evidence": "scripts/setup-voting-db.sql:116 Totals are published as a view, but the identifier-bearing base table is still granted to anon. This is the revoke half the technique says usually gets skipped. The route reads the view (src/app/api/feature-boosts/route.ts:81), so no feature needs the base grant."
+    },
+    {
+     "technique": "default-deny-plus-defaulted-owner",
+     "verdict": "conformant",
+     "evidence": "scripts/setup-voting-db.sql:89 RLS is on for every voting table, and feature_votes has no anon policy (setup-voting-db.sql lines 94-100 drop them). Writes go through the service-role route."
+    },
+    {
+     "technique": "omit-the-column-not-the-value",
+     "verdict": "conformant",
+     "evidence": "scripts/harden-voting-rls.sql:29 The public projection has no email or voter_id column. Legacy email still sits in feature_votes, but that table is revoked from anon outright (harden-voting-rls.sql:50) rather than filtered by a predicate."
+    },
+    {
+     "technique": "opaque-upstream-errors",
+     "verdict": "conformant",
+     "evidence": "src/app/api/votes/route.ts:63 Supabase errors become a fixed message plus 500, and a missing service role becomes a 503 store_unavailable. No upstream detail is relayed."
+    },
+    {
+     "technique": "public-vs-server-env-split",
+     "verdict": "conformant",
+     "evidence": "src/app/api/votes/storage.ts:50 The service-role client comes from a `server-only` module, and the key never takes the public prefix."
+    }
+   ]
+  },
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "browser-credential-boundary",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/api/orchestrator/[...path]/route.ts:133 The broker sends back the upstream's status code and body unchanged. An upstream 401 for the team key therefore reaches the browser as the caller's own 401, and upstream error bodies cross the boundary. The 'never surface the hostname' guard is also moot: the URL is a NEXT_PUBLIC_ value, and the dashboard settings view renders it client-side.",
+   "techniques": [
+    {
+     "technique": "opaque-upstream-errors",
+     "verdict": "deviation",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:133 The status is passed through instead of mapped into a closed vocabulary, and line 134 relays respBody verbatim. Only network failures are made opaque (line 126)."
+    },
+    {
+     "technique": "broker-proxy-attaches-secret",
+     "verdict": "conformant",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:76 The caller's Supabase session is verified before TEAM_API_KEY is attached. Forwarded headers are rebuilt from an explicit set (lines 97-100). Path segments are encoded and must stay on the same origin (lines 34-36)."
+    },
+    {
+     "technique": "public-vs-server-env-split",
+     "verdict": "conformant",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:23 The key is server-only and the old NEXT_PUBLIC_TEAM_API_KEY name is retired. The earlier verdict's complaint, a NEXT_PUBLIC_ URL, is an endpoint address, which the technique explicitly allows to be public."
+    },
+    {
+     "technique": "outbound-fetch-destination-validation",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:63 The destination comes from deployment config, not from response data. The base itself is checked for scheme and absoluteness (orchestrator-config.ts:26)."
+    }
+   ],
+   "registryProposal": "public-vs-server-env-split says an endpoint address is an acceptable public-prefixed value. opaque-upstream-errors says a host published in the bundle makes error opacity a ritual. The two should cross-reference each other: once a value goes behind a broker, its address should move server-side, or the team should openly accept that the topology is public."
+  },
+  {
+   "context": "Public Roadmap",
+   "subject": "browser-credential-boundary",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "src/app/api/roadmap/route.ts:26 The route reads a public, non-identifying table through the anon client (regime one). Supabase details go to the server log only, and the caller gets a closed `source` value with a 502, so a failure never looks like an empty success.",
+   "techniques": [
+    {
+     "technique": "opaque-upstream-errors",
+     "verdict": "conformant",
+     "evidence": "src/app/api/roadmap/route.ts:26 Closed vocabulary (supabase|none|error). Error detail is logged server-side at line 20 and never returned."
+    },
+    {
+     "technique": "public-vs-server-env-split",
+     "verdict": "conformant",
+     "evidence": "src/app/api/roadmap/route.ts:2 The env probe comes from the server-only module, and the client used is the published anon pair, which fits a public table."
+    },
+    {
+     "technique": "broker-proxy-attaches-secret",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/roadmap/route.ts:12 The dependency is public by design (anon key), so the technique's 'when not to broker' case applies."
+    },
+    {
+     "technique": "aggregate-view-not-base-table",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/roadmap/route.ts:15 The roadmap items carry no identifiers, so there are no counts over identifying rows to protect."
+    },
+    {
+     "technique": "omit-the-column-not-the-value",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/roadmap/route.ts:16 Every selected field is public product copy, and no sensitive value shares the table."
+    }
+   ]
+  },
+  {
+   "context": "Supabase Client",
+   "subject": "browser-credential-boundary",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "scripts/setup-sync-db.sql:624 Every synced table has RLS on with a single owner-only policy for the authenticated role and no anon policy, owner columns default from auth.uid(), and aggregates are invoker-evaluated views. The browser's anon key therefore reaches only the caller's own rows.",
+   "techniques": [
+    {
+     "technique": "default-deny-plus-defaulted-owner",
+     "verdict": "conformant",
+     "evidence": "scripts/setup-sync-db.sql:39 The owner column defaults from the session, and the browser writers omit user_id. The `for all` policy covers the upsert paths (line 622)."
+    },
+    {
+     "technique": "aggregate-view-not-base-table",
+     "verdict": "conformant",
+     "evidence": "scripts/setup-sync-db.sql:655 The dashboard aggregates are invoker views granted to authenticated (line 707), so the base-table RLS still applies to whoever queries them."
+    },
+    {
+     "technique": "omit-the-column-not-the-value",
+     "verdict": "conformant",
+     "evidence": "scripts/setup-sync-db.sql:286 Trigger config and vault ciphertext have no column in the reachable projection (see also line 18)."
+    },
+    {
+     "technique": "public-vs-server-env-split",
+     "verdict": "conformant",
+     "evidence": "src/lib/supabase-admin.ts:1 The service-role client lives behind the server-only marker. The browser client in supabase.ts reads only the NEXT_PUBLIC anon pair."
+    },
+    {
+     "technique": "opaque-upstream-errors",
+     "verdict": "conformant",
+     "evidence": "src/lib/supabase-admin.ts:89 Production without the service role fails closed with its own 'not configured' code instead of degrading to anon. The cause goes to Sentry once."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "browser-credential-boundary",
+   "context": "Shared Types, Utilities & Hooks",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-03T22:47:24.393293+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "browser-credential-boundary"
+   ],
+   "techniques": [
+    "aggregate-view-not-base-table",
+    "default-deny-plus-defaulted-owner",
+    "omit-the-column-not-the-value",
+    "opaque-upstream-errors",
+    "public-vs-server-env-split"
+   ],
+   "deviations": 1,
+   "context": "Feature Voting & Comments",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T22:47:24.393293+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "browser-credential-boundary"
+   ],
+   "techniques": [
+    "broker-proxy-attaches-secret",
+    "opaque-upstream-errors",
+    "outbound-fetch-destination-validation",
+    "public-vs-server-env-split"
+   ],
+   "deviations": 1,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T22:47:24.393293+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "browser-credential-boundary"
+   ],
+   "techniques": [
+    "aggregate-view-not-base-table",
+    "broker-proxy-attaches-secret",
+    "omit-the-column-not-the-value",
+    "opaque-upstream-errors",
+    "public-vs-server-env-split"
+   ],
+   "deviations": 0,
+   "context": "Public Roadmap",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T22:47:24.393293+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "browser-credential-boundary"
+   ],
+   "techniques": [
+    "aggregate-view-not-base-table",
+    "default-deny-plus-defaulted-owner",
+    "omit-the-column-not-the-value",
+    "opaque-upstream-errors",
+    "public-vs-server-env-split"
+   ],
+   "deviations": 0,
+   "context": "Supabase Client",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

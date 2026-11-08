@@ -1,0 +1,90 @@
+{
+ "schema": "conform-run/1",
+ "worker": "8f3f2179-77e9-4990-a827-599655f2c6a5",
+ "subject": "guided-tours",
+ "evaluatedAt": "2026-11-06T01:32:20.283995+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Guided Product Tour",
+   "subject": "guided-tours",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/contexts/TourContext.tsx:174 A dwell timer advances any step that has no waitForSignal, even when the step declares advanceOn. So the Board, Mission Control and Health steps, which ask the visitor to act, move on after 45, 30 or 35 seconds, and nothing records the step as moved past rather than performed.",
+   "techniques": [
+    {
+     "technique": "action-driven-advancement",
+     "verdict": "deviation",
+     "evidence": "src/lib/tour-progress.ts:65 Steps with advanceOn do complete on real product signals (command, view focus, causeFixed, verdict), which is good. But board, mission and health (tour-script.ts:359-385) set advanceOn without waitForSignal, so the dwell timer auto-completes them. That is the 'next-button wearing a stopwatch' this technique refuses. Next also stays live on interactive steps, and no ledger separates performed from skipped."
+    },
+    {
+     "technique": "narration-and-pacing",
+     "verdict": "deviation",
+     "evidence": "src/contexts/TourContext.tsx:179 When a narration clip ends, every step without waitForSignal advances. That is auto-advance on narration-end, which this technique refuses outright. The text-first steps, the play/pause toggle and the persisted volume are fine."
+    },
+    {
+     "technique": "anchor-contracts",
+     "verdict": "conformant",
+     "evidence": "src/lib/tour-anchors.test.ts:127 Anchors are semantic data-tour-diagram and data-* identifiers that live on the elements. The vitest gate builds its manifest from the live step objects, checks every selector against src/, names tour, step and attribute when one fails, and bans text-aimed actions. TourSpotlight looks the selector up again on every frame (TourSpotlight.tsx:96) instead of caching the element. One minor gap: that per-frame querySelector is a fast poll, not a movement subscription."
+    },
+    {
+     "technique": "missing-anchor-degradation",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/TourSpotlight.tsx:143 The never-strand rule holds: the caption card and its exit render without the anchor, and patience is bounded at 3000 ms. But one global 'drop the scrim, keep the caption' policy covers every step, and the docblock explicitly rejects skip, so no step declares its own policy. The degradation breadcrumb carries only waitedMs, with no tour, step or anchor, so it cannot serve as a drift gauge."
+    },
+    {
+     "technique": "overlay-precedence",
+     "verdict": "deviation",
+     "evidence": "src/hooks/useTourKeyboard.ts:21 A window-level listener exits the tour on Escape 'from anywhere', so a press meant for a dashboard Modal (z-[100]) above the tour also tears the tour down. Nothing pauses the tour when an unrelated modal opens. The tour also sets its own layer numbers (z-[80] scrim, z-[90] cards) instead of registering with a layering authority. The caption card's Tab trap covers the dialog only, not the anchor; 'Show me' is the keyboard path."
+    },
+    {
+     "technique": "tour-lifecycle",
+     "verdict": "deviation",
+     "evidence": "src/contexts/TourContext.tsx:45 Step ids are stable strings, which is good. But progress and the active tour exist only in React state, so a reload restarts at step 0. The only thing persisted is a 'seen' flag written when the tour starts (TourLauncher.tsx:89), which feeds the launcher's first-visit pulse. There is no completed, exited or declined ledger and no version or retirement state."
+    },
+    {
+     "technique": "tour-path-curriculum",
+     "verdict": "deviation",
+     "evidence": "src/components/tour/TourCaptionCard.tsx:156 The chapter quick-nav types its own Home/Features/Dashboard list instead of reading the site's single nav authority, useRoutes() (src/components/navbar/useRoutes.ts). It has already drifted: /roadmap has a tour and a nav tab but no chapter button. The dashboard-route test (tour-anchors.test.ts:356) checks against a copied route list."
+    },
+    {
+     "technique": "product-performed-effects",
+     "verdict": "deviation",
+     "evidence": "src/lib/tour-script.ts:146 Effects do press the product's own controls, which is good, and the Reviews step holds and only moves focus to Approve. But actions fire at atMs on the narration clock, and clickTarget silently does nothing when the control is absent. Nothing waits for the control to be pressable, so an effect is fired on a timer, which the technique refuses."
+    },
+    {
+     "technique": "spotlight-continuity",
+     "verdict": "conformant",
+     "evidence": "src/components/tour/TourSpotlight.tsx:97 The cutout is only rewritten when the step's element is found, so it keeps its last box while the next element is missing. The hold is bounded (ANCHOR_TIMEOUT_MS 3000) and then the spotlight drops. Measurement writes DOM styles in a rAF loop with no React re-render, so the ring's pulse does not restart, and useSpotlightMarker marks only the element it actually found. The 3 s bound is about twice the technique's suggested ~1.5 s, and the cross-route jump is a cut, not a glide."
+    }
+   ],
+   "registryProposal": "anchor-contracts recommends subscribing to scroll, resize and mutation instead of polling. It does not cover the common case of a rAF loop that re-reads the rect directly into DOM styles every frame without React re-renders. That loop is cheap per frame and catches every movement. The technique should say whether this counts as acceptable 'live derivation' or as the 'fast poll that taxes the product'."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-06T01:32:20.283995+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "guided-tours"
+   ],
+   "techniques": [
+    "action-driven-advancement",
+    "anchor-contracts",
+    "missing-anchor-degradation",
+    "narration-and-pacing",
+    "overlay-precedence",
+    "product-performed-effects",
+    "spotlight-continuity",
+    "tour-lifecycle",
+    "tour-path-curriculum"
+   ],
+   "deviations": 1,
+   "context": "Guided Product Tour",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

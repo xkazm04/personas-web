@@ -1,0 +1,143 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c7eeb450-613e-4e11-856b-429e514b9294",
+ "subject": "agent-memory",
+ "evaluatedAt": "2026-11-03T09:48:29.154274+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/MemoryActionsPanel.tsx:78 The panel seeds React state from a fixed mock list (MOCK_MEMORY_ACTIONS in src/lib/mock-dashboard-data.ts:368: three hardcoded suggestions), and dismiss only filters that local state. Nothing in this context captures, consolidates, decays or recalls agent memory. A search of the context directories (fixtures, scripts, src/app/dashboard, src/components/dashboard, src/lib/commands) and of all of src found no memoryStore, recallBudget, writeMemory or saveMemory; 'memory' appears here only as display copy, mock types and a link to /dashboard/knowledge.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "recallBudget",
+    "writeMemory",
+    "saveMemory"
+   ]
+  },
+  {
+   "context": "System Health Panel",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a demo-only mock host-health snapshot, and settleThread/demoCauseFix only project per-session incident state, so there is no agent memory store or recall path for the subject to govern. A grep of the context files for memor/recall/remember/knowledge found nothing, and the absence terms have zero hits across src.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "recallBudget",
+    "writeMemory",
+    "saveMemory"
+   ]
+  },
+  {
+   "context": "Animation & Motion System",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/contexts/QualityContext.tsx:6 The only state this context carries is a measured rendering-quality tier plus animation pause and lazy-mount flags. It holds no agent knowledge that could be carried forward. A grep of its files for memor/recall/remember/knowledge found nothing, and the absence terms have zero hits across src/components, src/hooks and src/contexts.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "recallBudget",
+    "writeMemory",
+    "saveMemory"
+   ]
+  },
+  {
+   "context": "Split & Pipeline Playground",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/playground-split/shared/beats.ts:60 The playground's 'memories' result is localized copy (data.ts:85), shown as the last scripted beat. useMindRun only advances fixed step delays (buildScript over STEP_DELAYS), so no memory is captured, stored or recalled. The only memory hits in this context are that display copy, and the absence terms have zero hits.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "recallBudget",
+    "writeMemory",
+    "saveMemory"
+   ]
+  },
+  {
+   "context": "Features Overview & Pricing",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/features/page.tsx:74 On the features page, 'memory' is only a lazily mounted marketing illustration section and a line of metadata copy (line 18), and murmuration-hero and vision-grid draw art and copy cards. Nothing here implements an agent memory pipeline, and the absence terms have zero hits in these directories or anywhere in src.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "recallBudget",
+    "writeMemory",
+    "saveMemory"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-03T09:48:29.154274+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T09:48:29.154274+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "System Health Panel",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T09:48:29.154274+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T09:48:29.154274+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Split & Pipeline Playground",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T09:48:29.154274+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Features Overview & Pricing",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

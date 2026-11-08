@@ -1,0 +1,102 @@
+{
+ "schema": "conform-run/1",
+ "worker": "a170ce22-0d33-4c11-bd1c-4f10359c73bd",
+ "subject": "agent-memory",
+ "evaluatedAt": "2026-11-07T03:54:52.792695+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:13 The context is an SSE relay plus a demo executions table/filter UI with no agent memory store; a search of src/app/api/executions, src/components/dashboard/views/executions and src/components/dashboard (recursive) for working memory, episodic, consolidat, decay and embedding found zero hits, so there is no capture, consolidation, decay or recall pipeline here (the context's own files also contain no 'memory' or 'recall', but sibling dashboard views outside the context do, so those terms are not used as absence terms).",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "consolidat",
+    "decay",
+    "embedding"
+   ]
+  },
+  {
+   "context": "Incidents Inbox",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/incidents/incidents-page/useAuditIncidents.ts:9 The context is a demo-only incidents inbox (mock fetcher, filter store, formatting helpers) with no agent memory; a search of the incidents view, src/lib and src/stores for working memory, episodic, memory store, half-life and salience found zero hits (the incident files themselves contain no memory, recall, consolidat, decay or embedding terms either).",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "half-life",
+    "salience"
+   ]
+  },
+  {
+   "context": "Blog",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/blog/feed.xml/route.ts:1 The blog context renders static posts, category filters and an RSS feed from a data module with no agent runtime; a recursive search of src/app/blog for memory, recall, consolidat, embedding and episod found zero hits, so the subject's precondition (an agent carrying state forward) does not hold.",
+   "techniques": [],
+   "absenceTerms": [
+    "memory",
+    "recall",
+    "consolidat",
+    "embedding",
+    "episod"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "agent-memory",
+   "context": "Guide Data, Content & Search Index",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "agent-memory",
+   "context": "Supabase Client",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-07T03:54:52.792695+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T03:54:52.792695+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Incidents Inbox",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T03:54:52.792695+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Blog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

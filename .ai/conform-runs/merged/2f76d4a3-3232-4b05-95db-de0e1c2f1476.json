@@ -1,0 +1,94 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2f76d4a3-3232-4b05-95db-de0e1c2f1476",
+ "subject": "background-jobs",
+ "evaluatedAt": "2026-11-04T05:40:46.804989+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "System Health Panel",
+   "subject": "background-jobs",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 The panel reads a static demo fixture once through useDemoOnlySWR, which turns off focus and reconnect revalidation and sets no refreshInterval, and its actions (healthActions.ts) are pure state projections, so there is no recurring loop, tick, job or tracked wait for this subject to govern. A search of the health view directory and of healthFormat/settleThread/demoCauseFix for setInterval, setTimeout, refreshInterval, AbortController, poll, progress and cancel found nothing.",
+   "techniques": [
+    {
+     "technique": "adaptive-cadence",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/health/health-page/useSystemHealth.ts:22 A one-shot SWR read of a static fixture. There is no polling cadence to adapt."
+    }
+   ],
+   "absenceTerms": [
+    "refreshInterval",
+    "startupSweep",
+    "cancelToken",
+    "quarantine",
+    "supervisor"
+   ]
+  },
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "background-jobs",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 useFreshRelease runs a client-side display poller that re-checks the release-freshness flag every 60s for as long as DownloadCTA is mounted. Nothing pauses it while the tab is hidden, nothing refreshes it when the tab becomes visible again, and it keeps ticking after the 7-day window has closed for good, which breaks adaptive-cadence's visibility-aware contract for client pollers. Each tick is only a Date comparison, so the practical cost is small.",
+   "techniques": [
+    {
+     "technique": "adaptive-cadence",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:16 A fixed 60s interval with no usePageVisibility or visibilitychange gate and no refresh on becoming visible. A grep of the context's files found no visibility hook."
+    },
+    {
+     "technique": "loop-supervision",
+     "verdict": "conformant",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:19 The timer names its reaper: the effect cleanup clears it on unmount or when the date changes. Any roster beyond the component lifecycle would sit outside this context."
+    },
+    {
+     "technique": "tick-isolation",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:17 The tick body is a synchronous pure timestamp comparison. It cannot overlap, hang or need a deadline or quarantine."
+    },
+    {
+     "technique": "first-tick-gates-readiness",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/download-cta/useFreshRelease.ts:12 Initial state comes from a lazy initializer, not from a first tick that gates the readiness of a runtime."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-04T05:40:46.804989+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "background-jobs"
+   ],
+   "techniques": [
+    "adaptive-cadence"
+   ],
+   "deviations": 0,
+   "context": "System Health Panel",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T05:40:46.804989+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "background-jobs"
+   ],
+   "techniques": [
+    "adaptive-cadence",
+    "first-tick-gates-readiness",
+    "loop-supervision",
+    "tick-isolation"
+   ],
+   "deviations": 1,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

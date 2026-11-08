@@ -1,0 +1,105 @@
+{
+ "schema": "conform-run/1",
+ "worker": "ffe80d5d-5d7b-4725-9e8e-04c84ae89d12",
+ "subject": "quality-gates",
+ "evaluatedAt": "2026-11-05T22:11:14.501030+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/app/api/executions/[id]/stream/stream.test.ts:59 The stream route's session-gate test was written in the same commit as the route change it verifies (050c9709, 'the team key goes upstream only for a verified session'), so the oracle for that security fix was never seen red against the old route.",
+   "techniques": [
+    {
+     "technique": "oracle-frozen-during-repair",
+     "verdict": "deviation",
+     "evidence": "src/app/api/executions/[id]/stream/stream.test.ts:59 git show --stat 050c9709 shows route.ts (+69/-?) and stream.test.ts (+109, which already contains this case) in one commit. The check was authored alongside the fix, not committed red first."
+    }
+   ]
+  },
+  {
+   "context": "Server-Side Vote Persistence",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/server/rate-limit.ts:17 The rule that caused a real production inversion is kept only as a prose prohibition in a header comment. The next line admits a violation is compile-clean, and no lint rule, test or script checks callers for a boolean wrapper (rg found checkRateLimit used only in the module and its tests), so a reintroduced inverted wrapper would pass every gate.",
+   "techniques": [
+    {
+     "technique": "prose-rule-drift",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.ts:17 This is a prohibition on an action, not an artifact, so its violation looks the same as compliance. Callers currently use rateLimitGuard, so it is not violated today, but it is unmechanised: checkRateLimit is still exported returning {allowed}, and nothing refuses a new wrapper around it."
+    },
+    {
+     "technique": "oracle-frozen-during-repair",
+     "verdict": "deviation",
+     "evidence": "src/lib/server/rate-limit.test.ts:25 The direction test was added in the same commit as the inversion fix (5a228cbc), not red first. This is partly mitigated after the fact by rateLimitMutants.test.ts, which proves the suite goes red against wrong implementations."
+    },
+    {
+     "technique": "gate-liveness",
+     "verdict": "conformant",
+     "evidence": "src/lib/server/rateLimitMutants.test.ts:130 Known violations (mutants of rate-limit.ts) are seeded, and each must turn the suite red. Line 124 also asserts the unmutated harness is sound, so the test separates 'checked and clean' from a dead harness."
+    },
+    {
+     "technique": "match-the-resolved-artifact",
+     "verdict": "conformant",
+     "evidence": "src/lib/server/rateLimitMutants.test.ts:121 Every mutation's needle carries a presence assertion over the real source, so a rewording cannot silently turn a mutant into a no-op that 'passes'."
+    },
+    {
+     "technique": "blocking-by-input-determinism",
+     "verdict": "conformant",
+     "evidence": "src/lib/server/rateLimitMutants.test.ts:35 The verdict is a function of the tree's own source only: mutants are transpiled in memory under fake time with server-only stubbed and no external feed, so the test may block."
+    },
+    {
+     "technique": "severity-by-construction",
+     "verdict": "conformant",
+     "evidence": "src/lib/server/rateLimitMutants.test.ts:36 The threshold is set where the code can actually trip it: one surviving mutant fails the expect at line 135, so the ratchet is fireable rather than set beyond reach."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "quality-gates",
+   "context": "Split & Pipeline Playground",
+   "reason": "evidence leans on SyntaxPrompt/data.ts, which is not a tracked file"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-05T22:11:14.501030+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [
+    "oracle-frozen-during-repair"
+   ],
+   "deviations": 1,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-05T22:11:14.501030+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [
+    "blocking-by-input-determinism",
+    "gate-liveness",
+    "match-the-resolved-artifact",
+    "oracle-frozen-during-repair",
+    "prose-rule-drift",
+    "severity-by-construction"
+   ],
+   "deviations": 1,
+   "context": "Server-Side Vote Persistence",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

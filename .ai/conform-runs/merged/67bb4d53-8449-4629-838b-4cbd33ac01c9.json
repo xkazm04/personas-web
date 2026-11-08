@@ -1,0 +1,93 @@
+{
+  "schema": "conform-run/1",
+  "worker": "67bb4d53-8449-4629-838b-4cbd33ac01c9",
+  "subject": "prompt-assembly",
+  "evaluatedAt": "2026-11-04T03:27:46.028196+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Execution History & Streaming",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/api/executions/[id]/stream/route.ts:13 The only server code here passes an orchestrator's SSE output through to the browser, and the rest is table/filter UI, so prompts are built (if at all) in the external orchestrator; searching src/app/api/executions, src/components/dashboard/views/executions and src/components/dashboard found no systemPrompt, messages.create, max_tokens or cache_control.",
+      "techniques": [],
+      "absenceTerms": [
+        "systemPrompt",
+        "messages.create",
+        "max_tokens",
+        "cache_control"
+      ]
+    },
+    {
+      "context": "Dashboard Home Overview",
+      "subject": "prompt-assembly",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:23 The home cards and hooks read demo fixtures or synced rows (here a count of open alerts) and render them, with no model call or prompt layer; searching src/components/dashboard and src/components/dashboard/views/home found no systemPrompt, messages.create, max_tokens or cache_control.",
+      "techniques": [],
+      "absenceTerms": [
+        "systemPrompt",
+        "messages.create",
+        "max_tokens",
+        "cache_control"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "prompt-assembly",
+      "context": "Mobile App Shell & Views",
+      "reason": "evidence leans on clock/data.ts, which is not a tracked file"
+    },
+    {
+      "subject": "prompt-assembly",
+      "context": "Fleet Playground (prototypes)",
+      "reason": "evidence leans on night/Strips.tsx, which is not a tracked file"
+    },
+    {
+      "subject": "prompt-assembly",
+      "context": "Localized Guide Content (14 locales)",
+      "reason": "withdrawn after review: reviewer (sonnet): The claim that nothing here builds a prompt for a model is contradicted by scripts/i18n/translate-guide-subagent-prompt.md. It is a canonical prompt template whose placeholders are filled in for one Claude translation subagent per locale. It sits in the searched scripts/i18n directory and is named b"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-11-04T03:27:46.028196+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "prompt-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Execution History & Streaming",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-04T03:27:46.028196+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "prompt-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Dashboard Home Overview",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-04T03:27:46.028196+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "prompt-assembly"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Localized Guide Content (14 locales)",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}

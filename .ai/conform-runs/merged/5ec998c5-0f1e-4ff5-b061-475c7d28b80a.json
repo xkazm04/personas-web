@@ -1,0 +1,116 @@
+{
+ "schema": "conform-run/1",
+ "worker": "5ec998c5-0f1e-4ff5-b061-475c7d28b80a",
+ "subject": "voice-io",
+ "evaluatedAt": "2026-11-05T23:09:10.918650+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Supabase Client",
+   "subject": "voice-io",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/supabase.ts:1 This context is a Supabase data client plus sync-reachability hooks and stores. I grepped its files for speech, voice, tts, stt, audio, microphone, getUserMedia, MediaRecorder and transcri. The only hit was a SQL comment that names a persona's identity/voice JSON field (setup-sync-db.sql:76), which is persona text, not audio. There is no speech capture or synthesis pipeline for the technique to govern.",
+   "techniques": [],
+   "absenceTerms": [
+    "getUserMedia",
+    "MediaRecorder",
+    "speechToText",
+    "textToSpeech"
+   ]
+  },
+  {
+   "context": "How It Works & Changelog",
+   "subject": "voice-io",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/how/page.tsx:10 The /how page and its manifesto, role-path and changelog sections are static marketing components. I grepped them for speech, voice, tts, audio, transcri, getUserMedia and MediaRecorder and found nothing; the Typewriter component is a visual effect with no audio. Voice input and output have no surface here.",
+   "techniques": [],
+   "absenceTerms": [
+    "getUserMedia",
+    "MediaRecorder",
+    "speechToText",
+    "textToSpeech"
+   ]
+  },
+  {
+   "context": "Error Monitoring & Analytics",
+   "subject": "voice-io",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/sentry.ts:5 This context only configures Sentry, PII scrubbing, analytics and the page-view and cookie controls. I grepped all its files for speech, voice, audio, tts, transcri and MediaRecorder and found nothing, so there is no voice pipeline to judge.",
+   "techniques": [],
+   "absenceTerms": [
+    "MediaRecorder",
+    "speechToText",
+    "textToSpeech"
+   ]
+  },
+  {
+   "context": "Connectors Catalog",
+   "subject": "voice-io",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/data/connectors.ts:1416 Voice engines such as Deepgram and ElevenLabs show up here only as marketing catalog entries, as static summary strings and example CLI commands. The catalog UI renders cards from this data. I searched the context's files for getUserMedia, MediaRecorder and speech-synthesis or recognition calls and found none, so no audio is captured, synthesized or played and the voice-io techniques do not apply.",
+   "techniques": [],
+   "absenceTerms": [
+    "getUserMedia",
+    "MediaRecorder",
+    "speechToText",
+    "textToSpeech"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-05T23:09:10.918650+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "voice-io"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Supabase Client",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-05T23:09:10.918650+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "voice-io"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "How It Works & Changelog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-05T23:09:10.918650+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "voice-io"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Error Monitoring & Analytics",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-05T23:09:10.918650+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "voice-io"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Connectors Catalog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

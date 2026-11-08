@@ -1,0 +1,111 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f8e5d93f-4f62-4727-9d2e-45342aa7ad5e",
+ "subject": "metrics-rollups",
+ "evaluatedAt": "2026-11-04T22:14:34.554538+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Knowledge Base",
+   "subject": "metrics-rollups",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:46 The detail panel shows the success rate as a percentage, and the rate comes from knowledgeClusterSuccessRate, which returns 0 when a pattern has zero attempts, so 'never tried' shows as '0.0%' (everything failed) rather than as no value.",
+   "techniques": [
+    {
+     "technique": "aggregate-honesty",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/knowledge/knowledge-cluster-graph/KnowledgeClusterDetailPanel.tsx:46 A rate over zero attempts shows as 0.0%. The technique names this exact smell: '0%' on a bucket with no attempts. The rate function sits at knowledgeClusterLayout.ts:6, and the dense table's knowledgeSuccessRate does the same thing."
+    },
+    {
+     "technique": "bundle-endpoints",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/knowledge/KnowledgeDenseTable.tsx:57 The top-bar summary (total, success and failure totals, average cost) folds over the same patterns array the table renders, from one read in useKnowledgeData, so the summary and the rows cannot disagree."
+    },
+    {
+     "technique": "count-and-list-from-one-tally",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/knowledge/MemoriesView.tsx:107 The filter-chip counts and the conflict count are folds over visibleMemories, the same selection the listed memories are filtered from. The total label uses filtered.length."
+    }
+   ]
+  },
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "metrics-rollups",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:38 A period with no outcomes gets a value-delivered rate of 0, which line 59 shows as '0%'. 'Nothing measured' reads as 'everything failed', and the same 0 feeds the period-over-period delta.",
+   "techniques": [
+    {
+     "technique": "aggregate-honesty",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/activity-view/ValueRollupCard.tsx:38 A rate over an empty denominator becomes 0 instead of no value. Cost per value also falls back to 0 when nothing was delivered."
+    },
+    {
+     "technique": "bucketing-strategy",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/activity-view/AthenaUsageCard.tsx:64 The window label is a hardcoded '14 days' string, not an effective window echoed by the response. The total above it sums however many points arrived. UsageView passes the same fixed label."
+    },
+    {
+     "technique": "bundle-endpoints",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:55 The KPI tiles, daily series, persona spend and health issues all come from one getObservability envelope (one SWR key). The Activity tab likewise reads one getActivityMetrics envelope."
+    },
+    {
+     "technique": "period-comparison",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:61 The current series comes from the getObservability read. The Compare overlay's prior period comes from a second SWR read (getObservabilityWorld, usePerformanceOverlays.ts:29), is aligned by array index (prior[i]), and missing days fill with 0 (observabilitySeries.ts:122). ValueRollupCard does it right: its prior values ride in the same envelope and the rate delta is in points."
+    },
+    {
+     "technique": "count-and-list-from-one-tally",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:77 The severity chip counts and the filtered health-issue list are both derived from displayHealthIssues, one selection."
+    },
+    {
+     "technique": "cardinality-and-cost",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/observability/UsageView.tsx:49 The tool bar chart is capped at the top 15, with an 'Other' remainder row so the rows still sum to the total. Gap: the per-agent chart builds one series per tool name with no budget, and real-mode spend has no top-N."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-04T22:14:34.554538+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "metrics-rollups"
+   ],
+   "techniques": [
+    "aggregate-honesty",
+    "bundle-endpoints",
+    "count-and-list-from-one-tally"
+   ],
+   "deviations": 1,
+   "context": "Knowledge Base",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T22:14:34.554538+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "metrics-rollups"
+   ],
+   "techniques": [
+    "aggregate-honesty",
+    "bucketing-strategy",
+    "bundle-endpoints",
+    "cardinality-and-cost",
+    "count-and-list-from-one-tally",
+    "period-comparison"
+   ],
+   "deviations": 1,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

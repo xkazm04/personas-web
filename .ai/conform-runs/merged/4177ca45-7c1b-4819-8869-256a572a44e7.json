@@ -1,0 +1,98 @@
+{
+ "schema": "conform-run/1",
+ "worker": "4177ca45-7c1b-4819-8869-256a572a44e7",
+ "subject": "quality-gates",
+ "evaluatedAt": "2026-11-04T05:04:11.549247+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:13 This context is dashboard table/filter/modal views plus a runtime SSE proxy route. It contains no checker, hook, waiver, ratchet or exit-code path. A grep of src/components/dashboard, src/components/dashboard/views/executions and src/app/api/executions found no hits for max-warnings, process.exit, waiver, mutant or pre-commit, so the subject's precondition (a gate owned by the context) does not hold.",
+   "techniques": [],
+   "absenceTerms": [
+    "max-warnings",
+    "process.exit",
+    "waiver",
+    "mutant",
+    "pre-commit"
+   ],
+   "registryProposal": "Matched on 'dashboard', 'report' and 'history'. Here these are execution-history UI terms, not gate reports. This is a false-positive join in the registry map."
+  },
+  {
+   "context": "Features Overview & Pricing",
+   "subject": "quality-gates",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:47 The guard written for this context's /features metadata regression reads page.tsx as raw text with a regex. It strips no comments or strings first, so a comment or string containing 'export const metadata' would make a route without metadata read as compliant. That is exactly the permissive raw-text failure that match-the-resolved-artifact names.",
+   "techniques": [
+    {
+     "technique": "prose-rule-drift",
+     "verdict": "conformant",
+     "evidence": "src/app/features/page.tsx:13 The convention 'every sitemap route carries metadata' used to be prose only, and /features broke it. It is now mechanised by a test that fails on regression."
+    },
+    {
+     "technique": "match-the-resolved-artifact",
+     "verdict": "deviation",
+     "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:27 The symbol is matched against unstripped source text. A comment that describes the rule would satisfy it. There is no seeded describe-vs-call pair and no note explaining why a raw read is the safe direction here."
+    },
+    {
+     "technique": "gate-liveness",
+     "verdict": "conformant",
+     "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:61 The test asserts the walked population is at least 9 routes (line 63), so a regex that matches nothing fails loudly instead of passing vacuously."
+    },
+    {
+     "technique": "refusal-names-a-reachable-remedy",
+     "verdict": "conformant",
+     "evidence": "src/lib/sitemapRoutesHaveMetadata.test.ts:69 The failure message names the route, the cause, and an in-tree remedy for both the server-page case and the client-page case."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "quality-gates",
+   "context": "Split & Pipeline Playground",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "quality-gates",
+   "context": "Server-Side Vote Persistence",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-04T05:04:11.549247+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T05:04:11.549247+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "quality-gates"
+   ],
+   "techniques": [
+    "gate-liveness",
+    "match-the-resolved-artifact",
+    "prose-rule-drift",
+    "refusal-names-a-reachable-remedy"
+   ],
+   "deviations": 1,
+   "context": "Features Overview & Pricing",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
