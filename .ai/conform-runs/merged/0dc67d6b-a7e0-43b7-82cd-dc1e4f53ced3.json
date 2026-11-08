@@ -1,0 +1,96 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0dc67d6b-a7e0-43b7-82cd-dc1e4f53ced3",
+ "subject": "ci-execution-trust",
+ "evaluatedAt": "2026-11-07T00:54:54.236016+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Split & Pipeline Playground",
+   "subject": "ci-execution-trust",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/playground-split/index.tsx:20 This context is a client-rendered marketing section that animates a scripted agent run. It has no delivery pipeline, runner, CI credential or build definition, and a grep of src/components/sections/playground-split/ for GITHUB_TOKEN, workflow_dispatch, pull_request_target, secrets. and runs-on found no hits, so the subject's precondition does not hold.",
+   "techniques": [
+    {
+     "technique": "control-plane-execution-boundary",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/index.tsx:20 A React section component. Nothing here decides or performs delivery jobs."
+    },
+    {
+     "technique": "untrusted-contribution-lanes",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:14 The 'run' is an in-browser simulation step counter, not a build lane that executes contributed code."
+    }
+   ],
+   "absenceTerms": [
+    "GITHUB_TOKEN",
+    "workflow_dispatch",
+    "pull_request_target",
+    "secrets.",
+    "runs-on"
+   ]
+  },
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "ci-execution-trust",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/orchestrator/[...path]/route.ts:11 The 'orchestrator' here is the product's agent-orchestration REST API, reached through a runtime same-origin proxy and served by mocks for the demo. It is not a CI or delivery system that tells runners what to execute. A grep of src/lib and src/app/api/orchestrator for GITHUB_TOKEN, workflow_dispatch, pull_request_target, secrets. and runs-on found no hits. The only 'pipeline' strings are demo copy in mock-dashboard-data.ts and mockData.ts.",
+   "techniques": [
+    {
+     "technique": "control-plane-execution-boundary",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:11 A request proxy to an app API. No orchestrator here sends build jobs to performer machines."
+    },
+    {
+     "technique": "secret-materialization-discipline",
+     "verdict": "not-applicable",
+     "evidence": "src/app/api/orchestrator/[...path]/route.ts:22 This key is a runtime server secret attached per request, not a credential materialized into a pipeline job. Its custody belongs to browser-credential-boundary and credential-vault, not to this subject."
+    }
+   ],
+   "absenceTerms": [
+    "GITHUB_TOKEN",
+    "workflow_dispatch",
+    "pull_request_target",
+    "secrets.",
+    "runs-on"
+   ],
+   "registryProposal": "The context map joined this subject to these contexts on surface tokens: 'Pipeline' in a marketing playground's name, and 'orchestrator' meaning an agent-orchestration API. The registry-map matcher could weight the CI sense of 'orchestrator' and 'pipeline' (runner, workflow, job definition) so that application contexts using the words in a product sense are not paired with CI execution trust."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T00:54:54.236016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "ci-execution-trust"
+   ],
+   "techniques": [
+    "control-plane-execution-boundary",
+    "untrusted-contribution-lanes"
+   ],
+   "deviations": 0,
+   "context": "Split & Pipeline Playground",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T00:54:54.236016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "ci-execution-trust"
+   ],
+   "techniques": [
+    "control-plane-execution-boundary",
+    "secret-materialization-discipline"
+   ],
+   "deviations": 0,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "c5d5a368-6038-4781-985b-4a237a3faf79",
+ "subject": "app-shell",
+ "evaluatedAt": "2026-11-07T04:24:41.979320+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "app-shell",
+   "context": "Guide Pages & Navigation",
+   "reason": "evidence leans on guide/page.tsx, which is not a tracked file"
+  }
+ ],
+ "consults": []
+}

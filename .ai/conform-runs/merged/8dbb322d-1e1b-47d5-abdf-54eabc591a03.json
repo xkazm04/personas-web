@@ -1,0 +1,125 @@
+{
+ "schema": "conform-run/1",
+ "worker": "8dbb322d-1e1b-47d5-abdf-54eabc591a03",
+ "subject": "fleet-orchestration",
+ "evaluatedAt": "2026-11-03T17:54:32.799808+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Orchestration & Platform Visualizers",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/orchestration-hub/data.ts:19 The module is a static marketing catalog of desktop trigger kinds, with no session registry, dispatcher, lifecycle sweeper or harvest; searching the orchestration-hub directory for fleet, harvest, hibernat, sweeper and heartbeat found zero hits (the only 'dispatch' hits are a useReducer playback dispatch in useHubPlayback.ts, which is unrelated).",
+   "techniques": [],
+   "absenceTerms": [
+    "fleet",
+    "harvest",
+    "hibernat",
+    "sweeper",
+    "heartbeat"
+   ]
+  },
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/DownloadCTA.tsx:32 The context only routes visitors to a release download, waitlist and footer links, with no agent sessions to register, dispatch or harvest; searching src/components for hibernat, sweeper, harvest and worktree found zero hits.",
+   "techniques": [],
+   "absenceTerms": [
+    "hibernat",
+    "sweeper",
+    "harvest",
+    "worktree"
+   ]
+  },
+  {
+   "context": "Homepage & Hero",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/page.tsx:28 The homepage only maps manifest slugs to lazily mounted marketing sections plus a hero illustration, with no agent fleet to orchestrate; searching src/app and src/components/sections for hibernat, sweeper, harvest and worktree found zero hits.",
+   "techniques": [],
+   "absenceTerms": [
+    "hibernat",
+    "sweeper",
+    "harvest",
+    "worktree"
+   ]
+  },
+  {
+   "context": "Manual Review Queue",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/reviews/useScopedReviews.ts:11 The context is a human approve/reject queue over review items read from a review store (the hitl-approval subject's territory), not a dispatcher holding a session registry or harvesting worker results; searching the reviews directory for fleet, harvest, hibernat, sweeper, worktree and heartbeat found zero hits.",
+   "techniques": [],
+   "absenceTerms": [
+    "fleet",
+    "harvest",
+    "hibernat",
+    "sweeper",
+    "heartbeat"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "fleet-orchestration",
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-03T17:54:32.799808+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Orchestration & Platform Visualizers",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T17:54:32.799808+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T17:54:32.799808+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Homepage & Hero",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T17:54:32.799808+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Manual Review Queue",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

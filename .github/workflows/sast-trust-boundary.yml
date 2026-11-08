@@ -34,4 +34,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: semgrep scan
-        run: pipx run --spec semgrep==1.90.0 --pip-args="setuptools<81" semgrep scan --config .github/semgrep-trust-boundary.yml --metrics=off --error src
+        # semgrep 1.90.0 cannot import on the Python 3.14 runner image (its protobuf<5 C
+        # extension raises "Metaclasses with custom tp_new"); 1.184.0 resolves protobuf 6.
+        run: pipx run --spec semgrep==1.184.0 --pip-args="setuptools<81" semgrep scan --config .github/semgrep-trust-boundary.yml --metrics=off --error src

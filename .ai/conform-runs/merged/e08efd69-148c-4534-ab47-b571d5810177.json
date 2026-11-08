@@ -1,0 +1,102 @@
+{
+ "schema": "conform-run/1",
+ "worker": "e08efd69-148c-4534-ab47-b571d5810177",
+ "subject": "prompt-assembly",
+ "evaluatedAt": "2026-11-04T02:41:35.838124+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/api.ts:244 The client sends the user's raw task text to the external orchestrator unchanged, and that orchestrator (in another repo) builds the model's prompt. A search of src for buildPrompt/assemblePrompt/cache_control/contextWindow found nothing. The systemPrompt strings in mockData.ts and desktopApi.ts are persona fields shown in the UI, not layers this code assembles, so nothing here is a prompt assembler.",
+   "techniques": [],
+   "absenceTerms": [
+    "buildPrompt",
+    "assemblePrompt",
+    "cache_control",
+    "contextWindow"
+   ]
+  },
+  {
+   "context": "Execution History & Streaming",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:13 This context passes the orchestrator's output stream (SSE) through and renders execution tables and detail modals, including token counts reported by the orchestrator. It never composes, budgets or compacts a prompt, and a search of src for buildPrompt/assemblePrompt/cache_control/contextWindow found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "buildPrompt",
+    "assemblePrompt",
+    "cache_control",
+    "contextWindow"
+   ]
+  },
+  {
+   "context": "Messages & Settings",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/messages/index.tsx:33 The messages view reads and paginates report threads, and the settings cards toggle device-local BYOM provider permissions (ModelProvidersCard) and notifications. Neither assembles a model prompt, and a search of src for buildPrompt/assemblePrompt/cache_control/contextWindow found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "buildPrompt",
+    "assemblePrompt",
+    "cache_control",
+    "contextWindow"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "prompt-assembly",
+   "context": "Mobile App Shell & Views",
+   "reason": "evidence leans on clock/data.ts, which is not a tracked file"
+  },
+  {
+   "subject": "prompt-assembly",
+   "context": "Fleet Playground (prototypes)",
+   "reason": "evidence leans on night/Strips.tsx, which is not a tracked file"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-04T02:41:35.838124+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T02:41:35.838124+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T02:41:35.838124+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Messages & Settings",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

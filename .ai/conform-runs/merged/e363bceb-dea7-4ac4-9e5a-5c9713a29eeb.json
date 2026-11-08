@@ -1,0 +1,148 @@
+{
+ "schema": "conform-run/1",
+ "worker": "e363bceb-dea7-4ac4-9e5a-5c9713a29eeb",
+ "subject": "prompt-assembly",
+ "evaluatedAt": "2026-11-06T00:27:40.343403+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Execution History & Streaming",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:13 This context only proxies and displays execution output and token totals that the external orchestrator produces; it never assembles, budgets, caches or compacts a prompt, and a search of its directories for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "contextWindow",
+    "cache_control",
+    "assemblePrompt",
+    "buildPrompt",
+    "tokenBudget"
+   ]
+  },
+  {
+   "context": "Animation & Motion System",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/hooks/useAnimationPause.ts:8 This context is client-side motion gating, particles and visibility hooks, and it makes no model call; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing (\"prompt\" appears only as tour-UI copy in src/contexts/tourTypes.ts).",
+   "techniques": [],
+   "absenceTerms": [
+    "contextWindow",
+    "cache_control",
+    "assemblePrompt",
+    "buildPrompt",
+    "tokenBudget"
+   ]
+  },
+  {
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/DownloadCTA.tsx:30 This context renders the download CTA, waitlist and footer and does no LLM work; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "contextWindow",
+    "cache_control",
+    "assemblePrompt",
+    "buildPrompt",
+    "tokenBudget"
+   ]
+  },
+  {
+   "context": "Section Preview & Demo Harness",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/preview/registry.ts:14 This context is a dev-only section preview registry and DOM inspector with no model calls; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing (the one \"prompting\" hit in devInspectorUi.tsx:148 is a keyboard hint).",
+   "techniques": [],
+   "absenceTerms": [
+    "contextWindow",
+    "cache_control",
+    "assemblePrompt",
+    "buildPrompt",
+    "tokenBudget"
+   ]
+  },
+  {
+   "context": "Shared Types, Utilities & Hooks",
+   "subject": "prompt-assembly",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/format.ts:9 This context's files are formatters, polling, focus-trap, scroll-lock and env helpers that format results but never build a prompt; a search for assembler terms (contextWindow, cache_control, assemblePrompt, buildPrompt, tokenBudget) found nothing (systemPrompt in sibling src/lib files such as types.ts:18 is a persona record field, not an assembler, so it was left out of the terms).",
+   "techniques": [],
+   "absenceTerms": [
+    "contextWindow",
+    "cache_control",
+    "assemblePrompt",
+    "buildPrompt",
+    "tokenBudget"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-06T00:27:40.343403+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-06T00:27:40.343403+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Animation & Motion System",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-06T00:27:40.343403+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Conversion: Get Started, FAQ & Footer",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-06T00:27:40.343403+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Section Preview & Demo Harness",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-06T00:27:40.343403+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "prompt-assembly"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Shared Types, Utilities & Hooks",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

@@ -1,0 +1,146 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2946bff8-14ff-4da1-986b-ae198df94a00",
+ "subject": "repository-landing-document",
+ "evaluatedAt": "2026-11-04T02:26:37.482114+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/m2/page.tsx:8 This context renders /m2, a phone marketing page with noindex inside the web app. It is not the repository's front page. Searching src/components/mobile-landing, src/app/m2 and src/components/primitives for README, shields.io and img.shields found nothing, so no landing document, badge row or host metadata lives here.",
+   "techniques": [
+    {
+     "technique": "evidence-linked-badges",
+     "verdict": "not-applicable",
+     "evidence": "src/app/m2/page.tsx:15 This is web page metadata for a route, not a repository badge row or host description. No shields.io or img.shields reference exists in the context's directories."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ]
+  },
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/guide/GuideBlocks.tsx:3 These are render components for the topic pages of a docs site. The golden path assigns that work to docs-content-model, not to the repository front page. Searching src/components/guide for README, shields.io and img.shields found nothing.",
+   "techniques": [
+    {
+     "technique": "input-channel-distinction",
+     "verdict": "not-applicable",
+     "evidence": "src/components/guide/blocks/CliBlock.tsx:42 CliBlock gives shell input its own visual channel, but only on guide topic pages. The technique governs blocks in the repository's landing document, which these are not."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ]
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/page.tsx:15 The guide builds many addressable pages from a typed category catalog. The golden path's test sends that to docs-content-model ('if the artifact is one of many addressable pages, it is a content model'). Searching src/app/guide for README, shields.io and img.shields found nothing.",
+   "techniques": [
+    {
+     "technique": "landing-document-as-router",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/[category]/page.tsx:3 Navigation here is built from a catalog on a docs site. It is not the routing table of a single front-page file."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ]
+  },
+  {
+   "context": "Homepage & Hero",
+   "subject": "repository-landing-document",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/page.tsx:5 This context is the public marketing site's homepage, which the app renders itself. It is not the README that the code host renders for the repository. Claims the app renders on its own pages belong to public-claim-provenance. Searching src/app and src/components/sections for README, shields.io and img.shields found nothing.",
+   "techniques": [
+    {
+     "technique": "host-metadata-is-a-second-document",
+     "verdict": "not-applicable",
+     "evidence": "src/app/homeJsonLd.ts:10 This is structured-data metadata in the site's own JSON-LD. It is not the code host's description, topics or homepage fields for the repository."
+    }
+   ],
+   "absenceTerms": [
+    "README",
+    "shields.io",
+    "img.shields"
+   ],
+   "registryProposal": "The subject keys off the word 'landing', so the registry map matches it to web-app contexts named landing, homepage or guide. None of these is a repository front page. The map could require a README or front-page path in a context before it pairs that context with this subject."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-04T02:26:37.482114+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "evidence-linked-badges"
+   ],
+   "deviations": 0,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T02:26:37.482114+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "input-channel-distinction"
+   ],
+   "deviations": 0,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T02:26:37.482114+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "landing-document-as-router"
+   ],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T02:26:37.482114+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "repository-landing-document"
+   ],
+   "techniques": [
+    "host-metadata-is-a-second-document"
+   ],
+   "deviations": 0,
+   "context": "Homepage & Hero",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

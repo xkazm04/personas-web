@@ -1,0 +1,109 @@
+{
+  "schema": "conform-run/1",
+  "worker": "f942caed-9d13-425d-a84e-c222316150b3",
+  "subject": "agent-memory",
+  "evaluatedAt": "2026-11-07T01:39:22.756642+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Execution History & Streaming",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/api/executions/[id]/stream/route.ts:13 This context lists, filters and streams execution records through an SSE proxy to the orchestrator. A search of its directories found no memory capture, consolidation, recall or supersedence code, so the subject's precondition (an agent carrying memory forward) does not hold here.",
+      "techniques": [],
+      "absenceTerms": [
+        "episodic",
+        "supersed"
+      ]
+    },
+    {
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/sections/DownloadCTA.tsx:39 This context is a marketing download CTA plus the footer (platform pills, release freshness, trust signals). Searches of src/components/sections and the top-level components found no agent memory construct, so the subject does not apply.",
+      "techniques": [],
+      "absenceTerms": [
+        "episodic",
+        "supersed"
+      ]
+    },
+    {
+      "context": "Dashboard Home Overview",
+      "subject": "agent-memory",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/components/dashboard/RecentActivityCard.tsx:26 This context renders home-dashboard cards (recent activity, heatmap, triage, routines, vault changes) from mock or synced data. Searches of src/components/dashboard found no memory capture, consolidation or recall pipeline. The only hits on 'memor' are a counter in the separate home/mission files, which this context does not own.",
+      "techniques": [],
+      "absenceTerms": [
+        "episodic",
+        "supersed",
+        "agentMemory"
+      ]
+    }
+  ],
+  "declined": [
+    {
+      "subject": "agent-memory",
+      "context": "Knowledge Base",
+      "reason": "the seat returned unknown"
+    },
+    {
+      "subject": "agent-memory",
+      "context": "Shared Types, Utilities & Hooks",
+      "reason": "withdrawn after review: reviewer (sonnet): The evidence says searches of src/lib found no memory store, but src/lib holds learned-memory code (commands/reviewLearning.ts, mockCommandPlane.ts writing MOCK_LEARNED_MEMORIES, clearUserCaches.ts). The claim is false as written, and the anchor (the usePolling.ts doc comment) only shows that one ho"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-11-07T01:39:22.756642+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-memory"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Execution History & Streaming",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-07T01:39:22.756642+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-memory"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Shared Types, Utilities & Hooks",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-07T01:39:22.756642+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-memory"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Conversion: Get Started, FAQ & Footer",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-07T01:39:22.756642+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "agent-memory"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Dashboard Home Overview",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}

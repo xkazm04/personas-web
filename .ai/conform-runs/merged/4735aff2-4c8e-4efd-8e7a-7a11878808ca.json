@@ -1,0 +1,65 @@
+{
+ "schema": "conform-run/1",
+ "worker": "4735aff2-4c8e-4efd-8e7a-7a11878808ca",
+ "subject": "authoring-block-vocabulary",
+ "evaluatedAt": "2026-11-06T01:01:17.763417+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Guide Content Blocks & Markdown",
+   "subject": "authoring-block-vocabulary",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/guide/blocks/FeatureHighlight.tsx:16 The `:::feature` block passes an authored `color=` value straight into an inline style (14 corpus uses across en and every locale), and the locale-parity gate compares only the sequence of block types; that breaks closure (appearance is set in content) and leaves item counts, enum labels and anchors unchecked across locales.",
+   "techniques": [
+    {
+     "technique": "closed-directive-set",
+     "verdict": "deviation",
+     "evidence": "src/components/guide/blocks/FeatureHighlight.tsx:16 Most of this is done well: one dispatch, KNOWN_DIRECTIVES derived from GRAMMAR (parseGuide.ts:311), and an unknown name renders nothing while a diagnostic fails the build (parseGuide.ts:418). But the feature grammar captures `color=(\\S+)` (parseGuide.ts:207) and the renderer applies it as a raw style. That is the style pass-through the technique names as an escape hatch to refuse."
+    },
+    {
+     "technique": "per-block-line-grammar",
+     "verdict": "conformant",
+     "evidence": "src/components/guide/guide-markdown/parseGuide.ts:287 Each block has its own line grammar. Continuation lines fold into the previous item, but a line shaped like a label is reported instead of folded. The dash separator is accepted as a class (DASH, line 126). A skipped line becomes an ignored-line diagnostic, and a block with no usable items becomes an empty-block diagnostic; the gate counts both."
+    },
+    {
+     "technique": "enum-guarded-block-payloads",
+     "verdict": "conformant",
+     "evidence": "src/components/guide/guide-markdown/parseGuide.ts:56 Each label set is declared once as a const tuple. The grammar admits only those literals, case-insensitively. Style tables are typed as Record<CalloutVariant>/Record<CardStatus>, so a missing entry is a compile error (Callout.tsx:17). Only `warning` escalates to role=alert. Small gap: the on-screen label text ('Tip', 'Roadmap', 'Coming soon') is hardcoded English rather than resolved per locale."
+    },
+    {
+     "technique": "vocabulary-as-translation-invariant",
+     "verdict": "deviation",
+     "evidence": "scripts/check-guide-content.mjs:160 The gate does parse the real locale bodies with the renderer's parser, but it compares only the block-type sequence. Item count per block, enum label per item position and the anchor set are not compared, and existing divergences are frozen in a baseline file. BLOCK_TYPES (line 155) is also a hand-kept copy of the node vocabulary."
+    },
+    {
+     "technique": "blocks-as-machine-readable-source",
+     "verdict": "conformant",
+     "evidence": "src/app/guide/[category]/[topic]/page.tsx:121 The HowTo JSON-LD, the TOC (headingsOf) and search (sectionsOf) all re-read the same parsed tree the renderer uses. Emitted step text goes through stripInline (page.tsx:34) so it matches what the reader sees. A body with no steps emits no steps."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-06T01:01:17.763417+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "authoring-block-vocabulary"
+   ],
+   "techniques": [
+    "blocks-as-machine-readable-source",
+    "closed-directive-set",
+    "enum-guarded-block-payloads",
+    "per-block-line-grammar",
+    "vocabulary-as-translation-invariant"
+   ],
+   "deviations": 1,
+   "context": "Guide Content Blocks & Markdown",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
