@@ -3194,7 +3194,11 @@
           "revision": 54,
           "changedAt": "2026-10-14",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/shared/useMindRun.ts:24 Here \"run\", \"execute\" and \"verify\" are animation beats of a marketing simulation, and a case-insensitive search of playground-split for quality gate, pre-commit, max-warnings, process.exit and exitCode found zero hits, so the context defines no check that can refuse a change and the subject's precondition does not hold.",
+          "evaluatedAt": "2026-11-08",
+          "evaluatedAgainst": "sha256-b2:a5b34d39a4b8edd3",
+          "evaluatedRevision": 56
         },
         {
           "subject": "mcp-tools",
