@@ -1,0 +1,185 @@
+{
+ "schema": "conform-run/1",
+ "worker": "be535d87-8685-415b-8727-2cbbb903280b",
+ "subject": "app-shell",
+ "evaluatedAt": "2026-11-03T22:20:53.641116+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Layout, Navigation & Page Shell",
+   "subject": "app-shell",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/PageTransition.tsx:53 The root layout keys the wrapper around every page on the pathname, and each page renders its own <Navbar> (whose header enters from y:-20/opacity 0). So outside /dashboard every navigation remounts and re-animates the navbar, and the root loading.tsx (an immediate spinner) replaces the navbar during streaming: the frame takes part in every transition.",
+   "techniques": [
+    {
+     "technique": "lazy-section-loading",
+     "verdict": "deviation",
+     "evidence": "src/app/loading.tsx:22 The route fallback is a spinner that renders at once, with no warm-path delay. It replaces the whole page segment, Navbar included because Navbar lives in each page, so the frame blanks instead of holding still."
+    },
+    {
+     "technique": "navigation-model",
+     "verdict": "conformant",
+     "evidence": "src/components/navbar/useRoutes.ts:19 Navbar's DesktopNav and MobilePanel both iterate one registry, and active state is derived from usePathname. Nothing is stored. It is an exact match, which is enough because /features and /roadmap have no sub-routes."
+    },
+    {
+     "technique": "nav-hierarchy",
+     "verdict": "conformant",
+     "evidence": "src/components/navbar/useMobileMenu.ts:36 The nav is flat (one level). The off-canvas mobile panel closes because the location changed, not through per-link handlers."
+    },
+    {
+     "technique": "shell-hosted-services",
+     "verdict": "conformant",
+     "evidence": "src/app/layout.tsx:122 Session-wide residents (PageViewTracker, WebVitalsReporter, CookieConsent, LocaleOfferMount) are mounted in the root layout, outside the pathname-keyed PageTransition, so they sit above the swap point."
+    },
+    {
+     "technique": "entitlement-gating",
+     "verdict": "not-applicable",
+     "evidence": "src/components/navbar/useRoutes.ts:15 The public marketing nav registry carries only a placement kind. No tiers, roles or flags gate any entry."
+    }
+   ]
+  },
+  {
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "subject": "app-shell",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/DashboardNavigation.tsx:122 A grouped section whose children carry counts collapses to a bare 'dot' grade. DesktopSidebar.tsx:58 renders it as an aria-hidden amber span with no text equivalent, and counts render uncapped, so the attention scale is partly colour-only.",
+   "techniques": [
+    {
+     "technique": "badge-and-attention",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/DashboardNavigation.tsx:122 The dot grade has no text alternative (aria-hidden at DesktopSidebar.tsx:58) and there is no 99+ display cap. On the plus side, counts are derived from stores, and the fixture counts are suppressed for real tenants (line 112)."
+    },
+    {
+     "technique": "navigation-model",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/DashboardNavigation.tsx:103 One current view comes from the URL (viewIdFromPath). Section activation is a containment query over the navRegistry, never a stored flag."
+    },
+    {
+     "technique": "nav-hierarchy",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/DesktopSidebar.tsx:17 The level-2 panel renders only for the active grouped section (section-scoped, never global), and there is no third shell level."
+    },
+    {
+     "technique": "shell-hosted-services",
+     "verdict": "conformant",
+     "evidence": "src/app/dashboard/layout.tsx:39 The realtime worker, TourProvider/TourAutostart and TourOverlay are mounted once in the dashboard layout, as siblings above ViewOutlet. All /dashboard/* share one transition key, so they survive view switches."
+    },
+    {
+     "technique": "lazy-section-loading",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/DashboardErrorBoundary.tsx:88 The view's boundary resets on location change instead of re-keying the subtree. ViewOutlet keeps a bounded keep-alive of 4 <Activity> views, chunks load per view and are preloaded on hover/focus plus idle warm-up, and the loading gap is the shapeless ViewGap."
+    },
+    {
+     "technique": "screen-contributed-second-level",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/DashboardNavigation.tsx:37 The second level is declared in the navRegistry, not contributed by screens. No screen portals its own sections into the sidebar."
+    }
+   ]
+  },
+  {
+   "context": "How It Works & Changelog",
+   "subject": "app-shell",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/how-lazy.tsx:16 All four lazy /how stages share one pulsing title+subtitle+block silhouette that matches none of them. It is drawn immediately through createLazySection's loading prop, with no warm-path delay, so a warm chunk still flashes a wrong outline.",
+   "techniques": [
+    {
+     "technique": "lazy-section-loading",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/how-lazy.tsx:16 This is a generic, drawn silhouette, not section-shaped and not an empty held block, and it has no delay. The held stage height (data-stage=fill) is the part that is right."
+    }
+   ]
+  },
+  {
+   "context": "Homepage & Hero",
+   "subject": "app-shell",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/sections/LazySection.tsx:48 The lazy-section factory renders its skeleton immediately with no delay. Five different gated landing stages use the same generic SectionSkeleton, and since they first show LazyMount's labelled held block, a cold entry shows two unrelated loading shapes in a row before content.",
+   "techniques": [
+    {
+     "technique": "lazy-section-loading",
+     "verdict": "deviation",
+     "evidence": "src/components/sections/LazySection.tsx:48 There is no warm-path delay, and the generic silhouette is stacked after the LazyMount placeholder (page.tsx:72). Chunk failure is handled honestly: SectionErrorBoundary.tsx:37 holds the slot and offers a reload."
+    }
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "app-shell",
+   "context": "Guide Pages & Navigation",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-03T22:20:53.641116+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "app-shell"
+   ],
+   "techniques": [
+    "entitlement-gating",
+    "lazy-section-loading",
+    "nav-hierarchy",
+    "navigation-model",
+    "shell-hosted-services"
+   ],
+   "deviations": 1,
+   "context": "Layout, Navigation & Page Shell",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T22:20:53.641116+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "app-shell"
+   ],
+   "techniques": [
+    "badge-and-attention",
+    "lazy-section-loading",
+    "nav-hierarchy",
+    "navigation-model",
+    "screen-contributed-second-level",
+    "shell-hosted-services"
+   ],
+   "deviations": 1,
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T22:20:53.641116+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "app-shell"
+   ],
+   "techniques": [
+    "lazy-section-loading"
+   ],
+   "deviations": 1,
+   "context": "How It Works & Changelog",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T22:20:53.641116+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "app-shell"
+   ],
+   "techniques": [
+    "lazy-section-loading"
+   ],
+   "deviations": 1,
+   "context": "Homepage & Hero",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

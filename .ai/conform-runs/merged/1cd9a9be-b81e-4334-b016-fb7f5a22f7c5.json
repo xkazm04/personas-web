@@ -1,0 +1,143 @@
+{
+ "schema": "conform-run/1",
+ "worker": "1cd9a9be-b81e-4334-b016-fb7f5a22f7c5",
+ "subject": "mcp-tools",
+ "evaluatedAt": "2026-11-04T01:20:14.207016+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Visual Flow Composer & Playground Page",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/flow-composer/components/FlowCTA.tsx:11 The composer is a marketing sketch of an agent graph that no app imports and no model calls; I searched src/app/playground, src/components/flow-composer and src/components (src, scripts, fixtures and package.json too) for the protocol's own identifiers and found none, so this context is neither a tool-protocol host nor a server.",
+   "techniques": [],
+   "absenceTerms": [
+    "modelcontextprotocol",
+    "inputSchema",
+    "jsonrpc",
+    "StdioServerTransport"
+   ]
+  },
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/m2/page.tsx:2 /m2 is a static landing page made from clock and dial components plus a bottom sheet; I searched src/app/m2, src/components/mobile-landing/clock and src/components/primitives for MCP, tool-schema and JSON-RPC terms and found nothing, so no tool boundary exists here.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Fleet Playground (prototypes)",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/fleet-monitor/board/sim.ts:124 Here 'tool calls' are only a simulated counter that the prototype board draws; I searched src/components/dashboard/fleet-monitor for MCP, server-transport, tool-schema and JSON-RPC terms with no hits, so this code neither hosts nor serves a tool protocol.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "scripts/gen-command-envelope-fixture.mjs:1 The only wire contract in this context is an Ed25519-signed command that a paired phone (a human controller) sends to the desktop, with no model reading or calling it; I searched src/components/dashboard, src/app/dashboard, src/lib/commands, fixtures and scripts for MCP and tool-schema terms with no hits, so the precondition fails.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Memory Layers & Multi-Provider AI",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/design-blueprint/shared/ToolMark.tsx:4 In this context 'tool' only means a connector logo drawn as an SVG mask in an animated marketing blueprint; I searched src/components/feature-sections/design-blueprint for MCP, tool-schema and JSON-RPC terms with no hits, so no tool-protocol boundary exists.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-04T01:20:14.207016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Visual Flow Composer & Playground Page",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:20:14.207016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:20:14.207016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Fleet Playground (prototypes)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:20:14.207016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:20:14.207016+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Memory Layers & Multi-Provider AI",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

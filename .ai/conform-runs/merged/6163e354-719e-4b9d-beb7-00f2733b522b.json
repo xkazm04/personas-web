@@ -1,0 +1,148 @@
+{
+ "schema": "conform-run/1",
+ "worker": "6163e354-719e-4b9d-beb7-00f2733b522b",
+ "subject": "mcp-tools",
+ "evaluatedAt": "2026-11-07T03:32:19.866703+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Orchestrator API Client & Mock Data",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/orchestrator/[...path]/route.ts:11 This context is a same-origin REST proxy to an external orchestrator plus demo mock data, and its 'tool' mentions (MOCK_TOOL_USAGE in src/lib/mockData.ts:1036) are chart figures rather than a tool catalog; a search of src/lib, src/app/api/orchestrator and src/app/dashboard for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing, so no tool-protocol host, client or server exists here.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "tools/call",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/scope/useDashboardScope.ts:21 The shell is React navigation, error and scope-filter UI over Zustand stores; a search of src/components/dashboard and src/app/dashboard for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing, so no tool boundary exists for these techniques to govern.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "tools/call",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Supabase Client",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/supabaseApi.ts:2 This context reads a Supabase table mirror under RLS and tracks device/controller pairing state, and no model reads or calls any of it; a search of src/lib, src/hooks, src/stores and scripts for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "tools/call",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Shared Types, Utilities & Hooks",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/hooks/usePolling.ts:4 These are generic React hooks, formatters and a server env reader with no tool server, schema or transport; a search of src/hooks and src/lib for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "tools/call",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  },
+  {
+   "context": "Server-Side Vote Persistence",
+   "subject": "mcp-tools",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/server/json-file-store.ts:13 This context is a locked JSON-file store and a rate limiter for roadmap votes, with no model-facing tool surface; a search of src/lib and src/lib/server for mcp, modelcontextprotocol, tools/call, tools/list, inputSchema and jsonrpc found nothing, so no MCP technique has a precondition here.",
+   "techniques": [],
+   "absenceTerms": [
+    "mcp",
+    "modelcontextprotocol",
+    "tools/call",
+    "inputSchema",
+    "jsonrpc"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T03:32:19.866703+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Orchestrator API Client & Mock Data",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T03:32:19.866703+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Dashboard Shell, Chrome & Realtime",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T03:32:19.866703+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Supabase Client",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T03:32:19.866703+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Shared Types, Utilities & Hooks",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T03:32:19.866703+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "mcp-tools"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Server-Side Vote Persistence",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

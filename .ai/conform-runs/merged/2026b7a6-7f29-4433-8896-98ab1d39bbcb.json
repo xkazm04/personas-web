@@ -1,0 +1,110 @@
+{
+ "schema": "conform-run/1",
+ "worker": "2026b7a6-7f29-4433-8896-98ab1d39bbcb",
+ "subject": "narrative-scroll-surface",
+ "evaluatedAt": "2026-11-07T02:49:39.512740+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Internationalization (14 locales)",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/LocaleOffer.tsx:25 This context has a footer locale select, a browser-language offer card and the locale catalogs. It has no explanatory page, stations or scroll-driven motion: searching src/components, src/i18n and the context's files for 'narrative', 'scroll-bound' and 'filmstrip' found nothing, so the subject's precondition (a page explaining something to a reader who hasn't decided to care) does not hold.",
+   "techniques": [
+    {
+     "technique": "scroll-bound-progression",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LocaleOffer.tsx:25 The offer card is static and fixed-position. Nothing here is bound to scroll or a timer."
+    },
+    {
+     "technique": "no-orientation-tax",
+     "verdict": "not-applicable",
+     "evidence": "src/components/LanguageSwitcher.tsx:35 This is a footer locale select, which is a settings control for a task. It is not a side index on an explanatory page."
+    }
+   ],
+   "absenceTerms": [
+    "narrative",
+    "filmstrip"
+   ]
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "narrative-scroll-surface",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:178 The guide is a documentation surface for a reader who already wants the content: an on-this-page TOC, a reading-progress bar, in-category search and a category card grid. The subject hands that case to long-form-reading-surface. Searching src/app/guide for 'useScroll', 'scrollYProgress', 'spine' and 'narrative' found nothing, so there are no stations, spine or scroll-bound motion to judge.",
+   "techniques": [
+    {
+     "technique": "no-orientation-tax",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:178 This TOC is real navigation for a document. The technique's 'Documents' exclusion applies."
+    },
+    {
+     "technique": "sequence-as-spine",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/guide-page/GuideCategoryGrid.tsx:36 The categories are an unranked set shown as a grid, so a spine would invent an order that isn't there."
+    },
+    {
+     "technique": "illustration-carries-the-claim",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/guide-page/GuideCategoryGrid.tsx:39 This is category card art on a reference hub. The exclusion for pages whose reader has already decided applies."
+    },
+    {
+     "technique": "scroll-bound-progression",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/[category]/[topic]/TopicView.tsx:129 The only scroll-bound element is a document reading-progress bar. There are no station envelopes, and long docs fall under this technique's exclusions."
+    },
+    {
+     "technique": "reveal-without-loss",
+     "verdict": "not-applicable",
+     "evidence": "src/app/guide/guide-page/GuideCategoryGrid.tsx:33 There is a scroll reveal here, but it changes appearance over content that is already mounted (not a mount on approach), and it sits on a docs hub rather than an explanatory page. See registryProposal."
+    }
+   ],
+   "absenceTerms": [
+    "useScroll",
+    "scrollYProgress",
+    "spine",
+    "narrative"
+   ],
+   "registryProposal": "reveal-without-loss scopes itself to a 'published explanatory page', but its static-frame obligations (capture, print, script failure) apply just as well to a public documentation hub that uses whileInView reveals (GuideCategoryGrid, GuideDiscordCTA). The subject should say whether those obligations travel to long-form/reference surfaces that borrow scroll reveals, or point to the subject that owns them."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T02:49:39.512740+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [
+    "no-orientation-tax",
+    "scroll-bound-progression"
+   ],
+   "deviations": 0,
+   "context": "Internationalization (14 locales)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T02:49:39.512740+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "narrative-scroll-surface"
+   ],
+   "techniques": [
+    "illustration-carries-the-claim",
+    "no-orientation-tax",
+    "reveal-without-loss",
+    "scroll-bound-progression",
+    "sequence-as-spine"
+   ],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

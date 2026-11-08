@@ -1,0 +1,143 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0aedc28a-2c67-4744-8f5f-cba976d66fe3",
+ "subject": "agent-memory",
+ "evaluatedAt": "2026-11-04T01:36:59.005249+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/AthenaUsageChart.tsx:33 The only memory-adjacent word here is 'recall', and it is a series key on a recharts usage chart that plots demo counts of Athena actions; this context holds no agent memory store and does no capture, consolidation, decay or injection. A search of its directories for episodic, consolidat, embedding and decay found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "consolidat",
+    "embedding",
+    "decay"
+   ]
+  },
+  {
+   "context": "Manual Review Queue",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/reviews/useScopedReviews.ts:15 This context is a human approve/reject queue that reads reviewStore and narrows it by scope; it stores, distills and injects no agent memory. A grep of its directory for memor, recall, episodic, consolidat, embedding and decay found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "consolidat",
+    "embedding",
+    "decay"
+   ]
+  },
+  {
+   "context": "Memory Layers & Multi-Provider AI",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/feature-sections/design-blueprint/geometry.ts:8 Here 'memory' is one cell of an SVG blueprint drawing on a marketing page (a geometry box, a tank path, a fill animation in TestRun); no code reads or writes an agent memory store. A search of the directory for episodic, consolidat, embedding and decay found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "consolidat",
+    "embedding",
+    "decay"
+   ]
+  },
+  {
+   "context": "Notes (Goal Board)",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/stores/notesStore.ts:23 The notes store is a read-only mirror of the goals people write in the desktop Notepad, fetched through the api proxy. It holds no agent-derived beliefs or episodes, and nothing here captures, consolidates, decays or recalls them. A search of src/stores, src/lib/notes, the notes views and e2e for episodic, consolidat, embedding and decay found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "consolidat",
+    "embedding",
+    "decay"
+   ]
+  },
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/mobile-landing/clock/Dial.tsx:69 Here 'memory' is a decorative aria-hidden SVG constellation (MEMORY_PTS) on the /m2 landing dial; the context is presentation-only and has no memory store or pipeline. A search of its directories for episodic, consolidat, embedding and decay found nothing.",
+   "techniques": [],
+   "absenceTerms": [
+    "episodic",
+    "consolidat",
+    "embedding",
+    "decay"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-04T01:36:59.005249+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:36:59.005249+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Manual Review Queue",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:36:59.005249+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Memory Layers & Multi-Provider AI",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:36:59.005249+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Notes (Goal Board)",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T01:36:59.005249+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

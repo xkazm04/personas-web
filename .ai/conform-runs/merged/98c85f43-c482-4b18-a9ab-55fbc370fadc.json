@@ -1,0 +1,126 @@
+{
+ "schema": "conform-run/1",
+ "worker": "98c85f43-c482-4b18-a9ab-55fbc370fadc",
+ "subject": "agent-memory",
+ "evaluatedAt": "2026-11-07T02:13:12.298807+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Knowledge Base",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/knowledge/index.tsx:44 The view only reads memory rows from somewhere else (demo fixtures, or the desktop's synced sub_memories in real mode) and renders them as table, graph and cards; a case-insensitive search of src/components/dashboard/views/knowledge (memories-view/ and knowledge-cluster-graph/ included) found no consolidat, decay, recall, distill or episod, so this context has no capture, consolidation, decay or recall-injection stage for the standard to govern.",
+   "techniques": [],
+   "absenceTerms": [
+    "consolidat",
+    "decay",
+    "recall",
+    "distill",
+    "episod"
+   ],
+   "registryProposal": "The subject has no rule for a read-only operator surface over a memory store that another runtime owns (showing pending, active and archived items in one list; a conflict review whose accept or reject decisions stay in client state). A short technique on what such a viewer owes, for example never presenting pending items as settled and persisting governance decisions, would let contexts like this be judged rather than marked not-applicable."
+  },
+  {
+   "context": "Execution History & Streaming",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/api/executions/[id]/stream/route.ts:13 This context proxies and lists execution output for display; a case-insensitive search of its files and of src/app/api/executions and src/components/dashboard found no consolidat, decay, distill, memoryStore or tombstone, and its own files contain no memory or recall code, so no agent memory is captured or recalled here.",
+   "techniques": [],
+   "absenceTerms": [
+    "consolidat",
+    "decay",
+    "distill",
+    "memoryStore",
+    "tombstone"
+   ]
+  },
+  {
+   "context": "Shared Types, Utilities & Hooks",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/hooks/usePolling.ts:4 The context holds generic React hooks, formatters, constants and server env access; none of its files mention memory, recall or prompts, and a search of src/hooks and src/lib found no memoryStore, vectorstore, tombstone or half_life, so there is no memory pipeline to judge.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "vectorstore",
+    "tombstone",
+    "half_life"
+   ]
+  },
+  {
+   "context": "Authentication & User Session",
+   "subject": "agent-memory",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/lib/clearUserCaches.ts:15 In this context 'memory' only ever means in-process session or cache state (clearUserCaches, the demo authStore session); a search of src/components, src/lib and src/stores found no memoryStore, vectorstore, tombstone or half_life, so no agent memory is stored, scoped or recalled here.",
+   "techniques": [],
+   "absenceTerms": [
+    "memoryStore",
+    "vectorstore",
+    "tombstone",
+    "half_life"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "agent-memory",
+   "context": "Guide Data, Content & Search Index",
+   "reason": "The context is end-user documentation stored as Markdown strings (for example src/data/guide/content/memories.ts, 'How Agent Memory Works', 'Importance Levels'). It describes the desktop product's memory feature in prose but does not implement any of it. The subject's own words (recall, decay, importance, consolidat, episod) appear in that prose, so an honest absence search cannot pass, and there is no code to hold to any technique. Whether the docs' claims (importance 1-5 drives recall priority and retention) match the desktop runtime is a question for public-claim-provenance against the desktop repo, not for agent-memory here."
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-07T02:13:12.298807+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Knowledge Base",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T02:13:12.298807+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Execution History & Streaming",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T02:13:12.298807+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Shared Types, Utilities & Hooks",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T02:13:12.298807+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "agent-memory"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Authentication & User Session",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

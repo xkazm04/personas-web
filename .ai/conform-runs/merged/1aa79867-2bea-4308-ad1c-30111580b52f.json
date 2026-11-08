@@ -1,0 +1,268 @@
+{
+ "schema": "conform-run/1",
+ "worker": "1aa79867-2bea-4308-ad1c-30111580b52f",
+ "subject": "test-harness",
+ "evaluatedAt": "2026-11-03T15:53:38.133768+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Memory Layers & Multi-Provider AI",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "scripts/sync-desktop-facts.mjs:24 The desktop-facts snapshot that rings.test.ts and desktopFacts.test.ts assert against is a copy of another repo's sources. Its only re-check passes as 'skipped' wherever no ../personas checkout exists, and that includes every CI runner. So nothing re-certifies the copy against the live desktop, and the suite stays green while the desktop drifts.",
+   "techniques": [
+    {
+     "technique": "recorded-interaction-fixtures",
+     "verdict": "deviation",
+     "evidence": "scripts/sync-desktop-facts.mjs:24 The snapshot of an external system has no live lane. CI's drift check skips green, so a recorded suite has stopped testing the world."
+    },
+    {
+     "technique": "fixture-economics",
+     "verdict": "deviation",
+     "evidence": "src/lib/product-facts/desktop-facts.json:2 The stored derivation names its generator but carries no fingerprint (commit or hash) of the desktop inputs it came from, so staleness cannot be detected from the artifact."
+    },
+    {
+     "technique": "pin-the-call-not-the-name",
+     "verdict": "conformant",
+     "evidence": "src/lib/product-facts/desktopFacts.test.ts:12 The source-text parsers are tested against CRLF input, so line endings are treated as a property of the checkout, as the technique asks."
+    },
+    {
+     "technique": "unreached-decisions-pin-nothing",
+     "verdict": "conformant",
+     "evidence": "src/lib/product-facts/desktopFacts.test.ts:6 The spec imports the very parsers the sync script uses, so the decision under test is the one production runs and not a test-only copy of it."
+    }
+   ]
+  },
+  {
+   "context": "Agent Lab & Plugin Ecosystem",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/data/desktop-plugins.test.ts:44 The test name claims it mirrors the desktop catalog, but it only compares the hand-copied local manifest to a hard-coded list. No lane reads the desktop's PluginsSidebarNav or CHANGELOG, so the next desktop roster change stays green. That is the same silent landing the file's own header describes.",
+   "techniques": [
+    {
+     "technique": "recorded-interaction-fixtures",
+     "verdict": "deviation",
+     "evidence": "src/data/desktop-plugins.ts:8 Each entry records a source and a verifiedAgainst date, so obligation 1 is met. Re-verifying is left as a human chore, and no live lane re-certifies the copy."
+    },
+    {
+     "technique": "pin-the-call-not-the-name",
+     "verdict": "conformant",
+     "evidence": "src/components/feature-sections/lab/still-motion.test.ts:22 The needle is a whole import construct that prose cannot spell. Comments are stripped before matching (line 25)."
+    },
+    {
+     "technique": "derived-selection-must-be-measured",
+     "verdict": "conformant",
+     "evidence": "src/components/feature-sections/lab/still-motion.test.ts:60 The file population comes from context-map.json and has a declared floor, so a walk that selects nothing fails instead of passing."
+    },
+    {
+     "technique": "negative-control-tests",
+     "verdict": "conformant",
+     "evidence": "src/components/feature-sections/lab/still-motion.test.ts:70 The pin proves it can fail: a real import must match and a commented one must not."
+    },
+    {
+     "technique": "approval-snapshots-with-guarded-update",
+     "verdict": "not-applicable",
+     "evidence": "src/components/feature-sections/lab/ledger.test.ts:110 The fixtures are guarded by length assertions, not by recorded snapshots, so there is no record switch to guard."
+    }
+   ],
+   "registryProposal": "recorded-interaction-fixtures is written for a remote service that someone else operates. Its freshness obligations fit just as well a hand-copied snapshot of a sibling repository's source, which this repo uses in several places. The use_when could name that case explicitly."
+  },
+  {
+   "context": "Agents (Personas) Management",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/commands/reviewLearning.desktopParity.test.ts:14 The parity suite asserts expected values copied from the desktop's flip_status at a pinned commit. Nothing re-runs them against the desktop, so a change in desktop behaviour leaves this suite green and certifying the old behaviour.",
+   "techniques": [
+    {
+     "technique": "recorded-interaction-fixtures",
+     "verdict": "deviation",
+     "evidence": "src/lib/commands/reviewLearning.desktopParity.test.ts:14 The contract revision is recorded (commit fc5491b, line 13), but freshness depends on a human re-copying, and no live lane exists. The scripts that mention manual_reviews check sync tables, not these values."
+    },
+    {
+     "technique": "negative-control-tests",
+     "verdict": "conformant",
+     "evidence": "src/lib/commands/envelope.test.ts:63 The signature check is proven able to fail on a one-byte tamper, and the generator asserts the same thing at scripts/gen-command-envelope-fixture.mjs:35."
+    },
+    {
+     "technique": "assert-the-schedule-not-the-stopwatch",
+     "verdict": "conformant",
+     "evidence": "src/lib/commands/mockCommandPlane.test.ts:24 The mock command plane's timing is asserted on fake timers at exact boundaries (executingMs - 1 against executingMs), not on wall-clock time."
+    },
+    {
+     "technique": "fixture-economics",
+     "verdict": "conformant",
+     "evidence": "src/lib/commands/envelope.test.ts:20 The deterministic Ed25519 test vector is generated once by a named script and read by every case, not rebuilt per test."
+    }
+   ]
+  },
+  {
+   "context": "Build Config & E2E Tests",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "e2e/connections.spec.ts:27 Two connector-modal tests were labelled flaky and silently skipped in the spec. They have no entry in e2e/flaky-register.json (entries: []), no owner and no expiry, so the quarantine is invisible to the register's own expiry gate and produces no history.",
+   "techniques": [
+    {
+     "technique": "flake-lifecycle",
+     "verdict": "deviation",
+     "evidence": "e2e/connections.spec.ts:33 The flake is skipped rather than muted and bypasses the owned, expiring register, which reads as empty. Retry recording at playwright.config.ts:26 (failOnFlakyTests) is the conformant half."
+    },
+    {
+     "technique": "configuration-axes-cross-the-ladder",
+     "verdict": "deviation",
+     "evidence": "playwright.config.ts:45 The phone project emulates iPhone on Chromium. No job runs the WebKit cell, so a test could pass in every cell the pipeline runs and still fail on the browser engine the phone product ships to."
+    },
+    {
+     "technique": "live-app-harness",
+     "verdict": "conformant",
+     "evidence": "playwright.config.ts:49 E2E drives a production build started from outside, and CI refuses to reuse a stale server (line 52)."
+    },
+    {
+     "technique": "isolation-lanes",
+     "verdict": "conformant",
+     "evidence": "playwright.config.ts:13 Serial execution is declared lane policy in config, alongside fullyParallel: false and the PORT override."
+    },
+    {
+     "technique": "suite-partitioning",
+     "verdict": "conformant",
+     "evidence": "playwright.config.ts:35 Project membership is decided by location (e2e/mobile/**), not by annotation."
+    },
+    {
+     "technique": "negative-control-tests",
+     "verdict": "conformant",
+     "evidence": "e2e/reduced-motion.spec.ts:62 The still-under-reduced-motion assertion has a control proving the pixel comparison can tell motion apart."
+    },
+    {
+     "technique": "unreached-decisions-pin-nothing",
+     "verdict": "conformant",
+     "evidence": "e2e/landing-hash-arrival.spec.ts:42 The spec asserts the unmounted precondition so the landing assertion cannot be satisfied by something else."
+    },
+    {
+     "technique": "platform-quirk-absorption",
+     "verdict": "conformant",
+     "evidence": "src/test/server-only-stub.ts:1 The unresolvable server-only guard is absorbed once in the runner alias, with its reason attached."
+    }
+   ]
+  },
+  {
+   "context": "Mobile App Shell & Views",
+   "subject": "test-harness",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "e2e/mobile/m2-landing.spec.ts:274 The /m2 reduced-motion test asserts no running animations and an unmoved hero step loop, with no no-preference control. It would pass just as well on a page whose animations or step loop never run at all.",
+   "techniques": [
+    {
+     "technique": "negative-control-tests",
+     "verdict": "deviation",
+     "evidence": "e2e/mobile/m2-landing.spec.ts:295 The 'holds still' claim is never shown able to fail. The spec has no no-preference arm, unlike e2e/reduced-motion.spec.ts."
+    },
+    {
+     "technique": "assert-the-schedule-not-the-stopwatch",
+     "verdict": "conformant",
+     "evidence": "e2e/mobile/m2-landing.spec.ts:235 The in-flight double-submit claim is asserted as a count of observed POSTs, not as a time bound."
+    },
+    {
+     "technique": "suite-partitioning",
+     "verdict": "conformant",
+     "evidence": "e2e/mobile/m2-landing.spec.ts:6 Phone specs belong to the mobile project by location under e2e/mobile/."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-03T15:53:38.133768+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "fixture-economics",
+    "pin-the-call-not-the-name",
+    "recorded-interaction-fixtures",
+    "unreached-decisions-pin-nothing"
+   ],
+   "deviations": 1,
+   "context": "Memory Layers & Multi-Provider AI",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T15:53:38.133768+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "approval-snapshots-with-guarded-update",
+    "derived-selection-must-be-measured",
+    "negative-control-tests",
+    "pin-the-call-not-the-name",
+    "recorded-interaction-fixtures"
+   ],
+   "deviations": 1,
+   "context": "Agent Lab & Plugin Ecosystem",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T15:53:38.133768+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "assert-the-schedule-not-the-stopwatch",
+    "fixture-economics",
+    "negative-control-tests",
+    "recorded-interaction-fixtures"
+   ],
+   "deviations": 1,
+   "context": "Agents (Personas) Management",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T15:53:38.133768+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "configuration-axes-cross-the-ladder",
+    "flake-lifecycle",
+    "isolation-lanes",
+    "live-app-harness",
+    "negative-control-tests",
+    "platform-quirk-absorption",
+    "suite-partitioning",
+    "unreached-decisions-pin-nothing"
+   ],
+   "deviations": 1,
+   "context": "Build Config & E2E Tests",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-03T15:53:38.133768+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "test-harness"
+   ],
+   "techniques": [
+    "assert-the-schedule-not-the-stopwatch",
+    "negative-control-tests",
+    "suite-partitioning"
+   ],
+   "deviations": 1,
+   "context": "Mobile App Shell & Views",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

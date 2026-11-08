@@ -1,0 +1,120 @@
+{
+ "schema": "conform-run/1",
+ "worker": "152d339e-1d56-4005-acc0-18a7c359884e",
+ "subject": "table",
+ "evaluatedAt": "2026-11-04T04:35:47.817333+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Incidents Inbox",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/lib/incidentFormat.ts:81 The inbox comparator stops at severity then detectedAt with no row-identity tiebreaker, so incidents with equal severity and timestamp fall back to storage order instead of a total, deterministic order.",
+   "techniques": [
+    {
+     "technique": "sorting",
+     "verdict": "deviation",
+     "evidence": "src/lib/incidentFormat.ts:81 bySeverityThenRecency ends on detectedAt (a timestamp, which the technique names as a colliding key) with no incident.id final term, so the order is not total."
+    },
+    {
+     "technique": "client-server-split",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:55 All-client regime: filter, sort and counts all run over the complete demo-only incident set, so no axis is split across tiers."
+    },
+    {
+     "technique": "filtering",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentsFilters.tsx:114 Enumerated pill controls commit on change (store setters). A single clear action exists exactly when the applied predicate is non-empty, and filtered-empty is its own state."
+    },
+    {
+     "technique": "loading-and-empty-states",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:64 The ghost shows only on a cold load with nothing held. It is geometry-matched and delayed by .dash-ghost, and the delay survives reduced motion in dashboard.css. Empty is typed (none vs filtered), and error renders the banner instead of the empty state (index.tsx:92)."
+    },
+    {
+     "technique": "performance",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/incidents/index.tsx:56 The presentation sequence is a memoized derivation whose recomputation inputs are named explicitly. The bounded demo set needs no windowing."
+    },
+    {
+     "technique": "grid-keyboard-model",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentRow.tsx:33 Each row is a single whole-row button in a list, not a table with interactive cells, so the native-table-vs-grid choice does not arise."
+    },
+    {
+     "technique": "pagination",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/incidents/incidents-page/IncidentList.tsx:48 The complete, fixed demo set is rendered whole with no server window, so offset vs keyset is not in play."
+    }
+   ]
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/CategoryTopics.tsx:62 Guide pages render topics as a card grid with a text search, not a table. Grepping src/app/guide recursively for <table, <thead, <td, aria-sort, role=\"grid\" and MarkdownTable found no hits (tables in guide content belong to the Guide Content Blocks context).",
+   "techniques": [],
+   "absenceTerms": [
+    "<table",
+    "<thead",
+    "aria-sort",
+    "role=\"grid\"",
+    "MarkdownTable"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "table",
+   "context": "Guide Content Blocks & Markdown",
+   "reason": "the seat returned unknown"
+  },
+  {
+   "subject": "table",
+   "context": "Error Monitoring & Analytics",
+   "reason": "absence contradicted: src/components/dashboard/MarkdownReport.tsx:58 contains '<table' (9 hit(s) in the context's directories)"
+  },
+  {
+   "subject": "table",
+   "context": "Observability Charts & SLA",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-04T04:35:47.817333+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [
+    "client-server-split",
+    "filtering",
+    "grid-keyboard-model",
+    "loading-and-empty-states",
+    "pagination",
+    "performance",
+    "sorting"
+   ],
+   "deviations": 1,
+   "context": "Incidents Inbox",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-04T04:35:47.817333+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

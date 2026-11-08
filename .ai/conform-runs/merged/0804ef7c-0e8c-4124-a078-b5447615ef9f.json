@@ -1,0 +1,87 @@
+{
+ "schema": "conform-run/1",
+ "worker": "0804ef7c-0e8c-4124-a078-b5447615ef9f",
+ "subject": "model-composed-workspace",
+ "evaluatedAt": "2026-11-07T02:36:38.763290+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Visual Flow Composer & Playground Page",
+   "subject": "model-composed-workspace",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/playground/TerminalSim.tsx:86 The playground plays back fixed lines from data.ts on timers, and FlowComposer is a builder where the user places nodes by hand (use-flow-composer addNode/removeNode). No model picks views or arranges the screen. Searching the context's directories for openai, streamText, composeView and tool_use found nothing.",
+   "techniques": [
+    {
+     "technique": "answer-form-routing",
+     "verdict": "not-applicable",
+     "evidence": "src/app/playground/data.ts:50 Every answer is a fixed script, so no model chooses an answer form."
+    },
+    {
+     "technique": "composition-region",
+     "verdict": "not-applicable",
+     "evidence": "src/components/flow-composer/components/EventQueueBar.tsx:5 Static SVG chrome on a canvas the user composes; there is no region set aside for a model."
+    }
+   ],
+   "absenceTerms": [
+    "openai",
+    "streamText",
+    "composeView",
+    "tool_use"
+   ]
+  },
+  {
+   "context": "Dashboard Home Overview",
+   "subject": "model-composed-workspace",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 The home cards are fixed components fed by the demo API through hooks. No model decides which cards appear or where. Searching the context's directories for openai, streamText, composeView and tool_use found nothing.",
+   "techniques": [
+    {
+     "technique": "composition-region",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:18 The triage pane renders a fixed hook-driven queue, not a model-composed view."
+    }
+   ],
+   "absenceTerms": [
+    "openai",
+    "streamText",
+    "composeView",
+    "tool_use"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-07T02:36:38.763290+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "model-composed-workspace"
+   ],
+   "techniques": [
+    "answer-form-routing",
+    "composition-region"
+   ],
+   "deviations": 0,
+   "context": "Visual Flow Composer & Playground Page",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T02:36:38.763290+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "model-composed-workspace"
+   ],
+   "techniques": [
+    "composition-region"
+   ],
+   "deviations": 0,
+   "context": "Dashboard Home Overview",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

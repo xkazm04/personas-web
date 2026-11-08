@@ -1,0 +1,80 @@
+{
+ "schema": "conform-run/1",
+ "worker": "9d9dd029-0175-477c-a133-543a02698bf9",
+ "subject": "table",
+ "evaluatedAt": "2026-11-07T00:08:14.739142+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Observability Charts & SLA",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/observability/performance-view/PerformanceHealthPanel.tsx:77 In real mode a failed observability fetch leaves the health-issue list empty (PerformanceView.tsx:66 returns [] when not demo), so this branch says \"All systems healthy / no issues detected\" under the error banner, which is an error shown as a settled empty.",
+   "techniques": [
+    {
+     "technique": "loading-and-empty-states",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/observability/PerformanceView.tsx:66 The charts get a `failed` prop (line 141), but the health list does not, so an error with no data reaches the empty branch and shows allSystemsHealthy. Rule 4 says error never wears the empty state's clothes."
+    },
+    {
+     "technique": "filtering",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/sla/sla-page/SLABreachLog.tsx:121 When a severity chip (zero-count chips can still be chosen) empties the breach log, it shows the generic 'no breaches' copy instead of a filter-caused empty worded from the applied predicate. The health panel gets this right at PerformanceHealthPanel.tsx:89 (noSeverityIssues)."
+    }
+   ]
+  },
+  {
+   "context": "Guide Pages & Navigation",
+   "subject": "table",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/app/guide/[category]/CategoryTopics.tsx:67 The guide pages show categories and topics as link cards in a CSS grid (also GuideCategoryGrid.tsx:36), plus sidebar, TOC and search popovers. Searching src/app/guide and src/components/guide for aria-sort, text/csv, role=\"grid\", pageSize and columnheader found nothing, so no tabular record surface exists in this context.",
+   "techniques": [],
+   "absenceTerms": [
+    "aria-sort",
+    "text/csv",
+    "role=\"grid\"",
+    "pageSize",
+    "columnheader"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "table",
+   "context": "Guide Content Blocks & Markdown",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-07T00:08:14.739142+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [
+    "filtering",
+    "loading-and-empty-states"
+   ],
+   "deviations": 1,
+   "context": "Observability Charts & SLA",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  },
+  {
+   "ts": "2026-11-07T00:08:14.739142+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "table"
+   ],
+   "techniques": [],
+   "deviations": 0,
+   "context": "Guide Pages & Navigation",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}
