@@ -12859,6 +12859,62 @@
           "evidence": "src/lib/serverModuleBoundaries.test.ts:8 The technique exempts a small stable capability set; this folder's helpers are four modules an agent can list, so the file omitting json-file-store.ts and request.ts is not a coverage gap."
         }
       ]
+    },
+    "Interactive Demos & Playground/Section Preview & Demo Harness/demo-data-plane": {
+      "context": "Section Preview & Demo Harness",
+      "subject": "demo-data-plane",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-08",
+      "evaluatedTs": "2026-11-08T23:49:53.445Z",
+      "worker": "2f070636-f788-488c-9c06-efa857b46b9c",
+      "techniques": [
+        {
+          "technique": "seeded-determinism",
+          "verdict": "deviation",
+          "evidence": "src/app/demo/page.tsx:33 Forwards any query, including ?seed= (pinned by src/lib/demoEntry.test.ts:10), into the dashboard where useSyncedRealtime passes demoSeedFromUrl(window.location.search) to mulberry32. The generator itself is seeded and defaults to 1; the defect is that the viewer can pick the world."
+        },
+        {
+          "technique": "runtime-dispatch-not-build-flag",
+          "verdict": "conformant",
+          "evidence": "src/app/demo/page.tsx:48 The entry is a route in the shipped artifact that records the choice in session state and redirects, with a bounded wait that swaps the spinner for a manual link, as the technique's entry-failure rule asks."
+        },
+        {
+          "technique": "fake-surface-honesty-contract",
+          "verdict": "conformant",
+          "evidence": "src/app/demo/page.tsx:35 Scope is the clauses this context owns: entry happens only on an explicit visit to /demo, with no inference from empty or failed data. /demo and /preview are disallowed in src/app/robots.ts:13. Marker, lying controls and count rule live in dashboard chrome and were not judged here."
+        },
+        {
+          "technique": "one-interface-many-planes",
+          "verdict": "not-applicable",
+          "evidence": "src/app/demo/page.tsx:26 The page reaches only the session store's entry action and names no plane. A search of src/app/demo, src/app/preview and src/app/_dev-inspector for mockApi, mockData, isDemoPlane and lib/api found nothing."
+        },
+        {
+          "technique": "fixture-self-consistency",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/derive.ts:7 The preview mounts live section components and declares no demo world. A search for fixture terms in these files found none."
+        },
+        {
+          "technique": "network-faithful-mocks",
+          "verdict": "not-applicable",
+          "evidence": "src/app/demo/page.tsx:15 The context only activates the mode. No fake-plane method is implemented or called here."
+        },
+        {
+          "technique": "replay-clock-pinning",
+          "verdict": "not-applicable",
+          "evidence": "src/app/demo/page.tsx:36 The entry only hands off and computes no ages. A search for Date.now, new Date and clock across the context's files found nothing, and no recorded moment is replayed here."
+        },
+        {
+          "technique": "cross-plane-parity-test",
+          "verdict": "not-applicable",
+          "evidence": "src/app/preview/registry.test.ts:77 This check covers component wiring between preview and live pages, not loader props across data planes. The context has no loaders to compare."
+        },
+        {
+          "technique": "mixed-plane-coexistence",
+          "verdict": "not-applicable",
+          "evidence": "src/app/demo/page.tsx:16 Coexistence here is between routes and sessions in one build. This context never puts demo and real rows on one screen."
+        }
+      ]
     }
   }
 }

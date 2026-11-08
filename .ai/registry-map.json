@@ -2716,7 +2716,11 @@
           "revision": 5,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "src/app/demo/page.tsx:33 The /demo entry forwards the whole query string instead of an allow-list such as tour, so /demo?seed=7 reaches demoSeedFromUrl (src/lib/demoRealtime.ts:43) and changes which scripted review and persona arrive, making the seed viewer-settable when the technique requires a checked-in constant no viewer can set.",
+          "evaluatedAt": "2026-11-08",
+          "evaluatedAgainst": "sha256-b2:8b6581bd5537bf1b",
+          "evaluatedRevision": 5
         },
         {
           "subject": "prompt-assembly",
