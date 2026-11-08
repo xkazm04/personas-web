@@ -5420,8 +5420,12 @@
           "revision": 31,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 9
+          "state": "deviation",
+          "priorNotApplicable": 9,
+          "evidence": "src/lib/server/CLAUDE.md:7 The scoped instruction file beside rate-limit.ts states a program-decidable rule about every write route in prose, yet no gate decides it: threatModelControls.test.ts only exercises routes whose threat-model row already names a rate limit, and the orchestrator proxy's POST/PUT/PATCH/DELETE handlers have no limiter while that check still passes by construction.",
+          "evaluatedAt": "2026-11-08",
+          "evaluatedAgainst": "sha256-b2:9b02cf004a7ce444",
+          "evaluatedRevision": 32
         },
         {
           "subject": "declarative-resource-lifecycle",

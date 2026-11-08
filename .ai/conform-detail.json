@@ -12725,25 +12725,27 @@
       "subject": "agent-instruction-files",
       "bundle": "software-engineering",
       "state": "unknown",
-      "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T04:10:29.952Z",
+      "evaluatedAt": "2026-11-08",
+      "evaluatedTs": "2026-11-08T22:24:04.097Z",
       "techniques": [
         {
           "technique": "line-earning",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/playground-split/index.tsx:20 This is a React section component, not an always-loaded instruction file."
+          "evidence": "src/components/sections/playground-split/index.tsx:20 This is a React section component, not an always-loaded instruction file.",
+          "carriedFrom": "2026-11-07"
         },
         {
           "technique": "enforcement-demotion",
           "verdict": "not-applicable",
-          "evidence": "src/components/sections/playground-split/index.tsx:22 This line runs a UI animation hook. There is no prose rule here that could be moved into a gate."
+          "evidence": "src/components/sections/playground-split/index.tsx:22 This line runs a UI animation hook. There is no prose rule here that could be moved into a gate.",
+          "carriedFrom": "2026-11-07"
         }
       ],
       "withdrawn": {
-        "worker": "e8867915-b101-4961-a244-2cd2b510efb6",
+        "worker": "66eaf90f-9a76-46db-a0b0-adbb17bbb683",
         "state": "not-applicable",
-        "at": "2026-11-07T04:10:53.815615+00:00",
-        "reason": "reviewer (sonnet): Both anchors are incidental React and metadata lines that cannot show an instruction file is absent, and the repo root has CLAUDE.md and AGENTS.md that govern all of src, so the precondition does hold."
+        "at": "2026-11-08T22:25:14.510961+00:00",
+        "reason": "reviewer (sonnet): The anchor context-map.json:457 is the map's own entry for the context and is outside the context's files. It does not show that the code carries no agent guidance. The claim that the code is a 'scripted UI simulation whose prompt is demo content' rests on a zero-hit search, not on the cited line."
       }
     },
     "Marketing & Landing/Features Overview & Pricing/agent-instruction-files": {
@@ -12751,25 +12753,27 @@
       "subject": "agent-instruction-files",
       "bundle": "software-engineering",
       "state": "unknown",
-      "evaluatedAt": "2026-11-07",
-      "evaluatedTs": "2026-11-07T04:10:29.952Z",
+      "evaluatedAt": "2026-11-08",
+      "evaluatedTs": "2026-11-08T22:24:04.097Z",
       "techniques": [
         {
           "technique": "line-earning",
           "verdict": "not-applicable",
-          "evidence": "src/app/features/page.tsx:16 This is page metadata for search engines, not agent instruction lines."
+          "evidence": "src/app/features/page.tsx:16 This is page metadata for search engines, not agent instruction lines.",
+          "carriedFrom": "2026-11-07"
         },
         {
           "technique": "instruction-freshness",
           "verdict": "not-applicable",
-          "evidence": "src/app/features/page.tsx:7 This is route rendering config. There is no instruction file here whose claims could go stale."
+          "evidence": "src/app/features/page.tsx:7 This is route rendering config. There is no instruction file here whose claims could go stale.",
+          "carriedFrom": "2026-11-07"
         }
       ],
       "withdrawn": {
-        "worker": "e8867915-b101-4961-a244-2cd2b510efb6",
+        "worker": "66eaf90f-9a76-46db-a0b0-adbb17bbb683",
         "state": "not-applicable",
-        "at": "2026-11-07T04:10:53.815615+00:00",
-        "reason": "reviewer (sonnet): Both anchors are incidental React and metadata lines that cannot show an instruction file is absent, and the repo root has CLAUDE.md and AGENTS.md that govern all of src, so the precondition does hold."
+        "at": "2026-11-08T22:25:14.690815+00:00",
+        "reason": "reviewer (sonnet): The anchor context-map.json:115 is the map's description line, which is incidental and outside the context's files. It does not show that no instruction asset is authored there. The absence claim depends only on a name search."
       }
     },
     "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/agent-runtime-assembly": {
@@ -12813,6 +12817,47 @@
         "at": "2026-11-07T22:26:06.526326+00:00",
         "reason": "reviewer (sonnet): The anchor index.tsx:19 is only the `useTranslation` import line, so it doesn't show the precondition is absent. `mobileCopy` and `pending/mobile` appear in ReviewDetailPanel.tsx, not at the anchor. I couldn't confirm the claim that the gate's walker and copy contract live elsewhere. The 0-hit grep "
       }
+    },
+    "Roadmap, Voting & Waitlist/Server-Side Vote Persistence/agent-instruction-files": {
+      "context": "Server-Side Vote Persistence",
+      "subject": "agent-instruction-files",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-08",
+      "evaluatedTs": "2026-11-08T22:24:04.097Z",
+      "worker": "66eaf90f-9a76-46db-a0b0-adbb17bbb683",
+      "techniques": [
+        {
+          "technique": "enforcement-demotion",
+          "verdict": "deviation",
+          "evidence": "src/lib/server/CLAUDE.md:7 A program could decide this (each route.ts exporting a write verb calls rateLimitGuard, with an exact exceptions list as in serverModuleBoundaries.test.ts). Unlike line 6, it names no gate. The nearest check (src/lib/threatModelControls.test.ts:94 filters rows by /rate limit/) watches the doc's own column, so a write route whose row omits the phrase escapes. Live counterexample: src/app/api/orchestrator/[...path]/route.ts:145 has a POST with no limiter, session-gated instead, and the line states no such exception."
+        },
+        {
+          "technique": "single-source-topology",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/CLAUDE.md:3 Nested file is additive and defers to docs/threat-model.md and .claude/CLAUDE.md, loaded on touch and contradicting neither. Its 'cannot drift' clause overclaims: the bullets carry rule text and only names, headings and length are pinned."
+        },
+        {
+          "technique": "line-earning",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/CLAUDE.md:5 Carries a cross-module invariant and the mechanism behind it, which no single file shows, in a 7-line loaded-on-touch file. The behaviour-changing half rests on inference; the file arrived in an unrelated loop commit (fb5cecd9), so no origin story could be established for the line."
+        },
+        {
+          "technique": "instruction-freshness",
+          "verdict": "conformant",
+          "evidence": "src/lib/scopedGuidance.test.ts:30 Paths and cited threat-model headings are a test, not a reading, and I confirmed every named target resolves today. The pin covers names, not meaning. 'step 5' is an ordinal citation, correct today, of the kind conventionPointers.test.ts bans for conventions."
+        },
+        {
+          "technique": "capability-before-steering",
+          "verdict": "conformant",
+          "evidence": "src/lib/server/rate-limit.ts:124 The capability the file steers toward exists and is callable, so the line asks for something an agent can actually do."
+        },
+        {
+          "technique": "capability-coverage-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/serverModuleBoundaries.test.ts:8 The technique exempts a small stable capability set; this folder's helpers are four modules an agent can list, so the file omitting json-file-store.ts and request.ts is not a coverage gap."
+        }
+      ]
     }
   }
 }
