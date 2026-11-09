@@ -12915,6 +12915,58 @@
           "evidence": "src/app/demo/page.tsx:16 Coexistence here is between routes and sessions in one build. This context never puts demo and real rows on one screen."
         }
       ]
+    },
+    "Marketing & Landing/Homepage & Hero/english": {
+      "context": "Homepage & Hero",
+      "subject": "english",
+      "bundle": "localization",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-09",
+      "evaluatedTs": "2026-11-09T00:32:36.917Z",
+      "worker": "55391d51-f923-494b-a0ed-3dfed527cdd2",
+      "techniques": [
+        {
+          "technique": "typography-and-capitalization",
+          "verdict": "deviation",
+          "evidence": "src/i18n/pending/landingSections.ts:85 EN-END-PUNCT: full stop closes the h1 with no declared display style. Further typography hits are listed in notes (EN-DASH, EN-LATIN, EN-CASE)."
+        },
+        {
+          "technique": "variant-and-locale-conventions",
+          "verdict": "conformant",
+          "evidence": "src/app/homeJsonLd.ts:31 US -ize form, matching the declared US variant (docs/i18n/style-en.md:11); no UK form in any string this context renders. Serial comma is held in the hero aria text."
+        },
+        {
+          "technique": "register-and-voice",
+          "verdict": "conformant",
+          "evidence": "src/i18n/en.ts:2096 Section-failure fallback is plain and blame-free, uses a contraction, has no 'we' and no exclamation (EN-WE, EN-YOU exception, EN-CONTRACTION, EN-EXCLAIM). One EN-REDUNDANCY candidate for a reader to confirm: homeJsonLd.ts:30 'Self-healing execution with automatic recovery'."
+        },
+        {
+          "technique": "ui-and-landing-microcopy",
+          "verdict": "conformant",
+          "evidence": "src/i18n/en.ts:2055 EN-BUTTON: specific verb plus object in two words; the sibling CTA 'Take the tour' and the fallback's 'Reload' are also verbs. EN-TAGLINE was not run with competitors' lines beside it, as that rule requires."
+        },
+        {
+          "technique": "interference-constructions",
+          "verdict": "conformant",
+          "evidence": "src/i18n/pending/landingSections.ts:87 The longest full sentence the hero renders has correct articles, prepositions and SVO order; no EN-ARTICLE, EN-PREP or EN-COMMA-THAT hit in the context's strings."
+        },
+        {
+          "technique": "false-friends-and-collocations",
+          "verdict": "conformant",
+          "evidence": "src/app/homeJsonLd.ts:10 Native verb-object pairs and no lexicon cognate in the context's strings. EN-ONE-TERM across the catalog was not counted; see notes."
+        },
+        {
+          "technique": "generated-prose-patterns",
+          "verdict": "conformant",
+          "evidence": "src/app/homeJsonLd.ts:28 Feature claims carry checkable specifics rather than category adjectives; no EN-PUFFERY trigger word, EN-PARTICIPLE-TAIL, EN-OPENER or chat residue in the context's strings. The hero's one fragment run stays within EN-STACCATO."
+        },
+        {
+          "technique": "de-translationese-constructions",
+          "verdict": "not-applicable",
+          "evidence": "src/i18n/pending/landingSections.ts:2 The hero copy has no source-language text in the repo and is the source for later translation; the technique excludes strings written natively in English. No EN-CONNECTOR trigger appears in the context's strings."
+        }
+      ],
+      "registryProposal": "typography-and-capitalization excludes 'data exports' without saying whether prose fields in structured data (a schema.org description that search engines may display) count; variant-and-locale-conventions has the same gap with 'data exports whose reader is a machine'. EN-END-PUNCT also does not say whether a two-sentence poster headline counts as a heading closed by a full stop or as a multi-sentence body."
     }
   }
 }
