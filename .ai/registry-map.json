@@ -6541,7 +6541,11 @@
           "revision": 3,
           "changedAt": "2026-08-31",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:16 This context has no outbound delivery: the Notifications card only flips in-app preference booleans persisted to localStorage, and Messages only reads synced_messages from Supabase. A search of the context's files for webhook/subscription/outbound/slack/dispatch/channel found nothing. Across all of src/components/dashboard, fetch(, sendNotification, webhookUrl, webhook_url and sendBeacon each had zero hits, so no channel, destination, template or dispatch exists here to judge.",
+          "evaluatedAt": "2026-11-09",
+          "evaluatedAgainst": "sha256-b2:fa75c38baf3e6de1",
+          "evaluatedRevision": 3
         },
         {
           "subject": "companion-runtime",

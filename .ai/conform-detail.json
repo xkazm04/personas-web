@@ -12967,6 +12967,37 @@
         }
       ],
       "registryProposal": "typography-and-capitalization excludes 'data exports' without saying whether prose fields in structured data (a schema.org description that search engines may display) count; variant-and-locale-conventions has the same gap with 'data exports whose reader is a machine'. EN-END-PUNCT also does not say whether a two-sentence poster headline counts as a heading closed by a full stop or as a multi-sentence body."
+    },
+    "Agent Operations Dashboard/Messages & Settings/outbound-notifications": {
+      "context": "Messages & Settings",
+      "subject": "outbound-notifications",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-09",
+      "evaluatedTs": "2026-11-09T22:01:55.964Z",
+      "worker": "ed0f5dcb-e99a-4ee3-9fed-efba303d1a8e",
+      "techniques": [
+        {
+          "technique": "subscription-patterns",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:78 These severity toggles are a local alert-count filter. They are not event-pattern subscriptions bound to a channel and destination."
+        },
+        {
+          "technique": "destination-guard-integrity",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:83 The weekly digest is a boolean toggle with no user-supplied endpoint or address field. Nothing is dispatched from this context, so there is no destination for a guard to check."
+        },
+        {
+          "technique": "inbound-counterparts",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/messages/useMessagesData.ts:51 Messages is a read-only reader of persona messages synced from Supabase. There is no reply or send path, so no mirror lane or echo guard is needed."
+        },
+        {
+          "technique": "compose-at-the-locale-layer",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:50 The preview emits a structured signal on an in-app bus that drives browser speech. That is in-app delivery (the toasts-notifications subject), not an immutable outbound message."
+        }
+      ]
     }
   }
 }
