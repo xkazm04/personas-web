@@ -10199,16 +10199,27 @@
       "context": "Build Config & E2E Tests",
       "subject": "schema-driven-ui",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-25",
-      "evaluatedTs": "2026-10-25T23:30:38.229Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "2f025f94-ea91-45dc-bbba-395ffd6133a3",
-        "state": "not-applicable",
-        "at": "2026-10-25T23:31:00.462995+00:00",
-        "reason": "reviewer (sonnet): The anchor, e2e/guide.spec.ts:195, is only a comment about CompareBlock and does not show that a spec-to-UI registry is absent. The 'src/ has no spec renderer' claim is about code outside this context. I also found that src/components/guide/guide-markdown/ (parseGuide.ts, renderGuideDoc.tsx) parses "
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-10",
+      "evaluatedTs": "2026-11-10T22:01:08.804Z",
+      "worker": "20e245f5-b4b8-447e-8a81-0df812d1f5ae",
+      "techniques": [
+        {
+          "technique": "node-vocabulary-design",
+          "verdict": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:205 The :::keys block is a markdown block written by the team (authoring-block-vocabulary territory), not a closed node vocabulary for a model- or user-composed spec."
+        },
+        {
+          "technique": "registry-mapping",
+          "verdict": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:195 The tests check the visible text of a block written by the team. Nothing maps spec kinds through a registry."
+        },
+        {
+          "technique": "spec-validation-and-repair",
+          "verdict": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:199 Assertions check fixed content. No spec is validated or repaired, and no dropped-N count is shown."
+        }
+      ]
     },
     "Observability & Event Monitoring/Leaderboard & Rankings/scoring-rubrics": {
       "context": "Leaderboard & Rankings",

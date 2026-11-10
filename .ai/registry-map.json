@@ -10379,7 +10379,11 @@
           "revision": 2,
           "changedAt": "2026-08-21",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:195 These Playwright specs drive pages whose layouts the team writes itself; the closest thing to a spec-rendered node is a guide markdown block (CompareBlock, :::keys) written by the same team, so no untrusted composer and no spec→registry renderer exist for these tests to cover. A search of e2e/ found no hits for schema, nodeKind, renderer, registry or capabilities, and src/ has no UiSpec/SpecRenderer/componentRegistry/blockRegistry construct.",
+          "evaluatedAt": "2026-11-10",
+          "evaluatedAgainst": "sha256-b2:3a801e8a0fefc717",
+          "evaluatedRevision": 2
         }
       ],
       "governance": "governed"
