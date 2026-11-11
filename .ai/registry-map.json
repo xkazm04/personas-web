@@ -2517,8 +2517,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 10
+          "state": "not-applicable",
+          "priorNotApplicable": 10,
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:4 The context is a scripted marketing animation that acts out five fixed failure cases and their healing remedies, and nothing in it runs a model against scenarios or scores results; a search of its directories (healing-run-circuit/, healing-run-circuit/shared/, illustrate/) for judge, rubric, benchmark, passRate and golden found zero hits, so the eval-harness precondition does not hold.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:85554b740461b19e",
+          "evaluatedRevision": 39
         },
         {
           "subject": "agent-instruction-files",
@@ -3712,8 +3716,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 10
+          "state": "not-applicable",
+          "priorNotApplicable": 10,
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 Here 'SCENARIOS' are hand-timed chat scripts for a landing animation, and the star ratings in them are hardcoded literals (e.g. `stars: { scripted: 2, agent: 5 }` at line 40), not measured scores, so no agent is run or scored and the eval-harness precondition does not hold; a search of agents-chat-split/ and its shared/ folder for judge, rubric, benchmark, passRate and golden found zero hits (the only eval-adjacent term, 'scenario', names these display scripts).",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:85554b740461b19e",
+          "evaluatedRevision": 39
         },
         {
           "subject": "agent-cli-transport",
@@ -8253,8 +8261,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 10
+          "state": "not-applicable",
+          "priorNotApplicable": 10,
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:8 The view renders mock fixtures of 0–5 Director verdict scores (directorMeta.ts only derives display tones, momentum and attention flags from them), and the scoring itself happens in the desktop app; this repo runs no scenarios, trials or judge calls, so the eval-harness machinery (pinned judges, aggregation, scenario versioning) has nothing to govern here. A search of director/ for judge, rubric, benchmark, passRate and golden found zero hits; 'verdict' and 'score' do appear, but only as display fields of the mocked data.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:85554b740461b19e",
+          "evaluatedRevision": 39
         },
         {
           "subject": "prompt-assembly",

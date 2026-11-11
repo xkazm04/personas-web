@@ -13040,6 +13040,37 @@
           "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:127 Each hook fetches for itself. No shared replica or stream is fanned out to consumers inside this context."
         }
       ]
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/eval-harness": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:25:04.890Z",
+      "worker": "0f3b7a7b-c426-4c83-b0c0-6216a78d5733",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/eval-harness": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:25:04.890Z",
+      "worker": "0f3b7a7b-c426-4c83-b0c0-6216a78d5733",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Director Coaching/eval-harness": {
+      "context": "Director Coaching",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:25:04.890Z",
+      "worker": "0f3b7a7b-c426-4c83-b0c0-6216a78d5733",
+      "techniques": [],
+      "registryProposal": "The use_when match on 'score'/'verdict' pulls display-only dashboards of judge output into eval-harness. The subject could say plainly that rendering a judge's verdicts is out of scope when the judging runs in another system."
     }
   }
 }
