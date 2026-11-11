@@ -13009,6 +13009,42 @@
           "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:50 The preview emits a structured signal on an in-app bus that drives browser speech. That is in-app delivery (the toasts-notifications subject), not an immutable outbound message."
         }
       ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/watch-cache-and-resync": {
+      "context": "Dashboard Home Overview",
+      "subject": "watch-cache-and-resync",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:05:16.008Z",
+      "worker": "da85311b-1bc4-4bd5-a3fe-8f10dce20230",
+      "techniques": [
+        {
+          "technique": "desync-is-a-state",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:48 One read per mount with no cursor or resumable stream, so there is no position that can expire and no desync state to model."
+        },
+        {
+          "technique": "atomic-swap-at-initial-sync",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:112 The grid is derived from one completed Promise.all and set in a single call, so nothing assembles a live replica incrementally. No re-read protocol exists for a swap to guard."
+        },
+        {
+          "technique": "initial-read-strategy-behind-a-gate",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:102 This is a plain bounded list read. The source offers no alternative initial-read protocol to choose between behind a capability gate."
+        },
+        {
+          "technique": "read-phase-before-write-transaction",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:119 No poll cycle writes rows. A failed read sets an error and keeps the previous rows instead of writing an empty result, which matches the technique's spirit, but its polled-replica precondition is absent."
+        },
+        {
+          "technique": "one-stream-fanned-out",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:127 Each hook fetches for itself. No shared replica or stream is fanned out to consumers inside this context."
+        }
+      ]
     }
   }
 }

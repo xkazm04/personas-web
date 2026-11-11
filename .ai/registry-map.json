@@ -8944,7 +8944,11 @@
           "revision": 3,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 The context's data hooks do one request-driven read when the component mounts (re-run only when useMock, reloadKey or the locale changes), so no complete replica fed by a change stream or poll cycle exists here; searching src/components/dashboard for resync, desync, resourceVersion, lastOk and initialSync found 0 hits, and the only setInterval timers in the context drive UI ticks (relative time, ticker rotation), not data reads.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:26e858c401316003",
+          "evaluatedRevision": 3
         },
         {
           "subject": "agent-memory",
