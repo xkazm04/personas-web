@@ -13135,6 +13135,28 @@
           "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:36 The scenarios are static scripted timelines, not live session entries."
         }
       ]
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/companion-identity": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T23:08:37.596Z",
+      "worker": "f8afedf0-d9b4-4031-8db9-5ad559971184",
+      "techniques": [
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "deviation",
+          "evidence": "scripts/i18n/guide-drift.mjs:27 The context's only drift gate compares each translation with the English text it was made from, which is one proxy checked against another. Nothing checks the English capability prose against the companion's action list, and nothing records a working/broken/unexercised state. The technique names this failure (gate-sees-target). The desktop repo's check-doc-sync.mjs Stop hook only nags when any personas-web file is edited, and the nag can be dismissed, so the guide is kept in sync by discipline rather than derived."
+        },
+        {
+          "technique": "anchored-identity-diffs",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/content/companion.ts:111 This line only describes anchored edits to identity.md, which happen in the desktop runtime. No code in this context writes or approves a self-model, so this prose is not evidence that the technique is realized."
+        }
+      ],
+      "registryProposal": "capability-exercise-ledger should say whether user-facing help text published from a separate repo or site (a product guide translated into N locales) is within scope. If it is, the derived inventory has to cross a repo boundary, and the technique could name the minimum acceptable link: a generated capability manifest that the docs site imports and diffs against."
     }
   }
 }

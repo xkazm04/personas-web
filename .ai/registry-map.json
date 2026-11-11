@@ -4073,8 +4073,12 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "deviation",
+          "priorNotApplicable": 5,
+          "evidence": "src/data/guide/locales/ar/content/companion.ts:240 The localized guide is the companion's user-facing help text. It lists what Athena can do (navigate, open editors, build cockpits, call connectors) in hand-written prose translated from hand-written English, and no code here derives that list from the runtime's permitted-action set or reports described-but-absent and present-but-undescribed capabilities, so a capability removed or added in the desktop host keeps being advertised (or missed) in all 14 locales.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         }
       ],
       "governance": "governed"
