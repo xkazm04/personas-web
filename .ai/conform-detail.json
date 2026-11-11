@@ -13111,13 +13111,24 @@
       "bundle": "software-engineering",
       "state": "unknown",
       "evaluatedAt": "2026-11-11",
-      "evaluatedTs": "2026-11-11T22:36:24.688Z",
-      "techniques": [],
+      "evaluatedTs": "2026-11-11T23:23:32.563Z",
+      "techniques": [
+        {
+          "technique": "host-forwarded-key-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/vision-grid/layer-stack/LayerLabels.tsx:45 The only key handling is ordinary in-document arrow/Home/End tablist navigation. No native wrapper forwards hardware or remote keys."
+        },
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/app/features/page.tsx:7 A static web page has no per-platform native capabilities to guard."
+        }
+      ],
       "withdrawn": {
-        "worker": "391ea9da-e313-40fe-8477-f3789543d22f",
+        "worker": "0eced74c-6a15-4c2c-a9d4-49e580bfd8b5",
         "state": "not-applicable",
-        "at": "2026-11-11T22:37:18.998150+00:00",
-        "reason": "reviewer (sonnet): The context's vision-grid files (data.ts, layer-stack/LayerDetail.tsx) import src/lib/guide-link.ts, whose openGuideLink checks window.__PERSONAS_DESKTOP__ and dispatches a 'personas:open-external' CustomEvent to a native desktop host, so a native-shell seam does exist here and the not-applicable cl"
+        "at": "2026-11-11T23:24:03.240353+00:00",
+        "reason": "reviewer (sonnet): The evidence says a search of all of src found no tauri hits, but src/data/guide/content/getting-started.ts:247 (and its locale copies) says Personas is a Tauri desktop app, so the claim that the product ships no native process is false. The anchor, page.tsx:7 (force-static), only shows this page is"
       }
     },
     "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/fleet-orchestration": {

@@ -1,0 +1,33 @@
+{
+  "schema": "conform-run/1",
+  "worker": "0eced74c-6a15-4c2c-a9d4-49e580bfd8b5",
+  "subject": "native-shell-integration",
+  "evaluatedAt": "2026-11-11T23:23:32.563265+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "native-shell-integration",
+      "context": "Features Overview & Pricing",
+      "reason": "withdrawn after review: reviewer (sonnet): The evidence says a search of all of src found no tauri hits, but src/data/guide/content/getting-started.ts:247 (and its locale copies) says Personas is a Tauri desktop app, so the claim that the product ships no native process is false. The anchor, page.tsx:7 (force-static), only shows this page is"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-11-11T23:23:32.563265+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "native-shell-integration"
+      ],
+      "techniques": [
+        "capability-presence-contract",
+        "host-forwarded-key-contract"
+      ],
+      "deviations": 0,
+      "context": "Features Overview & Pricing",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}
