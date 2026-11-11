@@ -1507,8 +1507,8 @@
           "revision": 5,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "agent-memory",
@@ -8693,8 +8693,12 @@
           "revision": 5,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/api/events/stream/route.ts:13 The event stream is a server-side SSE proxy consumed by a browser tab with no native wrapper, so native-owned-stream and every other technique here has no native side to own anything; searching src, scripts and package.json for __TAURI__, @tauri-apps, ipcRenderer and electron found nothing.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:838495bb60a986c6",
+          "evaluatedRevision": 6
         },
         {
           "subject": "fleet-orchestration",
@@ -10521,8 +10525,12 @@
           "revision": 5,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/sync/reachability.ts:2 This context is a browser-side remote client of a desktop app that ships from another repo, and it reaches that app over Supabase or HTTP; reachability and pairing trust belong to the pairing and transport-selection subjects, and no native wrapper, IPC or host-grant API turned up for __TAURI__, @tauri-apps, ipcRenderer or electron.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:838495bb60a986c6",
+          "evaluatedRevision": 6
         },
         {
           "subject": "agent-runtime-assembly",
