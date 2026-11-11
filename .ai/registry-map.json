@@ -3389,7 +3389,11 @@
           "changedAt": "2026-09-25",
           "confidence": "probable",
           "priorNotApplicable": 9,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:19 The 'prompts' in this context are translated marketing demo data for an animated playground, not an always-loaded instruction file read by a coding harness. Grepping the context directories for CLAUDE.md, AGENTS.md, copilot-instructions, .cursorrules, GEMINI.md and 'instruction'/'system prompt' found no matches.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:9b02cf004a7ce444",
+          "evaluatedRevision": 32
         },
         {
           "subject": "agent-memory",
