@@ -13119,6 +13119,22 @@
         "at": "2026-11-11T22:37:18.998150+00:00",
         "reason": "reviewer (sonnet): The context's vision-grid files (data.ts, layer-stack/LayerDetail.tsx) import src/lib/guide-link.ts, whose openGuideLink checks window.__PERSONAS_DESKTOP__ and dispatches a 'personas:open-external' CustomEvent to a native desktop host, so a native-shell seam does exist here and the not-applicable cl"
       }
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/fleet-orchestration": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:48:04.662Z",
+      "worker": "90606cd5-1a50-49a8-90d6-e6967f9c5629",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:36 The scenarios are static scripted timelines, not live session entries."
+        }
+      ]
     }
   }
 }

@@ -3779,8 +3779,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/agents-chat-split/shared/useStoryClock.ts:7 This context is a scripted marketing animation that plays canned chat lines on a story clock. A search of its directory for fleet, session, registry, hibernat and harvest found no hits (the only 'dispatch' hits are React useReducer calls), so no agent sessions are registered, dispatched or harvested here.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "companion-identity",
