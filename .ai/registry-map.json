@@ -8955,8 +8955,12 @@
           "revision": 22,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "deviation",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:28 The home Triage Pane styles pending reviews by severity weight alone and never by age. An `info` review therefore stays calm cyan right up to the moment the reviewStore sweep auto-approves it at 480 min (review-sla.ts DEFAULT_ESCALATION_POLICY), even though review-sla's own urgency ladder turns it urgent at 120 min.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:9adc955a19c6822e",
+          "evaluatedRevision": 23
         },
         {
           "subject": "watch-cache-and-resync",
