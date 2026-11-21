@@ -1,0 +1,78 @@
+{
+ "schema": "conform-run/1",
+ "worker": "764b69b8-ba23-45d1-a0a5-8d69f612c732",
+ "subject": "hitl-approval",
+ "evaluatedAt": "2026-11-11T23:18:43.167918+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Dashboard Home Overview",
+   "subject": "hitl-approval",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:28 The home Triage Pane styles pending reviews by severity weight alone and never by age. An `info` review therefore stays calm cyan right up to the moment the reviewStore sweep auto-approves it at 480 min (review-sla.ts DEFAULT_ESCALATION_POLICY), even though review-sla's own urgency ladder turns it urgent at 120 min.",
+   "techniques": [
+    {
+     "technique": "cosmetic-vs-enforced-threshold-invariant",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:28 Rose/amber/cyan tone comes from severity weight only (>=90/>=50); it ignores URGENCY_THRESHOLD_MINUTES/slaState. So for `info` this surface's cosmetic signal never fires before the enforcing auto_approve. validateEscalationPolicy in review-sla.ts asserts the invariant only for the reviews view's ladder, not for this derived surface."
+    },
+    {
+     "technique": "review-queues",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:82 Within a severity the order is newest-first (useTriageQueue sorts by startedAt descending, then slice(0, MAX_ITEMS=6)). That is the reverse of expiring-soonest-first, so the oldest pending reviews, the ones closest to their SLA action, are the rows cut. The badge (items.length) matches the rows shown but is capped at 6 and does not say it is a top-6 subset."
+    },
+    {
+     "technique": "fail-loud-classification-default",
+     "verdict": "deviation",
+     "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:61 reviewStore correctly promotes unparseable payloads to `critical` and sets `parseError`. TriageItem has no field for that marker, so the chip shows only the kind label and a defaulted row looks exactly like a genuine critical review. This is the 'severity without marker' half-failure."
+    },
+    {
+     "technique": "resume-after-decision",
+     "verdict": "conformant",
+     "evidence": "src/components/dashboard/views/home/home-page/ApprovedWorkCard.tsx:103 The card reconciles approvals against execution. Approved items that never ran are shown distinctly from dispatched ones, so the record does not stop silently at 'approved'. Dispatch itself is demo-local (no orchestrator)."
+    },
+    {
+     "technique": "severity-sla-ladder",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/ApprovedWorkCard.tsx:37 This context's only age threshold is a cosmetic 'stale' label with no automated action. The acting ladder lives in src/lib/review-sla.ts, outside this context."
+    },
+    {
+     "technique": "decision-records",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/ApprovedWorkCard.tsx:26 No gate verdict is written in this context. Dispatch of already-approved work is a demo-local session Set with no backend, so there is no decision record to judge here."
+    },
+    {
+     "technique": "gate-state-machines",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:44 The pane holds no verdict control. Each review row only navigates to /dashboard/reviews, where gate state is transitioned."
+    }
+   ],
+   "registryProposal": "cosmetic-vs-enforced-threshold-invariant assumes the cosmetic ladder lives next to the queue and can be asserted at load. In practice a secondary aggregate surface (a home triage pane) re-derives urgency from severity alone and forms an unasserted third ladder that the load-time check never sees. The technique should require every surface that renders pending items with urgency styling to derive it from the same SLA-state function the assertion covers."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-11T23:18:43.167918+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "hitl-approval"
+   ],
+   "techniques": [
+    "cosmetic-vs-enforced-threshold-invariant",
+    "decision-records",
+    "fail-loud-classification-default",
+    "gate-state-machines",
+    "resume-after-decision",
+    "review-queues",
+    "severity-sla-ladder"
+   ],
+   "deviations": 1,
+   "context": "Dashboard Home Overview",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

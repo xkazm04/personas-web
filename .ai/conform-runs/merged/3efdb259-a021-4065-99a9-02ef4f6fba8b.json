@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "3efdb259-a021-4065-99a9-02ef4f6fba8b",
+ "subject": "usage-event-ingestion",
+ "evaluatedAt": "2026-11-10T22:20:01.387816+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "usage-event-ingestion",
+   "context": "Event Bus & Stream Monitoring",
+   "reason": "absence contradicted: src/components/dashboard/SubscriptionsPanel.tsx:13 contains 'subscription' (97 hit(s) in the context's directories)"
+  }
+ ],
+ "consults": []
+}
