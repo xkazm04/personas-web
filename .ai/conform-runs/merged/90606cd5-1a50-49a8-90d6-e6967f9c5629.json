@@ -1,0 +1,54 @@
+{
+ "schema": "conform-run/1",
+ "worker": "90606cd5-1a50-49a8-90d6-e6967f9c5629",
+ "subject": "fleet-orchestration",
+ "evaluatedAt": "2026-11-11T22:48:04.662238+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Agent Playground & Multi-Agent Chat",
+   "subject": "fleet-orchestration",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/sections/agents-chat-split/shared/useStoryClock.ts:7 This context is a scripted marketing animation that plays canned chat lines on a story clock. A search of its directory for fleet, session, registry, hibernat and harvest found no hits (the only 'dispatch' hits are React useReducer calls), so no agent sessions are registered, dispatched or harvested here.",
+   "techniques": [
+    {
+     "technique": "session-registry",
+     "verdict": "not-applicable",
+     "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:36 The scenarios are static scripted timelines, not live session entries."
+    }
+   ],
+   "absenceTerms": [
+    "fleet",
+    "session",
+    "registry",
+    "hibernat",
+    "harvest"
+   ]
+  }
+ ],
+ "declined": [
+  {
+   "subject": "fleet-orchestration",
+   "context": "Agents (Personas) Management",
+   "reason": "the seat returned unknown"
+  }
+ ],
+ "consults": [
+  {
+   "ts": "2026-11-11T22:48:04.662238+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "fleet-orchestration"
+   ],
+   "techniques": [
+    "session-registry"
+   ],
+   "deviations": 0,
+   "context": "Agent Playground & Multi-Agent Chat",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

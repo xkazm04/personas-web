@@ -1,0 +1,72 @@
+{
+ "schema": "conform-run/1",
+ "worker": "da85311b-1bc4-4bd5-a3fe-8f10dce20230",
+ "subject": "watch-cache-and-resync",
+ "evaluatedAt": "2026-11-11T22:05:16.008731+00:00",
+ "provider": "claude",
+ "model": "claude-opus-5-5",
+ "pairs": [
+  {
+   "context": "Dashboard Home Overview",
+   "subject": "watch-cache-and-resync",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 The context's data hooks do one request-driven read when the component mounts (re-run only when useMock, reloadKey or the locale changes), so no complete replica fed by a change stream or poll cycle exists here; searching src/components/dashboard for resync, desync, resourceVersion, lastOk and initialSync found 0 hits, and the only setInterval timers in the context drive UI ticks (relative time, ticker rotation), not data reads.",
+   "techniques": [
+    {
+     "technique": "desync-is-a-state",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:48 One read per mount with no cursor or resumable stream, so there is no position that can expire and no desync state to model."
+    },
+    {
+     "technique": "atomic-swap-at-initial-sync",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:112 The grid is derived from one completed Promise.all and set in a single call, so nothing assembles a live replica incrementally. No re-read protocol exists for a swap to guard."
+    },
+    {
+     "technique": "initial-read-strategy-behind-a-gate",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:102 This is a plain bounded list read. The source offers no alternative initial-read protocol to choose between behind a capability gate."
+    },
+    {
+     "technique": "read-phase-before-write-transaction",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:119 No poll cycle writes rows. A failed read sets an error and keeps the previous rows instead of writing an empty result, which matches the technique's spirit, but its polled-replica precondition is absent."
+    },
+    {
+     "technique": "one-stream-fanned-out",
+     "verdict": "not-applicable",
+     "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:127 Each hook fetches for itself. No shared replica or stream is fanned out to consumers inside this context."
+    }
+   ],
+   "absenceTerms": [
+    "resync",
+    "desync",
+    "resourceVersion",
+    "lastOk",
+    "initialSync"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-11-11T22:05:16.008731+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "watch-cache-and-resync"
+   ],
+   "techniques": [
+    "atomic-swap-at-initial-sync",
+    "desync-is-a-state",
+    "initial-read-strategy-behind-a-gate",
+    "one-stream-fanned-out",
+    "read-phase-before-write-transaction"
+   ],
+   "deviations": 0,
+   "context": "Dashboard Home Overview",
+   "via": "curator-multi:claude",
+   "model": "claude-opus-5-5"
+  }
+ ]
+}

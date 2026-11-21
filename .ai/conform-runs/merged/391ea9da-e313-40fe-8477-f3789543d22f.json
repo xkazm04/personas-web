@@ -1,0 +1,100 @@
+{
+  "schema": "conform-run/1",
+  "worker": "391ea9da-e313-40fe-8477-f3789543d22f",
+  "subject": "native-shell-integration",
+  "evaluatedAt": "2026-11-11T22:36:24.688674+00:00",
+  "provider": "claude",
+  "model": "claude-opus-5-5",
+  "pairs": [
+    {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/app/api/events/stream/route.ts:13 The event stream is a server-side SSE proxy consumed by a browser tab with no native wrapper, so native-owned-stream and every other technique here has no native side to own anything; searching src, scripts and package.json for __TAURI__, @tauri-apps, ipcRenderer and electron found nothing.",
+      "techniques": [
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:13 The stream belongs to a plain web view; there is no native process to move it to."
+        }
+      ],
+      "absenceTerms": [
+        "__TAURI__",
+        "@tauri-apps",
+        "ipcRenderer",
+        "electron"
+      ]
+    },
+    {
+      "context": "Supabase Client",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evidence": "src/lib/sync/reachability.ts:2 This context is a browser-side remote client of a desktop app that ships from another repo, and it reaches that app over Supabase or HTTP; reachability and pairing trust belong to the pairing and transport-selection subjects, and no native wrapper, IPC or host-grant API turned up for __TAURI__, @tauri-apps, ipcRenderer or electron.",
+      "techniques": [
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sync/desktopUnsupported.ts:18 This is a table of what each remote data plane supports, not native-host presence; it looks like the technique but the technique's precondition doesn't hold."
+        }
+      ],
+      "absenceTerms": [
+        "__TAURI__",
+        "@tauri-apps",
+        "ipcRenderer",
+        "electron"
+      ],
+      "registryProposal": "capability-presence-contract may have a remote analogue: a web client that drives several backend data planes keeps a per-plane table of unsupported actions, pinned by a test, so controls that can only fail aren't offered (src/lib/sync/desktopUnsupported.ts). The pattern of a declared constant per host, tested against the implementation, carries over to remote planes even though no native process is involved."
+    }
+  ],
+  "declined": [
+    {
+      "subject": "native-shell-integration",
+      "context": "Features Overview & Pricing",
+      "reason": "withdrawn after review: reviewer (sonnet): The context's vision-grid files (data.ts, layer-stack/LayerDetail.tsx) import src/lib/guide-link.ts, whose openGuideLink checks window.__PERSONAS_DESKTOP__ and dispatches a 'personas:open-external' CustomEvent to a native desktop host, so a native-shell seam does exist here and the not-applicable cl"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-11-11T22:36:24.688674+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "native-shell-integration"
+      ],
+      "techniques": [
+        "native-owned-stream"
+      ],
+      "deviations": 0,
+      "context": "Event Bus & Stream Monitoring",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-11T22:36:24.688674+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "native-shell-integration"
+      ],
+      "techniques": [
+        "capability-presence-contract"
+      ],
+      "deviations": 0,
+      "context": "Supabase Client",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    },
+    {
+      "ts": "2026-11-11T22:36:24.688674+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "native-shell-integration"
+      ],
+      "techniques": [],
+      "deviations": 0,
+      "context": "Features Overview & Pricing",
+      "via": "curator-multi:claude",
+      "model": "claude-opus-5-5"
+    }
+  ]
+}
