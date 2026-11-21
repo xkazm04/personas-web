@@ -1507,8 +1507,8 @@
           "revision": 5,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "priorNotApplicable": 5,
+          "state": "unknown"
         },
         {
           "subject": "agent-memory",
@@ -2517,8 +2517,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 10
+          "state": "not-applicable",
+          "priorNotApplicable": 10,
+          "evidence": "src/components/feature-sections/healing-run-circuit/shared/cases.ts:4 The context is a scripted marketing animation that acts out five fixed failure cases and their healing remedies, and nothing in it runs a model against scenarios or scores results; a search of its directories (healing-run-circuit/, healing-run-circuit/shared/, illustrate/) for judge, rubric, benchmark, passRate and golden found zero hits, so the eval-harness precondition does not hold.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:85554b740461b19e",
+          "evaluatedRevision": 39
         },
         {
           "subject": "agent-instruction-files",
@@ -3389,7 +3393,11 @@
           "changedAt": "2026-09-25",
           "confidence": "probable",
           "priorNotApplicable": 9,
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/sections/playground-split/data.ts:19 The 'prompts' in this context are translated marketing demo data for an animated playground, not an always-loaded instruction file read by a coding harness. Grepping the context directories for CLAUDE.md, AGENTS.md, copilot-instructions, .cursorrules, GEMINI.md and 'instruction'/'system prompt' found no matches.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:9b02cf004a7ce444",
+          "evaluatedRevision": 32
         },
         {
           "subject": "agent-memory",
@@ -3708,8 +3716,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 10
+          "state": "not-applicable",
+          "priorNotApplicable": 10,
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:3 Here 'SCENARIOS' are hand-timed chat scripts for a landing animation, and the star ratings in them are hardcoded literals (e.g. `stars: { scripted: 2, agent: 5 }` at line 40), not measured scores, so no agent is run or scored and the eval-harness precondition does not hold; a search of agents-chat-split/ and its shared/ folder for judge, rubric, benchmark, passRate and golden found zero hits (the only eval-adjacent term, 'scenario', names these display scripts).",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:85554b740461b19e",
+          "evaluatedRevision": 39
         },
         {
           "subject": "agent-cli-transport",
@@ -3767,8 +3779,12 @@
           "revision": 28,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/sections/agents-chat-split/shared/useStoryClock.ts:7 This context is a scripted marketing animation that plays canned chat lines on a story clock. A search of its directory for fleet, session, registry, hibernat and harvest found no hits (the only 'dispatch' hits are React useReducer calls), so no agent sessions are registered, dispatched or harvested here.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:93bd71853ab468b1",
+          "evaluatedRevision": 28
         },
         {
           "subject": "companion-identity",
@@ -4057,8 +4073,12 @@
           "revision": 7,
           "changedAt": "2026-09-25",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "deviation",
+          "priorNotApplicable": 5,
+          "evidence": "src/data/guide/locales/ar/content/companion.ts:240 The localized guide is the companion's user-facing help text. It lists what Athena can do (navigate, open editors, build cockpits, call connectors) in hand-written prose translated from hand-written English, and no code here derives that list from the runtime's permitted-action set or reports described-but-absent and present-but-undescribed capabilities, so a capability removed or added in the desktop host keeps being advertised (or missed) in all 14 locales.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:ff529a6dc44bf233",
+          "evaluatedRevision": 7
         }
       ],
       "governance": "governed"
@@ -8249,8 +8269,12 @@
           "revision": 37,
           "changedAt": "2026-09-29",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 10
+          "state": "not-applicable",
+          "priorNotApplicable": 10,
+          "evidence": "src/components/dashboard/views/director/useDirectorData.ts:8 The view renders mock fixtures of 0–5 Director verdict scores (directorMeta.ts only derives display tones, momentum and attention flags from them), and the scoring itself happens in the desktop app; this repo runs no scenarios, trials or judge calls, so the eval-harness machinery (pinned judges, aggregation, scenario versioning) has nothing to govern here. A search of director/ for judge, rubric, benchmark, passRate and golden found zero hits; 'verdict' and 'score' do appear, but only as display fields of the mocked data.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:85554b740461b19e",
+          "evaluatedRevision": 39
         },
         {
           "subject": "prompt-assembly",
@@ -8677,8 +8701,12 @@
           "revision": 5,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/app/api/events/stream/route.ts:13 The event stream is a server-side SSE proxy consumed by a browser tab with no native wrapper, so native-owned-stream and every other technique here has no native side to own anything; searching src, scripts and package.json for __TAURI__, @tauri-apps, ipcRenderer and electron found nothing.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:838495bb60a986c6",
+          "evaluatedRevision": 6
         },
         {
           "subject": "fleet-orchestration",
@@ -8927,8 +8955,12 @@
           "revision": 22,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "deviation",
+          "priorNotApplicable": 5,
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:28 The home Triage Pane styles pending reviews by severity weight alone and never by age. An `info` review therefore stays calm cyan right up to the moment the reviewStore sweep auto-approves it at 480 min (review-sla.ts DEFAULT_ESCALATION_POLICY), even though review-sla's own urgency ladder turns it urgent at 120 min.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:9adc955a19c6822e",
+          "evaluatedRevision": 23
         },
         {
           "subject": "watch-cache-and-resync",
@@ -8944,7 +8976,11 @@
           "revision": 3,
           "changedAt": "2026-10-27",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:37 The context's data hooks do one request-driven read when the component mounts (re-run only when useMock, reloadKey or the locale changes), so no complete replica fed by a change stream or poll cycle exists here; searching src/components/dashboard for resync, desync, resourceVersion, lastOk and initialSync found 0 hits, and the only setInterval timers in the context drive UI ticks (relative time, ticker rotation), not data reads.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:26e858c401316003",
+          "evaluatedRevision": 3
         },
         {
           "subject": "agent-memory",
@@ -10379,7 +10415,11 @@
           "revision": 2,
           "changedAt": "2026-08-21",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:195 These Playwright specs drive pages whose layouts the team writes itself; the closest thing to a spec-rendered node is a guide markdown block (CompareBlock, :::keys) written by the same team, so no untrusted composer and no spec→registry renderer exist for these tests to cover. A search of e2e/ found no hits for schema, nodeKind, renderer, registry or capabilities, and src/ has no UiSpec/SpecRenderer/componentRegistry/blockRegistry construct.",
+          "evaluatedAt": "2026-11-10",
+          "evaluatedAgainst": "sha256-b2:3a801e8a0fefc717",
+          "evaluatedRevision": 2
         }
       ],
       "governance": "governed"
@@ -10497,8 +10537,12 @@
           "revision": 5,
           "changedAt": "2026-10-23",
           "confidence": "probable",
-          "state": "unknown",
-          "priorNotApplicable": 5
+          "state": "not-applicable",
+          "priorNotApplicable": 5,
+          "evidence": "src/lib/sync/reachability.ts:2 This context is a browser-side remote client of a desktop app that ships from another repo, and it reaches that app over Supabase or HTTP; reachability and pairing trust belong to the pairing and transport-selection subjects, and no native wrapper, IPC or host-grant API turned up for __TAURI__, @tauri-apps, ipcRenderer or electron.",
+          "evaluatedAt": "2026-11-11",
+          "evaluatedAgainst": "sha256-b2:838495bb60a986c6",
+          "evaluatedRevision": 6
         },
         {
           "subject": "agent-runtime-assembly",

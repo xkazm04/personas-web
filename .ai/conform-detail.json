@@ -10199,16 +10199,27 @@
       "context": "Build Config & E2E Tests",
       "subject": "schema-driven-ui",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-10-25",
-      "evaluatedTs": "2026-10-25T23:30:38.229Z",
-      "techniques": [],
-      "withdrawn": {
-        "worker": "2f025f94-ea91-45dc-bbba-395ffd6133a3",
-        "state": "not-applicable",
-        "at": "2026-10-25T23:31:00.462995+00:00",
-        "reason": "reviewer (sonnet): The anchor, e2e/guide.spec.ts:195, is only a comment about CompareBlock and does not show that a spec-to-UI registry is absent. The 'src/ has no spec renderer' claim is about code outside this context. I also found that src/components/guide/guide-markdown/ (parseGuide.ts, renderGuideDoc.tsx) parses "
-      }
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-10",
+      "evaluatedTs": "2026-11-10T22:01:08.804Z",
+      "worker": "20e245f5-b4b8-447e-8a81-0df812d1f5ae",
+      "techniques": [
+        {
+          "technique": "node-vocabulary-design",
+          "verdict": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:205 The :::keys block is a markdown block written by the team (authoring-block-vocabulary territory), not a closed node vocabulary for a model- or user-composed spec."
+        },
+        {
+          "technique": "registry-mapping",
+          "verdict": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:195 The tests check the visible text of a block written by the team. Nothing maps spec kinds through a registry."
+        },
+        {
+          "technique": "spec-validation-and-repair",
+          "verdict": "not-applicable",
+          "evidence": "e2e/guide.spec.ts:199 Assertions check fixed content. No spec is validated or repaired, and no dropped-N count is shown."
+        }
+      ]
     },
     "Observability & Event Monitoring/Leaderboard & Rankings/scoring-rubrics": {
       "context": "Leaderboard & Rankings",
@@ -12725,9 +12736,10 @@
       "context": "Split & Pipeline Playground",
       "subject": "agent-instruction-files",
       "bundle": "software-engineering",
-      "state": "unknown",
-      "evaluatedAt": "2026-11-08",
-      "evaluatedTs": "2026-11-08T22:24:04.097Z",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:11:28.774Z",
+      "worker": "92ad6787-13c4-4877-bd5a-4107877366ec",
       "techniques": [
         {
           "technique": "line-earning",
@@ -12741,21 +12753,15 @@
           "evidence": "src/components/sections/playground-split/index.tsx:22 This line runs a UI animation hook. There is no prose rule here that could be moved into a gate.",
           "carriedFrom": "2026-11-07"
         }
-      ],
-      "withdrawn": {
-        "worker": "66eaf90f-9a76-46db-a0b0-adbb17bbb683",
-        "state": "not-applicable",
-        "at": "2026-11-08T22:25:14.510961+00:00",
-        "reason": "reviewer (sonnet): The anchor context-map.json:457 is the map's own entry for the context and is outside the context's files. It does not show that the code carries no agent guidance. The claim that the code is a 'scripted UI simulation whose prompt is demo content' rests on a zero-hit search, not on the cited line."
-      }
+      ]
     },
     "Marketing & Landing/Features Overview & Pricing/agent-instruction-files": {
       "context": "Features Overview & Pricing",
       "subject": "agent-instruction-files",
       "bundle": "software-engineering",
       "state": "unknown",
-      "evaluatedAt": "2026-11-08",
-      "evaluatedTs": "2026-11-08T22:24:04.097Z",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:11:28.774Z",
       "techniques": [
         {
           "technique": "line-earning",
@@ -12771,10 +12777,10 @@
         }
       ],
       "withdrawn": {
-        "worker": "66eaf90f-9a76-46db-a0b0-adbb17bbb683",
+        "worker": "92ad6787-13c4-4877-bd5a-4107877366ec",
         "state": "not-applicable",
-        "at": "2026-11-08T22:25:14.690815+00:00",
-        "reason": "reviewer (sonnet): The anchor context-map.json:115 is the map's description line, which is incidental and outside the context's files. It does not show that no instruction asset is authored there. The absence claim depends only on a name search."
+        "at": "2026-11-11T22:12:01.115186+00:00",
+        "reason": "reviewer (sonnet): The anchor src/app/features/page.tsx:16 is only the metadata title ('Features'), so it doesn't show that no agent instruction file exists; the claimed canvas swarm hero and layer stack are not on that line either."
       }
     },
     "Theming, i18n & Shared Utilities/Shared Types, Utilities & Hooks/agent-runtime-assembly": {
@@ -12998,6 +13004,217 @@
           "evidence": "src/components/dashboard/views/settings/settings-sections/NotificationsCard.tsx:50 The preview emits a structured signal on an in-app bus that drives browser speech. That is in-app delivery (the toasts-notifications subject), not an immutable outbound message."
         }
       ]
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/watch-cache-and-resync": {
+      "context": "Dashboard Home Overview",
+      "subject": "watch-cache-and-resync",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:05:16.008Z",
+      "worker": "da85311b-1bc4-4bd5-a3fe-8f10dce20230",
+      "techniques": [
+        {
+          "technique": "desync-is-a-state",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useOpenAlertCount.ts:48 One read per mount with no cursor or resumable stream, so there is no position that can expire and no desync state to model."
+        },
+        {
+          "technique": "atomic-swap-at-initial-sync",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:112 The grid is derived from one completed Promise.all and set in a single call, so nothing assembles a live replica incrementally. No re-read protocol exists for a swap to guard."
+        },
+        {
+          "technique": "initial-read-strategy-behind-a-gate",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:102 This is a plain bounded list read. The source offers no alternative initial-read protocol to choose between behind a capability gate."
+        },
+        {
+          "technique": "read-phase-before-write-transaction",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:119 No poll cycle writes rows. A failed read sets an error and keeps the previous rows instead of writing an empty result, which matches the technique's spirit, but its polled-replica precondition is absent."
+        },
+        {
+          "technique": "one-stream-fanned-out",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/useExecutionHeatmap.ts:127 Each hook fetches for itself. No shared replica or stream is fanned out to consumers inside this context."
+        }
+      ]
+    },
+    "Product Feature Showcase/Self-Healing & Trigger Automation/eval-harness": {
+      "context": "Self-Healing & Trigger Automation",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:25:04.890Z",
+      "worker": "0f3b7a7b-c426-4c83-b0c0-6216a78d5733",
+      "techniques": []
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/eval-harness": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:25:04.890Z",
+      "worker": "0f3b7a7b-c426-4c83-b0c0-6216a78d5733",
+      "techniques": []
+    },
+    "Observability & Event Monitoring/Director Coaching/eval-harness": {
+      "context": "Director Coaching",
+      "subject": "eval-harness",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:25:04.890Z",
+      "worker": "0f3b7a7b-c426-4c83-b0c0-6216a78d5733",
+      "techniques": [],
+      "registryProposal": "The use_when match on 'score'/'verdict' pulls display-only dashboards of judge output into eval-harness. The subject could say plainly that rendering a judge's verdicts is out of scope when the judging runs in another system."
+    },
+    "Observability & Event Monitoring/Event Bus & Stream Monitoring/native-shell-integration": {
+      "context": "Event Bus & Stream Monitoring",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:36:24.688Z",
+      "worker": "391ea9da-e313-40fe-8477-f3789543d22f",
+      "techniques": [
+        {
+          "technique": "native-owned-stream",
+          "verdict": "not-applicable",
+          "evidence": "src/app/api/events/stream/route.ts:13 The stream belongs to a plain web view; there is no native process to move it to."
+        }
+      ]
+    },
+    "Infrastructure & Telemetry/Supabase Client/native-shell-integration": {
+      "context": "Supabase Client",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:36:24.688Z",
+      "worker": "391ea9da-e313-40fe-8477-f3789543d22f",
+      "techniques": [
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/lib/sync/desktopUnsupported.ts:18 This is a table of what each remote data plane supports, not native-host presence; it looks like the technique but the technique's precondition doesn't hold."
+        }
+      ],
+      "registryProposal": "capability-presence-contract may have a remote analogue: a web client that drives several backend data planes keeps a per-plane table of unsupported actions, pinned by a test, so controls that can only fail aren't offered (src/lib/sync/desktopUnsupported.ts). The pattern of a declared constant per host, tested against the implementation, carries over to remote planes even though no native process is involved."
+    },
+    "Marketing & Landing/Features Overview & Pricing/native-shell-integration": {
+      "context": "Features Overview & Pricing",
+      "subject": "native-shell-integration",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T23:23:32.563Z",
+      "techniques": [
+        {
+          "technique": "host-forwarded-key-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/vision-grid/layer-stack/LayerLabels.tsx:45 The only key handling is ordinary in-document arrow/Home/End tablist navigation. No native wrapper forwards hardware or remote keys."
+        },
+        {
+          "technique": "capability-presence-contract",
+          "verdict": "not-applicable",
+          "evidence": "src/app/features/page.tsx:7 A static web page has no per-platform native capabilities to guard."
+        }
+      ],
+      "withdrawn": {
+        "worker": "0eced74c-6a15-4c2c-a9d4-49e580bfd8b5",
+        "state": "not-applicable",
+        "at": "2026-11-11T23:24:03.240353+00:00",
+        "reason": "reviewer (sonnet): The evidence says a search of all of src found no tauri hits, but src/data/guide/content/getting-started.ts:247 (and its locale copies) says Personas is a Tauri desktop app, so the claim that the product ships no native process is false. The anchor, page.tsx:7 (force-static), only shows this page is"
+      }
+    },
+    "Interactive Demos & Playground/Agent Playground & Multi-Agent Chat/fleet-orchestration": {
+      "context": "Agent Playground & Multi-Agent Chat",
+      "subject": "fleet-orchestration",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T22:48:04.662Z",
+      "worker": "90606cd5-1a50-49a8-90d6-e6967f9c5629",
+      "techniques": [
+        {
+          "technique": "session-registry",
+          "verdict": "not-applicable",
+          "evidence": "src/components/sections/agents-chat-split/shared/scenarios.ts:36 The scenarios are static scripted timelines, not live session entries."
+        }
+      ]
+    },
+    "Product Documentation (Guide)/Localized Guide Content (14 locales)/companion-identity": {
+      "context": "Localized Guide Content (14 locales)",
+      "subject": "companion-identity",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T23:08:37.596Z",
+      "worker": "f8afedf0-d9b4-4031-8db9-5ad559971184",
+      "techniques": [
+        {
+          "technique": "capability-exercise-ledger",
+          "verdict": "deviation",
+          "evidence": "scripts/i18n/guide-drift.mjs:27 The context's only drift gate compares each translation with the English text it was made from, which is one proxy checked against another. Nothing checks the English capability prose against the companion's action list, and nothing records a working/broken/unexercised state. The technique names this failure (gate-sees-target). The desktop repo's check-doc-sync.mjs Stop hook only nags when any personas-web file is edited, and the nag can be dismissed, so the guide is kept in sync by discipline rather than derived."
+        },
+        {
+          "technique": "anchored-identity-diffs",
+          "verdict": "not-applicable",
+          "evidence": "src/data/guide/locales/ar/content/companion.ts:111 This line only describes anchored edits to identity.md, which happen in the desktop runtime. No code in this context writes or approves a self-model, so this prose is not evidence that the technique is realized."
+        }
+      ],
+      "registryProposal": "capability-exercise-ledger should say whether user-facing help text published from a separate repo or site (a product guide translated into N locales) is within scope. If it is, the derived inventory has to cross a repo boundary, and the technique could name the minimum acceptable link: a generated capability manifest that the docs site imports and diffs against."
+    },
+    "Observability & Event Monitoring/Dashboard Home Overview/hitl-approval": {
+      "context": "Dashboard Home Overview",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-11-11",
+      "evaluatedTs": "2026-11-11T23:18:43.167Z",
+      "worker": "764b69b8-ba23-45d1-a0a5-8d69f612c732",
+      "techniques": [
+        {
+          "technique": "cosmetic-vs-enforced-threshold-invariant",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:28 Rose/amber/cyan tone comes from severity weight only (>=90/>=50); it ignores URGENCY_THRESHOLD_MINUTES/slaState. So for `info` this surface's cosmetic signal never fires before the enforcing auto_approve. validateEscalationPolicy in review-sla.ts asserts the invariant only for the reviews view's ladder, not for this derived surface."
+        },
+        {
+          "technique": "review-queues",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:82 Within a severity the order is newest-first (useTriageQueue sorts by startedAt descending, then slice(0, MAX_ITEMS=6)). That is the reverse of expiring-soonest-first, so the oldest pending reviews, the ones closest to their SLA action, are the rows cut. The badge (items.length) matches the rows shown but is capped at 6 and does not say it is a top-6 subset."
+        },
+        {
+          "technique": "fail-loud-classification-default",
+          "verdict": "deviation",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:61 reviewStore correctly promotes unparseable payloads to `critical` and sets `parseError`. TriageItem has no field for that marker, so the chip shows only the kind label and a defaulted row looks exactly like a genuine critical review. This is the 'severity without marker' half-failure."
+        },
+        {
+          "technique": "resume-after-decision",
+          "verdict": "conformant",
+          "evidence": "src/components/dashboard/views/home/home-page/ApprovedWorkCard.tsx:103 The card reconciles approvals against execution. Approved items that never ran are shown distinctly from dispatched ones, so the record does not stop silently at 'approved'. Dispatch itself is demo-local (no orchestrator)."
+        },
+        {
+          "technique": "severity-sla-ladder",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/ApprovedWorkCard.tsx:37 This context's only age threshold is a cosmetic 'stale' label with no automated action. The acting ladder lives in src/lib/review-sla.ts, outside this context."
+        },
+        {
+          "technique": "decision-records",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/ApprovedWorkCard.tsx:26 No gate verdict is written in this context. Dispatch of already-approved work is a demo-local session Set with no backend, so there is no decision record to judge here."
+        },
+        {
+          "technique": "gate-state-machines",
+          "verdict": "not-applicable",
+          "evidence": "src/components/dashboard/views/home/home-page/TriagePane.tsx:44 The pane holds no verdict control. Each review row only navigates to /dashboard/reviews, where gate state is transitioned."
+        }
+      ],
+      "registryProposal": "cosmetic-vs-enforced-threshold-invariant assumes the cosmetic ladder lives next to the queue and can be asserted at load. In practice a secondary aggregate surface (a home triage pane) re-derives urgency from severity alone and forms an unasserted third ladder that the load-time check never sees. The technique should require every surface that renders pending items with urgency styling to derive it from the same SLA-state function the assertion covers."
     }
   }
 }
