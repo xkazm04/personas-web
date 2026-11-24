@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@sentry/nextjs": "^11.12.0",
-    "@supabase/supabase-js": "^2.112.2",
+    "@supabase/supabase-js": "^2.119.2",
     "framer-motion": "^14.9.0",
     "geist": "^1.9.2",
     "lucide-react": "^1.61.0",
